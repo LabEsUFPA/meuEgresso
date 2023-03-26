@@ -1,7 +1,7 @@
 ---
 name: Bug Report
 about: Template para informar um bug.
-title: ''
+title: "[BUG]"
 labels: bug
 assignees: ''
 
