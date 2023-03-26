@@ -1,0 +1,19 @@
+package labes.facomp.ufpa.br.meuegresso.model.mongo;
+
+import java.util.List;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+
+@Document("Questionario")
+public class QuestionarioMongo {
+
+    @Id
+    @Column(name = "id_questionario", nullable = false, unique = true)
+    private Integer idQuestionario;
+
+    @Column(name = "fatores_risco")
+    List<FatorRiscoMongo> fatorRiscoList;
+}
