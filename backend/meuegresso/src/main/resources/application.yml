@@ -31,7 +31,7 @@ springdoc:
 
 logging:
   file:
-      name: /var/log/apiRelatorios.log
+      name: /var/log/meuEgressoApi.log
       path: /var/log
   pattern:
     console: "%d %-5level %logger : %msg%n"

@@ -65,3 +65,5 @@ mongoDB/
 postgresDB/
 
 .env
+
+backend/meuegresso/data/
