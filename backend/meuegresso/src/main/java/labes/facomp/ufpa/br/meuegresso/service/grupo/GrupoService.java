@@ -11,28 +11,28 @@ import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
  */
 public interface GrupoService {
 
-    /**
-     * Metodo responsavel por persistir determinado grupo no banco de dados.
-     *
-     * @param grupoModel Dados do grupo
-     * @return Dados após serem gravados no banco de dados.
-     */
-    public GrupoModel save(GrupoModel grupoModel);
+	/**
+	 * Metodo responsavel por persistir determinado grupo no banco de dados.
+	 *
+	 * @param grupoModel Dados do grupo
+	 * @return Dados após serem gravados no banco de dados.
+	 */
+	public GrupoModel save(GrupoModel grupoModel);
 
-    /**
-     * Metodo responsavel por encontrar um determinado grupo por sua ID.
-     *
-     * @param idGrupo
-     * @return
-     */
-    public GrupoModel findById(Integer idGrupo);
+	/**
+	 * Metodo responsavel por encontrar um determinado grupo por sua ID.
+	 *
+	 * @param idGrupo
+	 * @return
+	 */
+	public GrupoModel findById(Integer idGrupo);
 
-    /**
-     * Metodo responsavel por encontrar um determinado grupo por seu nome.
-     *
-     * @param idGrupo
-     * @return
-     */
-    public GrupoModel findByNomeGrupo(String nomeGrupo);
+	/**
+	 * Metodo responsavel por encontrar um determinado grupo por seu nome.
+	 *
+	 * @param idGrupo
+	 * @return
+	 */
+	public GrupoModel findByNomeGrupo(String nomeGrupo);
 
 }

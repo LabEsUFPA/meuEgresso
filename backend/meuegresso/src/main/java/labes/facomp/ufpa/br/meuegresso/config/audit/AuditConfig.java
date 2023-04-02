@@ -25,17 +25,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuditConfig {
 
-    private final UsuarioRepository userRepository;
+	private final UsuarioRepository userRepository;
 
-    @Bean
-    public AuditorAware<UsuarioModel> auditorAware() {
-        return () -> {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null) {
-                return Optional.of(userRepository.findByUsername(auth.getName()).orElse(null));
-            } else {
-                return Optional.ofNullable(null);
-            }
-        };
-    }
+	@Bean
+	public AuditorAware<UsuarioModel> auditorAware() {
+		return () -> {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			if (auth != null) {
+				return Optional.of(userRepository.findByUsername(auth.getName()).orElse(null));
+			} else {
+				return Optional.ofNullable(null);
+			}
+		};
+	}
 }

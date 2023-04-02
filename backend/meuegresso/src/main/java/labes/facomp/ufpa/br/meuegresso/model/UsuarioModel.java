@@ -34,44 +34,44 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false, exclude = "grupos")
 public class UsuarioModel extends Auditable implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id_usuario", nullable = false, unique = true)
-    private Integer idUsuario;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(name = "id_usuario", nullable = false, unique = true)
+	private Integer idUsuario;
 
-    @Column(name = "login_usuario", nullable = false, unique = true, length = 100)
-    private String username;
+	@Column(name = "login_usuario", nullable = false, unique = true, length = 100)
+	private String username;
 
-    @Column(name = "senha_usuario", nullable = false, unique = false, length = 100)
-    private String password;
+	@Column(name = "senha_usuario", nullable = false, unique = false, length = 100)
+	private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
-    @JoinTable(name = "usuario_grupo", joinColumns = { @JoinColumn(name = "id_usuario") }, inverseJoinColumns = {
-            @JoinColumn(name = "id_grupo") })
-    private Set<GrupoModel> grupos = new HashSet<>();
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
+	@JoinTable(name = "usuario_grupo", joinColumns = { @JoinColumn(name = "id_usuario") }, inverseJoinColumns = {
+			@JoinColumn(name = "id_grupo") })
+	private Set<GrupoModel> grupos = new HashSet<>();
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.grupos;
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.grupos;
+	}
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return this.ativo;
-    }
+	@Override
+	public boolean isEnabled() {
+		return this.ativo;
+	}
 }

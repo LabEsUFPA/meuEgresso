@@ -27,22 +27,22 @@ import lombok.RequiredArgsConstructor;
 @EnableConfigurationProperties(value = { RsaKeyProperties.class, TokenProperties.class, CorsProperties.class })
 public class ApplicationConfig {
 
-    private final UsuarioService usuarioService;
+	private final UsuarioService usuarioService;
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return usuarioService;
-    }
+	@Bean
+	public UserDetailsService userDetailsService() {
+		return usuarioService;
+	}
 
-    @Bean
-    public AuthenticationManager authenticationManager() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService());
-        return new ProviderManager(authenticationProvider);
-    }
+	@Bean
+	public AuthenticationManager authenticationManager() {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(userDetailsService());
+		return new ProviderManager(authenticationProvider);
+	}
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
+	}
 }

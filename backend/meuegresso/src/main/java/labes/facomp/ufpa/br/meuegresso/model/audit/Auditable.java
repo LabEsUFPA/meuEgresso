@@ -28,25 +28,25 @@ import lombok.Data;
 @EntityListeners(AuditingEntityListener.class)
 public class Auditable {
 
-    @CreatedBy
-    @Column(name = "created_by", updatable = false)
-    protected String createdBy;
+	@CreatedBy
+	@Column(name = "created_by", updatable = false)
+	protected String createdBy;
 
-    @CreatedDate
-    @Column(name = "created_date", updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    protected Date createdDate;
+	@CreatedDate
+	@Column(name = "created_date", updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	protected Date createdDate;
 
-    @LastModifiedBy
-    @Column(name = "last_modified_by")
-    protected String lastModifiedBy;
+	@LastModifiedBy
+	@Column(name = "last_modified_by")
+	protected String lastModifiedBy;
 
-    @LastModifiedDate
-    @Column(name = "last_modified_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    protected Date lastModifiedDate;
+	@LastModifiedDate
+	@Column(name = "last_modified_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	protected Date lastModifiedDate;
 
-    @Column(name = "ativo", nullable = false)
-    @ColumnDefault(value = "TRUE")
-    protected Boolean ativo = true;
+	@Column(name = "ativo", nullable = false)
+	@ColumnDefault(value = "TRUE")
+	protected Boolean ativo = true;
 }

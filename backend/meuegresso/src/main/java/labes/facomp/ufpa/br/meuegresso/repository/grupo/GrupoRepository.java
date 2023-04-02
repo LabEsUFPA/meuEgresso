@@ -16,4 +16,4 @@ import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
  */
 public interface GrupoRepository extends CrudRepository<GrupoModel, Integer> {
 
-    Optional<GrupoModel> findByNomeGrupo(String nomeGrupo);}
+	Optional<GrupoModel> findByNomeGrupo(String nomeGrupo);}
