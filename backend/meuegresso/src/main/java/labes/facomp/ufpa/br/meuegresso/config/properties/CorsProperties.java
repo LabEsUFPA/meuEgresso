@@ -5,13 +5,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "cors")
 
 public class CorsProperties {
-    private String[] allowedOriginPatterns;
+	private String[] allowedOriginPatterns;
 
-    public String[] getAllowedOriginPatterns() {
-        return allowedOriginPatterns;
-    }
+	public String[] getAllowedOriginPatterns() {
+		return allowedOriginPatterns;
+	}
 
-    public void setAllowedOriginPatterns(String[] allowedOriginPatterns) {
-        this.allowedOriginPatterns = allowedOriginPatterns;
-    }
+	public void setAllowedOriginPatterns(String[] allowedOriginPatterns) {
+		this.allowedOriginPatterns = allowedOriginPatterns;
+	}
 }

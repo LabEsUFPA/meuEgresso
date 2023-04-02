@@ -32,19 +32,19 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false, exclude = "usuarios")
 public class GrupoModel extends Auditable implements GrantedAuthority {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id_grupo", nullable = false, unique = true)
-    private Integer idGrupo;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(name = "id_grupo", nullable = false, unique = true)
+	private Integer idGrupo;
 
-    @Column(name = "nome_grupo", nullable = false, unique = true, length = 50)
-    private String nomeGrupo;
+	@Column(name = "nome_grupo", nullable = false, unique = true, length = 50)
+	private String nomeGrupo;
 
-    @ManyToMany(mappedBy = "grupos", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-    private Set<UsuarioModel> usuarios = new HashSet<>();
+	@ManyToMany(mappedBy = "grupos", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+	private Set<UsuarioModel> usuarios = new HashSet<>();
 
-    @Override
-    public String getAuthority() {
-        return this.nomeGrupo;
-    }
+	@Override
+	public String getAuthority() {
+		return this.nomeGrupo;
+	}
 }

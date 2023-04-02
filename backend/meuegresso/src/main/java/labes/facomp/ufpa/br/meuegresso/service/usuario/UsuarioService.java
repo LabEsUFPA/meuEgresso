@@ -15,22 +15,22 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
  */
 public interface UsuarioService extends UserDetailsService {
 
-    /**
-     * Metodo responsavel por persistir determinado usuário no banco de dados.
-     *
-     * @param usuarioModel Dados do usuário
-     * @return Dados após serem gravados no banco de dados.
-     */
-    public UsuarioModel save(UsuarioModel usuarioModel);
+	/**
+	 * Metodo responsavel por persistir determinado usuário no banco de dados.
+	 *
+	 * @param usuarioModel Dados do usuário
+	 * @return Dados após serem gravados no banco de dados.
+	 */
+	public UsuarioModel save(UsuarioModel usuarioModel);
 
-    /**
-     * Metodo responsavel por encontrar um determinado usuário por sua ID.
-     *
-     * @param idUsuario
-     * @return
-     */
-    public UsuarioModel findById(Integer idUsuario);
+	/**
+	 * Metodo responsavel por encontrar um determinado usuário por sua ID.
+	 *
+	 * @param idUsuario
+	 * @return
+	 */
+	public UsuarioModel findById(Integer idUsuario);
 
-    public List<UsuarioModel> findAll();
+	public List<UsuarioModel> findAll();
 
 }

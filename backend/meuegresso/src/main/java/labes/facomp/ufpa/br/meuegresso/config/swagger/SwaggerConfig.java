@@ -20,20 +20,20 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 @Configuration
 public class SwaggerConfig {
 
-        @Bean
-        public OpenAPI springShopOpenAPI() {
-                return new OpenAPI()
-                                .components(new Components()
-                                                .addSecuritySchemes("Bearer",
-                                                                new SecurityScheme().type(SecurityScheme.Type.HTTP)
-                                                                                .scheme("bearer").bearerFormat("JWT")))
-                                .info(new Info().title("Meu Egresso API")
-                                                .description("API de Egressos da Universidade Federal do Pará.")
-                                                .version("v0.0.1")
-                                                .license(new License().name("GNU GENERAL PUBLIC LICENSE V3")
-                                                                .url("https://github.com/LabEsUFPA/meuEgresso/blob/main/LICENSE")))
-                                .externalDocs(new ExternalDocumentation()
-                                                .description("Wiki do Projeto no Gitlab")
-                                                .url("https://github.com/LabEsUFPA/meuEgresso/wiki"));
-        }
+	@Bean
+	public OpenAPI springShopOpenAPI() {
+		return new OpenAPI()
+				.components(new Components()
+						.addSecuritySchemes("Bearer",
+								new SecurityScheme().type(SecurityScheme.Type.HTTP)
+										.scheme("bearer").bearerFormat("JWT")))
+				.info(new Info().title("Meu Egresso API")
+						.description("API de Egressos da Universidade Federal do Pará.")
+						.version("v0.0.1")
+						.license(new License().name("GNU GENERAL PUBLIC LICENSE V3")
+								.url("https://github.com/LabEsUFPA/meuEgresso/blob/main/LICENSE")))
+				.externalDocs(new ExternalDocumentation()
+						.description("Wiki do Projeto no Gitlab")
+						.url("https://github.com/LabEsUFPA/meuEgresso/wiki"));
+	}
 }

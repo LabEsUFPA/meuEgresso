@@ -21,24 +21,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final TokenService tokenService;
+	private final TokenService tokenService;
 
-    private final AuthenticationManager authenticationManager;
+	private final AuthenticationManager authenticationManager;
 
 
-    /**
-     * Metodo responsável por autenticar e gerar o token de acesso.
-     *
-     * @param authenticationRequest Username e senha do usuário.
-     * @return Token de autenticação
-     * @author Alfredo Gabriel
-     * @since 26/03/2023
-     */
-    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getUsername(), authenticationRequest.getPassword()));
-        return AuthenticationResponse.builder().token(tokenService.generateToken(auth)).build();
-    }
+	/**
+	 * Metodo responsável por autenticar e gerar o token de acesso.
+	 *
+	 * @param authenticationRequest Username e senha do usuário.
+	 * @return Token de autenticação
+	 * @author Alfredo Gabriel
+	 * @since 26/03/2023
+	 */
+	public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
+		Authentication auth = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(
+						authenticationRequest.getUsername(), authenticationRequest.getPassword()));
+		return AuthenticationResponse.builder().token(tokenService.generateToken(auth)).build();
+	}
 
 }

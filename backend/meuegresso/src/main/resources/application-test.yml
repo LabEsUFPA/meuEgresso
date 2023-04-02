@@ -1,0 +1,43 @@
+logging:
+  level:
+    '[org.hibernate.stat]': debug
+
+spring:
+  #DEVTOOLS
+  devtools:
+    add-properties: true
+  # Database
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:./data/meuEgressoDBTest
+    username: meuEgressoTest
+    password: meuEgressoTestPassword
+  h2:
+    console.enabled: true
+    console.path: /h2
+    
+
+  data:
+    mongodb:
+      host: localhost
+      database: db-mongo
+      port: 27017
+      username: mongo
+      password: mongo
+      authentication-database: admin # habilitar autenticação
+      auto-index-creation: true # Atualizar indices quando autlaizar o model.
+
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      '[hibernate.format_sql]' : true
+      '[hibernate.generate_statistics]' : true
+      '[persistence.schema-generation.scripts.create-target]' : create.sql
+

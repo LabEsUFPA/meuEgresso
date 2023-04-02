@@ -18,36 +18,36 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GrupoServiceImpl implements GrupoService {
 
-    private final GrupoRepository grupoRepository;
+	private final GrupoRepository grupoRepository;
 
-    /**
-     * Metodo responsavel por persistir determinado grupo no banco de dados.
-     *
-     * @param grupoModel Dados do grupo
-     * @return Dados após serem gravados no banco de dados.
-     */
-    public GrupoModel save(GrupoModel grupoModel){
-        return grupoRepository.save(grupoModel);
-    }
+	/**
+	 * Metodo responsavel por persistir determinado grupo no banco de dados.
+	 *
+	 * @param grupoModel Dados do grupo
+	 * @return Dados após serem gravados no banco de dados.
+	 */
+	public GrupoModel save(GrupoModel grupoModel){
+		return grupoRepository.save(grupoModel);
+	}
 
-    /**
-     * Metodo responsavel por encontrar um determinado grupo por sua ID.
-     *
-     * @param idGrupo
-     * @return
-     */
-    public GrupoModel findById(Integer idGrupo){
-        return grupoRepository.findById(idGrupo).orElseThrow();
-    }
+	/**
+	 * Metodo responsavel por encontrar um determinado grupo por sua ID.
+	 *
+	 * @param idGrupo
+	 * @return
+	 */
+	public GrupoModel findById(Integer idGrupo){
+		return grupoRepository.findById(idGrupo).orElseThrow();
+	}
 
-    /**
-     * Metodo responsavel por encontrar um determinado grupo por seu nome.
-     *
-     * @param idGrupo
-     * @return
-     */
-    public GrupoModel findByNomeGrupo(String nomeGrupo){
-        return grupoRepository.findByNomeGrupo(nomeGrupo).orElseThrow();
-    }
+	/**
+	 * Metodo responsavel por encontrar um determinado grupo por seu nome.
+	 *
+	 * @param idGrupo
+	 * @return
+	 */
+	public GrupoModel findByNomeGrupo(String nomeGrupo){
+		return grupoRepository.findByNomeGrupo(nomeGrupo).orElseThrow();
+	}
 
 }

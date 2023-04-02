@@ -23,20 +23,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticationService authenticationService;
+	private final AuthenticationService authenticationService;
 
-    /**
-     * Endpoint responsavel por autentica um determinado usuário.
-     *
-     * @param authenticationRequest Recebe o usuario e senha para realizar login.
-     * @return {@link AuthenticationResponse} Token autenticado.
-     * @author Alfredo Gabriel
-     * @since 26/03/2023
-     */
-    @PostMapping(value = "/login")
-    public ResponseEntity<AuthenticationResponse> authenticationUser(
-            @RequestBody AuthenticationRequest authenticationRequest) {
-        return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
-    }
+	/**
+	 * Endpoint responsavel por autentica um determinado usuário.
+	 *
+	 * @param authenticationRequest Recebe o usuario e senha para realizar login.
+	 * @return {@link AuthenticationResponse} Token autenticado.
+	 * @author Alfredo Gabriel
+	 * @since 26/03/2023
+	 */
+	@PostMapping(value = "/login")
+	public ResponseEntity<AuthenticationResponse> authenticationUser(
+			@RequestBody AuthenticationRequest authenticationRequest) {
+		return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
+	}
 
 }

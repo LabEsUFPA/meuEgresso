@@ -36,47 +36,52 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CorsProperties corsProperties;
+	private final CorsProperties corsProperties;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .anonymous(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(
-                                "/auth/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/")
-                        .permitAll()
-                        .anyRequest().authenticated())
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(exeption -> exeption
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
+		return httpSecurity.csrf(AbstractHttpConfigurer::disable)
+				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+				.anonymous(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(authorize -> authorize
+						.requestMatchers(
+								"/auth/**",
+								"/v3/api-docs/**",
+								"/swagger-ui/**",
+								"/swagger-ui.html",
+								"/")
+						.permitAll()
+						.anyRequest().authenticated())
+				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+				.sessionManagement(session -> session
+						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.exceptionHandling(exeption -> exeption
+						.authenticationEntryPoint(
+								new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+				.build();
 
-        return httpSecurity.build();
-    }
+	}
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of(corsProperties.getAllowedOriginPatterns()));
-        configuration.setAllowedHeaders(List.of("Authorization"));
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedMethods(
-                Arrays.asList("POST", "GET", "PUT", "DELETE", "PATCH"));
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOriginPatterns(List.of(corsProperties.getAllowedOriginPatterns()));
+		configuration.setAllowedHeaders(List.of("Authorization"));
+		configuration.setAllowCredentials(true);
+		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Requestor-Type", "Content-Type",
+				"Access-Control-Allow-Headers", "access-control-allow-origin"));
+		configuration.setExposedHeaders(Arrays.asList("X-Get-Header", "Access-Control-Allow-Methods"));
+		configuration.setAllowedMethods(
+				Arrays.asList("POST", "GET", "PUT", "DELETE", "PATCH"));
 
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
 }
