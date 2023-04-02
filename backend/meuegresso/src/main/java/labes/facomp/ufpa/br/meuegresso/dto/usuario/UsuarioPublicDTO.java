@@ -17,10 +17,10 @@ import lombok.Data;
 @Data
 public class UsuarioPublicDTO {
 
-    private Integer idUsuario;
+	private Integer idUsuario;
 
-    private String username;
+	private String username;
 
-    private Set<GrupoDTO> grupos = new HashSet<>();
+	private Set<GrupoDTO> grupos = new HashSet<>();
 
 }

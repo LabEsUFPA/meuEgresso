@@ -15,9 +15,17 @@
 	<name>meuegresso</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>19</java.version>
+		<java.version>17</java.version>
+		<sonar.organization>labesufpa</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -88,10 +96,6 @@
 			<artifactId>jasperreports</artifactId>
 			<version>6.20.1</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mail</artifactId>
-		</dependency>
 		<!-- MAPP DTO START -->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
@@ -126,6 +130,14 @@
 			<version>1.6.15</version>
 		</dependency>
 		<!-- DOC END -->
+
+		<!-- H2 Test -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- END -->
 	</dependencies>
 
 	<build>
