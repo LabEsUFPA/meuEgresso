@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,9 +18,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * Representação da tabela Usuario presente no banco de dados.
@@ -30,6 +34,8 @@ import lombok.EqualsAndHashCode;
  * @version 1.0
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "usuario")
 @EqualsAndHashCode(callSuper = false, exclude = "grupos")
 public class UsuarioModel extends Auditable implements UserDetails {
@@ -44,6 +50,18 @@ public class UsuarioModel extends Auditable implements UserDetails {
 
 	@Column(name = "senha_usuario", nullable = false, unique = false, length = 100)
 	private String password;
+
+	@Column(name = "email", nullable = false, unique = false, length = 50)
+	private String email;
+
+	@Column(name = "nome_usuario", nullable = false, unique = false, length = 80)
+	private String nome;
+
+	@Column(name = "nascimento_usuario", nullable = false, unique = false)
+    private Date nascimento;
+
+    @OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
+	private EgressoModel egresso;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
 	@JoinTable(name = "usuario_grupo", joinColumns = { @JoinColumn(name = "id_usuario") }, inverseJoinColumns = {
