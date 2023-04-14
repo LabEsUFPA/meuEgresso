@@ -11,8 +11,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 
-public class PesquisaCientificaModel {
+public class PesquisaCientificaModel extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
