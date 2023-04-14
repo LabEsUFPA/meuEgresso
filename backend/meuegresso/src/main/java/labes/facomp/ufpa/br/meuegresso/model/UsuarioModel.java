@@ -19,6 +19,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,10 +44,10 @@ public class UsuarioModel extends Auditable implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name = "id_usuario", nullable = false, unique = true)
+	@Column(name = "id_usuario", unique = true, nullable = false)
 	private Integer idUsuario;
 
-	@Column(name = "login_usuario", nullable = false, unique = true, length = 100)
+	@Column(name = "login_usuario", unique = true, nullable = false, length = 100)
 	private String username;
 
 	@Column(name = "senha_usuario", nullable = false, unique = false, length = 100)
@@ -57,6 +59,7 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Column(name = "nome_usuario", nullable = false, unique = false, length = 80)
 	private String nome;
 
+    @Temporal(TemporalType.DATE)
 	@Column(name = "nascimento_usuario", nullable = false, unique = false)
     private Date nascimento;
 

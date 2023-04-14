@@ -17,19 +17,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "comentario")
 @EqualsAndHashCode(callSuper = false)
-@Entity(name = "depoimento")
-public class DepoimentoModel extends Auditable {
+public class ComentarioModel extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id_depoimento", unique = true, nullable = false)
+    @Column(name = "id_comentario", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "descricao_depoimento", unique = false, nullable = false, length = 255)
-    private String descricao;
+    @Column(name = "descricao_comentario", unique = false, nullable = false)
+    private String descricaoComentario;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "egresso_id", unique = true, nullable = false)
-    private EgressoModel egresso;
+    @JoinColumn(name = "anuncio_id", unique = false, nullable = false)
+    private AnuncioModel anuncio;
 }

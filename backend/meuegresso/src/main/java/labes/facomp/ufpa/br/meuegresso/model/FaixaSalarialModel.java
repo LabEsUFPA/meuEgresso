@@ -2,12 +2,9 @@ package labes.facomp.ufpa.br.meuegresso.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,19 +14,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "faixa_salarial")
 @EqualsAndHashCode(callSuper = false)
-@Entity(name = "depoimento")
-public class DepoimentoModel extends Auditable {
+public class FaixaSalarialModel extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id_depoimento", unique = true, nullable = false)
+    @Column(name = "id_faixa_salarial", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "descricao_depoimento", unique = false, nullable = false, length = 255)
-    private String descricao;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "egresso_id", unique = true, nullable = false)
-    private EgressoModel egresso;
+    @Column(name = "faixa_faixa_salarial", unique = true, nullable = false)
+    private String faixa;
 }

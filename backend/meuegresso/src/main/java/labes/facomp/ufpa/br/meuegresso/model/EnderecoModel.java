@@ -1,13 +1,14 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,19 +18,22 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "endereco")
 @EqualsAndHashCode(callSuper = false)
-@Entity(name = "depoimento")
-public class DepoimentoModel extends Auditable {
+public class EnderecoModel extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id_depoimento", unique = true, nullable = false)
+    @Column(name = "id_endereco", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "descricao_depoimento", unique = false, nullable = false, length = 255)
-    private String descricao;
+    @Column(name = "cidade_endereco", unique = false, nullable = false)
+    private String cidade;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "egresso_id", unique = true, nullable = false)
-    private EgressoModel egresso;
+    @Column(name = "pais_endereco", unique = false, nullable = false)
+    private String pais;
+
+    @OneToMany(mappedBy = "endereco", fetch = FetchType.LAZY)
+    private Set<EgressoModel> egressos;
+
 }
