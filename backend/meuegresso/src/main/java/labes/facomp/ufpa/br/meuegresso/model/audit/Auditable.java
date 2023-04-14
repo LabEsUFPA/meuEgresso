@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -30,7 +31,7 @@ import lombok.Data;
 public class Auditable {
 
 	@CreatedBy
-	@Column(name = "created_by", updatable = false)
+	@JoinColumn(name = "created_by", updatable = false)
 	protected UsuarioModel createdBy;
 
 	@CreatedDate
@@ -39,7 +40,7 @@ public class Auditable {
 	protected Date createdDate;
 
 	@LastModifiedBy
-	@Column(name = "last_modified_by")
+	@JoinColumn(name = "last_modified_by")
 	protected UsuarioModel lastModifiedBy;
 
 	@LastModifiedDate
