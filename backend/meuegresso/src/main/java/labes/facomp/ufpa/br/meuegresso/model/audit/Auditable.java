@@ -14,6 +14,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import lombok.Data;
 
 /**
@@ -30,7 +31,7 @@ public class Auditable {
 
 	@CreatedBy
 	@Column(name = "created_by", updatable = false)
-	protected String createdBy;
+	protected UsuarioModel createdBy;
 
 	@CreatedDate
 	@Column(name = "created_date", updatable = false)
@@ -39,7 +40,7 @@ public class Auditable {
 
 	@LastModifiedBy
 	@Column(name = "last_modified_by")
-	protected String lastModifiedBy;
+	protected UsuarioModel lastModifiedBy;
 
 	@LastModifiedDate
 	@Column(name = "last_modified_date")
