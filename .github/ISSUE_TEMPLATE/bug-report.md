@@ -2,8 +2,8 @@
 name: Bug Report
 about: Template para informar um bug.
 title: "[BUG]"
-labels: bug
-assignees: ''
+labels: bug, enhancement
+assignees: alverad-katsuro
 
 ---
 

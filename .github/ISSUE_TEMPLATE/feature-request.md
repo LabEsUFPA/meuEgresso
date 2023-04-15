@@ -9,12 +9,12 @@ assignees: ''
 
 ## Origem
 
-- [ ] Cliente 
-- [ ] Gerente de Projeto 
-- [ ] Analista de Requisito 
-- [ ] Arquiteto de Software
-- [ ] Desenvolvedores
-- [ ] Testadores
+-  Cliente 
+-  Gerente de Projeto 
+-  Analista de Requisito 
+-  Arquiteto de Software
+-  Desenvolvedores
+-  Testadores
 
 ## Motivação
 
@@ -33,12 +33,7 @@ Descrição da nova funcionalidade.
 
 ## Lista de Tarefas
 
-* [ ]  Tarefa 1
-  * [ ]  Tarefa 1.1
-* [ ]  Tarefa 2
-* [ ]  Tarefa 3 3
-
-/label ~feature ~"to do"
-/estimate (1d ou 1w)
-/milestone %"AGOSTO/2021"
-/assign me
+* [ ]  Criar Repository XXXXXXModel
+* [ ]  Criar Interface Service XXXXXXModel
+* [ ]  Implementar interface Service XXXXXXModel
+* [ ]  Criar Controller XXXXXXModel
