@@ -51,9 +51,8 @@ public class SecurityConfig {
 								"/swagger-ui/**",
 								"/swagger-ui.html",
 								"/",
-								"/usuario", // TODO Remover após desenvolvimento das funcionalidades referentes ao
-											// usuario
-								"/grupo") // TODO Remover após desenvolvimento das funcionalidades referentes ao grupo
+								"/usuario",
+								"/grupo")
 						.permitAll()
 						.anyRequest().authenticated())
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
