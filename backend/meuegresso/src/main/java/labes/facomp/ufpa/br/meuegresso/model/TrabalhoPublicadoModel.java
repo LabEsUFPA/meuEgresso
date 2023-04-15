@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +25,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity(name = "trabalho_publicado")
-public class TrabalhoPublicadoModel extends Auditable {
+public class TrabalhoPublicadoModel extends Auditable implements Serializable {
+
+    private static final long serialVersionUID = -4561291198769871496L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -38,7 +41,8 @@ public class TrabalhoPublicadoModel extends Auditable {
     private String linkTrabalho;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
-	@JoinTable(name = "egresso_tabalho_publicado", joinColumns = { @JoinColumn(name = "id_trabalho_publicado") }, inverseJoinColumns = {
-			@JoinColumn(name = "id_usuario") })
-	private Set<EgressoModel> egressos = new HashSet<>();
+    @JoinTable(name = "egresso_tabalho_publicado", joinColumns = {
+            @JoinColumn(name = "id_trabalho_publicado") }, inverseJoinColumns = {
+                    @JoinColumn(name = "id_usuario") })
+    private Set<EgressoModel> egressos = new HashSet<>();
 }

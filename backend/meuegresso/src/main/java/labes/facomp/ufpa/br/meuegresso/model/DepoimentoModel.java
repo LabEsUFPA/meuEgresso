@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,7 +21,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity(name = "depoimento")
-public class DepoimentoModel extends Auditable {
+public class DepoimentoModel extends Auditable implements Serializable {
+
+    private static final long serialVersionUID = -4561291198764208496L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
