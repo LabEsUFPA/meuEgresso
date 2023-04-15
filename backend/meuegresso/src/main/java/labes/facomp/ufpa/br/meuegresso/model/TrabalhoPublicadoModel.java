@@ -1,6 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,9 +24,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity(name = "trabalho_publicado")
-public class TrabalhoPublicadoModel extends Auditable implements Serializable {
-
-    private static final long serialVersionUID = -4561291198769871496L;
+public class TrabalhoPublicadoModel extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

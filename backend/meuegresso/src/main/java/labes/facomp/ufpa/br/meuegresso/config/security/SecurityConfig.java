@@ -51,7 +51,8 @@ public class SecurityConfig {
 								"/swagger-ui/**",
 								"/swagger-ui.html",
 								"/",
-								"/usuario", // TODO Remover após desenvolvimento das funcionalidades referentes ao usuario
+								"/usuario", // TODO Remover após desenvolvimento das funcionalidades referentes ao
+											// usuario
 								"/grupo") // TODO Remover após desenvolvimento das funcionalidades referentes ao grupo
 						.permitAll()
 						.anyRequest().authenticated())

@@ -1,6 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,9 +26,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "egresso")
 @EqualsAndHashCode(callSuper = false)
-public class EgressoModel extends Auditable implements Serializable {
-
-    private static final long serialVersionUID = -6470090944414208496L;
+public class EgressoModel extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

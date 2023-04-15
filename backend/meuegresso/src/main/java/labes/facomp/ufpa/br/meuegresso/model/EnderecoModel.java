@@ -1,6 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -21,9 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "endereco")
 @EqualsAndHashCode(callSuper = false)
-public class EnderecoModel extends Auditable implements Serializable {
-
-    private static final long serialVersionUID = -6470091198764208496L;
+public class EnderecoModel extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
