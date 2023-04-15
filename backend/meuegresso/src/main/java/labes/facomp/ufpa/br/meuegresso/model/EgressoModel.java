@@ -39,7 +39,7 @@ public class EgressoModel extends Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genero_id", nullable = false, unique = false)
-    private GeneroModel genero;
+    private SexoModel sexo;
 
     @Column(name = "cotista_egresso", nullable = false, unique = false)
     private Boolean cotista;
