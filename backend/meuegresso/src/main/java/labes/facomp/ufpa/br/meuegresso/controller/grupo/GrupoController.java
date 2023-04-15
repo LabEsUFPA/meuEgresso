@@ -37,7 +37,7 @@ public class GrupoController {
 	 * @author Alfredo Gabriel
 	 * @since 26/03/2023
 	 */
-	@PostMapping(value="/cadastrar")
+	@PostMapping
 	public ResponseEntity<GrupoDTO> cadastrarUsuario(@RequestBody @Valid GrupoDTO grupoDTO) {
 		GrupoModel grupoModel = mapper.map(grupoDTO, GrupoModel.class);
 		grupoModel = grupoService.save(grupoModel);

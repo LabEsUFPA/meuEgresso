@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,9 +18,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * Representação da tabela Usuario presente no banco de dados.
@@ -30,20 +36,35 @@ import lombok.EqualsAndHashCode;
  * @version 1.0
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "usuario")
 @EqualsAndHashCode(callSuper = false, exclude = "grupos")
 public class UsuarioModel extends Auditable implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name = "id_usuario", nullable = false, unique = true)
+	@Column(name = "id_usuario", unique = true, nullable = false)
 	private Integer idUsuario;
 
-	@Column(name = "login_usuario", nullable = false, unique = true, length = 100)
+	@Column(name = "login_usuario", unique = true, nullable = false, length = 100)
 	private String username;
 
 	@Column(name = "senha_usuario", nullable = false, unique = false, length = 100)
 	private String password;
+
+	@Column(name = "email", nullable = false, unique = false, length = 50)
+	private String email;
+
+	@Column(name = "nome_usuario", nullable = false, unique = false, length = 80)
+	private String nome;
+
+    @Temporal(TemporalType.DATE)
+	@Column(name = "nascimento_usuario", nullable = false, unique = false)
+    private Date nascimento;
+
+    @OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
+	private transient EgressoModel egresso;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
 	@JoinTable(name = "usuario_grupo", joinColumns = { @JoinColumn(name = "id_usuario") }, inverseJoinColumns = {
