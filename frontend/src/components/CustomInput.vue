@@ -11,18 +11,21 @@
       >*</sup>
     </label>
     <div
-      class="rounded-lg w-64 py-1 px-3 border grid grid-cols-8"
+      class="rounded-lg max-w-36 sm:w-48 md:w-64 py-1 border"
       :class="`${focused ? 'outline-2 outline outline-gray-600' : 'border-gray-400'} ${inputClass}`"
     >
       <SvgIcon
         type="mdi"
-        class="text-gray-400 col-span-1"
+        class="absolute ml-1 text-gray-400 col-span-1"
         size="24"
         :path="iconPath"
         v-if="iconPath"
       />
       <input
-        class="focus:outline-none"
+        class="w-full pl-8 pr-2 focus:outline-none"
+        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+        :maxlength="inputSize"
+        :minlength="inputSize"
         :class="iconPath ? 'col-span-7' : 'col-span-8'"
         :type="type"
         :value="modelValue"
@@ -39,6 +42,12 @@
       class="text-xs mt-1 ml-1 max-w-[250px] sm:max-w-fit"
     >
       {{ helperText }}
+    </div>
+    <div
+      v-if="errorText"
+      class="text-xs text-red-600 mt-1 ml-1 max-w-[250px] sm:max-w-fit"
+    >
+      {{ errorText }}
     </div>
   </div>
 </template>
@@ -57,11 +66,13 @@ interface Props {
   modelValue: string
   label: string
   helperText: string
+  errorText: string
   placeholder?: string
   type?: inputs
   iconPath?: string
   inputClass?: string
   required?: boolean
+  inputSize?: number
 }
 
 withDefaults(defineProps<Props>(), {
@@ -69,7 +80,9 @@ withDefaults(defineProps<Props>(), {
   type: 'text',
   iconPath: '',
   inputClass: '',
-  helperText: ''
+  helperText: '',
+  errorText: '',
+  inputSize: 255
 })
 
 const focused = ref(false)
