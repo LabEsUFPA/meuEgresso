@@ -11,15 +11,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.AnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.ContribuicaoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.CursoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.DepoimentoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoColacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EmpregoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EnderecoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.PesquisaCientificaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.TrabalhoPublicadoDTO;
+import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoColocaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
+import labes.facomp.ufpa.br.meuegresso.model.PesquisaCientificaModel;
 import labes.facomp.ufpa.br.meuegresso.model.TrabalhoPublicadoModel;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
@@ -45,12 +55,50 @@ public class EgressoController {
         egressoModel = egressoService.adicionarEgresso(egressoModel);
         return ResponseEntity.ok(mapper.map(egressoModel, EgressoPublicDTO.class));
     }
+    
+    @PostMapping(value = "/endereco")
+    public ResponseEntity<EnderecoDTO> cadastrarEndereco(@RequestBody EnderecoDTO endereco) {
+        EnderecoModel enderecoModel = mapper.map(endereco, EnderecoModel.class);
+        enderecoModel = egressoService.adicionarEndereco(enderecoModel);
+        return ResponseEntity.ok(mapper.map(enderecoModel, EnderecoDTO.class));
+    }
+
 
     @PostMapping(value = "/publicacao")
     public ResponseEntity<TrabalhoPublicadoDTO> cadastrarPublicacao(@RequestBody TrabalhoPublicadoDTO publicacao) {
         TrabalhoPublicadoModel publicacaoModel = mapper.map(publicacao, TrabalhoPublicadoModel.class);
         publicacaoModel = egressoService.adicionarPublicacao(publicacaoModel);
         return ResponseEntity.ok(mapper.map(publicacaoModel, TrabalhoPublicadoDTO.class));
+    }
+
+    @PostMapping(value = "/pesquisa")
+    public ResponseEntity<PesquisaCientificaDTO> cadastrarPublicacao(@RequestBody PesquisaCientificaDTO pesquisa) {
+        PesquisaCientificaModel pesquisaModel = mapper.map(pesquisa, PesquisaCientificaModel.class);
+        pesquisaModel = egressoService.adicionarPesquisa(pesquisaModel);
+        return ResponseEntity.ok(mapper.map(pesquisaModel, PesquisaCientificaDTO.class));
+    }
+
+    //curso
+    @PostMapping(value = "/curso")
+    public ResponseEntity<TrabalhoPublicadoDTO> cadastrarCurso(@RequestBody CursoDTO curso) {
+        CursoModel cursoModel = mapper.map(curso, CursoModel.class);
+        cursoModel = egressoService.adicionarCurso(cursoModel);
+        return ResponseEntity.ok(mapper.map(cursoModel, TrabalhoPublicadoDTO.class));
+    }
+
+    //anuncio
+    @PostMapping(value = "/anuncio")
+    public ResponseEntity<AnuncioDTO> cadastrarAnuncio(@RequestBody AnuncioDTO anuncio) {
+        AnuncioModel anuncioModel = mapper.map(anuncio, AnuncioModel.class);
+        anuncioModel = egressoService.adicionarAnuncio(anuncioModel);
+        return ResponseEntity.ok(mapper.map(anuncio, AnuncioDTO.class));
+    }
+
+    @PostMapping(value = "/titulo-academico")
+    public ResponseEntity<EgressoColacaoDTO> cadastrarTituloAcademico(@RequestBody EgressoColacaoDTO tituloAcademico) {
+        EgressoColocaoModel tituloAcademicoModel = mapper.map(tituloAcademico, EgressoColocaoModel.class);
+        tituloAcademicoModel = egressoService.adicionarTituloAcademico(tituloAcademicoModel);
+        return ResponseEntity.ok(mapper.map(tituloAcademicoModel, EgressoColacaoDTO.class));
     }
 
     @PostMapping(value = "/emprego")

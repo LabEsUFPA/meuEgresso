@@ -3,15 +3,25 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso.impl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoColocaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
+import labes.facomp.ufpa.br.meuegresso.model.PesquisaCientificaModel;
 import labes.facomp.ufpa.br.meuegresso.model.TrabalhoPublicadoModel;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.AnuncioRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.ContribuicaoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.CursoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.DepoimentoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoColocaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EmpregoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EnderecoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.PesquisaCientificaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.PublicacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +43,12 @@ public class EgressoServiceImpl implements EgressoService {
     private final PublicacaoRepository publicacaoRepository;
     private final DepoimentoRepository depoimentoRepository;
     private final EmpregoRepository empregoRepository;
+    private final EnderecoRepository enderecoRepository;
+    private final AnuncioRepository anuncioRepository;
+    private final PesquisaCientificaRepository pesquisaCientificaRepository;
+    private final CursoRepository cursoRepository;
+    private final EgressoColocaoRepository egressoColocaoRepository;
+
 
     @Override
     public EgressoModel adicionarEgresso(EgressoModel egresso) {
@@ -61,6 +77,35 @@ public class EgressoServiceImpl implements EgressoService {
         return depoimentoRepository.save(depoimento);
 
     }
+
+    @Override
+    public EnderecoModel adicionarEndereco(EnderecoModel endereco) {
+        return enderecoRepository.save(endereco);
+
+    }
+
+    @Override
+    public AnuncioModel adicionarAnuncio(AnuncioModel anuncio)
+    {
+        return anuncioRepository.save(anuncio);
+    }
+    
+    @Override
+    public PesquisaCientificaModel adicionarPesquisa(PesquisaCientificaModel pesquisa)
+    {
+        return pesquisaCientificaRepository.save(pesquisa);
+    }
+    
+    @Override
+    public CursoModel adicionarCurso(CursoModel curso){
+        return cursoRepository.save(curso);
+    }
+
+    public EgressoColocaoModel adicionarTituloAcademico (EgressoColocaoModel titulo)
+    {
+        return egressoColocaoRepository.save(titulo);
+    }
+
         
     /**
      * 

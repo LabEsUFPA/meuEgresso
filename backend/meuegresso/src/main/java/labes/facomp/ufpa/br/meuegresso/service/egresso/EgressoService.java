@@ -2,10 +2,15 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
 import org.springframework.http.ResponseEntity;
 
+import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoColocaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
+import labes.facomp.ufpa.br.meuegresso.model.PesquisaCientificaModel;
 import labes.facomp.ufpa.br.meuegresso.model.TrabalhoPublicadoModel;
 
 /**
@@ -27,6 +32,16 @@ public interface EgressoService {
 
     public DepoimentoModel adicionarDepoimento(DepoimentoModel depoimento);
 
+    public EnderecoModel adicionarEndereco(EnderecoModel endereco);
+
+    public AnuncioModel adicionarAnuncio(AnuncioModel anuncio);
+
+    public PesquisaCientificaModel adicionarPesquisa(PesquisaCientificaModel pesquisa);
+
+    public CursoModel adicionarCurso(CursoModel curso);
+
+    public EgressoColocaoModel adicionarTituloAcademico (EgressoColocaoModel titulo);
+    
     /**
      * Metodo responsavel por atualizar informacoes do egresso no banco de dados.
      * 
