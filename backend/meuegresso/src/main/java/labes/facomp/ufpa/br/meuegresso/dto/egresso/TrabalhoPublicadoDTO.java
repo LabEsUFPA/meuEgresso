@@ -6,8 +6,15 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+/**
+ * 
+ *
+ * @author João Paulo
+ * @since 16/04/2023
+ * @version 1.0
+ */
 @Data
-public class PublicacoesDTO {
+public class TrabalhoPublicadoDTO {
     private Integer id;
 
     @NotBlank(message = "Infome um nome.")
