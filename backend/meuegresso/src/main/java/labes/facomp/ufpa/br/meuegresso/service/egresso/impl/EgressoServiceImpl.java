@@ -51,8 +51,8 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
-    public TrabalhoPublicadoModel adicionarPesquisa(TrabalhoPublicadoModel pesquisa) {
-        return publicacaoRepository.save(pesquisa);
+    public TrabalhoPublicadoModel adicionarPublicacao(TrabalhoPublicadoModel publicacao) {
+        return publicacaoRepository.save(publicacao);
 
     }
 
@@ -111,9 +111,9 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
-    public TrabalhoPublicadoModel updatePesquisa(TrabalhoPublicadoModel pesquisa) {
-        if (pesquisa.getId() != null) {
-            publicacaoRepository.save(pesquisa);
+    public TrabalhoPublicadoModel updatePublicacao(TrabalhoPublicadoModel publicacao) {
+        if (publicacao.getId() != null) {
+            publicacaoRepository.save(publicacao);
         }
         return null;
     }
@@ -167,12 +167,12 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
-    public ResponseEntity<String> deletarPesquisa(TrabalhoPublicadoModel publicacao) {
+    public ResponseEntity<String> deletarPublicacao(TrabalhoPublicadoModel publicacao) {
         if (publicacaoRepository.existsById(publicacao.getId())) {
             publicacaoRepository.deleteById(publicacao.getId());
-            return ResponseEntity.ok("Pesquisa deletada");
+            return ResponseEntity.ok("Publicacao deletada");
         } else {
-            return ResponseEntity.ok("Pesquisa nao encontrada");
+            return ResponseEntity.ok("Publicacao nao encontrada");
         }
     }
 
