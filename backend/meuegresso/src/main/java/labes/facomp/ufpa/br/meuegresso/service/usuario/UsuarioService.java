@@ -33,4 +33,8 @@ public interface UsuarioService extends UserDetailsService {
 
 	public List<UsuarioModel> findAll();
 
+	public UsuarioModel update(UsuarioModel usuario);
+
+	public void deleteById(Integer idUsuario);
+
 }

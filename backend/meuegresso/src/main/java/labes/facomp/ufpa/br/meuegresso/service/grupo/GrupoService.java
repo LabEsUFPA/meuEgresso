@@ -35,4 +35,6 @@ public interface GrupoService {
 	 */
 	public GrupoModel findByNomeGrupo(String nomeGrupo);
 
+	public GrupoModel update(GrupoModel grupoModel);
+
 }

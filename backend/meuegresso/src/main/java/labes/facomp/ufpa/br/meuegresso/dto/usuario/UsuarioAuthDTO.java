@@ -12,39 +12,34 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grupo.GrupoDTO;
 import lombok.Data;
 
+
 /**
  * Encapsulamento da tabela Grupo a fim de representar somente os dados não
- * sensiveis.
+ * sensiveis, removendo a senha.
  * Nota: Use este DTO somente para persistir o usuário, não retorne o mesmo.
  *
- * @author Alfredo Gabriel, Camilo Santos
- * @since 26/03/2023
- * @version 1.0.1
+ * @author Camilo Santos
+ * @since 16/04/2023
+ * @version 1.0
  */
 @Data
-public class UsuarioDTO {
+public class UsuarioAuthDTO {
 
-	private Integer idUsuario;
+    @NotBlank(message = "Infome um usuário.")
+    private String username;
 
-	@NotBlank(message = "Infome um usuário.")
-	private String username;
+    @Email(message = "Informe um e-mail valido.")
+    @NotBlank(message = "Infome um email.")
+    private String email;
 
-	@NotBlank(message = "Infome uma senha.")
-	private String password;
+    @NotBlank(message = "Infome um nome.")
+    private String nome;
 
-	@Email
-	@NotBlank(message = "Infome um email.")
-	private String email;
+    @NotNull(message = "Infome uma data de nascimento.")
+    private Date nascimento;
 
-	@NotBlank(message = "Infome um nome.")
-	private String nome;
+    @Valid
+    private EgressoPublicDTO egresso;
 
-	@NotNull(message = "Informe uma data de nascimento.")
-	private Date nascimento;
-
-	@Valid
-	private EgressoPublicDTO egresso;
-
-	private Set<GrupoDTO> grupos = new HashSet<>();
-
+    private Set<GrupoDTO> grupos = new HashSet<>();
 }
