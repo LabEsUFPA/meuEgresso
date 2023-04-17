@@ -60,14 +60,14 @@ public class EgressoModel extends Auditable {
     @JoinColumn(name = "endereco_id", unique = false, nullable = false)
     private EnderecoModel endereco;
 
-    @OneToOne
+    @OneToOne(cascade = { CascadeType.REMOVE })
     @JoinColumn(name = "usuario_id", unique = true, nullable = false)
     private UsuarioModel usuario;
 
-    @OneToMany(mappedBy = "egresso", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
     private Set<DepoimentoModel> depoimentos;
 
-    @ManyToMany(mappedBy = "egressos", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "egressos", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
     private Set<TrabalhoPublicadoModel> trabalhoPublicados = new HashSet<>();
 
 }

@@ -2,11 +2,14 @@ package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.ContribuicoesDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
@@ -63,4 +66,41 @@ public class EgressoController {
         depoimentoModel = egressoService.adicionarDepoimento(depoimentoModel);
         return ResponseEntity.ok(mapper.map(depoimentoModel, DepoimentoDTO.class));
     }
+
+
+    @DeleteMapping(value = "/deletar")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> deletarEgresso(@RequestBody @Valid EgressoPublicDTO egressoPublicDTO) {
+        EgressoModel egressoModel = mapper.map(egressoPublicDTO, EgressoModel.class);
+        return egressoService.deletarEgresso(egressoModel);
+    }
+
+    @DeleteMapping(value = "/deletar/pesquisa")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> deletarPesquisa(@RequestBody @Valid PublicacoesDTO publicacao) {
+        TrabalhoPublicadoModel publicacaoModel = mapper.map(publicacao, TrabalhoPublicadoModel.class);
+        return egressoService.deletarPesquisa(publicacaoModel);
+    }
+
+    @PostMapping(value = "/deletar/emprego")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> deletarEmprego(@RequestBody EmpregoDTO emprego) {
+        EgressoEmpresaModel empregoModel = mapper.map(emprego, EgressoEmpresaModel.class);
+        return egressoService.deletarEmprego(empregoModel);
+    }
+
+    @PostMapping(value = "/deletar/contribuicao")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> deletarContribuicao(@RequestBody ContribuicoesDTO contribucao) {
+        ContribuicaoModel contribuicaoModel = mapper.map(contribucao, ContribuicaoModel.class);
+        return egressoService.deletarContribuicao(contribuicaoModel);
+    }
+
+    @PostMapping(value = "/deletar/depoimento")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> deletarDepoimento(@RequestBody DepoimentoDTO depoimento) {
+        DepoimentoModel depoimentoModel = mapper.map(depoimento, DepoimentoModel.class);
+        return egressoService.deletarDepoimento(depoimentoModel);
+    }
 }
+

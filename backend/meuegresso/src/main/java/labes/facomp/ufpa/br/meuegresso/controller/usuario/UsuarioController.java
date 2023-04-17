@@ -47,7 +47,7 @@ public class UsuarioController {
 	/**
 	 * Endpoint responsavel por cadastrar o usuário.
 	 *
-	 * @param usuario Estrutura de dados contendo as informações necessárias para persistir o Usuário.
+	 * @param usuarioDTO Estrutura de dados contendo as informações necessárias para persistir o Usuário.
 	 * @return {@link UsuarioModel} Dados gravados no banco com a Id atualizada.
 	 * @author Alfredo Gabriel
 	 * @since 26/03/2023
