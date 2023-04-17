@@ -2,7 +2,7 @@
 name: Duvidas e sugestões
 about: Este template tem como objetivo retirar duvidas e oferecer sugestões
 title: "[QUESTION]"
-labels: question
+labels: ''
 assignees: ''
 
 ---
