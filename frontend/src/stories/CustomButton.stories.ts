@@ -11,7 +11,9 @@ const meta: Meta<typeof CustomButton> = {
         Sky: 'sky',
         Blue: 'blue',
         Red: 'red',
-        Green: 'green'
+        Green: 'green',
+        Emerald: 'emerald',
+        White: 'white'
       },
       control: { type: 'select' }
     },
