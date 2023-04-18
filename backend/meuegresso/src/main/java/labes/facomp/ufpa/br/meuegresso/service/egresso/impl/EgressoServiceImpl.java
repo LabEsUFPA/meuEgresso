@@ -7,7 +7,7 @@ import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoColocaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
@@ -17,7 +17,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.AnuncioRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.ContribuicaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.CursoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.DepoimentoRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoColocaoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoColacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EmpregoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EnderecoRepository;
@@ -47,7 +47,7 @@ public class EgressoServiceImpl implements EgressoService {
     private final AnuncioRepository anuncioRepository;
     private final PesquisaCientificaRepository pesquisaCientificaRepository;
     private final CursoRepository cursoRepository;
-    private final EgressoColocaoRepository egressoColocaoRepository;
+    private final EgressoColacaoRepository egressoColacaoRepository;
 
 
     @Override
@@ -101,9 +101,9 @@ public class EgressoServiceImpl implements EgressoService {
         return cursoRepository.save(curso);
     }
 
-    public EgressoColocaoModel adicionarTituloAcademico (EgressoColocaoModel titulo)
+    public EgressoColacaoModel adicionarTituloAcademico (EgressoColacaoModel titulo)
     {
-        return egressoColocaoRepository.save(titulo);
+        return egressoColacaoRepository.save(titulo);
     }
 
         
@@ -225,5 +225,55 @@ public class EgressoServiceImpl implements EgressoService {
     public Boolean existsById(Integer id) {
         return egressoRepository.existsById(id);
     
+    }
+
+    @Override
+    public ResponseEntity<String> deletarAnuncio(AnuncioModel anuncio) {
+        if (anuncioRepository.existsById(anuncio.getId())) {
+            anuncioRepository.deleteById(anuncio.getId());
+            return ResponseEntity.ok("Anuncio deletada");
+        } else {
+            return ResponseEntity.ok("Anuncio nao encontrada");
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> deletarCurso(CursoModel curso) {
+        if (cursoRepository.existsById(curso.getId())) {
+            cursoRepository.deleteById(curso.getId());
+            return ResponseEntity.ok("Curso deletada");
+        } else {
+            return ResponseEntity.ok("Curso nao encontrada");
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> deletarPesquisa(PesquisaCientificaModel pesquisa) {
+        if (pesquisaCientificaRepository.existsById(pesquisa.getId())) {
+            pesquisaCientificaRepository.deleteById(pesquisa.getId());
+            return ResponseEntity.ok("Pesquisa deletada");
+        } else {
+            return ResponseEntity.ok("Pesquisa nao encontrada");
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> deletarTituloAcademico(EgressoColacaoModel tituloAcademico) {
+        if (egressoColacaoRepository.existsById(tituloAcademico.getId().getColacaoId())) {
+            egressoColacaoRepository.deleteById(tituloAcademico.getId().getColacaoId());
+            return ResponseEntity.ok("Colacao deletada");
+        } else {
+            return ResponseEntity.ok("Colacao nao encontrada");
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> deletarEndereco(EnderecoModel endereco) {
+        if (enderecoRepository.existsById(endereco.getId())) {
+            enderecoRepository.deleteById(endereco.getId());
+            return ResponseEntity.ok("Endereco deletado");
+        } else {
+            return ResponseEntity.ok("Endereco nao encontrado");
+        }
     }
 }

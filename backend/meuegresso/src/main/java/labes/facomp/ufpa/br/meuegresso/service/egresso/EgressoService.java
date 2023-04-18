@@ -6,7 +6,7 @@ import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoColocaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
@@ -40,7 +40,7 @@ public interface EgressoService {
 
     public CursoModel adicionarCurso(CursoModel curso);
 
-    public EgressoColocaoModel adicionarTituloAcademico (EgressoColocaoModel titulo);
+    public EgressoColacaoModel adicionarTituloAcademico (EgressoColacaoModel titulo);
     
     /**
      * Metodo responsavel por atualizar informacoes do egresso no banco de dados.
@@ -149,6 +149,62 @@ public interface EgressoService {
      */
     public ResponseEntity<String> deletarDepoimento(DepoimentoModel depoimento);
 
+    /**
+     * Metodo responsavel por deletar informacoes de pesquisa do egresso no banco
+     * de dados.
+     * 
+     * @param pesquisa Dados de pesquisa do egresso
+     * @return Mensagem de confirmacao
+     * @author Bruno Eiki
+     * @since 17/04/2023
+     */
+    public ResponseEntity<String> deletarPesquisa(PesquisaCientificaModel pesquisa);
+
+    /**
+     * Metodo responsavel por deletar informacoes de curso do egresso no banco
+     * de dados.
+     * 
+     * @param curso Dados de curso do egresso
+     * @return Mensagem de confirmacao
+     * @author Bruno Eiki
+     * @since 17/04/2023
+     */
+    public ResponseEntity<String> deletarCurso(CursoModel curso);
+
+    /**
+     * Metodo responsavel por deletar informacoes de anuncio do egresso no banco
+     * de dados.
+     * 
+     * @param anuncio Dados de anuncio do egresso
+     * @return Mensagem de confirmacao
+     * @author Bruno Eiki
+     * @since 17/04/2023
+     */
+    public ResponseEntity<String> deletarAnuncio(AnuncioModel anuncio);
+
+    /**
+     * Metodo responsavel por deletar informacoes da colacao(titulacao) do egresso no banco
+     * de dados.
+     * 
+     * @param tituloAcademico Dados de anuncio do egresso
+     * @return Mensagem de confirmacao
+     * @author Bruno Eiki
+     * @since 17/04/2023
+     */
+
+    public ResponseEntity<String> deletarTituloAcademico(EgressoColacaoModel tituloAcademico);
+
+    /**
+     * Metodo responsavel por deletar informacoes do endereco do egresso
+     * no banco de dados.
+     * 
+     * @param endereco Dados do endereco do egresso
+     * @return Mensagem de confirmacao
+     * @author Bruno Eiki
+     * @since 17/04/2023
+     */
+
+    public ResponseEntity<String> deletarEndereco(EnderecoModel endereco);
 
     /**
      * Metodo responsavel por verificar se egresso existe no banco de dados.
@@ -158,7 +214,6 @@ public interface EgressoService {
      * @author Pedro Inácio
      * @since 16/04/2023     
      */
-
     public Boolean existsById(Integer id);
 
     /**
