@@ -134,7 +134,7 @@ public class EgressoController {
     @PutMapping
     public ResponseEntity<EgressoPublicDTO> atualizarEgresso(@RequestBody EgressoPublicDTO egresso) {
         EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
-        egressoModel = egressoService.adicionarEgresso(egressoModel);
+        egressoModel = egressoService.updateEgresso(egressoModel);
         return ResponseEntity.ok(mapper.map(egressoModel, EgressoPublicDTO.class));
     }
     
@@ -151,7 +151,7 @@ public class EgressoController {
     @PutMapping(value = "/publicacao")
     public ResponseEntity<TrabalhoPublicadoDTO> atualizarPublicacao(@RequestBody TrabalhoPublicadoDTO publicacao) {
         TrabalhoPublicadoModel publicacaoModel = mapper.map(publicacao, TrabalhoPublicadoModel.class);
-        publicacaoModel = egressoService.adicionarPublicacao(publicacaoModel);
+        publicacaoModel = egressoService.updatePublicacao(publicacaoModel);
         return ResponseEntity.ok(mapper.map(publicacaoModel, TrabalhoPublicadoDTO.class));
     }
 
@@ -168,7 +168,7 @@ public class EgressoController {
     @PutMapping(value = "/emprego")
     public ResponseEntity<EmpregoDTO> atualizarEmprego(@RequestBody EmpregoDTO emprego) {
         EgressoEmpresaModel empregoModel = mapper.map(emprego, EgressoEmpresaModel.class);
-        empregoModel = egressoService.adicionarEmprego(empregoModel);
+        empregoModel = egressoService.updateEmprego(empregoModel);
         return ResponseEntity.ok(mapper.map(empregoModel, EmpregoDTO.class));
     }
 
@@ -185,7 +185,7 @@ public class EgressoController {
     @PutMapping(value = "/contribuicao")
     public ResponseEntity<ContribuicaoDTO> atualizarContribuicao(@RequestBody ContribuicaoDTO contribucao) {
         ContribuicaoModel contribuicaoModel = mapper.map(contribucao, ContribuicaoModel.class);
-        contribuicaoModel = egressoService.adicionarContribuicao(contribuicaoModel);
+        contribuicaoModel = egressoService.updateContribuicao(contribuicaoModel);
         return ResponseEntity.ok(mapper.map(contribuicaoModel, ContribuicaoDTO.class));
     }
 
@@ -202,10 +202,46 @@ public class EgressoController {
     @PutMapping(value = "/depoimento")
     public ResponseEntity<DepoimentoDTO> atualizarDepoimento(@RequestBody DepoimentoDTO depoimento) {
         DepoimentoModel depoimentoModel = mapper.map(depoimento, DepoimentoModel.class);
-        depoimentoModel = egressoService.adicionarDepoimento(depoimentoModel);
+        depoimentoModel = egressoService.updateDepoimento(depoimentoModel);
         return ResponseEntity.ok(mapper.map(depoimentoModel, DepoimentoDTO.class));
     }
 
+    @PostMapping(value = "/endereco")
+    public ResponseEntity<EnderecoDTO> atualizarEndereco(@RequestBody EnderecoDTO endereco) {
+        EnderecoModel enderecoModel = mapper.map(endereco, EnderecoModel.class);
+        enderecoModel = egressoService.updateEndereco(enderecoModel);
+        return ResponseEntity.ok(mapper.map(enderecoModel, EnderecoDTO.class));
+    }
+
+    @PostMapping(value = "/pesquisa")
+    public ResponseEntity<PesquisaCientificaDTO> atualizarPublicacao(@RequestBody PesquisaCientificaDTO pesquisa) {
+        PesquisaCientificaModel pesquisaModel = mapper.map(pesquisa, PesquisaCientificaModel.class);
+        pesquisaModel = egressoService.updatePesquisa(pesquisaModel);
+        return ResponseEntity.ok(mapper.map(pesquisaModel, PesquisaCientificaDTO.class));
+    }
+
+    // curso
+    @PostMapping(value = "/curso")
+    public ResponseEntity<CursoDTO> atualizarCurso(@RequestBody CursoDTO curso) {
+        CursoModel cursoModel = mapper.map(curso, CursoModel.class);
+        cursoModel = egressoService.updateCurso(cursoModel);
+        return ResponseEntity.ok(mapper.map(cursoModel, CursoDTO.class));
+    }
+
+    // anuncio
+    @PostMapping(value = "/anuncio")
+    public ResponseEntity<AnuncioDTO> atualizarAnuncio(@RequestBody AnuncioDTO anuncio) {
+        AnuncioModel anuncioModel = mapper.map(anuncio, AnuncioModel.class);
+        anuncioModel = egressoService.updateAnuncio(anuncioModel);
+        return ResponseEntity.ok(mapper.map(anuncio, AnuncioDTO.class));
+    }
+
+    @PostMapping(value = "/titulo-academico")
+    public ResponseEntity<EgressoColacaoDTO> atualizarTituloAcademico(@RequestBody EgressoColacaoDTO tituloAcademico) {
+        EgressoColacaoModel tituloAcademicoModel = mapper.map(tituloAcademico, EgressoColacaoModel.class);
+        tituloAcademicoModel = egressoService.updateTituloAcademico(tituloAcademicoModel);
+        return ResponseEntity.ok(mapper.map(tituloAcademicoModel, EgressoColacaoDTO.class));
+    }
 
 
     /**

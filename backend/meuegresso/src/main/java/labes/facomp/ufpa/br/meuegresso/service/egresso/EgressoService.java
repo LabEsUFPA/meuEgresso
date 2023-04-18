@@ -93,7 +93,15 @@ public interface EgressoService {
      */
     public DepoimentoModel updateDepoimento(DepoimentoModel depoimento);
 
+    public EnderecoModel updateEndereco(EnderecoModel endereco);
 
+    public AnuncioModel updateAnuncio(AnuncioModel anuncio);
+
+    public PesquisaCientificaModel updatePesquisa(PesquisaCientificaModel pesquisa);
+
+    public CursoModel updateCurso(CursoModel curso);
+
+    public EgressoColacaoModel updateTituloAcademico(EgressoColacaoModel titulo);
    
 
     /**

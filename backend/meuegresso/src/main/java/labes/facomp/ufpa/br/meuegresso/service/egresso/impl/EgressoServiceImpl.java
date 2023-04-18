@@ -163,7 +163,45 @@ public class EgressoServiceImpl implements EgressoService {
         return null;
     }
 
-    
+    @Override
+    public AnuncioModel updateAnuncio(AnuncioModel anuncio) {
+        if (anuncio.getId() != null) {
+            anuncioRepository.save(anuncio);
+        }
+        return null;
+    }
+
+    @Override
+    public CursoModel updateCurso(CursoModel curso) {
+        if (curso.getId() != null) {
+            cursoRepository.save(curso);
+        }
+        return null;
+    }
+
+    @Override
+    public EnderecoModel updateEndereco(EnderecoModel endereco) {
+        if (endereco.getId() != null) {
+            enderecoRepository.save(endereco);
+        }
+        return null;
+    }
+
+    @Override
+    public PesquisaCientificaModel updatePesquisa(PesquisaCientificaModel pesquisa) {
+        if (pesquisa.getId() != null) {
+            pesquisaCientificaRepository.save(pesquisa);
+        }
+        return null;
+    }
+
+    @Override
+    public EgressoColacaoModel updateTituloAcademico(EgressoColacaoModel titulo) {
+        if (titulo.getId() != null) {
+            egressoColacaoRepository.save(titulo);
+        }
+        return null;
+    }
 
     @Override
     public void deleteById(Integer id) {
