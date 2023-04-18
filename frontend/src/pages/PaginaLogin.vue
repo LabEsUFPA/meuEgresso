@@ -37,11 +37,13 @@
         label="Entrar"
         type="submit"
         @click="submit"
-      />
+      >
+        Entrar
+      </CustomButton>
       <p class="mt-9">
         Não possui login?
         <RouterLink
-          to="/register"
+          to="/cadastro-perfil"
           class="text-sky-600"
         >
           Cadastre-se
