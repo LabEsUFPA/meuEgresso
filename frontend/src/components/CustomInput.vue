@@ -24,8 +24,8 @@
       <input
         class="w-full pl-8 pr-2 focus:outline-none"
         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-        :maxlength="inputSize"
-        :minlength="inputSize"
+        :maxlength="maxLength"
+        :minlength="minLength"
         :class="iconPath ? 'col-span-7' : 'col-span-8'"
         :type="type"
         :value="modelValue"
@@ -65,14 +65,15 @@ type inputs = 'date' | 'text' | 'email' | 'number' | 'password'
 interface Props {
   modelValue: string
   label: string
-  helperText: string
-  errorText: string
+  helperText?: string
+  errorText?: string
   placeholder?: string
   type?: inputs
   iconPath?: string
   inputClass?: string
   required?: boolean
-  inputSize?: number
+  maxLength?: number
+  minLength?: number
 }
 
 withDefaults(defineProps<Props>(), {
@@ -82,7 +83,8 @@ withDefaults(defineProps<Props>(), {
   inputClass: '',
   helperText: '',
   errorText: '',
-  inputSize: 255
+  maxLength: 300,
+  minLength: 1
 })
 
 const focused = ref(false)

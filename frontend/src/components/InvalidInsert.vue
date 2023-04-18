@@ -18,12 +18,11 @@
 <script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiAlertCircleOutline } from '@mdi/js'
-import { defineProps } from 'vue'
 
 interface Props {
     showAlert: boolean
     text: string
-    iconPath: string
+    iconPath?: string
 }
 
 withDefaults(defineProps<Props>(), {

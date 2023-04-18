@@ -4,9 +4,7 @@
     @click="$emit('click')"
     :type="type"
   >
-    <slot>
-      {{ label }}
-    </slot>
+    <slot />
   </button>
 </template>
 
@@ -16,7 +14,6 @@ import { computed } from 'vue'
 defineEmits(['click'])
 
 interface Props {
-  label: string
   variant?: 'standard' | 'outlined' | 'flat'
   textClass?: string
   color?: 'sky' | 'blue' | 'red' | 'green' | 'emerald'
