@@ -54,4 +54,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return usuarioRepository.save(usuario);
 	}
 
+	public UsuarioModel update(UsuarioModel usuario) {
+		if(usuario.getIdUsuario() != null){
+			return usuarioRepository.save(usuario);
+		}
+
+		return null;
+	}
+
 }

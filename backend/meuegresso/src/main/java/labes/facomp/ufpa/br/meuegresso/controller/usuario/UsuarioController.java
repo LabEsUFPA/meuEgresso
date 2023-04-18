@@ -4,12 +4,16 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -36,13 +40,11 @@ public class UsuarioController {
 
 	private final ModelMapper mapper;
 
-
 	@GetMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	public List<UsuarioPublicDTO> consultarUsuarios() {
 		return mapper.map(usuarioService.findAll(), new TypeToken<List<UsuarioPublicDTO>>() {}.getType());
 	}
-
 
 	/**
 	 * Endpoint responsavel por cadastrar o usuário.
@@ -58,5 +60,14 @@ public class UsuarioController {
 		usuarioModel = usuarioService.save(usuarioModel);
 		return ResponseEntity.ok(mapper.map(usuarioModel, UsuarioPublicDTO.class));
 	}
+
+	
+	@PutMapping
+	public ResponseEntity<UsuarioPublicDTO> atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
+		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
+		usuarioModel = usuarioService.save(usuarioModel);
+		return ResponseEntity.ok(mapper.map(usuarioModel, UsuarioPublicDTO.class));
+	}
+	
 
 }
