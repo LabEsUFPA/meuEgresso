@@ -9,7 +9,10 @@ export default {
   theme: {
     extend: {},
     colors: {
-      primary: '#03045e',
+      aero: '#00b3e1',
+      'pacific-cyan': '#00a5cf',
+      'bondi-blue': '#0091b7',
+      transparent: 'transparent',
       ...colors
     }
   },

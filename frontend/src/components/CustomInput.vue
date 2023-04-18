@@ -12,15 +12,17 @@
     </label>
     <div
       class="rounded-lg w-64 py-1 px-3 border grid grid-cols-8"
-      :class="`${focused ? 'outline-2 outline outline-gray-600' : 'border-gray-400'} ${inputClass}`"
+      :class="`${focused ? 'outline-2 outline outline-sky-400' : 'border-gray-400'} ${inputClass}`"
     >
-      <SvgIcon
-        type="mdi"
-        class="text-gray-400 col-span-1"
-        size="24"
-        :path="iconPath"
-        v-if="iconPath"
-      />
+      <div class="flex flex-row items-center">
+        <SvgIcon
+          type="mdi"
+          class="text-gray-400 col-span-1"
+          size="20"
+          :path="iconPath"
+          v-if="iconPath"
+        />
+      </div>
       <input
         class="focus:outline-none"
         :class="iconPath ? 'col-span-7' : 'col-span-8'"
@@ -29,9 +31,11 @@
         :placeholder="placeholder"
         :id="id"
         :required="required"
+        :data-maska="mask"
         @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         @focus="focused = true"
         @blur="focused = false"
+        v-maska
       >
     </div>
     <div
@@ -56,12 +60,13 @@ type inputs = 'date' | 'text' | 'email' | 'number' | 'password'
 interface Props {
   modelValue: string
   label: string
-  helperText: string
+  helperText?: string
   placeholder?: string
   type?: inputs
   iconPath?: string
   inputClass?: string
   required?: boolean
+  mask?: string
 }
 
 withDefaults(defineProps<Props>(), {
@@ -69,7 +74,8 @@ withDefaults(defineProps<Props>(), {
   type: 'text',
   iconPath: '',
   inputClass: '',
-  helperText: ''
+  helperText: '',
+  mask: ''
 })
 
 const focused = ref(false)

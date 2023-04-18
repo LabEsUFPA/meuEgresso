@@ -1,9 +1,9 @@
 <template>
-  <div
+  <button
     class="flex flex-row items-center cursor-pointer w-fit"
     @click="$emit('update:modelValue', !modelValue)"
   >
-    <div class="text-green-500">
+    <div class="text-teal-600">
       <SvgIcon
         type="mdi"
         class="inline"
@@ -25,7 +25,7 @@
     >
       {{ label }}
     </label>
-  </div>
+  </button>
 </template>
 
 <script lang="ts" setup>

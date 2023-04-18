@@ -80,7 +80,7 @@ defineEmits([
 interface Props {
   modelValue: string
   label: string
-  helperText: string
+  helperText?: string
   options: string[]
   iconPath?: string
   required?: boolean

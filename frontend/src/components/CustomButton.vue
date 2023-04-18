@@ -16,7 +16,7 @@ defineEmits(['click'])
 interface Props {
   variant?: 'standard' | 'outlined' | 'flat'
   textClass?: string
-  color?: 'sky' | 'blue' | 'red' | 'green' | 'emerald'
+  color?: 'sky' | 'blue' | 'red' | 'green' | 'emerald' | 'white'
   type?: 'reset' | 'button' | 'submit'
 }
 
@@ -74,11 +74,20 @@ const colorClassNames = {
     },
     text: 'text-emerald-600',
     outline: 'outline-emerald-600'
+  },
+  white: {
+    background: {
+      standard: 'bg-white',
+      hoverLight: 'hover:bg-sky-300/20',
+      hover: 'hover:bg-sky-300'
+    },
+    text: 'text-white',
+    outline: 'outline-white'
   }
 }
 
 const styles = computed(() => {
-  const classes = ['rounded-md px-8 py-1.5 text-lg font-semibold hover:duration-200']
+  const classes = ['rounded-md px-4 py-1 text-lg font-semibold hover:duration-200']
 
   switch (props.variant) {
     case 'standard':
@@ -86,7 +95,7 @@ const styles = computed(() => {
       classes.push(colorClassNames[props.color].background.hover)
       break
     case 'outlined':
-      classes.push(`outline-2 focus:outline-4 outline ${colorClassNames[props.color].outline} ${colorClassNames[props.color].background.hoverLight} focus:outline-slate-900`)
+      classes.push(`outline-1 focus:outline-3 outline ${colorClassNames[props.color].outline} ${colorClassNames[props.color].background.hoverLight} focus:outline-slate-900`)
       break
     case 'flat':
       classes.push(colorClassNames[props.color].background.hoverLight)
