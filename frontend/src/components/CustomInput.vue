@@ -19,7 +19,7 @@
         />
       </div>
       <input
-        class="w-full pl-8 pr-2 focus:outline-none"
+        class="focus:outline-none"
         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
         :maxlength="maxLength"
         :minlength="minLength"
