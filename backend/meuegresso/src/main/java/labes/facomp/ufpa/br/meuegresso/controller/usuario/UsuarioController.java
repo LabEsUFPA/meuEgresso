@@ -59,14 +59,15 @@ public class UsuarioController {
 	}
 
 	/**
-	 * Endpoint responsavel por cadastrar o usuário.
+	 * Endpoint responsavel por Atualizar o usuário.
 	 *
 	 * @param usuario Estrutura de dados contendo as informações necessárias para persistir o Usuário.
 	 * @return {@link UsuarioModel} Dados gravados no banco com a Id atualizada.
-	 * @author Alfredo Gabriel
-	 * @since 26/03/2023
+	 * @author Lucas cantão
+	 * @since 17/04/2023
 	 */
 	@PutMapping
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
 	public ResponseEntity<UsuarioPublicDTO> atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 		usuarioModel = usuarioService.save(usuarioModel);
