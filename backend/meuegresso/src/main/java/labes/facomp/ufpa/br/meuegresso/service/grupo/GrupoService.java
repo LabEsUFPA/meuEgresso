@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.grupo;
 
+import java.util.List;
+
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 
 /**
@@ -10,6 +12,8 @@ import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
  * @version 1.0
  */
 public interface GrupoService {
+
+	public List<GrupoModel> findAll();
 
 	/**
 	 * Metodo responsavel por persistir determinado grupo no banco de dados.
