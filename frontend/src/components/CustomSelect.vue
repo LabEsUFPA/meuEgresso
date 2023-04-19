@@ -1,8 +1,14 @@
 <template>
   <div>
     <div class="w-fit">
-      <div class="text-sm ml-1" v-if="label">
-        {{ label }} <sup v-if="required" class="text-red-500">*</sup>
+      <div
+        class="text-sm ml-1"
+        v-if="label"
+      >
+        {{ label }} <sup
+          v-if="required"
+          class="text-red-500"
+        >*</sup>
       </div>
       <button
         type="button"
@@ -18,14 +24,20 @@
           :path="iconPath"
           v-if="iconPath"
         />
-        <div class="text-left" :class="iconPath ? 'col-span-6' : 'col-span-7'">
+        <div
+          class="text-left"
+          :class="iconPath ? 'col-span-6' : 'col-span-7'"
+        >
           {{ modelValue }}
         </div>
 
         <div
           class="text-cyan-600 col-span-1 flex flex-row items-end justify-end"
         >
-          <SvgIcon type="mdi" :path="mdiChevronDown" />
+          <SvgIcon
+            type="mdi"
+            :path="mdiChevronDown"
+          />
         </div>
 
         <div
@@ -59,11 +71,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import SvgIcon from "@jamescoyle/vue-icon";
-import { mdiChevronDown } from "@mdi/js";
+import { ref } from 'vue'
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiChevronDown } from '@mdi/js'
 
-defineEmits(["update:modelValue"]);
+defineEmits(['update:modelValue'])
 
 interface Props {
   modelValue: string;
@@ -75,9 +87,9 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  iconPath: "",
-  helperText: "",
-});
+  iconPath: '',
+  helperText: ''
+})
 
-const open = ref(false);
+const open = ref(false)
 </script>

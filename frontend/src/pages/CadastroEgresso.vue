@@ -1,7 +1,9 @@
 <template>
   <div class="container mx-auto p-3 pb-0">
     <form @submit="handleSubmit($event)">
-      <h1 class="text-cyan-800 text-2xl font-semibold">Cadastro de egresso</h1>
+      <h1 class="text-cyan-800 text-2xl font-semibold">
+        Cadastro de egresso
+      </h1>
       <FolderSection>
         <template #title>
           <h1
@@ -49,7 +51,10 @@
               label="Linkedin"
             />
 
-            <CustomInput v-model="data.geral.lattes" label="Curriculo Lattes" />
+            <CustomInput
+              v-model="data.geral.lattes"
+              label="Curriculo Lattes"
+            />
           </div>
         </template>
       </FolderSection>
@@ -317,87 +322,92 @@
         </template>
       </FolderSection>
       <div class="py-10 flex flex-row justify-center items-center">
-        <CustomButton color="emerald" type="submit"> Salvar </CustomButton>
+        <CustomButton
+          color="emerald"
+          type="submit"
+        >
+          Salvar
+        </CustomButton>
       </div>
     </form>
   </div>
 </template>
 
 <script lang="ts" setup>
-import FolderSection from "src/components/FolderSection.vue";
-import CustomInput from "src/components/CustomInput.vue";
-import CustomCheckbox from "src/components/CustomCheckbox.vue";
-import CustomButton from "src/components/CustomButton.vue";
-import CustomSelect from "src/components/CustomSelect.vue";
-import SvgIcon from "@jamescoyle/vue-icon";
+import FolderSection from 'src/components/FolderSection.vue'
+import CustomInput from 'src/components/CustomInput.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
+import CustomButton from 'src/components/CustomButton.vue'
+import CustomSelect from 'src/components/CustomSelect.vue'
+import SvgIcon from '@jamescoyle/vue-icon'
 import {
   mdiAccount,
   mdiBriefcase,
   mdiEmail,
   mdiMapMarker,
   mdiMessage,
-  mdiSchool,
-} from "@mdi/js";
-import { ref } from "vue";
+  mdiSchool
+} from '@mdi/js'
+import { ref } from 'vue'
 
 const data = ref({
   geral: {
-    nome: "",
-    nascimento: "",
-    email: "",
-    confirmacaoEmail: "",
-    linkedin: "",
-    lattes: "",
+    nome: '',
+    nascimento: '',
+    email: '',
+    confirmacaoEmail: '',
+    linkedin: '',
+    lattes: ''
   },
   localizacao: {
-    cep: "",
-    pais: "",
-    estado: "",
-    cidade: "",
+    cep: '',
+    pais: '',
+    estado: '',
+    cidade: ''
   },
   academico: {
-    matricula: "",
-    email: "",
-    tipoAluno: "",
+    matricula: '',
+    email: '',
+    tipoAluno: '',
     cotista: {
       value: false,
-      tipo: "",
+      tipo: ''
     },
     bolsista: {
       value: false,
-      tipo: "",
-      remuneracao: "",
+      tipo: '',
+      remuneracao: ''
     },
     posGrad: {
       value: false,
-      tipo: "",
-      local: "",
-      curso: "",
-    },
+      tipo: '',
+      local: '',
+      curso: ''
+    }
   },
   carreira: {
-    area: "",
-    setor: "",
-    empresa: "",
-    faixaSalarial: "",
-    remuneracao: "",
+    area: '',
+    setor: '',
+    empresa: '',
+    faixaSalarial: '',
+    remuneracao: ''
   },
   adicionais: {
     palestras: false,
-    assuntosPalestras: "",
-    experiencias: "",
-    contribuicoes: "",
-  },
-});
+    assuntosPalestras: '',
+    experiencias: '',
+    contribuicoes: ''
+  }
+})
 
 const selectOpts = ref({
-  pais: ["Brasil", "Espanha", "Reino Unido", "China"],
-  estado: ["Pará", "Rio Grande do Norte", "São Paulo", "Ceara"],
-  cidade: ["Belém", "Ananideua", "Natal", "Fortaleza"],
-});
+  pais: ['Brasil', 'Espanha', 'Reino Unido', 'China'],
+  estado: ['Pará', 'Rio Grande do Norte', 'São Paulo', 'Ceara'],
+  cidade: ['Belém', 'Ananideua', 'Natal', 'Fortaleza']
+})
 
-function handleSubmit($event: Event) {
-  $event.preventDefault();
-  console.log(data.value);
+function handleSubmit ($event: Event) {
+  $event.preventDefault()
+  console.log(data.value)
 }
 </script>

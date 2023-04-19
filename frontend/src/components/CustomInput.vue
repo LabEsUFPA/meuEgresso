@@ -1,7 +1,14 @@
 <template>
   <div>
-    <label class="text-sm ml-1" v-if="label" :for="id">
-      {{ label }} <sup v-if="required" class="text-red-500">*</sup>
+    <label
+      class="text-sm ml-1"
+      v-if="label"
+      :for="id"
+    >
+      {{ label }} <sup
+        v-if="required"
+        class="text-red-500"
+      >*</sup>
     </label>
     <div
       class="rounded-lg w-64 py-1 px-3 border grid grid-cols-8"
@@ -36,9 +43,12 @@
         @focus="focused = true"
         @blur="focused = false"
         v-maska
-      />
+      >
     </div>
-    <div v-if="helperText" class="text-xs mt-1 ml-1 max-w-[250px] sm:max-w-fit">
+    <div
+      v-if="helperText"
+      class="text-xs mt-1 ml-1 max-w-[250px] sm:max-w-fit"
+    >
       {{ helperText }}
     </div>
     <div
@@ -51,12 +61,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import SvgIcon from "@jamescoyle/vue-icon";
+import { ref } from 'vue'
+import SvgIcon from '@jamescoyle/vue-icon'
 
-defineEmits(["update:modelValue"]);
+defineEmits(['update:modelValue'])
 
-type inputs = "date" | "text" | "email" | "number" | "password";
+type inputs = 'date' | 'text' | 'email' | 'number' | 'password';
 
 interface Props {
   modelValue: string;
@@ -74,18 +84,18 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  placeholder: "",
-  type: "text",
-  iconPath: "",
-  inputClass: "",
-  helperText: "",
-  mask: "",
-  errorText: "",
+  placeholder: '',
+  type: 'text',
+  iconPath: '',
+  inputClass: '',
+  helperText: '',
+  mask: '',
+  errorText: '',
   maxLength: 300,
-  minLength: 1,
-});
+  minLength: 1
+})
 
-const focused = ref(false);
+const focused = ref(false)
 
-const id = `text-input-${Math.floor(Math.random() * 1000000).toString()}`;
+const id = `text-input-${Math.floor(Math.random() * 1000000).toString()}`
 </script>
