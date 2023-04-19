@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full h-screen flex items-center justify-center bg-neutral-100">
-    <div class="flex flex-col items-center justify-center bg-white w-[960px] pt-16 pb-8 mx-6 rounded-2xl">
+  <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
+    <div class="flex flex-col items-center justify-center bg-white w-[960px] py-10 mx-6 rounded-2xl shadow-md">
       <InvalidInsert
         text="Nome de usuário ou senha incorretos."
         :show-alert="error"

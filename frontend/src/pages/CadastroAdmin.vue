@@ -1,9 +1,9 @@
 <template>
-  <div class="w-full h-screen flex items-center justify-center bg-neutral-100">
+  <div class="w-full h-screen flex items-center justify-center bg-neutral-100 my-8">
     <form @submit="handleSubmit($event)">
       <div
         v-if="!submitSuccess"
-        class="flex flex-col items-center bg-white w-[960px] pt-16 pb-8 mx-6 rounded-2xl"
+        class="flex flex-col items-center bg-white w-[960px] py-10 mx-6 rounded-2xl shadow-md"
       >
         <InvalidInsert
           text="Por favor, preencha todos os campos abaixo"
