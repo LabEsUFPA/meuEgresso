@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grupo;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -10,6 +11,7 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
+@Builder
 public class GrupoDTO {
 
 	private Integer idGrupo;
