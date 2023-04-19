@@ -48,8 +48,8 @@ public class UsuarioController {
 
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	public void deleteById(Integer id) {
-		usuarioService.deleteById(id);
+	public boolean deleteById(Integer id) {
+		return usuarioService.deleteById(id);
 	}
 
 
@@ -65,8 +65,7 @@ public class UsuarioController {
 	@PostMapping // ResponseEntity<UsuarioAuthDTO>
 	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
-		usuarioModel = usuarioService.save(usuarioModel);
-		//return ResponseEntity.ok(mapper.map(usuarioModel, UsuarioAuthDTO.class));
+		usuarioService.save(usuarioModel);
 		return new ResponseEntity<>("Usuário criado com sucesso.",HttpStatus.OK);
 	}
 

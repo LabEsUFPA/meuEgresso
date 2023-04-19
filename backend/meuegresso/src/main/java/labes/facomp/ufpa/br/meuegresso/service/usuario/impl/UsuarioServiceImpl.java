@@ -61,7 +61,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return null;
 	}
 
-	public Boolean deleteById(Integer idUsuario) {
+	public boolean deleteById(Integer idUsuario) {
 		if (usuarioRepository.existsById(idUsuario)) {
 			usuarioRepository.deleteById(idUsuario);
 			return true;

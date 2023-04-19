@@ -51,6 +51,6 @@ public interface UsuarioService extends UserDetailsService {
 	 * 
 	 * @param idUsuario ID de um usuário
 	 */
-	public void deleteById(Integer idUsuario);
+	public boolean deleteById(Integer idUsuario);
 
 }
