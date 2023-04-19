@@ -1,11 +1,28 @@
 <template>
   <button
+    v-if="isButton"
     :class="styles"
     @click="$emit('click')"
     :type="type"
   >
     <slot />
   </button>
+  <RouterLink
+    v-if="isRouter"
+    :to="link"
+    :class="styles"
+  >
+    <slot />
+  </RouterLink>
+  <a
+    v-if="isAnchor"
+    :class="styles"
+    :href="link"
+    :rel="rel"
+    :target="target"
+  >
+    <slot />
+  </a>
 </template>
 
 <script lang="ts" setup>
@@ -18,13 +35,25 @@ interface Props {
   textClass?: string;
   color?: 'sky' | 'blue' | 'red' | 'green' | 'emerald' | 'white';
   type?: 'reset' | 'button' | 'submit';
+  isButton?: boolean
+  isRouter?: boolean
+  isAnchor?: boolean
+  link?: string
+  rel?: string
+  target?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   variant: 'standard',
   textClass: 'text-white',
   color: 'sky',
-  type: 'button'
+  type: 'button',
+  isButton: true,
+  isRouter: false,
+  isAnchor: false,
+  link: '/',
+  rel: 'noreferrer',
+  target: '_self'
 })
 
 // objeto mapeia a props 'color' para as classes tailwind correspondentes
