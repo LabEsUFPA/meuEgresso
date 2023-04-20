@@ -78,12 +78,12 @@ import { mdiChevronDown } from '@mdi/js'
 defineEmits(['update:modelValue'])
 
 interface Props {
-  modelValue: string;
-  label: string;
-  helperText?: string;
-  options: string[];
-  iconPath?: string;
-  required?: boolean;
+  modelValue: string
+  label: string
+  helperText?: string
+  options: string[]
+  iconPath?: string
+  required?: boolean
 }
 
 withDefaults(defineProps<Props>(), {

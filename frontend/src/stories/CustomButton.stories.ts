@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/vue3";
+import type { Meta, StoryObj } from "@storybook/vue3"
 
-import CustomButton from "src/components/CustomButton.vue";
+import CustomButton from "src/components/CustomButton.vue"
 
 const meta: Meta<typeof CustomButton> = {
   title: "Custom button",
@@ -36,9 +36,9 @@ const meta: Meta<typeof CustomButton> = {
   },
 };
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof CustomButton>;
+type Story = StoryObj<typeof CustomButton>
 
 export const Default: Story = {
   render: () => ({

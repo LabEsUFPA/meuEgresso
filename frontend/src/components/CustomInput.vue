@@ -27,7 +27,7 @@
       </div>
       <input
         class="focus:outline-none"
-        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)"
         :maxlength="maxLength"
         :minlength="minLength"
         :class="iconPath ? 'col-span-7' : 'col-span-8'"
@@ -66,21 +66,21 @@ import SvgIcon from '@jamescoyle/vue-icon'
 
 defineEmits(['update:modelValue'])
 
-type inputs = 'date' | 'text' | 'email' | 'number' | 'password';
+type inputs = 'date' | 'text' | 'email' | 'number' | 'password'
 
 interface Props {
-  modelValue: string;
-  label: string;
-  helperText?: string;
-  errorText?: string;
-  placeholder?: string;
-  type?: inputs;
-  iconPath?: string;
-  inputClass?: string;
-  required?: boolean;
-  mask?: string;
-  maxLength?: number;
-  minLength?: number;
+  modelValue: string
+  label: string
+  helperText?: string
+  errorText?: string
+  placeholder?: string
+  type?: inputs
+  iconPath?: string
+  inputClass?: string
+  required?: boolean
+  mask?: string
+  maxLength?: number
+  minLength?: number
 }
 
 withDefaults(defineProps<Props>(), {

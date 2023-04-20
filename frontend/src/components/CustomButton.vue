@@ -31,10 +31,10 @@ import { computed } from 'vue'
 defineEmits(['click'])
 
 interface Props {
-  variant?: 'standard' | 'outlined' | 'flat';
-  textClass?: string;
-  color?: 'sky' | 'blue' | 'red' | 'green' | 'emerald' | 'white';
-  type?: 'reset' | 'button' | 'submit';
+  variant?: 'standard' | 'outlined' | 'flat'
+  textClass?: string
+  color?: 'sky' | 'blue' | 'red' | 'green' | 'emerald' | 'white'
+  type?: 'reset' | 'button' | 'submit'
   isButton?: boolean
   isRouter?: boolean
   isAnchor?: boolean

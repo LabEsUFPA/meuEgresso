@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-screen flex items-center justify-center bg-neutral-100 my-8">
+  <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
     <form @submit="handleSubmit($event)">
       <div
         v-if="!submitSuccess"
@@ -24,7 +24,7 @@
               v-model="userRegisterData.name"
             />
             <CustomInput
-              type="text"
+              type="number"
               label="Matrícula"
               :required="true"
               :icon-path="mdiSchool"
@@ -56,9 +56,7 @@
             />
           </div>
         </div>
-        <CustomButton
-          type="submit"
-        >
+        <CustomButton type="submit">
           Enviar
         </CustomButton>
         <p class="mt-9">
@@ -75,7 +73,7 @@
 
     <div
       v-if="submitSuccess"
-      class="bg-white w-[960px] pt-36 pb-40 mx-6 rounded-2xl"
+      class="bg-white w-[960px] py-20 mx-6 rounded-2xl"
     >
       <div class="flex flex-col items-center text-center gap-y-28 mx-4">
         <h1 class="text-blue-900 text-4xl font-bold">
@@ -124,7 +122,11 @@ const userRegisterData = ref<registerData>({
 
 const handleSubmit = ($event: Event) => {
   $event.preventDefault()
-  if (userRegisterData.value.password === userRegisterData.value.confirmationPassword && userRegisterData.value.registration.length === 12) {
+  if (
+    userRegisterData.value.password ===
+      userRegisterData.value.confirmationPassword &&
+    userRegisterData.value.registration.length === 12
+  ) {
     if (
       userRegisterData.value.name ||
       userRegisterData.value.registration ||
@@ -143,3 +145,16 @@ const handleSubmit = ($event: Event) => {
   }
 }
 </script>
+
+<style>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+</style>

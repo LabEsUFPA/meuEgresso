@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex flex-col min-h-screen justify-between">
     <header class="text-white">
       <div class="bg-gradient-to-br from-pacific-cyan to-bondi-blue">
         <div

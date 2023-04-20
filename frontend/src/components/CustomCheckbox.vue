@@ -33,8 +33,8 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiCheckboxBlankOutline, mdiCheckboxMarked } from '@mdi/js'
 
 defineProps<{
-  modelValue: boolean;
-  label: string;
+  modelValue: boolean
+  label: string
 }>()
 
 defineEmits(['update:modelValue'])
