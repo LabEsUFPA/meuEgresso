@@ -77,7 +77,7 @@ const userLoginData = ref<loginData>({
 
 const handleSubmit = ($event: Event) => {
   $event?.preventDefault()
-  if (userLoginData.value.userName || userLoginData.value.userName) {
+  if (userLoginData.value.userName || userLoginData.value.password) {
     error.value = false
     console.log(userLoginData.value)
   } else {

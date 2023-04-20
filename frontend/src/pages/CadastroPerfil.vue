@@ -133,11 +133,11 @@ const handleSubmit = ($event: Event) => {
   if (
     userRegisterData.value.password !== userRegisterData.value.confirmationPassword
   ) {
-    error.value = true
     errorText.value = String(errorMessages.value.senha)
-  } else if (userRegisterData.value.registration.length < 12) {
     error.value = true
+  } else if (userRegisterData.value.registration.length < 12) {
     errorText.value = String(errorMessages.value.registrationLength)
+    error.value = true
   } else {
     error.value = false
     console.log(userRegisterData.value)

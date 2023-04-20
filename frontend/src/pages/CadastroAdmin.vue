@@ -123,7 +123,7 @@ const errorMessages = ref({
   senha: 'As senhas informadas são diferentes',
   email: 'Os e-mails informados são diferentes',
   standard: 'Por favor, preencha todos os campos abaixo',
-  accessLevel: 'Por favor, informe o nível de acesso'
+  accessLevel: 'Por favor, selecione o nível de acesso'
 })
 const errorText = ref('')
 const submitSuccess = ref(false)
@@ -161,14 +161,14 @@ const setSelectedAccessLevel = () => {
 const handleSubmit = ($event: Event) => {
   $event.preventDefault()
   if (userRegisterData.value.password !== userRegisterData.value.confirmationPassword) {
-    error.value = true
     errorText.value = String(errorMessages.value.senha)
+    error.value = true
   } else if (userRegisterData.value.email !== userRegisterData.value.confirmationEmail) {
-    error.value = true
     errorText.value = String(errorMessages.value.email)
-  } else if (userRegisterData.value.accessLevel === '') {
     error.value = true
+  } else if (userRegisterData.value.accessLevel === '') {
     errorText.value = String(errorMessages.value.accessLevel)
+    error.value = true
   } else {
     setSelectedAccessLevel()
     error.value = false
