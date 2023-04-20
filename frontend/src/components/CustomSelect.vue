@@ -28,7 +28,11 @@
           class="text-left"
           :class="iconPath ? 'col-span-6' : 'col-span-7'"
         >
-          {{ modelValue }}
+          <p
+            :class="modelValue === '' ? 'text-gray-500' : 'text-black'"
+          >
+            {{ modelValue === '' ? placeholder : modelValue }}
+          </p>
         </div>
 
         <div
@@ -84,11 +88,13 @@ interface Props {
   options: string[]
   iconPath?: string
   required?: boolean
+  placeholder?: string
 }
 
 withDefaults(defineProps<Props>(), {
   iconPath: '',
-  helperText: ''
+  helperText: '',
+  placeholder: ''
 })
 
 const open = ref(false)

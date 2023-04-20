@@ -6,7 +6,7 @@
         class="flex flex-col items-center bg-white w-[960px] py-10 mx-6 rounded-2xl shadow-md"
       >
         <InvalidInsert
-          text="Por favor, preencha todos os campos abaixo"
+          :text="errorText"
           :show-alert="error"
         />
         <h1 class="text-blue-900 text-4xl font-bold mb-12">
@@ -62,7 +62,7 @@
         <p class="mt-9">
           Já possui conta?
           <RouterLink
-            to="/login"
+            to="/entrar"
             class="text-sky-600"
           >
             Entre
@@ -102,6 +102,14 @@ import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 
 const error = ref(false)
+const errorMessages = ref({
+  senha: 'As senhas informadas são diferentes',
+  email: 'Os e-mails informados são diferentes',
+  standard: 'Por favor, preencha todos os campos abaixo',
+  accessLevel: 'Por favor, informe o nível de acesso',
+  registrationLength: 'Matrícula inválida, por favor digite novamente'
+})
+const errorText = ref('')
 const submitSuccess = ref(false)
 
 interface registerData {
@@ -123,25 +131,17 @@ const userRegisterData = ref<registerData>({
 const handleSubmit = ($event: Event) => {
   $event.preventDefault()
   if (
-    userRegisterData.value.password ===
-      userRegisterData.value.confirmationPassword &&
-    userRegisterData.value.registration.length === 12
+    userRegisterData.value.password !== userRegisterData.value.confirmationPassword
   ) {
-    if (
-      userRegisterData.value.name ||
-      userRegisterData.value.registration ||
-      userRegisterData.value.email ||
-      userRegisterData.value.password ||
-      userRegisterData.value.confirmationPassword
-    ) {
-      error.value = false
-      console.log(userRegisterData.value)
-      submitSuccess.value = true
-    } else {
-      error.value = true
-    }
-  } else {
     error.value = true
+    errorText.value = String(errorMessages.value.senha)
+  } else if (userRegisterData.value.registration.length < 12) {
+    error.value = true
+    errorText.value = String(errorMessages.value.registrationLength)
+  } else {
+    error.value = false
+    console.log(userRegisterData.value)
+    submitSuccess.value = true
   }
 }
 </script>

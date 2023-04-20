@@ -2,7 +2,7 @@
   <div class="flex flex-col min-h-screen justify-between">
     <header class="text-white">
       <div class="bg-gradient-to-br from-pacific-cyan to-bondi-blue">
-        <div class="py-12 pl-8 md:pl-14 flex flex-row items-end bg-[url('src/assets/textura.svg')] h-full w-full bg-right bg-no-repeat">
+        <div class="py-4 pl-8 md:pl-14 flex flex-row items-center bg-[url('src/assets/textura.svg')] h-full w-full bg-right bg-no-repeat">
           <div class="flex flex-row items-center">
             <img
               class="w-16"
@@ -20,14 +20,14 @@
           <!-- Div que preenche o espaco vazio no container flexbox -->
           <div class="flex-1" />
 
-
           <div class="px-8 hidden gap-x-2 md:flex">
             <CustomButton
               color="white"
               variant="flat"
               :is-button="false"
               :is-router="true"
-              link="/entrar">
+              link="/entrar"
+            >
               Entrar
             </CustomButton>
 
@@ -37,13 +37,14 @@
               variant="outlined"
               :is-button="false"
               :is-router="true"
-              link="/cadastro-perfil">
+              link="/cadastro-perfil"
+            >
               Cadastre-se
             </CustomButton>
           </div>
         </div>
       </div>
-      <div class="h-14 bg-aero">
+      <div class="h-10 bg-aero">
         <nav class="h-full pl-6">
           <ul class="text-cyan-800 w-96 h-full text-lg font-semibold hidden md:flex flex-row justify-around items-center">
             <li class="cursor-pointer relative group hover:text-white h-full">

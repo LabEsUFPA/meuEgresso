@@ -89,7 +89,6 @@ withDefaults(defineProps<Props>(), {
   errorText: '',
   maxLength: 300,
   minLength: 1
-  mask: ''
 })
 
 const focused = ref(false)

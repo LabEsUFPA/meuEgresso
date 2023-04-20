@@ -6,7 +6,7 @@
         class="flex flex-col items-center bg-white w-[960px] py-10 mx-6 rounded-2xl shadow-md"
       >
         <InvalidInsert
-          text="Por favor, preencha todos os campos abaixo"
+          :text="errorText"
           :show-alert="error"
         />
         <h1 class="text-blue-900 text-4xl font-bold mb-12">
@@ -71,6 +71,7 @@
             <CustomSelect
               v-model="userRegisterData.accessLevel"
               label="Nível de Acesso"
+              placeholder="Selecionar"
               :options="['Egresso', 'Secretário', 'Administrador']"
               :required="true"
             />
@@ -118,6 +119,13 @@ import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 
 const error = ref(false)
+const errorMessages = ref({
+  senha: 'As senhas informadas são diferentes',
+  email: 'Os e-mails informados são diferentes',
+  standard: 'Por favor, preencha todos os campos abaixo',
+  accessLevel: 'Por favor, informe o nível de acesso'
+})
+const errorText = ref('')
 const submitSuccess = ref(false)
 
   interface registerData {
@@ -152,25 +160,20 @@ const setSelectedAccessLevel = () => {
 
 const handleSubmit = ($event: Event) => {
   $event.preventDefault()
-  setSelectedAccessLevel()
-  if (userRegisterData.value.password === userRegisterData.value.confirmationPassword) {
-    if (
-      userRegisterData.value.name ||
-      userRegisterData.value.userName ||
-      userRegisterData.value.email ||
-      userRegisterData.value.confirmationEmail ||
-      userRegisterData.value.password ||
-      userRegisterData.value.confirmationPassword ||
-      userRegisterData.value.accessLevel
-    ) {
-      error.value = false
-      console.log(userRegisterData.value)
-      submitSuccess.value = true
-    } else {
-      error.value = true
-    }
-  } else {
+  if (userRegisterData.value.password !== userRegisterData.value.confirmationPassword) {
     error.value = true
+    errorText.value = String(errorMessages.value.senha)
+  } else if (userRegisterData.value.email !== userRegisterData.value.confirmationEmail) {
+    error.value = true
+    errorText.value = String(errorMessages.value.email)
+  } else if (userRegisterData.value.accessLevel === '') {
+    error.value = true
+    errorText.value = String(errorMessages.value.accessLevel)
+  } else {
+    setSelectedAccessLevel()
+    error.value = false
+    console.log(userRegisterData.value)
+    submitSuccess.value = true
   }
 }
 </script>
