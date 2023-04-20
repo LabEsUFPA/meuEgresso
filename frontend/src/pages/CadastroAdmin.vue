@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-screen flex items-center justify-center bg-neutral-100 my-8">
+  <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
     <form @submit="handleSubmit($event)">
       <div
         v-if="!submitSuccess"
@@ -65,28 +65,14 @@
             </div>
           </div>
           <p class="text-blue-400 text-base font-bold mb-5 mt-7">
-            Preencha os campos abaixo:
+            Selecione o nível de acesso:
           </p>
           <div class="flex flex-col gap-y-2">
-            <CustomCheckbox
-              label="Ediçao"
-              v-model="userRegisterData.edit"
-            />
-            <CustomCheckbox
-              label="Visualização"
-              v-model="userRegisterData.visualization"
-            />
-            <CustomCheckbox
-              label="Alteração"
-              v-model="userRegisterData.alteration"
-            />
-            <CustomCheckbox
-              label="Exclusão"
-              v-model="userRegisterData.exclusion"
-            />
-            <CustomCheckbox
-              label="Administrador"
-              v-model="userRegisterData.admin"
+            <CustomSelect
+              v-model="userRegisterData.accessLevel"
+              label="Nível de Acesso"
+              :options="['Egresso', 'Secretário', 'Administrador']"
+              :required="true"
             />
           </div>
         </div>
@@ -129,7 +115,7 @@ import CustomInput from 'src/components/CustomInput.vue'
 import { mdiAccount, mdiEmail, mdiLock } from '@mdi/js'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
-import CustomCheckbox from 'src/components/CustomCheckbox.vue'
+import CustomSelect from 'src/components/CustomSelect.vue'
 
 const error = ref(false)
 const submitSuccess = ref(false)
@@ -141,11 +127,7 @@ const submitSuccess = ref(false)
     confirmationEmail: string
     password: string
     confirmationPassword: string
-    edit: boolean
-    visualization: boolean
-    alteration: boolean
-    exclusion: boolean
-    admin: boolean
+    accessLevel: string
   }
 
 const userRegisterData = ref<registerData>({
@@ -155,15 +137,22 @@ const userRegisterData = ref<registerData>({
   confirmationEmail: '',
   password: '',
   confirmationPassword: '',
-  edit: false,
-  visualization: false,
-  alteration: false,
-  exclusion: false,
-  admin: false
+  accessLevel: ''
 })
+
+const setSelectedAccessLevel = () => {
+  if (userRegisterData.value.accessLevel === 'Egresso') {
+    userRegisterData.value.accessLevel = 'egresso'
+  } else if (userRegisterData.value.accessLevel === 'Secretário') {
+    userRegisterData.value.accessLevel = 'secretario'
+  } else {
+    userRegisterData.value.accessLevel = 'administrador'
+  }
+}
 
 const handleSubmit = ($event: Event) => {
   $event.preventDefault()
+  setSelectedAccessLevel()
   if (userRegisterData.value.password === userRegisterData.value.confirmationPassword) {
     if (
       userRegisterData.value.name ||
@@ -171,7 +160,8 @@ const handleSubmit = ($event: Event) => {
       userRegisterData.value.email ||
       userRegisterData.value.confirmationEmail ||
       userRegisterData.value.password ||
-      userRegisterData.value.confirmationPassword
+      userRegisterData.value.confirmationPassword ||
+      userRegisterData.value.accessLevel
     ) {
       error.value = false
       console.log(userRegisterData.value)
