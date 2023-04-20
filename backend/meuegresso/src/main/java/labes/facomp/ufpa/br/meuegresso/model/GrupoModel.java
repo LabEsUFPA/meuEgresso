@@ -34,10 +34,10 @@ public class GrupoModel extends Auditable implements GrantedAuthority {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name = "id_grupo", nullable = false, unique = true)
+	@Column(name = "id_grupo", unique = true, nullable = false)
 	private Integer idGrupo;
 
-	@Column(name = "nome_grupo", nullable = false, unique = true, length = 50)
+	@Column(name = "nome_grupo", unique = true, nullable = false, length = 50)
 	private String nomeGrupo;
 
 	@ManyToMany(mappedBy = "grupos", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})

@@ -6,9 +6,7 @@
       </h1>
       <FolderSection>
         <template #title>
-          <h1
-            class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-          >
+          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
             <SvgIcon
               type="mdi"
               size="20"
@@ -61,9 +59,7 @@
 
       <FolderSection class="mt-6">
         <template #title>
-          <h1
-            class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-          >
+          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
             <SvgIcon
               type="mdi"
               size="20"
@@ -109,9 +105,7 @@
 
       <FolderSection class="mt-6">
         <template #title>
-          <h1
-            class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-          >
+          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
             <SvgIcon
               type="mdi"
               size="20"
@@ -213,9 +207,7 @@
 
       <FolderSection class="mt-6">
         <template #title>
-          <h1
-            class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-          >
+          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
             <SvgIcon
               type="mdi"
               size="20"
@@ -267,9 +259,7 @@
 
       <FolderSection class="mt-6">
         <template #title>
-          <h1
-            class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-          >
+          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
             <SvgIcon
               type="mdi"
               size="20"
@@ -289,8 +279,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para listar aqueles assuntos que melhor você se
-              sente para apresentar palestras:
+              Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
             </div>
 
             <textarea
@@ -299,8 +288,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para de forma simples e resumida compartilhar
-              com outras pessoas experiências positivas ao realizar o curso:
+              Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso:
             </div>
 
             <textarea
@@ -309,9 +297,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para que todos possam ter conhecimento sobre
-              suas contribuições para a sociedade seja pequena ou grande, pois
-              tudo tem seu impacto:
+              Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto:
             </div>
 
             <textarea
@@ -340,14 +326,7 @@ import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import {
-  mdiAccount,
-  mdiBriefcase,
-  mdiEmail,
-  mdiMapMarker,
-  mdiMessage,
-  mdiSchool
-} from '@mdi/js'
+import { mdiAccount, mdiBriefcase, mdiEmail, mdiMapMarker, mdiMessage, mdiSchool } from '@mdi/js'
 import { ref } from 'vue'
 
 const data = ref({

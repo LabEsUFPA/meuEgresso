@@ -11,9 +11,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import lombok.Data;
 
 /**
@@ -29,8 +33,9 @@ import lombok.Data;
 public class Auditable {
 
 	@CreatedBy
-	@Column(name = "created_by", updatable = false)
-	protected String createdBy;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "created_by", updatable = false)
+	protected UsuarioModel createdBy;
 
 	@CreatedDate
 	@Column(name = "created_date", updatable = false)
@@ -38,8 +43,9 @@ public class Auditable {
 	protected Date createdDate;
 
 	@LastModifiedBy
-	@Column(name = "last_modified_by")
-	protected String lastModifiedBy;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "last_modified_by")
+	protected UsuarioModel lastModifiedBy;
 
 	@LastModifiedDate
 	@Column(name = "last_modified_date")

@@ -116,23 +116,14 @@ const colorClassNames = {
 }
 
 const styles = computed(() => {
-  const classes = [
-    'rounded-md px-4 py-1 text-lg font-semibold hover:duration-200'
-  ]
-
+  const classes = ['rounded-md px-4 py-1 text-lg font-semibold hover:duration-200']
   switch (props.variant) {
     case 'standard':
       classes.push(colorClassNames[props.color].background.standard)
       classes.push(colorClassNames[props.color].background.hover)
       break
     case 'outlined':
-      classes.push(
-        `outline-1 focus:outline-3 outline ${
-          colorClassNames[props.color].outline
-        } ${
-          colorClassNames[props.color].background.hoverLight
-        } focus:outline-slate-900`
-      )
+      classes.push(`outline-1 focus:outline-3 outline ${colorClassNames[props.color].outline} ${colorClassNames[props.color].background.hoverLight} focus:outline-slate-900`)
       break
     case 'flat':
       classes.push(colorClassNames[props.color].background.hoverLight)

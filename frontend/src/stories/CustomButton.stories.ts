@@ -8,12 +8,12 @@ const meta: Meta<typeof CustomButton> = {
   argTypes: {
     color: {
       options: {
-        Sky: "sky",
-        Blue: "blue",
-        Red: "red",
-        Green: "green",
-        Emerald: "emerald",
-        White: "white",
+        Sky: 'sky',
+        Blue: 'blue',
+        Red: 'red',
+        Green: 'green',
+        Emerald: 'emerald',
+        White: 'white'
       },
       control: { type: "select" },
     },

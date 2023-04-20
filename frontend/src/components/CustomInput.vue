@@ -12,9 +12,7 @@
     </label>
     <div
       class="rounded-lg w-64 py-1 px-3 border grid grid-cols-8"
-      :class="`${
-        focused ? 'outline-2 outline outline-sky-400' : 'border-gray-400'
-      } ${inputClass}`"
+      :class="`${focused ? 'outline-2 outline outline-sky-400' : 'border-gray-400'} ${inputClass}`"
     >
       <div class="flex flex-row items-center">
         <SvgIcon
@@ -37,9 +35,7 @@
         :id="id"
         :required="required"
         :data-maska="mask"
-        @input="
-          $emit('update:modelValue', ($event.target as HTMLInputElement).value)
-        "
+        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         @focus="focused = true"
         @blur="focused = false"
         v-maska
@@ -93,6 +89,7 @@ withDefaults(defineProps<Props>(), {
   errorText: '',
   maxLength: 300,
   minLength: 1
+  mask: ''
 })
 
 const focused = ref(false)
