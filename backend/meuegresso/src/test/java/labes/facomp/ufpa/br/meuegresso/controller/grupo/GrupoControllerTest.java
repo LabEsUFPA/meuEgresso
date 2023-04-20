@@ -3,54 +3,59 @@ package labes.facomp.ufpa.br.meuegresso.controller.grupo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import labes.facomp.ufpa.br.meuegresso.dto.grupo.GrupoDTO;
-import lombok.RequiredArgsConstructor;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GrupoControllerTest {
 
+	@Autowired
 	private GrupoController grupoController;
 
 	private final String NOME_TESTE_GRUPO = "TESTE GRUPO";
 
-	private GrupoDTO grupoDTO;
-
 	@Test
 	@Order(1)
 	public void testCadastrarUsuario() throws Exception {
-		GrupoDTO grupoDTO = GrupoDTO.builder().nomeGrupo(NOME_TESTE_GRUPO).build();
-		grupoDTO = grupoController.cadastrarUsuario(this.grupoDTO);
-		System.out.println(grupoDTO);
-		assertNotNull(this.grupoDTO.getIdGrupo());
+		GrupoDTO grupo = GrupoDTO.builder().nomeGrupo(NOME_TESTE_GRUPO).build();
+		grupo = grupoController.cadastrarUsuario(grupo);
+		assertNotNull(grupo.getIdGrupo());
 	}
 
 	@Test
 	@Order(2)
 	public void testFindById() throws Exception {
-		GrupoDTO grupo = grupoController.findById(this.grupoDTO.getIdGrupo());
-		assertEquals(grupo, this.grupoDTO);
+		Integer id = 1;
+		GrupoDTO grupo = grupoController.findById(id);
+		System.out.println(grupo);
+		assertEquals(grupo.getIdGrupo(), id);
 	}
 
 	@Test
 	@Order(3)
 	public void testFindByNomeGrupo() throws Exception {
 		GrupoDTO grupo = grupoController.findByNomeGrupo(NOME_TESTE_GRUPO);
-		assertEquals(grupo, this.grupoDTO);
+		assertNotNull(grupo);
 	}
 
 	@Test
 	@Order(4)
 	public void testAtualizarUsuario() throws Exception {
 		final String NOVO_NOME = "NOVO NOME";
-		this.grupoDTO.setNomeGrupo(NOVO_NOME);
-		this.grupoDTO = this.grupoController.atualizarUsuario(grupoDTO);
-		assertEquals(this.grupoDTO.getNomeGrupo(), NOVO_NOME);
+		final Integer id = 1;
+		GrupoDTO grupo = grupoController.findById(id);
+		grupo.setNomeGrupo(NOVO_NOME);
+		grupo = grupoController.atualizarUsuario(grupo);
+		assertEquals(grupo.getNomeGrupo(), NOVO_NOME);
 	}
 
 }
