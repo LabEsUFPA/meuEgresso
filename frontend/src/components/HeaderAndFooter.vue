@@ -120,20 +120,20 @@
             >
               <ul class="py-3 overflow-hidden rounded-b-xl shadow-lg">
                 <li>
-                  <a
-                    href="#"
+                  <RouterLink
+                    to="/entrar"
                     class="block py-2 px-3 hover:bg-gray-100"
                   >
                     Entrar
-                  </a>
+                  </RouterLink>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <RouterLink
+                    to="/cadastro-perfil"
                     class="block py-2 px-3 hover:bg-gray-100"
                   >
                     Cadastre-se
-                  </a>
+                  </RouterLink>
                 </li>
               </ul>
             </div>
