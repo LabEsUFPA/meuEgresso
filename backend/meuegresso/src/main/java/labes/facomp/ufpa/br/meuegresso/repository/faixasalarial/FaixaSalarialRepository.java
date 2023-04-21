@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.repository.faixasalarial;
 
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
@@ -14,4 +16,5 @@ import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
  */
 public interface FaixaSalarialRepository extends CrudRepository<FaixaSalarialModel, Integer> {
     
+    List<FaixaSalarialModel> findAll();
 }

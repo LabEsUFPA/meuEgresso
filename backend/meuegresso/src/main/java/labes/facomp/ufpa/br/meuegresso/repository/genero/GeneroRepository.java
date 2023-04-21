@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.repository.genero;
 
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
@@ -14,4 +16,5 @@ import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
  */
 public interface GeneroRepository extends CrudRepository<GeneroModel, Integer> {
     
+    List<GeneroModel> findAll();
 }

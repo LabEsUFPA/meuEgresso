@@ -9,7 +9,7 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
  * Interface responsável por especificar os metodos a serem implementados.
  *
  * @author Alfredo Gabriel, Camilo Santos
- * @since 26/03/2023
+ * @since 21/04/2023
  * @version 1.0.1
  */
 public interface CotaService  {
