@@ -1,7 +1,10 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
+import lombok.Data;
+
+@Data
 public class EgressoDTO {
-    
+
     private Integer id;
 
     private Integer matricula;

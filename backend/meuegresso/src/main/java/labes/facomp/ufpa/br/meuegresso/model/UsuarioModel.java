@@ -21,6 +21,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -94,5 +95,15 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return this.ativo;
+	}
+
+	@Transient
+	public String getFirstName() {
+		return this.nome.split(" ")[0];
+	}
+
+	@Transient
+	public String getLastName() {
+		return this.nome.replace(getFirstName(), "");
 	}
 }

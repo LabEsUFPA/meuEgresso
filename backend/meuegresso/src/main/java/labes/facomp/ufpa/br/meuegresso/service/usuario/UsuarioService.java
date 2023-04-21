@@ -33,4 +33,6 @@ public interface UsuarioService extends UserDetailsService {
 
 	public List<UsuarioModel> findAll();
 
+	public UsuarioModel loadUserByUsername(String username);
+
 }
