@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-public class EgressoColocaoModelId {
+public class EgressoColacaoModelId {
 
     @Column(name = "id_egresso", unique = true, nullable = false)
     private Integer egressoId;

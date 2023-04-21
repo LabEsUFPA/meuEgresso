@@ -22,10 +22,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "egresso_colacao")
 @EqualsAndHashCode(callSuper = false)
-public class EgressoColocaoModel extends Auditable {
+public class EgressoColacaoModel extends Auditable {
 
     @EmbeddedId
-    private EgressoColocaoModelId id;
+    private EgressoColacaoModelId id;
 
     @MapsId(value = "egressoId")
     @ManyToOne(fetch = FetchType.LAZY)
