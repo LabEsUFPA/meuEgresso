@@ -13,11 +13,11 @@
           Criar Perfil
         </h1>
         <div class="mb-8 mx-4 sm:mx-0">
-          <p class="text-blue-400 text-base font-bold mb-5">
+          <p class="text-blue-400 text-center font-bold mb-5 sm:text-base">
             Preencha os campos abaixo:
           </p>
-          <div class="flex flex-col gap-y-6">
-            <div class="flex gap-x-6 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32">
+          <div class="flex flex-col gap-y-4 sm:gap-y-6">
+            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 label="Nome Completo"
                 :required="true"
@@ -31,7 +31,7 @@
                 v-model="userRegisterData.userName"
               />
             </div>
-            <div class="flex gap-x-6 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32">
+            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 label="Email"
                 type="email"
@@ -47,7 +47,7 @@
                 v-model="userRegisterData.confirmationEmail"
               />
             </div>
-            <div class="flex gap-x-6 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32">
+            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 label="Senha"
                 type="password"
