@@ -5,14 +5,14 @@
         <div class="py-4 pl-8 md:pl-14 flex flex-row items-center bg-[url('src/assets/textura.svg')] h-full w-full bg-right bg-no-repeat">
           <div class="flex flex-row items-center">
             <img
-              class="w-16"
+              class="w-12"
               src="src/assets/logo.svg"
             >
             <div class="ml-8">
-              <div class="text-lx md:text-2xl">
+              <div class="text-lx md:text-xl">
                 UFPA
               </div>
-              <div class="text-2xl md:text-4xl font-semibold whitespace-nowrap">
+              <div class="text-2xl md:text-2xl font-semibold whitespace-nowrap">
                 Sistema de Egressos
               </div>
             </div>
@@ -24,8 +24,7 @@
             <CustomButton
               color="white"
               variant="flat"
-              :is-button="false"
-              :is-router="true"
+              tag="router"
               link="/entrar"
             >
               Entrar
@@ -35,8 +34,7 @@
               class="ml-4"
               color="white"
               variant="outlined"
-              :is-button="false"
-              :is-router="true"
+              tag="router"
               link="/cadastro-perfil"
             >
               Cadastre-se
@@ -46,7 +44,7 @@
       </div>
       <div class="h-10 bg-aero">
         <nav class="h-full pl-6">
-          <ul class="text-cyan-800 w-96 h-full text-lg font-semibold hidden md:flex flex-row justify-around items-center">
+          <ul class="text-cyan-800 w-96 h-full font-semibold hidden md:flex flex-row justify-around items-center">
             <li class="cursor-pointer relative group hover:text-white h-full">
               <div class="h-full flex items-center">
                 Noticias
