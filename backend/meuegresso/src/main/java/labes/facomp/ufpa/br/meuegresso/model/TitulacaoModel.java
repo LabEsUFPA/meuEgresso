@@ -23,6 +23,6 @@ public class TitulacaoModel extends Auditable {
     @Column(name = "id_titulacao", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "nome_titulacao", unique = true, nullable = false, length = 100)
+    @Column(name = "nome_titulacao", unique = true, nullable = false, length = 30)
     private String nome;
 }

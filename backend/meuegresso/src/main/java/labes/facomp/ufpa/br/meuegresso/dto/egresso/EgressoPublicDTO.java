@@ -2,7 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EtniaModel;
-import labes.facomp.ufpa.br.meuegresso.model.SexoModel;
+import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import lombok.Data;
 
 @Data
@@ -12,7 +12,7 @@ public class EgressoPublicDTO {
 
     private EtniaModel etnia;
 
-    private SexoModel sexo;
+    private GeneroModel genero;
 
     private Boolean cotista;
 

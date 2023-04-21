@@ -1,6 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.dto.usuario;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,14 +30,12 @@ public class UsuarioPublicDTO {
 	@NotBlank(message = "Infome uma senha.")
 	private String password;
 
-	@Email(message = "Informe um e-mail valido.")
+	@Email(message = "Informe um e-mail válido.")
 	@NotBlank(message = "Infome um email.")
 	private String email;
 
-	@NotBlank(message = "Infome um nome.")
+	@NotBlank(message = "Informe um nome.")
 	private String nome;
-
-	private Date nascimento;
 
 	@Valid
 	private EgressoPublicDTO egresso;
