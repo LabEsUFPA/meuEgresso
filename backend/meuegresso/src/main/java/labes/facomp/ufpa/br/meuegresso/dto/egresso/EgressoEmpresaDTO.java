@@ -21,5 +21,7 @@ public class EgressoEmpresaDTO {
 
     private EmpresaDTO empresa;
 
+    private String areaAtuacao;
+
     private FaixaSalarialDTO faixaSalarial;
 }

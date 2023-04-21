@@ -18,7 +18,4 @@ public class EmpresaDTO {
     private String nome;
 
     private String setor_atuacao;
-
-    private String area_atuacao;
-
 }

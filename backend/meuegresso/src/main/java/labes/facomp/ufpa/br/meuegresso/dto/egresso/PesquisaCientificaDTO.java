@@ -21,4 +21,6 @@ public class PesquisaCientificaDTO {
     private Date inicio;
     
     private Date fim;
+
+    private TipoBolsaDTO tipoBolsa;
 }
