@@ -2,26 +2,24 @@ package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
-import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
-import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import lombok.Data;
 
 /**
  * 
  *
- * @author João Paulo
+ * @author João Paulo, Pedro Inácio
  * @since 16/04/2023
  * @version 1.0
  */
 @Data
-public class EmpregoDTO {
+public class EgressoEmpresaDTO {
 
     private EgressoEmpresaModelId id;
 
     @Valid
     private EgressoPublicDTO egresso;
 
-    private EmpresaModel empresa;
+    private EmpresaDTO empresa;
 
-    private FaixaSalarialModel faixaSalarial;
+    private FaixaSalarialDTO faixaSalarial;
 }

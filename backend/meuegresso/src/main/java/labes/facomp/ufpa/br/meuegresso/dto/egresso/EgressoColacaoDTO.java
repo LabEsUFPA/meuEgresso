@@ -17,4 +17,8 @@ public class EgressoColacaoDTO {
     private Date ingresso;
     
     private Date conclusao;
+
+    private CursoDTO curso;
+
+    private TitulacaoDTO titulacao;
 }

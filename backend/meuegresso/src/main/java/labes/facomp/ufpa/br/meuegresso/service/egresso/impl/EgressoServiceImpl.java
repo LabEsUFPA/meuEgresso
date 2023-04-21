@@ -74,6 +74,7 @@ public class EgressoServiceImpl implements EgressoService {
 
     @Override
     public DepoimentoModel adicionarDepoimento(DepoimentoModel depoimento) {
+        depoimento.setAtivo(false);
         return depoimentoRepository.save(depoimento);
 
     }

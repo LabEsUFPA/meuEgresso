@@ -33,6 +33,9 @@ public class EgressoModel extends Auditable {
     @Column(name = "id_egresso", unique = true, nullable = false)
     private Integer id;
 
+    @Column(name = "matricula_egresso", unique = true, nullable = false)
+    private Integer matricula;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "etnia_id", nullable = false, unique = false)
     private EtniaModel etnia;
