@@ -5,15 +5,12 @@ import lombok.Getter;
 @Getter
 public enum ResponseType {
 
-    USUARIO_SUCESS_SAVE("Usuário salvo com sucesso"),
+    SUCESS_SAVE("Dado salvo com sucesso"),
 
-    COTA_SUCESS_GET("Cota buscada com sucesso"),
+    SUCESS_UPDATE("Dado atualizado com sucesso"),
 
-    COTA_SUCESS_SAVE("Cota salva com sucesso"),
+    SUCESS_DELETE("Dado deletado com sucesso");
 
-    COTA_SUCESS_UPDATE("Cota atualizada com sucesso"),
-
-    COTA_SUCESS_DELETE("Cota deletada com sucesso");
 
     private String message;
 

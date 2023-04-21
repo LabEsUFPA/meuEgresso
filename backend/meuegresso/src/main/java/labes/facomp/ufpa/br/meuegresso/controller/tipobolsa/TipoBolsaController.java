@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.controller.etnia;
+package labes.facomp.ufpa.br.meuegresso.controller.tipobolsa;
 
 import java.util.List;
 
@@ -15,54 +15,54 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EtniaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.TipoBolsaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.EtniaModel;
-import labes.facomp.ufpa.br.meuegresso.service.etnia.EtniaService;
+import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
+import labes.facomp.ufpa.br.meuegresso.service.tipobolsa.TipoBolsaService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/etnia")
-public class EtniaController {
+@RequestMapping(value = "/tipoBolsa")
+public class TipoBolsaController {
 
-    private final EtniaService etniaService;
+    private final TipoBolsaService tipoBolsaService;
 
     private final ModelMapper mapper;
 
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
-    public List<EtniaDTO> buscarEtnias() {
+    public List<TipoBolsaDTO> buscarTipoBolsas() {
 
-        return mapper.map(etniaService.findAll(), new TypeToken<List<EtniaDTO>>() {
+        return mapper.map(tipoBolsaService.findAll(), new TypeToken<List<TipoBolsaDTO>>() {
         }.getType());
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public String cadastrarEtnia(
-            @RequestBody @Valid EtniaDTO etniaDTO) {
-        EtniaModel etniaModel = mapper.map(etniaDTO, EtniaModel.class);
-        etniaService.save(etniaModel);
+    public String cadastrarTipoBolsa(
+            @RequestBody @Valid TipoBolsaDTO tipoBolsaDTO) {
+        TipoBolsaModel tipoBolsaModel = mapper.map(tipoBolsaDTO, TipoBolsaModel.class);
+        tipoBolsaService.save(tipoBolsaModel);
         return ResponseType.SUCESS_SAVE.getMessage();
     }
 
     @PutMapping
-    @ResponseStatus(code = HttpStatus.CREATED)
-    public String atualizarEtnia(@RequestBody @Valid EtniaDTO etniaDTO) throws InvalidRequestException {
+    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    public String atualizarTipoBolsa(@RequestBody @Valid TipoBolsaDTO tipoBolsaDTO) throws InvalidRequestException {
 
-        EtniaModel etniaModel = mapper.map(etniaDTO, EtniaModel.class);
-        etniaService.update(etniaModel);
+        TipoBolsaModel tipoBolsaModel = mapper.map(tipoBolsaDTO, TipoBolsaModel.class);
+        tipoBolsaService.update(tipoBolsaModel);
         return ResponseType.SUCESS_UPDATE.getMessage();
     }
 
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
-    public String deletarEtnia(@RequestBody @Valid EtniaDTO etniaDTO) {
+    public String deletarTipoBolsa(@RequestBody @Valid TipoBolsaDTO tipoBolsaDTO) {
 
-        EtniaModel etniaModel = mapper.map(etniaDTO, EtniaModel.class);
-        etniaService.deleteById(etniaModel.getId());
+        TipoBolsaModel tipoBolsaModel = mapper.map(tipoBolsaDTO, TipoBolsaModel.class);
+        tipoBolsaService.deleteById(tipoBolsaModel.getId());
         return ResponseType.SUCESS_DELETE.getMessage();
     }
 }

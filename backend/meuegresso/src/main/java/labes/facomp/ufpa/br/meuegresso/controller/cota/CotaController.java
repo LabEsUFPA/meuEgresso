@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping()
+@RequestMapping(value = "/cota")
 public class CotaController {
 
     private final CotaService cotaService;
@@ -45,7 +45,7 @@ public class CotaController {
             @RequestBody @Valid CotaDTO cotaDTO) {
         CotaModel cotaModel = mapper.map(cotaDTO, CotaModel.class);
         cotaService.save(cotaModel);
-        return ResponseType.COTA_SUCESS_SAVE.getMessage();
+        return ResponseType.SUCESS_SAVE.getMessage();
     }
 
     @PutMapping
@@ -54,15 +54,15 @@ public class CotaController {
 
         CotaModel cotaModel = mapper.map(cotaDTO, CotaModel.class);
         cotaService.update(cotaModel);
-        return ResponseType.COTA_SUCESS_UPDATE.getMessage();
+        return ResponseType.SUCESS_UPDATE.getMessage();
     }
 
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
-    public String deletarCota(@RequestBody @Valid CotaDTO cotaDTO) throws InvalidRequestException {
+    public String deletarCota(@RequestBody @Valid CotaDTO cotaDTO) {
 
         CotaModel cotaModel = mapper.map(cotaDTO, CotaModel.class);
         cotaService.deleteById(cotaModel.getId());
-        return ResponseType.COTA_SUCESS_DELETE.getMessage();
+        return ResponseType.SUCESS_DELETE.getMessage();
     }
 }

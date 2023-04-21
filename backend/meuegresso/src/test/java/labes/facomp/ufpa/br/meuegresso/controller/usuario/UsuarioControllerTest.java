@@ -23,7 +23,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 
-
 @SpringBootTest
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -66,7 +65,7 @@ public class UsuarioControllerTest {
             assertNotNull(grupoDTO.getIdGrupo());
             usuarioDTO.setGrupos(Set.of(grupoDTO));
         } finally {
-            assertEquals(ResponseType.USUARIO_SUCESS_SAVE.getMessage(), usuarioController.cadastrarUsuario(usuarioDTO));
+            assertEquals(ResponseType.SUCESS_SAVE.getMessage(), usuarioController.cadastrarUsuario(usuarioDTO));
         }
     }
 
@@ -91,7 +90,7 @@ public class UsuarioControllerTest {
         UsuarioAuthDTO usuarioAuthDTO = usuarioController.findById(1);
 
         UsuarioDTO usuarioDTO = mapper.map(usuarioAuthDTO, UsuarioDTO.class);
-        
+
         usuarioDTO.setNome(NOVO_NOME);
         usuarioDTO.setEmail(NOVO_EMAIL);
 
