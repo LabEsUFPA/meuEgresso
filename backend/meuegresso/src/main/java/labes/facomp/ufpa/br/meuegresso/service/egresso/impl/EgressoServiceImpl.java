@@ -18,8 +18,8 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.ContribuicaoRepository
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.CursoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.DepoimentoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoColacaoRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoEmpresaRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EnderecoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.PesquisaCientificaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.PublicacaoRepository;
@@ -57,6 +57,11 @@ public class EgressoServiceImpl implements EgressoService {
     @Override
     public ContribuicaoModel adicionarContribuicao(ContribuicaoModel contribuicao) {
         return contribuicaoRepository.save(contribuicao);
+    }
+
+    @Override
+    public EgressoModel findByUsuarioId(Integer idUsuario) {
+        return egressoRepository.findByUsuarioId(idUsuario).orElseThrow();
     }
 
     @Override

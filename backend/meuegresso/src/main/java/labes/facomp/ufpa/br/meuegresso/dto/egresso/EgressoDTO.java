@@ -26,4 +26,7 @@ public class EgressoDTO {
     private EnderecoDTO endereco;
 
     private DepoimentoDTO depoimento;
+
+    private Integer usuarioId;
+
 }

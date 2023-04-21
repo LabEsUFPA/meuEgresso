@@ -12,7 +12,8 @@ import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Implementação do Serviço responsável pelas rotinas internas da aplicação referente ao usuário.
+ * Implementação do Serviço responsável pelas rotinas internas da aplicação
+ * referente ao usuário.
  *
  * @author Alfredo Gabriel
  * @since 26/03/2023
@@ -55,9 +56,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	public UsuarioModel update(UsuarioModel usuario) {
-		if (usuario.getIdUsuario() != null) {
+		if (usuario.getId() != null) {
 			return usuarioRepository.save(usuario);
-		} 
+		}
 		return null;
 	}
 

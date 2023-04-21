@@ -12,7 +12,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grupo.GrupoDTO;
 import lombok.Data;
 
-
 /**
  * Encapsulamento da tabela Grupo a fim de representar somente os dados não
  * sensiveis, removendo a senha.
@@ -24,8 +23,8 @@ import lombok.Data;
  */
 @Data
 public class UsuarioAuthDTO {
-    
-    private Integer idUsuario;
+
+    private Integer id;
 
     @NotBlank(message = "Infome um usuário.")
     private String username;

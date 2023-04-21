@@ -37,7 +37,7 @@ public class JwtService {
                 .expiresAt(now.plus(tokenProperties.getExpiresHours(), ChronoUnit.HOURS))
                 .claim(JwtUtils.NOME.getPropriedade(), userModel.getFirstName())
                 .claim(JwtUtils.SOBRENOME.getPropriedade(), userModel.getLastName())
-                .claim(JwtUtils.USER_ID.getPropriedade(), userModel.getIdUsuario())
+                .claim(JwtUtils.USER_ID.getPropriedade(), userModel.getId())
                 .claim(JwtUtils.SCOPE.getPropriedade(), scope);
         return jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet.build())).getTokenValue();
 

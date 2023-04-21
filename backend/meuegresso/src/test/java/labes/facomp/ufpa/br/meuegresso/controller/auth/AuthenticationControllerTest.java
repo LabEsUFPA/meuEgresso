@@ -19,5 +19,4 @@ public class AuthenticationControllerTest {
     public void testAuthenticationUser() throws Exception {
 
     }
-
 }

@@ -1,12 +1,16 @@
 package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -16,8 +20,8 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.CursoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoColacaoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EnderecoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.PesquisaCientificaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.TrabalhoPublicadoDTO;
@@ -31,6 +35,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.PesquisaCientificaModel;
 import labes.facomp.ufpa.br.meuegresso.model.TrabalhoPublicadoModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
 
@@ -49,11 +54,20 @@ public class EgressoController {
     private EgressoService egressoService;
     private final ModelMapper mapper;
 
+    private final JwtService jwtService;
+
     @PostMapping
     public ResponseEntity<EgressoPublicDTO> cadastrarEgresso(@RequestBody EgressoPublicDTO egresso) {
         EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
         egressoModel = egressoService.adicionarEgresso(egressoModel);
         return ResponseEntity.ok(mapper.map(egressoModel, EgressoPublicDTO.class));
+    }
+
+    @GetMapping(value = "/endereco")
+    @ResponseStatus(code = HttpStatus.OK)
+    public EnderecoDTO getEndereco(JwtAuthenticationToken token) {
+        EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
+        return mapper.map(egressoModel.getEndereco(), EnderecoDTO.class);
     }
 
     @PostMapping(value = "/endereco")
@@ -90,7 +104,7 @@ public class EgressoController {
     public ResponseEntity<AnuncioDTO> cadastrarAnuncio(@RequestBody AnuncioDTO anuncio) {
         AnuncioModel anuncioModel = mapper.map(anuncio, AnuncioModel.class);
         anuncioModel = egressoService.adicionarAnuncio(anuncioModel);
-        return ResponseEntity.ok(mapper.map(anuncio, AnuncioDTO.class));
+        return ResponseEntity.ok(mapper.map(anuncioModel, AnuncioDTO.class));
     }
 
     @PostMapping(value = "/titulo-academico")
@@ -232,7 +246,7 @@ public class EgressoController {
     public ResponseEntity<AnuncioDTO> atualizarAnuncio(@RequestBody AnuncioDTO anuncio) {
         AnuncioModel anuncioModel = mapper.map(anuncio, AnuncioModel.class);
         anuncioModel = egressoService.updateAnuncio(anuncioModel);
-        return ResponseEntity.ok(mapper.map(anuncio, AnuncioDTO.class));
+        return ResponseEntity.ok(mapper.map(anuncioModel, AnuncioDTO.class));
     }
 
     @PutMapping(value = "/titulo-academico")
