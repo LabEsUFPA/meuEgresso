@@ -9,7 +9,7 @@ public enum ErrorType {
 
     REPORT_002("Relatório com ID = %s não encontrado.", "RP-002"),
 
-    REPORT_003("Senha inválida.", "RP-003"),
+    REPORT_003("Usuario ou Senha inválida.", "RP-003"),
 
     REPORT_004("Recurso não encontrado.", "RP-004"),
 
