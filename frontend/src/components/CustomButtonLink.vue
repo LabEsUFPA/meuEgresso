@@ -1,6 +1,6 @@
 <template>
   <a
-    v-if="url === ''"
+    v-if="url === '' "
     :href="'' + placeholder"
     target="_blank"
   >
@@ -8,6 +8,7 @@
 
       :class="styles"
       :type="type"
+      @click="$emit('click')"
     >
       <img
         :class="classimg"
@@ -24,11 +25,16 @@
       </h1>
     </button>
   </a>
-  <a v-else>
+  <a
+    v-else
+    :href="'' + url"
+    target="_blank"
+  >
     <button
-      :href="'' + url"
+
       :class="styles"
       :type="type"
+      @click="$emit('click')"
     >
       <img
         :class="classimg"
@@ -53,7 +59,7 @@ import { computed } from 'vue'
 defineEmits(['click'])
 
 interface Props {
-  label: string;
+  label?: string;
   variant?: 'standard' | 'outlined' | 'flat';
   hasShadow?: boolean;
   color?:
@@ -66,7 +72,7 @@ interface Props {
     | 'transparentsky'
     | 'invisiblesky';
   url?: string;
-  iconPath: string;
+  iconPath?: string;
   type?: 'reset' | 'button' | 'submit';
   iconType?: string;
   classimg?: string;
@@ -75,6 +81,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  label: '',
   variant: 'standard',
   hasShadow: true,
   textClass: 'text-white',

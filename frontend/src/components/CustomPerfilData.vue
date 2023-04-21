@@ -1,11 +1,20 @@
 <template>
-  <div class="flex-auto relative">
-    <div class="flex-auto rounded-lg py-1 px-3 mt-1">
-      <div class="flex-auto flex-row items-center">
+  <div
+    class="flex-auto relative"
+    alt="one"
+  >
+    <div
+      class="LabelModeValue flex-auto rounded-lg py-1 px-3 mt-1"
+      alt="two"
+    >
+      <div
+        class="flex-auto flex-row items-center"
+        alt="three"
+      >
         <SvgIcon
           type="mdi"
           class="text-gray-400"
-          size="20"
+          :size="20"
           :path="iconPath"
           current="sky-900"
         />
@@ -28,13 +37,13 @@
             :placeholder="placeholder"
           />
           <div v-else>
-            <slot v-if="modelValue">
+            <div v-if="modelValue">
               {{ modelValue }}
-            </slot>
+            </div>
 
-            <slot v-else>
+            <div v-else>
               {{ placeholder }}
-            </slot>
+            </div>
           </div>
         </h1>
       </div>
@@ -51,26 +60,45 @@ defineEmits(['update:modelValue'])
 type inputs = 'date' | 'text' | 'email' | 'number' | 'password';
 
 interface Props {
-  modelValue: string;
-  label: string;
+  modelValue?: string;
+  label?: string;
   helperText?: string;
   placeholder?: string;
-  type: inputs;
+  type?: inputs;
   iconPath?: string;
   inputClass?: string;
   required?: boolean;
   mask?: string;
   isinput?: boolean;
-  vmodel: string;
+  vmodel?: string;
+  iconSize?: string;
 }
 
+// interface Props {
+//   modelValue: string;
+//   label: string;
+//   helperText?: string;
+//   placeholder?: string;
+//   type: inputs;
+//   iconPath?: string;
+//   inputClass?: string;
+//   required?: boolean;
+//   mask?: string;
+//   isinput?: boolean;
+//   vmodel: string;
+// }
+
 withDefaults(defineProps<Props>(), {
+  modelValue: '',
+  label: '',
   type: 'text',
   iconPath: '',
   inputClass: '',
   helperText: '',
   mask: '',
   placeholder: 'placeholder',
-  isinput: false
+  isinput: false,
+  vmodel: '',
+  iconSize: '20'
 })
 </script>
