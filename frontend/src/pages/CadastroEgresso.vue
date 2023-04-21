@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-3 pb-0">
+  <div class="container mx-auto p-3 pb-0 mt-10">
     <form @submit="handleSubmit($event)">
       <h1 class="text-cyan-800 text-2xl font-semibold">
         Cadastro de egresso

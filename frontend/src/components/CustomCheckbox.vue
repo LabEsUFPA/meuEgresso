@@ -37,9 +37,7 @@ defineProps<{
   label: string
 }>()
 
-defineEmits([
-  'update:modelValue'
-])
+defineEmits(['update:modelValue'])
 
 const id = `checkbox-input-${Math.floor(Math.random() * 1000000).toString()}`
 </script>

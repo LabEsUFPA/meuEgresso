@@ -28,10 +28,16 @@
           class="text-left"
           :class="iconPath ? 'col-span-6' : 'col-span-7'"
         >
-          {{ modelValue }}
+          <p
+            :class="modelValue === '' ? 'text-gray-500' : 'text-black'"
+          >
+            {{ modelValue === '' ? placeholder : modelValue }}
+          </p>
         </div>
 
-        <div class="text-cyan-600 col-span-1 flex flex-row items-end justify-end">
+        <div
+          class="text-cyan-600 col-span-1 flex flex-row items-end justify-end"
+        >
           <SvgIcon
             type="mdi"
             :path="mdiChevronDown"
@@ -73,9 +79,7 @@ import { ref } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronDown } from '@mdi/js'
 
-defineEmits([
-  'update:modelValue'
-])
+defineEmits(['update:modelValue'])
 
 interface Props {
   modelValue: string
@@ -84,11 +88,13 @@ interface Props {
   options: string[]
   iconPath?: string
   required?: boolean
+  placeholder?: string
 }
 
 withDefaults(defineProps<Props>(), {
   iconPath: '',
-  helperText: ''
+  helperText: '',
+  placeholder: ''
 })
 
 const open = ref(false)

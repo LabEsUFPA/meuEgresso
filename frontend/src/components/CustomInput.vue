@@ -25,6 +25,9 @@
       </div>
       <input
         class="focus:outline-none"
+        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)"
+        :maxlength="maxLength"
+        :minlength="minLength"
         :class="iconPath ? 'col-span-7' : 'col-span-8'"
         :type="type"
         :value="modelValue"
@@ -44,6 +47,12 @@
     >
       {{ helperText }}
     </div>
+    <div
+      v-if="errorText"
+      class="text-xs text-red-600 mt-1 ml-1 max-w-[250px] sm:max-w-fit"
+    >
+      {{ errorText }}
+    </div>
   </div>
 </template>
 
@@ -51,9 +60,7 @@
 import { ref } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 
-defineEmits([
-  'update:modelValue'
-])
+defineEmits(['update:modelValue'])
 
 type inputs = 'date' | 'text' | 'email' | 'number' | 'password'
 
@@ -61,12 +68,15 @@ interface Props {
   modelValue: string
   label: string
   helperText?: string
+  errorText?: string
   placeholder?: string
   type?: inputs
   iconPath?: string
   inputClass?: string
   required?: boolean
   mask?: string
+  maxLength?: number
+  minLength?: number
 }
 
 withDefaults(defineProps<Props>(), {
@@ -75,7 +85,10 @@ withDefaults(defineProps<Props>(), {
   iconPath: '',
   inputClass: '',
   helperText: '',
-  mask: ''
+  mask: '',
+  errorText: '',
+  maxLength: 300,
+  minLength: 1
 })
 
 const focused = ref(false)
