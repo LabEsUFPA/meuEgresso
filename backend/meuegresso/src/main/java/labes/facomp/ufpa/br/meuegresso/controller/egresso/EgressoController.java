@@ -206,14 +206,14 @@ public class EgressoController {
         return ResponseEntity.ok(mapper.map(depoimentoModel, DepoimentoDTO.class));
     }
 
-    @PostMapping(value = "/endereco")
+    @PutMapping(value = "/endereco")
     public ResponseEntity<EnderecoDTO> atualizarEndereco(@RequestBody EnderecoDTO endereco) {
         EnderecoModel enderecoModel = mapper.map(endereco, EnderecoModel.class);
         enderecoModel = egressoService.updateEndereco(enderecoModel);
         return ResponseEntity.ok(mapper.map(enderecoModel, EnderecoDTO.class));
     }
 
-    @PostMapping(value = "/pesquisa")
+    @PutMapping(value = "/pesquisa")
     public ResponseEntity<PesquisaCientificaDTO> atualizarPublicacao(@RequestBody PesquisaCientificaDTO pesquisa) {
         PesquisaCientificaModel pesquisaModel = mapper.map(pesquisa, PesquisaCientificaModel.class);
         pesquisaModel = egressoService.updatePesquisa(pesquisaModel);
@@ -221,7 +221,7 @@ public class EgressoController {
     }
 
     // curso
-    @PostMapping(value = "/curso")
+    @PutMapping(value = "/curso")
     public ResponseEntity<CursoDTO> atualizarCurso(@RequestBody CursoDTO curso) {
         CursoModel cursoModel = mapper.map(curso, CursoModel.class);
         cursoModel = egressoService.updateCurso(cursoModel);
@@ -229,14 +229,14 @@ public class EgressoController {
     }
 
     // anuncio
-    @PostMapping(value = "/anuncio")
+    @PutMapping(value = "/anuncio")
     public ResponseEntity<AnuncioDTO> atualizarAnuncio(@RequestBody AnuncioDTO anuncio) {
         AnuncioModel anuncioModel = mapper.map(anuncio, AnuncioModel.class);
         anuncioModel = egressoService.updateAnuncio(anuncioModel);
         return ResponseEntity.ok(mapper.map(anuncio, AnuncioDTO.class));
     }
 
-    @PostMapping(value = "/titulo-academico")
+    @PutMapping(value = "/titulo-academico")
     public ResponseEntity<EgressoColacaoDTO> atualizarTituloAcademico(@RequestBody EgressoColacaoDTO tituloAcademico) {
         EgressoColacaoModel tituloAcademicoModel = mapper.map(tituloAcademico, EgressoColacaoModel.class);
         tituloAcademicoModel = egressoService.updateTituloAcademico(tituloAcademicoModel);
