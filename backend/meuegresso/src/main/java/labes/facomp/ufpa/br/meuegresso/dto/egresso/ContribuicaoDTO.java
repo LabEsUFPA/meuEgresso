@@ -1,8 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import lombok.Data;
 
 /**
@@ -19,5 +19,5 @@ public class ContribuicaoDTO {
 
     private String descricao;
 
-    private Set<EgressoModel> egressos;
+    private Set<EgressoPublicDTO> egressos = new HashSet<>();
 }
