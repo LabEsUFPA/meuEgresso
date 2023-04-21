@@ -44,9 +44,6 @@ public class EgressoModel extends Auditable {
     @JoinColumn(name = "genero_id", nullable = false, unique = false)
     private GeneroModel genero;
 
-    @Column(name = "cotista_egresso", nullable = false, unique = false)
-    private Boolean cotista;
-
     @Column(name = "pcd_egresso", nullable = false, unique = false)
     private Boolean pcd = false;
 
@@ -62,6 +59,10 @@ public class EgressoModel extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "endereco_id", unique = false, nullable = false)
     private EnderecoModel endereco;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "cota_id", unique = false, nullable = false)
+    private CotaModel cota;
 
     @OneToOne(cascade = { CascadeType.REMOVE })
     @JoinColumn(name = "usuario_id", unique = true, nullable = false)
