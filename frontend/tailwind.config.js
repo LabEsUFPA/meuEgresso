@@ -1,11 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 
-const colors = require('tailwindcss/colors')
+const colors = require("tailwindcss/colors");
 export default {
-  content: [
-    './index.html',
-    './src/**/*.{vue,js,ts,jsx,tsx}'
-  ],
+  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
     extend: {},
     colors: {
@@ -16,5 +13,5 @@ export default {
       ...colors
     }
   },
-  plugins: []
-}
+  plugins: [],
+};
