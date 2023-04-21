@@ -53,4 +53,10 @@ public interface UsuarioService extends UserDetailsService {
 	 */
 	public boolean deleteById(Integer idUsuario);
 
+	/**
+	 * Método responsável por encontrar um determinado usuário por seu username.
+	 * 
+	 */
+	public UsuarioModel loadUserByUsername(String username);
+
 }

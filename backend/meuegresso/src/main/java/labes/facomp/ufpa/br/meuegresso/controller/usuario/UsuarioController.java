@@ -5,7 +5,6 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -88,10 +87,10 @@ public class UsuarioController {
 	/**
 	 * Endpoint responsavel por cadastrar o usuário.
 	 *
-	 * @param usuario Estrutura de dados contendo as informações necessárias para
-	 *                persistir o Usuário.
-	 * @return {@link UsuarioAuthDTO} Dados gravados no banco com a Id atualizada.
+	 * @param usuarioDTO Estrutura de dados contendo as informações necessárias para persistir o Usuário.
+	 * @return String confirmando a transação.
 	 * @author Alfredo Gabriel
+	 * @see {@link UsuarioDTO}
 	 * @since 26/03/2023
 	 */
 	@PostMapping

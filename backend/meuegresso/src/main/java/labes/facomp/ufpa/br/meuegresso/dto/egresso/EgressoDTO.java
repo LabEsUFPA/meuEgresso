@@ -2,15 +2,8 @@ package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import lombok.Data;
 
-/**
- * 
- *
- * @author João Paulo, Pedro Inácio
- * @since 16/04/2023
- * @version 1.0
- */
 @Data
-public class EgressoPublicDTO {
+public class EgressoDTO {
 
     private Integer id;
 
@@ -32,4 +25,5 @@ public class EgressoPublicDTO {
 
     private EnderecoDTO endereco;
 
+    private DepoimentoDTO depoimento;
 }
