@@ -1,5 +1,5 @@
 <template>
-  <form @submit="handleSubmit($event)">
+  <form @submit.prevent="handleSubmit($event)">
     <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
       <div
         class="flex flex-col items-center justify-center bg-white w-[960px] py-10 mx-6 rounded-2xl shadow-md"
@@ -76,7 +76,6 @@ const userLoginData = ref<loginData>({
 })
 
 const handleSubmit = ($event: Event) => {
-  $event?.preventDefault()
   if (userLoginData.value.userName || userLoginData.value.password) {
     error.value = false
     console.log(userLoginData.value)

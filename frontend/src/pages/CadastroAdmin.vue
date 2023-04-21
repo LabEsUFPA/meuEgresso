@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
-    <form @submit="handleSubmit($event)">
+  <form @submit.prevent="handleSubmit($event)">
+    <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
       <div
         v-if="!submitSuccess"
         class="flex flex-col items-center bg-white w-[960px] py-10 mx-6 rounded-2xl shadow-md"
@@ -83,31 +83,31 @@
           Criar
         </CustomButton>
       </div>
-    </form>
 
-    <div
-      v-if="submitSuccess"
-      class="flex flex-col bg-white w-[818px] mx-6 rounded-2xl"
-    >
-      <RouterLink
-        to="/"
-        class="flex self-end justify-center w-36 py-3 bg-red-400 font-semibold text-xl text-white rounded-tl-lg rounded-tr-lg rounded-bl-lg"
+      <div
+        v-if="submitSuccess"
+        class="flex flex-col bg-white w-[818px] mx-6 rounded-2xl"
       >
-        Fechar
-      </RouterLink>
-      <div class="flex flex-col items-center text-center pt-16 pb-28 gap-y-12">
-        <img
-          class="max-w-max"
-          src="../assets/check.svg"
-          alt="Loading"
+        <RouterLink
+          to="/"
+          class="flex self-end justify-center w-36 py-3 bg-red-400 font-semibold text-xl text-white rounded-tl-lg rounded-tr-lg rounded-bl-lg"
         >
-        <h1 class="text-blue-900 text-4xl font-bold">
-          Perfil {{ userRegisterData.userName }} <br>
-          criado com sucesso!
-        </h1>
+          Fechar
+        </RouterLink>
+        <div class="flex flex-col items-center text-center pt-16 pb-28 gap-y-12">
+          <img
+            class="max-w-max"
+            src="../assets/check.svg"
+            alt="Loading"
+          >
+          <h1 class="text-blue-900 text-4xl font-bold">
+            Perfil {{ userRegisterData.userName }} <br>
+            criado com sucesso!
+          </h1>
+        </div>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script setup lang="ts">
@@ -159,7 +159,6 @@ const setSelectedAccessLevel = () => {
 }
 
 const handleSubmit = ($event: Event) => {
-  $event.preventDefault()
   if (userRegisterData.value.password !== userRegisterData.value.confirmationPassword) {
     errorText.value = String(errorMessages.value.senha)
     error.value = true
