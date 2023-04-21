@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import labes.facomp.ufpa.br.meuegresso.config.properties.TokenProperties;
@@ -58,6 +59,10 @@ public class JwtService {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
+    public Integer getIdUsuario(JwtAuthenticationToken jwtAuthenticationToken){
+        return Integer.parseInt(jwtAuthenticationToken.getTokenAttributes().get("userId").toString());
+    }
+
     private boolean isTokenExpired(String token) {
         Instant exp = jwtDecoder.decode(token).getExpiresAt();
         if (exp != null) {
@@ -66,4 +71,5 @@ public class JwtService {
             return true;
         }
     }
+
 }
