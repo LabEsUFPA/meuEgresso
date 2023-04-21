@@ -536,7 +536,7 @@
 <script setup lang="ts">
 // import ProfileHead from 'src/components/ProfileHead.vue'
 // import ProfileBodyView from 'src/components/ProfileBodyView.vue'
-import CustomButtonLink from 'components/CustomButtonLink.vue'
+import CustomButtonLink from 'src/components/CustomButtonLink.vue'
 
 import FolderSection from 'src/components/FolderSection.vue'
 
@@ -607,6 +607,50 @@ const data = ref({
     contribuicoes: ''
   }
 })
+
+const error = ref(false)
+const errorMessages = ref({
+  senha: 'As senhas informadas são diferentes',
+  email: 'Os e-mails informados são diferentes',
+  standard: 'Por favor, preencha todos os campos abaixo',
+  accessLevel: 'Por favor, informe o nível de acesso',
+  registrationLength: 'Matrícula inválida, por favor digite novamente'
+})
+const errorText = ref('')
+const submitSuccess = ref(false)
+
+interface registerData {
+  name: string
+  registration: string
+  email: string
+  password: string
+  confirmationPassword: string
+}
+
+const userRegisterData = ref<registerData>({
+  name: '',
+  registration: '',
+  email: '',
+  password: '',
+  confirmationPassword: ''
+})
+
+const handleSubmit = ($event: Event) => {
+  $event.preventDefault()
+  if (
+    userRegisterData.value.password !== userRegisterData.value.confirmationPassword
+  ) {
+    errorText.value = String(errorMessages.value.senha)
+    error.value = true
+  } else if (userRegisterData.value.registration.length < 12) {
+    errorText.value = String(errorMessages.value.registrationLength)
+    error.value = true
+  } else {
+    error.value = false
+    console.log(userRegisterData.value)
+    submitSuccess.value = true
+  }
+}
 // import FolderSection from 'components/FolderSection.vue'
 // import CadastroEgresso from 'src/pages/CadrastroEgresso.vue';
 
