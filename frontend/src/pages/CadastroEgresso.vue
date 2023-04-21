@@ -85,15 +85,6 @@
 
         <template #default>
           <div>
-            <CustomInput
-              class="mb-5"
-              v-model="data.localizacao.cep"
-              label="CEP"
-              placeholder="00000-000"
-              mask="#####-###"
-              required
-            />
-
             <CustomSelect
               class="mb-5"
               v-model="data.localizacao.pais"
@@ -383,7 +374,6 @@ const data = ref({
     lattes: ''
   },
   localizacao: {
-    cep: '',
     pais: '',
     estado: '',
     cidade: ''
