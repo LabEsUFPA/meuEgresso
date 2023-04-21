@@ -71,7 +71,7 @@ public class EgressoController {
     }
 
     @PostMapping(value = "/pesquisa")
-    public ResponseEntity<PesquisaCientificaDTO> cadastrarPublicacao(@RequestBody PesquisaCientificaDTO pesquisa) {
+    public ResponseEntity<PesquisaCientificaDTO> cadastrarPesquisa(@RequestBody PesquisaCientificaDTO pesquisa) {
         PesquisaCientificaModel pesquisaModel = mapper.map(pesquisa, PesquisaCientificaModel.class);
         pesquisaModel = egressoService.adicionarPesquisa(pesquisaModel);
         return ResponseEntity.ok(mapper.map(pesquisaModel, PesquisaCientificaDTO.class));
@@ -101,10 +101,10 @@ public class EgressoController {
     }
 
     @PostMapping(value = "/emprego")
-    public ResponseEntity<EgressoEmpresaDTO> cadastrarEmprego(@RequestBody EgressoEmpresaDTO emprego) {
-        EgressoEmpresaModel empregoModel = mapper.map(emprego, EgressoEmpresaModel.class);
-        empregoModel = egressoService.adicionarEmprego(empregoModel);
-        return ResponseEntity.ok(mapper.map(empregoModel, EgressoEmpresaDTO.class));
+    public ResponseEntity<EgressoEmpresaDTO> cadastrarEgressoEmpresa(@RequestBody EgressoEmpresaDTO egressoEmpresa) {
+        EgressoEmpresaModel egressoEmpresaModel = mapper.map(egressoEmpresa, EgressoEmpresaModel.class);
+        egressoEmpresaModel = egressoService.adicionarEgressoEmpresa(egressoEmpresaModel);
+        return ResponseEntity.ok(mapper.map(egressoEmpresaModel, EgressoEmpresaDTO.class));
     }
 
     @PostMapping(value = "/contribuicao")
@@ -165,9 +165,9 @@ public class EgressoController {
      * @since 16/04/2023
      */
     @PutMapping(value = "/emprego")
-    public ResponseEntity<EgressoEmpresaDTO> atualizarEmprego(@RequestBody EgressoEmpresaDTO emprego) {
+    public ResponseEntity<EgressoEmpresaDTO> atualizarEgressoEmpresa(@RequestBody EgressoEmpresaDTO emprego) {
         EgressoEmpresaModel empregoModel = mapper.map(emprego, EgressoEmpresaModel.class);
-        empregoModel = egressoService.updateEmprego(empregoModel);
+        empregoModel = egressoService.updateEgressoEmpresa(empregoModel);
         return ResponseEntity.ok(mapper.map(empregoModel, EgressoEmpresaDTO.class));
     }
 
@@ -213,7 +213,7 @@ public class EgressoController {
     }
 
     @PutMapping(value = "/pesquisa")
-    public ResponseEntity<PesquisaCientificaDTO> atualizarPublicacao(@RequestBody PesquisaCientificaDTO pesquisa) {
+    public ResponseEntity<PesquisaCientificaDTO> atualizarPesquisa(@RequestBody PesquisaCientificaDTO pesquisa) {
         PesquisaCientificaModel pesquisaModel = mapper.map(pesquisa, PesquisaCientificaModel.class);
         pesquisaModel = egressoService.updatePesquisa(pesquisaModel);
         return ResponseEntity.ok(mapper.map(pesquisaModel, PesquisaCientificaDTO.class));
@@ -287,7 +287,7 @@ public class EgressoController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deletarEmprego(@RequestBody EgressoEmpresaDTO emprego) {
         EgressoEmpresaModel empregoModel = mapper.map(emprego, EgressoEmpresaModel.class);
-        return egressoService.deletarEmprego(empregoModel);
+        return egressoService.deletarEgressoEmpresa(empregoModel);
     }
 
     /**

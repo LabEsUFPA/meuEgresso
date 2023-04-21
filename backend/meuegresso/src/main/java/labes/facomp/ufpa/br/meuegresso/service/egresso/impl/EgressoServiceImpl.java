@@ -19,7 +19,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.CursoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.DepoimentoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoColacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.EmpregoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoEmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EnderecoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.PesquisaCientificaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.PublicacaoRepository;
@@ -42,13 +42,12 @@ public class EgressoServiceImpl implements EgressoService {
     private final EgressoRepository egressoRepository;
     private final PublicacaoRepository publicacaoRepository;
     private final DepoimentoRepository depoimentoRepository;
-    private final EmpregoRepository empregoRepository;
+    private final EgressoEmpresaRepository egressoEmpresaRepository;
     private final EnderecoRepository enderecoRepository;
     private final AnuncioRepository anuncioRepository;
     private final PesquisaCientificaRepository pesquisaCientificaRepository;
     private final CursoRepository cursoRepository;
     private final EgressoColacaoRepository egressoColacaoRepository;
-
 
     @Override
     public EgressoModel adicionarEgresso(EgressoModel egresso) {
@@ -61,8 +60,8 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
-    public EgressoEmpresaModel adicionarEmprego(EgressoEmpresaModel emprego) {
-        return empregoRepository.save(emprego);
+    public EgressoEmpresaModel adicionarEgressoEmpresa(EgressoEmpresaModel egressoEmpresa) {
+        return egressoEmpresaRepository.save(egressoEmpresa);
 
     }
 
@@ -86,28 +85,24 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
-    public AnuncioModel adicionarAnuncio(AnuncioModel anuncio)
-    {
+    public AnuncioModel adicionarAnuncio(AnuncioModel anuncio) {
         return anuncioRepository.save(anuncio);
     }
-    
+
     @Override
-    public PesquisaCientificaModel adicionarPesquisa(PesquisaCientificaModel pesquisa)
-    {
+    public PesquisaCientificaModel adicionarPesquisa(PesquisaCientificaModel pesquisa) {
         return pesquisaCientificaRepository.save(pesquisa);
     }
-    
+
     @Override
-    public CursoModel adicionarCurso(CursoModel curso){
+    public CursoModel adicionarCurso(CursoModel curso) {
         return cursoRepository.save(curso);
     }
 
-    public EgressoColacaoModel adicionarTituloAcademico (EgressoColacaoModel titulo)
-    {
+    public EgressoColacaoModel adicionarTituloAcademico(EgressoColacaoModel titulo) {
         return egressoColacaoRepository.save(titulo);
     }
 
-        
     /**
      * 
      * 
@@ -118,7 +113,7 @@ public class EgressoServiceImpl implements EgressoService {
      */
     @Override
     public ContribuicaoModel updateContribuicao(ContribuicaoModel contribuicao) {
-        if(contribuicao.getId() != null){
+        if (contribuicao.getId() != null) {
             contribuicaoRepository.save(contribuicao);
         }
         return null;
@@ -149,9 +144,9 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
-    public EgressoEmpresaModel updateEmprego(EgressoEmpresaModel emprego) {
+    public EgressoEmpresaModel updateEgressoEmpresa(EgressoEmpresaModel emprego) {
         if (emprego.getId() != null) {
-            empregoRepository.save(emprego);
+            egressoEmpresaRepository.save(emprego);
         }
         return null;
     }
@@ -207,9 +202,9 @@ public class EgressoServiceImpl implements EgressoService {
     @Override
     public void deleteById(Integer id) {
         egressoRepository.deleteById(id);
-    
+
     }
-    
+
     @Override
     public ResponseEntity<String> deletarContribuicao(ContribuicaoModel contribuicao) {
         if (contribuicaoRepository.existsById(contribuicao.getId())) {
@@ -241,9 +236,9 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
-    public ResponseEntity<String> deletarEmprego(EgressoEmpresaModel emprego) {
-        if (empregoRepository.existsById(emprego.getId())) {
-            empregoRepository.deleteById(emprego.getId());
+    public ResponseEntity<String> deletarEgressoEmpresa(EgressoEmpresaModel egressoEmpresa) {
+        if (egressoEmpresaRepository.existsById(egressoEmpresa.getId())) {
+            egressoEmpresaRepository.deleteById(egressoEmpresa.getId());
             return ResponseEntity.ok("Emprego deletado");
         } else {
             return ResponseEntity.ok("Emprego nao encontrado");
@@ -263,7 +258,7 @@ public class EgressoServiceImpl implements EgressoService {
     @Override
     public Boolean existsById(Integer id) {
         return egressoRepository.existsById(id);
-    
+
     }
 
     @Override
