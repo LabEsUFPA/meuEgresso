@@ -21,7 +21,6 @@
               classimg="filter-sky"
             />
           </h1>
-          
         </div>
         <h1 class="text-sky-900 text-xl font-bold mt-5">
           <!-- v-model="data.geral.nome" -->
@@ -42,7 +41,7 @@
             placeholder="https://br.linkedin.com/"
             color="whitesky"
             variant="standard"
-            iconSize="30"
+            icon-size="30"
           />
           <CustomButtonLink
             label="Lattes"
@@ -51,7 +50,7 @@
             placeholder="https://lattes.cnpq.br/"
             color="whitesky"
             variant="standard"
-            iconSize="30"
+            icon-size="30"
           />
         </div>
       </div>
@@ -71,7 +70,7 @@
                     color="invisiblesky"
                     classimg="filter-sky"
                     :has-shadow="false"
-                    iconSize="20"
+                    icon-size="20"
                   />
                 </h1>
               </template>
