@@ -19,7 +19,7 @@
 
           <CustomInput
             v-if="isinput"
-            type="text"
+            :type="type"
             icon-path=""
             :model-value="modelValue"
             :v-model="vmodel"

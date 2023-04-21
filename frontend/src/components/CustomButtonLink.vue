@@ -5,6 +5,7 @@
     target="_blank"
   >
     <button
+
       :class="styles"
       :type="type"
     >

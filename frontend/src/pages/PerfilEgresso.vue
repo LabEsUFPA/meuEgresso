@@ -91,6 +91,7 @@
                 <div>
                   <!-- Talvez problema com v-model -->
                   <CustomPerfilData
+                    type="text"
                     class="mb-5"
                     v-model="data.geral.nome"
                     vmodel="data.geral.nome"
@@ -101,19 +102,22 @@
                   />
 
                   <CustomPerfilData
-                    class="mb-5"
+                    type="email"
+                    class="mb-6"
                     v-model="data.geral.email"
                     vmodel="data.geral.email"
                     label="Email"
+                    placeholder="marcele@email.com"
                     :icon-path="mdiEmail"
                   />
 
                   <CustomPerfilData
+                    type="date"
                     class="mb-1"
                     v-model="data.geral.nascimento"
                     vmodel="data.geral.nascimento"
                     label="Data Nascimento"
-                    placeholder="mm/dd/yyyy"
+                    placeholder="01/01/2001"
                     :icon-path="mdiCake"
                   />
                 </div>
@@ -150,6 +154,7 @@
               <template #default>
                 <div>
                   <CustomPerfilData
+                    type="text"
                     class="mb-5"
                     vmodel="data.localizacao.cep"
                     v-model="data.localizacao.cep"
@@ -160,6 +165,7 @@
                   />
 
                   <CustomPerfilData
+                    type="text"
                     class="mb-5"
                     vmodel="data.localizacao.pais"
                     v-model="data.localizacao.pais"
@@ -169,6 +175,7 @@
                   />
 
                   <CustomPerfilData
+                    type="text"
                     class="mb-5"
                     vmodel="data.localizacao.estado"
                     v-model="data.localizacao.estado"
@@ -178,6 +185,7 @@
                   />
 
                   <CustomPerfilData
+                    type="text"
                     class="mb-1"
                     vmodel="data.localizacao.cidade"
                     v-model="data.localizacao.cidade"
@@ -225,6 +233,7 @@
             :icon-path="mdiMapMarkerRadius""
           /> -->
                   <CustomPerfilData
+                    type="number"
                     class="mb-5"
                     vmodel="data.academico.matricula"
                     v-model="data.academico.matricula"
@@ -242,6 +251,7 @@
           />
           -->
                   <CustomPerfilData
+                    type="text"
                     class="mb-5"
                     vmodel="data.academico.cotista.tipo"
                     v-model="data.academico.cotista.tipo"
@@ -251,6 +261,7 @@
                   />
 
                   <CustomPerfilData
+                    type="text"
                     class="mb-5"
                     vmodel="data.academico.tipoAluno"
                     v-model="data.academico.tipoAluno"
@@ -268,6 +279,7 @@
           /> -->
 
                   <CustomPerfilData
+                    type="text"
                     class="mb-5"
                     vmodel="data.academico.posGrad.curso"
                     v-model="data.academico.posGrad.curso"
@@ -277,6 +289,7 @@
                   />
 
                   <CustomPerfilData
+                    type="text"
                     class="mb-5"
                     vmodel="data.academico.posGrad.local"
                     v-model="data.academico.posGrad.local"
@@ -286,6 +299,7 @@
                   />
 
                   <CustomPerfilData
+                    type="text"
                     class="mb-1"
                     vmodel="data.academico.bolsista.tipo"
                     v-model="data.academico.bolsista.tipo"
@@ -390,6 +404,7 @@
               <template #default>
                 <div>
                   <CustomPerfilData
+                    type="text"
                     class="mb-10"
                     vmodel="data.carreira.area"
                     v-model="data.carreira.area"
@@ -399,6 +414,7 @@
                   />
 
                   <CustomPerfilData
+                    type="text"
                     class="mb-10"
                     vmodel="data.carreira.setor"
                     v-model="data.carreira.setor"
@@ -408,6 +424,7 @@
                   />
 
                   <CustomPerfilData
+                    type="text"
                     class="mb-5"
                     vmodel="data.carreira.empresa"
                     v-model="data.carreira.empresa"
@@ -462,6 +479,7 @@
               <template #default>
                 <div>
                   <CustomPerfilData
+                    type="text"
                     class="flex-auto mb-5"
                     vmodel="data.adicionais.experiencias"
                     v-model="data.adicionais.experiencias"
@@ -473,6 +491,7 @@
                     icon-path=""
                   />
                   <CustomPerfilData
+                    type="text"
                     class="flex-auto mb-5"
                     vmodel="data.adicionais.contribuicoes"
                     v-model="data.adicionais.contribuicoes"
