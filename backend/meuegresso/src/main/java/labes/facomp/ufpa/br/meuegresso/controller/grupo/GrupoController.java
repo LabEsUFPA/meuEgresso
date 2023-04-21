@@ -74,7 +74,7 @@ public class GrupoController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public GrupoDTO cadastrarUsuario(@RequestBody @Valid GrupoDTO grupoDTO) {
+	public GrupoDTO cadastrarGrupo(@RequestBody @Valid GrupoDTO grupoDTO) {
 		GrupoModel grupoModel = mapper.map(grupoDTO, GrupoModel.class);
 		grupoModel = grupoService.save(grupoModel);
 		return mapper.map(grupoModel, GrupoDTO.class);
@@ -92,7 +92,7 @@ public class GrupoController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public GrupoDTO atualizarUsuario(@RequestBody @Valid GrupoDTO grupoDTO) throws NotFoundException {
+	public GrupoDTO atualizarGrupo(@RequestBody @Valid GrupoDTO grupoDTO) throws NotFoundException {
 		if (grupoDTO.getIdGrupo() == null) {
 			throw new NotFoundException();
 		} else {

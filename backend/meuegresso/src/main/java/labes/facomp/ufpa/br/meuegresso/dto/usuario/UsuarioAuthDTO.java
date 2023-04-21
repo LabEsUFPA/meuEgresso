@@ -24,6 +24,8 @@ import lombok.Data;
  */
 @Data
 public class UsuarioAuthDTO {
+    
+    private Integer idUsuario;
 
     @NotBlank(message = "Infome um usuário.")
     private String username;

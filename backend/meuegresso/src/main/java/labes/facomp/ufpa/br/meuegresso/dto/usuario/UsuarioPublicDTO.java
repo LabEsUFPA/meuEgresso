@@ -29,9 +29,6 @@ public class UsuarioPublicDTO {
 	@NotBlank(message = "Infome um usuário.")
 	private String username;
 
-	@NotBlank(message = "Infome uma senha.")
-	private String password;
-
 	@Email(message = "Informe um e-mail valido.")
 	@NotBlank(message = "Infome um email.")
 	private String email;

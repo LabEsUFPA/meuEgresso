@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.usuario;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.validation.Valid;
@@ -10,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grupo.GrupoDTO;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -22,6 +22,7 @@ import lombok.Data;
  * @version 1.0.1
  */
 @Data
+@Builder
 public class UsuarioDTO {
 
 	private Integer idUsuario;
@@ -45,6 +46,6 @@ public class UsuarioDTO {
 	@Valid
 	private EgressoPublicDTO egresso;
 
-	private Set<GrupoDTO> grupos = new HashSet<>();
+	private Set<GrupoDTO> grupos;
 
 }

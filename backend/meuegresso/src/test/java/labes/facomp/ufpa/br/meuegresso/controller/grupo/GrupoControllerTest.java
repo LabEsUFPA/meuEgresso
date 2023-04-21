@@ -25,9 +25,9 @@ public class GrupoControllerTest {
 
 	@Test
 	@Order(1)
-	public void testCadastrarUsuario() throws Exception {
+	public void testCadastrarGrupo() throws Exception {
 		GrupoDTO grupo = GrupoDTO.builder().nomeGrupo(NOME_TESTE_GRUPO).build();
-		grupo = grupoController.cadastrarUsuario(grupo);
+		grupo = grupoController.cadastrarGrupo(grupo);
 		assertNotNull(grupo.getIdGrupo());
 	}
 
@@ -49,12 +49,12 @@ public class GrupoControllerTest {
 
 	@Test
 	@Order(4)
-	public void testAtualizarUsuario() throws Exception {
+	public void testAtualizarGrupo() throws Exception {
 		final String NOVO_NOME = "NOVO NOME";
 		final Integer id = 1;
 		GrupoDTO grupo = grupoController.findById(id);
 		grupo.setNomeGrupo(NOVO_NOME);
-		grupo = grupoController.atualizarUsuario(grupo);
+		grupo = grupoController.atualizarGrupo(grupo);
 		assertEquals(grupo.getNomeGrupo(), NOVO_NOME);
 	}
 
