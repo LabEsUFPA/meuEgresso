@@ -10,4 +10,5 @@ Crie o arquivo .env baseado no .env.example
 
 ## Para Build
 
-`bash deploy.sh`
+1. Criar o arquivo JAR - `mvn install`
+2. Subir no docker - `docker-compose up`
