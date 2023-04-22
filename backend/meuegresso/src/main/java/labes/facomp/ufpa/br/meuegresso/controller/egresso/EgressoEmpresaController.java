@@ -91,16 +91,15 @@ public class EgressoEmpresaController {
 	}
 
 	/**
-	 * Endpoint responsavel por atualizar o egressoEmpresa.
-	 * 
-	 * @param egressoEmpresaDTO Estrutura de dados contendo as informações
-	 *                          necessárias para
-	 *                          atualizar o egressoEmpresa.
-	 * @return {@link EgressoEmpresaDTO} Dados gravados no banco com a Id
-	 *         atualizada.
-	 * @author Alfredo Gabriel
-	 * @since 21/04/2023
-	 */
+     * Endpoint responsavel por atualizar as informações de emprego do egresso.
+     *
+     * @param emprego Estrutura de dados contendo as informações necessárias para
+     *                atualizar o emprego.
+     * @return {@link EgressoEmpresaModel} Dados gravados no banco com a Id
+     *         atualizada.
+     * @author Pedro Inácio
+     * @since 16/04/2023
+     */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public EgressoEmpresaDTO atualizarEgressoEmpresa(@RequestBody @Valid EgressoEmpresaDTO egressoEmpresaDTO) {
@@ -110,13 +109,14 @@ public class EgressoEmpresaController {
 	}
 
 	/**
-	 * Endpoint responsável por deletar egressoEmpresa por sua ID>
-	 * 
-	 * @param id Integer
-	 * @return Boolean
-	 * @author Alfredo Gabriel
-	 * @since 21/04/2023
-	 */
+     * Endpoint responsavel por deletar o emprego do egresso.
+     *
+     * @param emprego Estrutura de dados contendo as informações
+     *                necessárias para deletar o emprego.
+     * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 17/04/2023
+     */
 	@DeleteMapping(params = { "egressoId", "empresaId" })
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean deleteById(@RequestParam(required = false) Integer egressoId,

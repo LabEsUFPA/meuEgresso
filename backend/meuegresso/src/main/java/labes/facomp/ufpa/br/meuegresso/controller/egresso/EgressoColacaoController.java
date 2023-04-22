@@ -110,13 +110,14 @@ public class EgressoColacaoController {
 	}
 
 	/**
-	 * Endpoint responsável por deletar EgressoColacao por sua ID>
-	 * 
-	 * @param id Integer
-	 * @return Boolean
-	 * @author Alfredo Gabriel
-	 * @since 21/04/2023
-	 */
+     * Endpoint responsavel por deletar a colacao do egresso.
+     *
+     * @param tituloAcademico Estrutura de dados contendo as informações
+     *                        necessárias para deletar o titulo academico.
+     * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 17/04/2023
+     */
 	@DeleteMapping(params = { "egressoId", "colacaoId" })
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean deleteById(@RequestParam(required = false) Integer egressoId,

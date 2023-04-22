@@ -105,13 +105,14 @@ public class AnuncioController {
 	}
 
 	/**
-	 * Endpoint responsável por deletar anuncio por sua ID>
-	 * 
-	 * @param id Integer
-	 * @return Boolean
-	 * @author Alfredo Gabriel
-	 * @since 21/04/2023
-	 */
+     * Endpoint responsavel por deletar o anuncio do egresso.
+     *
+     * @param anuncio Estrutura de dados contendo as informações
+     *                necessárias para deletar o anuncio.
+     * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 17/04/2023
+     */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean deleteById(Integer id) {
