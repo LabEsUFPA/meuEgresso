@@ -12,7 +12,8 @@ import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Implementação do Serviço responsável pelas rotinas internas da aplicação referente ao usuário.
+ * Implementação do Serviço responsável pelas rotinas internas da aplicação
+ * referente ao usuário.
  *
  * @author Alfredo Gabriel
  * @since 26/03/2023
@@ -31,8 +32,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 	 *
 	 * @param authenticationRequest
 	 * @return
-	 * @author Alfredo Gabriel
-	 * @since 26/03/2023
+	 * @author Alfredo Gabriel, Camilo Santos
+	 * @since 16/04/2023
 	 */
 	@Override
 	public UsuarioModel loadUserByUsername(String login) throws UsernameNotFoundException {
@@ -52,6 +53,21 @@ public class UsuarioServiceImpl implements UsuarioService {
 	public UsuarioModel save(UsuarioModel usuario) {
 		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 		return usuarioRepository.save(usuario);
+	}
+
+	public UsuarioModel update(UsuarioModel usuario) {
+		if (usuario.getId() != null) {
+			return usuarioRepository.save(usuario);
+		}
+		return null;
+	}
+
+	public boolean deleteById(Integer idUsuario) {
+		if (usuarioRepository.existsById(idUsuario)) {
+			usuarioRepository.deleteById(idUsuario);
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -15,14 +15,14 @@ import lombok.Data;
  * sensiveis.
  * Nota: Use este DTO somente para persistir o usuário, não retorne o mesmo.
  *
- * @author Alfredo Gabriel
+ * @author Alfredo Gabriel, Camilo Santos
  * @since 26/03/2023
- * @version 1.0
+ * @version 1.0.1
  */
 @Data
 public class UsuarioPublicDTO {
 
-	private Integer idUsuario;
+	private Integer id;
 
 	@NotBlank(message = "Infome um usuário.")
 	private String username;

@@ -21,6 +21,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +30,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * Representação da tabela Usuario presente no banco de dados.
- * Esta tabela tem como finalidade representar os usuários que podem realizar login no sistema.
+ * Esta tabela tem como finalidade representar os usuários que podem realizar
+ * login no sistema.
  *
  * @author Alfredo Gabriel
  * @since 26/03/2023
@@ -45,12 +47,12 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "id_usuario", unique = true, nullable = false)
-	private Integer idUsuario;
+	private Integer id;
 
 	@Column(name = "login_usuario", unique = true, nullable = false, length = 30)
 	private String username;
 
-	@Column(name = "senha_usuario", nullable = false, unique = false, length = 40)
+	@Column(name = "senha_usuario", nullable = false, unique = false, length = 80)
 	private String password;
 
 	@Column(name = "email", nullable = false, unique = false, length = 50)
@@ -59,11 +61,11 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Column(name = "nome_usuario", nullable = false, unique = false, length = 30)
 	private String nome;
 
-    @Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.DATE)
 	@Column(name = "nascimento_usuario", nullable = false, unique = false)
-    private Date nascimento;
+	private Date nascimento;
 
-    @OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
+	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
 	private transient EgressoModel egresso;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
@@ -94,5 +96,15 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return this.ativo;
+	}
+
+	@Transient
+	public String getFirstName() {
+		return this.nome.split(" ")[0];
+	}
+
+	@Transient
+	public String getLastName() {
+		return this.nome.replace(getFirstName(), "");
 	}
 }

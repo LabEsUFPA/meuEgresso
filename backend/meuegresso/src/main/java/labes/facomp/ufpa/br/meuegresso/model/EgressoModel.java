@@ -33,6 +33,9 @@ public class EgressoModel extends Auditable {
     @Column(name = "id_egresso", unique = true, nullable = false)
     private Integer id;
 
+    @Column(name = "matricula_egresso", unique = true, nullable = false, length = 12)
+    private String matricula;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "etnia_id", nullable = false, unique = false)
     private EtniaModel etnia;
@@ -60,14 +63,18 @@ public class EgressoModel extends Auditable {
     @JoinColumn(name = "endereco_id", unique = false, nullable = false)
     private EnderecoModel endereco;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "cota_id", unique = false, nullable = false)
+    private CotaModel cota;
+
+    @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "usuario_id", unique = true, nullable = false)
     private UsuarioModel usuario;
 
-    @OneToMany(mappedBy = "egresso", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
     private Set<DepoimentoModel> depoimentos;
 
-    @ManyToMany(mappedBy = "egressos", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "egressos", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
     private Set<TrabalhoPublicadoModel> trabalhoPublicados = new HashSet<>();
 
 }

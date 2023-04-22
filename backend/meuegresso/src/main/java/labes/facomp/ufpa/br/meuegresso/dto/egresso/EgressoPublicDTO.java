@@ -1,16 +1,21 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
-import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EtniaModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import lombok.Data;
 
+/**
+ *
+ *
+ * @author João Paulo, Pedro Inácio
+ * @since 16/04/2023
+ * @version 1.0
+ */
 @Data
 public class EgressoPublicDTO {
 
     private Integer id;
 
-    private EtniaModel etnia;
+    private Integer matricula;
 
     private GeneroModel genero;
 
@@ -24,6 +29,6 @@ public class EgressoPublicDTO {
 
     private String linkedin;
 
-    private EnderecoModel endereco;
+    private EnderecoDTO endereco;
 
 }
