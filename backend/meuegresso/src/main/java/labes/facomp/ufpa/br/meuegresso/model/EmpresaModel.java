@@ -25,4 +25,7 @@ public class EmpresaModel extends Auditable {
 
     @Column(name = "nome_empresa", unique = false, nullable = false, length = 130)
     private String nome;
+    
+    @Column(name = "setor_atuacao_empresa", unique = false, nullable = false, length = 130)
+    private String setorAtuacao;
 }

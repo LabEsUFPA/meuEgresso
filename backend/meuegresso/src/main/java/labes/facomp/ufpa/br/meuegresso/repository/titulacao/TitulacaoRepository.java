@@ -15,6 +15,8 @@ import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
  * @version 1.0
  */
 public interface TitulacaoRepository extends CrudRepository<TitulacaoModel, Integer> {
- 
+
     List<TitulacaoModel> findAll();
+    
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

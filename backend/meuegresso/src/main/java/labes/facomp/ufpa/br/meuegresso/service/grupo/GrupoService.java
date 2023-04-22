@@ -37,7 +37,7 @@ public interface GrupoService {
 
 	/**
 	 * Método responsável por atualizar os dados de um determinado grupo cadastrado.
-	 * 
+	 *
 	 * @param grupoModel
 	 * @return Dados atualizados do grupo ao banco de dados.
 	 */

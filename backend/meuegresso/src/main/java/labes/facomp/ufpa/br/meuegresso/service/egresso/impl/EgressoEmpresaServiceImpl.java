@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class EgressoEmpresaServiceImpl implements EgressoEmpresaService {
-    
+
     private final EgressoEmpresaRepository egressoEmpresaRepository;
 
     @Override
@@ -55,6 +55,10 @@ public class EgressoEmpresaServiceImpl implements EgressoEmpresaService {
         } else {
             throw new InvalidRequestException();
         }
-    }  
-    
+    }
+
+    @Override
+    public boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy) {
+        return egressoEmpresaRepository.existsByIdAndCreatedById(id, createdBy);
+    }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 
 /**
@@ -33,30 +34,38 @@ public interface UsuarioService extends UserDetailsService {
 
 	/**
 	 * Método responsável por encontrar todos os usuários cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe UsuarioModel.
 	 */
 	public List<UsuarioModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um usuário cadastrado.
-	 * 
+	 *
 	 * @param usuario objeto usuário
 	 * @return
 	 */
-	public UsuarioModel update(UsuarioModel usuario);
+	public UsuarioModel update(UsuarioModel usuario) throws InvalidRequestException;
 
 	/**
 	 * Método responsável por deletar um usuário cadastrado por sua ID.
-	 * 
+	 *
 	 * @param idUsuario ID de um usuário
 	 */
 	public boolean deleteById(Integer idUsuario);
 
 	/**
 	 * Método responsável por encontrar um determinado usuário por seu username.
-	 * 
+	 *
 	 */
 	public UsuarioModel loadUserByUsername(String username);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

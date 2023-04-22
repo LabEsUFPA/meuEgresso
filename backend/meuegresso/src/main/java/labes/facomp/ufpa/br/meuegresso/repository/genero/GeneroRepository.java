@@ -15,6 +15,8 @@ import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
  * @version 1.0
  */
 public interface GeneroRepository extends CrudRepository<GeneroModel, Integer> {
-    
+
     List<GeneroModel> findAll();
+
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

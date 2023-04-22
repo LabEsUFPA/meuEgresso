@@ -32,14 +32,14 @@ public interface DepoimentoService {
 
 	/**
 	 * Método responsável por encontrar todos os depoimentos cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe DepoimentoModel.
 	 */
 	public List<DepoimentoModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um depoimento cadastrado.
-	 * 
+	 *
 	 * @param depoimento objeto depoimento
 	 * @return
 	 */
@@ -47,9 +47,17 @@ public interface DepoimentoService {
 
 	/**
 	 * Método responsável por deletar um depoimento cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um depoimento
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

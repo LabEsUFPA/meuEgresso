@@ -33,8 +33,8 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     /**
-     * 
-     * 
+     *
+     *
      * @param egresso Dados do egresso
      * @return Dados após serem gravados no banco de dados.
      * @author Pedro Inácio
@@ -69,7 +69,11 @@ public class EgressoServiceImpl implements EgressoService {
     @Override
     public Boolean existsById(Integer id) {
         return egressoRepository.existsById(id);
+    }
 
+    @Override
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return egressoRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
 }

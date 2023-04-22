@@ -11,7 +11,7 @@ import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Interface responsável por especificar os metodos a serem implementados.
+ * Implementação.
  *
  * @author Alfredo Gabriel
  * @since 21/04/2023
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class EmpresaServiceImpl implements EmpresaService {
-    
+
     private final EmpresaRepository empresaRepository;
 
     @Override
@@ -54,6 +54,11 @@ public class EmpresaServiceImpl implements EmpresaService {
         } else {
             throw new InvalidRequestException();
         }
-    }  
-    
+    }
+
+    @Override
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return empresaRepository.existsByIdAndCreatedById(id, createdBy);
+    }
+
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,9 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.faixasalarial.FaixaSalarialService;
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +40,8 @@ public class FaixaSalarialController {
     private final FaixaSalarialService faixaSalarialService;
 
     private final ModelMapper mapper;
+
+    private final JwtService jwtService;
 
     /**
      * Endpoint responsavel por buscar todas as faixas salariais do banco.
@@ -80,16 +85,20 @@ public class FaixaSalarialController {
      *                         necessárias para atualizar uma faixa salarial.
      * @return {@link String} Mensagem de confirmacao.
      * @author Bruno Eiki
+     * @throws UnauthorizedRequestException
      * @since 21/04/2023
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public String atualizarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO)
-            throws InvalidRequestException {
-
-        FaixaSalarialModel faixaSalarialModel = mapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
-        faixaSalarialService.update(faixaSalarialModel);
-        return ResponseType.SUCESS_UPDATE.getMessage();
+    public String atualizarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO,
+            JwtAuthenticationToken token)
+            throws InvalidRequestException, UnauthorizedRequestException {
+        if (faixaSalarialService.existsByIdAndCreatedById(faixaSalarialDTO.getId(), jwtService.getIdUsuario(token))) {
+            FaixaSalarialModel faixaSalarialModel = mapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
+            faixaSalarialService.update(faixaSalarialModel);
+            return ResponseType.SUCESS_UPDATE.getMessage();
+        }
+        throw new UnauthorizedRequestException();
     }
 
     /**

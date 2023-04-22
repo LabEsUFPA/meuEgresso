@@ -5,6 +5,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,9 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.etnia.EtniaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EtniaModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.etnia.EtniaService;
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +40,8 @@ public class EtniaController {
     private final EtniaService etniaService;
 
     private final ModelMapper mapper;
+
+    private final JwtService jwtService;
 
     /**
      * Endpoint responsavel por buscar todas as etnias no banco.
@@ -79,15 +84,19 @@ public class EtniaController {
      *                 atualizar uma cota.
      * @return {@link String} Mensagem de confirmacao.
      * @author Bruno Eiki
+     * @throws UnauthorizedRequestException
      * @since 21/04/2023
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public String atualizarEtnia(@RequestBody @Valid EtniaDTO etniaDTO) throws InvalidRequestException {
-
-        EtniaModel etniaModel = mapper.map(etniaDTO, EtniaModel.class);
-        etniaService.update(etniaModel);
-        return ResponseType.SUCESS_UPDATE.getMessage();
+    public String atualizarEtnia(@RequestBody @Valid EtniaDTO etniaDTO,
+            JwtAuthenticationToken token) throws InvalidRequestException, UnauthorizedRequestException {
+        if (etniaService.existsByIdAndCreatedById(etniaDTO.getId(), jwtService.getIdUsuario(token))) {
+            EtniaModel etniaModel = mapper.map(etniaDTO, EtniaModel.class);
+            etniaService.update(etniaModel);
+            return ResponseType.SUCESS_UPDATE.getMessage();
+        }
+        throw new UnauthorizedRequestException();
     }
 
     /**

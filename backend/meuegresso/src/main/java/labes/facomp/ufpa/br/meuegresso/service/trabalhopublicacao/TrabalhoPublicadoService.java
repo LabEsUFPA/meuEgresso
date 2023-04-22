@@ -32,14 +32,14 @@ public interface TrabalhoPublicadoService {
 
 	/**
 	 * Método responsável por encontrar todos os trabalhoPublicados cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe TrabalhoPublicadoModel.
 	 */
 	public List<TrabalhoPublicadoModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um trabalhoPublicado cadastrado.
-	 * 
+	 *
 	 * @param trabalhoPublicado objeto trabalhoPublicado
 	 * @return
 	 */
@@ -47,9 +47,17 @@ public interface TrabalhoPublicadoService {
 
 	/**
 	 * Método responsável por deletar um trabalhoPublicado cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um trabalhoPublicado
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoColacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModelId;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoColacaoService;
 import lombok.RequiredArgsConstructor;
 
@@ -36,27 +40,29 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/EgressoColacao")
 public class EgressoColacaoController {
 
-	private final EgressoColacaoService EgressoColacaoService;
+	private final EgressoColacaoService egressoColacaoService;
 
 	private final ModelMapper mapper;
+
+	private final JwtService jwtService;
 
 	/**
 	 * Endpoint responsável por retornar a lista de EgressoColacao cadastrados no
 	 * banco de dados.
-	 * 
+	 *
 	 * @return {@link EgressoColacaoDTO} Lista de EgressoColacao cadastrados
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
 	 */
 	@GetMapping
 	public List<EgressoColacaoDTO> consultarEgressoColacaos() {
-		return mapper.map(EgressoColacaoService.findAll(), new TypeToken<List<EgressoColacaoDTO>>() {
+		return mapper.map(egressoColacaoService.findAll(), new TypeToken<List<EgressoColacaoDTO>>() {
 		}.getType());
 	}
 
 	/**
 	 * Endpoint responsável por retornar um EgressoColacao por sua ID.
-	 * 
+	 *
 	 * @param id Integer
 	 * @return {@link EgressoColacaoDTO} Dados gravados no banco.
 	 * @author Alfredo Gabriel, Camilo Santos
@@ -67,7 +73,7 @@ public class EgressoColacaoController {
 	public EgressoColacaoDTO findById(@RequestParam(required = false) Integer egressoId,
 			@RequestParam(required = false) Integer colacaoId) {
 		return mapper.map(
-				EgressoColacaoService
+				egressoColacaoService
 						.findById(EgressoColacaoModelId.builder().egressoId(egressoId).colacaoId(colacaoId).build()),
 				EgressoColacaoDTO.class);
 	}
@@ -86,27 +92,33 @@ public class EgressoColacaoController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public String cadastrarEgressoColacao(@RequestBody @Valid EgressoColacaoDTO EgressoColacaoDTO) {
 		EgressoColacaoModel EgressoColacaoModel = mapper.map(EgressoColacaoDTO, EgressoColacaoModel.class);
-		EgressoColacaoService.save(EgressoColacaoModel);
+		egressoColacaoService.save(EgressoColacaoModel);
 		return ResponseType.SUCESS_SAVE.getMessage();
 	}
 
 	/**
 	 * Endpoint responsavel por atualizar o EgressoColacao.
-	 * 
+	 *
 	 * @param EgressoColacaoDTO Estrutura de dados contendo as informações
 	 *                          necessárias para
 	 *                          atualizar o EgressoColacao.
 	 * @return {@link EgressoColacaoDTO} Dados gravados no banco com a Id
 	 *         atualizada.
 	 * @author Alfredo Gabriel
+	 * @throws UnauthorizedRequestException
+	 * @throws InvalidRequestException
 	 * @since 21/04/2023
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public EgressoColacaoDTO atualizarEgressoColacao(@RequestBody @Valid EgressoColacaoDTO EgressoColacaoDTO) {
-		EgressoColacaoModel EgressoColacaoModel = mapper.map(EgressoColacaoDTO, EgressoColacaoModel.class);
-		EgressoColacaoModel = EgressoColacaoService.save(EgressoColacaoModel);
-		return mapper.map(EgressoColacaoModel, EgressoColacaoDTO.class);
+	public String atualizarEgressoColacao(@RequestBody @Valid EgressoColacaoDTO egressoColacaoDTO,
+	JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
+		if (egressoColacaoService.existsByIdAndCreatedById(egressoColacaoDTO.getId(), jwtService.getIdUsuario(token))) {
+			EgressoColacaoModel egressoColacaoModel = mapper.map(egressoColacaoDTO, EgressoColacaoModel.class);
+			egressoColacaoService.update(egressoColacaoModel);
+			return ResponseType.SUCESS_UPDATE.getMessage();
+		}
+		throw new UnauthorizedRequestException();
 	}
 
 	/**
@@ -122,7 +134,7 @@ public class EgressoColacaoController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean deleteById(@RequestParam(required = false) Integer egressoId,
 			@RequestParam(required = false) Integer colacaoId) {
-		return EgressoColacaoService
+		return egressoColacaoService
 				.deleteById(EgressoColacaoModelId.builder().egressoId(egressoId).colacaoId(colacaoId).build());
 	}
 

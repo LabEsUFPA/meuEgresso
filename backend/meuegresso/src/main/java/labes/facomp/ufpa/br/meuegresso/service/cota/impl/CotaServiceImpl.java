@@ -11,7 +11,7 @@ import labes.facomp.ufpa.br.meuegresso.service.cota.CotaService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Interface responsável por especificar os metodos a serem implementados.
+ * Implementação.
  *
  * @author Alfredo Gabriel
  * @since 21/04/2023
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CotaServiceImpl implements CotaService {
-    
+
     private final CotaRepository cotaRepository;
 
     @Override
@@ -54,6 +54,12 @@ public class CotaServiceImpl implements CotaService {
         } else {
             throw new InvalidRequestException();
         }
-    }  
-    
+    }
+
+    @Override
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return cotaRepository.existsByIdAndCreatedById(id, createdBy);
+    }
+
+
 }

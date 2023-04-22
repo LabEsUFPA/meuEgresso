@@ -1,7 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
-import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
+import labes.facomp.ufpa.br.meuegresso.dto.etnia.EtniaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import lombok.Data;
 
 /**
@@ -18,7 +19,9 @@ public class EgressoPublicDTO {
 
     private Integer matricula;
 
-    private GeneroModel genero;
+    private EtniaDTO etnia;
+
+    private GeneroDTO genero;
 
     private Boolean cotista;
 

@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import jakarta.mail.MessagingException;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.erros.ErrorResponse;
+import labes.facomp.ufpa.br.meuegresso.exceptions.DataNotDeletedException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.DataNotSaveException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.EmptyBodyRequestListException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 
 /**
  * Responsável por tratar as exceções gerais da aplicação.
@@ -87,8 +90,60 @@ public class ControllerAdvise {
 	public ErrorResponse handleBadCredentialsException(BadCredentialsException ex) {
 		return ErrorResponse.builder()
 				.message(ErrorType.REPORT_003.getMessage())
+				.technicalMessage(ex.getLocalizedMessage())
 				.internalCode(ErrorType.REPORT_003.getInternalCode())
 				.build();
+	}
+
+	/**
+	 * Caso seja realizado uma requisição invalida.
+	 *
+	 * @param ex Excessão capturada.
+	 * @return Mensagem
+	 * @author Alfredo Gabriel
+	 * @since 26/03/2023
+	 */
+	@ExceptionHandler(UnauthorizedRequestException.class)
+	public ResponseEntity<ErrorResponse> handleUnauthorizedRequestException(UnauthorizedRequestException ex) {
+		ErrorResponse error = new ErrorResponse(
+				ex.getMessage(),
+				ex.getLocalizedMessage(),
+				ex.getInternalCode());
+		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+	}
+
+	/**
+	 * Caso seja realizado uma requisição invalida.
+	 *
+	 * @param ex Excessão capturada.
+	 * @return Mensagem
+	 * @author Alfredo Gabriel
+	 * @since 26/03/2023
+	 */
+	@ExceptionHandler(InvalidRequestException.class)
+	public ResponseEntity<ErrorResponse> handleInvalidRequestException(InvalidRequestException ex) {
+		ErrorResponse error = new ErrorResponse(
+				ex.getMessage(),
+				null,
+				ex.getInternalCode());
+		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+	}
+
+	/**
+	 * Caso seja solicitado o delete de uma entidade não existente.
+	 *
+	 * @param ex Excessão capturada.
+	 * @return Mensagem
+	 * @author Alfredo Gabriel
+	 * @since 26/03/2023
+	 */
+	@ExceptionHandler(DataNotDeletedException.class)
+	public ResponseEntity<ErrorResponse> handleDataNotDeletedException(DataNotDeletedException ex) {
+		ErrorResponse error = new ErrorResponse(
+				ex.getMessage(),
+				null,
+				ex.getInternalCode());
+		return new ResponseEntity<>(error, HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
 	/**
@@ -103,7 +158,7 @@ public class ControllerAdvise {
 	public ResponseEntity<ErrorResponse> handleNotFound(NoSuchElementException ex) {
 		ErrorResponse error = new ErrorResponse(
 				ErrorType.REPORT_004.getMessage(),
-				ex.getMessage(),
+				ex.getLocalizedMessage(),
 				ErrorType.REPORT_004.getInternalCode());
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
@@ -120,25 +175,47 @@ public class ControllerAdvise {
 	public ResponseEntity<ErrorResponse> handleNotFound(HttpMessageNotReadableException ex) {
 		ErrorResponse error = new ErrorResponse(
 				ErrorType.REPORT_005.getMessage(),
-				ex.getMessage(),
+				ex.getLocalizedMessage(),
 				ErrorType.REPORT_005.getInternalCode());
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 
 	/**
-	 * Caso a autenticação seja ja exista cadastrado um determinado marcado como unique.
+	 * Caso a autenticação seja ja exista cadastrado um determinado marcado como
+	 * unique.
+	 *
+	 * @param ex Excessão capturada.
+	 * @return Mensagem
+	 * @author Alfredo Gabriel
+	 * @since 21/04/2023
+	 * @see {@link EmptyBodyRequestListException}
+	 */
+	@ExceptionHandler({ EmptyBodyRequestListException.class })
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	public ErrorResponse handleEmptyBodyRequestListException(
+			EmptyBodyRequestListException ex) {
+
+		ErrorResponse error = new ErrorResponse(
+				ex.getMessage(),
+				ex.getLocalizedMessage(),
+				ex.getInternalCode());
+
+		return error;
+	}
+
+	/**
 	 * Caso seja feito uma requição sem dados na lista esperada.
 	 *
 	 * @param ex Excessão capturada.
 	 * @return Mensagem
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
-	 * @see {@link EmptyBodyRequestListException} {@link NameAlreadyExistsException}
+	 * @see {@link NameAlreadyExistsException}
 	 */
-	@ExceptionHandler({EmptyBodyRequestListException.class, NameAlreadyExistsException.class})
+	@ExceptionHandler({ NameAlreadyExistsException.class })
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	public ErrorResponse handleEmptyBodyRequestListException(
-			EmptyBodyRequestListException ex) {
+			NameAlreadyExistsException ex) {
 
 		ErrorResponse error = new ErrorResponse(
 				ex.getMessage(),
@@ -161,7 +238,7 @@ public class ControllerAdvise {
 	public ResponseEntity<ErrorResponse> handleMailException(MailException ex) {
 		ErrorResponse error = new ErrorResponse(
 				ErrorType.REPORT_006.getMessage(),
-				ex.getMessage(),
+				ex.getLocalizedMessage(),
 				ErrorType.REPORT_006.getInternalCode());
 		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}

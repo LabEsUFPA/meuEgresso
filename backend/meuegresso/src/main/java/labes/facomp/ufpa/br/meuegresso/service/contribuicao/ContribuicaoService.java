@@ -32,14 +32,14 @@ public interface ContribuicaoService {
 
 	/**
 	 * Método responsável por encontrar todos os anuncios cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe ContribuicaoModel.
 	 */
 	public List<ContribuicaoModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um anuncio cadastrado.
-	 * 
+	 *
 	 * @param anuncio objeto anuncio
 	 * @return
 	 */
@@ -47,9 +47,17 @@ public interface ContribuicaoService {
 
 	/**
 	 * Método responsável por deletar um anuncio cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um anuncio
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.GeneroDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +40,8 @@ public class GeneroController {
     private final GeneroService generoService;
 
     private final ModelMapper mapper;
+
+    private final JwtService jwtService;
 
     /**
      * Endpoint responsavel por buscar todos generos do banco.
@@ -79,15 +84,18 @@ public class GeneroController {
      *                  atualizar um genero.
      * @return {@link String} Mensagem de confirmacao.
      * @author Bruno Eiki
+     * @throws UnauthorizedRequestException
      * @since 21/04/2023
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public String atualizarGenero(@RequestBody @Valid GeneroDTO generoDTO) throws InvalidRequestException {
-
+    public String atualizarGenero(@RequestBody @Valid GeneroDTO generoDTO, JwtAuthenticationToken token) throws InvalidRequestException, UnauthorizedRequestException {
+        if (generoService.existsByIdAndCreatedById(generoDTO.getId(), jwtService.getIdUsuario(token))) {
         GeneroModel generoModel = mapper.map(generoDTO, GeneroModel.class);
         generoService.update(generoModel);
         return ResponseType.SUCESS_UPDATE.getMessage();
+        }
+        throw new UnauthorizedRequestException();
     }
 
     /**

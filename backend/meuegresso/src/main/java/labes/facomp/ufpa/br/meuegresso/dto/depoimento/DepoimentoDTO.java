@@ -1,6 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.dto.depoimento;
 
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import lombok.Data;
 
 /**
@@ -17,5 +16,5 @@ public class DepoimentoDTO {
 
     private String descricao;
 
-    private EgressoPublicDTO egresso;
+    private Integer egressoId;
 }

@@ -15,6 +15,8 @@ import labes.facomp.ufpa.br.meuegresso.model.EtniaModel;
  * @version 1.0
  */
 public interface EtniaRepository extends CrudRepository<EtniaModel, Integer> {
-    
+
     List<EtniaModel> findAll();
+
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

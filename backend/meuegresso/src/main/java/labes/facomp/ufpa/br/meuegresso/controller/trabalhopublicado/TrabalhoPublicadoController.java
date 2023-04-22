@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,12 +18,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.TrabalhoPublicadoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.trabalhopublicado.TrabalhoPublicadoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.TrabalhoPublicadoModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.trabalhopublicacao.TrabalhoPublicadoService;
 import lombok.RequiredArgsConstructor;
-
 
 /**
  * Responsável por fornecer um end-point para criar um novo trabalhoPublicado.
@@ -40,9 +43,12 @@ public class TrabalhoPublicadoController {
 
 	private final ModelMapper mapper;
 
+	private final JwtService jwtService;
+
 	/**
-	 * Endpoint responsável por retornar a lista de trabalhoPublicado cadastrados no banco de dados.
-	 * 
+	 * Endpoint responsável por retornar a lista de trabalhoPublicado cadastrados no
+	 * banco de dados.
+	 *
 	 * @return {@link TrabalhoPublicadoDTO} Lista de trabalhoPublicado cadastrados
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
@@ -53,27 +59,25 @@ public class TrabalhoPublicadoController {
 		}.getType());
 	}
 
-	
-
 	/**
 	 * Endpoint responsável por retornar um trabalhoPublicado por sua ID.
-	 * 
+	 *
 	 * @param id Integer
 	 * @return {@link TrabalhoPublicadoDTO} Dados gravados no banco.
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
-	@GetMapping(value = "{id}")
+	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public TrabalhoPublicadoDTO findById(@PathVariable Integer id) {
 		return mapper.map(trabalhoPublicadoService.findById(id), TrabalhoPublicadoDTO.class);
 	}
 
-
 	/**
 	 * Endpoint responsavel por cadastrar o trabalhoPublicado.
 	 *
-	 * @param trabalhoPublicadoDTO Estrutura de dados contendo as informações necessárias para persistir o trabalhoPublicado.
+	 * @param trabalhoPublicadoDTO Estrutura de dados contendo as informações
+	 *                             necessárias para persistir o trabalhoPublicado.
 	 * @return String confirmando a transação.
 	 * @author Alfredo Gabriel
 	 * @see {@link TrabalhoPublicadoDTO}
@@ -89,34 +93,43 @@ public class TrabalhoPublicadoController {
 
 	/**
 	 * Endpoint responsavel por atualizar o trabalhoPublicado.
-	 * 
-	 * @param trabalhoPublicadoDTO Estrutura de dados contendo as informações necessárias para
-	 *                   atualizar o trabalhoPublicado.
-	 * @return {@link TrabalhoPublicadoDTO} Dados gravados no banco com a Id atualizada.
+	 *
+	 * @param trabalhoPublicadoDTO Estrutura de dados contendo as informações
+	 *                             necessárias para
+	 *                             atualizar o trabalhoPublicado.
+	 * @return {@link TrabalhoPublicadoDTO} Dados gravados no banco com a Id
+	 *         atualizada.
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public TrabalhoPublicadoDTO atualizarTrabalhoPublicado(@RequestBody @Valid TrabalhoPublicadoDTO trabalhoPublicadoDTO) {
-		TrabalhoPublicadoModel trabalhoPublicadoModel = mapper.map(trabalhoPublicadoDTO, TrabalhoPublicadoModel.class);
-		trabalhoPublicadoModel = trabalhoPublicadoService.save(trabalhoPublicadoModel);
-		return mapper.map(trabalhoPublicadoModel, TrabalhoPublicadoDTO.class);
+	public TrabalhoPublicadoDTO atualizarTrabalhoPublicado(
+			@RequestBody @Valid TrabalhoPublicadoDTO trabalhoPublicadoDTO, JwtAuthenticationToken token)
+			throws InvalidRequestException, UnauthorizedRequestException {
+		if (trabalhoPublicadoService.existsByIdAndCreatedById(trabalhoPublicadoDTO.getId(),
+				jwtService.getIdUsuario(token))) {
+			TrabalhoPublicadoModel trabalhoPublicadoModel = mapper.map(trabalhoPublicadoDTO,
+					TrabalhoPublicadoModel.class);
+			trabalhoPublicadoModel = trabalhoPublicadoService.update(trabalhoPublicadoModel);
+			return mapper.map(trabalhoPublicadoModel, TrabalhoPublicadoDTO.class);
+		}
+		throw new UnauthorizedRequestException();
 	}
 
 	/**
-     * Endpoint responsavel por deletar a publicacao do egresso.
-     *
-     * @param publicacao Estrutura de dados contendo as informações
-     *                   necessárias para deletar a publicacao.
-     * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
-     * @author Bruno Eiki
-     * @since 17/04/2023
-     */
+	 * Endpoint responsavel por deletar a publicacao do egresso.
+	 *
+	 * @param publicacao Estrutura de dados contendo as informações
+	 *                   necessárias para deletar a publicacao.
+	 * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
+	 * @author Bruno Eiki
+	 * @since 17/04/2023
+	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean deleteById(Integer id) {
 		return trabalhoPublicadoService.deleteById(id);
 	}
-	
+
 }

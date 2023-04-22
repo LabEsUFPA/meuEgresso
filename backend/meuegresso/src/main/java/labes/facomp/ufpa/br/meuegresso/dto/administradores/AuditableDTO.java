@@ -2,7 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.dto.administradores;
 
 import java.util.Date;
 
-import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioAuditDTO;
 
 /**
  * Encapsulamento dos atributos comuns a todas as classes a fim de rastrar alterações no banco de dados.
@@ -13,11 +13,11 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
  */
 public class AuditableDTO {
 
-	protected UsuarioModel createdBy;
+	protected UsuarioAuditDTO createdBy;
 
 	protected Date createdDate;
 
-	protected UsuarioModel lastModifiedBy;
+	protected UsuarioAuditDTO lastModifiedBy;
 
 	protected Date lastModifiedDate;
 

@@ -10,4 +10,5 @@ public interface TrabalhoPublicadoRepository extends CrudRepository<TrabalhoPubl
 
     List<TrabalhoPublicadoModel> findAll();
 
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

@@ -32,14 +32,14 @@ public interface PesquisaCientificaService {
 
 	/**
 	 * Método responsável por encontrar todos os pesquisaCientificas cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe PesquisaCientificaModel.
 	 */
 	public List<PesquisaCientificaModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um pesquisaCientifica cadastrado.
-	 * 
+	 *
 	 * @param pesquisaCientifica objeto pesquisaCientifica
 	 * @return
 	 */
@@ -47,9 +47,17 @@ public interface PesquisaCientificaService {
 
 	/**
 	 * Método responsável por deletar um pesquisaCientifica cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um pesquisaCientifica
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

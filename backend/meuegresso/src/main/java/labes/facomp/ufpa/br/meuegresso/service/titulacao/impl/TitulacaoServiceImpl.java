@@ -11,7 +11,7 @@ import labes.facomp.ufpa.br.meuegresso.service.titulacao.TitulacaoService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Interface responsável por especificar os metodos a serem implementados.
+ * Implementação.
  *
  * @author Alfredo Gabriel
  * @since 21/04/2023
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class TitulacaoServiceImpl implements TitulacaoService {
-    
+
     private final TitulacaoRepository titulacaoRepository;
 
     @Override
@@ -54,6 +54,11 @@ public class TitulacaoServiceImpl implements TitulacaoService {
         } else {
             throw new InvalidRequestException();
         }
-    }  
-    
+    }
+
+    @Override
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return titulacaoRepository.existsByIdAndCreatedById(id, createdBy);
+    }
+
 }

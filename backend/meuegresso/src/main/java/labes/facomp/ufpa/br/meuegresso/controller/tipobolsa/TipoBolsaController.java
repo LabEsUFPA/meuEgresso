@@ -5,6 +5,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,9 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.tipobolsa.TipoBolsaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.tipobolsa.TipoBolsaService;
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +40,8 @@ public class TipoBolsaController {
     private final TipoBolsaService tipoBolsaService;
 
     private final ModelMapper mapper;
+
+    private final JwtService jwtService;
 
     /**
      * Endpoint responsavel por buscar todas bolsas do banco.
@@ -86,11 +91,14 @@ public class TipoBolsaController {
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public String atualizarTipoBolsa(@RequestBody @Valid TipoBolsaDTO tipoBolsaDTO) throws InvalidRequestException {
-
-        TipoBolsaModel tipoBolsaModel = mapper.map(tipoBolsaDTO, TipoBolsaModel.class);
-        tipoBolsaService.update(tipoBolsaModel);
-        return ResponseType.SUCESS_UPDATE.getMessage();
+    public String atualizarTipoBolsa(@RequestBody @Valid TipoBolsaDTO tipoBolsaDTO, JwtAuthenticationToken token)
+            throws InvalidRequestException, UnauthorizedRequestException {
+        if (tipoBolsaService.existsByIdAndCreatedById(tipoBolsaDTO.getId(), jwtService.getIdUsuario(token))) {
+            TipoBolsaModel tipoBolsaModel = mapper.map(tipoBolsaDTO, TipoBolsaModel.class);
+            tipoBolsaService.update(tipoBolsaModel);
+            return ResponseType.SUCESS_UPDATE.getMessage();
+        }
+        throw new UnauthorizedRequestException();
     }
 
     /**

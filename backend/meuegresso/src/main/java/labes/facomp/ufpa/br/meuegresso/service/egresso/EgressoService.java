@@ -19,7 +19,7 @@ public interface EgressoService {
 
 	/**
 	 * Metodo responsavel por atualizar informacoes do egresso no banco de dados.
-	 * 
+	 *
 	 * @param egresso Dados do egresso
 	 * @return Dados após serem gravados no banco de dados.
 	 * @author Pedro Inácio
@@ -30,7 +30,7 @@ public interface EgressoService {
 
 	/**
 	 * Metodo responsavel por deletar informacoes do egresso no banco de dados.
-	 * 
+	 *
 	 * @param egresso Dados do egresso
 	 * @return Mensagem de confirmacao
 	 * @author Bruno Eiki
@@ -40,7 +40,7 @@ public interface EgressoService {
 
 	/**
 	 * Metodo responsavel por verificar se egresso existe no banco de dados.
-	 * 
+	 *
 	 * @param id Id do egresso
 	 * @return True caso egresso exista, false do contrario.
 	 * @author Pedro Inácio
@@ -51,7 +51,7 @@ public interface EgressoService {
 	/**
 	 * Metodo responsavel por deletar informacoes do egresso no banco de dados a
 	 * partir do id.
-	 * 
+	 *
 	 * @param id Id do egresso
 	 * @return Vazio.
 	 * @author Pedro Inácio
@@ -59,4 +59,12 @@ public interface EgressoService {
 	 */
 	public void deleteById(Integer id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

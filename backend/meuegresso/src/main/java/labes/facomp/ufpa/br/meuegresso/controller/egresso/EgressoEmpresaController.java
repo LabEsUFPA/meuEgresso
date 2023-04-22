@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoEmpresaService;
 import lombok.RequiredArgsConstructor;
 
@@ -40,10 +44,12 @@ public class EgressoEmpresaController {
 
 	private final ModelMapper mapper;
 
+	private final JwtService jwtService;
+
 	/**
 	 * Endpoint responsável por retornar a lista de egressoEmpresa cadastrados no
 	 * banco de dados.
-	 * 
+	 *
 	 * @return {@link EgressoEmpresaDTO} Lista de egressoEmpresa cadastrados
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
@@ -56,7 +62,7 @@ public class EgressoEmpresaController {
 
 	/**
 	 * Endpoint responsável por retornar um egressoEmpresa por sua ID.
-	 * 
+	 *
 	 * @param id Integer
 	 * @return {@link EgressoEmpresaDTO} Dados gravados no banco.
 	 * @author Alfredo Gabriel, Camilo Santos
@@ -91,32 +97,38 @@ public class EgressoEmpresaController {
 	}
 
 	/**
-     * Endpoint responsavel por atualizar as informações de emprego do egresso.
-     *
-     * @param emprego Estrutura de dados contendo as informações necessárias para
-     *                atualizar o emprego.
-     * @return {@link EgressoEmpresaModel} Dados gravados no banco com a Id
-     *         atualizada.
-     * @author Pedro Inácio
-     * @since 16/04/2023
-     */
+	 * Endpoint responsavel por atualizar as informações de emprego do egresso.
+	 *
+	 * @param emprego Estrutura de dados contendo as informações necessárias para
+	 *                atualizar o emprego.
+	 * @return {@link EgressoEmpresaModel} Dados gravados no banco com a Id
+	 *         atualizada.
+	 * @author Pedro Inácio
+	 * @throws UnauthorizedRequestException
+	 * @throws InvalidRequestException
+	 * @since 16/04/2023
+	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public EgressoEmpresaDTO atualizarEgressoEmpresa(@RequestBody @Valid EgressoEmpresaDTO egressoEmpresaDTO) {
-		EgressoEmpresaModel egressoEmpresaModel = mapper.map(egressoEmpresaDTO, EgressoEmpresaModel.class);
-		egressoEmpresaModel = egressoEmpresaService.save(egressoEmpresaModel);
-		return mapper.map(egressoEmpresaModel, EgressoEmpresaDTO.class);
+	public String atualizarEgressoEmpresa(@RequestBody @Valid EgressoEmpresaDTO egressoEmpresaDTO,
+			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
+		if (egressoEmpresaService.existsByIdAndCreatedById(egressoEmpresaDTO.getId(), jwtService.getIdUsuario(token))) {
+			EgressoEmpresaModel egressoEmpresaModel = mapper.map(egressoEmpresaDTO, EgressoEmpresaModel.class);
+			egressoEmpresaService.update(egressoEmpresaModel);
+			return ResponseType.SUCESS_UPDATE.getMessage();
+		}
+		throw new UnauthorizedRequestException();
 	}
 
 	/**
-     * Endpoint responsavel por deletar o emprego do egresso.
-     *
-     * @param emprego Estrutura de dados contendo as informações
-     *                necessárias para deletar o emprego.
-     * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
-     * @author Bruno Eiki
-     * @since 17/04/2023
-     */
+	 * Endpoint responsavel por deletar o emprego do egresso.
+	 *
+	 * @param emprego Estrutura de dados contendo as informações
+	 *                necessárias para deletar o emprego.
+	 * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
+	 * @author Bruno Eiki
+	 * @since 17/04/2023
+	 */
 	@DeleteMapping(params = { "egressoId", "empresaId" })
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean deleteById(@RequestParam(required = false) Integer egressoId,

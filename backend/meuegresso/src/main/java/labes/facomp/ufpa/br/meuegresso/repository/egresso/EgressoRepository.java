@@ -12,5 +12,6 @@ public interface EgressoRepository extends CrudRepository<EgressoModel, Integer>
     List<EgressoModel> findAll();
 
     Optional<EgressoModel> findByUsuarioId(Integer idUsuario);
-    
+
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class GeneroServiceImpl implements GeneroService {
-    
+
     private final GeneroRepository generoRepository;
 
     @Override
@@ -54,6 +54,11 @@ public class GeneroServiceImpl implements GeneroService {
         } else {
             throw new InvalidRequestException();
         }
-    }  
-    
+    }
+
+    @Override
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return generoRepository.existsByIdAndCreatedById(id, createdBy);
+    }
+
 }

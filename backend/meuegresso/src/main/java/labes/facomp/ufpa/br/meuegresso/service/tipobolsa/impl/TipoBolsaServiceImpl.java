@@ -11,7 +11,7 @@ import labes.facomp.ufpa.br.meuegresso.service.tipobolsa.TipoBolsaService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Interface responsável por especificar os metodos a serem implementados.
+ * Implementação.
  *
  * @author Alfredo Gabriel
  * @since 21/04/2023
@@ -54,6 +54,11 @@ public class TipoBolsaServiceImpl implements TipoBolsaService {
         } else {
             throw new InvalidRequestException();
         }
+    }
+
+    @Override
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return tipoBolsaRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
 }

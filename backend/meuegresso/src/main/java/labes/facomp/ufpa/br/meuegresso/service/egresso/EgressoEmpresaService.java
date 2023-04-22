@@ -33,14 +33,14 @@ public interface EgressoEmpresaService {
 
 	/**
 	 * Método responsável por encontrar todos os egressoEmpresas cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe EgressoEmpresaModel.
 	 */
 	public List<EgressoEmpresaModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um egressoEmpresa cadastrado.
-	 * 
+	 *
 	 * @param egressoEmpresa objeto egressoEmpresa
 	 * @return
 	 */
@@ -48,9 +48,17 @@ public interface EgressoEmpresaService {
 
 	/**
 	 * Método responsável por deletar um egressoEmpresa cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um egressoEmpresa
 	 */
 	public boolean deleteById(EgressoEmpresaModelId id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy);
 }

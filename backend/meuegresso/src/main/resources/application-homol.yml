@@ -1,5 +1,5 @@
 logging:
-  level: 
+  level:
     '[org.hibernate.stat]': debug
 
 spring:
@@ -21,8 +21,11 @@ spring:
       password: ${MONGO_INITDB_ROOT_PASSWORD}
       authentication-database: admin # habilitar autenticação
       auto-index-creation: true # Atualizar indices quando autlaizar o model.
-    
+  sql:
+    init:
+      mode: always
   jpa:
+    defer-datasource-initialization: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true

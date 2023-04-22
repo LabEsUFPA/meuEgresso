@@ -32,14 +32,14 @@ public interface CotaService  {
 
 	/**
 	 * Método responsável por encontrar todos os cotas cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe CotaModel.
 	 */
 	public List<CotaModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um cota cadastrado.
-	 * 
+	 *
 	 * @param cota objeto cota
 	 * @return
 	 */
@@ -47,9 +47,17 @@ public interface CotaService  {
 
 	/**
 	 * Método responsável por deletar um cota cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um cota
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

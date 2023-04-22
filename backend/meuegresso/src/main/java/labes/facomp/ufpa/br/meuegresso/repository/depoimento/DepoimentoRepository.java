@@ -7,7 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
 
 public interface DepoimentoRepository extends CrudRepository<DepoimentoModel, Integer> {
-    
+
     List<DepoimentoModel> findAll();
 
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }
