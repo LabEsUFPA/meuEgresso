@@ -22,6 +22,13 @@ import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.service.faixasalarial.FaixaSalarialService;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Responsável por fornecer end-points para Faixa Salarial.
+ *
+ * @author Bruno Eiki
+ * @since 21/04/2023
+ * @version 1.0
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/faixaSalarial")
@@ -31,6 +38,15 @@ public class FaixaSalarialController {
 
     private final ModelMapper mapper;
 
+    /**
+     * Endpoint responsavel por buscar todas as faixas salariais do banco.
+     *
+     * @param void
+     * @return {@link List<FaixaSalarialDTO>} Retorna uma lista com todas as faixas
+     *         salariais.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     public List<FaixaSalarialDTO> buscarFaixaSalarials() {
@@ -39,6 +55,15 @@ public class FaixaSalarialController {
         }.getType());
     }
 
+    /**
+     * Endpoint responsavel por adicionar uma faixa salarial no banco.
+     *
+     * @param faixaSalarialDTO Estrutura de dados contendo as informações
+     *                         necessárias para adicionar uma faixa salarial.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public String cadastrarFaixaSalarial(
@@ -48,6 +73,15 @@ public class FaixaSalarialController {
         return ResponseType.SUCESS_SAVE.getMessage();
     }
 
+    /**
+     * Endpoint responsavel por atualizar uma faixa salarial no banco.
+     *
+     * @param faixaSalarialDTO Estrutura de dados contendo as informações
+     *                         necessárias para atualizar uma faixa salarial.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     public String atualizarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO)
@@ -58,6 +92,15 @@ public class FaixaSalarialController {
         return ResponseType.SUCESS_UPDATE.getMessage();
     }
 
+    /**
+     * Endpoint responsavel por deletar uma faixa salarial no banco.
+     *
+     * @param faixaSalarialDTO Estrutura de dados contendo as informações
+     *                         necessárias para deletar uma faixa salarial.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
     public String deletarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO) {

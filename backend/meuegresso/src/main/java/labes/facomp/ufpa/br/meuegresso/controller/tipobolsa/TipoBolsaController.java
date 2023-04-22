@@ -22,6 +22,13 @@ import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.service.tipobolsa.TipoBolsaService;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Responsável por fornecer end-points para tipo bolsa.
+ *
+ * @author Bruno Eiki
+ * @since 21/04/2023
+ * @version 1.0
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/tipoBolsa")
@@ -31,6 +38,15 @@ public class TipoBolsaController {
 
     private final ModelMapper mapper;
 
+    /**
+     * Endpoint responsavel por buscar todas bolsas do banco.
+     *
+     * @param void
+     * @return {@link List<TipoBolsaDTO} Retorna uma lista com todos os tipos de
+     *         bolsa.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     public List<TipoBolsaDTO> buscarTipoBolsas() {
@@ -39,6 +55,16 @@ public class TipoBolsaController {
         }.getType());
     }
 
+    /**
+     * Endpoint responsavel por adicionar um tipo de bolsa no banco.
+     *
+     * @param tipoBolsaDTO Estrutura de dados contendo as informações necessárias
+     *                     para
+     *                     adicionar um tipo de bolsa.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public String cadastrarTipoBolsa(
@@ -48,6 +74,16 @@ public class TipoBolsaController {
         return ResponseType.SUCESS_SAVE.getMessage();
     }
 
+    /**
+     * Endpoint responsavel por atualizar um tipo de bolsa no banco.
+     *
+     * @param tipoBolsaDTO Estrutura de dados contendo as informações necessárias
+     *                     para
+     *                     atualizar uma cota.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     public String atualizarTipoBolsa(@RequestBody @Valid TipoBolsaDTO tipoBolsaDTO) throws InvalidRequestException {
@@ -57,6 +93,16 @@ public class TipoBolsaController {
         return ResponseType.SUCESS_UPDATE.getMessage();
     }
 
+    /**
+     * Endpoint responsavel por deletar um tipo de bolsa no banco.
+     *
+     * @param tipoBolsaDTO Estrutura de dados contendo as informações necessárias
+     *                     para
+     *                     deletar um tipo de bolsa.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
     public String deletarTipoBolsa(@RequestBody @Valid TipoBolsaDTO tipoBolsaDTO) {

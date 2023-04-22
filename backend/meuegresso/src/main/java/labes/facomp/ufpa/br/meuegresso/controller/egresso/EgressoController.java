@@ -63,6 +63,14 @@ public class EgressoController {
         return ResponseEntity.ok(mapper.map(egressoModel, EgressoPublicDTO.class));
     }
 
+    /**
+     * Endpoint responsavel por buscar o endereco.
+     *
+     * @param token Token de acesso indicando o usuario logado
+     * @return {@link EgressoModel} Busca os enderecos relacionados ao usuario logado.
+     * @author Bruno Eiki
+     * @since 16/04/2023
+     */
     @GetMapping(value = "/endereco")
     @ResponseStatus(code = HttpStatus.OK)
     public EnderecoDTO getEndereco(JwtAuthenticationToken token) {

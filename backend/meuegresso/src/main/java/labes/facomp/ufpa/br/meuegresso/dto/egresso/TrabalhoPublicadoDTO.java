@@ -7,7 +7,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * 
+ * Encapsulamento da tabela Trabalho Publicado a fim de representar somente os
+ * dados não
+ * sensiveis.
  *
  * @author João Paulo
  * @since 16/04/2023

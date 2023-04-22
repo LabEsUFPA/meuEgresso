@@ -22,6 +22,13 @@ import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Responsável por fornecer end-points para genero.
+ *
+ * @author Bruno Eiki
+ * @since 21/04/2023
+ * @version 1.0
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/genero")
@@ -31,6 +38,14 @@ public class GeneroController {
 
     private final ModelMapper mapper;
 
+    /**
+     * Endpoint responsavel por buscar todos generos do banco.
+     *
+     * @param void
+     * @return {@link List<GeneroDTO} Retorna uma lista com todos os generos.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     public List<GeneroDTO> buscarGeneros() {
@@ -39,6 +54,15 @@ public class GeneroController {
         }.getType());
     }
 
+    /**
+     * Endpoint responsavel por adicionar uma etnia no banco.
+     *
+     * @param etniaDTO Estrutura de dados contendo as informações necessárias para
+     *                 adicionar uma cota.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public String cadastrarGenero(
@@ -48,6 +72,15 @@ public class GeneroController {
         return ResponseType.SUCESS_SAVE.getMessage();
     }
 
+    /**
+     * Endpoint responsavel por atualizar um genero no banco.
+     *
+     * @param generoDTO Estrutura de dados contendo as informações necessárias para
+     *                  atualizar um genero.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     public String atualizarGenero(@RequestBody @Valid GeneroDTO generoDTO) throws InvalidRequestException {
@@ -57,6 +90,15 @@ public class GeneroController {
         return ResponseType.SUCESS_UPDATE.getMessage();
     }
 
+    /**
+     * Endpoint responsavel por deletar um genero no banco.
+     *
+     * @param generoDTO Estrutura de dados contendo as informações necessárias para
+     *                  deletar um genero.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
     public String deletarGenero(@RequestBody @Valid GeneroDTO generoDTO) {

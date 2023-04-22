@@ -22,6 +22,13 @@ import labes.facomp.ufpa.br.meuegresso.model.EtniaModel;
 import labes.facomp.ufpa.br.meuegresso.service.etnia.EtniaService;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Responsável por fornecer end-points para Etnia.
+ *
+ * @author Bruno Eiki
+ * @since 21/04/2023
+ * @version 1.0
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/etnia")
@@ -31,6 +38,14 @@ public class EtniaController {
 
     private final ModelMapper mapper;
 
+    /**
+     * Endpoint responsavel por buscar todas as etnias no banco.
+     *
+     * @param void
+     * @return {@link List<EtniaDTO>} Retorna uma lista com todas etnias.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     public List<EtniaDTO> buscarEtnias() {
@@ -39,6 +54,15 @@ public class EtniaController {
         }.getType());
     }
 
+    /**
+     * Endpoint responsavel por adicionar uma etnia no banco.
+     *
+     * @param etniaDTO Estrutura de dados contendo as informações necessárias para
+     *                 adicionar uma cota.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public String cadastrarEtnia(
@@ -48,6 +72,15 @@ public class EtniaController {
         return ResponseType.SUCESS_SAVE.getMessage();
     }
 
+    /**
+     * Endpoint responsavel por atualizar uma etnia no banco.
+     *
+     * @param etniaDTO Estrutura de dados contendo as informações necessárias para
+     *                 atualizar uma cota.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @PutMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public String atualizarEtnia(@RequestBody @Valid EtniaDTO etniaDTO) throws InvalidRequestException {
@@ -57,6 +90,15 @@ public class EtniaController {
         return ResponseType.SUCESS_UPDATE.getMessage();
     }
 
+    /**
+     * Endpoint responsavel por deletar uma etnia no banco.
+     *
+     * @param etniaDTO Estrutura de dados contendo as informações necessárias para
+     *                 deletar uma cota.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
     public String deletarEtnia(@RequestBody @Valid EtniaDTO etniaDTO) {
