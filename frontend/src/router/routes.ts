@@ -18,8 +18,8 @@ export default [
         path: '/cadastro-admin',
         component: () => import('src/pages/CadastroAdmin.vue'),
       },
-      { path: "/Perfil", 
-        component: () => import("pages/PerfilEgresso.vue")
+      { path: '/egresso', 
+        component: () => import("src/pages/PerfilEgresso.vue")
       },
     ],
   },

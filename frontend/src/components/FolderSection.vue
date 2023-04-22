@@ -4,7 +4,7 @@
       <div
         class="bg-gradient-to-br relative h-12 from-sky-200 to-indigo-200 rounded-t-2xl"
       >
-        <div class="absolute top-0 right-[0px] py-[-12px]">
+        <div class="absolute top-[5px] right-[7px] py-[-12px]">
           <slot name="EditButton" />
         </div>
 

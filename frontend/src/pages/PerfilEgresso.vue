@@ -1,28 +1,28 @@
 <template>
-  <div class="flex-1 h-[3840px] items-center justify-center bg-neutral-100">
+  <div class="flex-1 min-h-screen items-center justify-center bg-neutral-100">
     <div
-      class="flex place-items-center justify-between flex-wrap relative w-full h-[30rem] pin-t bg-gradient-to-b from-sky-200 to-indigo-200"
+      class="flex place-items-center justify-between flex-wrap relative w-full h-[335px] pin-t bg-gradient-to-b from-sky-200 to-indigo-200 "
     >
       <!-- <ProfileHead /> -->
       <!-- Head Start-->
       <div class="items-center flex relative w-[7000px] flex-col">
-        <div class="flex flex-auto justify-center mt-[7.3rem]">
+        <div class="flex flex-auto justify-center mt-[-0.25rem] ">
           <img
-            class="img-profile ml-[207px]"
+            class="ml-[200px] mt-[37px] w-[120px] h-[120px] rounded-full"
             src="/src/assets/profile-pic.png"
             alt="Avatar"
           >
-          <h1 class="ml-[100px] sm:max-xl:ml[80px]">
+
+          <h1 class="mt-[5px] ml-[100px] ">
             <CustomButtonLink
               label="Editar"
               icon-path="/src/assets/edit.svg"
               url="/Perfil"
               color="whitesky"
-              classimg="filter-sky"
             />
           </h1>
         </div>
-        <h1 class="text-sky-900 text-xl font-bold mt-5">
+        <h1 class="text-cyan-800 text-xl font-bold mt-5">
           <!-- v-model="data.geral.nome" -->
           <slot v-if="data.geral.nome">
             {{ data.geral.nome }}
@@ -41,7 +41,7 @@
             placeholder="https://br.linkedin.com/"
             color="whitesky"
             variant="standard"
-            icon-size="30"
+            icon-size="25"
           />
           <CustomButtonLink
             label="Lattes"
@@ -50,199 +50,200 @@
             placeholder="https://lattes.cnpq.br/"
             color="whitesky"
             variant="standard"
-            icon-size="30"
+            icon-size="22"
           />
         </div>
       </div>
-      <!-- Head End-->
-      <div class="w-full mt-[55px]">
-        <!-- <ProfileBodyView /> -->
-        <!-- Body Start -->
-        <div class="container mx-auto p-3 pb-0">
-          <form @submit="handleSubmit($event)">
-            <FolderSection>
-              <template #EditButton>
-                <h1 class="relative">
-                  <CustomButtonLink
-                    label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    url="/Perfil"
-                    color="invisiblesky"
-                    classimg="filter-sky"
-                    :has-shadow="false"
-                    icon-size="20"
-                  />
-                </h1>
-              </template>
-              <template #title>
-                <h1
-                  class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-                >
-                  <SvgIcon
-                    type="mdi"
-                    size="20"
-                    class="inline mr-2"
-                    :path="mdiAccount"
-                  />
-                  Geral
-                </h1>
-              </template>
-              <template #default>
-                <div>
-                  <!-- Talvez problema com v-model -->
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-5"
-                    v-model="data.geral.nome"
-                    vmodel="data.geral.nome"
-                    placeholder="Masculino"
-                    label="Gênero"
-                    :icon-path="mdiAccount"
-                    :isinput="false"
-                  />
+    </div>
+    <!-- Head End-->
+    <div class="w-full mt-[12px]">
+      <!-- <ProfileBodyView /> -->
+      <!-- Body Start -->
+      <div class="container mx-auto p-3 pb-0">
+        <form @submit="handleSubmit($event)">
+          <FolderSection>
+            <template #EditButton>
+              <h1 class="relative">
+                <CustomButtonLink
+                  label="Editar"
+                  icon-path="/src/assets/edit.svg"
+                  url="/Perfil"
+                  color="invisiblesky"
+                  classimg="sky-600"
+                  :has-shadow="false"
+                  icon-size="20"
+                />
+              </h1>
+            </template>
+            <template #title>
+              <h1
+                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
+              >
+                <SvgIcon
+                  type="mdi"
+                  size="20"
+                  class="inline mr-2"
+                  :path="mdiAccount"
+                />
+                Geral
+              </h1>
+            </template>
+            <template #default>
+              <div>
+                <!-- Talvez problema com v-model -->
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  v-model="data.geral.nome"
+                  vmodel="data.geral.nome"
+                  placeholder="Masculino"
+                  label="Gênero"
+                  :icon-path="mdiAccount"
+                  :isinput="false"
+                />
 
-                  <CustomPerfilData
-                    type="email"
-                    class="mb-6"
-                    v-model="data.geral.email"
-                    vmodel="data.geral.email"
-                    label="Email"
-                    placeholder="marcele@email.com"
-                    :icon-path="mdiEmail"
-                  />
+                <CustomPerfilData
+                  type="email"
+                  class="mb-6"
+                  v-model="data.geral.email"
+                  vmodel="data.geral.email"
+                  label="Email"
+                  placeholder="marcele@email.com"
+                  :icon-path="mdiEmail"
+                />
 
-                  <CustomPerfilData
-                    type="date"
-                    class="mb-1"
-                    v-model="data.geral.nascimento"
-                    vmodel="data.geral.nascimento"
-                    label="Data Nascimento"
-                    placeholder="01/01/2001"
-                    :icon-path="mdiCake"
-                  />
-                </div>
-              </template>
-            </FolderSection>
+                <CustomPerfilData
+                  type="date"
+                  class="mb-1"
+                  v-model="data.geral.nascimento"
+                  vmodel="data.geral.nascimento"
+                  label="Data Nascimento"
+                  placeholder="01/01/2001"
+                  :icon-path="mdiCake"
+                />
+              </div>
+            </template>
+          </FolderSection>
 
-            <FolderSection class="mt-6">
-              <template #EditButton>
-                <h1 class="relative">
-                  <CustomButtonLink
-                    label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    url="/Perfil"
-                    color="invisiblesky"
-                    classimg="filter-sky"
-                    :has-shadow="false"
-                  />
-                </h1>
-              </template>
-              <template #title>
-                <h1
-                  class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-                >
-                  <SvgIcon
-                    type="mdi"
-                    size="20"
-                    class="inline mr-2"
-                    :path="mdiMapMarker"
-                  />
-                  Localização
-                </h1>
-              </template>
+          <FolderSection class="mt-6">
+            <template #EditButton>
+              <h1 class="relative">
+                <CustomButtonLink
+                  label="Editar"
+                  icon-path="/src/assets/edit.svg"
+                  url="/Perfil"
+                  color="invisiblesky"
+                  classimg="sky-600"
+                  :has-shadow="false"
+                />
+              </h1>
+            </template>
+            <template #title>
+              <h1
+                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
+              >
+                <SvgIcon
+                  type="mdi"
+                  size="20"
+                  class="inline mr-2"
+                  :path="mdiMapMarker"
+                />
+                Localização
+              </h1>
+            </template>
 
-              <template #default>
-                <div>
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-5"
-                    vmodel="data.localizacao.cep"
-                    v-model="data.localizacao.cep"
-                    label="CEP"
-                    placeholder="00000-000"
-                    mask="#####-###"
-                    :icon-path="mdiHome"
-                  />
+            <template #default>
+              <div>
+                <!-- <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  vmodel="data.localizacao.cep"
+                  v-model="data.localizacao.cep"
+                  label="CEP"
+                  placeholder="00000-000"
+                  mask="#####-###"
+                  :icon-path="mdiHome"
+                /> -->
 
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-5"
-                    vmodel="data.localizacao.pais"
-                    v-model="data.localizacao.pais"
-                    placeholder="Brasil"
-                    label="País"
-                    :icon-path="mdiWeb"
-                  />
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  vmodel="data.localizacao.pais"
+                  v-model="data.localizacao.pais"
+                  placeholder="Brasil"
+                  label="País"
+                  :icon-path="mdiWeb"
+                />
 
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-5"
-                    vmodel="data.localizacao.estado"
-                    v-model="data.localizacao.estado"
-                    label="Estado"
-                    placeholder="Pará"
-                    :icon-path="mdiMapOutline"
-                  />
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  vmodel="data.localizacao.estado"
+                  v-model="data.localizacao.estado"
+                  label="Estado"
+                  placeholder="Pará"
+                  :icon-path="mdiMapOutline"
+                />
 
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-1"
-                    vmodel="data.localizacao.cidade"
-                    v-model="data.localizacao.cidade"
-                    label="Cidade"
-                    placeholder="Belém"
-                    :icon-path="mdiMapMarkerRadius"
-                  />
-                </div>
-              </template>
-            </FolderSection>
+                <CustomPerfilData
+                  type="text"
+                  class="mb-1"
+                  vmodel="data.localizacao.cidade"
+                  v-model="data.localizacao.cidade"
+                  label="Cidade"
+                  placeholder="Belém"
+                  :icon-path="mdiMapMarkerRadius"
+                />
+              </div>
+            </template>
+          </FolderSection>
 
-            <FolderSection class="mt-6">
-              <template #EditButton>
-                <h1 class="relative">
-                  <CustomButtonLink
-                    label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    url="/Perfil"
-                    color="invisiblesky"
-                    classimg="filter-sky"
-                    :has-shadow="false"
-                  />
-                </h1>
-              </template>
-              <template #title>
-                <h1
-                  class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-                >
-                  <SvgIcon
-                    type="mdi"
-                    size="20"
-                    class="inline mr-2"
-                    :path="mdiSchool"
-                  />
-                  Academico
-                </h1>
-              </template>
+          <FolderSection class="mt-6">
+            <template #EditButton>
+              <h1 class="relative">
+                <CustomButtonLink
+                  label="Editar"
+                  icon-path="/src/assets/edit.svg"
+                  url="/Perfil"
+                  color="invisiblesky"
+                  classimg="sky-600"
+                  :has-shadow="false"
+                />
+              </h1>
+            </template>
+            <template #title>
+              <h1
+                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
+              >
+                <SvgIcon
+                  type="mdi"
+                  size="20"
+                  class="inline mr-2"
+                  :path="mdiSchool"
+                />
+                Academico
+              </h1>
+            </template>
 
-              <template #default>
-                <div>
-                  <!-- class="mb-1"
+            <template #default>
+              <div>
+                <!-- class="mb-1"
             v-model="data.localizacao.cidade"
             label="Cidade"
             placeholder="Belém"
             :icon-path="mdiMapMarkerRadius""
           /> -->
-                  <CustomPerfilData
-                    type="number"
-                    class="mb-5"
-                    vmodel="data.academico.matricula"
-                    v-model="data.academico.matricula"
-                    label="Matrícula"
-                    placeholder="Selecione"
-                    icon-path=""
-                  />
+                <CustomPerfilData
+                  type="number"
+                  class="mb-5"
+                  vmodel="data.academico.matricula"
+                  v-model="data.academico.matricula"
+                  label="Matrícula"
+                  placeholder="Selecione"
+                  icon-path=""
+                />
 
-                  <!-- <CustomPerfilData
+                <!-- <CustomPerfilData
             class="mb-5"
             v-model="data.academico.email"
             label="Email institucional"
@@ -250,27 +251,27 @@
             icon-path=""
           />
           -->
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-5"
-                    vmodel="data.academico.cotista.tipo"
-                    v-model="data.academico.cotista.tipo"
-                    label="Cota"
-                    placeholder="Tipo de cota"
-                    icon-path=""
-                  />
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  vmodel="data.academico.cotista.tipo"
+                  v-model="data.academico.cotista.tipo"
+                  label="Cota"
+                  placeholder="Tipo de cota"
+                  icon-path=""
+                />
 
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-5"
-                    vmodel="data.academico.tipoAluno"
-                    v-model="data.academico.tipoAluno"
-                    label="Formação"
-                    placeholder="Selecione"
-                    icon-path=""
-                  />
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  vmodel="data.academico.tipoAluno"
+                  v-model="data.academico.tipoAluno"
+                  label="Formação"
+                  placeholder="Selecione"
+                  icon-path=""
+                />
 
-                  <!-- <CustomPerfilData
+                <!-- <CustomPerfilData
             class="mb-5"
             v-model="data.academico.posGrad.tipo"
             label="Tipo de Aluno"
@@ -278,35 +279,35 @@
             icon-path=""
           /> -->
 
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-5"
-                    vmodel="data.academico.posGrad.curso"
-                    v-model="data.academico.posGrad.curso"
-                    label="Curso"
-                    placeholder="Curso de pós-graduação"
-                    icon-path=""
-                  />
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  vmodel="data.academico.posGrad.curso"
+                  v-model="data.academico.posGrad.curso"
+                  label="Curso"
+                  placeholder="Curso de pós-graduação"
+                  icon-path=""
+                />
 
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-5"
-                    vmodel="data.academico.posGrad.local"
-                    v-model="data.academico.posGrad.local"
-                    label="Local da pós-graduação"
-                    placeholder="UFPA"
-                    icon-path=""
-                  />
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  vmodel="data.academico.posGrad.local"
+                  v-model="data.academico.posGrad.local"
+                  label="Local da pós-graduação"
+                  placeholder="UFPA"
+                  icon-path=""
+                />
 
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-1"
-                    vmodel="data.academico.bolsista.tipo"
-                    v-model="data.academico.bolsista.tipo"
-                    label="Bolsa"
-                    placeholder="Bolsa"
-                    icon-path=""
-                  />
+                <CustomPerfilData
+                  type="text"
+                  class="mb-1"
+                  vmodel="data.academico.bolsista.tipo"
+                  v-model="data.academico.bolsista.tipo"
+                  label="Bolsa"
+                  placeholder="Bolsa"
+                  icon-path=""
+                />
 
                 <!-- <div class="mb-5 text-sm font-semibold text-cyan-600">
                 Marque todos as opções que sejam verdadeiras abaixo:
@@ -370,68 +371,68 @@
                 label="Curso de pós-graduação"
                 placeholder="Selecione"
               /> -->
-                </div>
-              </template>
-            </FolderSection>
+              </div>
+            </template>
+          </FolderSection>
 
-            <FolderSection class="mt-6">
-              <template #EditButton>
-                <h1 class="relative">
-                  <CustomButtonLink
-                    label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    url="/Perfil"
-                    color="invisiblesky"
-                    classimg="filter-sky"
-                    :has-shadow="false"
-                  />
-                </h1>
-              </template>
-              <template #title>
-                <h1
-                  class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-                >
-                  <SvgIcon
-                    type="mdi"
-                    size="20"
-                    class="inline mr-2"
-                    :path="mdiBriefcase"
-                  />
-                  Carreira
-                </h1>
-              </template>
+          <FolderSection class="mt-6">
+            <template #EditButton>
+              <h1 class="relative">
+                <CustomButtonLink
+                  label="Editar"
+                  icon-path="/src/assets/edit.svg"
+                  url="/Perfil"
+                  color="invisiblesky"
+                  classimg="sky-600"
+                  :has-shadow="false"
+                />
+              </h1>
+            </template>
+            <template #title>
+              <h1
+                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
+              >
+                <SvgIcon
+                  type="mdi"
+                  size="20"
+                  class="inline mr-2"
+                  :path="mdiBriefcase"
+                />
+                Carreira
+              </h1>
+            </template>
 
-              <template #default>
-                <div>
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-10"
-                    vmodel="data.carreira.area"
-                    v-model="data.carreira.area"
-                    label="Area de Atuação"
-                    placeholder="Área"
-                    icon-path=""
-                  />
+            <template #default>
+              <div>
+                <CustomPerfilData
+                  type="text"
+                  class="mb-10"
+                  vmodel="data.carreira.area"
+                  v-model="data.carreira.area"
+                  label="Area de Atuação"
+                  placeholder="Área"
+                  icon-path=""
+                />
 
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-10"
-                    vmodel="data.carreira.setor"
-                    v-model="data.carreira.setor"
-                    label="Setor de Atuação"
-                    placeholder="Setor"
-                    icon-path=""
-                  />
+                <CustomPerfilData
+                  type="text"
+                  class="mb-10"
+                  vmodel="data.carreira.setor"
+                  v-model="data.carreira.setor"
+                  label="Setor de Atuação"
+                  placeholder="Setor"
+                  icon-path=""
+                />
 
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-5"
-                    vmodel="data.carreira.empresa"
-                    v-model="data.carreira.empresa"
-                    label="Empresa Atual"
-                    placeholder="Empresa"
-                    icon-path=""
-                  />
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  vmodel="data.carreira.empresa"
+                  v-model="data.carreira.empresa"
+                  label="Empresa Atual"
+                  placeholder="Empresa"
+                  icon-path=""
+                />
 
                 <!-- <CustomInput
                 class="mb-5"
@@ -445,63 +446,63 @@
                 label="Valor da remuneração mensal"
                 placeholder="Selecione"
               /> -->
-                </div>
-              </template>
-            </FolderSection>
+              </div>
+            </template>
+          </FolderSection>
 
-            <FolderSection class="mt-6">
-              <template #EditButton>
-                <h1 class="relative">
-                  <CustomButtonLink
-                    label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    url="/Perfil"
-                    color="invisiblesky"
-                    classimg="filter-sky"
-                    :has-shadow="false"
-                  />
-                </h1>
-              </template>
-              <template #title>
-                <h1
-                  class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-                >
-                  <SvgIcon
-                    type="mdi"
-                    size="20"
-                    class="inline mr-2"
-                    :path="mdiMessage"
-                  />
-                  Adicionais
-                </h1>
-              </template>
+          <FolderSection class="mt-6">
+            <template #EditButton>
+              <h1 class="relative">
+                <CustomButtonLink
+                  label="Editar"
+                  icon-path="/src/assets/edit.svg"
+                  url="/Perfil"
+                  color="invisiblesky"
+                  classimg="sky-600"
+                  :has-shadow="false"
+                />
+              </h1>
+            </template>
+            <template #title>
+              <h1
+                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
+              >
+                <SvgIcon
+                  type="mdi"
+                  size="20"
+                  class="inline mr-2"
+                  :path="mdiMessage"
+                />
+                Adicionais
+              </h1>
+            </template>
 
-              <template #default>
-                <div>
-                  <CustomPerfilData
-                    type="text"
-                    class="flex-auto mb-5"
-                    vmodel="data.adicionais.experiencias"
-                    v-model="data.adicionais.experiencias"
-                    label="Depoimento"
-                    placeholder="Lorem ipsum dolor sit amet, consect
+            <template #default>
+              <div>
+                <CustomPerfilData
+                  type="text"
+                  class="flex-auto mb-5"
+                  vmodel="data.adicionais.experiencias"
+                  v-model="data.adicionais.experiencias"
+                  label="Depoimento"
+                  placeholder="Lorem ipsum dolor sit amet, consect
             etur adipiscing elit, sed do eiusmod tempor incididun
             t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
             ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                    icon-path=""
-                  />
-                  <CustomPerfilData
-                    type="text"
-                    class="flex-auto mb-5"
-                    vmodel="data.adicionais.contribuicoes"
-                    v-model="data.adicionais.contribuicoes"
-                    label="Contribuições"
-                    placeholder="Lorem ipsum dolor sit amet, consect
+                  icon-path=""
+                />
+                <CustomPerfilData
+                  type="text"
+                  class="flex-auto mb-5"
+                  vmodel="data.adicionais.contribuicoes"
+                  v-model="data.adicionais.contribuicoes"
+                  label="Contribuições"
+                  placeholder="Lorem ipsum dolor sit amet, consect
             etur adipiscing elit, sed do eiusmod tempor incididun
             t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
             ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                    icon-path=""
-                  />
+                  icon-path=""
+                />
 
                 <!-- <textarea
             class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
@@ -540,14 +541,13 @@
                 class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
                 v-model="data.adicionais.contribuicoes"
               /> -->
-                </div>
-              </template>
-            </FolderSection>
-            <div class="py-10 flex flex-row justify-center items-center" />
-          </form>
-        </div>
-        <!-- Body End-->
+              </div>
+            </template>
+          </FolderSection>
+          <div class="py-10 flex flex-row justify-center items-center" />
+        </form>
       </div>
+      <!-- Body End-->
     </div>
   </div>
 </template>
@@ -562,6 +562,7 @@ import FolderSection from 'src/components/FolderSection.vue'
 import CustomPerfilData from 'src/components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 // import SvgIcon from '@jamescoyle/vue-icon'
+// mdiHome CEP,
 import {
   mdiAccount,
   mdiBriefcase,
@@ -570,7 +571,6 @@ import {
   mdiMessage,
   mdiSchool,
   mdiCake,
-  mdiHome,
   mdiWeb,
   mdiMapOutline,
   mdiMapMarkerRadius
@@ -671,24 +671,9 @@ const handleSubmit = ($event: Event) => {
   }
 }
 // import FolderSection from 'components/FolderSection.vue'
-// import CadastroEgresso from 'src/pages/CadrastroEgresso.vue';
+// oldimport CadastroEgresso from 'src/pages/CadrastroEgresso.vue';
 
 // import Profile from 'components/Profile.vue'
 </script>
 <style>
-.img-profile {
-  width: 190px;
-  height: 190px;
-  border-radius: 50%;
-}
-
-/* .link-button {
-  align-items: flex-start;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 35px;
-  position: relative;
-  width: 295px;
-} */
 </style>

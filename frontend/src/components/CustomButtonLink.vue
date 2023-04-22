@@ -13,13 +13,12 @@
       <img
         :class="classimg"
         :src="iconPath"
-        color="#00FFFF"
         :width="iconSize"
         :height="iconSize"
         alt="link"
       >
       <h1
-        class="text-sky-600 outline-sky-600 text-xl font-bold mt-1 ml-3 mb-1 mr-1"
+        class="text-sky-600 outline-sky-600 text-base font-bold mt- ml-3 mb mr-2"
       >
         <slot>{{ label }}</slot>
       </h1>
@@ -39,13 +38,12 @@
       <img
         :class="classimg"
         :src="iconPath"
-        color="#00FFFF"
         :width="iconSize"
         :height="iconSize"
         alt="link"
       >
       <h1
-        class="text-sky-600 outline-sky-600 text-xl font-bold mt-1 ml-3 mb-1 mr-1"
+        class="text-sky-600 outline-sky-600 text-base font-bold mt- ml-3 mr-2"
       >
         <slot>{{ label }}</slot>
       </h1>
@@ -155,17 +153,17 @@ const colorClassNames = {
   whitesky: {
     background: {
       standard: 'bg-white',
-      hoverLight: 'hover:bg-sky-300/20',
-      hover: 'hover:bg-sky-300'
+      hoverLight: 'hover:bg-sky-600/20',
+      hover: 'hover:bg-sky-600/20'
     },
     text: 'text-sky-600',
-    outline: 'outline-sky-600'
+    outline: 'outline-sky-600/20'
   },
   transparentsky: {
     background: {
       standard: 'bg-transparent',
-      hoverLight: 'hover:bg-sky-300/20',
-      hover: 'hover:bg-sky-300'
+      hoverLight: 'hover:bg-sky-600/20',
+      hover: 'hover:bg-sky-600/20'
     },
     text: 'text-sky-600',
     outline: 'outline-sky-600'
@@ -173,8 +171,8 @@ const colorClassNames = {
   invisiblesky: {
     background: {
       standard: 'bg-transparent',
-      hoverLight: 'hover:bg-sky-300/20',
-      hover: 'hover:bg-sky-300'
+      hoverLight: 'hover:bg-sky-600/20',
+      hover: 'hover:bg-sky-600/20'
     },
     text: 'text-sky-600',
     outline: 'outline-sky-600'
@@ -184,7 +182,7 @@ const colorClassNames = {
 const styles = computed(() => {
   // const classes = ['items-center rounded-lg flex ml- px-2.5 py-1 relative text-lg font-semibold hover:duration-200']
   const classes = [
-    'items-center rounded-lg flex ml- px-2 py-1.5 relative text-lg font-semibold hover:duration-200'
+    'items-center rounded-md flex px-[7px] py-[7px] relative text-lg font-semibold hover:duration-200'
   ]
 
   // const classes = ['items-rounded-md flex px-8 py-1.5 text-lg font-semibold hover:duration-200']
@@ -222,14 +220,5 @@ const styles = computed(() => {
 </script>
 
 <style>
-/* #155E75 */
-.filter-blue {
-  filter: invert(11%) sepia(96%) saturate(4032%) hue-rotate(182deg)
-    brightness(105%) contrast(83%);
-}
-/* #1C77C3 */
-.filter-sky {
-  filter: invert(35%) sepia(76%) saturate(769%) hue-rotate(170deg)
-    brightness(99%) contrast(91%);
-}
+
 </style>
