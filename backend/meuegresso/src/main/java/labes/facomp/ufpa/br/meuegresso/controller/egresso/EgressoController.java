@@ -24,8 +24,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EnderecoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.PesquisaCientificaDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.TrabalhoPublicadoDTO;
-import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
@@ -34,7 +32,6 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.PesquisaCientificaModel;
-import labes.facomp.ufpa.br.meuegresso.model.TrabalhoPublicadoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
@@ -77,12 +74,12 @@ public class EgressoController {
         return ResponseEntity.ok(mapper.map(enderecoModel, EnderecoDTO.class));
     }
 
-    @PostMapping(value = "/publicacao")
-    public ResponseEntity<TrabalhoPublicadoDTO> cadastrarPublicacao(@RequestBody TrabalhoPublicadoDTO publicacao) {
-        TrabalhoPublicadoModel publicacaoModel = mapper.map(publicacao, TrabalhoPublicadoModel.class);
-        publicacaoModel = egressoService.adicionarPublicacao(publicacaoModel);
-        return ResponseEntity.ok(mapper.map(publicacaoModel, TrabalhoPublicadoDTO.class));
-    }
+    // @PostMapping(value = "/publicacao")
+    // public ResponseEntity<TrabalhoPublicadoDTO> cadastrarPublicacao(@RequestBody TrabalhoPublicadoDTO publicacao) {
+    //     TrabalhoPublicadoModel publicacaoModel = mapper.map(publicacao, TrabalhoPublicadoModel.class);
+    //     publicacaoModel = egressoService.adicionarPublicacao(publicacaoModel);
+    //     return ResponseEntity.ok(mapper.map(publicacaoModel, TrabalhoPublicadoDTO.class));
+    // }
 
     @PostMapping(value = "/pesquisa")
     public ResponseEntity<PesquisaCientificaDTO> cadastrarPesquisa(@RequestBody PesquisaCientificaDTO pesquisa) {
@@ -99,19 +96,21 @@ public class EgressoController {
         return ResponseEntity.ok(mapper.map(cursoModel, CursoDTO.class));
     }
 
-    // anuncio
-    @PostMapping(value = "/anuncio")
-    public ResponseEntity<AnuncioDTO> cadastrarAnuncio(@RequestBody AnuncioDTO anuncio) {
-        AnuncioModel anuncioModel = mapper.map(anuncio, AnuncioModel.class);
-        anuncioModel = egressoService.adicionarAnuncio(anuncioModel);
-        return ResponseEntity.ok(mapper.map(anuncioModel, AnuncioDTO.class));
-    }
+    // // anuncio
+    // @PostMapping(value = "/anuncio")
+    // public ResponseEntity<AnuncioDTO> cadastrarAnuncio(@RequestBody AnuncioDTO
+    // anuncio) {
+    // AnuncioModel anuncioModel = mapper.map(anuncio, AnuncioModel.class);
+    // anuncioModel = egressoService.adicionarAnuncio(anuncioModel);
+    // return ResponseEntity.ok(mapper.map(anuncioModel, AnuncioDTO.class));
+    // }
 
-    @PostMapping(value = "/titulo-academico")
-    public ResponseEntity<EgressoColacaoDTO> cadastrarTituloAcademico(@RequestBody EgressoColacaoDTO tituloAcademico) {
-        EgressoColacaoModel tituloAcademicoModel = mapper.map(tituloAcademico, EgressoColacaoModel.class);
-        tituloAcademicoModel = egressoService.adicionarTituloAcademico(tituloAcademicoModel);
-        return ResponseEntity.ok(mapper.map(tituloAcademicoModel, EgressoColacaoDTO.class));
+    @PostMapping(value = "/formacao-academico")
+    public ResponseEntity<EgressoColacaoDTO> cadastrarFormacaoAcademica(
+            @RequestBody EgressoColacaoDTO formacaoAcademica) {
+        EgressoColacaoModel egressoColacaoModel = mapper.map(formacaoAcademica, EgressoColacaoModel.class);
+        egressoColacaoModel = egressoService.adicionarTituloAcademico(egressoColacaoModel);
+        return ResponseEntity.ok(mapper.map(egressoColacaoModel, EgressoColacaoDTO.class));
     }
 
     @PostMapping(value = "/emprego")
@@ -161,12 +160,12 @@ public class EgressoController {
      * @author Pedro Inácio
      * @since 16/04/2023
      */
-    @PutMapping(value = "/publicacao")
-    public ResponseEntity<TrabalhoPublicadoDTO> atualizarPublicacao(@RequestBody TrabalhoPublicadoDTO publicacao) {
-        TrabalhoPublicadoModel publicacaoModel = mapper.map(publicacao, TrabalhoPublicadoModel.class);
-        publicacaoModel = egressoService.updatePublicacao(publicacaoModel);
-        return ResponseEntity.ok(mapper.map(publicacaoModel, TrabalhoPublicadoDTO.class));
-    }
+    // @PutMapping(value = "/publicacao")
+    // public ResponseEntity<TrabalhoPublicadoDTO> atualizarPublicacao(@RequestBody TrabalhoPublicadoDTO publicacao) {
+    //     TrabalhoPublicadoModel publicacaoModel = mapper.map(publicacao, TrabalhoPublicadoModel.class);
+    //     publicacaoModel = egressoService.updatePublicacao(publicacaoModel);
+    //     return ResponseEntity.ok(mapper.map(publicacaoModel, TrabalhoPublicadoDTO.class));
+    // }
 
     /**
      * Endpoint responsavel por atualizar as informações de emprego do egresso.
@@ -242,14 +241,14 @@ public class EgressoController {
     }
 
     // anuncio
-    @PutMapping(value = "/anuncio")
-    public ResponseEntity<AnuncioDTO> atualizarAnuncio(@RequestBody AnuncioDTO anuncio) {
-        AnuncioModel anuncioModel = mapper.map(anuncio, AnuncioModel.class);
-        anuncioModel = egressoService.updateAnuncio(anuncioModel);
-        return ResponseEntity.ok(mapper.map(anuncioModel, AnuncioDTO.class));
-    }
+    // @PutMapping(value = "/anuncio")
+    // public ResponseEntity<AnuncioDTO> atualizarAnuncio(@RequestBody AnuncioDTO anuncio) {
+    //     AnuncioModel anuncioModel = mapper.map(anuncio, AnuncioModel.class);
+    //     anuncioModel = egressoService.updateAnuncio(anuncioModel);
+    //     return ResponseEntity.ok(mapper.map(anuncioModel, AnuncioDTO.class));
+    // }
 
-    @PutMapping(value = "/titulo-academico")
+    @PutMapping(value = "/formacao-academico")
     public ResponseEntity<EgressoColacaoDTO> atualizarTituloAcademico(@RequestBody EgressoColacaoDTO tituloAcademico) {
         EgressoColacaoModel tituloAcademicoModel = mapper.map(tituloAcademico, EgressoColacaoModel.class);
         tituloAcademicoModel = egressoService.updateTituloAcademico(tituloAcademicoModel);
@@ -281,12 +280,12 @@ public class EgressoController {
      * @author Bruno Eiki
      * @since 17/04/2023
      */
-    @DeleteMapping(value = "/publicacao")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deletarPublicacao(@RequestBody @Valid TrabalhoPublicadoDTO publicacao) {
-        TrabalhoPublicadoModel publicacaoModel = mapper.map(publicacao, TrabalhoPublicadoModel.class);
-        return egressoService.deletarPublicacao(publicacaoModel);
-    }
+    // @DeleteMapping(value = "/publicacao")
+    // @PreAuthorize("hasRole('ADMIN')")
+    // public ResponseEntity<String> deletarPublicacao(@RequestBody @Valid TrabalhoPublicadoDTO publicacao) {
+    //     TrabalhoPublicadoModel publicacaoModel = mapper.map(publicacao, TrabalhoPublicadoModel.class);
+    //     return egressoService.deletarPublicacao(publicacaoModel);
+    // }
 
     /**
      * Endpoint responsavel por deletar o emprego do egresso.
@@ -377,12 +376,12 @@ public class EgressoController {
      * @author Bruno Eiki
      * @since 17/04/2023
      */
-    @DeleteMapping(value = "/anuncio")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deletarAnuncio(@RequestBody @Valid AnuncioDTO anuncio) {
-        AnuncioModel anuncioModel = mapper.map(anuncio, AnuncioModel.class);
-        return egressoService.deletarAnuncio(anuncioModel);
-    }
+    // @DeleteMapping(value = "/anuncio")
+    // @PreAuthorize("hasRole('ADMIN')")
+    // public ResponseEntity<String> deletarAnuncio(@RequestBody @Valid AnuncioDTO anuncio) {
+    //     AnuncioModel anuncioModel = mapper.map(anuncio, AnuncioModel.class);
+    //     return egressoService.deletarAnuncio(anuncioModel);
+    // }
 
     /**
      * Endpoint responsavel por deletar a colacao do egresso.
@@ -393,7 +392,7 @@ public class EgressoController {
      * @author Bruno Eiki
      * @since 17/04/2023
      */
-    @DeleteMapping(value = "/titulo-academico")
+    @DeleteMapping(value = "/formacao-academico ")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deletarTituloAcademico(@RequestBody @Valid EgressoColacaoDTO tituloAcademico) {
         EgressoColacaoModel tituloAcademicoModel = mapper.map(tituloAcademico, EgressoColacaoModel.class);
