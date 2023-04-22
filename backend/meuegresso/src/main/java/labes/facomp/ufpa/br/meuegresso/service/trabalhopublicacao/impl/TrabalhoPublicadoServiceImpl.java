@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
-public class TrabalhoPublicadoImpl implements TrabalhoPublicadoService {
+public class TrabalhoPublicadoServiceImpl implements TrabalhoPublicadoService {
 
     private final TrabalhoPublicadoRepository trabalhoPublicadoRepository;
 

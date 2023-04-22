@@ -24,7 +24,6 @@ import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * Responsável por fornecer um end-point para criar um novo usuário.
  *
@@ -57,11 +56,11 @@ public class UsuarioController {
 		return mapper.map(usuarioService.findById(jwtService.getIdUsuario(token)), UsuarioAuthDTO.class);
 	}
 
-
 	/**
 	 * Endpoint responsavel por cadastrar o usuário.
 	 *
-	 * @param usuarioDTO Estrutura de dados contendo as informações necessárias para persistir o Usuário.
+	 * @param usuarioDTO Estrutura de dados contendo as informações necessárias para
+	 *                   persistir o Usuário.
 	 * @return String confirmando a transação.
 	 * @author Alfredo Gabriel
 	 * @see {@link UsuarioDTO}
@@ -87,8 +86,10 @@ public class UsuarioController {
 	 * @since 16/04/2023
 	 */
 	@PutMapping
+	@PreAuthorize("hasRole('EGRESSO') or hasRole('SECRETARIA') or hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public String atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO, JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
+	public String atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO, JwtAuthenticationToken token)
+			throws UnauthorizedRequestException, InvalidRequestException {
 		if (usuarioService.existsByIdAndCreatedById(usuarioDTO.getId(), jwtService.getIdUsuario(token))) {
 			UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 			usuarioModel = usuarioService.update(usuarioModel);
