@@ -1,8 +1,9 @@
-package labes.facomp.ufpa.br.meuegresso.dto.egresso;
+package labes.facomp.ufpa.br.meuegresso.dto.contribuicao;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import lombok.Data;
 
 /**

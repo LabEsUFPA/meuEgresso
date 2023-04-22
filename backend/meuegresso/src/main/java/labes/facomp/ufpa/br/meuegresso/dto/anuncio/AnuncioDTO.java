@@ -1,9 +1,9 @@
-package labes.facomp.ufpa.br.meuegresso.dto.egresso;
+package labes.facomp.ufpa.br.meuegresso.dto.anuncio;
 
 import lombok.Data;
 
 /**
- * Encapsulamento da tabela Comentario a fim de representar somente os dados não
+ * Encapsulamento da tabela Anuncio a fim de representar somente os dados não
  * sensiveis.
  *
  * @author Pedro Inácio
@@ -11,7 +11,7 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
-public class ComentarioDTO {
+public class AnuncioDTO {
     
     private Integer id;
 

@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.dto.egresso;
+package labes.facomp.ufpa.br.meuegresso.dto.tipobolsa;
 
 import lombok.Data;
 

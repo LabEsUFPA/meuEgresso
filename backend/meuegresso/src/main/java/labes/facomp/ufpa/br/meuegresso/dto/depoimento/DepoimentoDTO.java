@@ -1,5 +1,6 @@
-package labes.facomp.ufpa.br.meuegresso.dto.egresso;
+package labes.facomp.ufpa.br.meuegresso.dto.depoimento;
 
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import lombok.Data;
 
 /**
