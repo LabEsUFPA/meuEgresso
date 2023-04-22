@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +42,8 @@ public class UsuarioController {
 	private final UsuarioService usuarioService;
 
 	private final ModelMapper mapper;
+
+	private final JwtService jwtService;
 
 	/**
 	 * Endpoint responsável por retornar a lista de usuários cadastrados no banco de dados.
@@ -70,7 +74,7 @@ public class UsuarioController {
 	}
 
 	/**
-	 * Endpoint responsável por retornar um ussário por sua ID.
+	 * Endpoint responsável por retornar um usuário por sua ID.
 	 * 
 	 * @param id Integer
 	 * @return {@link UsuarioAuthDTO} Dados gravados no banco.
@@ -79,10 +83,24 @@ public class UsuarioController {
 	 */
 	@GetMapping(value = "{id}")
 	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public UsuarioAuthDTO findById(@PathVariable Integer id) {
 		return mapper.map(usuarioService.findById(id), UsuarioAuthDTO.class);
 	}
 
+	/**
+	 * Endpoint responsável por retornar um usuário por sua ID.
+	 * 
+	 * @param id Integer
+	 * @return {@link UsuarioAuthDTO} Dados gravados no banco.
+	 * @author Alfredo Gabriel, Camilo Santos
+	 * @since 21/04/2023
+	 */
+	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
+	public UsuarioAuthDTO findById(JwtAuthenticationToken jwtAuthenticationToken) {
+		return mapper.map(usuarioService.findById(jwtService.getIdUsuario(jwtAuthenticationToken)), UsuarioAuthDTO.class);
+	}
 
 	/**
 	 * Endpoint responsavel por cadastrar o usuário.
