@@ -12,3 +12,9 @@ Crie o arquivo .env baseado no .env.example
 
 1. Criar o arquivo JAR - `mvn install`
 2. Subir no docker - `docker-compose up`
+
+# Usuarios Padrões para Testes
+
+1. ADMIN - 123456
+2. SECRETARIO - 123456
+3. EGRESSO - 123456
