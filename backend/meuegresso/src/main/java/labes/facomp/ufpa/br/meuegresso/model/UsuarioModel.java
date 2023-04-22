@@ -30,7 +30,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * Representação da tabela Usuario presente no banco de dados.
- * Esta tabela tem como finalidade representar os usuários que podem realizar login no sistema.
+ * Esta tabela tem como finalidade representar os usuários que podem realizar
+ * login no sistema.
  *
  * @author Alfredo Gabriel
  * @since 26/03/2023
@@ -46,7 +47,7 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "id_usuario", unique = true, nullable = false)
-	private Integer idUsuario;
+	private Integer id;
 
 	@Column(name = "login_usuario", unique = true, nullable = false, updatable = false, length = 100)
 	private String username;
@@ -60,11 +61,11 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Column(name = "nome_usuario", nullable = false, unique = false, length = 80)
 	private String nome;
 
-    @Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.DATE)
 	@Column(name = "nascimento_usuario", nullable = false, unique = false)
-    private Date nascimento;
+	private Date nascimento;
 
-    @OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
+	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
 	private transient EgressoModel egresso;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })

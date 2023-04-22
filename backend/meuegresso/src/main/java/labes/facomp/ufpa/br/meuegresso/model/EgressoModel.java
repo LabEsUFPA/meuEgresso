@@ -33,8 +33,8 @@ public class EgressoModel extends Auditable {
     @Column(name = "id_egresso", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "matricula_egresso", unique = true, nullable = false)
-    private Integer matricula;
+    @Column(name = "matricula_egresso", unique = true, nullable = false, length = 12)
+    private String matricula;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "etnia_id", nullable = false, unique = false)
@@ -64,7 +64,7 @@ public class EgressoModel extends Auditable {
     @JoinColumn(name = "cota_id", unique = false, nullable = false)
     private CotaModel cota;
 
-    @OneToOne(cascade = { CascadeType.REMOVE })
+    @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "usuario_id", unique = true, nullable = false)
     private UsuarioModel usuario;
 

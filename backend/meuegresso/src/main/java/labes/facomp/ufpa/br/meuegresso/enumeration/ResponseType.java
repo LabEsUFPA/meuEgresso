@@ -5,7 +5,12 @@ import lombok.Getter;
 @Getter
 public enum ResponseType {
 
-    USUARIO_SUCESS_SAVE("Usuário salvo com sucesso");
+    SUCESS_SAVE("Dado salvo com sucesso"),
+
+    SUCESS_UPDATE("Dado atualizado com sucesso"),
+
+    SUCESS_DELETE("Dado deletado com sucesso");
+
 
     private String message;
 

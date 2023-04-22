@@ -24,7 +24,7 @@ import lombok.Data;
 @Data
 public class UsuarioPublicDTO {
 
-	private Integer idUsuario;
+	private Integer id;
 
 	@NotBlank(message = "Infome um usuário.")
 	private String username;

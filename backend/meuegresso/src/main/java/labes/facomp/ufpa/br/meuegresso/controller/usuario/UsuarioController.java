@@ -98,7 +98,7 @@ public class UsuarioController {
 	public String cadastrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 		usuarioService.save(usuarioModel);
-		return ResponseType.USUARIO_SUCESS_SAVE.getMessage();
+		return ResponseType.SUCESS_SAVE.getMessage();
 	}
 
 	/**

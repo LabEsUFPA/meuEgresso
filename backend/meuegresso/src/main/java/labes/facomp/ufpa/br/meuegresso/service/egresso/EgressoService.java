@@ -22,6 +22,8 @@ import labes.facomp.ufpa.br.meuegresso.model.TrabalhoPublicadoModel;
  */
 public interface EgressoService {
 
+  public EgressoModel findByUsuarioId(Integer idUsuario);
+
   public EgressoModel adicionarEgresso(EgressoModel egresso);
 
   public ContribuicaoModel adicionarContribuicao(ContribuicaoModel contribuicao);
