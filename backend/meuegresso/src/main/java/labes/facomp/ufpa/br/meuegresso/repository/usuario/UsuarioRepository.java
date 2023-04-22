@@ -16,9 +16,9 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
  * @version 1.0
  */
 public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer> {
-	Optional<UsuarioModel> findByUsername(String username);
+	Optional<UsuarioModel> findByUsernameIgnoreCase(String username);
 
 	List<UsuarioModel> findAll();
-	
+
     boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

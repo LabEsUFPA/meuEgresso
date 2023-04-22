@@ -38,7 +38,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	 */
 	@Override
 	public UsuarioModel loadUserByUsername(String login) throws UsernameNotFoundException {
-		return usuarioRepository.findByUsername(login).orElseThrow();
+		return usuarioRepository.findByUsernameIgnoreCase(login).orElseThrow();
 	}
 
 	@Override
