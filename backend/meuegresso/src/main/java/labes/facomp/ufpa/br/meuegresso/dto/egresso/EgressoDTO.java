@@ -7,13 +7,13 @@ public class EgressoDTO {
 
     private Integer id;
 
-    private Integer matricula;
+    private String matricula;
 
     private EtniaDTO etnia;
 
     private GeneroDTO genero;
 
-    private Boolean cotista;
+    private CotaDTO cota;
 
     private Boolean pcd = false;
 
