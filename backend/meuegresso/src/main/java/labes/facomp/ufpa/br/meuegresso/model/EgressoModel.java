@@ -44,6 +44,9 @@ public class EgressoModel extends Auditable {
     @JoinColumn(name = "genero_id", nullable = false, unique = false)
     private GeneroModel genero;
 
+    @Column(name = "cotista_egresso", nullable = false, unique = false)
+    private Boolean cotista;
+
     @Column(name = "pcd_egresso", nullable = false, unique = false)
     private Boolean pcd = false;
 

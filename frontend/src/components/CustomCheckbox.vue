@@ -1,6 +1,7 @@
 <template>
   <button
     class="flex flex-row items-center cursor-pointer w-fit"
+    type="button"
     @click="$emit('update:modelValue', !modelValue)"
   >
     <div class="text-teal-600">
@@ -37,9 +38,7 @@ defineProps<{
   label: string
 }>()
 
-defineEmits([
-  'update:modelValue'
-])
+defineEmits(['update:modelValue'])
 
 const id = `checkbox-input-${Math.floor(Math.random() * 1000000).toString()}`
 </script>

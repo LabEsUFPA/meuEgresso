@@ -1,9 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.usuario;
 
-import java.util.List;
-
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -46,22 +43,8 @@ public class UsuarioController {
 	private final JwtService jwtService;
 
 	/**
-	 * Endpoint responsável por retornar a lista de usuários cadastrados no banco de dados.
-	 * 
-	 * @return {@link UsuarioAuthDTO} Lista de usuários cadastrados
-	 * @author Alfredo Gabriel, Camilo Santos
-	 * @since 18/04/2023
-	 */
-	@GetMapping
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
-	public List<UsuarioAuthDTO> consultarUsuarios() {
-		return mapper.map(usuarioService.findAll(), new TypeToken<List<UsuarioAuthDTO>>() {
-		}.getType());
-	}
-
-	/**
 	 * Endpoint responsável por deletar usuário por sua ID>
-	 * 
+	 *
 	 * @param id Integer
 	 * @return Boolean
 	 * @author Camilo Santos
@@ -75,7 +58,7 @@ public class UsuarioController {
 
 	/**
 	 * Endpoint responsável por retornar um usuário por sua ID.
-	 * 
+	 *
 	 * @param id Integer
 	 * @return {@link UsuarioAuthDTO} Dados gravados no banco.
 	 * @author Alfredo Gabriel, Camilo Santos
@@ -90,7 +73,7 @@ public class UsuarioController {
 
 	/**
 	 * Endpoint responsável por retornar um usuário por sua ID.
-	 * 
+	 *
 	 * @param id Integer
 	 * @return {@link UsuarioAuthDTO} Dados gravados no banco.
 	 * @author Alfredo Gabriel, Camilo Santos
@@ -121,7 +104,7 @@ public class UsuarioController {
 
 	/**
 	 * Endpoint responsavel por atualizar o usuário.
-	 * 
+	 *
 	 * @param usuarioDTO Estrutura de dados contendo as informações necessárias para
 	 *                   atualizar o Usuário.
 	 * @return {@link UsuarioAuthDTO} Dados gravados no banco com a Id atualizada.
