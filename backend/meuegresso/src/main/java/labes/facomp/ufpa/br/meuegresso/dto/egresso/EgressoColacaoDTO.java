@@ -2,6 +2,8 @@ package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import java.util.Date;
 
+import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;
 import lombok.Data;
 
 /**

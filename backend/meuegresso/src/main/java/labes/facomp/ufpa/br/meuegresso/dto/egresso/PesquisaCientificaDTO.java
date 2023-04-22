@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import java.util.Date;
 
+import labes.facomp.ufpa.br.meuegresso.dto.tipobolsa.TipoBolsaDTO;
 import lombok.Data;
 
 /**
