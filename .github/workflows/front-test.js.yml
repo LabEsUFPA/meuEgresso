@@ -30,5 +30,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm install
-    - run: npm test:unit
+    - name: Install dependencies
+      run: npm install
+      working-directory: frontend
+    - name: Run tests
+      run: npm test:unit
+      working-directory: frontend
