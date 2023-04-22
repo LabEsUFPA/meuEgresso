@@ -13,16 +13,16 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.PesquisaCientificaModel;
 import labes.facomp.ufpa.br.meuegresso.model.TrabalhoPublicadoModel;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.AnuncioRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.ContribuicaoRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.CursoRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.DepoimentoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.anuncio.AnuncioRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.contribuicao.ContribuicaoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.curso.CursoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.depoimento.DepoimentoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoColacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoEmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.EnderecoRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.PesquisaCientificaRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.PublicacaoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.endereco.EnderecoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.pesquisacientifica.PesquisaCientificaRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.trabalhopublicacao.TrabalhoPublicadoRepository;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
 
@@ -40,7 +40,7 @@ public class EgressoServiceImpl implements EgressoService {
 
     private final ContribuicaoRepository contribuicaoRepository;
     private final EgressoRepository egressoRepository;
-    private final PublicacaoRepository publicacaoRepository;
+    private final TrabalhoPublicadoRepository publicacaoRepository;
     private final DepoimentoRepository depoimentoRepository;
     private final EgressoEmpresaRepository egressoEmpresaRepository;
     private final EnderecoRepository enderecoRepository;
@@ -298,8 +298,8 @@ public class EgressoServiceImpl implements EgressoService {
 
     @Override
     public ResponseEntity<String> deletarTituloAcademico(EgressoColacaoModel tituloAcademico) {
-        if (egressoColacaoRepository.existsById(tituloAcademico.getId().getColacaoId())) {
-            egressoColacaoRepository.deleteById(tituloAcademico.getId().getColacaoId());
+        if (egressoColacaoRepository.existsById(tituloAcademico.getId())) {
+            egressoColacaoRepository.deleteById(tituloAcademico.getId());
             return ResponseEntity.ok("Colacao deletada");
         } else {
             return ResponseEntity.ok("Colacao nao encontrada");

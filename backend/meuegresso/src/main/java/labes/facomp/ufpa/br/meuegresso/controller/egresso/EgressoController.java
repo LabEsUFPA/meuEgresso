@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.AnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.CursoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.DepoimentoDTO;
@@ -49,6 +48,7 @@ import lombok.RequiredArgsConstructor;
 public class EgressoController {
 
     private EgressoService egressoService;
+    
     private final ModelMapper mapper;
 
     private final JwtService jwtService;
