@@ -12,17 +12,23 @@
       </div>
       <button
         type="button"
-        class="w-64 py-1 px-3 grid grid-cols-8 relative border"
+        class="w-64 py-1 px-3 grid grid-cols-8 relative border border-gray-400"
         :class="open ? 'rounded-t-lg' : 'rounded-lg'"
         @click="open = !open"
         @blur="open = false"
       >
+        <img
+          class="w-[20px]"
+          :src="iconPath"
+          v-if="imgIcon"
+        >
+
         <SvgIcon
           type="mdi"
-          class="text-gray-400 col-span-1"
-          size="24"
+          class="col-span-1"
+          size="20"
           :path="iconPath"
-          v-if="iconPath"
+          v-else-if="iconPath"
         />
         <div
           class="text-left"
@@ -31,7 +37,7 @@
           <p
             :class="modelValue === '' ? 'text-gray-500' : 'text-black'"
           >
-            {{ modelValue === '' ? placeholder : modelValue }}
+            {{ modelValue === '' ? placeholder : currentSelection.label }}
           </p>
         </div>
 
@@ -46,7 +52,7 @@
 
         <div
           :class="open ? '' : 'hidden'"
-          class="absolute shadow-md bg-white w-64 z-50 cursor-pointer -left-[1px] top-8 rounded-b-lg border border-t-0"
+          class="absolute shadow-md bg-white w-64 z-50 cursor-pointer -left-[1px] max-h-96 overflow-y-auto top-8 rounded-b-lg border border-gray-400 border-t-0"
         >
           <div
             class="p-2 hover:bg-gray-200 text-left"
@@ -55,12 +61,12 @@
             ...
           </div>
           <div
-            class="p-2 hover:bg-gray-200 text-left border-t"
+            class="p-2 hover:bg-gray-200 text-left border-t border-gray-400"
             :key="index"
             v-for="(option, index) in options"
-            @click="$emit('update:modelValue', option)"
+            @click="handleEmit(option)"
           >
-            {{ option }}
+            {{ typeof option === 'object' ? option.label : option }}
           </div>
         </div>
       </button>
@@ -79,16 +85,24 @@ import { ref } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronDown } from '@mdi/js'
 
-defineEmits(['update:modelValue'])
+const $emit = defineEmits(['update:modelValue'])
+
+interface ComplexOpts {
+  label: string,
+  value: any
+}
+
+type IOpts = string | ComplexOpts
 
 interface Props {
   modelValue: string
   label: string
   helperText?: string
-  options: string[]
+  options: IOpts[]
   iconPath?: string
   required?: boolean
   placeholder?: string
+  imgIcon?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
@@ -96,6 +110,23 @@ withDefaults(defineProps<Props>(), {
   helperText: '',
   placeholder: ''
 })
+
+const currentSelection = ref<ComplexOpts>({
+  label: '',
+  value: ''
+})
+
+function handleEmit (option: IOpts) {
+  console.log(typeof option)
+  if (typeof option === 'object') {
+    $emit('update:modelValue', option.value)
+    currentSelection.value = option
+    return
+  }
+
+  $emit('update:modelValue', option)
+  currentSelection.value.label = option
+}
 
 const open = ref(false)
 </script>

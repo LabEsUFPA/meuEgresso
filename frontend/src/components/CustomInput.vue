@@ -14,13 +14,19 @@
       class="rounded-lg w-64 py-1 px-3 border grid grid-cols-8"
       :class="`${focused ? 'outline-2 outline outline-sky-400' : 'border-gray-400'} ${inputClass}`"
     >
-      <div class="flex flex-row items-center">
+      <div class="flex flex-row text-gray-400  items-center">
+        <img
+          class="w-[20px]"
+          :src="iconPath"
+          v-if="imgIcon"
+        >
+
         <SvgIcon
           type="mdi"
-          class="text-gray-400 col-span-1"
+          class="col-span-1"
           size="20"
           :path="iconPath"
-          v-if="iconPath"
+          v-else-if="iconPath"
         />
       </div>
       <input
@@ -35,6 +41,7 @@
         :id="id"
         :required="required"
         :data-maska="mask"
+        :step="step"
         @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         @focus="focused = true"
         @blur="focused = false"
@@ -77,6 +84,8 @@ interface Props {
   mask?: string
   maxLength?: number
   minLength?: number
+  imgIcon?: boolean
+  step?: number | string
 }
 
 withDefaults(defineProps<Props>(), {
@@ -88,7 +97,8 @@ withDefaults(defineProps<Props>(), {
   mask: '',
   errorText: '',
   maxLength: 300,
-  minLength: 1
+  minLength: 1,
+  step: 1
 })
 
 const focused = ref(false)

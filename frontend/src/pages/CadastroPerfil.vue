@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
-    <form @submit="handleSubmit($event)">
+  <form @submit.prevent="handleSubmit($event)">
+    <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
       <div
         v-if="!submitSuccess"
         class="flex flex-col items-center bg-white w-[960px] py-10 mx-6 rounded-2xl shadow-md"
@@ -69,29 +69,29 @@
           </RouterLink>
         </p>
       </div>
-    </form>
 
-    <div
-      v-if="submitSuccess"
-      class="bg-white w-[960px] py-20 mx-6 rounded-2xl"
-    >
-      <div class="flex flex-col items-center text-center gap-y-28 mx-4">
-        <h1 class="text-blue-900 text-4xl font-bold">
-          Suas informações estão sendo analisadas
-        </h1>
-        <img
-          class="animate-spin mr-3 max-w-[100px]"
-          src="../assets/loading.svg"
-          alt="Loading"
-        >
-        <div>
-          <p class="max-w-xl text-center text-blue-400 text-2xl mb-5">
-            Aguarde o redirecionamento para a página de cadastro de egresso.
-          </p>
+      <div
+        v-if="submitSuccess"
+        class="bg-white w-[960px] py-20 mx-6 rounded-2xl"
+      >
+        <div class="flex flex-col items-center text-center gap-y-28 mx-4">
+          <h1 class="text-blue-900 text-4xl font-bold">
+            Suas informações estão sendo analisadas
+          </h1>
+          <img
+            class="animate-spin mr-3 max-w-[100px]"
+            src="../assets/loading.svg"
+            alt="Loading"
+          >
+          <div>
+            <p class="max-w-xl text-center text-blue-400 text-2xl mb-5">
+              Aguarde o redirecionamento para a página de cadastro de egresso.
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script setup lang="ts">
@@ -129,7 +129,6 @@ const userRegisterData = ref<registerData>({
 })
 
 const handleSubmit = ($event: Event) => {
-  $event.preventDefault()
   if (
     userRegisterData.value.password !== userRegisterData.value.confirmationPassword
   ) {

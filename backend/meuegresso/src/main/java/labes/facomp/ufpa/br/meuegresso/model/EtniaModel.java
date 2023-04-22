@@ -23,7 +23,7 @@ public class EtniaModel extends Auditable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(name = "nome_etnia", length = 100)
+    @Column(name = "nome_etnia", length = 30)
     private String nome;
 
 }

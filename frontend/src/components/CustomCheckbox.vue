@@ -1,6 +1,7 @@
 <template>
   <button
     class="flex flex-row items-center cursor-pointer w-fit"
+    type="button"
     @click="$emit('update:modelValue', !modelValue)"
   >
     <div class="text-teal-600">

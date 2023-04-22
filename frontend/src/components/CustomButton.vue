@@ -1,28 +1,30 @@
 <template>
-  <button
-    v-if="isButton"
-    :class="styles"
-    @click="$emit('click')"
-    :type="type"
-  >
-    <slot />
-  </button>
-  <RouterLink
-    v-if="isRouter"
-    :to="link"
-    :class="styles"
-  >
-    <slot />
-  </RouterLink>
-  <a
-    v-if="isAnchor"
-    :class="styles"
-    :href="link"
-    :rel="rel"
-    :target="target"
-  >
-    <slot />
-  </a>
+  <span>
+    <button
+      v-if="tag === 'button'"
+      :class="styles"
+      @click="$emit('click')"
+      :type="type"
+    >
+      <slot />
+    </button>
+    <RouterLink
+      v-if="tag === 'router'"
+      :to="link"
+      :class="styles"
+    >
+      <slot />
+    </RouterLink>
+    <a
+      v-if="tag === 'a'"
+      :class="styles"
+      :href="link"
+      :rel="rel"
+      :target="target"
+    >
+      <slot />
+    </a>
+  </span>
 </template>
 
 <script lang="ts" setup>
@@ -35,9 +37,7 @@ interface Props {
   textClass?: string
   color?: 'sky' | 'blue' | 'red' | 'green' | 'emerald' | 'white'
   type?: 'reset' | 'button' | 'submit'
-  isButton?: boolean
-  isRouter?: boolean
-  isAnchor?: boolean
+  tag?: 'a' | 'button' | 'router'
   link?: string
   rel?: string
   target?: string
@@ -48,9 +48,7 @@ const props = withDefaults(defineProps<Props>(), {
   textClass: 'text-white',
   color: 'sky',
   type: 'button',
-  isButton: true,
-  isRouter: false,
-  isAnchor: false,
+  tag: 'button',
   link: '/',
   rel: 'noreferrer',
   target: '_self'
@@ -90,7 +88,7 @@ const colorClassNames = {
     background: {
       standard: 'bg-green-600',
       hoverLight: 'hover:bg-green-600/20',
-      hover: 'hover:bg-green-600'
+      hover: 'hover:bg-green-800'
     },
     text: 'text-green-600',
     outline: 'outline-green-600'
@@ -99,7 +97,7 @@ const colorClassNames = {
     background: {
       standard: 'bg-emerald-600',
       hoverLight: 'hover:bg-emerald-600/20',
-      hover: 'hover:bg-emerald-600'
+      hover: 'hover:bg-emerald-800'
     },
     text: 'text-emerald-600',
     outline: 'outline-emerald-600'
