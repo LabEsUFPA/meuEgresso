@@ -32,14 +32,14 @@ public interface TipoBolsaService {
 
 	/**
 	 * Método responsável por encontrar todos os tipoBolsas cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe TipoBolsaModel.
 	 */
 	public List<TipoBolsaModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um tipoBolsa cadastrado.
-	 * 
+	 *
 	 * @param tipoBolsa objeto tipoBolsa
 	 * @return
 	 */
@@ -47,9 +47,17 @@ public interface TipoBolsaService {
 
 	/**
 	 * Método responsável por deletar um tipoBolsa cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um tipoBolsa
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.anuncio.AnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.service.anuncio.AnuncioService;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import lombok.RequiredArgsConstructor;
-
 
 /**
  * Responsável por fornecer um end-point para criar um novo anuncio.
@@ -40,9 +43,12 @@ public class AnuncioController {
 
 	private final ModelMapper mapper;
 
+	private final JwtService jwtService;
+
 	/**
-	 * Endpoint responsável por retornar a lista de anuncio cadastrados no banco de dados.
-	 * 
+	 * Endpoint responsável por retornar a lista de anuncio cadastrados no banco de
+	 * dados.
+	 *
 	 * @return {@link AnuncioDTO} Lista de anuncio cadastrados
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
@@ -53,11 +59,9 @@ public class AnuncioController {
 		}.getType());
 	}
 
-	
-
 	/**
 	 * Endpoint responsável por retornar um anuncio por sua ID.
-	 * 
+	 *
 	 * @param id Integer
 	 * @return {@link AnuncioDTO} Dados gravados no banco.
 	 * @author Alfredo Gabriel, Camilo Santos
@@ -69,11 +73,11 @@ public class AnuncioController {
 		return mapper.map(anuncioService.findById(id), AnuncioDTO.class);
 	}
 
-
 	/**
 	 * Endpoint responsavel por cadastrar o anuncio.
 	 *
-	 * @param anuncioDTO Estrutura de dados contendo as informações necessárias para persistir o anuncio.
+	 * @param anuncioDTO Estrutura de dados contendo as informações necessárias para
+	 *                   persistir o anuncio.
 	 * @return String confirmando a transação.
 	 * @author Alfredo Gabriel
 	 * @see {@link AnuncioDTO}
@@ -89,34 +93,39 @@ public class AnuncioController {
 
 	/**
 	 * Endpoint responsavel por atualizar o anuncio.
-	 * 
+	 *
 	 * @param anuncioDTO Estrutura de dados contendo as informações necessárias para
 	 *                   atualizar o anuncio.
 	 * @return {@link AnuncioDTO} Dados gravados no banco com a Id atualizada.
 	 * @author Alfredo Gabriel
+	 * @throws UnauthorizedRequestException
+	 * @throws InvalidRequestException
 	 * @since 21/04/2023
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public AnuncioDTO atualizarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO) {
-		AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
-		anuncioModel = anuncioService.save(anuncioModel);
-		return mapper.map(anuncioModel, AnuncioDTO.class);
+	public String atualizarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO, JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
+		if (anuncioService.existsByIdAndCreatedById(anuncioDTO.getId(), jwtService.getIdUsuario(token))) {
+			AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
+			anuncioService.update(anuncioModel);
+			return ResponseType.SUCESS_UPDATE.getMessage();
+		}
+		throw new UnauthorizedRequestException();
 	}
 
 	/**
-     * Endpoint responsavel por deletar o anuncio do egresso.
-     *
-     * @param anuncio Estrutura de dados contendo as informações
-     *                necessárias para deletar o anuncio.
-     * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
-     * @author Bruno Eiki
-     * @since 17/04/2023
-     */
+	 * Endpoint responsavel por deletar o anuncio do egresso.
+	 *
+	 * @param anuncio Estrutura de dados contendo as informações
+	 *                necessárias para deletar o anuncio.
+	 * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
+	 * @author Bruno Eiki
+	 * @since 17/04/2023
+	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean deleteById(Integer id) {
 		return anuncioService.deleteById(id);
 	}
-	
+
 }

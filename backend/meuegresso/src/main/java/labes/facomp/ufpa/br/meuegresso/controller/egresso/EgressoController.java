@@ -17,6 +17,8 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
@@ -35,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 public class EgressoController {
 
     private EgressoService egressoService;
-    
+
     private final ModelMapper mapper;
 
     private final JwtService jwtService;
@@ -69,13 +71,17 @@ public class EgressoController {
      *                persistir o Usuário.
      * @return {@link EgressoModel} Dados gravados no banco com a Id atualizada.
      * @author Pedro Inácio
+     * @throws UnauthorizedRequestException
      * @since 16/04/2023
      */
     @PutMapping
-    public ResponseEntity<EgressoPublicDTO> atualizarEgresso(@RequestBody EgressoPublicDTO egresso) {
-        EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
-        egressoModel = egressoService.updateEgresso(egressoModel);
-        return ResponseEntity.ok(mapper.map(egressoModel, EgressoPublicDTO.class));
+    public String atualizarEgresso(@RequestBody EgressoPublicDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
+        if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
+            EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
+            egressoService.updateEgresso(egressoModel); 
+			return ResponseType.SUCESS_UPDATE.getMessage();
+		}
+		throw new UnauthorizedRequestException();
     }
 
     /**

@@ -60,7 +60,7 @@ public class JwtService {
     }
 
     public Integer getIdUsuario(JwtAuthenticationToken jwtAuthenticationToken){
-        return Integer.parseInt(jwtAuthenticationToken.getTokenAttributes().get("userId").toString());
+        return Integer.parseInt(jwtAuthenticationToken.getTokenAttributes().get(JwtUtils.USER_ID.getPropriedade()).toString());
     }
 
     private boolean isTokenExpired(String token) {

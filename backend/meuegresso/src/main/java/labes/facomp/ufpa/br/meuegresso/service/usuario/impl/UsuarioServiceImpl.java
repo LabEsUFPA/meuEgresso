@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
@@ -55,11 +56,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return usuarioRepository.save(usuario);
 	}
 
-	public UsuarioModel update(UsuarioModel usuario) {
+	public UsuarioModel update(UsuarioModel usuario) throws InvalidRequestException {
 		if (usuario.getId() != null) {
 			return usuarioRepository.save(usuario);
+		} else {
+			throw new InvalidRequestException();
 		}
-		return null;
 	}
 
 	public boolean deleteById(Integer idUsuario) {
@@ -68,6 +70,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+		return usuarioRepository.existsByIdAndCreatedById(id, createdBy);
 	}
 
 }

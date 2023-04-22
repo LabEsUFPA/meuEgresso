@@ -11,7 +11,7 @@ import labes.facomp.ufpa.br.meuegresso.service.anuncio.AnuncioService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Interface responsável por especificar os metodos a serem implementados.
+ * Implementação.
  *
  * @author Alfredo Gabriel
  * @since 21/04/2023
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AnuncioServiceImpl implements AnuncioService {
-    
+
     private final AnuncioRepository anuncioRepository;
 
     @Override
@@ -54,6 +54,11 @@ public class AnuncioServiceImpl implements AnuncioService {
         } else {
             throw new InvalidRequestException();
         }
-    }  
-    
+    }
+
+    @Override
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return anuncioRepository.existsByIdAndCreatedById(id, createdBy);
+    }
+
 }

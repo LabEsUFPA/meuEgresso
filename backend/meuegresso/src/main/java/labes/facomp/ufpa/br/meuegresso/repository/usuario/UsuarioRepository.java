@@ -19,4 +19,6 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 	Optional<UsuarioModel> findByUsername(String username);
 
 	List<UsuarioModel> findAll();
+	
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

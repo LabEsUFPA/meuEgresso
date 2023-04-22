@@ -37,7 +37,7 @@ public class GrupoController {
 
 	/**
 	 * Endpoint responsavel por buscar um grupo de acordo com a ID.
-	 * 
+	 *
 	 * @param id - Integer que representa uma id no banco.
 	 * @return {@link GrupoDTO} Dados recuperados no banco de dados.
 	 * @author Alfredo Gabriel
@@ -51,7 +51,7 @@ public class GrupoController {
 
 	/**
 	 * Endpoint responsavel por buscar um grupo de acordo com a ID.
-	 * 
+	 *
 	 * @param grupoNome - String que representa uma nome de um Grupo.
 	 * @return {@link GrupoDTO} Dados recuperados no banco de dados.
 	 * @author Alfredo Gabriel
@@ -82,7 +82,7 @@ public class GrupoController {
 
 	/**
 	 * Endpoint responsavel por atualizar o grupo.
-	 * 
+	 *
 	 * @param grupoDTO Estrutura de dados contendo as informações necessárias para
 	 *                 atualizar o grupo.
 	 * @return {@link GrupoDTO} Dados atualizados no banco com a Id atualizada.
@@ -93,7 +93,7 @@ public class GrupoController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public GrupoDTO atualizarGrupo(@RequestBody @Valid GrupoDTO grupoDTO) throws NotFoundException {
-		if (grupoDTO.getIdGrupo() == null) {
+		if (grupoDTO.getId() == null) {
 			throw new NotFoundException();
 		} else {
 			GrupoModel grupoModel = mapper.map(grupoDTO, GrupoModel.class);

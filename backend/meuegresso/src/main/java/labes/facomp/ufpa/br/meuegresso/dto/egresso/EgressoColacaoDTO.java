@@ -4,10 +4,11 @@ import java.util.Date;
 
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModelId;
 import lombok.Data;
 
 /**
- * 
+ *
  *
  * @author João Paulo
  * @since 16/04/2023
@@ -16,8 +17,10 @@ import lombok.Data;
 @Data
 public class EgressoColacaoDTO {
 
+    private EgressoColacaoModelId id;
+
     private Date ingresso;
-    
+
     private Date conclusao;
 
     private CursoDTO curso;

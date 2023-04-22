@@ -11,7 +11,7 @@ import labes.facomp.ufpa.br.meuegresso.service.endereco.EnderecoService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Interface responsável por especificar os metodos a serem implementados.
+ * Implementação.
  *
  * @author Alfredo Gabriel
  * @since 21/04/2023
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class EnderecoServiceImpl implements EnderecoService {
-    
+
     private final EnderecoRepository enderecoRepository;
 
     @Override
@@ -54,6 +54,11 @@ public class EnderecoServiceImpl implements EnderecoService {
         } else {
             throw new InvalidRequestException();
         }
-    }  
-    
+    }
+
+    @Override
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return enderecoRepository.existsByIdAndCreatedById(id, createdBy);
+    }
+
 }

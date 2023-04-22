@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import lombok.RequiredArgsConstructor;
-
 
 /**
  * Responsável por fornecer um end-point para criar um novo empresa.
@@ -40,9 +43,12 @@ public class EmpresaController {
 
 	private final ModelMapper mapper;
 
+	private final JwtService jwtService;
+
 	/**
-	 * Endpoint responsável por retornar a lista de empresa cadastrados no banco de dados.
-	 * 
+	 * Endpoint responsável por retornar a lista de empresa cadastrados no banco de
+	 * dados.
+	 *
 	 * @return {@link EmpresaDTO} Lista de empresa cadastrados
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
@@ -53,11 +59,9 @@ public class EmpresaController {
 		}.getType());
 	}
 
-	
-
 	/**
 	 * Endpoint responsável por retornar um empresa por sua ID.
-	 * 
+	 *
 	 * @param id Integer
 	 * @return {@link EmpresaDTO} Dados gravados no banco.
 	 * @author Alfredo Gabriel, Camilo Santos
@@ -69,11 +73,11 @@ public class EmpresaController {
 		return mapper.map(empresaService.findById(id), EmpresaDTO.class);
 	}
 
-
 	/**
 	 * Endpoint responsavel por cadastrar o empresa.
 	 *
-	 * @param empresaDTO Estrutura de dados contendo as informações necessárias para persistir o empresa.
+	 * @param empresaDTO Estrutura de dados contendo as informações necessárias para
+	 *                   persistir o empresa.
 	 * @return String confirmando a transação.
 	 * @author Alfredo Gabriel
 	 * @see {@link EmpresaDTO}
@@ -89,24 +93,30 @@ public class EmpresaController {
 
 	/**
 	 * Endpoint responsavel por atualizar o empresa.
-	 * 
+	 *
 	 * @param empresaDTO Estrutura de dados contendo as informações necessárias para
 	 *                   atualizar o empresa.
 	 * @return {@link EmpresaDTO} Dados gravados no banco com a Id atualizada.
 	 * @author Alfredo Gabriel
+	 * @throws InvalidRequestException
+	 * @throws UnauthorizedRequestException
 	 * @since 21/04/2023
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public EmpresaDTO atualizarEmpresa(@RequestBody @Valid EmpresaDTO empresaDTO) {
-		EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);
-		empresaModel = empresaService.save(empresaModel);
-		return mapper.map(empresaModel, EmpresaDTO.class);
+	public String atualizarEmpresa(@RequestBody @Valid EmpresaDTO empresaDTO,
+			JwtAuthenticationToken token) throws InvalidRequestException, UnauthorizedRequestException {
+		if (empresaService.existsByIdAndCreatedById(empresaDTO.getId(), jwtService.getIdUsuario(token))) {
+			EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);
+			empresaService.update(empresaModel);
+			return ResponseType.SUCESS_UPDATE.getMessage();
+		}
+		throw new UnauthorizedRequestException();
 	}
 
 	/**
 	 * Endpoint responsável por deletar empresa por sua ID>
-	 * 
+	 *
 	 * @param id Integer
 	 * @return Boolean
 	 * @author Alfredo Gabriel
@@ -117,5 +127,5 @@ public class EmpresaController {
 	public boolean deleteById(Integer id) {
 		return empresaService.deleteById(id);
 	}
-	
+
 }

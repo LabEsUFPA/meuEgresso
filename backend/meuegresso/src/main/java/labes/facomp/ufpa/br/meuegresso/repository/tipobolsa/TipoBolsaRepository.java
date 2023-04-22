@@ -17,4 +17,6 @@ import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 public interface TipoBolsaRepository extends CrudRepository<TipoBolsaModel, Integer> {
 
     List<TipoBolsaModel> findAll();
+    
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

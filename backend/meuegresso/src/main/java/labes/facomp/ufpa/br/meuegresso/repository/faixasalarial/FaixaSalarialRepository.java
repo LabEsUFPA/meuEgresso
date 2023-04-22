@@ -15,6 +15,8 @@ import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
  * @version 1.0
  */
 public interface FaixaSalarialRepository extends CrudRepository<FaixaSalarialModel, Integer> {
-    
+
     List<FaixaSalarialModel> findAll();
+
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

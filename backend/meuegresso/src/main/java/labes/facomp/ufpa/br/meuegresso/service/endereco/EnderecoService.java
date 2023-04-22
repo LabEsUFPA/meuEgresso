@@ -32,14 +32,14 @@ public interface EnderecoService {
 
 	/**
 	 * Método responsável por encontrar todos os enderecos cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe EnderecoModel.
 	 */
 	public List<EnderecoModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um endereco cadastrado.
-	 * 
+	 *
 	 * @param endereco objeto endereco
 	 * @return
 	 */
@@ -47,9 +47,17 @@ public interface EnderecoService {
 
 	/**
 	 * Método responsável por deletar um endereco cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um endereco
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

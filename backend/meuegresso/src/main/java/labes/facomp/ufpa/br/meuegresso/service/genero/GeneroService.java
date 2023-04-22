@@ -32,14 +32,14 @@ public interface GeneroService {
 
 	/**
 	 * Método responsável por encontrar todos os generos cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe GeneroModel.
 	 */
 	public List<GeneroModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um genero cadastrado.
-	 * 
+	 *
 	 * @param genero objeto genero
 	 * @return
 	 */
@@ -47,9 +47,17 @@ public interface GeneroService {
 
 	/**
 	 * Método responsável por deletar um genero cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um genero
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

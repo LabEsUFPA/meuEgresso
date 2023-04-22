@@ -32,14 +32,14 @@ public interface EtniaService {
 
 	/**
 	 * Método responsável por encontrar todos os etnias cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe EtniaModel.
 	 */
 	public List<EtniaModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um etnia cadastrado.
-	 * 
+	 *
 	 * @param etnia objeto etnia
 	 * @return
 	 */
@@ -47,9 +47,17 @@ public interface EtniaService {
 
 	/**
 	 * Método responsável por deletar um etnia cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um etnia
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

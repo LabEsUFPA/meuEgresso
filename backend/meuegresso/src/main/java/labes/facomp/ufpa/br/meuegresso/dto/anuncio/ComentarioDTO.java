@@ -16,4 +16,7 @@ public class ComentarioDTO {
     private Integer id;
 
     private String descricao;
+
+    private Integer anuncioId;
+
 }

@@ -23,6 +23,8 @@ public enum ErrorType {
 
     DATABASE_002("Nenhuma mensagem de email do tipo %s cadastrada.", "DB-002"),
 
+    UNAUTHORIZED_TRANSACTION("Permisões insuficientes para realizar esta transação", "SECURITY-001"),
+
     USER_001("Usuário %s não existe.", "US-001");
 
     private String message;

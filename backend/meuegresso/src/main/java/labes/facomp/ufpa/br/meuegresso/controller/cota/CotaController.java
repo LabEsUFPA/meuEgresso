@@ -5,6 +5,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,9 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.cota.CotaService;
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +40,8 @@ public class CotaController {
     private final CotaService cotaService;
 
     private final ModelMapper mapper;
+
+    private final JwtService jwtService;
 
     /**
      * Endpoint responsavel por buscar todas as cotas no banco.
@@ -79,16 +84,21 @@ public class CotaController {
      *                atualizar uma cota.
      * @return {@link String} Mensagem de confirmacao.
      * @author Bruno Eiki
+     * @throws UnauthorizedRequestException
      * @since 21/04/2023
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public String atualizarCota(@RequestBody @Valid CotaDTO cotaDTO) throws InvalidRequestException {
-
-        CotaModel cotaModel = mapper.map(cotaDTO, CotaModel.class);
-        cotaService.update(cotaModel);
-        return ResponseType.SUCESS_UPDATE.getMessage();
+    public String atualizarCota(@RequestBody @Valid CotaDTO cotaDTO, JwtAuthenticationToken token)
+            throws InvalidRequestException, UnauthorizedRequestException {
+        if (cotaService.existsByIdAndCreatedById(cotaDTO.getId(), jwtService.getIdUsuario(token))) {
+            CotaModel cotaModel = mapper.map(cotaDTO, CotaModel.class);
+            cotaService.update(cotaModel);
+            return ResponseType.SUCESS_UPDATE.getMessage();
+        }
+        throw new UnauthorizedRequestException();
     }
+
 
     /**
      * Endpoint responsavel por deletar a cota.

@@ -16,4 +16,6 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
  */
 public interface CotaRepository extends CrudRepository<CotaModel, Integer> {
     public List<CotaModel> findAll();
+
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

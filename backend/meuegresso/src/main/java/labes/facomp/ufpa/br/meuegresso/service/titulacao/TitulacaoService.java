@@ -32,14 +32,14 @@ public interface TitulacaoService {
 
 	/**
 	 * Método responsável por encontrar todos os titulacaos cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe TitulacaoModel.
 	 */
 	public List<TitulacaoModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um titulacao cadastrado.
-	 * 
+	 *
 	 * @param titulacao objeto titulacao
 	 * @return
 	 */
@@ -47,9 +47,17 @@ public interface TitulacaoService {
 
 	/**
 	 * Método responsável por deletar um titulacao cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um titulacao
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

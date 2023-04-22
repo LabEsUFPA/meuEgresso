@@ -1,9 +1,10 @@
-package labes.facomp.ufpa.br.meuegresso.dto.egresso;
+package labes.facomp.ufpa.br.meuegresso.dto.trabalhopublicado;
 
 import java.util.Set;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import lombok.Data;
 
 /**

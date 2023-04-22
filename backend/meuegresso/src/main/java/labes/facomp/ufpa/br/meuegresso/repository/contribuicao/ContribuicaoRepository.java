@@ -10,4 +10,6 @@ public interface ContribuicaoRepository extends CrudRepository<ContribuicaoModel
 
     List<ContribuicaoModel> findAll();
 
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
 }

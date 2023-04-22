@@ -33,14 +33,14 @@ public interface EgressoColacaoService {
 
 	/**
 	 * Método responsável por encontrar todos os egressoColacaos cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe EgressoColacaoModel.
 	 */
 	public List<EgressoColacaoModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um egressoColacao cadastrado.
-	 * 
+	 *
 	 * @param egressoColacao objeto egressoColacao
 	 * @return
 	 */
@@ -48,9 +48,17 @@ public interface EgressoColacaoService {
 
 	/**
 	 * Método responsável por deletar um egressoColacao cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um egressoColacao
 	 */
 	public boolean deleteById(EgressoColacaoModelId id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(EgressoColacaoModelId id, Integer createdBy);
 }

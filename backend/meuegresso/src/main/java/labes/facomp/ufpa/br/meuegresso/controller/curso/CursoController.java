@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,10 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.curso.CursoService;
 import lombok.RequiredArgsConstructor;
-
 
 /**
  * Responsável por fornecer um end-point para criar um novo curso.
@@ -40,9 +42,12 @@ public class CursoController {
 
 	private final ModelMapper mapper;
 
+	private final JwtService jwtService;
+
 	/**
-	 * Endpoint responsável por retornar a lista de curso cadastrados no banco de dados.
-	 * 
+	 * Endpoint responsável por retornar a lista de curso cadastrados no banco de
+	 * dados.
+	 *
 	 * @return {@link CursoDTO} Lista de curso cadastrados
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
@@ -53,11 +58,9 @@ public class CursoController {
 		}.getType());
 	}
 
-	
-
 	/**
 	 * Endpoint responsável por retornar um curso por sua ID.
-	 * 
+	 *
 	 * @param id Integer
 	 * @return {@link CursoDTO} Dados gravados no banco.
 	 * @author Alfredo Gabriel, Camilo Santos
@@ -69,11 +72,11 @@ public class CursoController {
 		return mapper.map(cursoService.findById(id), CursoDTO.class);
 	}
 
-
 	/**
 	 * Endpoint responsavel por cadastrar o curso.
 	 *
-	 * @param cursoDTO Estrutura de dados contendo as informações necessárias para persistir o curso.
+	 * @param cursoDTO Estrutura de dados contendo as informações necessárias para
+	 *                 persistir o curso.
 	 * @return String confirmando a transação.
 	 * @author Alfredo Gabriel
 	 * @see {@link CursoDTO}
@@ -89,34 +92,38 @@ public class CursoController {
 
 	/**
 	 * Endpoint responsavel por atualizar o curso.
-	 * 
+	 *
 	 * @param cursoDTO Estrutura de dados contendo as informações necessárias para
-	 *                   atualizar o curso.
+	 *                 atualizar o curso.
 	 * @return {@link CursoDTO} Dados gravados no banco com a Id atualizada.
 	 * @author Alfredo Gabriel
+	 * @throws UnauthorizedRequestException
 	 * @since 21/04/2023
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public CursoDTO atualizarCurso(@RequestBody @Valid CursoDTO cursoDTO) {
-		CursoModel cursoModel = mapper.map(cursoDTO, CursoModel.class);
-		cursoModel = cursoService.save(cursoModel);
-		return mapper.map(cursoModel, CursoDTO.class);
+	public String atualizarCurso(@RequestBody @Valid CursoDTO cursoDTO, JwtAuthenticationToken token) throws UnauthorizedRequestException {
+		if (cursoService.existsByIdAndCreatedById(cursoDTO.getId(), jwtService.getIdUsuario(token))) {
+			CursoModel cursoModel = mapper.map(cursoDTO, CursoModel.class);
+			cursoModel = cursoService.save(cursoModel);
+			return ResponseType.SUCESS_UPDATE.getMessage();
+		}
+		throw new UnauthorizedRequestException();
 	}
 
 	/**
-     * Endpoint responsavel por deletar o curso do egresso.
-     *
-     * @param curso Estrutura de dados contendo as informações
-     *              necessárias para deletar o curso.
-     * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
-     * @author Bruno Eiki
-     * @since 17/04/2023
-     */
+	 * Endpoint responsavel por deletar o curso do egresso.
+	 *
+	 * @param curso Estrutura de dados contendo as informações
+	 *              necessárias para deletar o curso.
+	 * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
+	 * @author Bruno Eiki
+	 * @since 17/04/2023
+	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	public boolean deleteById(Integer id) {
 		return cursoService.deleteById(id);
 	}
-	
+
 }

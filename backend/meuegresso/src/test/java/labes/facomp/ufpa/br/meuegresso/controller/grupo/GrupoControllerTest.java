@@ -28,7 +28,7 @@ public class GrupoControllerTest {
 	public void testCadastrarGrupo() throws Exception {
 		GrupoDTO grupo = GrupoDTO.builder().nomeGrupo(NOME_TESTE_GRUPO).build();
 		grupo = grupoController.cadastrarGrupo(grupo);
-		assertNotNull(grupo.getIdGrupo());
+		assertNotNull(grupo.getId());
 	}
 
 	@Test
@@ -37,7 +37,7 @@ public class GrupoControllerTest {
 		Integer id = 1;
 		GrupoDTO grupo = grupoController.findById(id);
 		System.out.println(grupo);
-		assertEquals(grupo.getIdGrupo(), id);
+		assertEquals(grupo.getId(), id);
 	}
 
 	@Test

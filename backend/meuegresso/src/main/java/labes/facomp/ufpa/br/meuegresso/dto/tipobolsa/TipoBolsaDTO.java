@@ -17,5 +17,5 @@ public class TipoBolsaDTO {
     
     private String nome;
 
-    private double remuneracao;
+    private Double remuneracao;
 }

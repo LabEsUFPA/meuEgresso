@@ -10,5 +10,6 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 public interface EgressoEmpresaRepository extends CrudRepository<EgressoEmpresaModel, EgressoEmpresaModelId> {
 
     List<EgressoEmpresaModel> findAll();
-    
+
+    boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy);
 }

@@ -1,7 +1,8 @@
-package labes.facomp.ufpa.br.meuegresso.dto.egresso;
+package labes.facomp.ufpa.br.meuegresso.dto.pesquisacientifica;
 
 import java.util.Date;
 
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.tipobolsa.TipoBolsaDTO;
 import lombok.Data;
 
@@ -15,13 +16,16 @@ import lombok.Data;
  */
 @Data
 public class PesquisaCientificaDTO {
+
     private Integer id;
     
     private String nome;
     
+    private TipoBolsaDTO tipoBolsa;
+    
+    private EmpresaDTO empresa;
+
     private Date inicio;
     
     private Date fim;
-
-    private TipoBolsaDTO tipoBolsa;
 }

@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GrupoDTO {
 
-	private Integer idGrupo;
+	private Integer id;
 
 	private String nomeGrupo;
 }

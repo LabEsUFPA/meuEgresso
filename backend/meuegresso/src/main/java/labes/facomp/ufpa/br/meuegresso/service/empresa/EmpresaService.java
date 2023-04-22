@@ -32,14 +32,14 @@ public interface EmpresaService {
 
 	/**
 	 * Método responsável por encontrar todos os empresas cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe EmpresaModel.
 	 */
 	public List<EmpresaModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um empresa cadastrado.
-	 * 
+	 *
 	 * @param empresa objeto empresa
 	 * @return
 	 */
@@ -47,9 +47,17 @@ public interface EmpresaService {
 
 	/**
 	 * Método responsável por deletar um empresa cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um empresa
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

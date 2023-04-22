@@ -5,6 +5,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,9 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.titulacao.TitulacaoService;
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +33,8 @@ public class TitulacaoController {
     private final TitulacaoService titulacaoService;
 
     private final ModelMapper mapper;
+
+    private final JwtService jwtService;
 
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
@@ -50,11 +55,14 @@ public class TitulacaoController {
 
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public String atualizarTitulacao(@RequestBody @Valid TitulacaoDTO titulacaoDTO) throws InvalidRequestException {
-
-        TitulacaoModel titulacaoModel = mapper.map(titulacaoDTO, TitulacaoModel.class);
-        titulacaoService.update(titulacaoModel);
-        return ResponseType.SUCESS_UPDATE.getMessage();
+    public String atualizarTitulacao(@RequestBody @Valid TitulacaoDTO titulacaoDTO, JwtAuthenticationToken token)
+            throws InvalidRequestException, UnauthorizedRequestException {
+        if (titulacaoService.existsByIdAndCreatedById(titulacaoDTO.getId(), jwtService.getIdUsuario(token))) {
+            TitulacaoModel titulacaoModel = mapper.map(titulacaoDTO, TitulacaoModel.class);
+            titulacaoService.update(titulacaoModel);
+            return ResponseType.SUCESS_UPDATE.getMessage();
+        }
+        throw new UnauthorizedRequestException();
     }
 
     @DeleteMapping

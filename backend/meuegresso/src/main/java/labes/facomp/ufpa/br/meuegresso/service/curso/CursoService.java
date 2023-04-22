@@ -32,14 +32,14 @@ public interface CursoService {
 
 	/**
 	 * Método responsável por encontrar todos os cursos cadastrados.
-	 * 
+	 *
 	 * @return Lista de objetos da classe CursoModel.
 	 */
 	public List<CursoModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um curso cadastrado.
-	 * 
+	 *
 	 * @param curso objeto curso
 	 * @return
 	 */
@@ -47,9 +47,17 @@ public interface CursoService {
 
 	/**
 	 * Método responsável por deletar um curso cadastrado por sua ID.
-	 * 
+	 *
 	 * @param id ID de um curso
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }
