@@ -3,6 +3,7 @@ package labes.facomp.ufpa.br.meuegresso.model;
 import java.util.Date;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,9 +13,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity(name = "pesquisa_cientifica")
+@EqualsAndHashCode(callSuper = false)
 public class PesquisaCientificaModel extends Auditable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_pesquisa_cientifica", unique = true, nullable = false)

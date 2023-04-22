@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,6 +30,9 @@ public class EgressoEmpresaModel extends Auditable {
     @MapsId(value = "empresaId")
     @ManyToOne(fetch = FetchType.LAZY)
     private EmpresaModel empresa;
+
+    @Column(name = "area_atuacao", unique = false, nullable = false, length = 50)
+    private String areaAtuacao;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faixa_salarial_id", unique = false, nullable = false)

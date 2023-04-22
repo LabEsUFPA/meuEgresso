@@ -1,0 +1,122 @@
+package labes.facomp.ufpa.br.meuegresso.controller.endereco;
+
+import java.util.List;
+
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
+import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
+import labes.facomp.ufpa.br.meuegresso.service.endereco.EnderecoService;
+import lombok.RequiredArgsConstructor;
+
+
+/**
+ * Responsável por fornecer um end-point para criar um novo endereco.
+ *
+ * @author Alfredo Gabriel
+ * @since 21/04/2023
+ * @version 1.0
+ */
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/endereco")
+public class EnderecoController {
+
+	private final EnderecoService enderecoService;
+
+	private final ModelMapper mapper;
+
+	/**
+	 * Endpoint responsável por retornar a lista de endereco cadastrados no banco de dados.
+	 * 
+	 * @return {@link EnderecoDTO} Lista de endereco cadastrados
+	 * @author Alfredo Gabriel
+	 * @since 21/04/2023
+	 */
+	@GetMapping
+	public List<EnderecoDTO> consultarEnderecos() {
+		return mapper.map(enderecoService.findAll(), new TypeToken<List<EnderecoDTO>>() {
+		}.getType());
+	}
+
+	
+
+	/**
+	 * Endpoint responsável por retornar um endereco por sua ID.
+	 * 
+	 * @param id Integer
+	 * @return {@link EnderecoDTO} Dados gravados no banco.
+	 * @author Alfredo Gabriel, Camilo Santos
+	 * @since 21/04/2023
+	 */
+	@GetMapping(value = "{id}")
+	@ResponseStatus(code = HttpStatus.OK)
+	public EnderecoDTO findById(@PathVariable Integer id) {
+		return mapper.map(enderecoService.findById(id), EnderecoDTO.class);
+	}
+
+
+	/**
+	 * Endpoint responsavel por cadastrar o endereco.
+	 *
+	 * @param enderecoDTO Estrutura de dados contendo as informações necessárias para persistir o endereco.
+	 * @return String confirmando a transação.
+	 * @author Alfredo Gabriel
+	 * @see {@link EnderecoDTO}
+	 * @since 21/04/2023
+	 */
+	@PostMapping
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public String cadastrarEndereco(@RequestBody @Valid EnderecoDTO enderecoDTO) {
+		EnderecoModel enderecoModel = mapper.map(enderecoDTO, EnderecoModel.class);
+		enderecoService.save(enderecoModel);
+		return ResponseType.SUCESS_SAVE.getMessage();
+	}
+
+	/**
+	 * Endpoint responsavel por atualizar o endereco.
+	 * 
+	 * @param enderecoDTO Estrutura de dados contendo as informações necessárias para
+	 *                   atualizar o endereco.
+	 * @return {@link EnderecoDTO} Dados gravados no banco com a Id atualizada.
+	 * @author Alfredo Gabriel
+	 * @since 21/04/2023
+	 */
+	@PutMapping
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public EnderecoDTO atualizarEndereco(@RequestBody @Valid EnderecoDTO enderecoDTO) {
+		EnderecoModel enderecoModel = mapper.map(enderecoDTO, EnderecoModel.class);
+		enderecoModel = enderecoService.save(enderecoModel);
+		return mapper.map(enderecoModel, EnderecoDTO.class);
+	}
+
+	/**
+     * Endpoint responsavel por deletar o endereco do egresso.
+     *
+     * @param endereco Estrutura de dados contendo as informações
+     *                 necessárias para deletar o endereco.
+     * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 17/04/2023
+     */
+	@DeleteMapping
+	@PreAuthorize("hasRole('ADMIN')")
+	public boolean deleteById(Integer id) {
+		return enderecoService.deleteById(id);
+	}
+	
+}
