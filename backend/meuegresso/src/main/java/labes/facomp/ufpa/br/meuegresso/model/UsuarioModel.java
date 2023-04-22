@@ -49,16 +49,16 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Column(name = "id_usuario", unique = true, nullable = false)
 	private Integer id;
 
-	@Column(name = "login_usuario", unique = true, nullable = false, updatable = false, length = 100)
+	@Column(name = "login_usuario", unique = true, nullable = false, length = 30)
 	private String username;
 
-	@Column(name = "senha_usuario", nullable = false, unique = false, length = 100)
+	@Column(name = "senha_usuario", nullable = false, unique = false, length = 80)
 	private String password;
 
 	@Column(name = "email", nullable = false, unique = false, length = 50)
 	private String email;
 
-	@Column(name = "nome_usuario", nullable = false, unique = false, length = 80)
+	@Column(name = "nome_usuario", nullable = false, unique = false, length = 30)
 	private String nome;
 
 	@Temporal(TemporalType.DATE)

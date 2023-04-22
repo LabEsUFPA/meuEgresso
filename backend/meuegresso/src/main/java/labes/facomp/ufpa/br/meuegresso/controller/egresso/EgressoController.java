@@ -35,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class EgressoController {
 
     private EgressoService egressoService;
-    
+
     private final ModelMapper mapper;
 
     private final JwtService jwtService;

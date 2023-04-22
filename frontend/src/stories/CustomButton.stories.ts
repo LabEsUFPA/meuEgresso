@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from "@storybook/vue3"
 
-import CustomButton from 'src/components/CustomButton.vue'
+import CustomButton from "src/components/CustomButton.vue"
 
 const meta: Meta<typeof CustomButton> = {
-  title: 'Custom button',
+  title: "Custom button",
   component: CustomButton,
   argTypes: {
     color: {
@@ -15,26 +15,26 @@ const meta: Meta<typeof CustomButton> = {
         Emerald: 'emerald',
         White: 'white'
       },
-      control: { type: 'select' }
+      control: { type: "select" },
     },
     textClass: {
-      control: { type: 'text' },
-      defaultValue: 'text-white'
+      control: { type: "text" },
+      defaultValue: "text-white",
     },
     variant: {
       options: {
-        Standard: 'standard',
-        Outlined: 'outlined',
-        Flat: 'flat'
+        Standard: "standard",
+        Outlined: "outlined",
+        Flat: "flat",
       },
-      control: { type: 'select' }
+      control: { type: "select" },
     },
     type: {
-      options: ['submit', 'reset', 'button'],
-      control: { type: 'select' }
-    }
-  } 
-}
+      options: ["submit", "reset", "button"],
+      control: { type: "select" },
+    },
+  },
+};
 
 export default meta
 
@@ -43,7 +43,8 @@ type Story = StoryObj<typeof CustomButton>
 export const Default: Story = {
   render: () => ({
     components: { CustomButton },
-    slotcontent: 'oi',
-    template: '<CustomButton :text-class="textClass" :type="type" :variant="variant" :color="color">Botão</CustomButton>'
+    slotcontent: "oi",
+    template:
+      '<CustomButton :text-class="textClass" :type="type" :variant="variant" :color="color">Botão</CustomButton>',
   }),
 };

@@ -1,11 +1,30 @@
 <template>
-  <button
-    :class="styles"
-    @click="$emit('click')"
-    :type="type"
-  >
-    <slot />
-  </button>
+  <span>
+    <button
+      v-if="tag === 'button'"
+      :class="styles"
+      @click="$emit('click')"
+      :type="type"
+    >
+      <slot />
+    </button>
+    <RouterLink
+      v-if="tag === 'router'"
+      :to="link"
+      :class="styles"
+    >
+      <slot />
+    </RouterLink>
+    <a
+      v-if="tag === 'a'"
+      :class="styles"
+      :href="link"
+      :rel="rel"
+      :target="target"
+    >
+      <slot />
+    </a>
+  </span>
 </template>
 
 <script lang="ts" setup>
@@ -18,13 +37,21 @@ interface Props {
   textClass?: string
   color?: 'sky' | 'blue' | 'red' | 'green' | 'emerald' | 'white'
   type?: 'reset' | 'button' | 'submit'
+  tag?: 'a' | 'button' | 'router'
+  link?: string
+  rel?: string
+  target?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   variant: 'standard',
   textClass: 'text-white',
   color: 'sky',
-  type: 'button'
+  type: 'button',
+  tag: 'button',
+  link: '/',
+  rel: 'noreferrer',
+  target: '_self'
 })
 
 // objeto mapeia a props 'color' para as classes tailwind correspondentes
@@ -61,7 +88,7 @@ const colorClassNames = {
     background: {
       standard: 'bg-green-600',
       hoverLight: 'hover:bg-green-600/20',
-      hover: 'hover:bg-green-600'
+      hover: 'hover:bg-green-800'
     },
     text: 'text-green-600',
     outline: 'outline-green-600'
@@ -70,7 +97,7 @@ const colorClassNames = {
     background: {
       standard: 'bg-emerald-600',
       hoverLight: 'hover:bg-emerald-600/20',
-      hover: 'hover:bg-emerald-600'
+      hover: 'hover:bg-emerald-800'
     },
     text: 'text-emerald-600',
     outline: 'outline-emerald-600'
@@ -88,7 +115,6 @@ const colorClassNames = {
 
 const styles = computed(() => {
   const classes = ['rounded-md px-4 py-1 text-lg font-semibold hover:duration-200']
-
   switch (props.variant) {
     case 'standard':
       classes.push(colorClassNames[props.color].background.standard)

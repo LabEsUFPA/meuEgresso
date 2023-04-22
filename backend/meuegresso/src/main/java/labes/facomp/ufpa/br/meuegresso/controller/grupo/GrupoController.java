@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.controller.grupo;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +45,7 @@ public class GrupoController {
 	 * @since 19/04/2023
 	 */
 	@GetMapping(value = "{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
 	public GrupoDTO findById(@PathVariable Integer id) {
 		return mapper.map(grupoService.findById(id), GrupoDTO.class);
@@ -57,6 +59,7 @@ public class GrupoController {
 	 * @author Alfredo Gabriel
 	 * @since 19/04/2023
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(params = { "grupoNome" })
 	@ResponseStatus(code = HttpStatus.OK)
 	public GrupoDTO findByNomeGrupo(@RequestParam(required = false) String grupoNome) {
@@ -73,6 +76,7 @@ public class GrupoController {
 	 * @since 26/03/2023
 	 */
 	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public GrupoDTO cadastrarGrupo(@RequestBody @Valid GrupoDTO grupoDTO) {
 		GrupoModel grupoModel = mapper.map(grupoDTO, GrupoModel.class);
@@ -91,6 +95,7 @@ public class GrupoController {
 	 * @since 16/04/2023
 	 */
 	@PutMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public GrupoDTO atualizarGrupo(@RequestBody @Valid GrupoDTO grupoDTO) throws NotFoundException {
 		if (grupoDTO.getIdGrupo() == null) {

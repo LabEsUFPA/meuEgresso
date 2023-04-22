@@ -1,13 +1,11 @@
 package labes.facomp.ufpa.br.meuegresso.dto.usuario;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grupo.GrupoDTO;
 import lombok.Data;
@@ -29,15 +27,15 @@ public class UsuarioPublicDTO {
 	@NotBlank(message = "Infome um usuário.")
 	private String username;
 
-	@Email(message = "Informe um e-mail valido.")
+	@NotBlank(message = "Infome uma senha.")
+	private String password;
+
+	@Email(message = "Informe um e-mail válido.")
 	@NotBlank(message = "Infome um email.")
 	private String email;
 
-	@NotBlank(message = "Infome um nome.")
+	@NotBlank(message = "Informe um nome.")
 	private String nome;
-
-	@NotNull(message = "Infome uma data de nascimento.")
-	private Date nascimento;
 
 	@Valid
 	private EgressoPublicDTO egresso;
