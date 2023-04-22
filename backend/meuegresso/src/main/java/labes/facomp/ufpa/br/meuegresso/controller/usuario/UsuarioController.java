@@ -6,7 +6,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,24 +53,6 @@ public class UsuarioController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public UsuarioAuthDTO findById(JwtAuthenticationToken token) {
 		return mapper.map(usuarioService.findById(jwtService.getIdUsuario(token)), UsuarioAuthDTO.class);
-	}
-
-	/**
-	 * Endpoint responsavel por cadastrar o usuário.
-	 *
-	 * @param usuarioDTO Estrutura de dados contendo as informações necessárias para
-	 *                   persistir o Usuário.
-	 * @return String confirmando a transação.
-	 * @author Alfredo Gabriel
-	 * @see {@link UsuarioDTO}
-	 * @since 26/03/2023
-	 */
-	@PostMapping
-	@ResponseStatus(code = HttpStatus.CREATED)
-	public String cadastrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
-		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
-		usuarioService.save(usuarioModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
 	}
 
 	/**
