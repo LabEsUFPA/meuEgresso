@@ -67,7 +67,7 @@ public class AnuncioController {
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
-	@GetMapping(value = "{id}")
+	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public AnuncioDTO findById(@PathVariable Integer id) {
 		return mapper.map(anuncioService.findById(id), AnuncioDTO.class);

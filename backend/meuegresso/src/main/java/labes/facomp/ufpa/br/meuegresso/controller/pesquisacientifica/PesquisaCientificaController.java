@@ -67,7 +67,7 @@ public class PesquisaCientificaController {
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
-	@GetMapping(value = "{id}")
+	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public PesquisaCientificaDTO findById(@PathVariable Integer id) {
 		return mapper.map(pesquisaCientificaService.findById(id), PesquisaCientificaDTO.class);

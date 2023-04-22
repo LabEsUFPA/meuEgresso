@@ -1,6 +1,5 @@
-package labes.facomp.ufpa.br.meuegresso.dto.administradores.etnia;
+package labes.facomp.ufpa.br.meuegresso.dto.administradores.titulacao;
 
-import labes.facomp.ufpa.br.meuegresso.dto.administradores.AuditableDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,10 +16,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class EtniaDTO extends AuditableDTO {
+public class TitulacaoDTO {
 
     private Integer id;
 
     private String nome;
-
 }

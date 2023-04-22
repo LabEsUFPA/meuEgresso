@@ -67,7 +67,7 @@ public class DepoimentoController {
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
-	@GetMapping(value = "{id}")
+	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public DepoimentoDTO findById(@PathVariable Integer id) {
 		return mapper.map(depoimentoService.findById(id), DepoimentoDTO.class);

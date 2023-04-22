@@ -67,7 +67,7 @@ public class TrabalhoPublicadoController {
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
-	@GetMapping(value = "{id}")
+	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public TrabalhoPublicadoDTO findById(@PathVariable Integer id) {
 		return mapper.map(trabalhoPublicadoService.findById(id), TrabalhoPublicadoDTO.class);

@@ -44,7 +44,7 @@ public class GrupoController {
 	 * @author Alfredo Gabriel
 	 * @since 19/04/2023
 	 */
-	@GetMapping(value = "{id}")
+	@GetMapping(value = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
 	public GrupoDTO findById(@PathVariable Integer id) {

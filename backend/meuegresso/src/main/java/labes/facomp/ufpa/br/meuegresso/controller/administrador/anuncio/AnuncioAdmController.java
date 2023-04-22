@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.anuncio.AnuncioDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.anuncio.AnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.DataNotDeletedException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
@@ -41,20 +41,20 @@ public class AnuncioAdmController {
 	private final ModelMapper mapper;
 
 	/**
-     * Endpoint responsavel por buscar todas as anuncios no banco.
-     *
-     * @param void
-     * @return {@link AnuncioDTO} Retorna uma lista com todos as anuncios.
-     * @author Alfredo Gabriel
-     * @since 21/04/2023
-     */
-    @GetMapping
-    @ResponseStatus(code = HttpStatus.OK)
+	 * Endpoint responsavel por buscar todas as anuncios no banco.
+	 *
+	 * @param void
+	 * @return {@link AnuncioDTO} Retorna uma lista com todos as anuncios.
+	 * @author Alfredo Gabriel
+	 * @since 21/04/2023
+	 */
+	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
-    public List<AnuncioDTO> buscarAnuncios() {
-        return mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {
-        }.getType());
-    }
+	public List<AnuncioDTO> buscarAnuncios() {
+		return mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {
+		}.getType());
+	}
 
 	/**
 	 * Endpoint responsavel por cadastrar o anuncio.

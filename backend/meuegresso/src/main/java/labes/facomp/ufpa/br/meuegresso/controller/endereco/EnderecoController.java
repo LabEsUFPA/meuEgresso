@@ -67,7 +67,7 @@ public class EnderecoController {
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
-	@GetMapping(value = "{id}")
+	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public EnderecoDTO findById(@PathVariable Integer id) {
 		return mapper.map(enderecoService.findById(id), EnderecoDTO.class);

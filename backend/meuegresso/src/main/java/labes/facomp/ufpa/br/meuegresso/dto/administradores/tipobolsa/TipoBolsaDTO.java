@@ -1,13 +1,13 @@
-package labes.facomp.ufpa.br.meuegresso.dto.administradores.etnia;
+package labes.facomp.ufpa.br.meuegresso.dto.administradores.tipobolsa;
 
-import labes.facomp.ufpa.br.meuegresso.dto.administradores.AuditableDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * Encapsulamento da tabela Etnia a fim de representar os dados de auditoria.
+ * Encapsulamento da tabela Tipo Bolsa a fim de representar os dados de
+ * auditoria.
  *
  * @author Alfredo Gabriel
  * @since 22/04/2023
@@ -17,10 +17,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class EtniaDTO extends AuditableDTO {
+public class TipoBolsaDTO {
 
     private Integer id;
 
     private String nome;
 
+    private Double remuneracao;
 }

@@ -1,13 +1,13 @@
-package labes.facomp.ufpa.br.meuegresso.dto.administradores.etnia;
+package labes.facomp.ufpa.br.meuegresso.dto.administradores.faixasalarial;
 
-import labes.facomp.ufpa.br.meuegresso.dto.administradores.AuditableDTO;
+import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * Encapsulamento da tabela Etnia a fim de representar os dados de auditoria.
+ * Encapsulamento da tabela Faixa Salarial a fim de representar os dados de auditoria.
  *
  * @author Alfredo Gabriel
  * @since 22/04/2023
@@ -17,10 +17,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class EtniaDTO extends AuditableDTO {
+public class FaixaSalarialDTO extends Auditable {
 
     private Integer id;
 
-    private String nome;
-
+    private String faixa;
 }

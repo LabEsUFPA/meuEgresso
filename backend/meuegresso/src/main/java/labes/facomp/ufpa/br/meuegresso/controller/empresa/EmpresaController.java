@@ -67,7 +67,7 @@ public class EmpresaController {
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
-	@GetMapping(value = "{id}")
+	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public EmpresaDTO findById(@PathVariable Integer id) {
 		return mapper.map(empresaService.findById(id), EmpresaDTO.class);
