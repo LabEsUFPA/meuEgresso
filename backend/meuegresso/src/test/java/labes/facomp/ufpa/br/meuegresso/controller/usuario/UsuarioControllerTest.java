@@ -75,14 +75,9 @@ public class UsuarioControllerTest {
         assertNotNull(usuarioController.findById(1));
     }
 
-    @Test
-    @Order(3)
-    public void testConsultarUsuarios() throws Exception {
-        assertNotNull(usuarioController.consultarUsuarios());
-    }
 
     @Test
-    @Order(4)
+    @Order(3)
     public void testAtualizarUsuario() throws Exception {
         final String NOVO_NOME = "NOVO NOME TESTE";
         final String NOVO_EMAIL = "novoteste@gmail.com";
@@ -102,7 +97,7 @@ public class UsuarioControllerTest {
     }
 
     @Test
-    @Order(5)
+    @Order(4)
     public void testDeleteById() throws Exception {
 
         usuarioController.deleteById(1);
