@@ -111,6 +111,7 @@ public class UsuarioController {
 	 * @since 16/04/2023
 	 */
 	@PutMapping
+	@PreAuthorize("hasRole('EGRESSO') or hasRole('SECRETARIA') or hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public UsuarioAuthDTO atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);

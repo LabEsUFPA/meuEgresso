@@ -1,7 +1,9 @@
 package labes.facomp.ufpa.br.meuegresso.controller.grupo;
 
+import org.apache.logging.log4j.util.PerformanceSensitive;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +46,7 @@ public class GrupoController {
 	 * @since 19/04/2023
 	 */
 	@GetMapping(value = "{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
 	public GrupoDTO findById(@PathVariable Integer id) {
 		return mapper.map(grupoService.findById(id), GrupoDTO.class);
@@ -58,6 +61,7 @@ public class GrupoController {
 	 * @since 19/04/2023
 	 */
 	@GetMapping(params = { "grupoNome" })
+	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
 	public GrupoDTO findByNomeGrupo(@RequestParam(required = false) String grupoNome) {
 		return mapper.map(grupoService.findByNomeGrupo(grupoNome), GrupoDTO.class);
@@ -74,6 +78,7 @@ public class GrupoController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	// @PreAuthorize("hasRole('ADMIN')")
 	public GrupoDTO cadastrarGrupo(@RequestBody @Valid GrupoDTO grupoDTO) {
 		GrupoModel grupoModel = mapper.map(grupoDTO, GrupoModel.class);
 		grupoModel = grupoService.save(grupoModel);
@@ -92,6 +97,7 @@ public class GrupoController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@PreAuthorize("hasRole('ADMIN')")
 	public GrupoDTO atualizarGrupo(@RequestBody @Valid GrupoDTO grupoDTO) throws NotFoundException {
 		if (grupoDTO.getIdGrupo() == null) {
 			throw new NotFoundException();
