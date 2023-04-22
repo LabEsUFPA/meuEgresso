@@ -52,7 +52,7 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Column(name = "login_usuario", unique = true, nullable = false, length = 30)
 	private String username;
 
-	@Column(name = "senha_usuario", nullable = false, unique = false, length = 40)
+	@Column(name = "senha_usuario", nullable = false, unique = false, length = 80)
 	private String password;
 
 	@Column(name = "email", nullable = false, unique = false, length = 50)
