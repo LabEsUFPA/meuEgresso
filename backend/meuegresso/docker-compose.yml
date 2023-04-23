@@ -11,8 +11,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    volumes:
-      - ./mongoDB:/data/db
+    #volumes:
+    #  - ./mongoDB:/data/db
 
   postgres:
     container_name: postgres-meu-egresso
@@ -24,14 +24,14 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       PGDATA: /data/postgres
-    volumes:
-       - ./postgresDB:/data/postgres
+    #volumes:
+    #   - ./postgresDB:/data/postgres
     ports:
       - ${POSTGRES_EXPOSE_PORT}:5432
     restart: unless-stopped
 
   backend:
-    container_name: meu-egresso-api
+    container_name: meu-egresso-api-homol
     build:
       context: .
       dockerfile: docker/Dockerfile
@@ -45,6 +45,6 @@ services:
       - mongodb
       - postgres
 
-volumes:
-  mongo_report:
-    driver: local
+#volumes:
+#  mongo_report:
+#    driver: local

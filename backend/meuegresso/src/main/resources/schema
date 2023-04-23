@@ -40,13 +40,14 @@ CREATE  TABLE IF NOT EXISTS "public".usuario (
 	created_date         timestamp    ,
 	last_modified_date   timestamp    ,
 	email                varchar(50)  NOT NULL  ,
-	matricula_egresso    varchar(12)  NOT NULL  ,
+	matricula_usuario    varchar(12)  NOT NULL  ,
 	nome_usuario         varchar(30)  NOT NULL  ,
 	senha_usuario        varchar(80)  NOT NULL  ,
 	login_usuario        varchar(100)  NOT NULL  ,
 	created_by           integer    ,
 	last_modified_by     integer    ,
 	CONSTRAINT usuario_pkey PRIMARY KEY ( id_usuario ),
+	CONSTRAINT uk_4datilmpr40t15bnmxyve5t0y UNIQUE ( matricula_usuario ) ,
 	CONSTRAINT uk_8efax56av7vfdquauh0gyl9cx UNIQUE ( login_usuario )
  );
 
@@ -241,7 +242,6 @@ CREATE  TABLE IF NOT EXISTS "public".egresso (
 	genero_id            integer  NOT NULL  ,
 	usuario_id           integer  NOT NULL  ,
 	CONSTRAINT egresso_pkey PRIMARY KEY ( id_egresso ),
-	CONSTRAINT uk_4datilmpr40t15bnmxyve5t0y UNIQUE ( matricula_egresso ) ,
 	CONSTRAINT uk_3tmslc9ltmjdyy2mbstgpf1un UNIQUE ( usuario_id )
  );
 
