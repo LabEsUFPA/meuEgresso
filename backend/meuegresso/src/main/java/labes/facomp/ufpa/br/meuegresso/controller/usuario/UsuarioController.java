@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
@@ -51,6 +53,7 @@ public class UsuarioController {
 	 */
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public UsuarioAuthDTO findById(JwtAuthenticationToken token) {
 		return mapper.map(usuarioService.findById(jwtService.getIdUsuario(token)), UsuarioAuthDTO.class);
 	}
@@ -67,13 +70,15 @@ public class UsuarioController {
 	 * @since 16/04/2023
 	 */
 	@PutMapping
-	@PreAuthorize("hasRole('EGRESSO') or hasRole('SECRETARIA') or hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public String atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO, JwtAuthenticationToken token)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	@PreAuthorize("hasRole('EGRESSO') or hasRole('SECRETARIA') or hasRole('ADMIN')")
+	public String atualizarUsuario(
+			@RequestBody @Valid UsuarioDTO usuarioDTO, JwtAuthenticationToken token)
 			throws UnauthorizedRequestException, InvalidRequestException {
 		if (usuarioService.existsByIdAndCreatedById(usuarioDTO.getId(), jwtService.getIdUsuario(token))) {
 			UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
-			usuarioModel = usuarioService.update(usuarioModel);
+			usuarioService.update(usuarioModel);
 			return ResponseType.SUCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
@@ -89,6 +94,7 @@ public class UsuarioController {
 	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(Integer id) {
 		return usuarioService.deleteById(id);
 	}

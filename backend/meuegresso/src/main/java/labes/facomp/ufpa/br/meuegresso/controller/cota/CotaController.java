@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -53,6 +55,7 @@ public class CotaController {
      */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public List<CotaDTO> buscarCotas() {
         return mapper.map(cotaService.findAll(), new TypeToken<List<CotaDTO>>() {
         }.getType());
@@ -69,6 +72,7 @@ public class CotaController {
      */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarCota(
             @RequestBody @Valid CotaDTO cotaDTO) {
 
@@ -89,6 +93,7 @@ public class CotaController {
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarCota(@RequestBody @Valid CotaDTO cotaDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
         if (cotaService.existsByIdAndCreatedById(cotaDTO.getId(), jwtService.getIdUsuario(token))) {
@@ -111,8 +116,8 @@ public class CotaController {
      */
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarCota(@RequestBody @Valid CotaDTO cotaDTO) {
-
         CotaModel cotaModel = mapper.map(cotaDTO, CotaModel.class);
         cotaService.deleteById(cotaModel.getId());
         return ResponseType.SUCESS_DELETE.getMessage();

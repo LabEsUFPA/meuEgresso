@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -46,6 +48,7 @@ public class TitulacaoController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarTitulacao(
             @RequestBody @Valid TitulacaoDTO titulacaoDTO) {
         TitulacaoModel titulacaoModel = mapper.map(titulacaoDTO, TitulacaoModel.class);
@@ -55,6 +58,7 @@ public class TitulacaoController {
 
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarTitulacao(@RequestBody @Valid TitulacaoDTO titulacaoDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
         if (titulacaoService.existsByIdAndCreatedById(titulacaoDTO.getId(), jwtService.getIdUsuario(token))) {
@@ -67,6 +71,7 @@ public class TitulacaoController {
 
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarTitulacao(@RequestBody @Valid TitulacaoDTO titulacaoDTO) {
 
         TitulacaoModel titulacaoModel = mapper.map(titulacaoDTO, TitulacaoModel.class);

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
@@ -51,6 +53,7 @@ public class AuthenticationController {
 	 */
 	@PostMapping(value = "/login")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public AuthenticationResponse authenticationUser(
 			@RequestBody AuthenticationRequest authenticationRequest) {
 		Authentication auth = authenticationManager.authenticate(
@@ -71,6 +74,7 @@ public class AuthenticationController {
 	 */
 	@PostMapping(value = "/register")
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 		usuarioService.save(usuarioModel);

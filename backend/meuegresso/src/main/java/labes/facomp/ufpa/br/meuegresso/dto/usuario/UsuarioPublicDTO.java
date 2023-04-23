@@ -1,8 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.usuario;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -42,5 +41,5 @@ public class UsuarioPublicDTO {
 	@Valid
 	private EgressoPublicDTO egresso;
 
-	private Set<GrupoDTO> grupos = new HashSet<>();
+	private List<GrupoDTO> grupos;
 }

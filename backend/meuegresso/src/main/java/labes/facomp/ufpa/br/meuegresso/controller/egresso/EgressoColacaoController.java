@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoColacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -55,6 +57,7 @@ public class EgressoColacaoController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<EgressoColacaoDTO> consultarEgressoColacaos() {
 		return mapper.map(egressoColacaoService.findAll(), new TypeToken<List<EgressoColacaoDTO>>() {
 		}.getType());
@@ -70,6 +73,7 @@ public class EgressoColacaoController {
 	 */
 	@ResponseStatus(code = HttpStatus.OK)
 	@GetMapping(params = { "egressoId", "colacaoId" })
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoColacaoDTO findById(@RequestParam(required = false) Integer egressoId,
 			@RequestParam(required = false) Integer colacaoId) {
 		return mapper.map(
@@ -90,6 +94,7 @@ public class EgressoColacaoController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarEgressoColacao(@RequestBody @Valid EgressoColacaoDTO EgressoColacaoDTO) {
 		EgressoColacaoModel EgressoColacaoModel = mapper.map(EgressoColacaoDTO, EgressoColacaoModel.class);
 		egressoColacaoService.save(EgressoColacaoModel);
@@ -111,6 +116,7 @@ public class EgressoColacaoController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarEgressoColacao(@RequestBody @Valid EgressoColacaoDTO egressoColacaoDTO,
 	JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (egressoColacaoService.existsByIdAndCreatedById(egressoColacaoDTO.getId(), jwtService.getIdUsuario(token))) {
@@ -130,9 +136,11 @@ public class EgressoColacaoController {
      * @author Bruno Eiki
      * @since 17/04/2023
      */
-	@DeleteMapping(params = { "egressoId", "colacaoId" })
 	@PreAuthorize("hasRole('ADMIN')")
-	public boolean deleteById(@RequestParam(required = false) Integer egressoId,
+	@DeleteMapping(params = { "egressoId", "colacaoId" })
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public boolean deleteById(
+			@RequestParam(required = false) Integer egressoId,
 			@RequestParam(required = false) Integer colacaoId) {
 		return egressoColacaoService
 				.deleteById(EgressoColacaoModelId.builder().egressoId(egressoId).colacaoId(colacaoId).build());

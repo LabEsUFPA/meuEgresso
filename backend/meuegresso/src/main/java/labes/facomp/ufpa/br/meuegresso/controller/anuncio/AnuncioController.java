@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.anuncio.AnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -54,6 +56,7 @@ public class AnuncioController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<AnuncioDTO> consultarAnuncios() {
 		return mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {
 		}.getType());
@@ -69,6 +72,7 @@ public class AnuncioController {
 	 */
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public AnuncioDTO findById(@PathVariable Integer id) {
 		return mapper.map(anuncioService.findById(id), AnuncioDTO.class);
 	}
@@ -85,6 +89,7 @@ public class AnuncioController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO) {
 		AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
 		anuncioService.save(anuncioModel);
@@ -104,6 +109,7 @@ public class AnuncioController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO, JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (anuncioService.existsByIdAndCreatedById(anuncioDTO.getId(), jwtService.getIdUsuario(token))) {
 			AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
@@ -124,6 +130,7 @@ public class AnuncioController {
 	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(Integer id) {
 		return anuncioService.deleteById(id);
 	}

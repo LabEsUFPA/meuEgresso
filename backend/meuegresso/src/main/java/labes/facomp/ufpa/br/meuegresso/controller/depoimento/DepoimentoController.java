@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -54,6 +56,7 @@ public class DepoimentoController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<DepoimentoDTO> consultarDepoimentos() {
 		return mapper.map(depoimentoService.findAll(), new TypeToken<List<DepoimentoDTO>>() {
 		}.getType());
@@ -69,6 +72,7 @@ public class DepoimentoController {
 	 */
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public DepoimentoDTO findById(@PathVariable Integer id) {
 		return mapper.map(depoimentoService.findById(id), DepoimentoDTO.class);
 	}
@@ -85,6 +89,7 @@ public class DepoimentoController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarDepoimento(@RequestBody @Valid DepoimentoDTO depoimentoDTO) {
 		DepoimentoModel depoimentoModel = mapper.map(depoimentoDTO, DepoimentoModel.class);
 		depoimentoService.save(depoimentoModel);
@@ -105,6 +110,7 @@ public class DepoimentoController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarDepoimento(@RequestBody @Valid DepoimentoDTO depoimentoDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (depoimentoService.existsByIdAndCreatedById(depoimentoDTO.getId(), jwtService.getIdUsuario(token))) {
@@ -126,6 +132,7 @@ public class DepoimentoController {
 	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(Integer id) {
 		return depoimentoService.deleteById(id);
 	}

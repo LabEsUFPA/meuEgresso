@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -55,6 +57,7 @@ public class EgressoEmpresaController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<EgressoEmpresaDTO> consultarEgressoEmpresas() {
 		return mapper.map(egressoEmpresaService.findAll(), new TypeToken<List<EgressoEmpresaDTO>>() {
 		}.getType());
@@ -70,6 +73,7 @@ public class EgressoEmpresaController {
 	 */
 	@ResponseStatus(code = HttpStatus.OK)
 	@GetMapping(params = { "egressoId", "empresaId" })
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoEmpresaDTO findById(@RequestParam(required = false) Integer egressoId,
 			@RequestParam(required = false) Integer empresaId) {
 		return mapper.map(
@@ -90,6 +94,7 @@ public class EgressoEmpresaController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarEgressoEmpresa(@RequestBody @Valid EgressoEmpresaDTO egressoEmpresaDTO) {
 		EgressoEmpresaModel egressoEmpresaModel = mapper.map(egressoEmpresaDTO, EgressoEmpresaModel.class);
 		egressoEmpresaService.save(egressoEmpresaModel);
@@ -110,6 +115,7 @@ public class EgressoEmpresaController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarEgressoEmpresa(@RequestBody @Valid EgressoEmpresaDTO egressoEmpresaDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (egressoEmpresaService.existsByIdAndCreatedById(egressoEmpresaDTO.getId(), jwtService.getIdUsuario(token))) {
@@ -129,8 +135,9 @@ public class EgressoEmpresaController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping(params = { "egressoId", "empresaId" })
 	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping(params = { "egressoId", "empresaId" })
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(@RequestParam(required = false) Integer egressoId,
 			@RequestParam(required = false) Integer empresaId) {
 		return egressoEmpresaService
