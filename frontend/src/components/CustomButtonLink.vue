@@ -18,7 +18,7 @@
         alt="link"
       >
       <h1
-        class="text-sky-600 outline-sky-600 text-base font-bold mt- ml-3 mb mr-2"
+        class="text-sky-600 outline-sky-600 text-base font-bold ml-3 mr-2"
       >
         <slot>{{ label }}</slot>
       </h1>
