@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
@@ -43,6 +45,7 @@ public class EgressoController {
     private final JwtService jwtService;
 
     @PostMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<EgressoPublicDTO> cadastrarEgresso(@RequestBody EgressoPublicDTO egresso) {
         EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
         egressoModel = egressoService.adicionarEgresso(egressoModel);
@@ -59,6 +62,7 @@ public class EgressoController {
      */
     @GetMapping(value = "/endereco")
     @ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public EnderecoDTO getEndereco(JwtAuthenticationToken token) {
         EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
         return mapper.map(egressoModel.getEndereco(), EnderecoDTO.class);
@@ -75,10 +79,12 @@ public class EgressoController {
      * @since 16/04/2023
      */
     @PutMapping
-    public String atualizarEgresso(@RequestBody EgressoPublicDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public String atualizarEgresso(
+            @RequestBody EgressoPublicDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
         if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
-            egressoService.updateEgresso(egressoModel); 
+            egressoService.updateEgresso(egressoModel);
 			return ResponseType.SUCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
@@ -95,6 +101,7 @@ public class EgressoController {
      */
     @DeleteMapping
     @PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<String> deletarEgresso(@RequestBody @Valid EgressoPublicDTO egressoPublicDTO) {
         EgressoModel egressoModel = mapper.map(egressoPublicDTO, EgressoModel.class);
         return egressoService.deletarEgresso(egressoModel);

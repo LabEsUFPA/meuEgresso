@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -54,6 +56,7 @@ public class ContribuicaoController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<ContribuicaoDTO> consultarContribuicaos() {
 		return mapper.map(contribuicaoService.findAll(), new TypeToken<List<ContribuicaoDTO>>() {
 		}.getType());
@@ -69,6 +72,7 @@ public class ContribuicaoController {
 	 */
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public ContribuicaoDTO findById(@PathVariable Integer id) {
 		return mapper.map(contribuicaoService.findById(id), ContribuicaoDTO.class);
 	}
@@ -85,6 +89,7 @@ public class ContribuicaoController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO) {
 		ContribuicaoModel contribuicaoModel = mapper.map(contribuicaoDTO, ContribuicaoModel.class);
 		contribuicaoService.save(contribuicaoModel);
@@ -105,10 +110,11 @@ public class ContribuicaoController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO, JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (contribuicaoService.existsByIdAndCreatedById(contribuicaoDTO.getId(), jwtService.getIdUsuario(token))) {
 			ContribuicaoModel contribuicaoModel = mapper.map(contribuicaoDTO, ContribuicaoModel.class);
-			contribuicaoModel = contribuicaoService.update(contribuicaoModel);
+			contribuicaoService.update(contribuicaoModel);
 			return ResponseType.SUCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
@@ -125,6 +131,7 @@ public class ContribuicaoController {
 	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(Integer id) {
 		return contribuicaoService.deleteById(id);
 	}

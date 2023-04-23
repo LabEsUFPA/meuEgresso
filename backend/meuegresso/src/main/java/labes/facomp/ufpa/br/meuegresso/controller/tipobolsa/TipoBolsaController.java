@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.tipobolsa.TipoBolsaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -54,6 +56,7 @@ public class TipoBolsaController {
      */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public List<TipoBolsaDTO> buscarTipoBolsas() {
 
         return mapper.map(tipoBolsaService.findAll(), new TypeToken<List<TipoBolsaDTO>>() {
@@ -72,6 +75,7 @@ public class TipoBolsaController {
      */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarTipoBolsa(
             @RequestBody @Valid TipoBolsaDTO tipoBolsaDTO) {
         TipoBolsaModel tipoBolsaModel = mapper.map(tipoBolsaDTO, TipoBolsaModel.class);
@@ -91,6 +95,7 @@ public class TipoBolsaController {
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarTipoBolsa(@RequestBody @Valid TipoBolsaDTO tipoBolsaDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
         if (tipoBolsaService.existsByIdAndCreatedById(tipoBolsaDTO.getId(), jwtService.getIdUsuario(token))) {
@@ -113,6 +118,7 @@ public class TipoBolsaController {
      */
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarTipoBolsa(@RequestBody @Valid TipoBolsaDTO tipoBolsaDTO) {
 
         TipoBolsaModel tipoBolsaModel = mapper.map(tipoBolsaDTO, TipoBolsaModel.class);

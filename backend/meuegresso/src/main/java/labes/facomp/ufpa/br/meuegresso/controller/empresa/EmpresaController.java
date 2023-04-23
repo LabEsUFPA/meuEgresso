@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -54,6 +56,7 @@ public class EmpresaController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<EmpresaDTO> consultarEmpresas() {
 		return mapper.map(empresaService.findAll(), new TypeToken<List<EmpresaDTO>>() {
 		}.getType());
@@ -69,6 +72,7 @@ public class EmpresaController {
 	 */
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EmpresaDTO findById(@PathVariable Integer id) {
 		return mapper.map(empresaService.findById(id), EmpresaDTO.class);
 	}
@@ -85,6 +89,7 @@ public class EmpresaController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarEmpresa(@RequestBody @Valid EmpresaDTO empresaDTO) {
 		EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);
 		empresaService.save(empresaModel);
@@ -104,6 +109,7 @@ public class EmpresaController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarEmpresa(@RequestBody @Valid EmpresaDTO empresaDTO,
 			JwtAuthenticationToken token) throws InvalidRequestException, UnauthorizedRequestException {
 		if (empresaService.existsByIdAndCreatedById(empresaDTO.getId(), jwtService.getIdUsuario(token))) {
@@ -124,6 +130,7 @@ public class EmpresaController {
 	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(Integer id) {
 		return empresaService.deleteById(id);
 	}

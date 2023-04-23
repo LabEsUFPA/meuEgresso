@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.pesquisacientifica.PesquisaCientificaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -54,6 +56,7 @@ public class PesquisaCientificaController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<PesquisaCientificaDTO> consultarPesquisaCientificas() {
 		return mapper.map(pesquisaCientificaService.findAll(), new TypeToken<List<PesquisaCientificaDTO>>() {
 		}.getType());
@@ -69,6 +72,7 @@ public class PesquisaCientificaController {
 	 */
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public PesquisaCientificaDTO findById(@PathVariable Integer id) {
 		return mapper.map(pesquisaCientificaService.findById(id), PesquisaCientificaDTO.class);
 	}
@@ -85,6 +89,7 @@ public class PesquisaCientificaController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarPesquisaCientifica(@RequestBody @Valid PesquisaCientificaDTO pesquisaCientificaDTO) {
 		PesquisaCientificaModel pesquisaCientificaModel = mapper.map(pesquisaCientificaDTO,
 				PesquisaCientificaModel.class);
@@ -107,7 +112,9 @@ public class PesquisaCientificaController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public String atualizarPesquisaCientifica(@RequestBody @Valid PesquisaCientificaDTO pesquisaCientificaDTO, JwtAuthenticationToken token)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public String atualizarPesquisaCientifica(@RequestBody @Valid PesquisaCientificaDTO pesquisaCientificaDTO,
+			JwtAuthenticationToken token)
 			throws InvalidRequestException, UnauthorizedRequestException {
 		if (pesquisaCientificaService.existsByIdAndCreatedById(pesquisaCientificaDTO.getId(),
 				jwtService.getIdUsuario(token))) {
@@ -130,6 +137,7 @@ public class PesquisaCientificaController {
 	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(Integer id) {
 		return pesquisaCientificaService.deleteById(id);
 	}

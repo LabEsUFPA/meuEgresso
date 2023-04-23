@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -53,6 +55,7 @@ public class GeneroController {
      */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public List<GeneroDTO> buscarGeneros() {
 
         return mapper.map(generoService.findAll(), new TypeToken<List<GeneroDTO>>() {
@@ -70,6 +73,7 @@ public class GeneroController {
      */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarGenero(
             @RequestBody @Valid GeneroDTO generoDTO) {
         GeneroModel generoModel = mapper.map(generoDTO, GeneroModel.class);
@@ -89,11 +93,13 @@ public class GeneroController {
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public String atualizarGenero(@RequestBody @Valid GeneroDTO generoDTO, JwtAuthenticationToken token) throws InvalidRequestException, UnauthorizedRequestException {
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public String atualizarGenero(@RequestBody @Valid GeneroDTO generoDTO, JwtAuthenticationToken token)
+            throws InvalidRequestException, UnauthorizedRequestException {
         if (generoService.existsByIdAndCreatedById(generoDTO.getId(), jwtService.getIdUsuario(token))) {
-        GeneroModel generoModel = mapper.map(generoDTO, GeneroModel.class);
-        generoService.update(generoModel);
-        return ResponseType.SUCESS_UPDATE.getMessage();
+            GeneroModel generoModel = mapper.map(generoDTO, GeneroModel.class);
+            generoService.update(generoModel);
+            return ResponseType.SUCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
     }
@@ -109,6 +115,7 @@ public class GeneroController {
      */
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarGenero(@RequestBody @Valid GeneroDTO generoDTO) {
 
         GeneroModel generoModel = mapper.map(generoDTO, GeneroModel.class);

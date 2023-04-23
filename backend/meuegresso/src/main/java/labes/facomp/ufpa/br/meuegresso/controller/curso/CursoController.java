@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -53,6 +55,7 @@ public class CursoController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<CursoDTO> consultarCursos() {
 		return mapper.map(cursoService.findAll(), new TypeToken<List<CursoDTO>>() {
 		}.getType());
@@ -68,6 +71,7 @@ public class CursoController {
 	 */
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public CursoDTO findById(@PathVariable Integer id) {
 		return mapper.map(cursoService.findById(id), CursoDTO.class);
 	}
@@ -84,6 +88,7 @@ public class CursoController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarCurso(@RequestBody @Valid CursoDTO cursoDTO) {
 		CursoModel cursoModel = mapper.map(cursoDTO, CursoModel.class);
 		cursoService.save(cursoModel);
@@ -102,10 +107,11 @@ public class CursoController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarCurso(@RequestBody @Valid CursoDTO cursoDTO, JwtAuthenticationToken token) throws UnauthorizedRequestException {
 		if (cursoService.existsByIdAndCreatedById(cursoDTO.getId(), jwtService.getIdUsuario(token))) {
 			CursoModel cursoModel = mapper.map(cursoDTO, CursoModel.class);
-			cursoModel = cursoService.save(cursoModel);
+			cursoService.save(cursoModel);
 			return ResponseType.SUCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
@@ -122,6 +128,7 @@ public class CursoController {
 	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(Integer id) {
 		return cursoService.deleteById(id);
 	}

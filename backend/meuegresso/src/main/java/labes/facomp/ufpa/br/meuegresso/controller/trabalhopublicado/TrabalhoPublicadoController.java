@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.trabalhopublicado.TrabalhoPublicadoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -54,6 +56,7 @@ public class TrabalhoPublicadoController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<TrabalhoPublicadoDTO> consultarTrabalhoPublicados() {
 		return mapper.map(trabalhoPublicadoService.findAll(), new TypeToken<List<TrabalhoPublicadoDTO>>() {
 		}.getType());
@@ -69,6 +72,7 @@ public class TrabalhoPublicadoController {
 	 */
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public TrabalhoPublicadoDTO findById(@PathVariable Integer id) {
 		return mapper.map(trabalhoPublicadoService.findById(id), TrabalhoPublicadoDTO.class);
 	}
@@ -85,6 +89,7 @@ public class TrabalhoPublicadoController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarTrabalhoPublicado(@RequestBody @Valid TrabalhoPublicadoDTO trabalhoPublicadoDTO) {
 		TrabalhoPublicadoModel trabalhoPublicadoModel = mapper.map(trabalhoPublicadoDTO, TrabalhoPublicadoModel.class);
 		trabalhoPublicadoService.save(trabalhoPublicadoModel);
@@ -104,6 +109,7 @@ public class TrabalhoPublicadoController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public TrabalhoPublicadoDTO atualizarTrabalhoPublicado(
 			@RequestBody @Valid TrabalhoPublicadoDTO trabalhoPublicadoDTO, JwtAuthenticationToken token)
 			throws InvalidRequestException, UnauthorizedRequestException {
@@ -128,6 +134,7 @@ public class TrabalhoPublicadoController {
 	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(Integer id) {
 		return trabalhoPublicadoService.deleteById(id);
 	}

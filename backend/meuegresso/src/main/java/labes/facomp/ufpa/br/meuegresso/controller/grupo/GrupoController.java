@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.grupo.GrupoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
@@ -47,6 +49,7 @@ public class GrupoController {
 	@GetMapping(value = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public GrupoDTO findById(@PathVariable Integer id) {
 		return mapper.map(grupoService.findById(id), GrupoDTO.class);
 	}
@@ -62,6 +65,7 @@ public class GrupoController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(params = { "grupoNome" })
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public GrupoDTO findByNomeGrupo(@RequestParam(required = false) String grupoNome) {
 		return mapper.map(grupoService.findByNomeGrupo(grupoNome), GrupoDTO.class);
 	}
@@ -78,6 +82,7 @@ public class GrupoController {
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public GrupoDTO cadastrarGrupo(@RequestBody @Valid GrupoDTO grupoDTO) {
 		GrupoModel grupoModel = mapper.map(grupoDTO, GrupoModel.class);
 		grupoModel = grupoService.save(grupoModel);
@@ -97,6 +102,7 @@ public class GrupoController {
 	@PutMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public GrupoDTO atualizarGrupo(@RequestBody @Valid GrupoDTO grupoDTO) throws NotFoundException {
 		if (grupoDTO.getId() == null) {
 			throw new NotFoundException();

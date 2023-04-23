@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.etnia.EtniaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -53,6 +55,7 @@ public class EtniaController {
      */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public List<EtniaDTO> buscarEtnias() {
 
         return mapper.map(etniaService.findAll(), new TypeToken<List<EtniaDTO>>() {
@@ -70,6 +73,7 @@ public class EtniaController {
      */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarEtnia(
             @RequestBody @Valid EtniaDTO etniaDTO) {
         EtniaModel etniaModel = mapper.map(etniaDTO, EtniaModel.class);
@@ -89,6 +93,7 @@ public class EtniaController {
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEtnia(@RequestBody @Valid EtniaDTO etniaDTO,
             JwtAuthenticationToken token) throws InvalidRequestException, UnauthorizedRequestException {
         if (etniaService.existsByIdAndCreatedById(etniaDTO.getId(), jwtService.getIdUsuario(token))) {
@@ -110,6 +115,7 @@ public class EtniaController {
      */
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarEtnia(@RequestBody @Valid EtniaDTO etniaDTO) {
 
         EtniaModel etniaModel = mapper.map(etniaDTO, EtniaModel.class);

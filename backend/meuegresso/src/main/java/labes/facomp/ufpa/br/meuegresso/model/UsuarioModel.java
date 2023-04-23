@@ -1,9 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,8 +18,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.persistence.Transient;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
@@ -61,9 +58,8 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Column(name = "nome_usuario", nullable = false, unique = false, length = 30)
 	private String nome;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "nascimento_usuario", nullable = false, unique = false)
-	private Date nascimento;
+	@Column(name = "matricula_usuario", unique = true, nullable = false, length = 12)
+	private String matricula;
 
 	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
 	private transient EgressoModel egresso;
@@ -71,7 +67,7 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
 	@JoinTable(name = "usuario_grupo", joinColumns = { @JoinColumn(name = "id_usuario") }, inverseJoinColumns = {
 			@JoinColumn(name = "id_grupo") })
-	private Set<GrupoModel> grupos = new HashSet<>();
+	private List<GrupoModel> grupos = new ArrayList<>();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

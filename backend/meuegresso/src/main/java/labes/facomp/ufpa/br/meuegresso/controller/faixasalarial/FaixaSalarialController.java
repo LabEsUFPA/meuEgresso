@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -54,6 +56,7 @@ public class FaixaSalarialController {
      */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public List<FaixaSalarialDTO> buscarFaixaSalarials() {
 
         return mapper.map(faixaSalarialService.findAll(), new TypeToken<List<FaixaSalarialDTO>>() {
@@ -71,6 +74,7 @@ public class FaixaSalarialController {
      */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarFaixaSalarial(
             @RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO) {
         FaixaSalarialModel faixaSalarialModel = mapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
@@ -90,6 +94,7 @@ public class FaixaSalarialController {
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO,
             JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
@@ -112,6 +117,7 @@ public class FaixaSalarialController {
      */
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO) {
 
         FaixaSalarialModel faixaSalarialModel = mapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
