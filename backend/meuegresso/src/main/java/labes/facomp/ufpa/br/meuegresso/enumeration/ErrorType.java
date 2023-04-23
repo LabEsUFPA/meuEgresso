@@ -9,8 +9,6 @@ public enum ErrorType {
 
     REPORT_002("Relatório com ID = %s não encontrado.", "RP-002"),
 
-    REPORT_003("Usuario ou Senha inválida.", "RP-003"),
-
     REPORT_004("Recurso não encontrado.", "RP-004"),
 
     REPORT_005("Erro no JSON do corpo da requisição.", "RP-005"),
@@ -25,7 +23,9 @@ public enum ErrorType {
 
     UNAUTHORIZED_TRANSACTION("Permisões insuficientes para realizar esta transação", "SECURITY-001"),
 
-    USER_001("Usuário %s não existe.", "US-001");
+    USER_001("Usuário %s ja existe.", "US-001"),
+
+    USER_002("Usuario ou Senha inválida.", "US-002");
 
     private String message;
     private String internalCode;

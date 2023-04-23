@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.mail.MailException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -89,9 +90,28 @@ public class ControllerAdvise {
 	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
 	public ErrorResponse handleBadCredentialsException(BadCredentialsException ex) {
 		return ErrorResponse.builder()
-				.message(ErrorType.REPORT_003.getMessage())
+				.message(ErrorType.USER_002.getMessage())
 				.technicalMessage(ex.getLocalizedMessage())
-				.internalCode(ErrorType.REPORT_003.getInternalCode())
+				.internalCode(ErrorType.USER_002.getInternalCode())
+				.build();
+	}
+
+	/**
+	 * Caso a autenticação não seja bem sucedida, será retornado a mensagem
+	 * pre-estabelicida.
+	 *
+	 * @param ex Excessão capturada.
+	 * @return Mensagem
+	 * @author Alfredo Gabriel
+	 * @since 26/03/2023
+	 */
+	@ExceptionHandler(AuthenticationException.class)
+	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+	public ErrorResponse handleAuthenticationException(AuthenticationException ex) {
+		return ErrorResponse.builder()
+				.message(ErrorType.USER_002.getMessage())
+				.technicalMessage(ex.getLocalizedMessage())
+				.internalCode(ErrorType.USER_002.getInternalCode())
 				.build();
 	}
 
@@ -195,12 +215,11 @@ public class ControllerAdvise {
 	public ErrorResponse handleEmptyBodyRequestListException(
 			EmptyBodyRequestListException ex) {
 
-		ErrorResponse error = new ErrorResponse(
+		return new ErrorResponse(
 				ex.getMessage(),
 				ex.getLocalizedMessage(),
 				ex.getInternalCode());
 
-		return error;
 	}
 
 	/**
@@ -216,13 +235,10 @@ public class ControllerAdvise {
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	public ErrorResponse handleEmptyBodyRequestListException(
 			NameAlreadyExistsException ex) {
-
-		ErrorResponse error = new ErrorResponse(
+		return new ErrorResponse(
 				ex.getMessage(),
 				ex.getLocalizedMessage(),
 				ex.getInternalCode());
-
-		return error;
 	}
 
 	/**
@@ -254,11 +270,10 @@ public class ControllerAdvise {
 	@ExceptionHandler(DataNotSaveException.class)
 	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
 	public ErrorResponse handleDataNotSaveException(DataNotSaveException ex) {
-		ErrorResponse error = new ErrorResponse(
+		return new ErrorResponse(
 				ex.getMessage(),
 				ex.getLocalizedMessage(),
 				ex.getInternalCode());
-		return error;
 	}
 
 }

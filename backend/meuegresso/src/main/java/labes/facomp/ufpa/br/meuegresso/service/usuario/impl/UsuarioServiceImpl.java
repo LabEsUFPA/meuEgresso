@@ -42,6 +42,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
+	public boolean existsByUsername(String username) {
+		return usuarioRepository.existsByUsername(username);
+	}
+
+	@Override
 	public UsuarioModel findById(Integer idUsuario) {
 		return usuarioRepository.findById(idUsuario).orElseThrow();
 	}

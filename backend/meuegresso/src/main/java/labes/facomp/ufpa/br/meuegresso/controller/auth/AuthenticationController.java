@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.controller.auth;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +18,10 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
@@ -37,7 +41,8 @@ public class AuthenticationController {
 
 	private final AuthService authService;
 
-	private final AuthenticationManager authenticationManager;
+	@Autowired
+	AuthenticationManager authenticationManager;
 
 	private final ModelMapper mapper;
 
@@ -58,7 +63,7 @@ public class AuthenticationController {
 			@RequestBody AuthenticationRequest authenticationRequest) {
 		Authentication auth = authenticationManager.authenticate(
 				UsernamePasswordAuthenticationToken.unauthenticated(authenticationRequest.getUsername(),
-						authenticationRequest.getPassword()));
+						authenticationRequest.getPassword() ));
 		return AuthenticationResponse.builder().token(authService.authenticate(auth)).build();
 	}
 
@@ -69,13 +74,20 @@ public class AuthenticationController {
 	 *                   persistir o Usuário.
 	 * @return String confirmando a transação.
 	 * @author Alfredo Gabriel
+	 * @throws NotFoundException
+	 * @throws NameAlreadyExistsException
 	 * @see {@link UsuarioDTO}
 	 * @since 26/03/2023
 	 */
 	@PostMapping(value = "/register")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
+	public String cadastrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) throws NameAlreadyExistsException {
+		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
+			throw new NameAlreadyExistsException(
+					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),
+					ErrorType.USER_001.getInternalCode());
+		}
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 		usuarioService.save(usuarioModel);
 		return ResponseType.SUCESS_SAVE.getMessage();
