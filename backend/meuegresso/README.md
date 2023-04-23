@@ -8,10 +8,23 @@ openssl rsa -in src/main/resources/certs/private.pem -out src/main/resources/cer
 
 Crie o arquivo .env baseado no .env.example
 
+## Pre Requisitos para Usuarios Windows
+
+- Instalar o Docker Desktop
+
+
+- Instalar o WSL
+1. Abrir o PowerShell
+2. Digitar `wsl --install`
+3. Ir na MicrosftStore e instalar o Ubuntu 22.04
+4. Abrir o Ubuntu 22.04
+5. Instalar as dependencias: `sudo apt update && sudo apt install openjdk-17-jdk maven docker docker-compose`
+6. Digitar no terminal do Ubuntu: `echo export JAVA_HOME=/lib/jvm/java-17-openjdk-amd64 >> ~/.bashrc`
+
 ## Para Build
 
 1. Criar o arquivo JAR - `mvn install`
-2. Subir no docker - `docker-compose up`
+2. Subir no docker - `docker-compose up --build`
 
 # Usuarios Padrões para Testes
 
