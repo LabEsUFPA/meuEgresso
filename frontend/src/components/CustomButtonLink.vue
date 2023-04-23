@@ -1,10 +1,63 @@
 <template>
-  <a
-    v-if="url === '' "
-    :href="'' + placeholder"
-    target="_blank"
+  <div
+    v-if="mode === 'link'"
   >
-    <button
+    <a
+      v-if="url === '' "
+      :href="'' + placeholder"
+      target="_blank"
+    >
+      <button
+
+        :class="styles"
+        :type="type"
+        @click="$emit('click')"
+      >
+        <img
+          :class="classimg"
+          :src="iconPath"
+          :width="iconSize"
+          :height="iconSize"
+          alt="link"
+        >
+        <h1
+          class="text-sky-600 outline-sky-600 text-base font-bold ml-3 mr-2"
+        >
+          <slot>{{ label }}</slot>
+        </h1>
+      </button>
+    </a>
+    <a
+      v-else
+      :href="'' + url"
+      target="_blank"
+    >
+      <button
+
+        :class="styles"
+        :type="type"
+        @click="$emit('click')"
+      >
+        <img
+          :class="classimg"
+          :src="iconPath"
+          :width="iconSize"
+          :height="iconSize"
+          alt="link"
+        >
+        <h1
+          class="text-sky-600 outline-sky-600 text-base font-bold mt- ml-3 mr-2"
+        >
+          <slot>{{ label }}</slot>
+        </h1>
+      </button>
+    </a>
+  </div>
+
+  <div
+    v-if="mode === 'input'"
+  >
+    <fakeButton
 
       :class="styles"
       :type="type"
@@ -20,35 +73,10 @@
       <h1
         class="text-sky-600 outline-sky-600 text-base font-bold ml-3 mr-2"
       >
-        <slot>{{ label }}</slot>
+        <slot name="input" />
       </h1>
-    </button>
-  </a>
-  <a
-    v-else
-    :href="'' + url"
-    target="_blank"
-  >
-    <button
-
-      :class="styles"
-      :type="type"
-      @click="$emit('click')"
-    >
-      <img
-        :class="classimg"
-        :src="iconPath"
-        :width="iconSize"
-        :height="iconSize"
-        alt="link"
-      >
-      <h1
-        class="text-sky-600 outline-sky-600 text-base font-bold mt- ml-3 mr-2"
-      >
-        <slot>{{ label }}</slot>
-      </h1>
-    </button>
-  </a>
+    </fakeButton>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -76,6 +104,7 @@ interface Props {
   classimg?: string;
   placeholder?: string;
   iconSize?: string;
+  mode?: 'link' | 'input'
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -90,7 +119,8 @@ const props = withDefaults(defineProps<Props>(), {
   iconType: 'mdi',
   classimg: 'normal',
   placeholder: '',
-  iconSize: '20'
+  iconSize: '20',
+  mode: 'link'
 })
 
 // objeto mapeia a props 'color' para as classes tailwind correspondentes

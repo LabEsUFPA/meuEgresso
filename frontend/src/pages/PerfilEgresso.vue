@@ -17,43 +17,117 @@
             <ButtonEdit
               label="Editar"
               icon-path="/src/assets/edit.svg"
+              icon-path2="/src/assets/wcheck.svg"
               color="whitesky"
+              color2="emerald"
               @toggle="toggleIsInput('profileHead')"
               :is-input="!data.profileHead.isInput"
             />
           </h1>
         </div>
-        <h1 class="text-cyan-800 text-xl font-bold mt-5">
-          <!-- v-model="data.geral.nome" -->
-          <slot v-if="data.geral.nome">
-            {{ data.geral.nome }}
-          </slot>
+        <div class="head">
+          <h1 class="grid place-items-center text-cyan-800 text-xl font-bold mt-5 ">
+            <!-- v-model="data.geral.nome" -->
 
-          <slot v-else>
-            Nome Completo
-          </slot>
-        </h1>
-        <!-- v-model="data.geral.linkedin" -->
-        <div class="items-start flex justify-center mt-8 relative gap-[10px]">
-          <CustomButtonLink
-            label="Linkedin"
-            icon-path="/src/assets/linkedin-icon.svg"
-            :url="data.geral.linkedin"
-            placeholder="https://br.linkedin.com/"
-            color="whitesky"
-            variant="standard"
-            icon-size="25"
-          />
-          <CustomButtonLink
-            label="Lattes"
-            icon-path="/src/assets/lattes.svg"
-            :url="data.geral.lattes"
-            placeholder="https://lattes.cnpq.br/"
-            color="whitesky"
-            variant="standard"
-            icon-size="22"
-          />
+            <div v-if="!data.profileHead.isInput">
+              <slot v-if="data.geral.nome">
+                {{ data.geral.nome }}
+              </slot>
+
+              <slot v-else>
+                Nome Completo
+              </slot>
+            </div>
+
+            <div
+              v-else
+              class="mb-[-35px]  ml-7"
+            >
+              <CustomInput
+                class="mb-5"
+                v-model="data.geral.nome"
+                label=""
+                placeholder="Ex: Marcelle Mota"
+
+                :icon-path="mdiAccount"
+              />
+            </div>
+          </h1>
+          <!-- helper-text="Números e caracteres especiais não são permitidos" -->
+
+          <div
+            v-if="!data.profileHead.isInput"
+            class="items-start flex justify-center mt-8 relative gap-[10px]"
+          >
+            <CustomButtonLink
+              label="Linkedin"
+              icon-path="/src/assets/linkedin-icon.svg"
+              :url="data.geral.linkedin"
+              placeholder="https://br.linkedin.com/"
+              color="whitesky"
+              variant="standard"
+              icon-size="25"
+            />
+
+            <CustomButtonLink
+              label="Lattes"
+              icon-path="/src/assets/lattes.svg"
+              :url="data.geral.lattes"
+              placeholder="https://lattes.cnpq.br/"
+              color="whitesky"
+              variant="standard"
+              icon-size="22"
+            />
+          </div>
+          <div
+            v-else
+            class="items-start flex justify-center mt-8 relative gap-[10px]"
+          >
+            <CustomButtonLink
+              label="Linkedin"
+              icon-path="/src/assets/linkedin-icon.svg"
+              :url="data.geral.linkedin"
+              placeholder="https://br.linkedin.com/"
+              color="whitesky"
+              variant="standard"
+              icon-size="25"
+              mode="input"
+            >
+              <template #input>
+                <CustomInput
+                  class="mr-[-5px]"
+                  label=""
+                  input-class="w-32"
+                  :icon-path="mdiLinkVariant"
+                  v-model="data.geral.linkedin"
+                />
+              </template>
+            </CustomButtonLink>
+
+            <CustomButtonLink
+              label="Lattes"
+              icon-path="/src/assets/lattes.svg"
+              :url="data.geral.lattes"
+              placeholder="https://lattes.cnpq.br/"
+              color="whitesky"
+              variant="standard"
+              icon-size="22"
+              mode="input"
+            >
+              <template #input>
+                <CustomInput
+                  class="mr-[-5px]"
+                  input-class="w-32"
+                  label=""
+                  :icon-path="mdiLinkVariant"
+                  v-model="data.geral.lattes"
+                />
+              </template>
+            </Custombuttonlink>
+          </div>
         </div>
+
+      <!-- v-model="data.geral.linkedin" -->
       </div>
     </div>
     <!-- Head End-->
@@ -73,7 +147,9 @@
                 <ButtonEdit
                   label="Editar"
                   icon-path="/src/assets/edit.svg"
+                  icon-path2="/src/assets/wcheck.svg"
                   color="invisiblesky"
+                  color2="emerald"
                   classimg="sky-600"
                   :has-shadow="false"
                   icon-size="20"
@@ -102,8 +178,8 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  v-model="data.geral.nome"
-                  vmodel="data.geral.nome"
+                  v-model="data.geral.genero"
+                  vmodel="data.geral.genero"
                   placeholder="Masculino"
                   label="Gênero"
                   :icon-path="mdiAccount"
@@ -131,22 +207,13 @@
               </div>
 
               <div v-else>
-                <CustomInput
+                <CustomSelect
                   class="mb-5"
-                  v-model="data.geral.nome"
-                  label="Nome"
-                  placeholder="Ex: Marcelle Mota"
-                  helper-text="Números e caracteres especiais não são permitidos"
-                  :icon-path="mdiAccount"
+                  v-model="data.geral.genero"
+                  label="Genero"
+                  :options="selectOpts.genero"
+                  required
                 />
-
-                <CustomInput
-                  class="mb-5"
-                  v-model="data.geral.nascimento"
-                  label="Data de Nascimento"
-                  type="date"
-                />
-
                 <CustomInput
                   class="mb-5"
                   v-model="data.geral.email"
@@ -158,13 +225,9 @@
 
                 <CustomInput
                   class="mb-5"
-                  v-model="data.geral.linkedin"
-                  label="Linkedin"
-                />
-
-                <CustomInput
-                  v-model="data.geral.lattes"
-                  label="Curriculo Lattes"
+                  v-model="data.geral.nascimento"
+                  label="Data de Nascimento"
+                  type="date"
                 />
               </div>
             </template>
@@ -176,7 +239,9 @@
                 <ButtonEdit
                   label="Editar"
                   icon-path="/src/assets/edit.svg"
+                  icon-path2="/src/assets/wcheck.svg"
                   color="invisiblesky"
+                  color2="emerald"
                   classimg="sky-600"
                   :has-shadow="false"
                   @toggle="toggleIsInput('localizacao')"
@@ -254,6 +319,29 @@
                   class="mb-5"
                   v-model="data.localizacao.pais"
                   label="País"
+                  :options="countries"
+                  required
+                />
+
+                <CustomSelect
+                  class="mb-5"
+                  v-model="data.localizacao.estado"
+                  label="Estado"
+                  :options="states"
+                  required
+                />
+
+                <CustomSelect
+                  v-model="data.localizacao.cidade"
+                  label="Cidade"
+                  :options="cities"
+                  required
+                />
+
+                <!-- <CustomSelect
+                  class="mb-5"
+                  v-model="data.localizacao.pais"
+                  label="País"
                   :options="selectOpts.pais"
                 />
 
@@ -268,7 +356,7 @@
                   v-model="data.localizacao.cidade"
                   label="Cidade"
                   :options="selectOpts.cidade"
-                />
+                /> -->
               </div>
             </template>
           </FolderSection>
@@ -279,8 +367,9 @@
                 <ButtonEdit
                   label="Editar"
                   icon-path="/src/assets/edit.svg"
-                  url="/Perfil"
+                  icon-path2="/src/assets/wcheck.svg"
                   color="invisiblesky"
+                  color2="emerald"
                   classimg="sky-600"
                   :has-shadow="false"
                   @toggle="toggleIsInput('academico')"
@@ -316,7 +405,7 @@
                   vmodel="data.academico.matricula"
                   v-model="data.academico.matricula"
                   label="Matrícula"
-                  placeholder="Selecione"
+                  placeholder="205004940001"
                   icon-path=""
                 />
 
@@ -386,7 +475,7 @@
                   icon-path=""
                 />
 
-                <!-- <div class="mb-5 text-sm font-semibold text-cyan-600">
+              <!-- <div class="mb-5 text-sm font-semibold text-cyan-600">
                 Marque todos as opções que sejam verdadeiras abaixo:
               </div>
 
@@ -543,7 +632,9 @@
                 <ButtonEdit
                   label="Editar"
                   icon-path="/src/assets/edit.svg"
+                  icon-path2="/src/assets/wcheck.svg"
                   color="invisiblesky"
+                  color2="emerald"
                   classimg="sky-600"
                   :has-shadow="false"
                   @toggle="toggleIsInput('carreira')"
@@ -597,7 +688,7 @@
                   icon-path=""
                 />
 
-                <!-- <CustomInput
+              <!-- <CustomInput
                 class="mb-5"
                 v-model="data.carreira.faixaSalarial"
                 label="Faixa Salarial"
@@ -632,7 +723,7 @@
                   placeholder="Ex: Google"
                 />
 
-                <!-- <CustomInput
+                <CustomInput
                   class="mb-5"
                   v-model="data.carreira.faixaSalarial"
                   label="Faixa Salarial"
@@ -643,7 +734,7 @@
                   v-model="data.carreira.remuneracao"
                   label="Valor da remuneração mensal"
                   placeholder="Selecione"
-                /> -->
+                />
               </div>
             </template>
           </FolderSection>
@@ -654,7 +745,9 @@
                 <ButtonEdit
                   label="Editar"
                   icon-path="/src/assets/edit.svg"
+                  icon-path2="/src/assets/wcheck.svg"
                   color="invisiblesky"
+                  color2="emerald"
                   classimg="sky-600"
                   :has-shadow="false"
                   @toggle="toggleIsInput('adicionais')"
@@ -703,12 +796,12 @@
                   icon-path=""
                 />
 
-                <!-- <textarea
+              <!-- <textarea
             class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
             v-model="data.adicionais.experiencias"
           /> -->
 
-                <!-- <CustomCheckbox
+              <!-- <CustomCheckbox
                 v-model="data.adicionais.palestras"
                 label="Gostaria de apresentar palestras"
                 class="mb-5"
@@ -742,21 +835,21 @@
               /> -->
               </div>
               <div v-else>
-                <!-- <CustomCheckbox
-                v-model="data.adicionais.palestras"
-                label="Gostaria de apresentar palestras"
-                class="mb-5"
-              />
+                <CustomCheckbox
+                  v-model="data.adicionais.palestras"
+                  label="Gostaria de apresentar palestras"
+                  class="mb-5"
+                />
 
-              <div class="mb-5 text-sm font-semibold text-cyan-600">
-                Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
-              </div>
+                <div class="mb-5 text-sm font-semibold text-cyan-600">
+                  Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
+                </div>
 
-              <textarea
-                class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
-                v-model="data.adicionais.assuntosPalestras"
-              />
-            -->
+                <textarea
+                  class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
+                  v-model="data.adicionais.assuntosPalestras"
+                />
+
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
                   Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso:
                 </div>
@@ -780,7 +873,7 @@
           <div class="py-10 flex flex-row justify-center items-center" />
         </form>
       </div>
-      <!-- Body End-->
+    <!-- Body End-->
     </div>
   </div>
 </template>
@@ -795,6 +888,9 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomPerfilData from 'src/components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
+import { Country, State, City } from 'country-state-city'
+import { computed, ref } from 'vue'
 // import SvgIcon from '@jamescoyle/vue-icon'
 // mdiHome CEP,
 import {
@@ -807,9 +903,9 @@ import {
   mdiCake,
   mdiWeb,
   mdiMapOutline,
-  mdiMapMarkerRadius
+  mdiMapMarkerRadius,
+  mdiLinkVariant
 } from '@mdi/js'
-import { ref } from 'vue'
 // const editMode = ref({
 //    isInput:{
 //     geral:false,
@@ -822,6 +918,7 @@ const data = ref({
     nome: '',
     nascimento: '',
     email: '',
+    genero: '',
     confirmacaoEmail: '',
     linkedin: '',
     lattes: '',
@@ -875,9 +972,14 @@ const data = ref({
   }
 })
 const selectOpts = ref({
-  pais: ['Brasil', 'Espanha', 'Reino Unido', 'China'],
+  genero: ['Masculino', 'Feminino', 'Não-Binário', 'Transsexual'],
   estado: ['Pará', 'Rio Grande do Norte', 'São Paulo', 'Ceara'],
-  cidade: ['Belém', 'Ananideua', 'Natal', 'Fortaleza']
+  cidade: ['Belém', 'Ananideua', 'Natal', 'Fortaleza'],
+  tipoAluno: ['Graduação', 'Pós-graduação'],
+  tipoCota: ['Escola', 'Renda', 'Autodeclaração de Raça', 'Quilombola/Indígena'],
+  tipoBolsa: ['PIBIC', 'PROAD', 'PROEX', 'Permanência', 'Outros'],
+  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Outros'],
+  setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
 })
 
 const error = ref(false)
@@ -946,6 +1048,41 @@ function toggleIsInput (FolderLabel: string) {
   }
 }
 
+const countries = computed(() => {
+  const countries = Country.getAllCountries()
+  const filteredCountries = []
+  for (const country of countries) {
+    filteredCountries.push({
+      label: country.name,
+      value: country.isoCode
+    })
+  }
+
+  return filteredCountries
+})
+
+const states = computed(() => {
+  const states = State.getStatesOfCountry(data.value.localizacao.pais)
+  const filteredStates = []
+
+  for (const state of states) {
+    filteredStates.push({
+      label: state.name,
+      value: state.isoCode
+    })
+  }
+  return filteredStates
+})
+
+const cities = computed(() => {
+  const cities = City.getCitiesOfState(data.value.localizacao.pais, data.value.localizacao.estado)
+  const filteredCities = []
+
+  for (const city of cities) {
+    filteredCities.push(city.name)
+  }
+  return filteredCities
+})
 </script>
 <style>
 </style>

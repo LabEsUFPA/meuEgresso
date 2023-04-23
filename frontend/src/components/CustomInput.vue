@@ -11,7 +11,7 @@
       >*</sup>
     </label>
     <div
-      class="rounded-lg w-64 py-1 px-3 border grid grid-cols-8"
+      class="rounded-lg w-64 py-1 px-3 border grid grid-cols-8 "
       :class="`${focused ? 'outline-2 outline outline-sky-400' : 'border-gray-400'} ${inputClass}`"
     >
       <div class="flex flex-row text-gray-400  items-center">
@@ -30,7 +30,7 @@
         />
       </div>
       <input
-        class="focus:outline-none"
+        class="focus:outline-none bg-transparent"
         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)"
         :maxlength="maxLength"
         :minlength="minLength"
@@ -86,6 +86,7 @@ interface Props {
   minLength?: number
   imgIcon?: boolean
   step?: number | string
+  inputWidth?: string
 }
 
 withDefaults(defineProps<Props>(), {
@@ -98,7 +99,8 @@ withDefaults(defineProps<Props>(), {
   errorText: '',
   maxLength: 300,
   minLength: 1,
-  step: 1
+  step: 1,
+  inputWidth: 'w-64'
 })
 
 const focused = ref(false)
