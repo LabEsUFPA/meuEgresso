@@ -94,10 +94,9 @@ public class EgressoColacaoController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarEgressoColacao(@RequestBody @Valid EgressoColacaoDTO EgressoColacaoDTO) {
-		EgressoColacaoModel EgressoColacaoModel = mapper.map(EgressoColacaoDTO, EgressoColacaoModel.class);
-		egressoColacaoService.save(EgressoColacaoModel);
+	public String cadastrarEgressoColacao(@RequestBody @Valid EgressoColacaoDTO egressoColacaoDTO) {
+		EgressoColacaoModel egressoColacaoModel = mapper.map(egressoColacaoDTO, EgressoColacaoModel.class);
+		egressoColacaoService.save(egressoColacaoModel);
 		return ResponseType.SUCESS_SAVE.getMessage();
 	}
 
