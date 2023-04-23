@@ -14,11 +14,12 @@
           >
 
           <h1 class="mt-[5px] ml-[100px] ">
-            <CustomButtonLink
+            <ButtonEdit
               label="Editar"
               icon-path="/src/assets/edit.svg"
-              url="/Perfil"
               color="whitesky"
+              @toggle="toggleIsInput('profileHead')"
+              :is-input="!data.profileHead.isInput"
             />
           </h1>
         </div>
@@ -64,14 +65,20 @@
           <FolderSection>
             <template #EditButton>
               <h1 class="relative">
-                <CustomButtonLink
+                <!-- Tem q ser o nome do folder atual @toggle="toggleIsInput('"data.label"')"  -->
+                <!-- <ButtonEdit
+
+                  @toggle="toggleIsInput('geral')"
+                /> -->
+                <ButtonEdit
                   label="Editar"
                   icon-path="/src/assets/edit.svg"
-                  url="/Perfil"
                   color="invisiblesky"
                   classimg="sky-600"
                   :has-shadow="false"
                   icon-size="20"
+                  @toggle="toggleIsInput('geral')"
+                  :is-input="!data.geral.isInput"
                 />
               </h1>
             </template>
@@ -89,8 +96,9 @@
               </h1>
             </template>
             <template #default>
-              <div>
+              <div v-if="!data.geral.isInput">
                 <!-- Talvez problema com v-model -->
+                <!-- Add um v-if aq pro botão de ativar edição -->
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
@@ -99,7 +107,6 @@
                   placeholder="Masculino"
                   label="Gênero"
                   :icon-path="mdiAccount"
-                  :isinput="false"
                 />
 
                 <CustomPerfilData
@@ -122,19 +129,58 @@
                   :icon-path="mdiCake"
                 />
               </div>
+
+              <div v-else>
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.geral.nome"
+                  label="Nome"
+                  placeholder="Ex: Marcelle Mota"
+                  helper-text="Números e caracteres especiais não são permitidos"
+                  :icon-path="mdiAccount"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.geral.nascimento"
+                  label="Data de Nascimento"
+                  type="date"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.geral.email"
+                  label="Email"
+                  placeholder="Ex: marcelle.mota.@gov.br"
+                  helper-text="Use um email válido: hotmail, outlook, gmail, etc."
+                  :icon-path="mdiEmail"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.geral.linkedin"
+                  label="Linkedin"
+                />
+
+                <CustomInput
+                  v-model="data.geral.lattes"
+                  label="Curriculo Lattes"
+                />
+              </div>
             </template>
           </FolderSection>
 
           <FolderSection class="mt-6">
             <template #EditButton>
               <h1 class="relative">
-                <CustomButtonLink
+                <ButtonEdit
                   label="Editar"
                   icon-path="/src/assets/edit.svg"
-                  url="/Perfil"
                   color="invisiblesky"
                   classimg="sky-600"
                   :has-shadow="false"
+                  @toggle="toggleIsInput('localizacao')"
+                  :is-input="!data.localizacao.isInput"
                 />
               </h1>
             </template>
@@ -153,7 +199,7 @@
             </template>
 
             <template #default>
-              <div>
+              <div v-if="!data.localizacao.isInput">
                 <!-- <CustomPerfilData
                   type="text"
                   class="mb-5"
@@ -195,19 +241,50 @@
                   :icon-path="mdiMapMarkerRadius"
                 />
               </div>
+              <div v-else>
+                <!-- <CustomInput
+                  class="mb-5"
+                  v-model="data.localizacao.cep"
+                  label="CEP"
+                  placeholder="00000-000"
+                  mask="#####-###"
+                /> -->
+
+                <CustomSelect
+                  class="mb-5"
+                  v-model="data.localizacao.pais"
+                  label="País"
+                  :options="selectOpts.pais"
+                />
+
+                <CustomSelect
+                  class="mb-5"
+                  v-model="data.localizacao.estado"
+                  label="Estado"
+                  :options="selectOpts.estado"
+                />
+
+                <CustomSelect
+                  v-model="data.localizacao.cidade"
+                  label="Cidade"
+                  :options="selectOpts.cidade"
+                />
+              </div>
             </template>
           </FolderSection>
 
           <FolderSection class="mt-6">
             <template #EditButton>
               <h1 class="relative">
-                <CustomButtonLink
+                <ButtonEdit
                   label="Editar"
                   icon-path="/src/assets/edit.svg"
                   url="/Perfil"
                   color="invisiblesky"
                   classimg="sky-600"
                   :has-shadow="false"
+                  @toggle="toggleIsInput('academico')"
+                  :is-input="!data.academico.isInput"
                 />
               </h1>
             </template>
@@ -226,7 +303,7 @@
             </template>
 
             <template #default>
-              <div>
+              <div v-if="!data.academico.isInput">
                 <!-- class="mb-1"
             v-model="data.localizacao.cidade"
             label="Cidade"
@@ -372,19 +449,105 @@
                 placeholder="Selecione"
               /> -->
               </div>
+              <div v-else>
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.academico.matricula"
+                  label="Matrícula"
+                  placeholder="Selecione"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.academico.email"
+                  label="Email institucional"
+                  placeholder="Selecione"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.academico.tipoAluno"
+                  label="Tipo de Aluno"
+                  placeholder="Selecione"
+                />
+
+                <div class="mb-5 text-sm font-semibold text-cyan-600">
+                  Marque todos as opções que sejam verdadeiras abaixo:
+                </div>
+
+                <CustomCheckbox
+                  class="mb-5"
+                  v-model="data.academico.cotista.value"
+                  label="Cotista"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.academico.cotista.tipo"
+                  label="Tipo de Cota"
+                  placeholder="Selecione"
+                />
+
+                <CustomCheckbox
+                  class="mb-5"
+                  v-model="data.academico.bolsista.value"
+                  label="Bolsista"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.academico.bolsista.tipo"
+                  label="Tipo de Bolsa"
+                  placeholder="Selecione"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.academico.bolsista.remuneracao"
+                  label="Remuneração da bolsa"
+                  placeholder="Selecione"
+                />
+
+                <CustomCheckbox
+                  class="mb-5"
+                  v-model="data.academico.posGrad.value"
+                  label="Pós-graduação"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.academico.posGrad.tipo"
+                  label="Tipo de pós-graduação"
+                  placeholder="Selecione"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.academico.posGrad.local"
+                  label="Local da pós-graduação"
+                  placeholder="Selecione"
+                />
+
+                <CustomInput
+                  v-model="data.academico.posGrad.curso"
+                  label="Curso de pós-graduação"
+                  placeholder="Selecione"
+                />
+              </div>
             </template>
           </FolderSection>
 
           <FolderSection class="mt-6">
             <template #EditButton>
               <h1 class="relative">
-                <CustomButtonLink
+                <ButtonEdit
                   label="Editar"
                   icon-path="/src/assets/edit.svg"
-                  url="/Perfil"
                   color="invisiblesky"
                   classimg="sky-600"
                   :has-shadow="false"
+                  @toggle="toggleIsInput('carreira')"
+                  :is-input="!data.carreira.isInput"
                 />
               </h1>
             </template>
@@ -403,7 +566,7 @@
             </template>
 
             <template #default>
-              <div>
+              <div v-if="!data.carreira.isInput">
                 <CustomPerfilData
                   type="text"
                   class="mb-10"
@@ -447,19 +610,55 @@
                 placeholder="Selecione"
               /> -->
               </div>
+              <div v-else>
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.carreira.area"
+                  label="Area de Atuação"
+                  placeholder="Selecione"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.carreira.setor"
+                  label="Setor de Atuação"
+                  placeholder="Selecione"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  v-model="data.carreira.empresa"
+                  label="Empresa"
+                  placeholder="Ex: Google"
+                />
+
+                <!-- <CustomInput
+                  class="mb-5"
+                  v-model="data.carreira.faixaSalarial"
+                  label="Faixa Salarial"
+                  placeholder="Selecione"
+                />
+
+                <CustomInput
+                  v-model="data.carreira.remuneracao"
+                  label="Valor da remuneração mensal"
+                  placeholder="Selecione"
+                /> -->
+              </div>
             </template>
           </FolderSection>
 
           <FolderSection class="mt-6">
             <template #EditButton>
               <h1 class="relative">
-                <CustomButtonLink
+                <ButtonEdit
                   label="Editar"
                   icon-path="/src/assets/edit.svg"
-                  url="/Perfil"
                   color="invisiblesky"
                   classimg="sky-600"
                   :has-shadow="false"
+                  @toggle="toggleIsInput('adicionais')"
+                  :is-input="!data.adicionais.isInput"
                 />
               </h1>
             </template>
@@ -478,7 +677,7 @@
             </template>
 
             <template #default>
-              <div>
+              <div v-if="!data.adicionais.isInput">
                 <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"
@@ -542,6 +741,40 @@
                 v-model="data.adicionais.contribuicoes"
               /> -->
               </div>
+              <div v-else>
+                <!-- <CustomCheckbox
+                v-model="data.adicionais.palestras"
+                label="Gostaria de apresentar palestras"
+                class="mb-5"
+              />
+
+              <div class="mb-5 text-sm font-semibold text-cyan-600">
+                Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
+              </div>
+
+              <textarea
+                class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
+                v-model="data.adicionais.assuntosPalestras"
+              />
+            -->
+                <div class="mb-5 text-sm font-semibold text-cyan-600">
+                  Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso:
+                </div>
+
+                <textarea
+                  class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
+                  v-model="data.adicionais.experiencias"
+                />
+
+                <div class="mb-5 text-sm font-semibold text-cyan-600">
+                  Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto:
+                </div>
+
+                <textarea
+                  class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
+                  v-model="data.adicionais.contribuicoes"
+                />
+              </div>
             </template>
           </FolderSection>
           <div class="py-10 flex flex-row justify-center items-center" />
@@ -556,11 +789,12 @@
 // import ProfileHead from 'src/components/ProfileHead.vue'
 // import ProfileBodyView from 'src/components/ProfileBodyView.vue'
 import CustomButtonLink from 'src/components/CustomButtonLink.vue'
-
+import ButtonEdit from 'src/components/ButtonEdit.vue'
 import FolderSection from 'src/components/FolderSection.vue'
-
+import CustomInput from 'src/components/CustomInput.vue'
 import CustomPerfilData from 'src/components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
+import CustomSelect from 'src/components/CustomSelect.vue'
 // import SvgIcon from '@jamescoyle/vue-icon'
 // mdiHome CEP,
 import {
@@ -576,7 +810,13 @@ import {
   mdiMapMarkerRadius
 } from '@mdi/js'
 import { ref } from 'vue'
-
+// const editMode = ref({
+//    isInput:{
+//     geral:false,
+//     localizacao
+//    }
+//    }
+//   })
 const data = ref({
   geral: {
     nome: '',
@@ -584,13 +824,15 @@ const data = ref({
     email: '',
     confirmacaoEmail: '',
     linkedin: '',
-    lattes: ''
+    lattes: '',
+    isInput: false
   },
   localizacao: {
     cep: '',
     pais: '',
     estado: '',
-    cidade: ''
+    cidade: '',
+    isInput: false
   },
   academico: {
     matricula: '',
@@ -610,21 +852,32 @@ const data = ref({
       tipo: '',
       local: '',
       curso: ''
-    }
+    },
+    isInput: false
   },
   carreira: {
     area: '',
     setor: '',
     empresa: '',
     faixaSalarial: '',
-    remuneracao: ''
+    remuneracao: '',
+    isInput: false
   },
   adicionais: {
     palestras: false,
     assuntosPalestras: '',
     experiencias: '',
-    contribuicoes: ''
+    contribuicoes: '',
+    isInput: false
+  },
+  profileHead: {
+    isInput: false
   }
+})
+const selectOpts = ref({
+  pais: ['Brasil', 'Espanha', 'Reino Unido', 'China'],
+  estado: ['Pará', 'Rio Grande do Norte', 'São Paulo', 'Ceara'],
+  cidade: ['Belém', 'Ananideua', 'Natal', 'Fortaleza']
 })
 
 const error = ref(false)
@@ -670,10 +923,29 @@ const handleSubmit = ($event: Event) => {
     submitSuccess.value = true
   }
 }
-// import FolderSection from 'components/FolderSection.vue'
-// oldimport CadastroEgresso from 'src/pages/CadrastroEgresso.vue';
+function toggleIsInput (FolderLabel: string) {
+  console.log('EditMode: ' + FolderLabel)
+  switch (FolderLabel) {
+    case 'profileHead':
+      data.value.profileHead.isInput = !data.value.profileHead.isInput
+      break
+    case 'geral':
+      data.value.geral.isInput = !data.value.geral.isInput
+      break
+    case 'localizacao':
+      data.value.localizacao.isInput = !data.value.localizacao.isInput
+      break
+    case 'academico':
+      data.value.academico.isInput = !data.value.academico.isInput
+      break
+    case 'carreira':
+      data.value.carreira.isInput = !data.value.carreira.isInput
+      break
+    case 'adicionais':
+      data.value.adicionais.isInput = !data.value.adicionais.isInput
+  }
+}
 
-// import Profile from 'components/Profile.vue'
 </script>
 <style>
 </style>
