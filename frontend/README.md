@@ -1,11 +1,16 @@
 # Instruções
 
-## Rodar para desenvolvimento
+### Instalar as dependências:
 
 ```bash
 npm i # somente uma vez
+```
+
+## Rodar em modo desenvolvimento
+```bash
 npm run dev
 ```
+
 ## Storybook
 ```bash
 npm run storybook
