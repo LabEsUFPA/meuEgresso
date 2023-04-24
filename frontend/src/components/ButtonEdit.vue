@@ -1,6 +1,25 @@
 <template>
   <button
     v-if="isInput"
+    :class="sytleVersion2"
+    type="submit"
+    @click="$emit('toggle')"
+  >
+    <img
+      :class="classimg"
+      :src="iconPath2"
+      :width="30"
+      :height="30"
+    >
+    <h1
+      class="ml-3 mr-2"
+    >
+      Salvar
+    </h1>
+  </button>
+
+  <button
+    v-else
 
     :class="styles"
     :type="type"
@@ -17,34 +36,6 @@
     >
       {{ label }}
     </h1>
-  </button>
-  <button
-    v-else
-
-    :class="sytleVersion2"
-    type="submit"
-    @click="$emit('toggle')"
-  >
-    <img
-      :class="classimg"
-      :src="iconPath2"
-      :width="30"
-      :height="30"
-    >
-    <h1
-      class="ml-3 mr-2"
-    >
-      Salvar
-    </h1>
-
-    <!-- <div>
-        <CustomButton
-          color="emerald"
-          type="submit"
-        >
-          Salvar
-        </CustomButton>
-      </div> -->
   </button>
 </template>
 

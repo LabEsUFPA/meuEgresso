@@ -21,7 +21,7 @@
               color="whitesky"
               color2="emerald"
               @toggle="toggleIsInput('profileHead')"
-              :is-input="!data.profileHead.isInput"
+              :is-input="data.profileHead.isInput"
             />
           </h1>
         </div>
@@ -154,7 +154,7 @@
                   :has-shadow="false"
                   icon-size="20"
                   @toggle="toggleIsInput('geral')"
-                  :is-input="!data.geral.isInput"
+                  :is-input="data.geral.isInput"
                 />
               </h1>
             </template>
@@ -245,7 +245,7 @@
                   classimg="sky-600"
                   :has-shadow="false"
                   @toggle="toggleIsInput('localizacao')"
-                  :is-input="!data.localizacao.isInput"
+                  :is-input="data.localizacao.isInput"
                 />
               </h1>
             </template>
@@ -373,7 +373,7 @@
                   classimg="sky-600"
                   :has-shadow="false"
                   @toggle="toggleIsInput('academico')"
-                  :is-input="!data.academico.isInput"
+                  :is-input="data.academico.isInput"
                 />
               </h1>
             </template>
@@ -638,7 +638,7 @@
                   classimg="sky-600"
                   :has-shadow="false"
                   @toggle="toggleIsInput('carreira')"
-                  :is-input="!data.carreira.isInput"
+                  :is-input="data.carreira.isInput"
                 />
               </h1>
             </template>
@@ -751,7 +751,7 @@
                   classimg="sky-600"
                   :has-shadow="false"
                   @toggle="toggleIsInput('adicionais')"
-                  :is-input="!data.adicionais.isInput"
+                  :is-input="data.adicionais.isInput"
                 />
               </h1>
             </template>
