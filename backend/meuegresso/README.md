@@ -18,9 +18,9 @@ Crie o arquivo .env baseado no .env.example
 - Instalar o Docker Desktop
 
 
-3. Crie o arquivo `.env` baseado no `.env.example`.
+- Crie o arquivo `.env` baseado no `.env.example`.
 
-## Pré-requisitos para usuários Windows
+
 
 - Instalar o Docker Desktop.
 - Instalar o WSL:
