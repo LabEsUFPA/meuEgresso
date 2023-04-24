@@ -33,7 +33,7 @@
       target="_blank"
     >
       <button
-        class="styles"
+        :class="styles"
 
         :type="type"
         @click="$emit('click')"
