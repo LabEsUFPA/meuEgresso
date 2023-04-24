@@ -21,7 +21,7 @@
           alt="link"
         >
         <h1
-          class="text-sky-600 outline-sky-600 text-base font-bold ml-3 mr-2"
+          class="text-sky-600 outline-sky-600 text-base font-semibold ml-3 mr-2"
         >
           <slot>{{ label }}</slot>
         </h1>
@@ -33,8 +33,8 @@
       target="_blank"
     >
       <button
+        class="styles"
 
-        :class="styles"
         :type="type"
         @click="$emit('click')"
       >
@@ -46,7 +46,7 @@
           alt="link"
         >
         <h1
-          class="text-sky-600 outline-sky-600 text-base font-bold mt- ml-3 mr-2"
+          class="text-sky-600 outline-sky-600 text-base font-bold ml-3 mr-2"
         >
           <slot>{{ label }}</slot>
         </h1>
@@ -60,15 +60,14 @@
     <fakeButton
 
       :class="styles"
+      class="hover:bg-white/90"
       :type="type"
-      @click="$emit('click')"
     >
       <img
         :class="classimg"
         :src="iconPath"
         :width="iconSize"
         :height="iconSize"
-        alt="link"
       >
       <h1
         class="text-sky-600 outline-sky-600 text-base font-bold ml-3 mr-2"
@@ -213,6 +212,45 @@ const styles = computed(() => {
   // const classes = ['items-center rounded-lg flex ml- px-2.5 py-1 relative text-lg font-semibold hover:duration-200']
   const classes = [
     'items-center rounded-md flex px-[7px] py-[7px] relative text-lg font-semibold hover:duration-200'
+  ]
+
+  // const classes = ['items-rounded-md flex px-8 py-1.5 text-lg font-semibold hover:duration-200']
+
+  switch (props.variant) {
+    case 'standard':
+      classes.push(colorClassNames[props.color].background.standard)
+      classes.push(colorClassNames[props.color].background.hover)
+      if (props.hasShadow === true) {
+        classes.push('shadow-md')
+      }
+
+      break
+    case 'outlined':
+      classes.push(
+        `outline-2 focus:outline-4 outline ${
+          colorClassNames[props.color].outline
+        } ${
+          colorClassNames[props.color].background.hoverLight
+        } focus:outline-slate-900`
+      )
+      break
+    case 'flat':
+      classes.push(colorClassNames[props.color].background.hoverLight)
+  }
+
+  if (props.variant === 'standard') {
+    classes.push(props.textClass)
+  } else {
+    classes.push(colorClassNames[props.color].text)
+  }
+
+  return classes.join(' ')
+})
+
+const stylesV2 = computed(() => {
+  // const classes = ['items-center rounded-lg flex ml- px-2.5 py-1 relative text-lg font-semibold hover:duration-200']
+  const classes = [
+    'items-center rounded-md flex px-[7px] py-[7px] relative text-lg font-semibold'
   ]
 
   // const classes = ['items-rounded-md flex px-8 py-1.5 text-lg font-semibold hover:duration-200']

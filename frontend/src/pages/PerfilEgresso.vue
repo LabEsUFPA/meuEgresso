@@ -71,7 +71,7 @@
 
             <CustomButtonLink
               label="Lattes"
-              icon-path="/src/assets/lattes.svg"
+              icon-path="/src/assets/lattesP.svg"
               :url="data.geral.lattes"
               placeholder="https://lattes.cnpq.br/"
               color="whitesky"
@@ -97,7 +97,7 @@
                 <CustomInput
                   class="mr-[-5px]"
                   label=""
-                  input-class="w-32"
+                  input-class="w-[150px]"
                   :icon-path="mdiLinkVariant"
                   v-model="data.geral.linkedin"
                 />
@@ -106,7 +106,7 @@
 
             <CustomButtonLink
               label="Lattes"
-              icon-path="/src/assets/lattes.svg"
+              icon-path="/src/assets/lattesP.svg"
               :url="data.geral.lattes"
               placeholder="https://lattes.cnpq.br/"
               color="whitesky"
@@ -117,7 +117,7 @@
               <template #input>
                 <CustomInput
                   class="mr-[-5px]"
-                  input-class="w-32"
+                  input-class="w-[150px]"
                   label=""
                   :icon-path="mdiLinkVariant"
                   v-model="data.geral.lattes"
