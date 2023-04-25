@@ -97,7 +97,7 @@
                 <CustomInput
                   class="mr-[-5px]"
                   label=""
-                  input-class="w-[150px]"
+                  input-class="w-[150px] h-[31px] "
                   :icon-path="mdiLinkVariant"
                   v-model="data.geral.linkedin"
                 />
@@ -117,7 +117,7 @@
               <template #input>
                 <CustomInput
                   class="mr-[-5px]"
-                  input-class="w-[150px]"
+                  input-class="w-[150px] h-[31px]"
                   label=""
                   :icon-path="mdiLinkVariant"
                   v-model="data.geral.lattes"

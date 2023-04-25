@@ -12,7 +12,7 @@
       :height="30"
     >
     <h1
-      class="ml-3 mr-2"
+      class="ml-2 mr-3"
     >
       Salvar
     </h1>
