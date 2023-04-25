@@ -38,8 +38,8 @@ public class Auditable {
 	protected UsuarioModel createdBy;
 
 	@CreatedDate
-	@Column(name = "created_date", updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "created_date", updatable = false)
 	protected Date createdDate;
 
 	@LastModifiedBy
@@ -48,11 +48,11 @@ public class Auditable {
 	protected UsuarioModel lastModifiedBy;
 
 	@LastModifiedDate
-	@Column(name = "last_modified_date")
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "last_modified_date")
 	protected Date lastModifiedDate;
 
-	@Column(name = "ativo", nullable = false)
 	@ColumnDefault(value = "TRUE")
+	@Column(name = "ativo", nullable = false)
 	protected Boolean ativo = true;
 }

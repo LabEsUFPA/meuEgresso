@@ -1,5 +1,5 @@
 logging:
-  level: 
+  level:
     '[org.hibernate.stat]': debug
 
 spring:
@@ -34,3 +34,7 @@ spring:
       '[hibernate.format_sql]' : true
       '[hibernate.generate_statistics]' : true
       '[persistence.schema-generation.scripts.create-target]' : create.sql
+
+server:
+  error:
+    include-stacktrace: never

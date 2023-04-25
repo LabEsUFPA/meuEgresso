@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +16,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,12 +40,13 @@ public class EgressoModel extends Auditable {
     @JoinColumn(name = "etnia_id", nullable = false, unique = false)
     private EtniaModel etnia;
 
+    @Temporal(TemporalType.DATE)
+	@Column(name = "nascimento_usuario", nullable = false, unique = false)
+	private Date nascimento;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genero_id", nullable = false, unique = false)
     private GeneroModel genero;
-
-    @Column(name = "cotista_egresso", nullable = false, unique = false)
-    private Boolean cotista;
 
     @Column(name = "pcd_egresso", nullable = false, unique = false)
     private Boolean pcd = false;
@@ -60,14 +64,18 @@ public class EgressoModel extends Auditable {
     @JoinColumn(name = "endereco_id", unique = false, nullable = false)
     private EnderecoModel endereco;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "cota_id", unique = false, nullable = false)
+    private CotaModel cota;
+
+    @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "usuario_id", unique = true, nullable = false)
     private UsuarioModel usuario;
 
-    @OneToMany(mappedBy = "egresso", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
     private Set<DepoimentoModel> depoimentos;
 
-    @ManyToMany(mappedBy = "egressos", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "egressos", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
     private Set<TrabalhoPublicadoModel> trabalhoPublicados = new HashSet<>();
 
 }

@@ -30,6 +30,14 @@ public class GrupoServiceImpl implements GrupoService {
 		return grupoRepository.save(grupoModel);
 	}
 
+	@Override
+	public GrupoModel update(GrupoModel grupoModel) {
+		if (grupoModel.getIdGrupo() != null) {
+			return grupoRepository.save(grupoModel);
+		}
+		return null;
+	}
+
 	/**
 	 * Metodo responsavel por encontrar um determinado grupo por sua ID.
 	 *

@@ -1,14 +1,30 @@
 package labes.facomp.ufpa.br.meuegresso.controller.auth;
 
-import org.springframework.http.ResponseEntity;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
-import labes.facomp.ufpa.br.meuegresso.service.auth.AuthenticationService;
+import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
+import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
+import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
+import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -23,7 +39,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-	private final AuthenticationService authenticationService;
+	private final AuthService authService;
+
+	@Autowired
+	AuthenticationManager authenticationManager;
+
+	private final ModelMapper mapper;
+
+	private final UsuarioService usuarioService;
 
 	/**
 	 * Endpoint responsavel por autentica um determinado usuário.
@@ -34,9 +57,40 @@ public class AuthenticationController {
 	 * @since 26/03/2023
 	 */
 	@PostMapping(value = "/login")
-	public ResponseEntity<AuthenticationResponse> authenticationUser(
+	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public AuthenticationResponse authenticationUser(
 			@RequestBody AuthenticationRequest authenticationRequest) {
-		return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
+		Authentication auth = authenticationManager.authenticate(
+				UsernamePasswordAuthenticationToken.unauthenticated(authenticationRequest.getUsername(),
+						authenticationRequest.getPassword() ));
+		return AuthenticationResponse.builder().token(authService.authenticate(auth)).build();
+	}
+
+	/**
+	 * Endpoint responsavel por cadastrar o usuário.
+	 *
+	 * @param usuarioDTO Estrutura de dados contendo as informações necessárias para
+	 *                   persistir o Usuário.
+	 * @return String confirmando a transação.
+	 * @author Alfredo Gabriel
+	 * @throws NotFoundException
+	 * @throws NameAlreadyExistsException
+	 * @see {@link UsuarioDTO}
+	 * @since 26/03/2023
+	 */
+	@PostMapping(value = "/register")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public String cadastrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) throws NameAlreadyExistsException {
+		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
+			throw new NameAlreadyExistsException(
+					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),
+					ErrorType.USER_001.getInternalCode());
+		}
+		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
+		usuarioService.save(usuarioModel);
+		return ResponseType.SUCESS_SAVE.getMessage();
 	}
 
 }

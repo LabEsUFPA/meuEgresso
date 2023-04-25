@@ -1,18 +1,33 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
-import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EtniaModel;
-import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.etnia.EtniaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import lombok.Data;
 
+/**
+ *
+ *
+ * @author João Paulo, Pedro Inácio
+ * @since 16/04/2023
+ * @version 1.0
+ */
 @Data
 public class EgressoPublicDTO {
 
     private Integer id;
 
-    private EtniaModel etnia;
+    private Integer matricula;
 
-    private GeneroModel genero;
+    private EtniaDTO etnia;
+
+    @Email
+    @NotBlank(message = "Infome um email.")
+    private String email;
+
+    private GeneroDTO genero;
 
     private Boolean cotista;
 
@@ -24,6 +39,6 @@ public class EgressoPublicDTO {
 
     private String linkedin;
 
-    private EnderecoModel endereco;
+    private EnderecoDTO endereco;
 
 }

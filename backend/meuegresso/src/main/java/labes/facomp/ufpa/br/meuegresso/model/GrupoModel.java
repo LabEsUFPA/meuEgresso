@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -41,7 +40,7 @@ public class GrupoModel extends Auditable implements GrantedAuthority {
 	private String nomeGrupo;
 
 	@ManyToMany(mappedBy = "grupos", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-	private Set<UsuarioModel> usuarios = new HashSet<>();
+	private List<UsuarioModel> usuarios;
 
 	@Override
 	public String getAuthority() {
