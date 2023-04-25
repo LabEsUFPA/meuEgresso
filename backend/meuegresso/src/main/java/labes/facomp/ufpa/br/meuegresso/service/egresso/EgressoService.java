@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
@@ -12,6 +14,13 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
  * @version 1.0
  */
 public interface EgressoService {
+
+	/**
+	 * Método responsável por encontrar todos os egressoEmpresas cadastrados.
+	 *
+	 * @return Lista de objetos da classe EgressoModel.
+	 */
+	public List<EgressoModel> findAll();
 
 	public EgressoModel findByUsuarioId(Integer idUsuario);
 
@@ -57,7 +66,7 @@ public interface EgressoService {
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
-	public void deleteById(Integer id);
+	public boolean deleteById(Integer id);
 
 	/**
 	 * Método responsável por verificar se existe um determinado elemento.
