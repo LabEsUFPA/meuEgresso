@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/administrador/curso")
+@RequestMapping("/administrador/etnia")
 public class EtniaAdmController {
 
 	private final EtniaService etniaService;

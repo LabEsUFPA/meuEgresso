@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/administrador/Egresso")
+@RequestMapping("/administrador/egresso")
 public class EgressoAdmController {
 
 	private final EgressoService egressoService;

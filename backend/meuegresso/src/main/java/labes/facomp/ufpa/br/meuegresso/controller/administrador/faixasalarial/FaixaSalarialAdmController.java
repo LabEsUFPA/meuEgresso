@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/administrador/FaixaSalarial")
+@RequestMapping("/administrador/faixaSalarial")
 public class FaixaSalarialAdmController {
 
 	private final FaixaSalarialService faixaSalarialService;

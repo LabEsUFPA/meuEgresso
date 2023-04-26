@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/administrador/Titulacao")
+@RequestMapping("/administrador/titulacao")
 public class TitulacaoAdmController {
 
 	private final TitulacaoService titulacaoService;

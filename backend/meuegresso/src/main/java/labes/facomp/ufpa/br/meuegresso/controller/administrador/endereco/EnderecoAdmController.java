@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/administrador/curso")
+@RequestMapping("/administrador/endereco")
 public class EnderecoAdmController {
 
 	private final EnderecoService enderecoService;
