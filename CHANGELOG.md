@@ -153,6 +153,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - LICENSE GPLv3.
 - README contém instruções sobre como rodar o projeto local.
 
+[0.0.12]: https://github.com/LabEsUFPA/meuEgresso/compare/sprint_1...sprint_1
+[0.0.11]: https://github.com/LabEsUFPA/meuEgresso/compare/sprint_1...sprint_1
+[0.0.10]: https://github.com/LabEsUFPA/meuEgresso/compare/sprint_1...sprint_1
+[0.0.9]: https://github.com/LabEsUFPA/meuEgresso/compare/sprint_1...sprint_1
+[0.0.8]: https://github.com/LabEsUFPA/meuEgresso/compare/sprint_1...sprint_1
+[0.0.7]: https://github.com/LabEsUFPA/meuEgresso/compare/sprint_1...sprint_1
+[0.0.6]: https://github.com/LabEsUFPA/meuEgresso/compare/sprint_1...sprint_1
+[0.0.5]: https://github.com/LabEsUFPA/meuEgresso/compare/sprint_1...sprint_1
+[0.0.4]: https://github.com/LabEsUFPA/meuEgresso/compare/sprint_1...sprint_1
+[0.0.3]: https://github.com/LabEsUFPA/meuEgresso/compare/sprint_1...sprint_1
 [0.0.2]: https://github.com/LabEsUFPA/meuEgresso/compare/sprint_1...sprint_1
 [0.0.1]: https://github.com/LabEsUFPA/meuEgresso/compare/sprint_1...sprint_1
 [0.0.0]: https://github.com/LabEsUFPA/meuEgresso/compare/sprint_1...sprint_1
