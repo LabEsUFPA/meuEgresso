@@ -8,45 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [<version>] - 21-05-2023
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### Adicionado
+  
+- Configuração inicial do workflow utilizando GitHub Actions
+- SonarCloud configurado com o objetivo de detectar security
+  hotspots, code smells e code coverage(%).
 
 
 ## [<version>] - 17-05-2023
