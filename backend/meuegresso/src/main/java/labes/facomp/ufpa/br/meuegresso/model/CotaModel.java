@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "cota")
 @EqualsAndHashCode(callSuper = false)
-public class CotaModel extends Auditable{
+@Builder
+public class CotaModel extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

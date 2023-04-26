@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -29,6 +30,7 @@ import lombok.ToString;
 @Entity(name = "grupo")
 @ToString(exclude = {"usuarios"})
 @EqualsAndHashCode(callSuper = false, exclude = "usuarios")
+@Builder
 public class GrupoModel extends Auditable implements GrantedAuthority {
 
 	@Id
