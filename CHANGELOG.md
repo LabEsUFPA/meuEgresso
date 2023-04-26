@@ -8,7 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
-## [<version>] - 21-05-2023
+## [0.0.2] - 21-05-2023
+
+### Adicionado
+  
+- Estrutura básica do projeto.
+- Template para sugestões e dúvidas.
+- Propriedades do sonar
+
+
+## [0.0.1] - 21-05-2023
 
 ### Adicionado
   
@@ -17,14 +26,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   hotspots, code smells e code coverage(%).
 
 
-## [<version>] - 17-05-2023
+## [0.0.0] - 17-05-2023
 
 ### Adicionado
   
 - Repositório com a função de representar um portal de Egressos da
   Universidade Federal do Pará - UFPA.
-- Configuração inicial do projeto.
 - Este arquivo de CHANGELOG possui como objetivo listar as modifica
   ções como: bug fixes, features, secutiry hotspots, unreleased, etc.
 - LICENSE GPLv3.
 - README contém instruções sobre como rodar o projeto local.
+
+[0.0.2]: https://github.com/LabEsUFPA/meuEgresso/commit/e4eb5aeb16c9bd180b79c4aa97f3104a36e1b725
+[0.0.1]: https://github.com/LabEsUFPA/meuEgresso/commit/c950afb73d2503b66590255c6a9d040bafe07b1e
+[0.0.0]: https://github.com/LabEsUFPA/meuEgresso/commit/c950afb73d2503b66590255c6a9d040bafe07b1e
