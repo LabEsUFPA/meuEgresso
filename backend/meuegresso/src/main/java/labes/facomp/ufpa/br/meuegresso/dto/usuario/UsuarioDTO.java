@@ -1,11 +1,11 @@
 package labes.facomp.ufpa.br.meuegresso.dto.usuario;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grupo.GrupoDTO;
 import lombok.Builder;
@@ -36,7 +36,6 @@ public class UsuarioDTO {
 	@NotBlank(message = "Infome um email.")
 	private String email;
 
-	@NotNull(message = "Informe a matricula.")
 	private String matricula;
 
 	@NotBlank(message = "Infome um nome.")
@@ -45,6 +44,7 @@ public class UsuarioDTO {
 	@Valid
 	private EgressoPublicDTO egresso;
 
-	private List<GrupoDTO> grupos;
+	@Builder.Default
+	private Set<GrupoDTO> grupos = new HashSet<>();
 
 }

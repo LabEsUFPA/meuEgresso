@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.validation.Valid;
@@ -46,6 +47,6 @@ public class UsuarioDTO extends AuditableDTO {
 	@Valid
 	private EgressoDTO egresso;
 
-	private Set<GrupoDTO> grupos;
+	private Set<GrupoDTO> grupos = new HashSet<>();
 
 }

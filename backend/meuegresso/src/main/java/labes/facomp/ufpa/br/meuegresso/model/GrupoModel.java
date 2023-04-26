@@ -1,10 +1,9 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,7 +19,8 @@ import lombok.ToString;
 
 /**
  * Representação da tabela Grupo presente no banco de dados.
- * Esta tabela tem como finalidade representar os papeis/permissões de cada usuário no sistema.
+ * Esta tabela tem como finalidade representar os papeis/permissões de cada
+ * usuário no sistema.
  *
  * @author Alfredo Gabriel
  * @since 26/03/2023
@@ -28,7 +28,7 @@ import lombok.ToString;
  */
 @Data
 @Entity(name = "grupo")
-@ToString(exclude = {"usuarios"})
+@ToString(exclude = { "usuarios" })
 @EqualsAndHashCode(callSuper = false, exclude = "usuarios")
 @Builder
 public class GrupoModel extends Auditable implements GrantedAuthority {
@@ -41,8 +41,8 @@ public class GrupoModel extends Auditable implements GrantedAuthority {
 	@Column(name = "nome_grupo", unique = true, nullable = false, length = 50)
 	private String nomeGrupo;
 
-	@ManyToMany(mappedBy = "grupos", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-	private List<UsuarioModel> usuarios;
+	@ManyToMany(mappedBy = "grupos", fetch = FetchType.LAZY)
+	private Set<UsuarioModel> usuarios;
 
 	@Override
 	public String getAuthority() {
