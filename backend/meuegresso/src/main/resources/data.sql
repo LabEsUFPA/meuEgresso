@@ -1,8 +1,8 @@
 -- Grupos Padrões
 
-insert into grupo (id_grupo, ativo, created_date , last_modified_date , nome_grupo) values (1,	true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'ADMIN') ON CONFLICT DO NOTHING;
-insert into grupo (id_grupo, ativo, created_date , last_modified_date , nome_grupo) values (2,	true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'SECRETARIO') ON CONFLICT DO NOTHING;
-insert into grupo (id_grupo, ativo, created_date , last_modified_date , nome_grupo) values (3,	true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'EGRESSO') ON CONFLICT DO NOTHING;
+INSERT INTO grupo (id_grupo, ativo, created_date , last_modified_date , nome_grupo) values (1,	true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'ADMIN') ON CONFLICT DO NOTHING;
+INSERT INTO grupo (id_grupo, ativo, created_date , last_modified_date , nome_grupo) values (2,	true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'SECRETARIO') ON CONFLICT DO NOTHING;
+INSERT INTO grupo (id_grupo, ativo, created_date , last_modified_date , nome_grupo) values (3,	true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'EGRESSO') ON CONFLICT DO NOTHING;
 
 -- Usuario Padrão
 
@@ -10,6 +10,7 @@ INSERT INTO usuario (id_usuario,ativo,created_date,last_modified_date,email,nome
 
 INSERT INTO usuario (id_usuario,ativo,created_date,last_modified_date,email,nome_usuario,senha_usuario,login_usuario) VALUES (2,true,'2023-04-22 14:35:09.149','2023-04-22 14:35:09.149','secretario@secretario.com','SECRETARIO SECRETARIO','{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy','SECRETARIO') ON CONFLICT DO NOTHING;
 
+<<<<<<< HEAD
 INSERT INTO usuario (id_usuario,ativo,created_date,last_modified_date,email,nome_usuario,senha_usuario,login_usuario) VALUES (3,true,'2023-04-22 14:35:30.354','2023-04-22 14:35:30.354','egresso@egresso.com','EGRESSO EGRESSO','{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO','EGRESSO') ON CONFLICT DO NOTHING;
 
 
@@ -1134,3 +1135,8 @@ insert into egresso_valido (id_egresso_valido, nome_egresso_valido , matricula_e
 (1205,'Wilson Luiz da Silva Farias ',null,'wilsonluiz.dsf@gmail.com'),
 (1206,'Yuri Lima Cavalcante  ',null,'yurilimacavalcante@gmail.com'),
 (1207,'Yuri Santa Rosa Nassar dos Santos ',null,'yuri.nassar@gmail.com')
+=======
+INSERT INTO usuario (id_usuario,ativo,created_date,last_modified_date,email,matricula_usuario,nome_usuario,senha_usuario,login_usuario) VALUES (3,true,'2023-04-22 14:35:30.354','2023-04-22 14:35:30.354','egresso@egresso.com','9466165','EGRESSO EGRESSO','{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO','EGRESSO') ON CONFLICT DO NOTHING;
+
+INSERT INTO usuario_grupo (id_usuario, id_grupo) values (1,1), (2,2), (3,3) ON CONFLICT DO NOTHING;
+>>>>>>> develop

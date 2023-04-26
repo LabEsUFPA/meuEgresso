@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.UniqueConstraint;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +36,9 @@ public class ContribuicaoModel extends Auditable {
     private String descricao;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
-	@JoinTable(name = "egresso_contribuicao", joinColumns = { @JoinColumn(name = "id_contribuicao") }, inverseJoinColumns = {
-			@JoinColumn(name = "egresso_id") })
-	private Set<EgressoModel> egressos = new HashSet<>();
+    @JoinTable(name = "egresso_contribuicao", joinColumns = {
+            @JoinColumn(name = "id_contribuicao") }, inverseJoinColumns = {
+                    @JoinColumn(name = "egresso_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+                            "egresso_id", "id_contribuicao" }))
+    private Set<EgressoModel> egressos = new HashSet<>();
 }
