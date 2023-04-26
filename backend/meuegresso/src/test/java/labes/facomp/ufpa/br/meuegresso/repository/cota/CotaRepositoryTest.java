@@ -21,10 +21,8 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EtniaModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
-import labes.facomp.ufpa.br.meuegresso.model.TrabalhoPublicadoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 
 /**
@@ -44,13 +42,11 @@ public class CotaRepositoryTest {
     CotaRepository cotaRepository;
 
 
-    EtniaModel etnia;
     GeneroModel genero;
     EnderecoModel endereco;
     GrupoModel grupo;
     UsuarioModel usuario;
     DepoimentoModel depoimento;
-    TrabalhoPublicadoModel trabalhoPublicado;
     EgressoModel egresso;
 
     CotaModel testCota;
