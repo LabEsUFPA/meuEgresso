@@ -1,0 +1,15 @@
+name: build_vue
+on:
+  push:
+    branches:
+      - main
+      - develop
+jobs:
+  build_vue:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build and Deploy
+      uses: myorg/myrepo@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
