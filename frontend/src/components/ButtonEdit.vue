@@ -42,7 +42,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 // import CustomButton from './CustomButton.vue'
-defineEmits(['toggle', 'localToggle'])
+defineEmits(['toggle', 'localToggle', 'click'])
 
 interface Props {
   isInput: boolean
@@ -185,6 +185,10 @@ const colorClassNames = {
     text: 'text-sky-600',
     outline: 'outline-sky-600'
   }
+}
+function handleClick () {
+  $emit('toggle')
+  $emit('click')
 }
 const sytleVersion2 = computed(() => {
   // const classesV2 = [

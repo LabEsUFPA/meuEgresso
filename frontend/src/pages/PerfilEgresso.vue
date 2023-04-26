@@ -21,17 +21,17 @@
               color="whitesky"
               color2="emerald"
               @toggle="toggleIsInput('profileHead')"
-              :is-input="data.profileHead.isInput"
+              :is-input="dataEgresso.profileHead.isInput"
             />
           </h1>
         </div>
         <div class="head">
           <h1 class="grid place-items-center text-cyan-800 text-xl font-bold mt-5 ">
-            <!-- v-model="data.geral.nome" -->
+            <!-- v-model="dataEgresso.geral.nome" -->
 
-            <div v-if="!data.profileHead.isInput">
-              <slot v-if="data.geral.nome">
-                {{ data.geral.nome }}
+            <div v-if="!dataEgresso.profileHead.isInput">
+              <slot v-if="dataEgresso.geral.nome">
+                {{ dataEgresso.geral.nome }}
               </slot>
 
               <slot v-else>
@@ -45,7 +45,7 @@
             >
               <CustomInput
                 class="mb-5"
-                v-model="data.geral.nome"
+                v-model="dataEgresso.geral.nome"
                 label=""
                 placeholder="Ex: Marcelle Mota"
 
@@ -56,13 +56,13 @@
           <!-- helper-text="Números e caracteres especiais não são permitidos" -->
 
           <div
-            v-if="!data.profileHead.isInput"
+            v-if="!dataEgresso.profileHead.isInput"
             class="items-start flex justify-center mt-8 relative gap-[10px]"
           >
             <CustomButtonLink
               label="Linkedin"
               icon-path="/src/assets/linkedin-icon.svg"
-              :url="data.geral.linkedin"
+              :url="dataEgresso.geral.linkedin"
               placeholder="https://br.linkedin.com/"
               color="whitesky"
               variant="standard"
@@ -72,7 +72,7 @@
             <CustomButtonLink
               label="Lattes"
               icon-path="/src/assets/lattesP.svg"
-              :url="data.geral.lattes"
+              :url="dataEgresso.geral.lattes"
               placeholder="https://lattes.cnpq.br/"
               color="whitesky"
               variant="standard"
@@ -86,7 +86,7 @@
             <CustomButtonLink
               label="Linkedin"
               icon-path="/src/assets/linkedin-icon.svg"
-              :url="data.geral.linkedin"
+              :url="dataEgresso.geral.linkedin"
               placeholder="https://br.linkedin.com/"
               color="whitesky"
               variant="standard"
@@ -99,7 +99,7 @@
                   label=""
                   input-class="w-[150px] h-[31px] "
                   :icon-path="mdiLinkVariant"
-                  v-model="data.geral.linkedin"
+                  v-model="dataEgresso.geral.linkedin"
                 />
               </template>
             </CustomButtonLink>
@@ -107,7 +107,7 @@
             <CustomButtonLink
               label="Lattes"
               icon-path="/src/assets/lattesP.svg"
-              :url="data.geral.lattes"
+              :url="dataEgresso.geral.lattes"
               placeholder="https://lattes.cnpq.br/"
               color="whitesky"
               variant="standard"
@@ -120,14 +120,14 @@
                   input-class="w-[150px] h-[31px]"
                   label=""
                   :icon-path="mdiLinkVariant"
-                  v-model="data.geral.lattes"
+                  v-model="dataEgresso.geral.lattes"
                 />
               </template>
             </Custombuttonlink>
           </div>
         </div>
 
-      <!-- v-model="data.geral.linkedin" -->
+      <!-- v-model="dataEgresso.geral.linkedin" -->
       </div>
     </div>
     <!-- Head End-->
@@ -135,15 +135,16 @@
       <!-- <ProfileBodyView /> -->
       <!-- Body Start -->
       <div class="container mx-auto p-3 pb-0">
-        <form @submit="handleSubmit($event)">
+        <form @submit.prevent="handleSubmit($event)">
           <FolderSection>
             <template #EditButton>
               <h1 class="relative">
-                <!-- Tem q ser o nome do folder atual @toggle="toggleIsInput('"data.label"')"  -->
+                <!-- Tem q ser o nome do folder atual @toggle="toggleIsInput('"dataEgresso.label"')"  -->
                 <!-- <ButtonEdit
 
                   @toggle="toggleIsInput('geral')"
                 /> -->
+
                 <ButtonEdit
                   label="Editar"
                   icon-path="/src/assets/edit.svg"
@@ -154,7 +155,7 @@
                   :has-shadow="false"
                   icon-size="20"
                   @toggle="toggleIsInput('geral')"
-                  :is-input="data.geral.isInput"
+                  :is-input="dataEgresso.geral.isInput"
                 />
               </h1>
             </template>
@@ -172,14 +173,14 @@
               </h1>
             </template>
             <template #default>
-              <div v-if="!data.geral.isInput">
+              <div v-if="!dataEgresso.geral.isInput">
                 <!-- Talvez problema com v-model -->
                 <!-- Add um v-if aq pro botão de ativar edição -->
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  v-model="data.geral.genero"
-                  vmodel="data.geral.genero"
+                  v-model="dataEgresso.geral.genero"
+                  vmodel="dataEgresso.geral.genero"
                   placeholder="Masculino"
                   label="Gênero"
                   :icon-path="mdiAccount"
@@ -188,8 +189,8 @@
                 <CustomPerfilData
                   type="email"
                   class="mb-6"
-                  v-model="data.geral.email"
-                  vmodel="data.geral.email"
+                  v-model="dataEgresso.geral.email"
+                  vmodel="dataEgresso.geral.email"
                   label="Email"
                   placeholder="marcele@email.com"
                   :icon-path="mdiEmail"
@@ -198,9 +199,9 @@
                 <CustomPerfilData
                   type="date"
                   class="mb-1"
-                  v-model="data.geral.nascimento"
-                  vmodel="data.geral.nascimento"
-                  label="Data Nascimento"
+                  v-model="dataEgresso.geral.nascimento"
+                  vmodel="dataEgresso.geral.nascimento"
+                  label="dataEgresso Nascimento"
                   placeholder="01/01/2001"
                   :icon-path="mdiCake"
                 />
@@ -209,14 +210,14 @@
               <div v-else>
                 <CustomSelect
                   class="mb-5"
-                  v-model="data.geral.genero"
+                  v-model="dataEgresso.geral.genero"
                   label="Genero"
                   :options="selectOpts.genero"
                   required
                 />
                 <CustomInput
                   class="mb-5"
-                  v-model="data.geral.email"
+                  v-model="dataEgresso.geral.email"
                   label="Email"
                   placeholder="Ex: marcelle.mota.@gov.br"
                   helper-text="Use um email válido: hotmail, outlook, gmail, etc."
@@ -225,8 +226,8 @@
 
                 <CustomInput
                   class="mb-5"
-                  v-model="data.geral.nascimento"
-                  label="Data de Nascimento"
+                  v-model="dataEgresso.geral.nascimento"
+                  label="dataEgresso de Nascimento"
                   type="date"
                 />
               </div>
@@ -245,7 +246,7 @@
                   classimg="sky-600"
                   :has-shadow="false"
                   @toggle="toggleIsInput('localizacao')"
-                  :is-input="data.localizacao.isInput"
+                  :is-input="dataEgresso.localizacao.isInput"
                 />
               </h1>
             </template>
@@ -264,12 +265,12 @@
             </template>
 
             <template #default>
-              <div v-if="!data.localizacao.isInput">
+              <div v-if="!dataEgresso.localizacao.isInput">
                 <!-- <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  vmodel="data.localizacao.cep"
-                  v-model="data.localizacao.cep"
+                  vmodel="dataEgresso.localizacao.cep"
+                  v-model="dataEgresso.localizacao.cep"
                   label="CEP"
                   placeholder="00000-000"
                   mask="#####-###"
@@ -279,8 +280,8 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  vmodel="data.localizacao.pais"
-                  v-model="data.localizacao.pais"
+                  vmodel="dataEgresso.localizacao.pais"
+                  v-model="dataEgresso.localizacao.pais"
                   placeholder="Brasil"
                   label="País"
                   :icon-path="mdiWeb"
@@ -289,8 +290,8 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  vmodel="data.localizacao.estado"
-                  v-model="data.localizacao.estado"
+                  vmodel="dataEgresso.localizacao.estado"
+                  v-model="dataEgresso.localizacao.estado"
                   label="Estado"
                   placeholder="Pará"
                   :icon-path="mdiMapOutline"
@@ -299,8 +300,8 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-1"
-                  vmodel="data.localizacao.cidade"
-                  v-model="data.localizacao.cidade"
+                  vmodel="dataEgresso.localizacao.cidade"
+                  v-model="dataEgresso.localizacao.cidade"
                   label="Cidade"
                   placeholder="Belém"
                   :icon-path="mdiMapMarkerRadius"
@@ -309,7 +310,7 @@
               <div v-else>
                 <!-- <CustomInput
                   class="mb-5"
-                  v-model="data.localizacao.cep"
+                  v-model="dataEgresso.localizacao.cep"
                   label="CEP"
                   placeholder="00000-000"
                   mask="#####-###"
@@ -317,7 +318,7 @@
 
                 <CustomSelect
                   class="mb-5"
-                  v-model="data.localizacao.pais"
+                  v-model="dataEgresso.localizacao.pais"
                   label="País"
                   :options="countries"
                   required
@@ -325,14 +326,14 @@
 
                 <CustomSelect
                   class="mb-5"
-                  v-model="data.localizacao.estado"
+                  v-model="dataEgresso.localizacao.estado"
                   label="Estado"
                   :options="states"
                   required
                 />
 
                 <CustomSelect
-                  v-model="data.localizacao.cidade"
+                  v-model="dataEgresso.localizacao.cidade"
                   label="Cidade"
                   :options="cities"
                   required
@@ -340,20 +341,20 @@
 
                 <!-- <CustomSelect
                   class="mb-5"
-                  v-model="data.localizacao.pais"
+                  v-model="dataEgresso.localizacao.pais"
                   label="País"
                   :options="selectOpts.pais"
                 />
 
                 <CustomSelect
                   class="mb-5"
-                  v-model="data.localizacao.estado"
+                  v-model="dataEgresso.localizacao.estado"
                   label="Estado"
                   :options="selectOpts.estado"
                 />
 
                 <CustomSelect
-                  v-model="data.localizacao.cidade"
+                  v-model="dataEgresso.localizacao.cidade"
                   label="Cidade"
                   :options="selectOpts.cidade"
                 /> -->
@@ -373,7 +374,7 @@
                   classimg="sky-600"
                   :has-shadow="false"
                   @toggle="toggleIsInput('academico')"
-                  :is-input="data.academico.isInput"
+                  :is-input="dataEgresso.academico.isInput"
                 />
               </h1>
             </template>
@@ -392,9 +393,9 @@
             </template>
 
             <template #default>
-              <div v-if="!data.academico.isInput">
+              <div v-if="!dataEgresso.academico.isInput">
                 <!-- class="mb-1"
-            v-model="data.localizacao.cidade"
+            v-model="dataEgresso.localizacao.cidade"
             label="Cidade"
             placeholder="Belém"
             :icon-path="mdiMapMarkerRadius""
@@ -402,8 +403,8 @@
                 <CustomPerfilData
                   type="number"
                   class="mb-5"
-                  vmodel="data.academico.matricula"
-                  v-model="data.academico.matricula"
+                  vmodel="dataEgresso.academico.matricula"
+                  v-model="dataEgresso.academico.matricula"
                   label="Matrícula"
                   placeholder="205004940001"
                   icon-path=""
@@ -411,7 +412,7 @@
 
                 <!-- <CustomPerfilData
             class="mb-5"
-            v-model="data.academico.email"
+            v-model="dataEgresso.academico.email"
             label="Email institucional"
             placeholder="Selecione"
             icon-path=""
@@ -420,8 +421,8 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  vmodel="data.academico.cotista.tipo"
-                  v-model="data.academico.cotista.tipo"
+                  vmodel="dataEgresso.academico.cotista.tipo"
+                  v-model="dataEgresso.academico.cotista.tipo"
                   label="Cota"
                   placeholder="Tipo de cota"
                   icon-path=""
@@ -430,8 +431,8 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  vmodel="data.academico.tipoAluno"
-                  v-model="data.academico.tipoAluno"
+                  vmodel="dataEgresso.academico.tipoAluno"
+                  v-model="dataEgresso.academico.tipoAluno"
                   label="Formação"
                   placeholder="Selecione"
                   icon-path=""
@@ -439,7 +440,7 @@
 
                 <!-- <CustomPerfilData
             class="mb-5"
-            v-model="data.academico.posGrad.tipo"
+            v-model="dataEgresso.academico.posGrad.tipo"
             label="Tipo de Aluno"
             placeholder="Tipo"
             icon-path=""
@@ -448,8 +449,8 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  vmodel="data.academico.posGrad.curso"
-                  v-model="data.academico.posGrad.curso"
+                  vmodel="dataEgresso.academico.posGrad.curso"
+                  v-model="dataEgresso.academico.posGrad.curso"
                   label="Curso"
                   placeholder="Curso de pós-graduação"
                   icon-path=""
@@ -458,8 +459,8 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  vmodel="data.academico.posGrad.local"
-                  v-model="data.academico.posGrad.local"
+                  vmodel="dataEgresso.academico.posGrad.local"
+                  v-model="dataEgresso.academico.posGrad.local"
                   label="Local da pós-graduação"
                   placeholder="UFPA"
                   icon-path=""
@@ -468,8 +469,8 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-1"
-                  vmodel="data.academico.bolsista.tipo"
-                  v-model="data.academico.bolsista.tipo"
+                  vmodel="dataEgresso.academico.bolsista.tipo"
+                  v-model="dataEgresso.academico.bolsista.tipo"
                   label="Bolsa"
                   placeholder="Bolsa"
                   icon-path=""
@@ -481,59 +482,59 @@
 
               <CustomCheckbox
                 class="mb-5"
-                v-model="data.academico.cotista.value"
+                v-model="dataEgresso.academico.cotista.value"
                 label="Cotista"
               />
 
               <CustomInput
                 class="mb-5"
-                v-model="data.academico.cotista.tipo"
+                v-model="dataEgresso.academico.cotista.tipo"
                 label="Tipo de Cota"
                 placeholder="Selecione"
               />
 
               <CustomCheckbox
                 class="mb-5"
-                v-model="data.academico.bolsista.value"
+                v-model="dataEgresso.academico.bolsista.value"
                 label="Bolsista"
               />
 
               <CustomInput
                 class="mb-5"
-                v-model="data.academico.bolsista.tipo"
+                v-model="dataEgresso.academico.bolsista.tipo"
                 label="Tipo de Bolsa"
                 placeholder="Selecione"
               />
 
               <CustomInput
                 class="mb-5"
-                v-model="data.academico.bolsista.remuneracao"
+                v-model="dataEgresso.academico.bolsista.remuneracao"
                 label="Remuneração da bolsa"
                 placeholder="Selecione"
               />
 
               <CustomCheckbox
                 class="mb-5"
-                v-model="data.academico.posGrad.value"
+                v-model="dataEgresso.academico.posGrad.value"
                 label="Pós-graduação"
               />
 
               <CustomInput
                 class="mb-5"
-                v-model="data.academico.posGrad.tipo"
+                v-model="dataEgresso.academico.posGrad.tipo"
                 label="Tipo de pós-graduação"
                 placeholder="Selecione"
               />
 
               <CustomInput
                 class="mb-5"
-                v-model="data.academico.posGrad.local"
+                v-model="dataEgresso.academico.posGrad.local"
                 label="Local da pós-graduação"
                 placeholder="Selecione"
               />
 
               <CustomInput
-                v-model="data.academico.posGrad.curso"
+                v-model="dataEgresso.academico.posGrad.curso"
                 label="Curso de pós-graduação"
                 placeholder="Selecione"
               /> -->
@@ -541,21 +542,21 @@
               <div v-else>
                 <CustomInput
                   class="mb-5"
-                  v-model="data.academico.matricula"
+                  v-model="dataEgresso.academico.matricula"
                   label="Matrícula"
                   placeholder="Selecione"
                 />
 
                 <CustomInput
                   class="mb-5"
-                  v-model="data.academico.email"
+                  v-model="dataEgresso.academico.email"
                   label="Email institucional"
                   placeholder="Selecione"
                 />
 
                 <CustomInput
                   class="mb-5"
-                  v-model="data.academico.tipoAluno"
+                  v-model="dataEgresso.academico.tipoAluno"
                   label="Tipo de Aluno"
                   placeholder="Selecione"
                 />
@@ -566,59 +567,59 @@
 
                 <CustomCheckbox
                   class="mb-5"
-                  v-model="data.academico.cotista.value"
+                  v-model="dataEgresso.academico.cotista.value"
                   label="Cotista"
                 />
 
                 <CustomInput
                   class="mb-5"
-                  v-model="data.academico.cotista.tipo"
+                  v-model="dataEgresso.academico.cotista.tipo"
                   label="Tipo de Cota"
                   placeholder="Selecione"
                 />
 
                 <CustomCheckbox
                   class="mb-5"
-                  v-model="data.academico.bolsista.value"
+                  v-model="dataEgresso.academico.bolsista.value"
                   label="Bolsista"
                 />
 
                 <CustomInput
                   class="mb-5"
-                  v-model="data.academico.bolsista.tipo"
+                  v-model="dataEgresso.academico.bolsista.tipo"
                   label="Tipo de Bolsa"
                   placeholder="Selecione"
                 />
 
                 <CustomInput
                   class="mb-5"
-                  v-model="data.academico.bolsista.remuneracao"
+                  v-model="dataEgresso.academico.bolsista.remuneracao"
                   label="Remuneração da bolsa"
                   placeholder="Selecione"
                 />
 
                 <CustomCheckbox
                   class="mb-5"
-                  v-model="data.academico.posGrad.value"
+                  v-model="dataEgresso.academico.posGrad.value"
                   label="Pós-graduação"
                 />
 
                 <CustomInput
                   class="mb-5"
-                  v-model="data.academico.posGrad.tipo"
+                  v-model="dataEgresso.academico.posGrad.tipo"
                   label="Tipo de pós-graduação"
                   placeholder="Selecione"
                 />
 
                 <CustomInput
                   class="mb-5"
-                  v-model="data.academico.posGrad.local"
+                  v-model="dataEgresso.academico.posGrad.local"
                   label="Local da pós-graduação"
                   placeholder="Selecione"
                 />
 
                 <CustomInput
-                  v-model="data.academico.posGrad.curso"
+                  v-model="dataEgresso.academico.posGrad.curso"
                   label="Curso de pós-graduação"
                   placeholder="Selecione"
                 />
@@ -638,7 +639,7 @@
                   classimg="sky-600"
                   :has-shadow="false"
                   @toggle="toggleIsInput('carreira')"
-                  :is-input="data.carreira.isInput"
+                  :is-input="dataEgresso.carreira.isInput"
                 />
               </h1>
             </template>
@@ -657,12 +658,12 @@
             </template>
 
             <template #default>
-              <div v-if="!data.carreira.isInput">
+              <div v-if="!dataEgresso.carreira.isInput">
                 <CustomPerfilData
                   type="text"
                   class="mb-10"
-                  vmodel="data.carreira.area"
-                  v-model="data.carreira.area"
+                  vmodel="dataEgresso.carreira.area"
+                  v-model="dataEgresso.carreira.area"
                   label="Area de Atuação"
                   placeholder="Área"
                   icon-path=""
@@ -671,8 +672,8 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-10"
-                  vmodel="data.carreira.setor"
-                  v-model="data.carreira.setor"
+                  vmodel="dataEgresso.carreira.setor"
+                  v-model="dataEgresso.carreira.setor"
                   label="Setor de Atuação"
                   placeholder="Setor"
                   icon-path=""
@@ -681,8 +682,8 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  vmodel="data.carreira.empresa"
-                  v-model="data.carreira.empresa"
+                  vmodel="dataEgresso.carreira.empresa"
+                  v-model="dataEgresso.carreira.empresa"
                   label="Empresa Atual"
                   placeholder="Empresa"
                   icon-path=""
@@ -690,13 +691,13 @@
 
               <!-- <CustomInput
                 class="mb-5"
-                v-model="data.carreira.faixaSalarial"
+                v-model="dataEgresso.carreira.faixaSalarial"
                 label="Faixa Salarial"
                 placeholder="Selecione"
               />
 
               <CustomInput
-                v-model="data.carreira.remuneracao"
+                v-model="dataEgresso.carreira.remuneracao"
                 label="Valor da remuneração mensal"
                 placeholder="Selecione"
               /> -->
@@ -704,34 +705,34 @@
               <div v-else>
                 <CustomInput
                   class="mb-5"
-                  v-model="data.carreira.area"
+                  v-model="dataEgresso.carreira.area"
                   label="Area de Atuação"
                   placeholder="Selecione"
                 />
 
                 <CustomInput
                   class="mb-5"
-                  v-model="data.carreira.setor"
+                  v-model="dataEgresso.carreira.setor"
                   label="Setor de Atuação"
                   placeholder="Selecione"
                 />
 
                 <CustomInput
                   class="mb-5"
-                  v-model="data.carreira.empresa"
+                  v-model="dataEgresso.carreira.empresa"
                   label="Empresa"
                   placeholder="Ex: Google"
                 />
 
                 <CustomInput
                   class="mb-5"
-                  v-model="data.carreira.faixaSalarial"
+                  v-model="dataEgresso.carreira.faixaSalarial"
                   label="Faixa Salarial"
                   placeholder="Selecione"
                 />
 
                 <CustomInput
-                  v-model="data.carreira.remuneracao"
+                  v-model="dataEgresso.carreira.remuneracao"
                   label="Valor da remuneração mensal"
                   placeholder="Selecione"
                 />
@@ -751,7 +752,7 @@
                   classimg="sky-600"
                   :has-shadow="false"
                   @toggle="toggleIsInput('adicionais')"
-                  :is-input="data.adicionais.isInput"
+                  :is-input="dataEgresso.adicionais.isInput"
                 />
               </h1>
             </template>
@@ -770,12 +771,12 @@
             </template>
 
             <template #default>
-              <div v-if="!data.adicionais.isInput">
+              <div v-if="!dataEgresso.adicionais.isInput">
                 <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"
-                  vmodel="data.adicionais.experiencias"
-                  v-model="data.adicionais.experiencias"
+                  vmodel="dataEgresso.adicionais.experiencias"
+                  v-model="dataEgresso.adicionais.experiencias"
                   label="Depoimento"
                   placeholder="Lorem ipsum dolor sit amet, consect
             etur adipiscing elit, sed do eiusmod tempor incididun
@@ -786,8 +787,8 @@
                 <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"
-                  vmodel="data.adicionais.contribuicoes"
-                  v-model="data.adicionais.contribuicoes"
+                  vmodel="dataEgresso.adicionais.contribuicoes"
+                  v-model="dataEgresso.adicionais.contribuicoes"
                   label="Contribuições"
                   placeholder="Lorem ipsum dolor sit amet, consect
             etur adipiscing elit, sed do eiusmod tempor incididun
@@ -798,11 +799,11 @@
 
               <!-- <textarea
             class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
-            v-model="data.adicionais.experiencias"
+            v-model="dataEgresso.adicionais.experiencias"
           /> -->
 
               <!-- <CustomCheckbox
-                v-model="data.adicionais.palestras"
+                v-model="dataEgresso.adicionais.palestras"
                 label="Gostaria de apresentar palestras"
                 class="mb-5"
               />
@@ -813,7 +814,7 @@
 
               <textarea
                 class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
-                v-model="data.adicionais.assuntosPalestras"
+                v-model="dataEgresso.adicionais.assuntosPalestras"
               />
 
               <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -822,7 +823,7 @@
 
               <textarea
                 class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
-                v-model="data.adicionais.experiencias"
+                v-model="dataEgresso.adicionais.experiencias"
               />
 
               <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -831,12 +832,12 @@
 
               <textarea
                 class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
-                v-model="data.adicionais.contribuicoes"
+                v-model="dataEgresso.adicionais.contribuicoes"
               /> -->
               </div>
               <div v-else>
                 <CustomCheckbox
-                  v-model="data.adicionais.palestras"
+                  v-model="dataEgresso.adicionais.palestras"
                   label="Gostaria de apresentar palestras"
                   class="mb-5"
                 />
@@ -847,7 +848,7 @@
 
                 <textarea
                   class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
-                  v-model="data.adicionais.assuntosPalestras"
+                  v-model="dataEgresso.adicionais.assuntosPalestras"
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -856,7 +857,7 @@
 
                 <textarea
                   class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
-                  v-model="data.adicionais.experiencias"
+                  v-model="dataEgresso.adicionais.experiencias"
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -865,7 +866,7 @@
 
                 <textarea
                   class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
-                  v-model="data.adicionais.contribuicoes"
+                  v-model="dataEgresso.adicionais.contribuicoes"
                 />
               </div>
             </template>
@@ -891,8 +892,11 @@ import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
 import { computed, ref } from 'vue'
-// import SvgIcon from '@jamescoyle/vue-icon'
 // mdiHome CEP,
+
+import egressoModel from 'src/model/egressoModel'
+import axios from 'axios'
+
 import {
   mdiAccount,
   mdiBriefcase,
@@ -906,14 +910,12 @@ import {
   mdiMapMarkerRadius,
   mdiLinkVariant
 } from '@mdi/js'
-// const editMode = ref({
-//    isInput:{
-//     geral:false,
-//     localizacao
-//    }
-//    }
-//   })
-const data = ref({
+
+const Axios = axios.create({
+  baseURL: import.meta.env.VITE_API_URL_LOCAL
+})
+
+const dataEgresso = ref({
   geral: {
     nome: '',
     nascimento: '',
@@ -988,12 +990,14 @@ const errorMessages = ref({
   email: 'Os e-mails informados são diferentes',
   standard: 'Por favor, preencha todos os campos abaixo',
   accessLevel: 'Por favor, informe o nível de acesso',
-  registrationLength: 'Matrícula inválida, por favor digite novamente'
+  registrationLength: 'Matrícula inválida, por favor digite novamente',
+  errorRequest: 'Requisição não aceita!'
+
 })
 const errorText = ref('')
 const submitSuccess = ref(false)
 
-interface registerData {
+interface registerdataEgresso {
   name: string
   registration: string
   email: string
@@ -1001,7 +1005,7 @@ interface registerData {
   confirmationPassword: string
 }
 
-const userRegisterData = ref<registerData>({
+const userRegisterdataEgresso = ref<registerdataEgresso>({
   name: '',
   registration: '',
   email: '',
@@ -1009,43 +1013,93 @@ const userRegisterData = ref<registerData>({
   confirmationPassword: ''
 })
 
-const handleSubmit = ($event: Event) => {
-  $event.preventDefault()
-  if (
-    userRegisterData.value.password !== userRegisterData.value.confirmationPassword
-  ) {
-    errorText.value = String(errorMessages.value.senha)
-    error.value = true
-  } else if (userRegisterData.value.registration.length < 12) {
-    errorText.value = String(errorMessages.value.registrationLength)
-    error.value = true
-  } else {
-    error.value = false
-    console.log(userRegisterData.value)
-    submitSuccess.value = true
+// old: $event: Event
+// Futuro: 1 Autenticar usr ('/auth/register' ? ,), 2 get egresso, 3 update egresso
+async function handleSubmit () {
+  // $event.preventDefault()
+  console.log('HandleSubmit')
+
+  // if (
+  //   userRegisterdataEgresso.value.password !== userRegisterdataEgresso.value.confirmationPassword
+  // ) {
+  //   errorText.value = String(errorMessages.value.senha)
+  //   error.value = true
+  // } else if (userRegisterdataEgresso.value.registration.length < 12) {
+  //   errorText.value = String(errorMessages.value.registrationLength)
+  //   error.value = true
+  // } else {
+  // error.value = false
+  // console.log(userRegisterdataEgresso.value)
+  // submitSuccess.value = true
+  const data: egressoModel = {
+    // String to number >:)
+    matricula: +dataEgresso.value.academico.matricula,
+    genero: {
+      nome: dataEgresso.value.geral.genero
+    },
+    cotista: dataEgresso.value.academico.cotista.value,
+    pcd: dataEgresso.value.academico.bolsista.value,
+    interesseEmPos: dataEgresso.value.academico.posGrad.value,
+    lattes: dataEgresso.value.geral.lattes,
+    linkedin: dataEgresso.value.geral.linkedin,
+    endereco: {
+      cidade: dataEgresso.value.localizacao.cidade,
+      estado: dataEgresso.value.localizacao.estado,
+      pais: dataEgresso.value.localizacao.pais
+    }
   }
+  console.log(data)
+  // error.value = false
+  // Update / Edit egresso
+  await Axios({
+    method: 'post',
+    url: 'http://localhost:15000/egresso',
+    data
+  })
+
+    .then(response => {
+      console.log(response.data)
+      if (response.status === 201) {
+        submitSuccess.value = true
+      }
+    })
+    .catch(response => {
+      console.log(response.data)
+      if (response.response.status === 401) {
+        errorText.value = errorMessages.value.errorRequest
+        error.value = true
+      }
+    })
+  // }
 }
+let isInputLocal = false
 function toggleIsInput (FolderLabel: string) {
   console.log('EditMode: ' + FolderLabel)
+
   switch (FolderLabel) {
     case 'profileHead':
-      data.value.profileHead.isInput = !data.value.profileHead.isInput
+      dataEgresso.value.profileHead.isInput = !dataEgresso.value.profileHead.isInput
       break
     case 'geral':
-      data.value.geral.isInput = !data.value.geral.isInput
+      dataEgresso.value.geral.isInput = !dataEgresso.value.geral.isInput
       break
     case 'localizacao':
-      data.value.localizacao.isInput = !data.value.localizacao.isInput
+      dataEgresso.value.localizacao.isInput = !dataEgresso.value.localizacao.isInput
       break
     case 'academico':
-      data.value.academico.isInput = !data.value.academico.isInput
+      dataEgresso.value.academico.isInput = !dataEgresso.value.academico.isInput
       break
     case 'carreira':
-      data.value.carreira.isInput = !data.value.carreira.isInput
+      dataEgresso.value.carreira.isInput = !dataEgresso.value.carreira.isInput
       break
     case 'adicionais':
-      data.value.adicionais.isInput = !data.value.adicionais.isInput
+      dataEgresso.value.adicionais.isInput = !dataEgresso.value.adicionais.isInput
   }
+  if (isInputLocal) {
+    handleSubmit()
+  }
+  isInputLocal = !isInputLocal
+  console.log(isInputLocal)
 }
 
 const countries = computed(() => {
@@ -1062,7 +1116,7 @@ const countries = computed(() => {
 })
 
 const states = computed(() => {
-  const states = State.getStatesOfCountry(data.value.localizacao.pais)
+  const states = State.getStatesOfCountry(dataEgresso.value.localizacao.pais)
   const filteredStates = []
 
   for (const state of states) {
@@ -1075,7 +1129,7 @@ const states = computed(() => {
 })
 
 const cities = computed(() => {
-  const cities = City.getCitiesOfState(data.value.localizacao.pais, data.value.localizacao.estado)
+  const cities = City.getCitiesOfState(dataEgresso.value.localizacao.pais, dataEgresso.value.localizacao.estado)
   const filteredCities = []
 
   for (const city of cities) {
