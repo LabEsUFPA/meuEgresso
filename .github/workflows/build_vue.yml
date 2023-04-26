@@ -1,15 +1,20 @@
-name: build_vue
+name: Build and Deploy
 on:
   push:
     branches:
-      - main
       - develop
 jobs:
-  build_vue:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Build and Deploy
-      uses: myorg/myrepo@v1
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: Build
+        run: npm install && npm run build
+        env:
+          NODE_ENV: production
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        with:
+          branch: develop
+          folder: dist
+          token: ${{ secrets.GITHUB_TOKEN }}
