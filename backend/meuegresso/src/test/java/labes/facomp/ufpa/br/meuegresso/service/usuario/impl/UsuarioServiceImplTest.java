@@ -3,6 +3,8 @@ package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -31,6 +33,8 @@ public class UsuarioServiceImplTest {
 
 	private UsuarioModel usuario = new UsuarioModel();
 
+	private List<UsuarioModel> usuarios = new ArrayList<>();
+
 	@BeforeEach
 	public void setUp() {
 		usuario.setId(1);
@@ -39,6 +43,14 @@ public class UsuarioServiceImplTest {
 		usuario.setEmail("john@example.com");
 		usuario.setPassword("password123");
 		usuario.setMatricula("123456789123");
+		repository.save(usuario);
+
+		usuario.setId(2);
+		usuario.setNome("Jocke");
+		usuario.setUsername("jocke123");
+		usuario.setEmail("jocke@example.com");
+		usuario.setPassword("password124");
+		usuario.setMatricula("123456789124");
 		repository.save(usuario);
 	}
 
@@ -76,13 +88,26 @@ public class UsuarioServiceImplTest {
 	@Test
 	public void test_Given_Valid_Id_Should_Return_Userdata() {
 		Mockito.when(repository.findById(1)).thenReturn(Optional.of(usuario));
-		assertEquals(usuario, usuarioService.findById(usuario.getId()));
+		assertEquals(usuario, usuarioService.findById(1));
 	}
 
 	@Test
 	public void test_Given_Invalid_Id_Should_Not_Return_Userdata() {
 		Mockito.when(repository.findById(10)).thenReturn(Optional.of(usuario));
-		assertThrows(NoSuchElementException.class, () -> usuarioService.findById(usuario.getId()));
+		assertThrows(NoSuchElementException.class, () -> usuarioService.findById(1));
+	}
+
+	@Test
+	void test_Return_All_Userdata() {
+		List<UsuarioModel> users = new ArrayList<>();
+		Mockito.when(repository.findAll()).thenReturn(usuarios);
+		users = usuarioService.findAll();
+		assertEquals(usuarios, users);
+	}
+
+	@Test
+	void testSave() {
+
 	}
 
 	@AfterEach
