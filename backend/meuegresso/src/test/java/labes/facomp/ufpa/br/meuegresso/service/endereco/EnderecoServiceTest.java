@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.service.genero;
+package labes.facomp.ufpa.br.meuegresso.service.endereco;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,11 +20,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
-import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
+import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
+import labes.facomp.ufpa.br.meuegresso.repository.endereco.EnderecoRepository;
 
 /**
- * classe que implementa os testes da GeneroService
+ * classe que implementa os testes da EnderecoService
  * 
  * @author Pedro Inácio
  * @since 27/04/2023
@@ -34,15 +34,15 @@ import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class GeneroServiceTest {
+public class EnderecoServiceTest {
     @Autowired
-    private GeneroService service;
+    private EnderecoService service;
 
     @MockBean
-    private GeneroRepository repository;
+    private EnderecoRepository repository;
     
     /**
-     * metodo para criar um genero para uso nos testes.
+     * metodo para criar um endereco para uso nos testes.
      * 
      * @author Pedro Inácio
      * @since 27/04/2023
@@ -51,16 +51,16 @@ public class GeneroServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(repository.save(Mockito.any(GeneroModel.class)))
-                .willReturn(getMockGeneroModel());
-        GeneroModel response = service.save(new GeneroModel());
+        BDDMockito.given(repository.save(Mockito.any(EnderecoModel.class)))
+                .willReturn(getMockEnderecoModel());
+        EnderecoModel response = service.save(new EnderecoModel());
 
         assertNotNull(response);
-        assertEquals("Homem Cis", response.getNome());
+        assertEquals("Ananindeua", response.getCidade());
     }
 
     /**
-     * metodo para atualizar um genero para uso no teste.
+     * metodo para atualizar uma endereco para uso no teste.
      * 
      * @author Pedro Inácio
      * @since 27/04/2023
@@ -70,13 +70,13 @@ public class GeneroServiceTest {
     @Order(2)
     public void testUpdate() {
 
-        BDDMockito.given(repository.save(Mockito.any(GeneroModel.class)))
-                .willReturn(getMockGeneroModel());
-        GeneroModel response = service.save(new GeneroModel());
+        BDDMockito.given(repository.save(Mockito.any(EnderecoModel.class)))
+                .willReturn(getMockEnderecoModel());
+        EnderecoModel response = service.save(new EnderecoModel());
         response.setNome(null);
         repository.update();
 
-        GeneroModel responseUpdate = new GeneroModel(1, "Homem trans");
+        EnderecoModel responseUpdate = new EnderecoModel(1, "Homem trans");
         response = service.update(responseUpdate);
 
         assertNotNull(response);
@@ -84,21 +84,21 @@ public class GeneroServiceTest {
     }*/
 
     /**
-     * metodo que preenche um mock de um genero para usar como return nos testes.
+     * metodo que preenche um mock de uma endereco para usar como return nos testes.
      * 
      * @author Pedro Inácio
      * @since 27/04/2023
      * 
-     * @return <code>GeneroModel</code> object
+     * @return <code>EnderecoModel</code> object
      */
-    private GeneroModel getMockGeneroModel() {
+    private EnderecoModel getMockEnderecoModel() {
 
-        GeneroModel generoModel = new GeneroModel(1, "Homem Cis");
-        return generoModel;
+        EnderecoModel enderecoModel = new EnderecoModel(1, "Ananindeua", null, null, null);
+        return enderecoModel;
     }
 
     /**
-     * Metodo para remover todos os dados do teste de genero
+     * Metodo para remover todos os dados do teste de endereco
      * 
      * @author Pedro Inácio
      * @since 27/04/2023

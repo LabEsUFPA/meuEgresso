@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.service.genero;
+package labes.facomp.ufpa.br.meuegresso.service.titulacao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,11 +20,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
-import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
+import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
+import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
 
 /**
- * classe que implementa os testes da GeneroService
+ * classe que implementa os testes da TitulacaoService
  * 
  * @author Pedro Inácio
  * @since 27/04/2023
@@ -34,15 +34,15 @@ import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class GeneroServiceTest {
+public class TitulacaoServiceTest {
     @Autowired
-    private GeneroService service;
+    private TitulacaoService service;
 
     @MockBean
-    private GeneroRepository repository;
+    private TitulacaoRepository repository;
     
     /**
-     * metodo para criar um genero para uso nos testes.
+     * metodo para criar um titulacao para uso nos testes.
      * 
      * @author Pedro Inácio
      * @since 27/04/2023
@@ -51,16 +51,16 @@ public class GeneroServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(repository.save(Mockito.any(GeneroModel.class)))
-                .willReturn(getMockGeneroModel());
-        GeneroModel response = service.save(new GeneroModel());
+        BDDMockito.given(repository.save(Mockito.any(TitulacaoModel.class)))
+                .willReturn(getMockTitulacaoModel());
+        TitulacaoModel response = service.save(new TitulacaoModel());
 
         assertNotNull(response);
         assertEquals("Homem Cis", response.getNome());
     }
 
     /**
-     * metodo para atualizar um genero para uso no teste.
+     * metodo para atualizar uma titulacao para uso no teste.
      * 
      * @author Pedro Inácio
      * @since 27/04/2023
@@ -70,13 +70,13 @@ public class GeneroServiceTest {
     @Order(2)
     public void testUpdate() {
 
-        BDDMockito.given(repository.save(Mockito.any(GeneroModel.class)))
-                .willReturn(getMockGeneroModel());
-        GeneroModel response = service.save(new GeneroModel());
+        BDDMockito.given(repository.save(Mockito.any(TitulacaoModel.class)))
+                .willReturn(getMockTitulacaoModel());
+        TitulacaoModel response = service.save(new TitulacaoModel());
         response.setNome(null);
         repository.update();
 
-        GeneroModel responseUpdate = new GeneroModel(1, "Homem trans");
+        TitulacaoModel responseUpdate = new TitulacaoModel(1, "Homem trans");
         response = service.update(responseUpdate);
 
         assertNotNull(response);
@@ -84,21 +84,22 @@ public class GeneroServiceTest {
     }*/
 
     /**
-     * metodo que preenche um mock de um genero para usar como return nos testes.
+     * metodo que preenche um mock de uma titulacao para usar como return nos
+     * testes.
      * 
      * @author Pedro Inácio
      * @since 27/04/2023
      * 
-     * @return <code>GeneroModel</code> object
+     * @return <code>TitulacaoModel</code> object
      */
-    private GeneroModel getMockGeneroModel() {
+    private TitulacaoModel getMockTitulacaoModel() {
 
-        GeneroModel generoModel = new GeneroModel(1, "Homem Cis");
-        return generoModel;
+        TitulacaoModel titulacaoModel = new TitulacaoModel(1, "Homem Cis");
+        return titulacaoModel;
     }
 
     /**
-     * Metodo para remover todos os dados do teste de genero
+     * Metodo para remover todos os dados do teste de titulacao
      * 
      * @author Pedro Inácio
      * @since 27/04/2023

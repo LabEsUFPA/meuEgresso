@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.service.genero;
+package labes.facomp.ufpa.br.meuegresso.service.pesquisacientifica;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,11 +20,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
-import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
+import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import labes.facomp.ufpa.br.meuegresso.model.PesquisaCientificaModel;
+import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
+import labes.facomp.ufpa.br.meuegresso.repository.pesquisacientifica.PesquisaCientificaRepository;
 
 /**
- * classe que implementa os testes da GeneroService
+ * classe que implementa os testes da PesquisaCientificaService
  * 
  * @author Pedro Inácio
  * @since 27/04/2023
@@ -34,15 +36,15 @@ import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class GeneroServiceTest {
+public class PesquisaCientificaServiceTest {
     @Autowired
-    private GeneroService service;
+    private PesquisaCientificaService service;
 
     @MockBean
-    private GeneroRepository repository;
+    private PesquisaCientificaRepository repository;
     
     /**
-     * metodo para criar um genero para uso nos testes.
+     * metodo para criar um PesquisaCientifica para uso nos testes.
      * 
      * @author Pedro Inácio
      * @since 27/04/2023
@@ -51,16 +53,16 @@ public class GeneroServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(repository.save(Mockito.any(GeneroModel.class)))
-                .willReturn(getMockGeneroModel());
-        GeneroModel response = service.save(new GeneroModel());
+        BDDMockito.given(repository.save(Mockito.any(PesquisaCientificaModel.class)))
+                .willReturn(getMockPesquisaCientificaModel());
+        PesquisaCientificaModel response = service.save(new PesquisaCientificaModel());
 
         assertNotNull(response);
-        assertEquals("Homem Cis", response.getNome());
+        assertEquals("PesquisaIA", response.getNome());
     }
 
     /**
-     * metodo para atualizar um genero para uso no teste.
+     * metodo para atualizar uma pesquisacientifica para uso no teste.
      * 
      * @author Pedro Inácio
      * @since 27/04/2023
@@ -70,13 +72,13 @@ public class GeneroServiceTest {
     @Order(2)
     public void testUpdate() {
 
-        BDDMockito.given(repository.save(Mockito.any(GeneroModel.class)))
-                .willReturn(getMockGeneroModel());
-        GeneroModel response = service.save(new GeneroModel());
+        BDDMockito.given(repository.save(Mockito.any(PesquisaCientificaModel.class)))
+                .willReturn(getMockPesquisaCientificaModel());
+        PesquisaCientificaModel response = service.save(new PesquisaCientificaModel());
         response.setNome(null);
         repository.update();
 
-        GeneroModel responseUpdate = new GeneroModel(1, "Homem trans");
+        PesquisaCientificaModel responseUpdate = new PesquisaCientificaModel(1, "Homem trans");
         response = service.update(responseUpdate);
 
         assertNotNull(response);
@@ -84,21 +86,22 @@ public class GeneroServiceTest {
     }*/
 
     /**
-     * metodo que preenche um mock de um genero para usar como return nos testes.
+     * metodo que preenche um mock de uma pesquisacientifica para usar como return
+     * nos testes.
      * 
      * @author Pedro Inácio
      * @since 27/04/2023
      * 
-     * @return <code>GeneroModel</code> object
+     * @return <code>PesquisaCientificaModel</code> object
      */
-    private GeneroModel getMockGeneroModel() {
+    private PesquisaCientificaModel getMockPesquisaCientificaModel() {
 
-        GeneroModel generoModel = new GeneroModel(1, "Homem Cis");
-        return generoModel;
+        PesquisaCientificaModel pesquisaCientificaModel = new PesquisaCientificaModel(1,"PesquisaIA", null, null, null, null);
+        return pesquisaCientificaModel;
     }
 
     /**
-     * Metodo para remover todos os dados do teste de genero
+     * Metodo para remover todos os dados do teste de pesquisacientifica
      * 
      * @author Pedro Inácio
      * @since 27/04/2023
