@@ -3,7 +3,6 @@ package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.etnia.EtniaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import lombok.Data;
 
@@ -14,13 +13,9 @@ public class EgressoDTO {
 
     private String matricula;
 
-    private EtniaDTO etnia;
-
     private GeneroDTO genero;
 
     private CotaDTO cota;
-
-    private Boolean pcd = false;
 
     private Boolean interesseEmPos = false;
 

@@ -36,10 +36,6 @@ public class EgressoModel extends Auditable {
     @Column(name = "id_egresso", unique = true, nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "etnia_id", nullable = false, unique = false)
-    private EtniaModel etnia;
-
     @Temporal(TemporalType.DATE)
 	@Column(name = "nascimento_usuario", nullable = false, unique = false)
 	private Date nascimento;
@@ -47,9 +43,6 @@ public class EgressoModel extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genero_id", nullable = false, unique = false)
     private GeneroModel genero;
-
-    @Column(name = "pcd_egresso", nullable = false, unique = false)
-    private Boolean pcd = false;
 
     @Column(name = "interesse_em_pos_egresso", nullable = false, unique = false)
     private Boolean interesseEmPos = false;
@@ -74,8 +67,5 @@ public class EgressoModel extends Auditable {
 
     @OneToMany(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
     private Set<DepoimentoModel> depoimentos;
-
-    @ManyToMany(mappedBy = "egressos", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
-    private Set<TrabalhoPublicadoModel> trabalhoPublicados = new HashSet<>();
 
 }
