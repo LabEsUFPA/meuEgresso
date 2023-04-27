@@ -34,7 +34,7 @@ export async function sendLogin (username: string, password: string) {
   const token = response.data.token
 
   // store the token in the auth store
-  useAuthStore().setToken(token)
+  useAuthStore().setUserToken(token)
   return response
 }
 
@@ -47,17 +47,17 @@ export async function sendLoginModel (data: loginModel) {
   })
 
   const token = response.data.token
-  useAuthStore().setToken(token)
+  useAuthStore().setUserToken(token)
   console.log(token)
 
-  console.log('Token: ' + useAuthStore().getToken())
+  console.log('Token: ' + useAuthStore().getUserToken())
   return response
 }
 //
 
 // Egresso
 export async function sendEgressoDataModel (data: egressoModel) {
-  const token = useAuthStore().getToken()
+  const token = useAuthStore().getUserToken()
   console.log('Token: ' + token)
   console.log(data)
   const response = await Axios({
@@ -73,7 +73,7 @@ export async function sendEgressoDataModel (data: egressoModel) {
 }
 
 export async function sendEgressoData () {
-  // const token = useAuthStore().getToken()
+  // const token = useAuthStore().getUserToken()
   // const data: egressoModel = {
   //   // String to number >:)
 
