@@ -56,7 +56,7 @@ public class TitulacaoServiceTest {
         TitulacaoModel response = service.save(new TitulacaoModel());
 
         assertNotNull(response);
-        assertEquals("Homem Cis", response.getNome());
+        assertEquals("Graduacao", response.getNome());
     }
 
     /**
@@ -94,7 +94,7 @@ public class TitulacaoServiceTest {
      */
     private TitulacaoModel getMockTitulacaoModel() {
 
-        TitulacaoModel titulacaoModel = new TitulacaoModel(1, "Homem Cis");
+        TitulacaoModel titulacaoModel = new TitulacaoModel(1, "Graduacao");
         return titulacaoModel;
     }
 

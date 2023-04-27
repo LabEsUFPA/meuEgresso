@@ -56,7 +56,7 @@ public class TipoBolsaServiceTest {
         TipoBolsaModel response = service.save(new TipoBolsaModel());
 
         assertNotNull(response);
-        assertEquals("PesquisaIA", response.getNome());
+        assertEquals("PIBIC", response.getNome());
     }
 
     /**
