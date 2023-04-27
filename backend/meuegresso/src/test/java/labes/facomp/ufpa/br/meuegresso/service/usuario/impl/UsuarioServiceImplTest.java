@@ -110,7 +110,7 @@ public class UsuarioServiceImplTest {
 	}
 
 	@Test
-	void test_Return_All_Userdata() {
+	void test_Should_Return_All_Userdata() {
 		List<UsuarioModel> users = new ArrayList<>();
 		Mockito.when(repository.findAll()).thenReturn(usuarios);
 		users = usuarioService.findAll();
