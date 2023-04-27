@@ -27,7 +27,6 @@ describe('ButtonEdit Test', () => {
     expect(wrapper.find('button').classes('bg-sky-700')).toBe(true);
   });
 
-
   it('ButtonEdit expected to use the correct class when isInput prop is false', () => {
     const wrapper = mount(ButtonEdit, {
       props: {

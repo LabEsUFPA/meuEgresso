@@ -12,7 +12,7 @@
       :height="30"
     >
     <h1
-      class="ml-2 mr-3"
+      class="ml-[7px] mr-3"
     >
       Salvar
     </h1>
@@ -57,8 +57,7 @@ interface Props {
     | 'emerald'
     | 'whitesky'
     | 'transparentsky'
-    | 'invisiblesky';
-
+    | 'invisiblesky'
     color2?:
     | 'sky'
     | 'blue'
@@ -186,10 +185,7 @@ const colorClassNames = {
     outline: 'outline-sky-600'
   }
 }
-function handleClick () {
-  $emit('toggle')
-  $emit('click')
-}
+
 const sytleVersion2 = computed(() => {
   // const classesV2 = [
   //   'items-center rounded-md flex px-[7px] py-[7px] relative text-lg font-semibold hover:duration-200'

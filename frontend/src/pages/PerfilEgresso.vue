@@ -895,6 +895,7 @@ import { computed, ref } from 'vue'
 // mdiHome CEP,
 
 import egressoModel from 'src/model/egressoModel'
+import { sendEgressoDataModel } from 'src/store/ResponseStore.vue'
 import axios from 'axios'
 
 import {
@@ -1005,13 +1006,13 @@ interface registerdataEgresso {
   confirmationPassword: string
 }
 
-const userRegisterdataEgresso = ref<registerdataEgresso>({
-  name: '',
-  registration: '',
-  email: '',
-  password: '',
-  confirmationPassword: ''
-})
+// const userRegisterdataEgresso = ref<registerdataEgresso>({
+//   name: '',
+//   registration: '',
+//   email: '',
+//   password: '',
+//   confirmationPassword: ''
+// })
 
 // old: $event: Event
 // Futuro: 1 Autenticar usr ('/auth/register' ? ,), 2 get egresso, 3 update egresso
@@ -1033,6 +1034,7 @@ async function handleSubmit () {
   // submitSuccess.value = true
   const data: egressoModel = {
     // String to number >:)
+
     matricula: +dataEgresso.value.academico.matricula,
     genero: {
       nome: dataEgresso.value.geral.genero
@@ -1048,29 +1050,7 @@ async function handleSubmit () {
       pais: dataEgresso.value.localizacao.pais
     }
   }
-  console.log(data)
-  // error.value = false
-  // Update / Edit egresso
-  await Axios({
-    method: 'post',
-    url: 'http://localhost:15000/egresso',
-    data
-  })
-
-    .then(response => {
-      console.log(response.data)
-      if (response.status === 201) {
-        submitSuccess.value = true
-      }
-    })
-    .catch(response => {
-      console.log(response.data)
-      if (response.response.status === 401) {
-        errorText.value = errorMessages.value.errorRequest
-        error.value = true
-      }
-    })
-  // }
+  sendEgressoDataModel(data)
 }
 let isInputLocal = false
 function toggleIsInput (FolderLabel: string) {

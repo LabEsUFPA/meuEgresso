@@ -100,6 +100,12 @@ import CustomInput from 'src/components/CustomInput.vue'
 import { mdiAccount, mdiSchool, mdiEmail, mdiLock } from '@mdi/js'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import userModel from 'src/model/usuarioModel'
+import axios from 'axios'
+
+const Axios = axios.create({
+  baseURL: import.meta.env.VITE_API_URL_LOCAL
+})
 
 const error = ref(false)
 const errorMessages = ref({
@@ -107,7 +113,8 @@ const errorMessages = ref({
   email: 'Os e-mails informados são diferentes',
   standard: 'Por favor, preencha todos os campos abaixo',
   accessLevel: 'Por favor, informe o nível de acesso',
-  registrationLength: 'Matrícula inválida, por favor digite novamente'
+  registrationLength: 'Matrícula inválida, por favor digite novamente',
+  errorRequest: 'Requisição não aceita!'
 })
 const errorText = ref('')
 const submitSuccess = ref(false)
@@ -128,7 +135,7 @@ const userRegisterData = ref<registerData>({
   confirmationPassword: ''
 })
 
-const handleSubmit = ($event: Event) => {
+const handleSubmit = async ($event: Event) => {
   if (
     userRegisterData.value.password !== userRegisterData.value.confirmationPassword
   ) {
@@ -138,9 +145,31 @@ const handleSubmit = ($event: Event) => {
     errorText.value = String(errorMessages.value.registrationLength)
     error.value = true
   } else {
+    const data: userModel = {
+      username: userRegisterData.value.email,
+      password: userRegisterData.value.password,
+      email: userRegisterData.value.email,
+      nome: userRegisterData.value.name,
+      matricula: userRegisterData.value.registration
+    }
+
     error.value = false
-    console.log(userRegisterData.value)
-    submitSuccess.value = true
+    await Axios({
+      method: 'post',
+      url: '/auth/register',
+      data
+    })
+      .then(response => {
+        if (response.status === 201) {
+          submitSuccess.value = true
+        }
+      })
+      .catch(response => {
+        if (response.response.status === 401) {
+          errorText.value = errorMessages.value.errorRequest
+          error.value = true
+        }
+      })
   }
 }
 </script>
@@ -156,5 +185,4 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield; /* Firefox */
 }
-
 </style>
