@@ -15,6 +15,14 @@ import org.springframework.test.context.ActiveProfiles;
 
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 
+/**
+ * Responsável por realizar os testes unitários referentes ao
+ * UsuárioServiceImpl.
+ *
+ * @author Marcus Maciel
+ * @since 27/04/2023
+ * @version 1.0.1
+ */
 @SpringBootTest
 @ActiveProfiles("test")
 public class UsuarioRepositoryTest {
@@ -69,12 +77,12 @@ public class UsuarioRepositoryTest {
     }
 
     @Test
-    void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_True_If_Right() {
+    public void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_True_If_Right() {
         assertTrue(repository.existsByIdAndCreatedById(2, 1));
     }
 
     @Test
-    void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_False_If_Wrong() {
+    public void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_False_If_Wrong() {
         assertFalse(repository.existsByIdAndCreatedById(1, 2));
     }
 

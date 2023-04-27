@@ -110,7 +110,7 @@ public class UsuarioServiceImplTest {
 	}
 
 	@Test
-	void test_Should_Return_All_Userdata() {
+	public void test_Should_Return_All_Userdata() {
 		List<UsuarioModel> users = new ArrayList<>();
 		Mockito.when(repository.findAll()).thenReturn(usuarios);
 		users = usuarioService.findAll();
@@ -118,14 +118,14 @@ public class UsuarioServiceImplTest {
 	}
 
 	@Test
-	void test_Save_Should_Save_On_Repository() {
+	public void test_Save_Should_Save_On_Repository() {
 		Mockito.when(repository.save(usuario)).thenReturn(usuario);
 		UsuarioModel usuariotest = usuarioService.save(usuario);
 		assertEquals(usuario, usuariotest);
 	}
 
 	@Test
-	void test_Given_New_Credentials_Return_Updated_User() throws InvalidRequestException {
+	public void test_Given_New_Credentials_Return_Updated_User() throws InvalidRequestException {
 		LocalDateTime time = LocalDateTime.of(2023, 01, 01, 00, 00, 00);
 		usuario.setNome("Michael");
 		usuario.setEmail("michel@hotmail.com");
@@ -153,28 +153,28 @@ public class UsuarioServiceImplTest {
 	}
 
 	@Test
-	void test_Given_Correct_Id_Should_Delete_User_Data() {
+	public void test_Given_Correct_Id_Should_Delete_User_Data() {
 		Mockito.when(repository.findById(1)).thenReturn(Optional.of(usuario));
 		usuarioService.deleteById(1);
 		Mockito.verify(repository).deleteById(1);
 	}
 
 	@Test
-	void test_Given_Incorrect_Id_Should_Not_Delete_User_Data() {
+	public void test_Given_Incorrect_Id_Should_Not_Delete_User_Data() {
 		Mockito.when(repository.findById(10)).thenReturn(Optional.of(usuario));
 		usuarioService.deleteById(10);
 		Mockito.verify(repository).deleteById(10);
 	}
 
 	@Test
-	void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_True_If_Right() {
+	public void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_True_If_Right() {
 		Boolean right = true;
 		Mockito.when(repository.existsByIdAndCreatedById(2, 1)).thenReturn(right);
 		assertEquals(right, usuarioService.existsByIdAndCreatedById(2, 1));
 	}
 
 	@Test
-	void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_False_If_Wrong() {
+	public void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_False_If_Wrong() {
 		Boolean right = false;
 		Mockito.when(repository.existsByIdAndCreatedById(1, 2)).thenReturn(right);
 		assertEquals(right, usuarioService.existsByIdAndCreatedById(1, 2));
