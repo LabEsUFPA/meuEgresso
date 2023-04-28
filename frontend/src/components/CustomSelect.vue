@@ -20,7 +20,7 @@
         :class="{
           ['bg-gray-100 cursor-not-allowed']: disabled,
           ['outline-2 outline outline-red-500']: !meta.valid && meta.validated && meta.touched,
-          ['outline-2 outline outline-emerald-600']: meta.valid && meta.validated && meta.touched,
+          ['outline-2 outline outline-emerald-500']: meta.valid && meta.validated && meta.touched,
           ['rounded-t-lg']: open,
           ['rounded-lg']: !open
         }"

@@ -4,7 +4,7 @@
       class="px-2 py-0.5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block focus:outline-sky-400 focus:outline-2"
       :class="{
         ['outline outline-red-500']: !meta.valid && meta.validated && meta.touched,
-        ['outline outline-green-500']: meta.valid && meta.validated && meta.touched,
+        ['outline outline-emerald-500']: meta.valid && meta.validated && meta.touched,
         ['opacity-80 bg-gray-100 cursor-not-allowed']: disabled
       }"
       name="adicionais.experiencias"
