@@ -4,7 +4,8 @@ import { useAuthStore } from 'src/store/AuthStore.vue'
 import Axios from 'axios'
 import loginModel from 'src/model/loginModel'
 import egressoModel from 'src/model/egressoModel'
-
+const baseUrl = `${import.meta.env.VITE_API_URL}`
+const loginUrl = `'${baseUrl}/auth/login'`
 // login
 
 export async function sendLogin (username: string, password: string) {
@@ -30,7 +31,7 @@ export async function sendLogin (username: string, password: string) {
   //       error.value = true
   //     }
   //   })
-
+  console.log(baseUrl)
   const token = response.data.token
 
   // store the token in the auth store
@@ -40,6 +41,7 @@ export async function sendLogin (username: string, password: string) {
 
 export async function sendLoginModel (data: loginModel) {
   console.log('login1')
+  console.log(baseUrl)
   const response = await Axios({
     method: 'post',
     url: 'http://localhost:15000/auth/login',
@@ -56,7 +58,22 @@ export async function sendLoginModel (data: loginModel) {
 //
 
 // Egresso
-export async function sendEgressoDataModel (data: egressoModel) {
+export async function updateEgressoDataModel (data: egressoModel) {
+  const token = useAuthStore().getUserToken()
+  console.log('Token: ' + token)
+  console.log(data)
+  const response = await Axios({
+    method: 'put',
+    url: 'http://localhost:15000/egresso',
+    data,
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  console.log(response)
+  return response
+}
+export async function postEgressoDataModel (data: egressoModel) {
   const token = useAuthStore().getUserToken()
   console.log('Token: ' + token)
   console.log(data)
@@ -94,7 +111,7 @@ export async function sendEgressoData () {
   // }
   // const response = await Axios({
   //   method: 'post',
-  //   url: 'http://localhost:15000/egresso',
+  //   url: '${baseUrl}/egresso',
   //   data,
   //   headers: {
   //     Authorization: `Bearer ${token}`

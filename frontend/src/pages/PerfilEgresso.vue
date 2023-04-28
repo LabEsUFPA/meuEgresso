@@ -895,7 +895,7 @@ import { computed, ref } from 'vue'
 // mdiHome CEP,
 
 import egressoModel from 'src/model/egressoModel'
-import { sendEgressoDataModel } from 'src/store/ResponseStore.vue'
+import { updateEgressoDataModel } from 'src/store/ResponseStore.vue'
 import axios from 'axios'
 
 import {
@@ -1036,6 +1036,7 @@ async function handleSubmit () {
     // String to number >:)
 
     matricula: +dataEgresso.value.academico.matricula,
+    email: dataEgresso.value.geral.email,
     genero: {
       nome: dataEgresso.value.geral.genero
     },
@@ -1050,7 +1051,24 @@ async function handleSubmit () {
       pais: dataEgresso.value.localizacao.pais
     }
   }
-  sendEgressoDataModel(data)
+  // const data: egressoModel = {
+  //   matricula: 0,
+  //   email: 'string',
+  //   genero: {
+  //     nome: 'string'
+  //   },
+  //   cotista: true,
+  //   pcd: true,
+  //   interesseEmPos: true,
+  //   lattes: 'string',
+  //   linkedin: 'string',
+  //   endereco: {
+  //     cidade: 'string',
+  //     estado: 'string',
+  //     pais: 'string'
+  //   }
+  // }
+  updateEgressoDataModel(data)
 }
 let isInputLocal = false
 function toggleIsInput (FolderLabel: string) {

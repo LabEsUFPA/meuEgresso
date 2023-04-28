@@ -5,6 +5,7 @@ export default interface egressoModel{
         id: number,
         nome: string
       },
+      email: string,
       genero: {
         id?: number,
         nome: string
