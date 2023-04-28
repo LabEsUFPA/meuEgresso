@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div
+    :class="{
+      'opacity-80': disabled
+    }"
+  >
     <div class="w-fit">
       <div
         class="text-sm ml-1"
@@ -12,9 +16,15 @@
       </div>
       <button
         type="button"
-        class="w-64 py-1 px-3 grid grid-cols-8 relative border border-gray-400"
-        :class="open ? 'rounded-t-lg' : 'rounded-lg'"
-        @click="open = !open"
+        class="w-64 py-1 px-3 grid grid-cols-8 relative border"
+        :class="{
+          ['bg-gray-100 cursor-not-allowed']: disabled,
+          ['outline-2 outline outline-red-500']: !meta.valid && meta.validated && meta.touched,
+          ['outline-2 outline outline-emerald-500']: meta.valid && meta.validated && meta.touched,
+          ['rounded-t-lg']: open,
+          ['rounded-lg']: !open
+        }"
+        @click="() => { !disabled ? open = !open : '' }"
         @blur="open = false"
       >
         <img
@@ -35,9 +45,9 @@
           :class="iconPath ? 'col-span-6' : 'col-span-7'"
         >
           <p
-            :class="modelValue === '' ? 'text-gray-500' : 'text-black'"
+            :class="inputValue === '' ? 'text-gray-500' : 'text-black'"
           >
-            {{ modelValue === '' ? placeholder : currentSelection.label }}
+            {{ inputValue === '' ? placeholder : currentSelection.label }}
           </p>
         </div>
 
@@ -52,16 +62,16 @@
 
         <div
           :class="open ? '' : 'hidden'"
-          class="absolute shadow-md bg-white w-64 z-50 cursor-pointer -left-[1px] max-h-96 overflow-y-auto top-8 rounded-b-lg border border-gray-400 border-t-0"
+          class="absolute shadow-md bg-white w-64 z-50 cursor-pointer -left-[1px] max-h-96 overflow-y-auto top-8 rounded-b-lg border border-t-0"
         >
           <div
             class="p-2 hover:bg-gray-200 text-left"
-            @click="$emit('update:modelValue', '')"
+            @click="handleChange('')"
           >
             ...
           </div>
           <div
-            class="p-2 hover:bg-gray-200 text-left border-t border-gray-400"
+            class="p-2 hover:bg-gray-200 text-left border-t"
             :key="index"
             v-for="(option, index) in options"
             @click="handleEmit(option)"
@@ -70,6 +80,16 @@
           </div>
         </div>
       </button>
+      <div
+        class="text-xs mt-1"
+        :class="{
+          ['text-red-500']: !meta.valid,
+          ['text-emerald-500']: meta.valid,
+        }"
+        v-show="meta.validated"
+      >
+        {{ meta.valid ? successMessage : errorMessage }}
+      </div>
       <div
         v-if="helperText"
         class="text-xs mt-1 ml-1 max-w-[250px] sm:max-w-fit"
@@ -81,11 +101,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, toRef } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronDown } from '@mdi/js'
-
-const $emit = defineEmits(['update:modelValue'])
+import { useField } from 'vee-validate'
 
 interface ComplexOpts {
   label: string,
@@ -95,36 +114,56 @@ interface ComplexOpts {
 type IOpts = string | ComplexOpts
 
 interface Props {
-  modelValue: string
+  value?: string
   label: string
+  name: string
   helperText?: string
   options: IOpts[]
   iconPath?: string
   required?: boolean
   placeholder?: string
   imgIcon?: boolean
+  disabled?: boolean
+  errorMessage?: string
+  successMessage?: string
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   iconPath: '',
   helperText: '',
-  placeholder: ''
+  placeholder: '',
+  value: '',
+  errorMessage: 'Campo inválido',
+  successMessage: 'Campo correto'
 })
+
+const $emit = defineEmits(['update:value'])
 
 const currentSelection = ref<ComplexOpts>({
   label: '',
   value: ''
 })
 
+const name = toRef(props, 'name')
+
+const {
+  value: inputValue,
+  handleChange,
+  meta
+} = useField(name, undefined, {
+  initialValue: props.value
+})
+
 function handleEmit (option: IOpts) {
-  console.log(typeof option)
   if (typeof option === 'object') {
-    $emit('update:modelValue', option.value)
+    handleChange(option.value)
+    $emit('update:value', option.value)
     currentSelection.value = option
     return
   }
 
-  $emit('update:modelValue', option)
+  handleChange(option)
+  $emit('update:value', option)
   currentSelection.value.label = option
 }
 

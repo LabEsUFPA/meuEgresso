@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
 
   backend:
-    container_name: meu-egresso-api-homol
+    container_name: meu-egresso-api
     build:
       context: .
       dockerfile: docker/Dockerfile

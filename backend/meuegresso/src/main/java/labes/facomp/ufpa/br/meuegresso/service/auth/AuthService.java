@@ -2,7 +2,6 @@ package labes.facomp.ufpa.br.meuegresso.service.auth;
 
 import java.util.stream.Collectors;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,12 +18,11 @@ public class AuthService {
 
     private final UsuarioService userService;
 
-    public String authenticate(Authentication auth) {
-        String scope = auth.getAuthorities().stream()
+    public String authenticate(UsuarioModel usuarioModel) {
+        String scope = usuarioModel.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
-        UsuarioModel user = userService.loadUserByUsername(auth.getName());
-        return tokenService.generateToken(user, scope);
+        return tokenService.generateToken(usuarioModel, scope);
     }
 
     public UserDetails register(UsuarioModel user) {
