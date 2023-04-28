@@ -40,25 +40,25 @@ public class EgressoAdmController {
 	private final ModelMapper mapper;
 
 	/**
-	 * Endpoint responsavel por buscar todas as cotas no banco.
-	 *
-	 * @param void
-	 * @return {@link EgressoDTO} Retorna uma lista com todos as cotas.
-	 * @author Bruno Eiki
-	 * @since 21/04/2023
-	 */
-	@GetMapping
-	@ResponseStatus(code = HttpStatus.OK)
-	public List<EgressoDTO> buscarEgressos() {
-		return mapper.map(egressoService.findAll(), new TypeToken<List<EgressoDTO>>() {
-		}.getType());
-	}
+     * Endpoint responsavel por buscar todas as cotas no banco.
+     *
+     * @param void
+     * @return {@link EgressoDTO} Retorna uma lista com todos as cotas.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
+    @GetMapping
+    @ResponseStatus(code = HttpStatus.OK)
+    public List<EgressoDTO> buscarEgressos() {
+        return mapper.map(egressoService.findAll(), new TypeToken<List<EgressoDTO>>() {
+        }.getType());
+    }
 
 	/**
 	 * Endpoint responsavel por atualizar a Egresso do egresso.
 	 *
 	 * @param EgressoDTO Estrutura de dados contendo as informações necessárias
-	 *                   para atualizar a Egresso.
+	 *                    para atualizar a Egresso.
 	 * @return Mensagem de confirmacao.
 	 * @author Alfredo Gabriel.
 	 * @throws InvalidRequestException
@@ -69,7 +69,7 @@ public class EgressoAdmController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
 	public String atualizarEgresso(@RequestBody @Valid EgressoDTO egressoDTO) throws InvalidRequestException {
 		EgressoModel egressoModel = mapper.map(egressoDTO, EgressoModel.class);
-		egressoService.update(egressoModel);
+		egressoService.updateEgresso(egressoModel);
 		return ResponseType.SUCESS_UPDATE.getMessage();
 	}
 

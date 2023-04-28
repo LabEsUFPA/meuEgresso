@@ -24,7 +24,7 @@ public interface EgressoService {
 
 	public EgressoModel findByUsuarioId(Integer idUsuario);
 
-	public EgressoModel save(EgressoModel egresso);
+	public EgressoModel adicionarEgresso(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por atualizar informacoes do egresso no banco de dados.
@@ -35,7 +35,7 @@ public interface EgressoService {
 	 * @since 16/04/2023
 	 */
 
-	public EgressoModel update(EgressoModel egresso);
+	public EgressoModel updateEgresso(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por deletar informacoes do egresso no banco de dados.
@@ -45,7 +45,7 @@ public interface EgressoService {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	public ResponseEntity<String> deleteById(EgressoModel egresso);
+	public ResponseEntity<String> deletarEgresso(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por verificar se egresso existe no banco de dados.
@@ -75,5 +75,5 @@ public interface EgressoService {
 	 * @param createdBy
 	 * @return
 	 */
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

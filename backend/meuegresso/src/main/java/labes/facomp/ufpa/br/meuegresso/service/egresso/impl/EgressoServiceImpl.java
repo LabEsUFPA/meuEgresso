@@ -25,14 +25,20 @@ public class EgressoServiceImpl implements EgressoService {
     private final EgressoRepository egressoRepository;
 
     @Override
-    public EgressoModel save(EgressoModel egresso) {
+    public EgressoModel adicionarEgresso(EgressoModel egresso) {
         return egressoRepository.save(egresso);
     }
+
+
+    
 
     @Override
     public List<EgressoModel> findAll() {
         return egressoRepository.findAll();
     }
+
+
+
 
     @Override
     public EgressoModel findByUsuarioId(Integer idUsuario) {
@@ -48,12 +54,13 @@ public class EgressoServiceImpl implements EgressoService {
      * @since 16/04/2023
      */
     @Override
-    public EgressoModel update(EgressoModel egresso) {
+    public EgressoModel updateEgresso(EgressoModel egresso) {
         if (egresso.getId() != null) {
             egressoRepository.save(egresso);
         }
         return null;
     }
+
 
     @Override
     public boolean deleteById(Integer id) {
@@ -65,8 +72,9 @@ public class EgressoServiceImpl implements EgressoService {
 
     }
 
+
     @Override
-    public ResponseEntity<String> deleteById(EgressoModel egresso) {
+    public ResponseEntity<String> deletarEgresso(EgressoModel egresso) {
         if (egressoRepository.existsById(egresso.getId())) {
             egressoRepository.deleteById(egresso.getId());
             return ResponseEntity.ok("Egresso deletado");
