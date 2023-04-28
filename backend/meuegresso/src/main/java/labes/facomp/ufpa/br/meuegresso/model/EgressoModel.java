@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,8 +41,8 @@ public class EgressoModel extends Auditable {
     private EtniaModel etnia;
 
     @Temporal(TemporalType.DATE)
-	@Column(name = "nascimento_usuario", nullable = false, unique = false)
-	private Date nascimento;
+    @Column(name = "nascimento_usuario", nullable = false, unique = false)
+    private LocalDate nascimento;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genero_id", nullable = false, unique = false)
