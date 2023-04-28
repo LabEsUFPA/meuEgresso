@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.service.cota;
+package labes.facomp.ufpa.br.meuegresso.service.endereco;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -23,11 +23,10 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
-
+import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 
 /**
- * Class que implementa testes para o CotaService.
+ * Class que implementa testes para o EnderecoService.
  * 
  * @author
  * @since
@@ -37,21 +36,25 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class CotaServiceTest {
+public class EnderecoServiceTest {
 
     private static final Integer ID = 1;
-    private static final String NOME = "Escola Pública";
+    private static final String CIDADE = "Ananindeua";
+    private static final String ESTADO = "Pará";
+    private static final String PAIS = "Brasil";
 
     private static final Integer ID2 = 2;
-    private static final String NOME2 = "Pardo";
+    private static final String CIDADE2 = "São Paulo";
+    private static final String ESTADO2 = "São Paulo";
+    private static final String PAIS2 = "Brasil";
 
     @Autowired
-    private CotaService cotaService;
+    private EnderecoService enderecoService;
 
-    CotaModel testCota;
+    EnderecoModel testEndereco;
 
     /**
-     * Metodo para testar a criacao de um CotaModel com save.
+     * Metodo para testar a criacao de um EnderecoModel com save.
      * 
      * @author Bruno Eiki
      * @since 27/04/2023
@@ -60,14 +63,16 @@ public class CotaServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(cotaService.save(Mockito.any(CotaModel.class)))
-                .willReturn(getMockCota());
+        BDDMockito.given(enderecoService.save(Mockito.any(EnderecoModel.class)))
+                .willReturn(getMockEndereco());
 
-        CotaModel response = cotaService.save(new CotaModel());
+        EnderecoModel response = enderecoService.save(new EnderecoModel());
 
         assertNotNull(response);
         assertEquals(ID, response.getId());
-        assertEquals(NOME, response.getNome());
+        assertEquals(CIDADE, response.getCidade());
+        assertEquals(ESTADO, response.getEstado());
+        assertEquals(PAIS, response.getPais());
 
     }
 
@@ -80,11 +85,11 @@ public class CotaServiceTest {
     @Test
     @Order(2)
     public void testFindAll() {
-        BDDMockito.given(cotaService.findAll())
-                .willReturn(getMockCotaLista());
-        // .willReturn(List.of(getMockCota()));
+        BDDMockito.given(enderecoService.findAll())
+                .willReturn(getMockEnderecoLista());
+        // .willReturn(List.of(getMockEndereco()));
 
-        List<CotaModel> response = cotaService.findAll();
+        List<EnderecoModel> response = enderecoService.findAll();
         assertNotNull(response);
     }
 
@@ -97,10 +102,10 @@ public class CotaServiceTest {
     @Test
     @Order(3)
     public void testFindById() {
-        BDDMockito.given(cotaService.findById(Mockito.anyInt()))
-                .willReturn(getMockCota());
+        BDDMockito.given(enderecoService.findById(Mockito.anyInt()))
+                .willReturn(getMockEndereco());
 
-        CotaModel response = cotaService.findById(ID);
+        EnderecoModel response = enderecoService.findById(ID);
         assertNotNull(response);
     }
 
@@ -114,10 +119,10 @@ public class CotaServiceTest {
     @Test
     @Order(4)
     public void testUpdate() throws InvalidRequestException {
-        BDDMockito.given(cotaService.update(Mockito.any(CotaModel.class)))
-                .willReturn(getMockCota());
+        BDDMockito.given(enderecoService.update(Mockito.any(EnderecoModel.class)))
+                .willReturn(getMockEndereco());
 
-        CotaModel response = cotaService.update(getMockCota());
+        EnderecoModel response = enderecoService.update(getMockEndereco());
         assertNotNull(response);
     }
 
@@ -131,10 +136,10 @@ public class CotaServiceTest {
     @Order(4)
     public void testDeleteById() {
 
-        BDDMockito.given(cotaService.deleteById(Mockito.anyInt()))
+        BDDMockito.given(enderecoService.deleteById(Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = cotaService.deleteById(ID);
+        Boolean response = enderecoService.deleteById(ID);
         assertTrue(response);
     }
 
@@ -148,45 +153,50 @@ public class CotaServiceTest {
     @Order(5)
     public void testExistsByIdAndCreatedById() {
 
-        BDDMockito.given(cotaService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+        BDDMockito.given(enderecoService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = cotaService.existsByIdAndCreatedById(ID, ID);
+        Boolean response = enderecoService.existsByIdAndCreatedById(ID, ID);
         assertTrue(response);
     }
 
     /**
-     * Metodo que preenche um mock de um CotaModel para retorno dos testes
+     * Metodo que preenche um mock de um EnderecoModel para retorno dos testes
      * 
      * @author Bruno Eiki
      * @since 27/04/2023
      * 
-     * @return <code>cotaTeste</code> object
+     * @return <code>enderecoTeste</code> object
      */
-    private CotaModel getMockCota() {
-        CotaModel cotaTest = CotaModel.builder()
+    private EnderecoModel getMockEndereco() {
+        EnderecoModel enderecoTest = EnderecoModel.builder()
                 .id(ID)
-                .nome(NOME)
+                .cidade(CIDADE)
+                .estado(ESTADO)
+                .pais(PAIS)
                 .build();
-        return cotaTest;
+        return enderecoTest;
     }
 
-    private List<CotaModel> getMockCotaLista() {
-        List<CotaModel> cotaLista = new ArrayList<>();
-        CotaModel cotaTest = CotaModel.builder()
-                .id(ID)
-                .nome(NOME)
-                .build();
-
-        CotaModel cotaTest2 = CotaModel.builder()
+    private List<EnderecoModel> getMockEnderecoLista() {
+        List<EnderecoModel> enderecoLista = new ArrayList<>();
+        EnderecoModel enderecoTest = EnderecoModel.builder()
                 .id(ID2)
-                .nome(NOME2)
+                .cidade(CIDADE2)
+                .estado(ESTADO2)
+                .pais(PAIS2)
                 .build();
 
-        cotaLista.add(cotaTest);
-        cotaLista.add(cotaTest2);
+        EnderecoModel enderecoTest2 = EnderecoModel.builder()
+                .id(ID2)
+                .cidade(CIDADE2)
+                .estado(ESTADO2)
+                .pais(PAIS2)
+                .build();
 
-        return cotaLista;
+        enderecoLista.add(enderecoTest);
+        enderecoLista.add(enderecoTest2);
+
+        return enderecoLista;
     }
-
 }

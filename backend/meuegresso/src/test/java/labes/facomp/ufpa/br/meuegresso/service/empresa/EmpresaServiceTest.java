@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.service.cota;
+package labes.facomp.ufpa.br.meuegresso.service.empresa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -23,11 +23,10 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
-
+import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 
 /**
- * Class que implementa testes para o CotaService.
+ * Class que implementa testes para o EmpresaService.
  * 
  * @author
  * @since
@@ -37,21 +36,23 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class CotaServiceTest {
+public class EmpresaServiceTest {
 
     private static final Integer ID = 1;
-    private static final String NOME = "Escola Pública";
+    private static final String NOME = "Empresa";
+    private static final String SETORATUACAO = "Empresarial";
 
     private static final Integer ID2 = 2;
-    private static final String NOME2 = "Pardo";
+    private static final String NOME2 = "Ufpa";
+    private static final String SETORATUACAO2 = "Público";
 
     @Autowired
-    private CotaService cotaService;
+    private EmpresaService empresaService;
 
-    CotaModel testCota;
+    EmpresaModel testEmpresa;
 
     /**
-     * Metodo para testar a criacao de um CotaModel com save.
+     * Metodo para testar a criacao de um EmpresaModel com save.
      * 
      * @author Bruno Eiki
      * @since 27/04/2023
@@ -60,15 +61,15 @@ public class CotaServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(cotaService.save(Mockito.any(CotaModel.class)))
-                .willReturn(getMockCota());
+        BDDMockito.given(empresaService.save(Mockito.any(EmpresaModel.class)))
+                .willReturn(getMockEmpresa());
 
-        CotaModel response = cotaService.save(new CotaModel());
+        EmpresaModel response = empresaService.save(new EmpresaModel());
 
         assertNotNull(response);
         assertEquals(ID, response.getId());
         assertEquals(NOME, response.getNome());
-
+        assertEquals(SETORATUACAO, response.getSetorAtuacao());
     }
 
     /**
@@ -80,11 +81,11 @@ public class CotaServiceTest {
     @Test
     @Order(2)
     public void testFindAll() {
-        BDDMockito.given(cotaService.findAll())
-                .willReturn(getMockCotaLista());
-        // .willReturn(List.of(getMockCota()));
+        BDDMockito.given(empresaService.findAll())
+                .willReturn(getMockEmpresaLista());
+        // .willReturn(List.of(getMockEmpresa()));
 
-        List<CotaModel> response = cotaService.findAll();
+        List<EmpresaModel> response = empresaService.findAll();
         assertNotNull(response);
     }
 
@@ -97,10 +98,10 @@ public class CotaServiceTest {
     @Test
     @Order(3)
     public void testFindById() {
-        BDDMockito.given(cotaService.findById(Mockito.anyInt()))
-                .willReturn(getMockCota());
+        BDDMockito.given(empresaService.findById(Mockito.anyInt()))
+                .willReturn(getMockEmpresa());
 
-        CotaModel response = cotaService.findById(ID);
+        EmpresaModel response = empresaService.findById(ID);
         assertNotNull(response);
     }
 
@@ -114,10 +115,10 @@ public class CotaServiceTest {
     @Test
     @Order(4)
     public void testUpdate() throws InvalidRequestException {
-        BDDMockito.given(cotaService.update(Mockito.any(CotaModel.class)))
-                .willReturn(getMockCota());
+        BDDMockito.given(empresaService.update(Mockito.any(EmpresaModel.class)))
+                .willReturn(getMockEmpresa());
 
-        CotaModel response = cotaService.update(getMockCota());
+        EmpresaModel response = empresaService.update(getMockEmpresa());
         assertNotNull(response);
     }
 
@@ -131,10 +132,10 @@ public class CotaServiceTest {
     @Order(4)
     public void testDeleteById() {
 
-        BDDMockito.given(cotaService.deleteById(Mockito.anyInt()))
+        BDDMockito.given(empresaService.deleteById(Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = cotaService.deleteById(ID);
+        Boolean response = empresaService.deleteById(ID);
         assertTrue(response);
     }
 
@@ -148,45 +149,46 @@ public class CotaServiceTest {
     @Order(5)
     public void testExistsByIdAndCreatedById() {
 
-        BDDMockito.given(cotaService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+        BDDMockito.given(empresaService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = cotaService.existsByIdAndCreatedById(ID, ID);
+        Boolean response = empresaService.existsByIdAndCreatedById(ID, ID);
         assertTrue(response);
     }
 
     /**
-     * Metodo que preenche um mock de um CotaModel para retorno dos testes
+     * Metodo que preenche um mock de um EmpresaModel para retorno dos testes
      * 
      * @author Bruno Eiki
      * @since 27/04/2023
      * 
-     * @return <code>cotaTeste</code> object
+     * @return <code>empresaTeste</code> object
      */
-    private CotaModel getMockCota() {
-        CotaModel cotaTest = CotaModel.builder()
+    private EmpresaModel getMockEmpresa() {
+        EmpresaModel empresaTest = EmpresaModel.builder()
                 .id(ID)
                 .nome(NOME)
                 .build();
-        return cotaTest;
+        return empresaTest;
     }
 
-    private List<CotaModel> getMockCotaLista() {
-        List<CotaModel> cotaLista = new ArrayList<>();
-        CotaModel cotaTest = CotaModel.builder()
+    private List<EmpresaModel> getMockEmpresaLista() {
+        List<EmpresaModel> empresaLista = new ArrayList<>();
+        EmpresaModel empresaTest = EmpresaModel.builder()
                 .id(ID)
                 .nome(NOME)
+                .setorAtuacao(SETORATUACAO)
                 .build();
 
-        CotaModel cotaTest2 = CotaModel.builder()
+        EmpresaModel empresaTest2 = EmpresaModel.builder()
                 .id(ID2)
                 .nome(NOME2)
+                .setorAtuacao(SETORATUACAO2)
                 .build();
 
-        cotaLista.add(cotaTest);
-        cotaLista.add(cotaTest2);
+        empresaLista.add(empresaTest);
+        empresaLista.add(empresaTest2);
 
-        return cotaLista;
+        return empresaLista;
     }
-
 }

@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.service.cota;
+package labes.facomp.ufpa.br.meuegresso.service.depoimento;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -23,11 +23,10 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
-
+import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
 
 /**
- * Class que implementa testes para o CotaService.
+ * Class que implementa testes para o DepoimentoService.
  * 
  * @author
  * @since
@@ -37,21 +36,21 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class CotaServiceTest {
+public class DepoimentoServiceTest {
 
     private static final Integer ID = 1;
-    private static final String NOME = "Escola Pública";
+    private static final String DESCRICAO = "Foi bom";
 
     private static final Integer ID2 = 2;
-    private static final String NOME2 = "Pardo";
+    private static final String DESCRICAO2 = "Me formei";
 
     @Autowired
-    private CotaService cotaService;
+    private DepoimentoService depoimentoService;
 
-    CotaModel testCota;
+    DepoimentoModel testDepoimento;
 
     /**
-     * Metodo para testar a criacao de um CotaModel com save.
+     * Metodo para testar a criacao de um DepoimentoModel com save.
      * 
      * @author Bruno Eiki
      * @since 27/04/2023
@@ -60,15 +59,14 @@ public class CotaServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(cotaService.save(Mockito.any(CotaModel.class)))
-                .willReturn(getMockCota());
+        BDDMockito.given(depoimentoService.save(Mockito.any(DepoimentoModel.class)))
+                .willReturn(getMockDepoimento());
 
-        CotaModel response = cotaService.save(new CotaModel());
+        DepoimentoModel response = depoimentoService.save(new DepoimentoModel());
 
         assertNotNull(response);
         assertEquals(ID, response.getId());
-        assertEquals(NOME, response.getNome());
-
+        assertEquals(DESCRICAO, response.getDescricao());
     }
 
     /**
@@ -80,11 +78,11 @@ public class CotaServiceTest {
     @Test
     @Order(2)
     public void testFindAll() {
-        BDDMockito.given(cotaService.findAll())
-                .willReturn(getMockCotaLista());
-        // .willReturn(List.of(getMockCota()));
+        BDDMockito.given(depoimentoService.findAll())
+                .willReturn(getMockDepoimentoLista());
+        // .willReturn(List.of(getMockDepoimento()));
 
-        List<CotaModel> response = cotaService.findAll();
+        List<DepoimentoModel> response = depoimentoService.findAll();
         assertNotNull(response);
     }
 
@@ -97,10 +95,10 @@ public class CotaServiceTest {
     @Test
     @Order(3)
     public void testFindById() {
-        BDDMockito.given(cotaService.findById(Mockito.anyInt()))
-                .willReturn(getMockCota());
+        BDDMockito.given(depoimentoService.findById(Mockito.anyInt()))
+                .willReturn(getMockDepoimento());
 
-        CotaModel response = cotaService.findById(ID);
+        DepoimentoModel response = depoimentoService.findById(ID);
         assertNotNull(response);
     }
 
@@ -114,10 +112,10 @@ public class CotaServiceTest {
     @Test
     @Order(4)
     public void testUpdate() throws InvalidRequestException {
-        BDDMockito.given(cotaService.update(Mockito.any(CotaModel.class)))
-                .willReturn(getMockCota());
+        BDDMockito.given(depoimentoService.update(Mockito.any(DepoimentoModel.class)))
+                .willReturn(getMockDepoimento());
 
-        CotaModel response = cotaService.update(getMockCota());
+        DepoimentoModel response = depoimentoService.update(getMockDepoimento());
         assertNotNull(response);
     }
 
@@ -131,10 +129,10 @@ public class CotaServiceTest {
     @Order(4)
     public void testDeleteById() {
 
-        BDDMockito.given(cotaService.deleteById(Mockito.anyInt()))
+        BDDMockito.given(depoimentoService.deleteById(Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = cotaService.deleteById(ID);
+        Boolean response = depoimentoService.deleteById(ID);
         assertTrue(response);
     }
 
@@ -148,45 +146,45 @@ public class CotaServiceTest {
     @Order(5)
     public void testExistsByIdAndCreatedById() {
 
-        BDDMockito.given(cotaService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+        BDDMockito.given(depoimentoService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = cotaService.existsByIdAndCreatedById(ID, ID);
+        Boolean response = depoimentoService.existsByIdAndCreatedById(ID, ID);
         assertTrue(response);
     }
 
     /**
-     * Metodo que preenche um mock de um CotaModel para retorno dos testes
+     * Metodo que preenche um mock de um DepoimentoModel para retorno dos testes
      * 
      * @author Bruno Eiki
      * @since 27/04/2023
      * 
-     * @return <code>cotaTeste</code> object
+     * @return <code>depoimentoTeste</code> object
      */
-    private CotaModel getMockCota() {
-        CotaModel cotaTest = CotaModel.builder()
+    private DepoimentoModel getMockDepoimento() {
+        DepoimentoModel depoimentoTest = DepoimentoModel.builder()
                 .id(ID)
-                .nome(NOME)
+                .descricao(DESCRICAO)
                 .build();
-        return cotaTest;
+        return depoimentoTest;
     }
 
-    private List<CotaModel> getMockCotaLista() {
-        List<CotaModel> cotaLista = new ArrayList<>();
-        CotaModel cotaTest = CotaModel.builder()
+    private List<DepoimentoModel> getMockDepoimentoLista() {
+        List<DepoimentoModel> depoimentoLista = new ArrayList<>();
+        DepoimentoModel depoimentoTest = DepoimentoModel.builder()
                 .id(ID)
-                .nome(NOME)
+                .descricao(DESCRICAO)
                 .build();
 
-        CotaModel cotaTest2 = CotaModel.builder()
+        DepoimentoModel depoimentoTest2 = DepoimentoModel.builder()
                 .id(ID2)
-                .nome(NOME2)
+                .descricao(DESCRICAO2)
                 .build();
 
-        cotaLista.add(cotaTest);
-        cotaLista.add(cotaTest2);
+        depoimentoLista.add(depoimentoTest);
+        depoimentoLista.add(depoimentoTest2);
 
-        return cotaLista;
+        return depoimentoLista;
     }
 
 }

@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.service.cota;
+package labes.facomp.ufpa.br.meuegresso.service.curso;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -23,11 +23,11 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
+import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 
 
 /**
- * Class que implementa testes para o CotaService.
+ * Class que implementa testes para o CursoService.
  * 
  * @author
  * @since
@@ -37,21 +37,21 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class CotaServiceTest {
+public class CursoServiceTest {
 
     private static final Integer ID = 1;
-    private static final String NOME = "Escola Pública";
+    private static final String NOME = "Ciência da Computação";
 
     private static final Integer ID2 = 2;
-    private static final String NOME2 = "Pardo";
+    private static final String NOME2 = "Letras";
 
     @Autowired
-    private CotaService cotaService;
+    private CursoService cursoService;
 
-    CotaModel testCota;
+    CursoModel testCurso;
 
     /**
-     * Metodo para testar a criacao de um CotaModel com save.
+     * Metodo para testar a criacao de um CursoModel com save.
      * 
      * @author Bruno Eiki
      * @since 27/04/2023
@@ -60,10 +60,10 @@ public class CotaServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(cotaService.save(Mockito.any(CotaModel.class)))
-                .willReturn(getMockCota());
+        BDDMockito.given(cursoService.save(Mockito.any(CursoModel.class)))
+                .willReturn(getMockCurso());
 
-        CotaModel response = cotaService.save(new CotaModel());
+        CursoModel response = cursoService.save(new CursoModel());
 
         assertNotNull(response);
         assertEquals(ID, response.getId());
@@ -80,11 +80,11 @@ public class CotaServiceTest {
     @Test
     @Order(2)
     public void testFindAll() {
-        BDDMockito.given(cotaService.findAll())
-                .willReturn(getMockCotaLista());
-        // .willReturn(List.of(getMockCota()));
+        BDDMockito.given(cursoService.findAll())
+                .willReturn(getMockCursoLista());
+        // .willReturn(List.of(getMockCurso()));
 
-        List<CotaModel> response = cotaService.findAll();
+        List<CursoModel> response = cursoService.findAll();
         assertNotNull(response);
     }
 
@@ -97,10 +97,10 @@ public class CotaServiceTest {
     @Test
     @Order(3)
     public void testFindById() {
-        BDDMockito.given(cotaService.findById(Mockito.anyInt()))
-                .willReturn(getMockCota());
+        BDDMockito.given(cursoService.findById(Mockito.anyInt()))
+                .willReturn(getMockCurso());
 
-        CotaModel response = cotaService.findById(ID);
+        CursoModel response = cursoService.findById(ID);
         assertNotNull(response);
     }
 
@@ -114,10 +114,10 @@ public class CotaServiceTest {
     @Test
     @Order(4)
     public void testUpdate() throws InvalidRequestException {
-        BDDMockito.given(cotaService.update(Mockito.any(CotaModel.class)))
-                .willReturn(getMockCota());
+        BDDMockito.given(cursoService.update(Mockito.any(CursoModel.class)))
+                .willReturn(getMockCurso());
 
-        CotaModel response = cotaService.update(getMockCota());
+        CursoModel response = cursoService.update(getMockCurso());
         assertNotNull(response);
     }
 
@@ -131,10 +131,10 @@ public class CotaServiceTest {
     @Order(4)
     public void testDeleteById() {
 
-        BDDMockito.given(cotaService.deleteById(Mockito.anyInt()))
+        BDDMockito.given(cursoService.deleteById(Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = cotaService.deleteById(ID);
+        Boolean response = cursoService.deleteById(ID);
         assertTrue(response);
     }
 
@@ -148,45 +148,44 @@ public class CotaServiceTest {
     @Order(5)
     public void testExistsByIdAndCreatedById() {
 
-        BDDMockito.given(cotaService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+        BDDMockito.given(cursoService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = cotaService.existsByIdAndCreatedById(ID, ID);
+        Boolean response = cursoService.existsByIdAndCreatedById(ID, ID);
         assertTrue(response);
     }
 
     /**
-     * Metodo que preenche um mock de um CotaModel para retorno dos testes
+     * Metodo que preenche um mock de um CursoModel para retorno dos testes
      * 
      * @author Bruno Eiki
      * @since 27/04/2023
      * 
-     * @return <code>cotaTeste</code> object
+     * @return <code>cursoTeste</code> object
      */
-    private CotaModel getMockCota() {
-        CotaModel cotaTest = CotaModel.builder()
+    private CursoModel getMockCurso() {
+        CursoModel cursoTest = CursoModel.builder()
                 .id(ID)
                 .nome(NOME)
                 .build();
-        return cotaTest;
+        return cursoTest;
     }
 
-    private List<CotaModel> getMockCotaLista() {
-        List<CotaModel> cotaLista = new ArrayList<>();
-        CotaModel cotaTest = CotaModel.builder()
+    private List<CursoModel> getMockCursoLista() {
+        List<CursoModel> cursoLista = new ArrayList<>();
+        CursoModel cursoTest = CursoModel.builder()
                 .id(ID)
                 .nome(NOME)
                 .build();
 
-        CotaModel cotaTest2 = CotaModel.builder()
+        CursoModel cursoTest2 = CursoModel.builder()
                 .id(ID2)
                 .nome(NOME2)
                 .build();
 
-        cotaLista.add(cotaTest);
-        cotaLista.add(cotaTest2);
+        cursoLista.add(cursoTest);
+        cursoLista.add(cursoTest2);
 
-        return cotaLista;
+        return cursoLista;
     }
-
 }

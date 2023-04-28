@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -12,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -20,6 +18,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -29,6 +28,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "egresso")
 @EqualsAndHashCode(callSuper = false)
+@Builder
 public class EgressoModel extends Auditable {
 
     @Id
@@ -37,18 +37,15 @@ public class EgressoModel extends Auditable {
     private Integer id;
 
     @Temporal(TemporalType.DATE)
-	@Column(name = "nascimento_usuario", nullable = false, unique = false)
-	private Date nascimento;
+    @Column(name = "nascimento_usuario", nullable = false, unique = false)
+    private Date nascimento;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genero_id", nullable = false, unique = false)
     private GeneroModel genero;
 
-    @Column(name = "pcd_egresso", nullable = false, unique = false)
-    private Boolean pcd = false;
-
     @Column(name = "interesse_em_pos_egresso", nullable = false, unique = false)
-    private Boolean interesseEmPos = false;
+    private Boolean interesseEmPos;
 
     @Column(name = "lattes_egresso", nullable = false, unique = false)
     private String lattes;
@@ -59,10 +56,6 @@ public class EgressoModel extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "endereco_id", unique = false, nullable = false)
     private EnderecoModel endereco;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "cota_id", unique = false, nullable = false)
-    private CotaModel cota;
 
     @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "usuario_id", unique = true, nullable = false)
