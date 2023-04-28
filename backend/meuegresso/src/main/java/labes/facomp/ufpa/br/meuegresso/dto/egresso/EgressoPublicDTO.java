@@ -3,7 +3,6 @@ package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.etnia.EtniaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import lombok.Data;
 
@@ -20,8 +19,6 @@ public class EgressoPublicDTO {
     private Integer id;
 
     private Integer matricula;
-
-    private EtniaDTO etnia;
 
     @Email
     @NotBlank(message = "Infome um email.")
