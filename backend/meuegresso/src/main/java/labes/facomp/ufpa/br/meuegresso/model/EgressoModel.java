@@ -36,40 +36,39 @@ public class EgressoModel extends Auditable {
     @Column(name = "id_egresso", unique = true, nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "etnia_id", nullable = false, unique = false)
-    private EtniaModel etnia;
-
     @Temporal(TemporalType.DATE)
-	@Column(name = "nascimento_usuario", nullable = false, unique = false)
+	@Column(name = "nascimento_egresso", unique = false, nullable = false)
 	private Date nascimento;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "genero_id", nullable = false, unique = false)
+    @JoinColumn(name = "genero_id", unique = false, nullable = false)
     private GeneroModel genero;
 
-    @Column(name = "pcd_egresso", nullable = false, unique = false)
+    @Column(name = "matricula_egresso", unique = true, nullable = true, length = 12)
+	private String matricula;
+
+    @Column(name = "pcd_egresso", unique = false, nullable = false)
     private Boolean pcd = false;
 
-    @Column(name = "interesse_em_pos_egresso", nullable = false, unique = false)
+    @Column(name = "interesse_em_pos_egresso", unique = false, nullable = false)
     private Boolean interesseEmPos = false;
 
-    @Column(name = "lattes_egresso", nullable = false, unique = false)
+    @Column(name = "lattes_egresso", unique = true, nullable = true)
     private String lattes;
 
-    @Column(name = "linkedin_egresso", nullable = false, unique = false)
+    @Column(name = "linkedin_egresso", unique = true, nullable = true)
     private String linkedin;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "endereco_id", unique = false, nullable = false)
     private EnderecoModel endereco;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "cota_id", unique = false, nullable = false)
     private CotaModel cota;
 
     @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.MERGE })
-    @JoinColumn(name = "usuario_id", unique = true, nullable = false)
+    @JoinColumn(name = "usuario_id", unique = true, nullable = true)
     private UsuarioModel usuario;
 
     @OneToMany(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
