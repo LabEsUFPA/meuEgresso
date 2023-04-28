@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;
@@ -19,9 +19,9 @@ public class EgressoColacaoDTO {
 
     private EgressoColacaoModelId id;
 
-    private Date ingresso;
+    private LocalDate ingresso;
 
-    private Date conclusao;
+    private LocalDate conclusao;
 
     private CursoDTO curso;
 

@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,7 +42,7 @@ public class UsuarioDTO extends AuditableDTO {
 	private String nome;
 
 	@NotNull(message = "Informe uma data de nascimento.")
-	private Date nascimento;
+	private LocalDate nascimento;
 
 	@Valid
 	private EgressoDTO egresso;
