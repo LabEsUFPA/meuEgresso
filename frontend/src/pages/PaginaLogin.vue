@@ -62,12 +62,7 @@ import CustomButton from 'src/components/CustomButton.vue'
 import { ref } from 'vue'
 import { mdiAccount, mdiLock } from '@mdi/js'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
-import loginModel from 'src/model/loginModel'
-import axios from 'axios'
-
-const Axios = axios.create({
-  baseURL: import.meta.env.VITE_API_URL_LOCAL
-})
+import { useLoginStore } from 'src/store/LoginStore.js'
 
 const error = ref(false)
 
@@ -83,26 +78,15 @@ const userLoginData = ref<loginData>({
 
 const handleSubmit = async ($event: Event) => {
   if (userLoginData.value.userName || userLoginData.value.password) {
-    const data: loginModel = {
-      username: userLoginData.value.userName,
-      password: userLoginData.value.password
+    await useLoginStore().useLogin(userLoginData.value.userName, userLoginData.value.password)
+    const response = useLoginStore().response
+
+    if (response === 200) {
+      error.value = false
+      console.log(useLoginStore().token)
+    } else {
+      error.value = true
     }
-    await Axios({
-      method: 'post',
-      url: '/auth/login',
-      data
-    })
-      .then(response => {
-        if (response.status === 200) {
-          error.value = false
-          console.log(response.data)
-        }
-      })
-      .catch(response => {
-        if (response.response.status === 401) {
-          error.value = true
-        }
-      })
   } else {
     error.value = true
   }
