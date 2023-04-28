@@ -1,6 +1,10 @@
 <template>
   <div class="container mx-auto p-3 pb-0 mt-10">
-    <form @submit.prevent="handleSubmit($event)">
+    <Form
+      @submit="handleSubmit"
+      @invalid-submit="onInvalid"
+      :validation-schema="schema"
+    >
       <h1 class="text-cyan-800 text-2xl font-semibold">
         Cadastro de egresso
       </h1>
@@ -20,24 +24,23 @@
           <div>
             <CustomInput
               class="mb-5"
-              v-model="data.geral.nome"
+              name="geral.nome"
               label="Nome"
-              helper-text="Números e caracteres especiais não são permitidos"
               :icon-path="mdiAccount"
               required
             />
 
             <CustomInput
               class="mb-5"
-              v-model="data.geral.nascimento"
-              label="Data de Nascimento"
+              name="geral.nascimento"
               type="date"
+              label="Data de Nascimento"
               required
             />
 
             <CustomSelect
               class="mb-5"
-              v-model="data.geral.genero"
+              name="geral.genero"
               label="Genero"
               :options="selectOpts.genero"
               required
@@ -45,8 +48,8 @@
 
             <CustomInput
               class="mb-5"
-              v-model="data.geral.email"
-              label="Email"
+              name="geral.email"
+              label="E-mail"
               placeholder="Ex: example@gov.br"
               helper-text="Use um email válido: hotmail, outlook, gmail, etc."
               :icon-path="mdiEmail"
@@ -55,14 +58,14 @@
 
             <CustomInput
               class="mb-5"
-              v-model="data.geral.linkedin"
-              :icon-path="svgPath.linkedin"
+              name="geral.linkedin"
               label="Linkedin"
+              :icon-path="svgPath.linkedin"
             />
 
             <CustomInput
-              v-model="data.geral.lattes"
               label="Curriculo Lattes"
+              name="geral.lattes"
               icon-path="src/assets/Lattes.svg"
               img-icon
             />
@@ -87,22 +90,24 @@
           <div>
             <CustomSelect
               class="mb-5"
-              v-model="data.localizacao.pais"
+              name="localizacao.pais"
               label="País"
               :options="countries"
+              v-model:value="selections.pais"
               required
             />
 
             <CustomSelect
               class="mb-5"
-              v-model="data.localizacao.estado"
+              name="localizacao.estado"
               label="Estado"
               :options="states"
+              v-model:value="selections.estado"
               required
             />
 
             <CustomSelect
-              v-model="data.localizacao.cidade"
+              name="localizacao.cidade"
               label="Cidade"
               :options="cities"
               required
@@ -128,7 +133,7 @@
           <div>
             <CustomInput
               class="mb-5"
-              v-model="data.academico.matricula"
+              name="academico.matricula"
               label="Matrícula"
               mask="############"
               placeholder="205004940001"
@@ -137,7 +142,7 @@
 
             <CustomInput
               class="mb-5"
-              v-model="data.academico.email"
+              name="academico.email"
               label="Email institucional"
               placeholder="Selecione"
               required
@@ -145,7 +150,7 @@
 
             <CustomSelect
               class="mb-5"
-              v-model="data.academico.tipoAluno"
+              name="academico.tipoAluno"
               label="Tipo de Aluno"
               placeholder="Selecione"
               :options="selectOpts.tipoAluno"
@@ -158,70 +163,78 @@
 
             <CustomCheckbox
               class="mb-5"
-              v-model="data.academico.cotista.value"
+              name="academico.cotista.value"
               label="Cotista"
+              v-model:value="bools.cotista"
             />
 
             <CustomSelect
               class="mb-5"
-              v-model="data.academico.cotista.tipo"
+              name="academico.cotista.tipo"
               label="Tipo de Cota"
               placeholder="Selecione"
               :options="selectOpts.tipoCota"
-              :required="data.academico.cotista.value"
+              :required="bools.cotista"
+              :disabled="!bools.cotista"
             />
 
             <CustomCheckbox
               class="mb-5"
-              v-model="data.academico.bolsista.value"
+              name="academico.bolsista.value"
               label="Bolsista"
+              v-model:value="bools.bolsista"
             />
 
-            <CustomInput
+            <CustomSelect
               class="mb-5"
-              v-model="data.academico.bolsista.tipo"
+              name="academico.bolsista.tipo"
               label="Tipo de Bolsa"
               placeholder="Selecione"
               :options="selectOpts.tipoBolsa"
-              :required="data.academico.bolsista.value"
+              :required="bools.bolsista"
+              :disabled="!bools.bolsista"
             />
 
             <CustomInput
               class="mb-5"
-              v-model="data.academico.bolsista.remuneracao"
+              name="academico.bolsista.remuneracao"
               label="Remuneração da bolsa"
               placeholder="Selecione"
               type="number"
               step="0.01"
-              :required="data.academico.bolsista.value"
+              :required="bools.bolsista"
+              :disabled="!bools.bolsista"
             />
 
             <CustomCheckbox
               class="mb-5"
-              v-model="data.academico.posGrad.value"
+              name="academico.posGrad.value"
+              v-model:value="bools.posGrad"
               label="Pós-graduação"
             />
 
             <CustomInput
               class="mb-5"
-              v-model="data.academico.posGrad.local"
+              name="academico.posGrad.local"
               label="Local da pós-graduação"
               placeholder="Selecione"
-              :required="data.academico.posGrad.value"
+              :required="bools.posGrad"
+              :disabled="!bools.posGrad"
             />
 
             <CustomInput
               class="mb-5"
-              v-model="data.academico.posGrad.curso"
+              name="academico.posGrad.curso"
               label="Curso de pós-graduação"
               placeholder="Selecione"
-              :required="data.academico.posGrad.value"
+              :required="bools.posGrad"
+              :disabled="!bools.posGrad"
             />
 
             <CustomCheckbox
-              v-model="data.academico.desejaPos"
+              name="academico.posGrad.desejaPos"
               label="Deseja realizar pós graduação?"
-              v-if="!data.academico.posGrad.value"
+              v-if="!bools.posGrad"
             />
           </div>
         </template>
@@ -244,36 +257,40 @@
           <div>
             <CustomSelect
               class="mb-5"
-              v-model="data.carreira.area"
+              name="carreira.area"
               label="Area de Atuação"
               placeholder="Selecione"
+              v-model:value="selections.area"
               :options="selectOpts.areaAtuacao"
             />
 
             <CustomSelect
               class="mb-5"
-              v-model="data.carreira.setor"
+              name="carreira.setor"
               label="Setor de Atuação"
               placeholder="Selecione"
-              :required="data.carreira.area !== 'Desempregado'"
               :options="selectOpts.setorAtuacao"
+              :required="selections.area !== 'Desempregado'"
+              :disabled="selections.area === 'Desempregado'"
             />
 
             <CustomInput
               class="mb-5"
-              v-model="data.carreira.empresa"
+              name="carreira.empresa"
               label="Empresa"
               placeholder="Ex: Google"
-              :required="data.carreira.area !== 'Desempregado'"
+              :required="selections.area !== 'Desempregado'"
+              :disabled="selections.area === 'Desempregado'"
             />
 
             <CustomInput
               class="mb-5"
-              v-model="data.carreira.faixaSalarial"
+              name="carreira.faixaSalarial"
               label="Faixa Salarial"
               type="number"
               step="0.01"
-              :required="data.carreira.area !== 'Desempregado'"
+              :required="selections.area !== 'Desempregado'"
+              :disabled="selections.area === 'Desempregado'"
             />
           </div>
         </template>
@@ -295,40 +312,37 @@
         <template #default>
           <div>
             <CustomCheckbox
-              v-model="data.adicionais.palestras"
+              name="adicionais.palestras"
               label="Gostaria de apresentar palestras"
               class="mb-5"
+              v-model:value="bools.palestras"
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
               Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
             </div>
 
-            <textarea
-              class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block focus:outline-sky-400 focus:outline-2"
-              v-model="data.adicionais.assuntosPalestras"
-              :required="data.adicionais.palestras"
+            <CustomTextarea
+              class="mb-5"
+              name="adicionais.assuntosPalestras"
+              :required="bools.palestras"
+              :disabled="!bools.palestras"
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
               Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso:
             </div>
 
-            <textarea
-              class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block focus:outline-sky-400 focus:outline-2"
-              v-model="data.adicionais.experiencias"
-              required
+            <CustomTextarea
+              class="mb-5"
+              name="adicionais.experiencias"
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
               Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto:
             </div>
 
-            <textarea
-              class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block focus:outline-sky-400 focus:outline-2"
-              v-model="data.adicionais.contribuicoes"
-              required
-            />
+            <CustomTextarea name="adicionais.contribuicoes" />
           </div>
         </template>
       </FolderSection>
@@ -340,20 +354,23 @@
           Salvar
         </CustomButton>
       </div>
-    </form>
+    </Form>
   </div>
 </template>
 
 <script lang="ts" setup>
 import FolderSection from 'src/components/FolderSection.vue'
 import CustomInput from 'src/components/CustomInput.vue'
+import CustomTextarea from 'src/components/CustomTextarea.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
+import { Form } from 'vee-validate'
 import { ref, computed } from 'vue'
 import { Country, State, City } from 'country-state-city'
 import svgPath from 'src/assets/svgPaths.json'
+import { object, string, date, boolean } from 'yup'
 import {
   mdiAccount,
   mdiBriefcase,
@@ -363,70 +380,27 @@ import {
   mdiSchool
 } from '@mdi/js'
 
-const data = ref({
-  geral: {
-    nome: '',
-    nascimento: '',
-    email: '',
-    genero: '',
-    confirmacaoEmail: '',
-    linkedin: '',
-    lattes: ''
-  },
-  localizacao: {
-    pais: '',
-    estado: '',
-    cidade: ''
-  },
-  academico: {
-    matricula: '',
-    email: '',
-    tipoAluno: '',
-    cotista: {
-      value: false,
-      tipo: ''
-    },
-    bolsista: {
-      value: false,
-      tipo: '',
-      remuneracao: ''
-    },
-    posGrad: {
-      value: false,
-      local: '',
-      curso: ''
-    },
-    desejaPos: false
-  },
-  carreira: {
-    area: '',
-    setor: '',
-    empresa: '',
-    faixaSalarial: '',
-    remuneracao: ''
-  },
-  adicionais: {
-    palestras: false,
-    assuntosPalestras: '',
-    experiencias: '',
-    contribuicoes: ''
-  }
+const selections = ref({
+  pais: '',
+  estado: '',
+  area: ''
+})
+
+const bools = ref({
+  cotista: false,
+  bolsista: false,
+  posGrad: false,
+  palestras: false
 })
 
 const selectOpts = ref({
   genero: ['Masculino', 'Feminino', 'Não-Binário', 'Transsexual'],
-  estado: ['Pará', 'Rio Grande do Norte', 'São Paulo', 'Ceara'],
-  cidade: ['Belém', 'Ananideua', 'Natal', 'Fortaleza'],
   tipoAluno: ['Graduação', 'Pós-graduação'],
   tipoCota: ['Escola', 'Renda', 'Autodeclaração de Raça', 'Quilombola/Indígena'],
   tipoBolsa: ['PIBIC', 'PROAD', 'PROEX', 'Permanência', 'Outros'],
   areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Outros'],
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
 })
-
-function handleSubmit ($event: Event) {
-  console.log(data.value)
-}
 
 const countries = computed(() => {
   const countries = Country.getAllCountries()
@@ -442,7 +416,7 @@ const countries = computed(() => {
 })
 
 const states = computed(() => {
-  const states = State.getStatesOfCountry(data.value.localizacao.pais)
+  const states = State.getStatesOfCountry(selections.value.pais)
   const filteredStates = []
 
   for (const state of states) {
@@ -455,12 +429,86 @@ const states = computed(() => {
 })
 
 const cities = computed(() => {
-  const cities = City.getCitiesOfState(data.value.localizacao.pais, data.value.localizacao.estado)
+  const cities = City.getCitiesOfState(selections.value.pais, selections.value.estado)
   const filteredCities = []
 
   for (const city of cities) {
     filteredCities.push(city.name)
   }
   return filteredCities
+})
+
+function handleSubmit (values: any) {
+  console.log(values)
+}
+
+function onInvalid (e: any) {
+  console.log(e)
+}
+
+const schema = object().shape({
+  geral: object({
+    nome: string().required(),
+    nascimento: date().required(),
+    email: string().email().required(),
+    genero: string().required(),
+    linkedin: string(),
+    lattes: string()
+  }),
+  localizacao: object({
+    pais: string().required(),
+    estado: string().required(),
+    cidade: string().required()
+  }),
+  academico: object({
+    matricula: string().required(),
+    email: string().email().required(),
+    tipoAluno: string().required(),
+    cotista: object({
+      value: boolean(),
+      tipo: string().when('value', ([value], schema) => {
+        return value ? schema.required() : schema.notRequired()
+      })
+    }),
+    bolsista: object({
+      value: boolean(),
+      tipo: string().when('value', ([value], schema) => {
+        return value ? schema.required() : schema.notRequired()
+      }),
+      remuneracao: string().when('value', ([value], schema) => {
+        return value ? schema.required() : schema.notRequired()
+      })
+    }),
+    posGrad: object({
+      value: boolean(),
+      local: string().when('value', ([value], schema) => {
+        return value ? schema.required() : schema.notRequired()
+      }),
+      curso: string().when('value', ([value], schema) => {
+        return value ? schema.required() : schema.notRequired()
+      })
+    }),
+    desejaPos: boolean()
+  }),
+  carreira: object({
+    area: string().required(),
+    setor: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
+    }),
+    empresa: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
+    }),
+    faixaSalarial: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
+    })
+  }),
+  adicionais: object({
+    palestras: boolean(),
+    assuntosPalestras: string().when('palestras', ([palestras], schema) => {
+      return palestras ? schema.required() : schema.notRequired()
+    }),
+    experiencias: string().required(),
+    contribuicoes: string().required()
+  })
 })
 </script>

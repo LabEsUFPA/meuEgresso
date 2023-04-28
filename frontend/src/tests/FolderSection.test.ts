@@ -18,7 +18,7 @@ describe('FolderSection', () => {
       }
     })
 
-    expect(wrapper.find('.rounded-t-xl').html()).toContain('Title slot')
-    expect(wrapper.find('.rounded-b-xl').html()).toContain('Body slot')
+    expect(wrapper.find('.rounded-t-2xl').html()).toContain('Title slot')
+    expect(wrapper.find('.rounded-b-2xl').html()).toContain('Body slot')
   })
 })
