@@ -12,10 +12,8 @@ import lombok.Data;
  */
 @Data
 public class TipoBolsaDTO {
-    
-    private Integer id;
-    
-    private String nome;
 
-    private Double remuneracao;
+    private Integer id;
+
+    private String nome;
 }

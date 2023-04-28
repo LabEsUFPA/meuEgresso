@@ -25,8 +25,4 @@ public class TipoBolsaModel extends Auditable {
 
     @Column(name = "nome_tipo_bolsa", unique = true, nullable = false, length = 100)
     private String nome;
-
-    @Column(name = "remuneracao_tipo_bolsa", unique = false, nullable = false)
-    private Double remuneracao;
-
 }

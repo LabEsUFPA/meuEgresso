@@ -36,6 +36,9 @@ public class PesquisaCientificaModel extends Auditable {
     @JoinColumn(name = "tipo_bolsa_id", unique = true, nullable = false)
     private TipoBolsaModel tipoBolsa;
 
+    @Column(name = "remuneracao_tipo_bolsa", unique = false, nullable = false)
+    private Double remuneracao;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id", unique = true, nullable = false)
     private EmpresaModel empresa;

@@ -7,7 +7,8 @@ import labes.facomp.ufpa.br.meuegresso.dto.tipobolsa.TipoBolsaDTO;
 import lombok.Data;
 
 /**
- * Encapsulamento da tabela PesquisaCientifica a fim de representar somente os dados não
+ * Encapsulamento da tabela PesquisaCientifica a fim de representar somente os
+ * dados não
  * sensiveis.
  *
  * @author Pedro Inácio
@@ -18,14 +19,16 @@ import lombok.Data;
 public class PesquisaCientificaDTO {
 
     private Integer id;
-    
+
     private String nome;
-    
+
     private TipoBolsaDTO tipoBolsa;
-    
+
     private EmpresaDTO empresa;
 
+    private Double remuneracao;
+
     private Date inicio;
-    
+
     private Date fim;
 }
