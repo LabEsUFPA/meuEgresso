@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -26,7 +26,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.contribuicao.ContribuicaoRepository;
+import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 
 /**
  * Class que implementa testes para o ContribuicaoService.
@@ -44,16 +46,14 @@ public class ContribuicaoServiceTest {
     private static final Integer ID = 1;
     private static final String DESCRICAO = "Contribui";
 
-    private static final Integer ID2 = 2;
-    private static final String DESCRICAO2 = "Contribui";
-
     @Autowired
     private ContribuicaoService contribuicaoService;
 
-    ContribuicaoModel testContribuicao;
+    @Autowired
+    private UsuarioService userService;
 
     @MockBean
-    private ContribuicaoRepository repository;
+    private ContribuicaoRepository contribuicaoRepository;
 
     /**
      * Metodo para testar a criacao de um ContribuicaoModel com save.
@@ -65,7 +65,7 @@ public class ContribuicaoServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(repository.save(Mockito.any(ContribuicaoModel.class)))
+        BDDMockito.given(contribuicaoRepository.save(Mockito.any(ContribuicaoModel.class)))
                 .willReturn(getMockContribuicao());
 
         ContribuicaoModel response = contribuicaoService.save(new ContribuicaoModel());
@@ -86,11 +86,13 @@ public class ContribuicaoServiceTest {
     @Order(2)
     public void testFindAll() {
         BDDMockito.given(contribuicaoService.findAll())
-                .willReturn(getMockContribuicaoLista());
-        // .willReturn(List.of(getMockContribuicao()));
+                .willReturn(List.of(getMockContribuicao()));
 
         List<ContribuicaoModel> response = contribuicaoService.findAll();
+
         assertNotNull(response);
+        assertEquals(response, List.of(getMockContribuicao()));
+
     }
 
     /**
@@ -102,11 +104,13 @@ public class ContribuicaoServiceTest {
     @Test
     @Order(3)
     public void testFindById() {
-        BDDMockito.given(contribuicaoService.findById(Mockito.anyInt()))
-                .willReturn(getMockContribuicao());
+        BDDMockito.given(contribuicaoRepository.findById(ID))
+                .willReturn(Optional.of(getMockContribuicao()));
 
         ContribuicaoModel response = contribuicaoService.findById(ID);
+
         assertNotNull(response);
+        assertEquals(ID, response.getId());
     }
 
     /**
@@ -116,14 +120,18 @@ public class ContribuicaoServiceTest {
      * @throws InvalidRequestException
      * @since 27/04/2023
      */
+
     @Test
     @Order(4)
     public void testUpdate() throws InvalidRequestException {
-        BDDMockito.given(contribuicaoService.update(Mockito.any(ContribuicaoModel.class)))
+
+        BDDMockito.given(contribuicaoRepository.save(Mockito.any(ContribuicaoModel.class)))
                 .willReturn(getMockContribuicao());
 
-        ContribuicaoModel response = contribuicaoService.findById(ID);
-        assertNotNull(response);
+        ContribuicaoModel contribuicaoAtualizada = contribuicaoService.update(getMockContribuicao());
+
+        assertNotNull(contribuicaoAtualizada);
+        assertEquals(contribuicaoAtualizada, getMockContribuicao());
     }
 
     /**
@@ -133,10 +141,10 @@ public class ContribuicaoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(4)
+    @Order(5)
     public void testDeleteById() {
 
-        BDDMockito.given(contribuicaoService.deleteById(Mockito.anyInt()))
+        BDDMockito.given(contribuicaoService.deleteById(ID))
                 .willReturn(true);
 
         Boolean response = contribuicaoService.deleteById(ID);
@@ -150,13 +158,22 @@ public class ContribuicaoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(5)
+    @Order(6)
     public void testExistsByIdAndCreatedById() {
 
-        BDDMockito.given(contribuicaoService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+        BDDMockito.given(contribuicaoRepository.existsByIdAndCreatedById(ID, ID))
                 .willReturn(true);
 
-        Boolean response = contribuicaoService.existsByIdAndCreatedById(ID, ID);
+        UsuarioModel usuario = new UsuarioModel(1, "username", "password", "email@gmail.com", "nome", null, null);
+        ContribuicaoModel curso = getMockContribuicao();
+        curso.setCreatedBy(usuario);
+
+        userService.save(usuario);
+        contribuicaoService.save(curso);
+
+        Boolean response = contribuicaoService.existsByIdAndCreatedById(
+                curso.getId(),
+                curso.getCreatedBy().getId());
         assertTrue(response);
     }
 
@@ -176,26 +193,8 @@ public class ContribuicaoServiceTest {
         return contribuicaoTest;
     }
 
-    private List<ContribuicaoModel> getMockContribuicaoLista() {
-        List<ContribuicaoModel> contribuicaoLista = new ArrayList<>();
-        ContribuicaoModel contribuicaoTest = ContribuicaoModel.builder()
-                .id(ID)
-                .descricao(DESCRICAO)
-                .build();
-
-        ContribuicaoModel contribuicaoTest2 = ContribuicaoModel.builder()
-                .id(ID2)
-                .descricao(DESCRICAO2)
-                .build();
-
-        contribuicaoLista.add(contribuicaoTest);
-        contribuicaoLista.add(contribuicaoTest2);
-
-        return contribuicaoLista;
-    }
-
     @AfterAll
     public void tearDown() {
-        repository.deleteAll();
+        contribuicaoRepository.deleteAll();
     }
 }
