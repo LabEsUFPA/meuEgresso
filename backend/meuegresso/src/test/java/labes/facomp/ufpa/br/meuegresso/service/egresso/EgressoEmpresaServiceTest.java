@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
@@ -27,6 +30,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoEmpresaRepository;
 
 /**
  * Class que implementa testes para o EgressoEmpresaService.
@@ -49,8 +53,9 @@ public class EgressoEmpresaServiceTest {
 
     @Autowired
     private EgressoEmpresaService egressoEmpresaService;
-
-    EgressoEmpresaModel testEgresso;
+    
+    @MockBean
+    private EgressoEmpresaRepository repository;
 
     /**
      * Metodo para testar a criacao de um EgressoEmpresaModel com adicionar Egresso.
@@ -63,7 +68,7 @@ public class EgressoEmpresaServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(egressoEmpresaService.save(Mockito.any(EgressoEmpresaModel.class)))
+        BDDMockito.given(repository.save(Mockito.any(EgressoEmpresaModel.class)))
                 .willReturn(getMockEgressoEmpresa());
 
         EgressoEmpresaModel response = egressoEmpresaService.save(new EgressoEmpresaModel());
@@ -87,7 +92,6 @@ public class EgressoEmpresaServiceTest {
     public void testFindAll() {
         BDDMockito.given(egressoEmpresaService.findAll())
                 .willReturn(getMockEgressoEmpresaLista());
-        // .willReturn(List.of(getMockEgressoEmpresa()));
 
         List<EgressoEmpresaModel> response = egressoEmpresaService.findAll();
         assertNotNull(response);
@@ -99,15 +103,14 @@ public class EgressoEmpresaServiceTest {
      * @author Pedro Inácio
      * @since 28/04/2023
      */
-    // @Test
-    // @Order(3)
-    // public void testFindByUsuarioId() {
-    // BDDMockito.given(egressoEmpresaService.findByUsuarioId(Mockito.anyInt()))
-    // .willReturn(getMockEgressoEmpresa());
+    @Test
+    public void testFindById() {
+        BDDMockito.given(repository.findById(Mockito.any(EgressoEmpresaModelId.class)))
+                .willReturn(Optional.ofNullable(getMockEgressoEmpresa()));
 
-    // EgressoEmpresaModel response = egressoEmpresaService.findByUsuarioId(ID);
-    // assertNotNull(response);
-    // }
+        EgressoEmpresaModel response = egressoEmpresaService.findById(ID);
+        assertNotNull(response);
+    }
 
     /**
      * Metodo para testar o update.
@@ -116,10 +119,9 @@ public class EgressoEmpresaServiceTest {
      * @since 28/04/2023
      */
     @Test
-    @Order(3)
     public void testUpdate() {
         try {
-            BDDMockito.given(egressoEmpresaService.update(Mockito.any(EgressoEmpresaModel.class)))
+            BDDMockito.given(repository.save(Mockito.any(EgressoEmpresaModel.class)))
                     .willReturn(getMockEgressoEmpresa());
             EgressoEmpresaModel response = egressoEmpresaService.update(getMockEgressoEmpresa());
             assertNotNull(response);
@@ -129,39 +131,36 @@ public class EgressoEmpresaServiceTest {
     }
 
     /**
-     * Metodo para testar o deleteById.
-     * 
-     * @author Pedro Inácio
-     * @since 28/04/2023
-     */
-    @Test
-    @Order(4)
-
-    public void testDeletarEgresso() {
-
-        BDDMockito.given(egressoEmpresaService.deleteById(Mockito.any(
-                EgressoEmpresaModelId.class)))
-                .willReturn(true);
-
-        Boolean response = egressoEmpresaService.deleteById(ID);
-        assertTrue(response);
-    }
-
-    /**
      * Metodo para testar o existsByIdAndCreatedById.
      * 
      * @author Pedro Inácio
      * @since 28/04/2023
      */
     @Test
-    @Order(5)
     public void testExistsByIdAndCreatedById() {
 
-        BDDMockito.given(egressoEmpresaService.existsByIdAndCreatedById(Mockito.any(
+        BDDMockito.given(repository.existsByIdAndCreatedById(Mockito.any(
                 EgressoEmpresaModelId.class), Mockito.anyInt()))
                 .willReturn(true);
 
         Boolean response = egressoEmpresaService.existsByIdAndCreatedById(ID, 1);
+        assertTrue(response);
+    }
+
+    /**
+     * Metodo para testar o deleteById.
+     * 
+     * @author Pedro Inácio
+     * @since 28/04/2023
+     */
+    @Test
+    public void testdeleteById() {
+
+        BDDMockito.given(egressoEmpresaService.deleteById(Mockito.any(
+                EgressoEmpresaModelId.class)))
+                .willReturn(true);
+
+        Boolean response = egressoEmpresaService.deleteById(ID);
         assertTrue(response);
     }
 
@@ -201,8 +200,8 @@ public class EgressoEmpresaServiceTest {
         return egressoEmpresaLista;
     }
 
-    // @AfterAll
-    // private void tearDown() {
-    // //
-    // }
+    @AfterAll
+    public void tearDown() {
+        repository.deleteAll();
+    }
 }

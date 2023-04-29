@@ -1,204 +1,205 @@
-// package labes.facomp.ufpa.br.meuegresso.service.egresso;
+package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
-// import static org.junit.jupiter.api.Assertions.assertEquals;
-// import static org.junit.jupiter.api.Assertions.assertNotNull;
-// import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-// import java.util.ArrayList;
-// import java.util.Date;
-// import java.util.List;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-// import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-// import org.junit.jupiter.api.Order;
-// import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.TestInstance;
-// import org.junit.jupiter.api.TestInstance.Lifecycle;
-// import org.junit.jupiter.api.TestMethodOrder;
-// import org.mockito.BDDMockito;
-// import org.mockito.Mockito;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.boot.test.context.SpringBootTest;
-// import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
-// import org.springframework.test.context.ActiveProfiles;
-// import org.springframework.test.context.TestExecutionListeners;
-// import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.mockito.BDDMockito;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-// import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 
-// /**
-//  * Class que implementa testes para o EgressoService.
-//  * 
-//  * @author
-//  * @since
-//  */
-// @SpringBootTest
-// @ActiveProfiles("test")
-// @TestInstance(Lifecycle.PER_CLASS)
-// @TestMethodOrder(OrderAnnotation.class)
-// @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-// public class EgressoServiceTest {
+/**
+ * Classe que implementa testes para o EgressoService.
+ * 
+ * @author Pedro Inácio
+ * @since 28/04/2023
+ */
+@SpringBootTest
+@ActiveProfiles("test")
+@TestInstance(Lifecycle.PER_CLASS)
+@TestMethodOrder(OrderAnnotation.class)
+@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
+public class EgressoServiceTest {
 
-//     private static final Integer ID = 1;
-//     private static final Date NASCIMENTO = "1997-05-05";
-//     private static final Boolean INTERESSEEMPOS = true;
-//     private static final String LATTES = "https://lattes.cnpq.br/";
-//     private static final String LINKEDIN = "https://linkedin.com/";
+    private static final Integer ID = 1;
+    private static final LocalDate NASCIMENTO = LocalDate.parse("1997-05-05");
+    private static final Boolean INTERESSEEMPOS = true;
+    private static final String LATTES = "https://lattes.cnpq.br/";
+    private static final String LINKEDIN = "https://linkedin.com/";
 
-//     @Autowired
-//     private EgressoService egressoService;
+    @Autowired
+    private EgressoService egressoService;
 
-//     EgressoModel testEgresso;
+    @MockBean
+    private EgressoRepository repository;
 
-//     /**
-//      * Metodo para testar a criacao de um EgressoModel com adicionar Egresso.
-//      * 
-//      * @author Bruno Eiki
-//      * @since 27/04/2023
-//      */
+    /**
+     * Metodo para testar a criacao de um EgressoModel com adicionar Egresso.
+     * 
+     * @author Bruno Eiki, Pedro Inácio
+     * @since 27/04/2023
+     */
 
-//     @Test
-//     @Order(1)
-//     public void adicionarEgresso() {
+    @Test
+    public void testAdicionarEgresso() {
 
-//         BDDMockito.given(egressoService.adicionarEgresso(Mockito.any(EgressoModel.class)))
-//                 .willReturn(getMockEgresso());
+        BDDMockito.given(repository.save(Mockito.any(EgressoModel.class)))
+                .willReturn(getMockEgresso());
 
-//         EgressoModel response = egressoService.adicionarEgresso(new EgressoModel());
+        EgressoModel response = egressoService.adicionarEgresso(new EgressoModel());
 
-//         assertNotNull(response);
-//         assertEquals(ID, response.getId());
-//         assertEquals(NASCIMENTO, response.getNascimento());
-//         assertEquals(INTERESSEEMPOS, response.getInteresseEmPos());
-//         assertEquals(LATTES, response.getLattes());
-//         assertEquals(LINKEDIN, response.getLinkedin());
-//     }
+        assertNotNull(response);
+        assertEquals(ID, response.getId());
+        assertEquals(NASCIMENTO, response.getNascimento());
+        assertEquals(INTERESSEEMPOS, response.getInteresseEmPos());
+        assertEquals(LATTES, response.getLattes());
+        assertEquals(LINKEDIN, response.getLinkedin());
+    }
 
-//     /**
-//      * Metodo para testar o metodo findAll.
-//      * 
-//      * @author Bruno Eiki
-//      * @since 27/04/2023
-//      */
-//     @Test
-//     @Order(2)
-//     public void testFindAll() {
-//         BDDMockito.given(egressoService.findAll())
-//                 .willReturn(getMockEgressoLista());
-//         // .willReturn(List.of(getMockEgresso()));
+    /**
+     * Metodo para testar o metodo findAll.
+     * 
+     * @author Bruno Eiki, Pedro Inácio
+     * @since 27/04/2023
+     */
+    @Test
+    public void testFindAll() {
+        BDDMockito.given(repository.findAll())
+                .willReturn(getMockEgressoLista());
 
-//         List<EgressoModel> response = egressoService.findAll();
-//         assertNotNull(response);
-//     }
+        List<EgressoModel> response = egressoService.findAll();
+        assertNotNull(response);
+    }
 
-//     /**
-//      * Metodo para testar o findById.
-//      * 
-//      * @author Bruno Eiki
-//      * @since 27/04/2023
-//      */
-//     @Test
-//     @Order(3)
-//     public void testFindByUsuarioId() {
-//         BDDMockito.given(egressoService.findByUsuarioId(Mockito.anyInt()))
-//                 .willReturn(getMockEgresso());
+    /**
+     * Metodo para testar o findById.
+     * 
+     * @author Bruno Eiki, Pedro Inácio
+     * @since 27/04/2023
+     */
+    @Test
+    public void testFindByUsuarioId() {
+        BDDMockito.given(repository.findByUsuarioId(Mockito.anyInt()))
+                .willReturn(Optional.ofNullable(getMockEgresso()));
 
-//         EgressoModel response = egressoService.findByUsuarioId(ID);
-//         assertNotNull(response);
-//     }
+        EgressoModel response = egressoService.findByUsuarioId(ID);
+        assertNotNull(response);
+    }
 
-//     /**
-//      * Metodo para testar o update.
-//      * 
-//      * @author Bruno Eiki
-//      * @since 27/04/2023
-//      */
-//     @Test
-//     @Order(4)
-//     public void testUpdate() {
-//         BDDMockito.given(egressoService.updateEgresso(Mockito.any(EgressoModel.class)))
-//                 .willReturn(getMockEgresso());
+    /**
+     * Metodo para testar o update.
+     * 
+     * @author Bruno Eiki, Pedro Inácio
+     * @since 27/04/2023
+     */
+    @Test
+    public void testUpdateEgresso() {
+        BDDMockito.given(repository.save(Mockito.any(EgressoModel.class)))
+                .willReturn(getMockEgresso());
 
-//         EgressoModel response = egressoService.updateEgresso();
-//         assertNotNull(response);
-//     }
+        EgressoModel response = egressoService.updateEgresso(getMockEgresso());
+        assertNotNull(response);
+    }
 
-//     /**
-//      * Metodo para testar o deleteById.
-//      * 
-//      * @author Bruno Eiki
-//      * @since 27/04/2023
-//      */
-//     @Test
-//     @Order(4)
+    /**
+     * Metodo para testar o deleteById.
+     * 
+     * @author Bruno Eiki, Pedro Inácio
+     * @since 27/04/2023
+     */
+    @Test
+    public void testDeletarEgresso() {
 
-//     public void testDeletarEgresso() {
+        BDDMockito.given(egressoService.deleteById(Mockito.anyInt()))
+                .willReturn(true);
 
-//         BDDMockito.given(egressoService.deleteById(Mockito.anyInt()))
-//                 .willReturn(true);
+        Boolean response = egressoService.deleteById(ID);
+        assertTrue(response);
+    }
 
-//         Boolean response = egressoService.deleteById(ID);
-//         assertTrue(response);
-//     }
+    /**
+     * Metodo para testar o existsByIdAndCreatedById.
+     * 
+     * @author Bruno Eiki, Pedro Inácio
+     * @since 27/04/2023
+     */
+    @Test
+    @Order(6)
+    public void testExistsByIdAndCreatedById() {
 
-//     /**
-//      * Metodo para testar o existsByIdAndCreatedById.
-//      * 
-//      * @author Bruno Eiki
-//      * @since 27/04/2023
-//      */
-//     @Test
-//     @Order(5)
-//     public void testExistsByIdAndCreatedById() {
+        BDDMockito.given(egressoService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+                .willReturn(true);
 
-//         BDDMockito.given(egressoService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
-//                 .willReturn(true);
+        Boolean response = egressoService.existsByIdAndCreatedById(ID, ID);
+        assertTrue(response);
+    }
 
-//         Boolean response = egressoService.existsByIdAndCreatedById(ID, ID);
-//         assertTrue(response);
-//     }
+    /**
+     * Metodo que preenche um mock de um EgressoModel para retorno dos testes
+     * 
+     * @author Bruno Eiki, Pedro Inácio
+     * @since 27/04/2023
+     * 
+     * @return <code>egressoTeste</code> object
+     */
+    private EgressoModel getMockEgresso() {
+        EgressoModel egressoTest = EgressoModel.builder()
+                .id(ID)
+                .nascimento(NASCIMENTO)
+                .interesseEmPos(INTERESSEEMPOS)
+                .lattes(LATTES)
+                .linkedin(LINKEDIN)
+                .build();
+        return egressoTest;
+    }
 
-//     /**
-//      * Metodo que preenche um mock de um EgressoModel para retorno dos testes
-//      * 
-//      * @author Bruno Eiki
-//      * @since 27/04/2023
-//      * 
-//      * @return <code>egressoTeste</code> object
-//      */
-//     private EgressoModel getMockEgresso() {
-//         EgressoModel egressoTest = EgressoModel.builder()
-//                 .id(ID)
-//                 .nascimento(NASCIMENTO)
-//                 .interesseEmPos(INTERESSEEMPOS)
-//                 .lattes(LATTES)
-//                 .linkedin(LINKEDIN)
-//                 .build();
-//         return egressoTest;
-//     }
+    private List<EgressoModel> getMockEgressoLista() {
+        List<EgressoModel> egressoLista = new ArrayList<>();
+        EgressoModel egressoTest = EgressoModel.builder()
+                .id(ID)
+                .nascimento(NASCIMENTO)
+                .interesseEmPos(INTERESSEEMPOS)
+                .lattes(LATTES)
+                .linkedin(LINKEDIN)
+                .build();
 
-//     private List<EgressoModel> getMockEgressoLista() {
-//         List<EgressoModel> egressoLista = new ArrayList<>();
-//         EgressoModel egressoTest = EgressoModel.builder()
-//                 .id(ID)
-//                 .nascimento(NASCIMENTO)
-//                 .interesseEmPos(INTERESSEEMPOS)
-//                 .lattes(LATTES)
-//                 .linkedin(LINKEDIN)
-//                 .build();
+        EgressoModel egressoTest2 = EgressoModel.builder()
+                .id(ID)
+                .nascimento(NASCIMENTO)
+                .interesseEmPos(INTERESSEEMPOS)
+                .lattes(LATTES)
+                .linkedin(LINKEDIN)
+                .build();
 
-//         EgressoModel egressoTest2 = EgressoModel.builder()
-//                 .id(ID2)
-//                 .nome(NOME2)
-//                 .build();
+        egressoLista.add(egressoTest);
+        egressoLista.add(egressoTest2);
 
-//         egressoLista.add(egressoTest);
-//         egressoLista.add(egressoTest2);
+        return egressoLista;
+    }
 
-//         return egressoLista;
-//     }
-
-//     // @AfterAll
-//     // private void tearDown() {
-//     // //
-//     // }
-// }
+    @AfterAll
+    public void tearDown() {
+        repository.deleteAll();
+    }
+}

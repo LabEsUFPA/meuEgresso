@@ -7,9 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -33,7 +34,7 @@ import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoColacaoRepository;
 
 /**
- * Class que implementa testes para o EgressoColacaoService.
+ * Classe que implementa testes para o EgressoColacaoService.
  * 
  * @author Pedro Inácio
  * @since 28/04/2023
@@ -62,14 +63,13 @@ public class EgressoColacaoServiceTest {
     private EgressoColacaoRepository repository;
 
     /**
-     * Metodo para testar a criacao de um EgressoColacaoModel com adicionar Egresso.
+     * Metodo para testar a criacao de um EgressoColacaoModel com save.
      * 
      * @author Pedro Inácio
      * @since 28/04/2023
      */
 
     @Test
-    @Order(1)
     public void testSave() {
 
         BDDMockito.given(repository.save(Mockito.any(EgressoColacaoModel.class)))
@@ -94,11 +94,9 @@ public class EgressoColacaoServiceTest {
      * @since 28/04/2023
      */
     @Test
-    @Order(2)
     public void testFindAll() {
-        BDDMockito.given(egressoColacaoService.findAll())
+        BDDMockito.given(repository.findAll())
                 .willReturn(getMockEgressoColacaoLista());
-        // .willReturn(List.of(getMockEgressoColacao()));
 
         List<EgressoColacaoModel> response = egressoColacaoService.findAll();
         assertNotNull(response);
@@ -110,15 +108,14 @@ public class EgressoColacaoServiceTest {
      * @author Pedro Inácio
      * @since 28/04/2023
      */
-    // @Test
-    // @Order(3)
-    // public void testFindByUsuarioId() {
-    // BDDMockito.given(egressoColacaoService.findByUsuarioId(Mockito.anyInt()))
-    // .willReturn(getMockEgressoColacao());
+    @Test
+    public void testFindById() {
+        BDDMockito.given(repository.findById(Mockito.any(EgressoColacaoModelId.class)))
+                .willReturn(Optional.ofNullable(getMockEgressoColacao()));
 
-    // EgressoColacaoModel response = egressoColacaoService.findByUsuarioId(ID);
-    // assertNotNull(response);
-    // }
+        EgressoColacaoModel response = egressoColacaoService.findById(ID);
+        assertNotNull(response);
+    }
 
     /**
      * Metodo para testar o update.
@@ -127,10 +124,9 @@ public class EgressoColacaoServiceTest {
      * @since 28/04/2023
      */
     @Test
-    @Order(3)
     public void testUpdate() {
         try {
-            BDDMockito.given(egressoColacaoService.update(Mockito.any(EgressoColacaoModel.class)))
+            BDDMockito.given(repository.save(Mockito.any(EgressoColacaoModel.class)))
                     .willReturn(getMockEgressoColacao());
             EgressoColacaoModel response = egressoColacaoService.update(getMockEgressoColacao());
             assertNotNull(response);
@@ -140,14 +136,29 @@ public class EgressoColacaoServiceTest {
     }
 
     /**
+     * Metodo para testar o existsByIdAndCreatedById.
+     * 
+     * @author Pedro Inácio
+     * @since 28/04/2023
+     */
+    @Test
+    public void testExistsByIdAndCreatedById() {
+
+        BDDMockito.given(repository.existsByIdAndCreatedById(Mockito.any(
+                EgressoColacaoModelId.class), Mockito.anyInt()))
+                .willReturn(true);
+
+        Boolean response = egressoColacaoService.existsByIdAndCreatedById(ID, 1);
+        assertTrue(response);
+    }
+
+    /**
      * Metodo para testar o deleteById.
      * 
      * @author Pedro Inácio
      * @since 28/04/2023
      */
     @Test
-    @Order(4)
-
     public void testDeletarEgresso() {
 
         BDDMockito.given(egressoColacaoService.deleteById(Mockito.any(
@@ -155,24 +166,6 @@ public class EgressoColacaoServiceTest {
                 .willReturn(true);
 
         Boolean response = egressoColacaoService.deleteById(ID);
-        assertTrue(response);
-    }
-
-    /**
-     * Metodo para testar o existsByIdAndCreatedById.
-     * 
-     * @author Pedro Inácio
-     * @since 28/04/2023
-     */
-    @Test
-    @Order(5)
-    public void testExistsByIdAndCreatedById() {
-
-        BDDMockito.given(egressoColacaoService.existsByIdAndCreatedById(Mockito.any(
-                EgressoColacaoModelId.class), Mockito.anyInt()))
-                .willReturn(true);
-
-        Boolean response = egressoColacaoService.existsByIdAndCreatedById(ID, 1);
         assertTrue(response);
     }
 
@@ -187,15 +180,7 @@ public class EgressoColacaoServiceTest {
     private EgressoColacaoModel getMockEgressoColacao() {
         EgressoColacaoModel egressoColacaoTest = new EgressoColacaoModel(ID, EGRESSO, COLACAO, DATA_INGRESSO,
                 DATA_CONCLUSAO, EMPRESA, CURSO);
-        /*
-         * EgressoColacaoModel egressoColacaoTest = EgressoColacaoModel.builder()
-         * .id(ID)
-         * .egresso(EGRESSO)
-         * .empresa(EMPRESA)
-         * .areaAtuacao(AREA_ATUACAO)
-         * .FaixaSalarial(FAIXA_SALARIAL)
-         * .build();
-         */
+        
         return egressoColacaoTest;
     }
 
@@ -212,26 +197,8 @@ public class EgressoColacaoServiceTest {
         List<EgressoColacaoModel> egressoColacaoLista = new ArrayList<>();
         EgressoColacaoModel egressoColacaoTest = new EgressoColacaoModel(ID, EGRESSO, COLACAO, DATA_INGRESSO,
                 DATA_CONCLUSAO, EMPRESA, CURSO);
-        /*
-         * EgressoColacaoModel egressoColacaoTest = EgressoColacaoModel.builder()
-         * .id(ID)
-         * .egresso(EGRESSO)
-         * .empresa(EMPRESA)
-         * .areaAtuacao(AREA_ATUACAO)
-         * .FaixaSalarial(FAIXA_SALARIAL)
-         * .build();
-         */
         EgressoColacaoModel egressoColacaoTest2 = new EgressoColacaoModel(ID, EGRESSO, COLACAO, DATA_INGRESSO,
                 DATA_CONCLUSAO, EMPRESA, CURSO);
-        /*
-         * EgressoColacaoModel egressoColacaoTest2 = EgressoColacaoModel.builder()
-         * .id(ID)
-         * .egresso(EGRESSO)
-         * .empresa(EMPRESA)
-         * .areaAtuacao(AREA_ATUACAO)
-         * .FaixaSalarial(FAIXA_SALARIAL)
-         * .build();
-         */
 
         egressoColacaoLista.add(egressoColacaoTest);
         egressoColacaoLista.add(egressoColacaoTest2);
@@ -239,8 +206,8 @@ public class EgressoColacaoServiceTest {
         return egressoColacaoLista;
     }
 
-    // @AfterAll
-    // private void tearDown() {
-    // //
-    // }
+    @AfterAll
+    public void tearDown() {
+        repository.deleteAll();
+    }
 }
