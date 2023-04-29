@@ -1,7 +1,9 @@
 package labes.facomp.ufpa.br.meuegresso.dto.auth;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Encapsulamento de uma autenticação bem sucedida.
@@ -12,6 +14,8 @@ import lombok.Data;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthenticationResponse {
 
 	private String token;

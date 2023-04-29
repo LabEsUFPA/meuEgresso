@@ -31,6 +31,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
  * @since 26/04/2023
  * @version 1.0.1
  */
+
 @SpringBootTest
 @ActiveProfiles("test")
 public class UsuarioServiceImplTest {
@@ -130,7 +131,7 @@ public class UsuarioServiceImplTest {
 		usuario.setNome("Michael");
 		usuario.setEmail("michel@hotmail.com");
 		usuario.setUsername("michel123");
-		usuario.setLastModifiedDate(time);
+		//usuario.setLastModifiedDate(time);
 		usuario.setLastModifiedBy(usuario);
 
 		Mockito.when(repository.save(usuario)).thenReturn(usuario);
@@ -146,7 +147,7 @@ public class UsuarioServiceImplTest {
 		usuario2.setNome("Michael");
 		usuario2.setEmail("michel@hotmail.com");
 		usuario2.setUsername("michel123");
-		usuario2.setLastModifiedDate(time);
+		//usuario2.setLastModifiedDate(time);
 		usuario2.setLastModifiedBy(usuario2);
 
 		assertEquals(usuario, usuarioService.update(usuario2));
@@ -185,3 +186,4 @@ public class UsuarioServiceImplTest {
 		usuario = null;
 	}
 }
+

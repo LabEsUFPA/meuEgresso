@@ -64,7 +64,7 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
 	private transient EgressoModel egresso;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "usuario_grupo", joinColumns = { @JoinColumn(name = "id_usuario") }, inverseJoinColumns = {
 			@JoinColumn(name = "id_grupo") }, uniqueConstraints = @UniqueConstraint(columnNames = { "id_usuario",
 					"id_grupo" }))
