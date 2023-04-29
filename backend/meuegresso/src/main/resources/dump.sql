@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS public.anuncio (
 
 
 --
--- TOC entry 214 (class 1259 OID 17929)
+-- TOC entry 230 (class 1259 OID 17927)
 -- Name: anuncio_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -23,7 +23,20 @@ CREATE SEQUENCE IF NOT EXISTS public.anuncio_seq
 
 
 --
--- TOC entry 233 (class 1259 OID 18407)
+-- TOC entry 223 (class 1259 OID 17552)
+-- Name: colacao_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE IF NOT EXISTS public.colacao_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 237 (class 1259 OID 21066)
 -- Name: comentario; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -40,7 +53,7 @@ CREATE TABLE IF NOT EXISTS public.comentario (
 
 
 --
--- TOC entry 215 (class 1259 OID 17930)
+-- TOC entry 231 (class 1259 OID 17936)
 -- Name: comentario_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -53,7 +66,7 @@ CREATE SEQUENCE IF NOT EXISTS public.comentario_seq
 
 
 --
--- TOC entry 234 (class 1259 OID 18413)
+-- TOC entry 238 (class 1259 OID 21072)
 -- Name: contribuicao; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -69,7 +82,20 @@ CREATE TABLE IF NOT EXISTS public.contribuicao (
 
 
 --
--- TOC entry 216 (class 1259 OID 17931)
+-- TOC entry 216 (class 1259 OID 17300)
+-- Name: contribuicao_model_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE IF NOT EXISTS public.contribuicao_model_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 222 (class 1259 OID 17533)
 -- Name: contribuicao_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -82,7 +108,7 @@ CREATE SEQUENCE IF NOT EXISTS public.contribuicao_seq
 
 
 --
--- TOC entry 235 (class 1259 OID 18419)
+-- TOC entry 239 (class 1259 OID 21078)
 -- Name: cota; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -98,7 +124,7 @@ CREATE TABLE IF NOT EXISTS public.cota (
 
 
 --
--- TOC entry 217 (class 1259 OID 17932)
+-- TOC entry 232 (class 1259 OID 19524)
 -- Name: cota_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -111,7 +137,7 @@ CREATE SEQUENCE IF NOT EXISTS public.cota_seq
 
 
 --
--- TOC entry 236 (class 1259 OID 18425)
+-- TOC entry 240 (class 1259 OID 21084)
 -- Name: curso; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -127,7 +153,7 @@ CREATE TABLE IF NOT EXISTS public.curso (
 
 
 --
--- TOC entry 218 (class 1259 OID 17933)
+-- TOC entry 224 (class 1259 OID 17583)
 -- Name: curso_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -140,7 +166,7 @@ CREATE SEQUENCE IF NOT EXISTS public.curso_seq
 
 
 --
--- TOC entry 237 (class 1259 OID 18431)
+-- TOC entry 241 (class 1259 OID 21090)
 -- Name: depoimento; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -157,7 +183,7 @@ CREATE TABLE IF NOT EXISTS public.depoimento (
 
 
 --
--- TOC entry 219 (class 1259 OID 17934)
+-- TOC entry 217 (class 1259 OID 17301)
 -- Name: depoimento_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -170,7 +196,7 @@ CREATE SEQUENCE IF NOT EXISTS public.depoimento_seq
 
 
 --
--- TOC entry 238 (class 1259 OID 18437)
+-- TOC entry 242 (class 1259 OID 21096)
 -- Name: egresso; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -180,22 +206,22 @@ CREATE TABLE IF NOT EXISTS public.egresso (
     created_date timestamp(6) without time zone,
     last_modified_date timestamp(6) without time zone,
     interesse_em_pos_egresso boolean NOT NULL,
-    lattes_egresso character varying(255) NOT NULL,
-    linkedin_egresso character varying(255) NOT NULL,
-    nascimento_usuario date NOT NULL,
+    lattes_egresso character varying(255),
+    linkedin_egresso character varying(255),
+    matricula_egresso character varying(12),
+    nascimento_egresso date NOT NULL,
     pcd_egresso boolean NOT NULL,
     created_by integer,
     last_modified_by integer,
     cota_id integer NOT NULL,
     endereco_id integer NOT NULL,
-    etnia_id integer NOT NULL,
     genero_id integer NOT NULL,
-    usuario_id integer NOT NULL
+    usuario_id integer
 );
 
 
 --
--- TOC entry 239 (class 1259 OID 18445)
+-- TOC entry 243 (class 1259 OID 21104)
 -- Name: egresso_colacao; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -215,7 +241,7 @@ CREATE TABLE IF NOT EXISTS public.egresso_colacao (
 
 
 --
--- TOC entry 240 (class 1259 OID 18451)
+-- TOC entry 244 (class 1259 OID 21110)
 -- Name: egresso_contribuicao; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -226,7 +252,7 @@ CREATE TABLE IF NOT EXISTS public.egresso_contribuicao (
 
 
 --
--- TOC entry 241 (class 1259 OID 18456)
+-- TOC entry 245 (class 1259 OID 21115)
 -- Name: egresso_empresa; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -244,7 +270,7 @@ CREATE TABLE IF NOT EXISTS public.egresso_empresa (
 
 
 --
--- TOC entry 220 (class 1259 OID 17935)
+-- TOC entry 218 (class 1259 OID 17302)
 -- Name: egresso_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -257,7 +283,7 @@ CREATE SEQUENCE IF NOT EXISTS public.egresso_seq
 
 
 --
--- TOC entry 242 (class 1259 OID 18462)
+-- TOC entry 246 (class 1259 OID 21121)
 -- Name: egresso_tabalho_publicado; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -268,7 +294,46 @@ CREATE TABLE IF NOT EXISTS public.egresso_tabalho_publicado (
 
 
 --
--- TOC entry 243 (class 1259 OID 18467)
+-- TOC entry 247 (class 1259 OID 21126)
+-- Name: egresso_valido; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE IF NOT EXISTS public.egresso_valido (
+    id_egresso_valido integer NOT NULL,
+    email_egresso_valido character varying(255),
+    matricula_egresso_valido character varying(12),
+    nome_egresso_valido character varying(100) NOT NULL
+);
+
+
+--
+-- TOC entry 235 (class 1259 OID 20065)
+-- Name: egresso_valido_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE IF NOT EXISTS public.egresso_valido_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 233 (class 1259 OID 19525)
+-- Name: egressos_validos_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE IF NOT EXISTS public.egressos_validos_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 248 (class 1259 OID 21131)
 -- Name: empresa; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -285,7 +350,7 @@ CREATE TABLE IF NOT EXISTS public.empresa (
 
 
 --
--- TOC entry 221 (class 1259 OID 17936)
+-- TOC entry 221 (class 1259 OID 17348)
 -- Name: empresa_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -298,7 +363,7 @@ CREATE SEQUENCE IF NOT EXISTS public.empresa_seq
 
 
 --
--- TOC entry 244 (class 1259 OID 18473)
+-- TOC entry 249 (class 1259 OID 21137)
 -- Name: endereco; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -316,7 +381,7 @@ CREATE TABLE IF NOT EXISTS public.endereco (
 
 
 --
--- TOC entry 222 (class 1259 OID 17937)
+-- TOC entry 220 (class 1259 OID 17332)
 -- Name: endereco_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -329,7 +394,7 @@ CREATE SEQUENCE IF NOT EXISTS public.endereco_seq
 
 
 --
--- TOC entry 245 (class 1259 OID 18481)
+-- TOC entry 250 (class 1259 OID 21145)
 -- Name: etnia; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -345,7 +410,7 @@ CREATE TABLE IF NOT EXISTS public.etnia (
 
 
 --
--- TOC entry 223 (class 1259 OID 17938)
+-- TOC entry 226 (class 1259 OID 17622)
 -- Name: etnia_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -358,7 +423,7 @@ CREATE SEQUENCE IF NOT EXISTS public.etnia_seq
 
 
 --
--- TOC entry 246 (class 1259 OID 18487)
+-- TOC entry 251 (class 1259 OID 21151)
 -- Name: faixa_salarial; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -374,7 +439,7 @@ CREATE TABLE IF NOT EXISTS public.faixa_salarial (
 
 
 --
--- TOC entry 224 (class 1259 OID 17939)
+-- TOC entry 227 (class 1259 OID 17642)
 -- Name: faixa_salarial_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -387,7 +452,7 @@ CREATE SEQUENCE IF NOT EXISTS public.faixa_salarial_seq
 
 
 --
--- TOC entry 247 (class 1259 OID 18493)
+-- TOC entry 252 (class 1259 OID 21157)
 -- Name: genero; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -403,7 +468,7 @@ CREATE TABLE IF NOT EXISTS public.genero (
 
 
 --
--- TOC entry 225 (class 1259 OID 17940)
+-- TOC entry 225 (class 1259 OID 17609)
 -- Name: genero_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -416,7 +481,7 @@ CREATE SEQUENCE IF NOT EXISTS public.genero_seq
 
 
 --
--- TOC entry 248 (class 1259 OID 18499)
+-- TOC entry 253 (class 1259 OID 21163)
 -- Name: grupo; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -432,7 +497,7 @@ CREATE TABLE IF NOT EXISTS public.grupo (
 
 
 --
--- TOC entry 226 (class 1259 OID 17941)
+-- TOC entry 214 (class 1259 OID 17250)
 -- Name: grupo_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -445,7 +510,7 @@ CREATE SEQUENCE IF NOT EXISTS public.grupo_seq
 
 
 --
--- TOC entry 249 (class 1259 OID 18505)
+-- TOC entry 254 (class 1259 OID 21169)
 -- Name: pesquisa_cientifica; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -465,7 +530,7 @@ CREATE TABLE IF NOT EXISTS public.pesquisa_cientifica (
 
 
 --
--- TOC entry 227 (class 1259 OID 17942)
+-- TOC entry 234 (class 1259 OID 19526)
 -- Name: pesquisa_cientifica_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -478,7 +543,7 @@ CREATE SEQUENCE IF NOT EXISTS public.pesquisa_cientifica_seq
 
 
 --
--- TOC entry 250 (class 1259 OID 18511)
+-- TOC entry 255 (class 1259 OID 21175)
 -- Name: tipo_bolsa; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -495,7 +560,7 @@ CREATE TABLE IF NOT EXISTS public.tipo_bolsa (
 
 
 --
--- TOC entry 228 (class 1259 OID 17943)
+-- TOC entry 228 (class 1259 OID 17892)
 -- Name: tipo_bolsa_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -508,7 +573,7 @@ CREATE SEQUENCE IF NOT EXISTS public.tipo_bolsa_seq
 
 
 --
--- TOC entry 251 (class 1259 OID 18517)
+-- TOC entry 256 (class 1259 OID 21181)
 -- Name: titulacao; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -524,7 +589,7 @@ CREATE TABLE IF NOT EXISTS public.titulacao (
 
 
 --
--- TOC entry 229 (class 1259 OID 17944)
+-- TOC entry 229 (class 1259 OID 17913)
 -- Name: titulacao_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -537,7 +602,7 @@ CREATE SEQUENCE IF NOT EXISTS public.titulacao_seq
 
 
 --
--- TOC entry 252 (class 1259 OID 18523)
+-- TOC entry 257 (class 1259 OID 21187)
 -- Name: trabalho_publicado; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -554,7 +619,7 @@ CREATE TABLE IF NOT EXISTS public.trabalho_publicado (
 
 
 --
--- TOC entry 230 (class 1259 OID 17945)
+-- TOC entry 219 (class 1259 OID 17303)
 -- Name: trabalho_publicado_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -567,7 +632,7 @@ CREATE SEQUENCE IF NOT EXISTS public.trabalho_publicado_seq
 
 
 --
--- TOC entry 253 (class 1259 OID 18531)
+-- TOC entry 258 (class 1259 OID 21195)
 -- Name: usuario; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -577,7 +642,6 @@ CREATE TABLE IF NOT EXISTS public.usuario (
     created_date timestamp(6) without time zone,
     last_modified_date timestamp(6) without time zone,
     email character varying(50) NOT NULL,
-    matricula_usuario character varying(12) NOT NULL,
     nome_usuario character varying(30) NOT NULL,
     senha_usuario character varying(80) NOT NULL,
     login_usuario character varying(100) NOT NULL,
@@ -587,7 +651,7 @@ CREATE TABLE IF NOT EXISTS public.usuario (
 
 
 --
--- TOC entry 254 (class 1259 OID 18894)
+-- TOC entry 259 (class 1259 OID 21201)
 -- Name: usuario_grupo; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -598,7 +662,7 @@ CREATE TABLE IF NOT EXISTS public.usuario_grupo (
 
 
 --
--- TOC entry 231 (class 1259 OID 17946)
+-- TOC entry 215 (class 1259 OID 17251)
 -- Name: usuario_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 

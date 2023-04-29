@@ -7,8 +7,9 @@ describe('CustomCheckbox', () => {
     const wrapper = mount(CustomCheckbox, {
       props: {
         label: 'Testing',
-        modelValue: false,
-        'onUpdate:modelValue': (e: any) => wrapper.setProps({ modelValue: !wrapper.props('modelValue') })
+        value: false,
+        name: 'testing',
+        'onUpdate:value': (e: any) => wrapper.setProps({ value: !wrapper.props('value') })
       }
     })
 
@@ -19,8 +20,9 @@ describe('CustomCheckbox', () => {
     const wrapper = mount(CustomCheckbox, {
       props: {
         label: 'Testing',
-        modelValue: false,
-        'onUpdate:modelValue': (e: any) => wrapper.setProps({ modelValue: !wrapper.props('modelValue') })
+        value: false,
+        name: 'testing',
+        'onUpdate:value': (e: any) => wrapper.setProps({ value: !wrapper.props('value') })
       }
     })
 
@@ -31,15 +33,16 @@ describe('CustomCheckbox', () => {
     const wrapper = mount(CustomCheckbox, {
       props: {
         label: 'Testing',
-        modelValue: false,
-        'onUpdate:modelValue': (e: any) => wrapper.setProps({ modelValue: !wrapper.props('modelValue') })
+        value: false,
+        name: 'testing',
+        'onUpdate:value': (e: any) => wrapper.setProps({ value: !wrapper.props('value') })
       }
     })
 
-    expect(wrapper.props('modelValue')).toBe(false)
+    expect(wrapper.props('value')).toBe(false)
     await wrapper.find('button').trigger('click')
-    expect(wrapper.props('modelValue')).toBe(true)
+    expect(wrapper.props('value')).toBe(true)
     await wrapper.find('button').trigger('click')
-    expect(wrapper.props('modelValue')).toBe(false)
+    expect(wrapper.props('value')).toBe(false)
   })
 })

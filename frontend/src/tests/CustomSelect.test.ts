@@ -13,8 +13,9 @@ describe('CustomSelect', () => {
           'Option 2',
           'Option 3'
         ],
-        modelValue: '',
-        'onUpdate:modelValue': (e: any) => wrapper.setProps({ modelValue: e })
+        name: 'test',
+        value: '',
+        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
       }
     })
 
@@ -30,8 +31,9 @@ describe('CustomSelect', () => {
           'Option 2',
           'Option 3'
         ],
-        modelValue: '',
-        'onUpdate:modelValue': (e: any) => wrapper.setProps({ modelValue: e })
+        name: 'test',
+        value: '',
+        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
       }
     })
 
@@ -54,8 +56,9 @@ describe('CustomSelect', () => {
           'Option 2',
           'Option 3'
         ],
-        modelValue: '',
-        'onUpdate:modelValue': (e: any) => wrapper.setProps({ modelValue: e })
+        name: 'test',
+        value: '',
+        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
       }
     })
 

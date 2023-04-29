@@ -58,9 +58,6 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Column(name = "nome_usuario", nullable = false, unique = false, length = 30)
 	private String nome;
 
-	@Column(name = "matricula_usuario", unique = true, nullable = true, length = 12)
-	private String matricula;
-
 	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
 	private transient EgressoModel egresso;
 

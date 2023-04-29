@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.pesquisacientifica;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.tipobolsa.TipoBolsaDTO;
@@ -31,7 +31,7 @@ public class PesquisaCientificaDTO {
 
     private EmpresaDTO empresa;
 
-    private Date inicio;
+    private LocalDate inicio;
 
-    private Date fim;
+    private LocalDate fim;
 }
