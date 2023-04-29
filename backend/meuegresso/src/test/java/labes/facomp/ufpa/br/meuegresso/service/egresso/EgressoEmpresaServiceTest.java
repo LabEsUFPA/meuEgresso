@@ -53,7 +53,7 @@ public class EgressoEmpresaServiceTest {
 
     @Autowired
     private EgressoEmpresaService egressoEmpresaService;
-    
+
     @MockBean
     private EgressoEmpresaRepository repository;
 

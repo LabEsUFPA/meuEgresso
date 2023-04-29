@@ -1,5 +1,25 @@
 // package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 
+// import org.junit.jupiter.api.BeforeAll;
+// import org.junit.jupiter.api.Test;
+// import org.mockito.BDDMockito;
+// import org.mockito.Mockito;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.boot.test.context.SpringBootTest;
+// import org.springframework.boot.test.mock.mockito.MockBean;
+// import org.springframework.http.HttpHeaders;
+// import org.springframework.test.context.ActiveProfiles;
+// import org.springframework.test.web.servlet.MockMvc;
+// import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+// import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+
+// import com.fasterxml.jackson.core.JsonProcessingException;
+// import com.fasterxml.jackson.databind.ObjectMapper;
+
+// import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
+// import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+// import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
+
 // @SpringBootTest
 // //@AutoConfigureMockMvc
 // @ActiveProfiles("test")
@@ -52,8 +72,8 @@
 //      * @return <code>User</code> object
 //      * @throws ParseException
 //      */
-//     private User getMockUser() throws ParseException {
-//         return new User(1, NAME);
+//     private EgressoModel getMockUser() throws ParseException {
+//         return new EgressoModel(1, NAME);
 //     }
 
 //     /**

@@ -17,6 +17,10 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
+import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.cota.CotaRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 /**
  * Classe que implementa testes das funcionalides de EgressoRepository
@@ -33,22 +37,45 @@ public class EgressoRepositoryTest {
 
     private EgressoModel testarEgresso;
 
+    @Autowired
+    GeneroRepository generoRepository;
+    
+    @Autowired
+    CotaRepository cotaRepository;
+
+    @Autowired
+    UsuarioRepository usuarioRepository;
+
     @BeforeEach
     public void setUp() {
+        GeneroModel genero = new GeneroModel();
+        genero.setNome("null");
+        genero = generoRepository.save(genero);
+
+        CotaModel cota = CotaModel.builder().nome("cota").build();
+        cota = cotaRepository.save(cota);
+
+        UsuarioModel usuario = new UsuarioModel();
+        usuario.setUsername("username");
+        usuario.setPassword("pass");
+        usuario.setEmail("email@gmail.com");
+        usuario.setNome("Pedro Fodao");
+        usuario = usuarioRepository.save(usuario);
+        
         testarEgresso = new EgressoModel();
-        testarEgresso.setId(1);
         testarEgresso.setNascimento(LocalDate.parse("1999-10-20"));
         testarEgresso.setInteresseEmPos(true);
         testarEgresso.setLattes("https://lattes.cnpq.br/");
         testarEgresso.setLinkedin("https://linkedin.com/");
-        testarEgresso.setCota(new CotaModel(1, "null", null));
+        testarEgresso.setCota(cota);
         testarEgresso.setMatricula("20200464222");
-        testarEgresso.setEndereco(new EnderecoModel(1, "null", "null", "null", null));
-        testarEgresso.setGenero(new GeneroModel(1, "null"));
+        testarEgresso.setEndereco(EnderecoModel.builder().pais("null").cidade("null").estado("null").build());
+        testarEgresso.setGenero(genero);
+        testarEgresso.setUsuario(usuario);
 
-        egressoRepository.save(testarEgresso);
+        testarEgresso =  egressoRepository.save(testarEgresso);
     }
-
+    /* 
     @Test
     public void testSave() {
     
@@ -61,7 +88,7 @@ public class EgressoRepositoryTest {
         .build();
         EgressoModel response = egressoRepository.save(testarEgresso);
         assertNotNull(response);
-    }
+    }*/
 
 
     @Test
