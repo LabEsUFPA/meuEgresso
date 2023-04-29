@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -26,8 +26,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
+import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.curso.CursoRepository;
-
+import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 
 /**
  * Class que implementa testes para o CursoService.
@@ -45,16 +46,14 @@ public class CursoServiceTest {
     private static final Integer ID = 1;
     private static final String NOME = "Ciência da Computação";
 
-    private static final Integer ID2 = 2;
-    private static final String NOME2 = "Letras";
-
     @Autowired
     private CursoService cursoService;
 
-    CursoModel testCurso;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @MockBean
-    private CursoRepository repository;
+    private CursoRepository cursoRepository;
 
     /**
      * Metodo para testar a criacao de um CursoModel com save.
@@ -66,7 +65,7 @@ public class CursoServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(repository.save(Mockito.any(CursoModel.class)))
+        BDDMockito.given(cursoRepository.save(Mockito.any(CursoModel.class)))
                 .willReturn(getMockCurso());
 
         CursoModel response = cursoService.save(new CursoModel());
@@ -74,7 +73,6 @@ public class CursoServiceTest {
         assertNotNull(response);
         assertEquals(ID, response.getId());
         assertEquals(NOME, response.getNome());
-
     }
 
     /**
@@ -87,8 +85,7 @@ public class CursoServiceTest {
     @Order(2)
     public void testFindAll() {
         BDDMockito.given(cursoService.findAll())
-                .willReturn(getMockCursoLista());
-        // .willReturn(List.of(getMockCurso()));
+                .willReturn(List.of(getMockCurso()));
 
         List<CursoModel> response = cursoService.findAll();
         assertNotNull(response);
@@ -103,8 +100,8 @@ public class CursoServiceTest {
     @Test
     @Order(3)
     public void testFindById() {
-        BDDMockito.given(cursoService.findById(Mockito.anyInt()))
-                .willReturn(getMockCurso());
+        BDDMockito.given(cursoRepository.findById(ID))
+                .willReturn(Optional.of(getMockCurso()));
 
         CursoModel response = cursoService.findById(ID);
         assertNotNull(response);
@@ -120,11 +117,13 @@ public class CursoServiceTest {
     @Test
     @Order(4)
     public void testUpdate() throws InvalidRequestException {
-        BDDMockito.given(cursoService.update(Mockito.any(CursoModel.class)))
+        BDDMockito.given(cursoRepository.save(Mockito.any(CursoModel.class)))
                 .willReturn(getMockCurso());
 
-        CursoModel response = cursoService.update(getMockCurso());
-        assertNotNull(response);
+        CursoModel cursoUpdated = cursoService.update(getMockCurso());
+
+        assertNotNull(cursoUpdated);
+        assertEquals(cursoUpdated, getMockCurso());
     }
 
     /**
@@ -134,10 +133,10 @@ public class CursoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(4)
+    @Order(5)
     public void testDeleteById() {
 
-        BDDMockito.given(cursoService.deleteById(Mockito.anyInt()))
+        BDDMockito.given(cursoService.deleteById(ID))
                 .willReturn(true);
 
         Boolean response = cursoService.deleteById(ID);
@@ -151,13 +150,22 @@ public class CursoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(5)
+    @Order(6)
     public void testExistsByIdAndCreatedById() {
 
-        BDDMockito.given(cursoService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+        BDDMockito.given(cursoRepository.existsByIdAndCreatedById(ID, ID))
                 .willReturn(true);
 
-        Boolean response = cursoService.existsByIdAndCreatedById(ID, ID);
+        UsuarioModel usuario = new UsuarioModel(1, "username", "password", "email@gmail.com", "nome", null, null);
+        CursoModel curso = getMockCurso();
+        curso.setCreatedBy(usuario);
+
+        usuarioService.save(usuario);
+        cursoService.save(curso);
+
+        Boolean response = cursoService.existsByIdAndCreatedById(
+                curso.getId(),
+                curso.getCreatedBy().getId());
         assertTrue(response);
     }
 
@@ -177,26 +185,10 @@ public class CursoServiceTest {
         return cursoTest;
     }
 
-    private List<CursoModel> getMockCursoLista() {
-        List<CursoModel> cursoLista = new ArrayList<>();
-        CursoModel cursoTest = CursoModel.builder()
-                .id(ID)
-                .nome(NOME)
-                .build();
-
-        CursoModel cursoTest2 = CursoModel.builder()
-                .id(ID2)
-                .nome(NOME2)
-                .build();
-
-        cursoLista.add(cursoTest);
-        cursoLista.add(cursoTest2);
-
-        return cursoLista;
-    }
-
     @AfterAll
     public void tearDown() {
-        repository.deleteAll();
+        usuarioService.deleteById(ID);
+        cursoService.deleteById(ID);
+        cursoRepository.deleteAll();
     }
 }

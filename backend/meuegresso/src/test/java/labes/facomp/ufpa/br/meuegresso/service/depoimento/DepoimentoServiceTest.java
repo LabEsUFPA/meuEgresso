@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -26,7 +26,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
+import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.depoimento.DepoimentoRepository;
+import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 
 /**
  * Class que implementa testes para o DepoimentoService.
@@ -42,18 +44,16 @@ import labes.facomp.ufpa.br.meuegresso.repository.depoimento.DepoimentoRepositor
 public class DepoimentoServiceTest {
 
     private static final Integer ID = 1;
-    private static final String DESCRICAO = "Foi bom";
-
-    private static final Integer ID2 = 2;
-    private static final String DESCRICAO2 = "Me formei";
+    private static final String DESCRICAO = "Me formei";
 
     @Autowired
     private DepoimentoService depoimentoService;
 
-    DepoimentoModel testDepoimento;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @MockBean
-    private DepoimentoRepository repository;
+    private DepoimentoRepository depoimentoRepository;
 
     /**
      * Metodo para testar a criacao de um DepoimentoModel com save.
@@ -65,7 +65,7 @@ public class DepoimentoServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(repository.save(Mockito.any(DepoimentoModel.class)))
+        BDDMockito.given(depoimentoRepository.save(Mockito.any(DepoimentoModel.class)))
                 .willReturn(getMockDepoimento());
 
         DepoimentoModel response = depoimentoService.save(new DepoimentoModel());
@@ -85,11 +85,12 @@ public class DepoimentoServiceTest {
     @Order(2)
     public void testFindAll() {
         BDDMockito.given(depoimentoService.findAll())
-                .willReturn(getMockDepoimentoLista());
-        // .willReturn(List.of(getMockDepoimento()));
+                .willReturn(List.of(getMockDepoimento()));
 
         List<DepoimentoModel> response = depoimentoService.findAll();
         assertNotNull(response);
+        assertEquals(response, List.of(getMockDepoimento()));
+
     }
 
     /**
@@ -101,11 +102,13 @@ public class DepoimentoServiceTest {
     @Test
     @Order(3)
     public void testFindById() {
-        BDDMockito.given(depoimentoService.findById(Mockito.anyInt()))
-                .willReturn(getMockDepoimento());
+        BDDMockito.given(depoimentoRepository.findById(ID))
+                .willReturn(Optional.of(getMockDepoimento()));
 
         DepoimentoModel response = depoimentoService.findById(ID);
+
         assertNotNull(response);
+        assertEquals(ID, response.getId());
     }
 
     /**
@@ -118,11 +121,13 @@ public class DepoimentoServiceTest {
     @Test
     @Order(4)
     public void testUpdate() throws InvalidRequestException {
-        BDDMockito.given(depoimentoService.update(Mockito.any(DepoimentoModel.class)))
+        BDDMockito.given(depoimentoRepository.save(Mockito.any(DepoimentoModel.class)))
                 .willReturn(getMockDepoimento());
 
-        DepoimentoModel response = depoimentoService.update(getMockDepoimento());
-        assertNotNull(response);
+        DepoimentoModel depoimentoUpdated = depoimentoService.update(getMockDepoimento());
+
+        assertNotNull(depoimentoUpdated);
+        assertEquals(depoimentoUpdated, getMockDepoimento());
     }
 
     /**
@@ -132,10 +137,10 @@ public class DepoimentoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(4)
+    @Order(5)
     public void testDeleteById() {
 
-        BDDMockito.given(depoimentoService.deleteById(Mockito.anyInt()))
+        BDDMockito.given(depoimentoService.deleteById(ID))
                 .willReturn(true);
 
         Boolean response = depoimentoService.deleteById(ID);
@@ -149,13 +154,22 @@ public class DepoimentoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(5)
+    @Order(6)
     public void testExistsByIdAndCreatedById() {
 
-        BDDMockito.given(depoimentoService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+        BDDMockito.given(depoimentoRepository.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = depoimentoService.existsByIdAndCreatedById(ID, ID);
+        UsuarioModel usuario = new UsuarioModel(1, "username", "password", "email@gmail.com", "nome", null, null);
+        DepoimentoModel curso = getMockDepoimento();
+        curso.setCreatedBy(usuario);
+
+        usuarioService.save(usuario);
+        depoimentoService.save(curso);
+
+        Boolean response = depoimentoService.existsByIdAndCreatedById(
+                curso.getId(),
+                curso.getCreatedBy().getId());
         assertTrue(response);
     }
 
@@ -175,27 +189,9 @@ public class DepoimentoServiceTest {
         return depoimentoTest;
     }
 
-    private List<DepoimentoModel> getMockDepoimentoLista() {
-        List<DepoimentoModel> depoimentoLista = new ArrayList<>();
-        DepoimentoModel depoimentoTest = DepoimentoModel.builder()
-                .id(ID)
-                .descricao(DESCRICAO)
-                .build();
-
-        DepoimentoModel depoimentoTest2 = DepoimentoModel.builder()
-                .id(ID2)
-                .descricao(DESCRICAO2)
-                .build();
-
-        depoimentoLista.add(depoimentoTest);
-        depoimentoLista.add(depoimentoTest2);
-
-        return depoimentoLista;
-    }
-
     @AfterAll
     public void tearDown() {
-        repository.deleteAll();
+        depoimentoRepository.deleteAll();
     }
 
 }
