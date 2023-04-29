@@ -2,6 +2,11 @@ package labes.facomp.ufpa.br.meuegresso.service.tipobolsa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -20,6 +25,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.repository.tipobolsa.TipoBolsaRepository;
 
@@ -40,7 +47,13 @@ public class TipoBolsaServiceTest {
 
     @MockBean
     private TipoBolsaRepository repository;
-    
+
+    private static final Integer ID = 1;
+    private static final String NOME = "PIBIC";
+
+    private static final Integer ID2 = 2;
+    private static final String NOME2 = "PROEX";
+
     /**
      * metodo para criar um PesquisaCientifica para uso nos testes.
      * 
@@ -53,35 +66,55 @@ public class TipoBolsaServiceTest {
 
         BDDMockito.given(repository.save(Mockito.any(TipoBolsaModel.class)))
                 .willReturn(getMockTipoBolsaModel());
+
         TipoBolsaModel response = service.save(new TipoBolsaModel());
 
         assertNotNull(response);
-        assertEquals("PIBIC", response.getNome());
+        assertEquals(NOME, response.getNome());
     }
 
-    /**
-     * metodo para atualizar uma tipobolsa para uso no teste.
-     * 
-     * @author Pedro Inácio
-     * @since 27/04/2023
-     */
-    /* 
     @Test
     @Order(2)
-    public void testUpdate() {
+    public void testFindAll() {
+        BDDMockito.given(service.findAll())
+                .willReturn(getMockTipoBolsaLista());
 
+        List<TipoBolsaModel> response = service.findAll();
+        assertNotNull(response);
+    }
+
+    @Test
+    @Order(3)
+    public void testFindById() {
+        BDDMockito.given(repository.findById(ID))
+                .willReturn(Optional.of(getMockTipoBolsaModel()));
+
+        TipoBolsaModel response = service.findById(ID);
+        assertNotNull(response);
+    }
+
+    @Test
+    @Order(4)
+    public void testUpdate() throws InvalidRequestException {
         BDDMockito.given(repository.save(Mockito.any(TipoBolsaModel.class)))
                 .willReturn(getMockTipoBolsaModel());
-        TipoBolsaModel response = service.save(new TipoBolsaModel());
-        response.setNome(null);
-        repository.update();
 
-        TipoBolsaModel responseUpdate = new TipoBolsaModel(1, "Homem trans");
-        response = service.update(responseUpdate);
+        TipoBolsaModel tipoBolsaUpdated = service.update(getMockTipoBolsaModel());
 
-        assertNotNull(response);
-        assertEquals("Homem Cis", response.getNome());
-    }*/
+        assertNotNull(tipoBolsaUpdated);
+        assertEquals(getMockTipoBolsaModel(), tipoBolsaUpdated);
+    }
+
+    @Test
+    @Order(5)
+    public void testDeleteById() {
+
+        BDDMockito.given(service.deleteById(ID))
+                .willReturn(true);
+
+        Boolean response = service.deleteById(ID);
+        assertTrue(response);
+    }
 
     /**
      * metodo que preenche um mock de um tipobolsa para usar como return nos testes.
@@ -93,8 +126,20 @@ public class TipoBolsaServiceTest {
      */
     private TipoBolsaModel getMockTipoBolsaModel() {
 
-        TipoBolsaModel tipoBolsaModel = new TipoBolsaModel(1,"PIBIC", null);
+        TipoBolsaModel tipoBolsaModel = new TipoBolsaModel(ID, NOME, null);
         return tipoBolsaModel;
+    }
+
+    private List<TipoBolsaModel> getMockTipoBolsaLista() {
+        List<TipoBolsaModel> tipoBolsaLista = new ArrayList<>();
+
+        TipoBolsaModel bolsaTeste1 = new TipoBolsaModel(ID, NOME, null);
+        TipoBolsaModel bolsaTeste2 = new TipoBolsaModel(ID2, NOME2, null);
+
+        tipoBolsaLista.add(bolsaTeste1);
+        tipoBolsaLista.add(bolsaTeste2);
+
+        return tipoBolsaLista;
     }
 
     /**
