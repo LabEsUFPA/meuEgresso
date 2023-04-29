@@ -237,7 +237,7 @@
                 <CustomInput
                   class="mb-5"
                   name="geral.nascimento"
-                  label="dataEgresso de Nascimento"
+                  label="Data de Nascimento"
                   type="date"
                 />
               </div>
@@ -336,6 +336,7 @@
                   name="localizacao.pais"
                   label="País"
                   :options="countries"
+                  v-model:value="selections.pais"
                   required
                 />
 
@@ -344,6 +345,7 @@
                   name="localizacao.estado"
                   label="Estado"
                   :options="states"
+                  v-model:value="selections.estado"
                   required
                 />
 
@@ -353,26 +355,6 @@
                   :options="cities"
                   required
                 />
-
-              <!-- <CustomSelect
-                  class="mb-5"
-                  name="localizacao.pais"
-                  label="País"
-                  :options="selectOpts.pais"
-                />
-
-                <CustomSelect
-                  class="mb-5"
-                  name="localizacao.estado"
-                  label="Estado"
-                  :options="selectOpts.estado"
-                />
-
-                <CustomSelect
-                  name="localizacao.cidade"
-                  label="Cidade"
-                  :options="selectOpts.cidade"
-                /> -->
               </div>
             </template>
           </FolderSection>
@@ -495,76 +477,15 @@
                   placeholder="Bolsa"
                   icon-path=""
                 />
-
-              <!-- <div class="mb-5 text-sm font-semibold text-cyan-600">
-                Marque todos as opções que sejam verdadeiras abaixo:
-              </div>
-
-              <CustomCheckbox
-                class="mb-5"
-                name="academico.cotista.value"
-                label="Cotista"
-              />
-
-              <CustomInput
-                class="mb-5"
-                name="academico.cotista.tipo"
-                label="Tipo de Cota"
-                placeholder="Selecione"
-              />
-
-              <CustomCheckbox
-                class="mb-5"
-                name="academico.bolsista.value"
-                label="Bolsista"
-              />
-
-              <CustomInput
-                class="mb-5"
-                name="academico.bolsista.tipo"
-                label="Tipo de Bolsa"
-                placeholder="Selecione"
-              />
-
-              <CustomInput
-                class="mb-5"
-                name="academico.bolsista.remuneracao"
-                label="Remuneração da bolsa"
-                placeholder="Selecione"
-              />
-
-              <CustomCheckbox
-                class="mb-5"
-                name="academico.posGrad.value"
-                label="Pós-graduação"
-              />
-
-              <CustomInput
-                class="mb-5"
-                name="academico.posGrad.tipo"
-                label="Tipo de pós-graduação"
-                placeholder="Selecione"
-              />
-
-              <CustomInput
-                class="mb-5"
-                name="academico.posGrad.local"
-                label="Local da pós-graduação"
-                placeholder="Selecione"
-              />
-
-              <CustomInput
-                name="academico.posGrad.curso"
-                label="Curso de pós-graduação"
-                placeholder="Selecione"
-              /> -->
               </div>
               <div v-else>
                 <CustomInput
                   class="mb-5"
                   name="academico.matricula"
                   label="Matrícula"
-                  placeholder="Selecione"
+                  mask="############"
+                  placeholder="205004940001"
+                  required
                 />
 
                 <CustomInput
@@ -572,13 +493,16 @@
                   name="academico.email"
                   label="Email institucional"
                   placeholder="Selecione"
+                  required
                 />
 
-                <CustomInput
+                <CustomSelect
                   class="mb-5"
                   name="academico.tipoAluno"
                   label="Tipo de Aluno"
                   placeholder="Selecione"
+                  :options="selectOpts.tipoAluno"
+                  required
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -589,26 +513,34 @@
                   class="mb-5"
                   name="academico.cotista.value"
                   label="Cotista"
+                  v-model:value="bools.cotista"
                 />
 
-                <CustomInput
+                <CustomSelect
                   class="mb-5"
                   name="academico.cotista.tipo"
                   label="Tipo de Cota"
                   placeholder="Selecione"
+                  :options="selectOpts.tipoCota"
+                  :required="bools.cotista"
+                  :disabled="!bools.cotista"
                 />
 
                 <CustomCheckbox
                   class="mb-5"
                   name="academico.bolsista.value"
                   label="Bolsista"
+                  v-model:value="bools.bolsista"
                 />
 
-                <CustomInput
+                <CustomSelect
                   class="mb-5"
                   name="academico.bolsista.tipo"
                   label="Tipo de Bolsa"
                   placeholder="Selecione"
+                  :options="selectOpts.tipoBolsa"
+                  :required="bools.bolsista"
+                  :disabled="!bools.bolsista"
                 />
 
                 <CustomInput
@@ -616,19 +548,17 @@
                   name="academico.bolsista.remuneracao"
                   label="Remuneração da bolsa"
                   placeholder="Selecione"
+                  type="number"
+                  step="0.01"
+                  :required="bools.bolsista"
+                  :disabled="!bools.bolsista"
                 />
 
                 <CustomCheckbox
                   class="mb-5"
                   name="academico.posGrad.value"
+                  v-model:value="bools.posGrad"
                   label="Pós-graduação"
-                />
-
-                <CustomInput
-                  class="mb-5"
-                  name="academico.posGrad.tipo"
-                  label="Tipo de pós-graduação"
-                  placeholder="Selecione"
                 />
 
                 <CustomInput
@@ -636,12 +566,23 @@
                   name="academico.posGrad.local"
                   label="Local da pós-graduação"
                   placeholder="Selecione"
+                  :required="bools.posGrad"
+                  :disabled="!bools.posGrad"
                 />
 
                 <CustomInput
+                  class="mb-5"
                   name="academico.posGrad.curso"
                   label="Curso de pós-graduação"
                   placeholder="Selecione"
+                  :required="bools.posGrad"
+                  :disabled="!bools.posGrad"
+                />
+
+                <CustomCheckbox
+                  name="academico.posGrad.desejaPos"
+                  label="Deseja realizar pós graduação?"
+                  v-if="!bools.posGrad"
                 />
               </div>
             </template>
@@ -713,33 +654,25 @@
                   placeholder="Empresa"
                   icon-path=""
                 />
-
-              <!-- <CustomInput
-                class="mb-5"
-                name="carreira.faixaSalarial"
-                label="Faixa Salarial"
-                placeholder="Selecione"
-              />
-
-              <CustomInput
-                name="carreira.remuneracao"
-                label="Valor da remuneração mensal"
-                placeholder="Selecione"
-              /> -->
               </div>
               <div v-else>
-                <CustomInput
+                <CustomSelect
                   class="mb-5"
                   name="carreira.area"
                   label="Area de Atuação"
                   placeholder="Selecione"
+                  v-model:value="selections.area"
+                  :options="selectOpts.areaAtuacao"
                 />
 
-                <CustomInput
+                <CustomSelect
                   class="mb-5"
                   name="carreira.setor"
                   label="Setor de Atuação"
                   placeholder="Selecione"
+                  :options="selectOpts.setorAtuacao"
+                  :required="selections.area !== 'Desempregado'"
+                  :disabled="selections.area === 'Desempregado'"
                 />
 
                 <CustomInput
@@ -747,19 +680,18 @@
                   name="carreira.empresa"
                   label="Empresa"
                   placeholder="Ex: Google"
+                  :required="selections.area !== 'Desempregado'"
+                  :disabled="selections.area === 'Desempregado'"
                 />
 
                 <CustomInput
                   class="mb-5"
                   name="carreira.faixaSalarial"
                   label="Faixa Salarial"
-                  placeholder="Selecione"
-                />
-
-                <CustomInput
-                  name="carreira.remuneracao"
-                  label="Valor da remuneração mensal"
-                  placeholder="Selecione"
+                  type="number"
+                  step="0.01"
+                  :required="selections.area !== 'Desempregado'"
+                  :disabled="selections.area === 'Desempregado'"
                 />
               </div>
             </template>
@@ -826,67 +758,32 @@
             ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                   icon-path=""
                 />
-
-              <!-- <textarea
-            class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
-            name="adicionais.experiencias"
-          /> -->
-
-              <!-- <CustomCheckbox
-                name="adicionais.palestras"
-                label="Gostaria de apresentar palestras"
-                class="mb-5"
-              />
-
-              <div class="mb-5 text-sm font-semibold text-cyan-600">
-                Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
-              </div>
-
-              <textarea
-                class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
-                name="adicionais.assuntosPalestras"
-              />
-
-              <div class="mb-5 text-sm font-semibold text-cyan-600">
-                Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso:
-              </div>
-
-              <textarea
-                class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
-                name="adicionais.experiencias"
-              />
-
-              <div class="mb-5 text-sm font-semibold text-cyan-600">
-                Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto:
-              </div>
-
-              <textarea
-                class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
-                name="adicionais.contribuicoes"
-              /> -->
               </div>
               <div v-else>
                 <CustomCheckbox
                   name="adicionais.palestras"
                   label="Gostaria de apresentar palestras"
                   class="mb-5"
+                  v-model:value="bools.palestras"
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
                   Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
                 </div>
 
-                <textarea
-                  class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
+                <CustomTextarea
+                  class="mb-5"
                   name="adicionais.assuntosPalestras"
+                  :required="bools.palestras"
+                  :disabled="!bools.palestras"
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
                   Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso:
                 </div>
 
-                <textarea
-                  class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
+                <CustomTextarea
+                  class="mb-5"
                   name="adicionais.experiencias"
                 />
 
@@ -894,10 +791,7 @@
                   Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto:
                 </div>
 
-                <textarea
-                  class="px-2 py-0.5 mb-5 border border-gray-400 rounded-md w-full md:w-1/2 h-32 block"
-                  name="adicionais.contribuicoes"
-                />
+                <CustomTextarea name="adicionais.contribuicoes" />
               </div>
             </template>
           </FolderSection>
@@ -912,7 +806,6 @@
 <script setup lang="ts">
 // import ProfileHead from 'src/components/ProfileHead.vue'
 // import ProfileBodyView from 'src/components/ProfileBodyView.vue'
-import { useAuthStore } from 'src/store/AuthStore.vue'
 import CustomButtonLink from 'src/components/CustomButtonLink.vue'
 import ButtonEdit from 'src/components/ButtonEdit.vue'
 import FolderSection from 'src/components/FolderSection.vue'
@@ -922,7 +815,7 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
-import { computed, defineExpose, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import svgPath from 'src/assets/svgPaths.json'
 import CustomTextarea from 'src/components/CustomTextarea.vue'
@@ -931,7 +824,6 @@ import { object, string, date, boolean } from 'yup'
 import CustomButton from 'src/components/CustomButton.vue'
 import egressoModel from 'src/model/egressoModel'
 import { updateEgressoDataModel } from 'src/store/ResponseStore.vue'
-import axios from 'axios'
 
 import {
   mdiAccount,
@@ -1328,26 +1220,29 @@ const schemaAcademico = object().shape({
     tipoAluno: string().required(),
     cotista: object({
       value: boolean(),
-      tipo: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+      tipo: string().when('value', ([value], schemaAcademico) => {
+        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
       })
+      // tipo: string().when('value', ([value], schema) => {
+      //   return value ? schema.required() : schema.notRequired()
+      // })
     }),
     bolsista: object({
       value: boolean(),
-      tipo: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+      tipo: string().when('value', ([value], schemaAcademico) => {
+        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
       }),
-      remuneracao: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+      remuneracao: string().when('value', ([value], schemaAcademico) => {
+        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
       })
     }),
     posGrad: object({
       value: boolean(),
-      local: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+      local: string().when('value', ([value], schemaAcademico) => {
+        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
       }),
-      curso: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+      curso: string().when('value', ([value], schemaAcademico) => {
+        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
       })
     }),
     desejaPos: boolean()
@@ -1357,22 +1252,22 @@ const schemaAcademico = object().shape({
 const schemaCarreira = object().shape({
   carreira: object({
     area: string().required(),
-    setor: string().when('area', ([area], schema) => {
-      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
+    setor: string().when('area', ([area], schemaCarreira) => {
+      return area !== 'Desempregado' ? schemaCarreira.required() : schemaCarreira.notRequired()
     }),
-    empresa: string().when('area', ([area], schema) => {
-      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
+    empresa: string().when('area', ([area], schemaCarreira) => {
+      return area !== 'Desempregado' ? schemaCarreira.required() : schemaCarreira.notRequired()
     }),
-    faixaSalarial: string().when('area', ([area], schema) => {
-      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
+    faixaSalarial: string().when('area', ([area], schemaCarreira) => {
+      return area !== 'Desempregado' ? schemaCarreira.required() : schemaCarreira.notRequired()
     })
   })
 })
 const schemaAdicionais = object().shape({
   adicionais: object({
     palestras: boolean(),
-    assuntosPalestras: string().when('palestras', ([palestras], schema) => {
-      return palestras ? schema.required() : schema.notRequired()
+    assuntosPalestras: string().when('palestras', ([palestras], schemaAdicionais) => {
+      return palestras ? schemaAdicionais.required() : schemaAdicionais.notRequired()
     }),
     experiencias: string().required(),
     contribuicoes: string().required()
