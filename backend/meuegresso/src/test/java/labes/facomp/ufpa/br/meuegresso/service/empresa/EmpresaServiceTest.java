@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
@@ -24,6 +26,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 
 /**
  * Class que implementa testes para o EmpresaService.
@@ -51,6 +54,9 @@ public class EmpresaServiceTest {
 
     EmpresaModel testEmpresa;
 
+    @MockBean
+    private EmpresaRepository repository;
+
     /**
      * Metodo para testar a criacao de um EmpresaModel com save.
      * 
@@ -61,7 +67,7 @@ public class EmpresaServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(empresaService.save(Mockito.any(EmpresaModel.class)))
+        BDDMockito.given(repository.save(Mockito.any(EmpresaModel.class)))
                 .willReturn(getMockEmpresa());
 
         EmpresaModel response = empresaService.save(new EmpresaModel());
@@ -190,5 +196,10 @@ public class EmpresaServiceTest {
         empresaLista.add(empresaTest2);
 
         return empresaLista;
+    }
+
+    @AfterAll
+    public void tearDown() {
+        repository.deleteAll();
     }
 }

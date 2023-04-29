@@ -6,22 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 
 /**
  * Class that implements tests of the UserAccountRepository functionalities
@@ -34,7 +25,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 @ActiveProfiles("test")
 /*
  * @TestInstance(Lifecycle.PER_CLASS)
- * 
+ *
  * @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class })
  */
 public class EgressoRepositoryTest {
@@ -86,7 +77,7 @@ public class EgressoRepositoryTest {
     // @Order(1)
     /*
      * public void testSave() {
-     * 
+     *
      * EgressoModel.builder()
      * .id(1)
      * .nascimento(null)
@@ -94,7 +85,7 @@ public class EgressoRepositoryTest {
      * .lattes("https://lattes.cnpq.br/")
      * .linkedin("https://linkedin.com/")
      * .build();
-     * 
+     *
      * EgressoModel response = egressoRepository.save(testarEgresso);
      * assertNotNull(response);
      * }

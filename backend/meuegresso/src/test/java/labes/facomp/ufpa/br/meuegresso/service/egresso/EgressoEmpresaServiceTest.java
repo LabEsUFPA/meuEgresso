@@ -176,15 +176,6 @@ public class EgressoEmpresaServiceTest {
     private EgressoEmpresaModel getMockEgressoEmpresa() {
         EgressoEmpresaModel egressoEmpresaTest = new EgressoEmpresaModel(ID, EGRESSO, EMPRESA, AREA_ATUACAO,
                 FAIXA_SALARIAL);
-        /*
-         * EgressoEmpresaModel egressoEmpresaTest = EgressoEmpresaModel.builder()
-         * .id(ID)
-         * .egresso(EGRESSO)
-         * .empresa(EMPRESA)
-         * .areaAtuacao(AREA_ATUACAO)
-         * .FaixaSalarial(FAIXA_SALARIAL)
-         * .build();
-         */
         return egressoEmpresaTest;
     }
 
@@ -201,26 +192,8 @@ public class EgressoEmpresaServiceTest {
         List<EgressoEmpresaModel> egressoEmpresaLista = new ArrayList<>();
         EgressoEmpresaModel egressoEmpresaTest = new EgressoEmpresaModel(ID, EGRESSO, EMPRESA, AREA_ATUACAO,
                 FAIXA_SALARIAL);
-        /*
-         * EgressoEmpresaModel egressoEmpresaTest = EgressoEmpresaModel.builder()
-         * .id(ID)
-         * .egresso(EGRESSO)
-         * .empresa(EMPRESA)
-         * .areaAtuacao(AREA_ATUACAO)
-         * .FaixaSalarial(FAIXA_SALARIAL)
-         * .build();
-         */
         EgressoEmpresaModel egressoEmpresaTest2 = new EgressoEmpresaModel(ID, EGRESSO, EMPRESA, AREA_ATUACAO,
                 FAIXA_SALARIAL);
-        /*
-         * EgressoEmpresaModel egressoEmpresaTest2 = EgressoEmpresaModel.builder()
-         * .id(ID)
-         * .egresso(EGRESSO)
-         * .empresa(EMPRESA)
-         * .areaAtuacao(AREA_ATUACAO)
-         * .FaixaSalarial(FAIXA_SALARIAL)
-         * .build();
-         */
 
         egressoEmpresaLista.add(egressoEmpresaTest);
         egressoEmpresaLista.add(egressoEmpresaTest2);

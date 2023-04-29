@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +18,7 @@ import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
@@ -29,6 +30,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoColacaoRepository;
 
 /**
  * Class que implementa testes para o EgressoColacaoService.
@@ -46,8 +48,8 @@ public class EgressoColacaoServiceTest {
     private static final EgressoColacaoModelId ID = new EgressoColacaoModelId();
     private static final EgressoModel EGRESSO = new EgressoModel();
     private static final TitulacaoModel COLACAO = new TitulacaoModel();
-    private static final Date DATA_INGRESSO = null;// "2016-06-06";
-    private static final Date DATA_CONCLUSAO = null;// "2020-06-06";
+    private static final LocalDate DATA_INGRESSO = LocalDate.parse("2016-06-06");
+    private static final LocalDate DATA_CONCLUSAO = LocalDate.parse("2020-06-06");
     private static final EmpresaModel EMPRESA = new EmpresaModel();
     private static final CursoModel CURSO = new CursoModel();
 
@@ -55,6 +57,9 @@ public class EgressoColacaoServiceTest {
     private EgressoColacaoService egressoColacaoService;
 
     EgressoColacaoModel testEgresso;
+
+    @MockBean
+    private EgressoColacaoRepository repository;
 
     /**
      * Metodo para testar a criacao de um EgressoColacaoModel com adicionar Egresso.
@@ -67,7 +72,7 @@ public class EgressoColacaoServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(egressoColacaoService.save(Mockito.any(EgressoColacaoModel.class)))
+        BDDMockito.given(repository.save(Mockito.any(EgressoColacaoModel.class)))
                 .willReturn(getMockEgressoColacao());
 
         EgressoColacaoModel response = egressoColacaoService.save(new EgressoColacaoModel());

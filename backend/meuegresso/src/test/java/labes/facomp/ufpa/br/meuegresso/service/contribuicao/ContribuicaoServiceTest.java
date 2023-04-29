@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
@@ -24,6 +26,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
+import labes.facomp.ufpa.br.meuegresso.repository.contribuicao.ContribuicaoRepository;
 
 /**
  * Class que implementa testes para o ContribuicaoService.
@@ -49,6 +52,9 @@ public class ContribuicaoServiceTest {
 
     ContribuicaoModel testContribuicao;
 
+    @MockBean
+    private ContribuicaoRepository repository;
+
     /**
      * Metodo para testar a criacao de um ContribuicaoModel com save.
      * 
@@ -59,7 +65,7 @@ public class ContribuicaoServiceTest {
     @Order(1)
     public void testSave() {
 
-        BDDMockito.given(contribuicaoService.save(Mockito.any(ContribuicaoModel.class)))
+        BDDMockito.given(repository.save(Mockito.any(ContribuicaoModel.class)))
                 .willReturn(getMockContribuicao());
 
         ContribuicaoModel response = contribuicaoService.save(new ContribuicaoModel());
@@ -188,8 +194,8 @@ public class ContribuicaoServiceTest {
         return contribuicaoLista;
     }
 
-    // @AfterAll
-    // private void tearDown() {
-    // //
-    // }
+    @AfterAll
+    public void tearDown() {
+        repository.deleteAll();
+    }
 }

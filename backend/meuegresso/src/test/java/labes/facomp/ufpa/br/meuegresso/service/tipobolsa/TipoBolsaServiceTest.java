@@ -104,7 +104,7 @@ public class TipoBolsaServiceTest {
      * @since 27/04/2023
      */
     @AfterAll
-    private void tearDown() {
+    public void tearDown() {
         repository.deleteAll();
     }
 

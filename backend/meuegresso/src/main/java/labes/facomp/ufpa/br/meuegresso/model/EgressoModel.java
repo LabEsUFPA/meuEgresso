@@ -1,8 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
-import java.util.Date;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -50,9 +48,11 @@ public class EgressoModel extends Auditable {
     @Column(name = "matricula_egresso", unique = true, nullable = true, length = 12)
 	  private String matricula;
 
+    @Builder.Default
     @Column(name = "pcd_egresso", unique = false, nullable = false)
     private Boolean pcd = false;
 
+    @Builder.Default
     @Column(name = "interesse_em_pos_egresso", unique = false, nullable = false)
     private Boolean interesseEmPos = false;
 

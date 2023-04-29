@@ -20,14 +20,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.PesquisaCientificaModel;
-import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.repository.pesquisacientifica.PesquisaCientificaRepository;
 
 /**
  * classe que implementa os testes da PesquisaCientificaService
- * 
+ *
  * @author Pedro Inácio
  * @since 27/04/2023
  */
@@ -42,10 +40,10 @@ public class PesquisaCientificaServiceTest {
 
     @MockBean
     private PesquisaCientificaRepository repository;
-    
+
     /**
      * metodo para criar um PesquisaCientifica para uso nos testes.
-     * 
+     *
      * @author Pedro Inácio
      * @since 27/04/2023
      */
@@ -63,11 +61,11 @@ public class PesquisaCientificaServiceTest {
 
     /**
      * metodo para atualizar uma pesquisacientifica para uso no teste.
-     * 
+     *
      * @author Pedro Inácio
      * @since 27/04/2023
      */
-    /* 
+    /*
     @Test
     @Order(2)
     public void testUpdate() {
@@ -88,10 +86,10 @@ public class PesquisaCientificaServiceTest {
     /**
      * metodo que preenche um mock de uma pesquisacientifica para usar como return
      * nos testes.
-     * 
+     *
      * @author Pedro Inácio
      * @since 27/04/2023
-     * 
+     *
      * @return <code>PesquisaCientificaModel</code> object
      */
     private PesquisaCientificaModel getMockPesquisaCientificaModel() {
@@ -102,12 +100,12 @@ public class PesquisaCientificaServiceTest {
 
     /**
      * Metodo para remover todos os dados do teste de pesquisacientifica
-     * 
+     *
      * @author Pedro Inácio
      * @since 27/04/2023
      */
     @AfterAll
-    private void tearDown() {
+    public void tearDown() {
         repository.deleteAll();
     }
 
