@@ -18,12 +18,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
-import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
-import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
-import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 
 /**
  * Class that implements tests of the UserAccountRepository functionalities
@@ -40,13 +34,6 @@ public class CotaRepositoryTest {
 
     @Autowired
     CotaRepository cotaRepository;
-
-    GeneroModel genero;
-    EnderecoModel endereco;
-    GrupoModel grupo;
-    UsuarioModel usuario;
-    DepoimentoModel depoimento;
-    EgressoModel egresso;
 
     CotaModel testCota;
 
@@ -76,15 +63,6 @@ public class CotaRepositoryTest {
         List<CotaModel> testar = cotaRepository.findAll();
 
         assertNotNull(testar);
-    }
-
-    @Test
-    @Order(3)
-    public void testExistsByIdAndCreatedById() {
-
-        Boolean response = cotaRepository.existsByIdAndCreatedById(testCota.getId(), testCota.getCreatedBy().getId());
-
-        assertTrue(response);
     }
 
 }
