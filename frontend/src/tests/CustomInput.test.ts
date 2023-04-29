@@ -8,8 +8,9 @@ describe('CustomInput', () => {
     const wrapper = mount(CustomInput, {
       props: {
         label: 'Testing',
-        modelValue: 'Initial value',
-        'onUpdate:modelValue': (e: any) => wrapper.setProps({ modelValue: e })
+        name: 'testing',
+        value: 'Initial value',
+        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
       }
     })
 
@@ -20,26 +21,28 @@ describe('CustomInput', () => {
     const wrapper = mount(CustomInput, {
       props: {
         label: 'Testing',
-        modelValue: 'Initial value',
-        'onUpdate:modelValue': (e: any) => wrapper.setProps({ modelValue: e })
+        name: 'testing',
+        value: 'Initial value',
+        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
       }
     })
 
     await wrapper.find('input').setValue('New value')
-    expect(wrapper.props('modelValue')).toBe('New value')
+    expect(wrapper.props('value')).toBe('New value')
   })
 
   it('Renders style props', async () => {
     const wrapper = mount(CustomInput, {
       props: {
         label: 'Testing',
+        name: 'testing',
         helperText: 'Helper Text',
         errorText: 'Error Text',
         iconPath: mdiViewDashboard,
         placeholder: 'Placeholder',
         required: true,
-        modelValue: 'Initial value',
-        'onUpdate:modelValue': (e: any) => wrapper.setProps({ modelValue: e })
+        value: 'Initial value',
+        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
       }
     })
 

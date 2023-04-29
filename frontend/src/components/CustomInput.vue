@@ -1,9 +1,13 @@
 <template>
-  <div>
+  <div
+    :class="{
+      'opacity-80': disabled
+    }"
+  >
     <label
       class="text-sm ml-1"
       v-if="label"
-      :for="id"
+      :for="name"
     >
       {{ label }} <sup
         v-if="required"
@@ -12,9 +16,18 @@
     </label>
     <div
       class="rounded-lg w-64 py-1 px-3 border grid grid-cols-8"
-      :class="`${focused ? 'outline-2 outline outline-sky-400' : 'border-gray-400'} ${inputClass}`"
+      :class="{
+        ['outline-2 outline outline-sky-400']: focused && !disabled,
+        ['bg-gray-100 cursor-not-allowed']: disabled,
+        ['outline-2 outline outline-red-500']: !meta.valid && meta.validated && meta.touched,
+        ['outline-2 outline outline-emerald-500']: meta.valid && meta.validated && meta.touched,
+        [`${inputClass}`]: true
+      }"
     >
-      <div class="flex flex-row text-gray-400  items-center">
+      <div
+        :class="{ ['cursor-not-allowed']: disabled }"
+        class="flex flex-row text-gray-400 items-center"
+      >
         <img
           class="w-[20px]"
           :src="iconPath"
@@ -34,48 +47,63 @@
         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)"
         :maxlength="maxLength"
         :minlength="minLength"
-        :class="iconPath ? 'col-span-7' : 'col-span-8'"
+        :class="{
+          ['cursor-not-allowed']: disabled,
+          ['col-span-7']: iconPath,
+          ['col-span-8']: !iconPath
+        }"
         :type="type"
-        :value="modelValue"
+        :value="inputValue"
         :placeholder="placeholder"
-        :id="id"
+        :id="name"
+        :name="name"
         :required="required"
         :data-maska="mask"
         :step="step"
-        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+        :disabled="disabled"
+        @input="handleInput($event)"
         @focus="focused = true"
-        @blur="focused = false"
+        @blur="focused = false; handleBlur()"
         v-maska
       >
     </div>
+
+    <div
+      class="text-xs mt-1"
+      :class="{
+        ['text-red-500']: !meta.valid,
+        ['text-emerald-500']: meta.valid,
+      }"
+      v-show="meta.validated"
+    >
+      {{ meta.valid ? successMessage : errorMessage }}
+    </div>
+
     <div
       v-if="helperText"
-      class="text-xs mt-1 ml-1 max-w-[250px] sm:max-w-fit"
+      class="text-xs mt-1 max-w-[250px] sm:max-w-fit"
     >
       {{ helperText }}
-    </div>
-    <div
-      v-if="errorText"
-      class="text-xs text-red-600 mt-1 ml-1 max-w-[250px] sm:max-w-fit"
-    >
-      {{ errorText }}
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, toRef } from 'vue'
+import { useField } from 'vee-validate'
 import SvgIcon from '@jamescoyle/vue-icon'
-
-defineEmits(['update:modelValue'])
 
 type inputs = 'date' | 'text' | 'email' | 'number' | 'password'
 
+const $emit = defineEmits(['update:value'])
+
 interface Props {
-  modelValue: string
+  value?: string
+  name: string
   label: string
   helperText?: string
-  errorText?: string
+  errorMessage?: string
+  successMessage?: string
   placeholder?: string
   type?: inputs
   iconPath?: string
@@ -86,16 +114,19 @@ interface Props {
   minLength?: number
   imgIcon?: boolean
   step?: number | string
+  disabled?: boolean
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
+  value: '',
   placeholder: '',
   type: 'text',
   iconPath: '',
   inputClass: '',
   helperText: '',
   mask: '',
-  errorText: '',
+  errorMessage: 'Campo inválido',
+  successMessage: 'Campo correto',
   maxLength: 300,
   minLength: 1,
   step: 1
@@ -103,5 +134,21 @@ withDefaults(defineProps<Props>(), {
 
 const focused = ref(false)
 
-const id = `text-input-${Math.floor(Math.random() * 1000000).toString()}`
+const name = toRef(props, 'name')
+
+// we don't provide any rules here because we are using form-level validation
+// https://vee-validate.logaretm.com/v4/guide/validation#form-level-validation
+const {
+  value: inputValue,
+  handleBlur,
+  handleChange,
+  meta
+} = useField(name, undefined, {
+  initialValue: props.value
+})
+
+function handleInput (e: Event) {
+  $emit('update:value', (e.target as HTMLInputElement).value)
+  handleChange(e)
+}
 </script>
