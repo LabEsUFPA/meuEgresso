@@ -62,7 +62,7 @@ import CustomButton from 'src/components/CustomButton.vue'
 import { ref } from 'vue'
 import { mdiAccount, mdiLock } from '@mdi/js'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
-import { useLoginStore } from 'src/store/LoginStore.js'
+import { useLoginStore } from 'src/store/LoginStore'
 
 const error = ref(false)
 
@@ -78,12 +78,12 @@ const userLoginData = ref<loginData>({
 
 const handleSubmit = async ($event: Event) => {
   if (userLoginData.value.userName || userLoginData.value.password) {
-    await useLoginStore().useLogin(userLoginData.value.userName, userLoginData.value.password)
+    await useLoginStore().userLogin(userLoginData.value.userName, userLoginData.value.password)
+    await useLoginStore().saveUser()
     const response = useLoginStore().response
 
     if (response === 200) {
       error.value = false
-      console.log(useLoginStore().token)
     } else {
       error.value = true
     }

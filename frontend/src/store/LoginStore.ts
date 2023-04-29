@@ -1,34 +1,41 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import Api from 'src/services/api'
 import loginModel from 'src/model/loginModel'
 
-const Axios = axios.create({
-  baseURL: import.meta.env.VITE_API_URL_LOCAL
-})
 export const useLoginStore = defineStore('LoginStore', {
   state: () => ({
     token: '',
+    user: {},
     response: 0
   }),
 
   actions: {
-    async useLogin (username: string, password: string) {
+    async userLogin (username: string, password: string) {
       const data: loginModel = {
-        username: username,
-        password: password
+        username,
+        password
       }
-      
-      await Axios({
+
+      const response = await Api.request({
         method: 'post',
-        url: '/auth/login',
-        data
-      }).then(response => {
-        this.token = response.data.token
-        this.response = response.status
-      }).catch(error => {
-        this.response = error.response.status
+        route: '/auth/login',
+        body: data
       })
+      if (response?.status === 200) {
+        document.cookie = `token=${response.data?.token}`
+      }
+
+      this.response = response?.status? response.status : 500
+    },
+
+    async saveUser () {
+      const response = await Api.request({
+        method: 'get',
+        route: '/usuario'
+      })
+      if (response?.status === 200) {
+        localStorage.setItem('user', JSON.stringify(response.data))
+      }
     }
   }
-}
-)
+})
