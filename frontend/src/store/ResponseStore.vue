@@ -5,7 +5,7 @@ import loginModel from 'src/model/loginModel'
 import egressoModel from 'src/model/egressoModel'
 
 const Axios = axios.create({
-  baseURL: import.meta.env.VITE_API_URL_LOCAL
+  baseURL: 'http://localhost:15000'
 })
 
 export async function sendLogin (username: string, password: string) {

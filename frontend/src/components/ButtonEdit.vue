@@ -1,9 +1,8 @@
 <template>
   <button
-    v-if="isInput"
-    :class="sytleVersion2"
     type="submit"
-    @click="$emit('toggle')"
+    :class="sytleVersion2"
+    v-if="isInput"
   >
     <img
       :class="classimg"

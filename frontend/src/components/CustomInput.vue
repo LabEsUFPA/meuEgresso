@@ -114,6 +114,7 @@ interface Props {
   minLength?: number
   imgIcon?: boolean
   step?: number | string
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -128,8 +129,7 @@ const props = withDefaults(defineProps<Props>(), {
   successMessage: 'Campo correto',
   maxLength: 300,
   minLength: 1,
-  step: 1,
-  inputWidth: 'w-64'
+  step: 1
 })
 
 const focused = ref(false)

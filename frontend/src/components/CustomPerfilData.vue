@@ -30,7 +30,7 @@
             v-if="isinput"
             :type="type"
             icon-path=""
-            :model-value="modelValue"
+            :model-value="name"
             :v-model="vmodel"
             label=""
             helper-text=""
@@ -39,8 +39,8 @@
           <!-- <slot name="title" />
           <slot -->
           <div v-else>
-            <div v-if="modelValue">
-              {{ modelValue }}
+            <div v-if="vmodel">
+              {{ vmodel }}
             </div>
 
             <div v-else>
@@ -57,12 +57,12 @@
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomInput from 'src/components/CustomInput.vue'
 
-defineEmits(['update:modelValue'])
+defineEmits(['update:name'])
 
 type inputs = 'date' | 'text' | 'email' | 'number' | 'password';
 
 interface Props {
-  modelValue?: string;
+  name?: string;
   label?: string;
   helperText?: string;
   placeholder?: string;
@@ -77,7 +77,7 @@ interface Props {
 }
 
 // interface Props {
-//   modelValue: string;
+//   name: string;
 //   label: string;
 //   helperText?: string;
 //   placeholder?: string;
@@ -91,7 +91,7 @@ interface Props {
 // }
 
 withDefaults(defineProps<Props>(), {
-  modelValue: '',
+  name: '',
   label: '',
   type: 'text',
   iconPath: '',

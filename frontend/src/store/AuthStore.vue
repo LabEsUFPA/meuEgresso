@@ -16,6 +16,9 @@ export const useAuthStore = defineStore('auth', {
     },
     removeUserToken (userToken) {
       localStorage.removeItem('userToken')
+    },
+    submit () {
+      this.$emit('submit')
     }
   }
 })
