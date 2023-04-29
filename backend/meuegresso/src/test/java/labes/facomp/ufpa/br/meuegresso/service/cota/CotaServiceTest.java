@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -27,7 +28,6 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 import labes.facomp.ufpa.br.meuegresso.repository.cota.CotaRepository;
-
 
 /**
  * Class que implementa testes para o CotaService.
@@ -88,23 +88,16 @@ public class CotaServiceTest {
     public void testFindAll() {
         BDDMockito.given(cotaService.findAll())
                 .willReturn(getMockCotaLista());
-        // .willReturn(List.of(getMockCota()));
 
         List<CotaModel> response = cotaService.findAll();
         assertNotNull(response);
     }
 
-    /**
-     * Metodo para testar o findById.
-     * 
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     */
     @Test
     @Order(3)
     public void testFindById() {
-        BDDMockito.given(cotaService.findById(Mockito.anyInt()))
-                .willReturn(getMockCota());
+        BDDMockito.given(repository.findById(ID))
+                .willReturn(Optional.of(getMockCota()));
 
         CotaModel response = cotaService.findById(ID);
         assertNotNull(response);
@@ -120,11 +113,13 @@ public class CotaServiceTest {
     @Test
     @Order(4)
     public void testUpdate() throws InvalidRequestException {
-        BDDMockito.given(cotaService.update(Mockito.any(CotaModel.class)))
+        BDDMockito.given(repository.save(Mockito.any(CotaModel.class)))
                 .willReturn(getMockCota());
 
-        CotaModel response = cotaService.update(getMockCota());
-        assertNotNull(response);
+        CotaModel cotaUpdated = cotaService.update(getMockCota());
+
+        assertNotNull(cotaUpdated);
+        assertEquals(getMockCota(), cotaUpdated);
     }
 
     /**

@@ -34,13 +34,12 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
-@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class })
 public class CotaRepositoryTest {
 
     @Autowired
     CotaRepository cotaRepository;
-
 
     GeneroModel genero;
     EnderecoModel endereco;
@@ -50,8 +49,6 @@ public class CotaRepositoryTest {
     EgressoModel egresso;
 
     CotaModel testCota;
-
-
 
     /**
      * Method that test the repository that save an object Travel in the API.
