@@ -42,8 +42,8 @@
               <!-- name="geral.nome" -->
 
               <div v-if="!dataEgresso.profileHead.isInput">
-                <slot v-if="dataEgresso.geral.nome">
-                  {{ dataEgresso.geral.nome }}
+                <slot v-if="dataEgresso.profileHead.nome">
+                  {{ dataEgresso.profileHead.nome }}
                 </slot>
 
                 <slot v-else>
@@ -74,7 +74,7 @@
               <CustomButtonLink
                 label="Linkedin"
                 icon-path="/src/assets/linkedin-icon.svg"
-                :url="dataEgresso.geral.linkedin"
+                :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
                 color="whitesky"
                 variant="standard"
@@ -84,7 +84,7 @@
               <CustomButtonLink
                 label="Lattes"
                 icon-path="/src/assets/lattesP.svg"
-                :url="dataEgresso.geral.lattes"
+                :url="dataEgresso.profileHead.lattes"
                 placeholder="https://lattes.cnpq.br/"
                 color="whitesky"
                 variant="standard"
@@ -98,7 +98,7 @@
               <CustomButtonLink
                 label="Linkedin"
                 icon-path="/src/assets/linkedin-icon.svg"
-                :url="dataEgresso.geral.linkedin"
+                :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
                 color="whitesky"
                 variant="standard"
@@ -119,7 +119,7 @@
               <CustomButtonLink
                 label="Lattes"
                 icon-path="/src/assets/lattesP.svg"
-                :url="dataEgresso.geral.lattes"
+                :url="dataEgresso.profileHead.lattes"
                 placeholder="https://lattes.cnpq.br/"
                 color="whitesky"
                 variant="standard"
@@ -836,8 +836,11 @@ import {
   mdiWeb,
   mdiMapOutline,
   mdiMapMarkerRadius,
-  mdiLinkVariant
+  mdiLinkVariant,
+  mdiYoutubeSubscription
 } from '@mdi/js'
+import { getRandomValues } from 'crypto'
+import { userInfo } from 'os'
 // mdiHome CEP,
 
 const myForm = ref<HTMLFormElement>()
@@ -857,90 +860,45 @@ function callSubmit () {
 //     myForm.value?.submit(Test)
 //   }
 // })
-const dataEgresso = ref({
-  geral: {
-    nome: '',
-    nascimento: '',
-    email: '',
-    genero: '',
-    confirmacaoEmail: '',
-    linkedin: '',
-    lattes: '',
-    isInput: false
-  },
-  localizacao: {
-    cep: '',
-    pais: '',
-    estado: '',
-    cidade: '',
-    isInput: false
-  },
-  academico: {
-    matricula: '',
-    email: '',
-    tipoAluno: '',
-    cotista: {
-      value: false,
-      tipo: ''
-    },
-    bolsista: {
-      value: false,
-      tipo: '',
-      remuneracao: ''
-    },
-    posGrad: {
-      value: false,
-      tipo: '',
-      local: '',
-      curso: ''
-    },
-    isInput: false
-  },
-  carreira: {
-    area: '',
-    setor: '',
-    empresa: '',
-    faixaSalarial: '',
-    remuneracao: '',
-    isInput: false
-  },
-  adicionais: {
-    palestras: false,
-    assuntosPalestras: '',
-    experiencias: '',
-    contribuicoes: '',
-    isInput: false
-  },
-  profileHead: {
-    isInput: false
-  }
-})
 
 // Futuro: 1 Autenticar usr ('/auth/register' ? ,), 2 get egresso, 3 update egresso
 async function handleSubmitHeader (values: any) {
   console.log('handleSubmitHeader')
   toggleIsInput('profileHead')
+  console.log(values)
+  // const valuesJSON = JSON.stringify(values, null, 2)
+  dataEgresso.value.profileHead.nome = values.geral.nome
+  dataEgresso.value.profileHead.linkedin = values.geral.linkedin
+  dataEgresso.value.profileHead.lattes = values.geral.lattes
 }
 async function handleSubmitGeral (values: any) {
   console.log('handleSubmitGeral')
   toggleIsInput('geral')
+  console.log(JSON.stringify(values, null, 2))
+  dataEgresso.value.geral.genero = values.geral.genero
+  dataEgresso.value.geral.genero = values.geral.genero
+  dataEgresso.value.geral.genero = values.geral.genero
 }
 
 async function handleSubmitAcademico (values: any) {
   console.log('handleSubmitAcademico')
   toggleIsInput('academico')
+  console.log(JSON.stringify(values, null, 2))
 }
 async function handleSubmitLocalizacao (values: any) {
   console.log('handleSubmitLocalizacao')
   toggleIsInput('localizacao')
+  console.log(JSON.stringify(values, null, 2))
 }
 async function handleSubmitCarreira (values: any) {
   console.log('handleSubmitCarreira')
   toggleIsInput('carreira')
+  console.log(JSON.stringify(values, null, 2))
 }
 async function handleSubmitAdicionais (values: any) {
   console.log('handleSubmitAdicionais')
   toggleIsInput('adicionais')
+  console.log(JSON.stringify(values, null, 2))
 }
 
 async function handleSubmit (values: any) {
@@ -1189,9 +1147,10 @@ const schema = object().shape({
 })
 
 // Add email para resquest
+
 const schemaHeader = object().shape({
   geral: object({
-    nome: string().required(),
+    nome: string(),
     linkedin: string(),
     lattes: string()
   })
@@ -1272,6 +1231,64 @@ const schemaAdicionais = object().shape({
     experiencias: string().required(),
     contribuicoes: string().required()
   })
+})
+const dataEgresso = ref({
+  geral: {
+    email: '',
+    genero: '',
+    confirmacaoEmail: '',
+    isInput: false
+  },
+  localizacao: {
+    cep: '',
+    pais: '',
+    estado: '',
+    cidade: '',
+    isInput: false
+  },
+  academico: {
+    matricula: '',
+    email: '',
+    tipoAluno: '',
+    cotista: {
+      value: false,
+      tipo: ''
+    },
+    bolsista: {
+      value: false,
+      tipo: '',
+      remuneracao: ''
+    },
+    posGrad: {
+      value: false,
+      tipo: '',
+      local: '',
+      curso: ''
+    },
+    isInput: false
+  },
+  carreira: {
+    area: '',
+    setor: '',
+    empresa: '',
+    faixaSalarial: '',
+    remuneracao: '',
+    isInput: false
+  },
+  adicionais: {
+    palestras: false,
+    assuntosPalestras: '',
+    experiencias: '',
+    contribuicoes: '',
+    isInput: false
+  },
+  profileHead: {
+    nome: '',
+    email: '',
+    linkedin: '',
+    lattes: '',
+    isInput: false
+  }
 })
 
 </script>
