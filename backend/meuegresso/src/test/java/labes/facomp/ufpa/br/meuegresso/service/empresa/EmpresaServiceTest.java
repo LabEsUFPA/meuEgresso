@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -14,9 +15,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
@@ -39,6 +42,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
+@AutoConfigureMockMvc
 public class EmpresaServiceTest {
 
     private static final Integer ID = 1;
@@ -87,6 +91,7 @@ public class EmpresaServiceTest {
     @Test
     @Order(2)
     public void testFindAll() {
+        
         BDDMockito.given(empresaService.findAll())
                 .willReturn(getMockEmpresaLista());
         // .willReturn(List.of(getMockEmpresa()));
@@ -104,8 +109,8 @@ public class EmpresaServiceTest {
     @Test
     @Order(3)
     public void testFindById() {
-        BDDMockito.given(empresaService.findById(Mockito.anyInt()))
-                .willReturn(getMockEmpresa());
+
+        BDDMockito.given(repository.findById(ID)).willReturn(Optional.of(getMockEmpresa()));
 
         EmpresaModel response = empresaService.findById(ID);
         assertNotNull(response);
@@ -121,11 +126,17 @@ public class EmpresaServiceTest {
     @Test
     @Order(4)
     public void testUpdate() throws InvalidRequestException {
-        BDDMockito.given(empresaService.update(Mockito.any(EmpresaModel.class)))
-                .willReturn(getMockEmpresa());
 
-        EmpresaModel response = empresaService.update(getMockEmpresa());
-        assertNotNull(response);
+        EmpresaModel empresa = getMockEmpresa();
+        String NOME_ATUALIZADO = "NOME ATUALIZADO";
+        
+        BDDMockito.given(repository.save(Mockito.any(EmpresaModel.class)))
+                .willReturn(empresa);
+
+        empresa.setNome(NOME_ATUALIZADO);
+
+        EmpresaModel response = empresaService.update(empresa);
+        assertEquals(response.getNome(), NOME_ATUALIZADO);
     }
 
     /**
@@ -174,6 +185,7 @@ public class EmpresaServiceTest {
         EmpresaModel empresaTest = EmpresaModel.builder()
                 .id(ID)
                 .nome(NOME)
+                .setorAtuacao(SETORATUACAO)
                 .build();
         return empresaTest;
     }
