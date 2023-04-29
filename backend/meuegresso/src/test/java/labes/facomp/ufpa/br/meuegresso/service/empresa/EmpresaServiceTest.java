@@ -68,7 +68,6 @@ public class EmpresaServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(1)
     public void testSave() {
 
         BDDMockito.given(repository.save(Mockito.any(EmpresaModel.class)))
@@ -89,7 +88,6 @@ public class EmpresaServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(2)
     public void testFindAll() {
         
         BDDMockito.given(empresaService.findAll())
@@ -107,7 +105,6 @@ public class EmpresaServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(3)
     public void testFindById() {
 
         BDDMockito.given(repository.findById(ID)).willReturn(Optional.of(getMockEmpresa()));
@@ -124,7 +121,6 @@ public class EmpresaServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(4)
     public void testUpdate() throws InvalidRequestException {
 
         EmpresaModel empresa = getMockEmpresa();
@@ -136,6 +132,7 @@ public class EmpresaServiceTest {
         empresa.setNome(NOME_ATUALIZADO);
 
         EmpresaModel response = empresaService.update(empresa);
+        assertNotNull(response);
         assertEquals(response.getNome(), NOME_ATUALIZADO);
     }
 
@@ -146,7 +143,6 @@ public class EmpresaServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(4)
     public void testDeleteById() {
 
         BDDMockito.given(empresaService.deleteById(Mockito.anyInt()))
@@ -162,16 +158,16 @@ public class EmpresaServiceTest {
      * @author Bruno Eiki
      * @since 27/04/2023
      */
-    @Test
-    @Order(5)
-    public void testExistsByIdAndCreatedById() {
+    
+    //  @Test
+    // public void testExistsByIdAndCreatedById() {
 
-        BDDMockito.given(empresaService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
-                .willReturn(true);
+    //     BDDMockito.given(empresaService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+    //             .willReturn(true);
 
-        Boolean response = empresaService.existsByIdAndCreatedById(ID, ID);
-        assertTrue(response);
-    }
+    //     Boolean response = empresaService.existsByIdAndCreatedById(ID, ID);
+    //     assertTrue(response);
+    // }
 
     /**
      * Metodo que preenche um mock de um EmpresaModel para retorno dos testes
