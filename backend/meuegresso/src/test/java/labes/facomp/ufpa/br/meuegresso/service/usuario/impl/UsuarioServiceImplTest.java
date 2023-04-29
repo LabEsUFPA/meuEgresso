@@ -1,9 +1,9 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -17,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
@@ -33,14 +35,18 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
  */
 
 @SpringBootTest
+@DirtiesContext
 @ActiveProfiles("test")
 public class UsuarioServiceImplTest {
 
-	@InjectMocks
-	private UsuarioServiceImpl usuarioService;
+	@Mock
+	private PasswordEncoder passwordEncoder;
 
 	@Mock
-	private UsuarioRepository repository;
+	private UsuarioRepository usuarioRepository;
+
+	@InjectMocks
+	private UsuarioServiceImpl usuarioService;
 
 	private UsuarioModel usuario = new UsuarioModel();
 
@@ -55,7 +61,7 @@ public class UsuarioServiceImplTest {
 		usuario.setPassword("password123");
 		usuario.setCreatedBy(usuario);
 
-		repository.save(usuario);
+		usuarioRepository.save(usuario);
 
 		UsuarioModel usuario2 = new UsuarioModel();
 		usuario2.setId(2);
@@ -64,20 +70,20 @@ public class UsuarioServiceImplTest {
 		usuario2.setEmail("jocke@example.com");
 		usuario2.setPassword("password124");
 		usuario2.setCreatedBy(usuario);
-		repository.save(usuario2);
+		usuarioRepository.save(usuario2);
 	}
 
 	@Test
 	public void test_Given_Valid_Username_Should_Return_Userdata() {
 
-		Mockito.when(repository.findByUsernameIgnoreCase("john123")).thenReturn(Optional.of(usuario));
+		Mockito.when(usuarioRepository.findByUsernameIgnoreCase("john123")).thenReturn(Optional.of(usuario));
 
 		assertEquals(usuario, usuarioService.loadUserByUsername("john123"));
 	}
 
 	@Test
 	public void test_Given_Invalid_Username_Should_Not_Return_Userdata() {
-		Mockito.when(repository.findByUsernameIgnoreCase("carla123")).thenReturn(Optional.empty());
+		Mockito.when(usuarioRepository.findByUsernameIgnoreCase("carla123")).thenReturn(Optional.empty());
 
 		assertThrows(UsernameNotFoundException.class, () -> usuarioService.loadUserByUsername("carla123"));
 	}
@@ -85,7 +91,7 @@ public class UsuarioServiceImplTest {
 	@Test
 	public void test_Given_Valid_Username_Should_Return_True() {
 		Boolean username_in_database = true;
-		Mockito.when(repository.existsByUsername("john123")).thenReturn(username_in_database);
+		Mockito.when(usuarioRepository.existsByUsername("john123")).thenReturn(username_in_database);
 
 		assertEquals(username_in_database, usuarioService.existsByUsername("john123"));
 	}
@@ -93,48 +99,46 @@ public class UsuarioServiceImplTest {
 	@Test
 	public void test_Given_Invalid_Username_Should_False() {
 		Boolean username_in_database = true;
-		Mockito.when(repository.existsByUsername("carla123")).thenReturn(username_in_database);
+		Mockito.when(usuarioRepository.existsByUsername("carla123")).thenReturn(username_in_database);
 
 		assertEquals(username_in_database, usuarioService.existsByUsername("carla123"));
 	}
 
 	@Test
 	public void test_Given_Valid_Id_Should_Return_Userdata() {
-		Mockito.when(repository.findById(1)).thenReturn(Optional.of(usuario));
+		Mockito.when(usuarioRepository.findById(1)).thenReturn(Optional.of(usuario));
 		assertEquals(usuario, usuarioService.findById(1));
 	}
 
 	@Test
 	public void test_Given_Invalid_Id_Should_Not_Return_Userdata() {
-		Mockito.when(repository.findById(10)).thenReturn(Optional.of(usuario));
+		Mockito.when(usuarioRepository.findById(10)).thenReturn(Optional.of(usuario));
 		assertThrows(NoSuchElementException.class, () -> usuarioService.findById(1));
 	}
 
 	@Test
 	public void test_Should_Return_All_Userdata() {
 		List<UsuarioModel> users = new ArrayList<>();
-		Mockito.when(repository.findAll()).thenReturn(usuarios);
+		Mockito.when(usuarioRepository.findAll()).thenReturn(usuarios);
 		users = usuarioService.findAll();
 		assertEquals(usuarios, users);
 	}
 
 	@Test
 	public void test_Save_Should_Save_On_Repository() {
-		Mockito.when(repository.save(usuario)).thenReturn(usuario);
+		Mockito.when(usuarioRepository.save(usuario)).thenReturn(usuario);
 		UsuarioModel usuariotest = usuarioService.save(usuario);
 		assertEquals(usuario, usuariotest);
 	}
 
 	@Test
 	public void test_Given_New_Credentials_Return_Updated_User() throws InvalidRequestException {
-		LocalDateTime time = LocalDateTime.of(2023, 01, 01, 00, 00, 00);
 		usuario.setNome("Michael");
 		usuario.setEmail("michel@hotmail.com");
 		usuario.setUsername("michel123");
-		//usuario.setLastModifiedDate(time);
 		usuario.setLastModifiedBy(usuario);
 
-		Mockito.when(repository.save(usuario)).thenReturn(usuario);
+		Mockito.when(usuarioRepository.save(usuario)).thenReturn(usuario);
 
 		UsuarioModel usuario2 = new UsuarioModel();
 		usuario2.setId(1);
@@ -147,7 +151,6 @@ public class UsuarioServiceImplTest {
 		usuario2.setNome("Michael");
 		usuario2.setEmail("michel@hotmail.com");
 		usuario2.setUsername("michel123");
-		//usuario2.setLastModifiedDate(time);
 		usuario2.setLastModifiedBy(usuario2);
 
 		assertEquals(usuario, usuarioService.update(usuario2));
@@ -155,29 +158,26 @@ public class UsuarioServiceImplTest {
 
 	@Test
 	public void test_Given_Correct_Id_Should_Delete_User_Data() {
-		Mockito.when(repository.findById(1)).thenReturn(Optional.of(usuario));
-		usuarioService.deleteById(1);
-		Mockito.verify(repository).deleteById(1);
+		Mockito.when(usuarioService.deleteById(1)).thenReturn(true);
+		assertThrows(NoSuchElementException.class, () -> usuarioService.findById(1));
 	}
 
 	@Test
 	public void test_Given_Incorrect_Id_Should_Not_Delete_User_Data() {
-		Mockito.when(repository.findById(10)).thenReturn(Optional.of(usuario));
-		usuarioService.deleteById(10);
-		Mockito.verify(repository).deleteById(10);
+		assertFalse(usuarioService.deleteById(10));
 	}
 
 	@Test
 	public void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_True_If_Right() {
 		Boolean right = true;
-		Mockito.when(repository.existsByIdAndCreatedById(2, 1)).thenReturn(right);
+		Mockito.when(usuarioRepository.existsByIdAndCreatedById(2, 1)).thenReturn(right);
 		assertEquals(right, usuarioService.existsByIdAndCreatedById(2, 1));
 	}
 
 	@Test
 	public void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_False_If_Wrong() {
 		Boolean right = false;
-		Mockito.when(repository.existsByIdAndCreatedById(1, 2)).thenReturn(right);
+		Mockito.when(usuarioRepository.existsByIdAndCreatedById(1, 2)).thenReturn(right);
 		assertEquals(right, usuarioService.existsByIdAndCreatedById(1, 2));
 	}
 
@@ -186,4 +186,3 @@ public class UsuarioServiceImplTest {
 		usuario = null;
 	}
 }
-
