@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -12,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -37,9 +35,8 @@ public class EgressoModel extends Auditable {
     private Integer id;
 
     @Temporal(TemporalType.DATE)
-	  @Column(name = "nascimento_egresso", unique = false, nullable = false)
+    @Column(name = "nascimento_egresso", unique = false, nullable = false)
     private LocalDate nascimento;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genero_id", unique = false, nullable = false)
@@ -62,7 +59,7 @@ public class EgressoModel extends Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "endereco_id", unique = false, nullable = false)
-    private EnderecoModel endereco;
+    private EnderecoModel endereco; // TODO não existe mais aqui so na empresa
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "cota_id", unique = false, nullable = false)
