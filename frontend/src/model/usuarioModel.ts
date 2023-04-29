@@ -4,7 +4,6 @@ export default interface userModel {
   password: string,
   email: string,
   nome: string,
-  matricula: string,
   egresso?: {
     id: number,
     matricula: number,
@@ -31,7 +30,7 @@ export default interface userModel {
   grupos?: [
     {
       id: number,
-      nomeGrupo: string
+      nomeGrupo?: string
     }
   ]
 }

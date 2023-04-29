@@ -117,13 +117,15 @@ import { mdiAccount, mdiEmail, mdiLock } from '@mdi/js'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
+import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 
 const error = ref(false)
 const errorMessages = ref({
   senha: 'As senhas informadas são diferentes',
   email: 'Os e-mails informados são diferentes',
   standard: 'Por favor, preencha todos os campos abaixo',
-  accessLevel: 'Por favor, selecione o nível de acesso'
+  accessLevel: 'Por favor, selecione o nível de acesso',
+  errorRequest: 'Requisição não aceita'
 })
 const errorText = ref('')
 const submitSuccess = ref(false)
@@ -136,6 +138,7 @@ const submitSuccess = ref(false)
     password: string
     confirmationPassword: string
     accessLevel: string
+    idAccessLevel: number
   }
 
 const userRegisterData = ref<registerData>({
@@ -145,20 +148,21 @@ const userRegisterData = ref<registerData>({
   confirmationEmail: '',
   password: '',
   confirmationPassword: '',
-  accessLevel: ''
+  accessLevel: '',
+  idAccessLevel: 0
 })
 
 const setSelectedAccessLevel = () => {
-  if (userRegisterData.value.accessLevel === 'Egresso') {
-    userRegisterData.value.accessLevel = 'egresso'
+  if (userRegisterData.value.accessLevel === 'Administrador') {
+    userRegisterData.value.idAccessLevel = 1
   } else if (userRegisterData.value.accessLevel === 'Secretário') {
-    userRegisterData.value.accessLevel = 'secretario'
+    userRegisterData.value.idAccessLevel = 2
   } else {
-    userRegisterData.value.accessLevel = 'administrador'
+    userRegisterData.value.idAccessLevel = 3
   }
 }
 
-const handleSubmit = ($event: Event) => {
+const handleSubmit = async ($event: Event) => {
   if (userRegisterData.value.password !== userRegisterData.value.confirmationPassword) {
     errorText.value = String(errorMessages.value.senha)
     error.value = true
@@ -170,9 +174,24 @@ const handleSubmit = ($event: Event) => {
     error.value = true
   } else {
     setSelectedAccessLevel()
-    error.value = false
-    console.log(userRegisterData.value)
-    submitSuccess.value = true
+    await useCadastroPerfilStore().userProfileRegister(
+      userRegisterData.value.userName,
+      userRegisterData.value.password,
+      userRegisterData.value.email,
+      userRegisterData.value.name,
+      [{
+        id: userRegisterData.value.idAccessLevel
+      }]
+    )
+    const response = useCadastroPerfilStore().response
+
+    if (response === 201) {
+      error.value = false
+      submitSuccess.value = true
+    } else {
+      errorText.value = errorMessages.value.errorRequest
+      error.value = true
+    }
   }
 }
 </script>

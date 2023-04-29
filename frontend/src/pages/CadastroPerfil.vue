@@ -24,15 +24,6 @@
               v-model="userRegisterData.name"
             />
             <CustomInput
-              type="number"
-              label="Matrícula"
-              :required="true"
-              :icon-path="mdiSchool"
-              :max-length="12"
-              :min-length="12"
-              v-model="userRegisterData.registration"
-            />
-            <CustomInput
               type="email"
               label="Email"
               error-text="O email deve ser o mesmo cadastrado no SIGAA"
@@ -97,15 +88,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import CustomInput from 'src/components/CustomInput.vue'
-import { mdiAccount, mdiSchool, mdiEmail, mdiLock } from '@mdi/js'
+import { mdiAccount, mdiEmail, mdiLock } from '@mdi/js'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
-import userModel from 'src/model/usuarioModel'
-import axios from 'axios'
-
-const Axios = axios.create({
-  baseURL: import.meta.env.VITE_API_URL_LOCAL
-})
+import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 
 const error = ref(false)
 const errorMessages = ref({
@@ -113,8 +99,7 @@ const errorMessages = ref({
   email: 'Os e-mails informados são diferentes',
   standard: 'Por favor, preencha todos os campos abaixo',
   accessLevel: 'Por favor, informe o nível de acesso',
-  registrationLength: 'Matrícula inválida, por favor digite novamente',
-  errorRequest: 'Requisição não aceita!'
+  errorRequest: 'Requisição não aceita'
 })
 const errorText = ref('')
 const submitSuccess = ref(false)
@@ -139,37 +124,24 @@ const handleSubmit = async ($event: Event) => {
   if (
     userRegisterData.value.password !== userRegisterData.value.confirmationPassword
   ) {
-    errorText.value = String(errorMessages.value.senha)
-    error.value = true
-  } else if (userRegisterData.value.registration.length < 12) {
-    errorText.value = String(errorMessages.value.registrationLength)
+    errorText.value = errorMessages.value.senha
     error.value = true
   } else {
-    const data: userModel = {
-      username: userRegisterData.value.email,
-      password: userRegisterData.value.password,
-      email: userRegisterData.value.email,
-      nome: userRegisterData.value.name,
-      matricula: userRegisterData.value.registration
-    }
+    await useCadastroPerfilStore().userProfileRegister(
+      userRegisterData.value.email,
+      userRegisterData.value.password,
+      userRegisterData.value.email,
+      userRegisterData.value.name
+    )
+    const response = useCadastroPerfilStore().response
 
-    error.value = false
-    await Axios({
-      method: 'post',
-      url: '/auth/register',
-      data
-    })
-      .then(response => {
-        if (response.status === 201) {
-          submitSuccess.value = true
-        }
-      })
-      .catch(response => {
-        if (response.response.status === 401) {
-          errorText.value = errorMessages.value.errorRequest
-          error.value = true
-        }
-      })
+    if (response === 201) {
+      error.value = false
+      submitSuccess.value = true
+    } else {
+      errorText.value = errorMessages.value.errorRequest
+      error.value = true
+    }
   }
 }
 </script>
