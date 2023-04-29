@@ -17,14 +17,23 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
+import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.PesquisaCientificaModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
+import labes.facomp.ufpa.br.meuegresso.service.contribuicao.ContribuicaoService;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoColacaoService;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoEmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
+import labes.facomp.ufpa.br.meuegresso.service.pesquisacientifica.PesquisaCientificaService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -40,22 +49,45 @@ import lombok.RequiredArgsConstructor;
 public class EgressoController {
 
     private EgressoService egressoService;
+    private EgressoColacaoService egressoColacaoService;
+    private EgressoEmpresaService egressoEmpresaService;
+    private PesquisaCientificaService pesquisaCientificaService;
+    private ContribuicaoService contribuicaoService;
 
     private final ModelMapper mapper;
 
     private final JwtService jwtService;
 
     @PostMapping
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<EgressoPublicDTO> cadastrarEgresso(@RequestBody EgressoPublicDTO egresso) {
         EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
         egressoModel = egressoService.adicionarEgresso(egressoModel);
         return ResponseEntity.ok(mapper.map(egressoModel, EgressoPublicDTO.class));
     }
 
+    @PostMapping(value = "/cadastrar")
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public ResponseEntity<EgressoPublicDTO> cadastrarEgressoPrimeiroCadastro(@RequestBody EgressoCadastroDTO cadastro) {
+
+        EgressoModel egresso = mapper.map(cadastro.egresso, EgressoModel.class);
+        EgressoColacaoModel academico = mapper.map(cadastro.acdemico, EgressoColacaoModel.class);
+        EgressoEmpresaModel carreira = mapper.map(cadastro.carreira, EgressoEmpresaModel.class);
+        PesquisaCientificaModel pesquisa = mapper.map(cadastro.pesquisa, PesquisaCientificaModel.class);
+        ContribuicaoModel contribuicao = mapper.map(cadastro.contribuicao, ContribuicaoModel.class);
+
+        egresso = egressoService.adicionarEgresso(egresso);
+        academico = egressoColacaoService.save(academico);
+        carreira = egressoEmpresaService.save(carreira);
+        pesquisa = pesquisaCientificaService.save(pesquisa);
+        contribuicao = contribuicaoService.save(contribuicao);
+
+        return ResponseEntity.ok(mapper.map(egresso, EgressoPublicDTO.class));
+    }
+
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public EgressoDTO getEgresso(JwtAuthenticationToken token) {
         EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
         return mapper.map(egressoModel, EgressoDTO.class);
@@ -65,13 +97,14 @@ public class EgressoController {
      * Endpoint responsavel por buscar o endereco.
      *
      * @param token Token de acesso indicando o usuario logado
-     * @return {@link EgressoModel} Busca os enderecos relacionados ao usuario logado.
+     * @return {@link EgressoModel} Busca os enderecos relacionados ao usuario
+     *         logado.
      * @author Bruno Eiki
      * @since 16/04/2023
      */
     @GetMapping(value = "/endereco")
     @ResponseStatus(code = HttpStatus.OK)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public EnderecoDTO getEndereco(JwtAuthenticationToken token) {
         EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
         return mapper.map(egressoModel.getEndereco(), EnderecoDTO.class);
@@ -88,15 +121,15 @@ public class EgressoController {
      * @since 16/04/2023
      */
     @PutMapping
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(
             @RequestBody EgressoPublicDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
         if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
             egressoService.updateEgresso(egressoModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
-		}
-		throw new UnauthorizedRequestException();
+            return ResponseType.SUCESS_UPDATE.getMessage();
+        }
+        throw new UnauthorizedRequestException();
     }
 
     /**
@@ -110,7 +143,7 @@ public class EgressoController {
      */
     @DeleteMapping
     @PreAuthorize("hasRole('ADMIN')")
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<String> deletarEgresso(@RequestBody @Valid EgressoPublicDTO egressoPublicDTO) {
         EgressoModel egressoModel = mapper.map(egressoPublicDTO, EgressoModel.class);
         return egressoService.deletarEgresso(egressoModel);
