@@ -1,17 +1,17 @@
 import { defineStore } from 'pinia'
 import Api from 'src/services/api'
-import loginModel from 'src/model/loginModel'
+import { type models } from 'src/@types'
+interface LoginModel extends models.LoginModel {}
 
 export const useLoginStore = defineStore('LoginStore', {
   state: () => ({
     token: '',
-    user: {},
-    response: 0
+    user: {}
   }),
 
   actions: {
     async userLogin (username: string, password: string) {
-      const data: loginModel = {
+      const data: LoginModel = {
         username,
         password
       }
@@ -22,10 +22,13 @@ export const useLoginStore = defineStore('LoginStore', {
         body: data
       })
       if (response?.status === 200) {
-        document.cookie = `token=${response.data?.token}`
+        if (response.data?.token !== undefined) {
+          const token: string = response.data.token
+          document.cookie = `token=${token}`
+        }
       }
 
-      this.response = response?.status? response.status : 500
+      return (response?.status) !== undefined ? response.status : 500
     },
 
     async saveUser () {
