@@ -1,7 +1,9 @@
 package labes.facomp.ufpa.br.meuegresso.repository.cota;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Order;
@@ -36,32 +38,57 @@ public class CotaRepositoryTest {
 
     CotaModel testCota;
 
-    /**
-     * Method that test the repository that save an object Travel in the API.
-     *
-     * @author
-     * @since 24/03/2020
-     */
+    private final static Integer ID = 1;
+    private final static String NOME = "RENDA";
+
+    private final static Integer ID2 = 2;
+    private final static String NOME2 = "ESCOLA PUBLICA";
+
+  
     @Test
     @Order(1)
     public void testSave() {
 
-        CotaModel testarCota = CotaModel.builder()
-                .id(1)
-                .nome("Grupo")
-                .build();
-
-        CotaModel response = cotaRepository.save(testarCota);
+        CotaModel response = cotaRepository.save(getMockCota());
         assertNotNull(response);
+        assertEquals(response.getNome(), response.getNome());
     }
 
     @Test
     @Order(2)
     public void testFindAll() {
 
-        List<CotaModel> testar = cotaRepository.findAll();
+        cotaRepository.save(getMockCota());
+        cotaRepository.save(getMockCota2());
 
-        assertNotNull(testar);
+        List<CotaModel> listaCota = cotaRepository.findAll();
+    
+        assertNotNull(listaCota);
+        assertEquals(getMockCota().getNome(), listaCota.get(0).getNome());
+        assertEquals(getMockCota2().getNome(), listaCota.get(1).getNome());
     }
 
+    private CotaModel getMockCota() {
+
+        CotaModel cotaTest = new CotaModel(ID, NOME, null);
+        return cotaTest;
+    }
+    private CotaModel getMockCota2() {
+
+        CotaModel cotaTest2 = new CotaModel(ID2, NOME2, null);
+        return cotaTest2;
+    }
+    private List<CotaModel> getMockCotaLista() {
+        List<CotaModel> listaCota = new ArrayList<>();
+
+       CotaModel cota1 = new CotaModel(ID, NOME, null);
+       CotaModel cota2 = new CotaModel(ID2, NOME2, null);
+
+        listaCota.add(cota1);
+        listaCota.add(cota2);
+
+        return listaCota;
+    }
 }
+
+
