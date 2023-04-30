@@ -37,7 +37,7 @@ public class EgressoModel extends Auditable {
     private Integer id;
 
     @Temporal(TemporalType.DATE)
-	  @Column(name = "nascimento_egresso", unique = false, nullable = false)
+	@Column(name = "nascimento_egresso", unique = false, nullable = false)
     private LocalDate nascimento;
 
 
@@ -46,7 +46,7 @@ public class EgressoModel extends Auditable {
     private GeneroModel genero;
 
     @Column(name = "matricula_egresso", unique = true, nullable = true, length = 12)
-	  private String matricula;
+	private String matricula;
 
     @Builder.Default
     @Column(name = "pcd_egresso", unique = false, nullable = false)

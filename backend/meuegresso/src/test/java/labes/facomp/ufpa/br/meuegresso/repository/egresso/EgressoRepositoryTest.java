@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,9 +19,12 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
+import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.cota.CotaRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.endereco.EnderecoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 /**
@@ -35,35 +40,82 @@ public class EgressoRepositoryTest {
     @Autowired
     private EgressoRepository egressoRepository;
 
-    private EgressoModel testarEgresso;
-
     @Autowired
-    GeneroRepository generoRepository;
+    private GeneroRepository generoRepository;
     
     @Autowired
-    CotaRepository cotaRepository;
+    private CotaRepository cotaRepository;
 
     @Autowired
-    UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private GrupoRepository grupoRepository;
+
+    @Autowired
+    private EnderecoRepository enderecoRepository;
+    
+
+    EgressoModel testarEgresso = new EgressoModel();
 
     @BeforeEach
     public void setUp() {
         GeneroModel genero = new GeneroModel();
-        genero.setNome("null");
+        genero.setNome("Masculino");
         genero = generoRepository.save(genero);
 
-        CotaModel cota = CotaModel.builder().nome("cota").build();
+        CotaModel cota = CotaModel.builder().nome("cota Trans").build();
         cota = cotaRepository.save(cota);
 
-        UsuarioModel usuario = new UsuarioModel();
-        usuario.setUsername("username");
-        usuario.setPassword("pass");
-        usuario.setEmail("email@gmail.com");
-        usuario.setNome("Pedro Fodao");
-        usuario = usuarioRepository.save(usuario);
+        /*EnderecoModel endereco = EnderecoModel.builder().pais("Brasil").cidade("Ananindeua").estado("Para").build();
+        endereco = enderecoRepository.save(endereco);*/
+
         
-        testarEgresso = new EgressoModel();
-        testarEgresso.setNascimento(LocalDate.parse("1999-10-20"));
+        GrupoModel grupoModel = GrupoModel.builder().nomeGrupo("ADMINNN").build();
+        grupoModel = grupoRepository.save(grupoModel);
+        Set<GrupoModel> grupos = new HashSet<>();
+        grupos.add(grupoModel);
+        
+        UsuarioModel usuarioModel = UsuarioModel.builder()
+                .nome("John")
+                .username("john123")
+                .email("john@example.com")
+                .password("password123")
+                .grupos(grupos)
+                .build();
+        usuarioModel = usuarioRepository.save(usuarioModel);
+
+        EgressoModel egressoModel = EgressoModel.builder()
+                .nascimento(LocalDate.parse("1999-10-20"))
+                .genero(genero)
+                .matricula("202003940011")
+                .pcd(true)
+                .interesseEmPos(true)
+                .lattes("null")
+                .linkedin("null")
+                .endereco(EnderecoModel.builder().pais("Brasil").cidade("Ananindeua").estado("Para").build())
+                .cota(cota)
+                .usuario(usuarioModel)
+                .build();
+
+       /*DepoimentoModel depoimentoModel = DepoimentoModel.builder()
+                .descricao("texto")
+                .egresso(egressoModel)
+                .build();
+        depoimentoModel = depoimentoRepository.save(depoimentoModel);
+        Set<DepoimentoModel> depoimentos = new HashSet<>();
+        depoimentos.add(depoimentoModel);
+
+        egressoModel.setDepoimentos(depoimentos);*/
+                /*
+                UsuarioModel usuario = new UsuarioModel();
+                usuario.setUsername("username");
+                usuario.setPassword("pass");
+                usuario.setEmail("email@gmail.com");
+                usuario.setNome("Pedro Fodao");
+                usuario = usuarioRepository.save(usuario);*/
+                
+                /*testarEgresso.setNascimento(LocalDate.parse("1999-10-20"));
         testarEgresso.setInteresseEmPos(true);
         testarEgresso.setLattes("https://lattes.cnpq.br/");
         testarEgresso.setLinkedin("https://linkedin.com/");
@@ -71,9 +123,9 @@ public class EgressoRepositoryTest {
         testarEgresso.setMatricula("20200464222");
         testarEgresso.setEndereco(EnderecoModel.builder().pais("null").cidade("null").estado("null").build());
         testarEgresso.setGenero(genero);
-        testarEgresso.setUsuario(usuario);
+        testarEgresso.setUsuario(usuario);*/
 
-        testarEgresso =  egressoRepository.save(testarEgresso);
+        testarEgresso =  egressoRepository.save(egressoModel);
     }
     /* 
     @Test
