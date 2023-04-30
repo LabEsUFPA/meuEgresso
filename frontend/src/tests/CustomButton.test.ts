@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import CustomButton from 'src/components/CustomButton.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import  routes from 'src/router/routes'
+import routes from 'src/router/routes'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -59,7 +59,7 @@ describe('CustomButton', () => {
       global: {
         plugins: [router]
       },
-      
+
       props: {
         tag: 'router'
       }

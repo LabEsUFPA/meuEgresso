@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -50,6 +51,14 @@ public class EgressoController {
         EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
         egressoModel = egressoService.adicionarEgresso(egressoModel);
         return ResponseEntity.ok(mapper.map(egressoModel, EgressoPublicDTO.class));
+    }
+
+    @GetMapping
+    @ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public EgressoDTO getEgresso(JwtAuthenticationToken token) {
+        EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
+        return mapper.map(egressoModel, EgressoDTO.class);
     }
 
     /**

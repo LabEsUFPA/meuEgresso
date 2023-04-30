@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,10 +42,10 @@ public class PesquisaCientificaModel extends Auditable {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "inicio", unique = true, nullable = false)
-    private Date inicio;
+    private LocalDate inicio;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "fim", unique = true, nullable = false)
-    private Date fim;
+    private LocalDate fim;
 
 }

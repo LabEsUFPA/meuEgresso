@@ -11,7 +11,9 @@ public enum ResponseType {
 
     SUCESS_DELETE("Dado deletado com sucesso"),
 
-    FAIL_DELETE("Dado não deletado");
+    FAIL_DELETE("Dado não deletado"),
+    
+    EGRESSO_ENCONTRADO("Egresso encontrado");
 
     private String message;
 

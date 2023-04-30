@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import 'src/style.scss'
 
-import CustomInput from 'src/components/CustomInput.vue'
+import CustomTextarea from 'src/components/CustomTextarea.vue'
 
-const meta: Meta<typeof CustomInput> = {
-  title: 'Custom Input',
-  component: CustomInput,
+const meta: Meta<typeof CustomTextarea> = {
+  title: 'Custom Textarea',
+  component: CustomTextarea,
   argTypes: {
     placeholder: {
       control: { type: 'text' },
@@ -21,11 +21,11 @@ const meta: Meta<typeof CustomInput> = {
 
 export default meta
 
-type Story = StoryObj<typeof CustomInput>
+type Story = StoryObj<typeof CustomTextarea>
 
 export const Default: Story = {
   render: () => ({
-    components: { CustomInput },
-    template: '<CustomInput />'
+    components: { CustomTextarea },
+    template: '<CustomTextarea />'
   })
 }

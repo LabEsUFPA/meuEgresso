@@ -2,7 +2,6 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import FolderSection from 'src/components/FolderSection.vue'
 
-
 describe('FolderSection', () => {
   it('Runs properly', () => {
     const wrapper = mount(FolderSection)
@@ -18,7 +17,7 @@ describe('FolderSection', () => {
       }
     })
 
-    expect(wrapper.find('.rounded-t-xl').html()).toContain('Title slot')
-    expect(wrapper.find('.rounded-b-xl').html()).toContain('Body slot')
+    expect(wrapper.find('.rounded-t-2xl').html()).toContain('Title slot')
+    expect(wrapper.find('.rounded-b-2xl').html()).toContain('Body slot')
   })
 })
