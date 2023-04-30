@@ -9,7 +9,7 @@ describe('CustomCheckbox', () => {
         label: 'Testing',
         value: false,
         name: 'testing',
-        'onUpdate:value': (e: any) => wrapper.setProps({ value: !wrapper.props('value') })
+        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: !(wrapper.props('value')) }) }
       }
     })
 
@@ -22,11 +22,11 @@ describe('CustomCheckbox', () => {
         label: 'Testing',
         value: false,
         name: 'testing',
-        'onUpdate:value': (e: any) => wrapper.setProps({ value: !wrapper.props('value') })
+        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: !wrapper.props('value') }) }
       }
     })
 
-    expect(wrapper.html()).toContain("Testing")
+    expect(wrapper.html()).toContain('Testing')
   })
 
   it('Changes v-model', async () => {
@@ -35,7 +35,7 @@ describe('CustomCheckbox', () => {
         label: 'Testing',
         value: false,
         name: 'testing',
-        'onUpdate:value': (e: any) => wrapper.setProps({ value: !wrapper.props('value') })
+        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: !wrapper.props('value') }) }
       }
     })
 
