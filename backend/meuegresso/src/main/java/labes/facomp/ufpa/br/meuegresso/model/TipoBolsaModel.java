@@ -25,4 +25,6 @@ public class TipoBolsaModel extends Auditable {
 
     @Column(name = "nome_tipo_bolsa", unique = true, nullable = false, length = 100)
     private String nome;
+
+    // TODO Relacionar com Egresso N to N e por o valor no relacionamento.
 }

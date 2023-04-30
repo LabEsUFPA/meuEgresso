@@ -6,16 +6,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-@Entity(name = "setor_atuacao")
-public class SetorAtuacaoModel {
+@Entity(name = "area_atuacao")
+public class AreaAtuacaoModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id_setor_atuacao", unique = true, nullable = false)
+    @Column(name = "id_area_atuacao", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "nome_setor_atuacao", unique = true, nullable = false)
+    @Column(name = "nome_area_atuacao", unique = true, nullable = false)
     private String nome;
 
-    // TODO fazer relacionamento com empresa
+    // TODO fazer relacionamento com egresso
 }

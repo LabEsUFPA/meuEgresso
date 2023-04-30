@@ -32,7 +32,7 @@ public class EgressoEmpresaModel extends Auditable {
     private EmpresaModel empresa;
 
     @Column(name = "area_atuacao", unique = false, nullable = false, length = 50)
-    private String areaAtuacao;
+    private String areaAtuacao; // TODO mudar pra tabela ja tem
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faixa_salarial_id", unique = false, nullable = false)
