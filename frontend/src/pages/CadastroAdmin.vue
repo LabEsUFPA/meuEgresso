@@ -1,5 +1,9 @@
 <template>
-  <form @submit.prevent="handleSubmit($event)">
+  <Form
+    @submit="handleSubmit"
+    @invalid-submit="onInvalid"
+    :validation-schema="schema"
+  >
     <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
       <div
         v-if="!submitSuccess"
@@ -19,48 +23,50 @@
           <div class="flex flex-col gap-y-4 sm:gap-y-6">
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
+                name="name"
                 label="Nome Completo"
                 :required="true"
                 :icon-path="mdiAccount"
-                v-model="userRegisterData.name"
               />
               <CustomInput
+                name="username"
                 label="Usuário"
                 :required="true"
                 :icon-path="mdiAccount"
-                v-model="userRegisterData.userName"
               />
             </div>
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
+                name="email"
                 label="Email"
                 type="email"
                 :required="true"
                 :icon-path="mdiEmail"
-                v-model="userRegisterData.email"
               />
               <CustomInput
+                name="confirmationEmail"
                 label="Confirmar email"
                 type="email"
+                error-message="Os e-mails informados são diferentes"
                 :required="true"
                 :icon-path="mdiEmail"
-                v-model="userRegisterData.confirmationEmail"
               />
             </div>
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
+                name="password"
                 label="Senha"
                 type="password"
                 :required="true"
                 :icon-path="mdiLock"
-                v-model="userRegisterData.password"
               />
               <CustomInput
+                name="confirmationPassword"
                 label="Confirmar senha"
                 type="password"
+                error-message="As senhas informadas são diferentes"
                 :required="true"
                 :icon-path="mdiLock"
-                v-model="userRegisterData.confirmationPassword"
               />
             </div>
           </div>
@@ -69,10 +75,11 @@
           </p>
           <div class="flex flex-col gap-y-2">
             <CustomSelect
-              v-model="userRegisterData.accessLevel"
+              name="accessLevel"
               label="Nível de Acesso"
               placeholder="Selecionar"
               :options="['Egresso', 'Secretário', 'Administrador']"
+              error-message="Selecione o nível de acesso"
               :required="true"
             />
           </div>
@@ -101,78 +108,79 @@
             alt="Loading"
           >
           <h1 class="text-blue-900 text-4xl font-bold">
-            Perfil {{ userRegisterData.userName }} <br>
+            Perfil {{ 123 }} <br>
             criado com sucesso!
           </h1>
         </div>
       </div>
     </div>
-  </form>
+  </Form>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import { mdiAccount, mdiEmail, mdiLock } from '@mdi/js'
+import { Form } from 'vee-validate'
+import { object, string, ref as refYup, number } from 'yup'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
+import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
+import { models } from 'src/@types'
+interface ProfileRegisterModel extends models.ProfileRegisterModel {}
 
 const error = ref(false)
 const errorMessages = ref({
-  senha: 'As senhas informadas são diferentes',
-  email: 'Os e-mails informados são diferentes',
-  standard: 'Por favor, preencha todos os campos abaixo',
-  accessLevel: 'Por favor, selecione o nível de acesso'
+  errorRequest: 'Requisição não aceita.'
 })
 const errorText = ref('')
 const submitSuccess = ref(false)
 
-  interface registerData {
-    name: string
-    userName: string
-    email: string
-    confirmationEmail: string
-    password: string
-    confirmationPassword: string
-    accessLevel: string
-  }
-
-const userRegisterData = ref<registerData>({
-  name: '',
-  userName: '',
-  email: '',
-  confirmationEmail: '',
-  password: '',
-  confirmationPassword: '',
-  accessLevel: ''
-})
-
-const setSelectedAccessLevel = () => {
-  if (userRegisterData.value.accessLevel === 'Egresso') {
-    userRegisterData.value.accessLevel = 'egresso'
-  } else if (userRegisterData.value.accessLevel === 'Secretário') {
-    userRegisterData.value.accessLevel = 'secretario'
+const setIdAccessLevel = (accessLevel: string) => {
+  if (accessLevel === 'Administrador') {
+    return 1
+  } else if (accessLevel === 'Secretário') {
+    return 2
   } else {
-    userRegisterData.value.accessLevel = 'administrador'
+    return 3
   }
 }
 
-const handleSubmit = ($event: Event) => {
-  if (userRegisterData.value.password !== userRegisterData.value.confirmationPassword) {
-    errorText.value = String(errorMessages.value.senha)
-    error.value = true
-  } else if (userRegisterData.value.email !== userRegisterData.value.confirmationEmail) {
-    errorText.value = String(errorMessages.value.email)
-    error.value = true
-  } else if (userRegisterData.value.accessLevel === '') {
-    errorText.value = String(errorMessages.value.accessLevel)
-    error.value = true
-  } else {
-    setSelectedAccessLevel()
+const schema = object().shape({
+  name: string().required(),
+  username: string().required(),
+  email: string().email().required(),
+  confirmationEmail: string().email().required().oneOf([refYup('email')]),
+  password: string().required(),
+  confirmationPassword: string().required().oneOf([refYup('password')]),
+  accessLevel: string().required(),
+  idAccessLevel: number()
+})
+
+const handleSubmit = async (profileData: ProfileRegisterModel) => {
+  profileData.idAccessLevel = setIdAccessLevel(profileData.accessLevel)
+  console.log(profileData)
+  const response = await useCadastroPerfilStore().userProfileRegister(
+    profileData.username,
+    profileData.password,
+    profileData.email,
+    profileData.name,
+    [{
+      id: profileData.idAccessLevel
+    }]
+  )
+
+  if (response === 201) {
     error.value = false
-    console.log(userRegisterData.value)
     submitSuccess.value = true
+  } else {
+    errorText.value = errorMessages.value.errorRequest
+    error.value = true
   }
+}
+
+const onInvalid = (e: any) => {
+  console.log(e)
 }
 </script>
