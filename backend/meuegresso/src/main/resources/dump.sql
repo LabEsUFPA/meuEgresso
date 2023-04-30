@@ -325,7 +325,7 @@ CREATE SEQUENCE IF NOT EXISTS public.egresso_valido_seq
 --
 
 CREATE SEQUENCE IF NOT EXISTS public.egressos_validos_seq
-    START WITH 1
+    START WITH 1208
     INCREMENT BY 50
     NO MINVALUE
     NO MAXVALUE
@@ -502,7 +502,7 @@ CREATE TABLE IF NOT EXISTS public.grupo (
 --
 
 CREATE SEQUENCE IF NOT EXISTS public.grupo_seq
-    START WITH 1
+    START WITH 4
     INCREMENT BY 50
     NO MINVALUE
     NO MAXVALUE
@@ -667,7 +667,7 @@ CREATE TABLE IF NOT EXISTS public.usuario_grupo (
 --
 
 CREATE SEQUENCE IF NOT EXISTS public.usuario_seq
-    START WITH 1
+    START WITH 4
     INCREMENT BY 50
     NO MINVALUE
     NO MAXVALUE
@@ -1967,4 +1967,3 @@ ALTER TABLE ONLY public.titulacao
 --
 -- PostgreSQL database dump complete
 --
-
