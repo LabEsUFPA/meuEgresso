@@ -30,5 +30,5 @@ export const Default: Story = {
     },
     components: { CustomSelect },
     template: '<CustomSelect v-model="value" :options="options" />'
-  }),
+  })
 }

@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -37,11 +37,11 @@ public class EgressoColacaoModel extends Auditable {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "data_ingresso", unique = false, nullable = false)
-    private Date ingresso;
+    private LocalDate ingresso;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "data_conclusao", unique = false, nullable = true)
-    private Date conclusao;
+    private LocalDate conclusao;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id", unique = false, nullable = false)

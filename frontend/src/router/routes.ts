@@ -1,18 +1,18 @@
 export default [
   {
     path: '/',
-    component: () => import('src/components/HeaderAndFooter.vue'),
+    component: async () => await import('src/components/HeaderAndFooter.vue'),
     children: [
-      { path: '/', component: () => import('src/pages/HomePage.vue') },
-      { path: '/test', component: () => import('src/pages/RouterTest.vue') },
-      { path: '/entrar', component: () => import('src/pages/PaginaLogin.vue') },
+      { path: '/', component: async () => await import('src/pages/HomePage.vue') },
+      { path: '/test', component: async () => await import('src/pages/RouterTest.vue') },
+      { path: '/entrar', component: async () => await import('src/pages/PaginaLogin.vue') },
       {
         path: '/cadastro',
-        component: () => import('src/pages/CadastroEgresso.vue'),
+        component: async () => await import('src/pages/CadastroEgresso.vue')
       },
       {
         path: '/cadastro-perfil',
-        component: () => import('src/pages/CadastroPerfil.vue'),
+        component: async () => await import('src/pages/CadastroPerfil.vue')
       },
       {
         path: '/cadastro-admin',
@@ -21,10 +21,10 @@ export default [
           requiresAuth: true
         }
       },
-      { path: '/egresso', 
-        component: () => import("src/pages/PerfilEgresso.vue")
-      },
-    ],
-  },
-];
-
+      {
+        path: '/egresso',
+        component: async () => await import('src/pages/PerfilEgresso.vue')
+      }
+    ]
+  }
+]
