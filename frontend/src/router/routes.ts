@@ -17,6 +17,9 @@ export default [
       {
         path: '/cadastro-admin',
         component: () => import('src/pages/CadastroAdmin.vue'),
+        meta: {
+          requiresAuth: true
+        }
       },
       { path: '/egresso', 
         component: () => import("src/pages/PerfilEgresso.vue")
