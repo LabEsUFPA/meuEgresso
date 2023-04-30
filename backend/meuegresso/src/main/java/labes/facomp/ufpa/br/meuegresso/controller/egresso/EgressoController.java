@@ -19,16 +19,14 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.contribuicao.ContribuicaoService;
-import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoColacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoEmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
-import labes.facomp.ufpa.br.meuegresso.service.pesquisacientifica.PesquisaCientificaService;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -40,34 +38,36 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/egresso")
+@RequestMapping(value = "/egresso")
 public class EgressoController {
 
-    private EgressoService egressoService;
-    private EgressoColacaoService egressoColacaoService;
-    private EgressoEmpresaService egressoEmpresaService;
-    private PesquisaCientificaService pesquisaCientificaService;
-    private ContribuicaoService contribuicaoService;
+    private final EgressoService egressoService;
+    private final EgressoTitulacaoService egressoTitulacaoService;
+    private final EgressoEmpresaService egressoEmpresaService;
+    private final ContribuicaoService contribuicaoService;
 
     private final ModelMapper mapper;
 
     private final JwtService jwtService;
 
-    @PostMapping
-    @ResponseStatus(code = HttpStatus.CREATED)
-    @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public EgressoPublicDTO cadastrarEgresso(@RequestBody EgressoPublicDTO egresso) {
-        EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
-        egressoModel = egressoService.adicionarEgresso(egressoModel);
-        return mapper.map(egressoModel, EgressoPublicDTO.class);
-    }
+    // @PostMapping
+    // @ResponseStatus(code = HttpStatus.CREATED)
+    // @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    // public EgressoPublicDTO cadastrarEgresso(@RequestBody EgressoPublicDTO
+    // egressoPublicDTO) {
+    // EgressoModel egressoModel = mapper.map(egressoPublicDTO, EgressoModel.class);
+    // egressoModel = egressoService.adicionarEgresso(egressoModel);
+    // return mapper.map(egressoModel, EgressoPublicDTO.class);
+    // }
 
     @PostMapping(value = "/cadastrar")
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public EgressoPublicDTO cadastrarEgressoPrimeiroCadastro(@RequestBody EgressoCadastroDTO cadastro,
+    public EgressoPublicDTO cadastrarEgressoPrimeiroCadastro(@RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO,
             JwtAuthenticationToken token) {
 
+        EgressoModel egresso = mapper.map(egressoCadastroDTO, EgressoModel.class);
+        System.out.println(egresso);
         // TODO refactor
         // EgressoModel egresso = mapper.map(cadastro.egresso, EgressoModel.class);
         // EgressoTitulacaoModel academico = mapper.map(cadastro.acdemico,
@@ -95,23 +95,6 @@ public class EgressoController {
     public EgressoDTO getEgresso(JwtAuthenticationToken token) {
         EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
         return mapper.map(egressoModel, EgressoDTO.class);
-    }
-
-    /**
-     * Endpoint responsavel por buscar o endereco.
-     *
-     * @param token Token de acesso indicando o usuario logado
-     * @return {@link EgressoModel} Busca os enderecos relacionados ao usuario
-     *         logado.
-     * @author Bruno Eiki
-     * @since 16/04/2023
-     */
-    @GetMapping(value = "/endereco")
-    @ResponseStatus(code = HttpStatus.OK)
-    @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public EnderecoDTO getEndereco(JwtAuthenticationToken token) {
-        EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
-        return mapper.map(egressoModel.getEndereco(), EnderecoDTO.class);
     }
 
     /**
