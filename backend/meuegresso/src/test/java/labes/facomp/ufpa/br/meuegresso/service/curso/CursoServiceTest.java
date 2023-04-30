@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -20,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -33,15 +33,16 @@ import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 /**
  * Class que implementa testes para o CursoService.
  * 
- * @author
- * @since
+ * @author Bruno Eiki
+ * @since 27/04/2023
  */
+@DirtiesContext
 @SpringBootTest
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class CursoServiceTest {
+class CursoServiceTest {
 
     private static final Integer ID = 1;
     private static final String NOME = "Ciência da Computação";
@@ -62,8 +63,7 @@ public class CursoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(1)
-    public void testSave() {
+    void testSave() {
 
         BDDMockito.given(cursoRepository.save(Mockito.any(CursoModel.class)))
                 .willReturn(getMockCurso());
@@ -82,8 +82,7 @@ public class CursoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(2)
-    public void testFindAll() {
+    void testFindAll() {
         BDDMockito.given(cursoService.findAll())
                 .willReturn(List.of(getMockCurso()));
 
@@ -98,8 +97,7 @@ public class CursoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(3)
-    public void testFindById() {
+    void testFindById() {
         BDDMockito.given(cursoRepository.findById(ID))
                 .willReturn(Optional.of(getMockCurso()));
 
@@ -115,8 +113,7 @@ public class CursoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(4)
-    public void testUpdate() throws InvalidRequestException {
+    void testUpdate() throws InvalidRequestException {
         BDDMockito.given(cursoRepository.save(Mockito.any(CursoModel.class)))
                 .willReturn(getMockCurso());
 
@@ -133,8 +130,7 @@ public class CursoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(5)
-    public void testDeleteById() {
+    void testDeleteById() {
 
         BDDMockito.given(cursoService.deleteById(ID))
                 .willReturn(true);
@@ -150,8 +146,7 @@ public class CursoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(6)
-    public void testExistsByIdAndCreatedById() {
+    void testExistsByIdAndCreatedById() {
 
         BDDMockito.given(cursoRepository.existsByIdAndCreatedById(ID, ID))
                 .willReturn(true);

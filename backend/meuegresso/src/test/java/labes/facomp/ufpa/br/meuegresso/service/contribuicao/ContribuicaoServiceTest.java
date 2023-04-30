@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -33,15 +34,16 @@ import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 /**
  * Class que implementa testes para o ContribuicaoService.
  * 
- * @author
- * @since
+ * @author Bruno Eiki
+ * @since 27/04/2023
  */
+@DirtiesContext
 @SpringBootTest
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class ContribuicaoServiceTest {
+class ContribuicaoServiceTest {
 
     private static final Integer ID = 1;
     private static final String DESCRICAO = "Contribui";
@@ -63,7 +65,7 @@ public class ContribuicaoServiceTest {
      */
     @Test
     @Order(1)
-    public void testSave() {
+    void testSave() {
 
         BDDMockito.given(contribuicaoRepository.save(Mockito.any(ContribuicaoModel.class)))
                 .willReturn(getMockContribuicao());
@@ -84,7 +86,7 @@ public class ContribuicaoServiceTest {
      */
     @Test
     @Order(2)
-    public void testFindAll() {
+    void testFindAll() {
         BDDMockito.given(contribuicaoService.findAll())
                 .willReturn(List.of(getMockContribuicao()));
 
@@ -103,7 +105,7 @@ public class ContribuicaoServiceTest {
      */
     @Test
     @Order(3)
-    public void testFindById() {
+    void testFindById() {
         BDDMockito.given(contribuicaoRepository.findById(ID))
                 .willReturn(Optional.of(getMockContribuicao()));
 
@@ -123,7 +125,7 @@ public class ContribuicaoServiceTest {
 
     @Test
     @Order(4)
-    public void testUpdate() throws InvalidRequestException {
+    void testUpdate() throws InvalidRequestException {
 
         BDDMockito.given(contribuicaoRepository.save(Mockito.any(ContribuicaoModel.class)))
                 .willReturn(getMockContribuicao());
@@ -142,7 +144,7 @@ public class ContribuicaoServiceTest {
      */
     @Test
     @Order(5)
-    public void testDeleteById() {
+    void testDeleteById() {
 
         BDDMockito.given(contribuicaoService.deleteById(ID))
                 .willReturn(true);
@@ -159,7 +161,7 @@ public class ContribuicaoServiceTest {
      */
     @Test
     @Order(6)
-    public void testExistsByIdAndCreatedById() {
+    void testExistsByIdAndCreatedById() {
 
         BDDMockito.given(contribuicaoRepository.existsByIdAndCreatedById(ID, ID))
                 .willReturn(true);
@@ -194,7 +196,7 @@ public class ContribuicaoServiceTest {
     }
 
     @AfterAll
-    public void tearDown() {
+    void tearDown() {
         contribuicaoRepository.deleteAll();
     }
 }
