@@ -23,6 +23,6 @@ public class FaixaSalarialModel extends Auditable {
     @Column(name = "id_faixa_salarial", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "faixa_faixa_salarial", unique = true, nullable = false)
+    @Column(name = "faixa_faixa_salarial", unique = true, nullable = false, length = 60)
     private String faixa;
 }

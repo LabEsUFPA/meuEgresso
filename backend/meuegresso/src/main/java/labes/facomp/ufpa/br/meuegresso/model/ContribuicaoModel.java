@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.UniqueConstraint;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
@@ -32,7 +33,8 @@ public class ContribuicaoModel extends Auditable {
     @Column(name = "id_contribuicao", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "descricao_contribuicao", unique = false, nullable = false, length = 255)
+    @Lob
+    @Column(name = "descricao_contribuicao", unique = false, nullable = false)
     private String descricao;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })

@@ -48,7 +48,6 @@ public class GeneroController {
     /**
      * Endpoint responsavel por buscar todos generos do banco.
      *
-     * @param void
      * @return {@link List<GeneroDTO} Retorna uma lista com todos os generos.
      * @author Bruno Eiki
      * @since 21/04/2023
@@ -63,9 +62,9 @@ public class GeneroController {
     }
 
     /**
-     * Endpoint responsavel por adicionar uma etnia no banco.
+     * Endpoint responsavel por adicionar uma genero no banco.
      *
-     * @param etniaDTO Estrutura de dados contendo as informações necessárias para
+     * @param generoDTO Estrutura de dados contendo as informações necessárias para
      *                 adicionar uma cota.
      * @return {@link String} Mensagem de confirmacao.
      * @author Bruno Eiki

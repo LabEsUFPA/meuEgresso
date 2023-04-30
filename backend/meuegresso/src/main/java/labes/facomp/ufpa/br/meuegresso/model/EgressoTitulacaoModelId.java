@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-public class EgressoColacaoModelId {
+public class EgressoTitulacaoModelId {
 
     @Column(name = "id_egresso", unique = true, nullable = false)
     private Integer egressoId;
 
-    @Column(name = "id_colacao", unique = true, nullable = false)
-    private Integer colacaoId;
+    @Column(name = "id_titulacao", unique = true, nullable = false)
+    private Integer titulacaoId;
 
 }
