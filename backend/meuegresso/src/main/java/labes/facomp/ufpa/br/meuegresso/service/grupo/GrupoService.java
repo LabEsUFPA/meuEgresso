@@ -22,15 +22,15 @@ public interface GrupoService {
 	/**
 	 * Método responsável por encontrar um determinado grupo por sua ID.
 	 *
-	 * @param idGrupo
+	 * @param id
 	 * @return
 	 */
-	public GrupoModel findById(Integer idGrupo);
+	public GrupoModel findById(Integer id);
 
 	/**
 	 * Método responsável por encontrar um determinado grupo por seu nome.
 	 *
-	 * @param idGrupo
+	 * @param id
 	 * @return
 	 */
 	public GrupoModel findByNomeGrupo(String nomeGrupo);

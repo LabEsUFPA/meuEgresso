@@ -27,14 +27,17 @@ spring:
       password: mongo
       authentication-database: admin # habilitar autenticação
       auto-index-creation: true # Atualizar indices quando autlaizar o model.
+  sql:
+    init:
+      mode: never
 
   jpa:
-    database: postgresql
+    database: h2
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       naming:
         physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -42,3 +45,5 @@ spring:
       '[hibernate.generate_statistics]' : true
       '[persistence.schema-generation.scripts.create-target]' : create.sql
 
+server:
+  port: 15000

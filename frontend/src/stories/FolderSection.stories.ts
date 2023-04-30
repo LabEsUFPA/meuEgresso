@@ -38,5 +38,5 @@ export const Default: Story = {
                   neque, porttitor in tempus eget, pulvinar sit amet orci.
                 </template>
               </FolderSection>`
-  }),
+  })
 }

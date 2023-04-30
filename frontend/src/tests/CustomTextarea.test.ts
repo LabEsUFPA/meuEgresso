@@ -1,7 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import CustomTextarea from 'src/components/CustomTextarea.vue'
-import { mdiViewDashboard } from '@mdi/js'
 
 describe('CustomTextarea', () => {
   it('Runs properly', () => {
@@ -10,7 +9,7 @@ describe('CustomTextarea', () => {
         label: 'Testing',
         value: 'Initial value',
         name: 'testing',
-        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
+        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: e }) }
       }
     })
 
@@ -23,7 +22,7 @@ describe('CustomTextarea', () => {
         label: 'Testing',
         value: 'Initial value',
         name: 'testing',
-        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
+        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: e }) }
       }
     })
 

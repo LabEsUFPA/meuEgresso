@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,8 +77,9 @@ public class UsuarioController {
 	public String atualizarUsuario(
 			@RequestBody @Valid UsuarioDTO usuarioDTO, JwtAuthenticationToken token)
 			throws UnauthorizedRequestException, InvalidRequestException {
-		if (usuarioService.existsByIdAndCreatedById(usuarioDTO.getId(), jwtService.getIdUsuario(token))) {
-			UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
+		if (jwtService.getIdUsuario(token).equals(usuarioDTO.getId())) {
+			UsuarioModel usuarioModel = usuarioService.findById(jwtService.getIdUsuario(token));
+			mapper.map(usuarioDTO, usuarioModel);
 			usuarioService.update(usuarioModel);
 			return ResponseType.SUCESS_UPDATE.getMessage();
 		}
@@ -92,11 +94,16 @@ public class UsuarioController {
 	 * @author Camilo Santos
 	 * @since 19/04/2023
 	 */
-	@DeleteMapping
+	@DeleteMapping(value = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(Integer id) {
-		return usuarioService.deleteById(id);
+	public String deleteById(@PathVariable(name = "id") Integer id) {
+		if (usuarioService.deleteById(id)) {
+			return ResponseType.SUCESS_DELETE.getMessage();
+		} else {
+			return ResponseType.FAIL_DELETE.getMessage();
+		}
 	}
 
 }

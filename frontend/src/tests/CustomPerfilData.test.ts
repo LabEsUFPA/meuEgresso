@@ -20,27 +20,27 @@ describe('CustomPerfilButton', () => {
   })
 
   describe('CustomPerfilData', () => {
-    it('renders the correct props', () => {
+    it('renders the correct props', async () => {
       const modelValue = 'Marcelle'
       const label = 'Name'
       const type = 'text'
       const iconPath = 'mdi-account'
-      
+
       const wrapper = mount(CustomPerfilData, {
         props: {
           modelValue,
           label,
           type,
-          iconPath,
+          iconPath
         }
       })
-        const input = wrapper.find('input')
-        expect(input.exists()).toBe(false)
-        expect(wrapper.find('.font-semibold').text()).toBe(label)
-        expect(wrapper.find('.LabelModeValue').text()).toBe(label+modelValue)
-        expect(wrapper.find('.flex-auto h1').text()).toBe(label)
+      const input = wrapper.find('input')
+      expect(input.exists()).toBe(false)
+      expect(wrapper.find('.font-semibold').text()).toBe(label)
+      expect(wrapper.find('.LabelModeValue').text()).toBe(label + modelValue)
+      expect(wrapper.find('.flex-auto h1').text()).toBe(label)
 
-      wrapper.setProps({ modelValue: '' })
+      await wrapper.setProps({ modelValue: '' })
     })
   })
 })
