@@ -26,6 +26,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
@@ -61,7 +63,7 @@ public class UsuarioControllerTest {
 
         @BeforeAll
         void setUp() throws Exception {
-                ObjectMapper objectMapper = new ObjectMapper();
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
                 GrupoModel grupoModel = new GrupoModel();
                 grupoModel.setNomeGrupo("ADMIN");
 
@@ -103,7 +105,7 @@ public class UsuarioControllerTest {
         @Test
         @Order(1)
         void testFindById() throws Exception {
-                ObjectMapper objectMapper = new ObjectMapper();
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.get("/usuario")
@@ -120,7 +122,7 @@ public class UsuarioControllerTest {
         @Test
         @Order(2)
         void testAtualizarUsuario() throws Exception {
-                ObjectMapper objectMapper = new ObjectMapper();
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 UsuarioDTO usuarioDTO = modelMapper.map(usuarioModel, UsuarioDTO.class);
 
