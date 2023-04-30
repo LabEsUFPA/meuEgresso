@@ -10,12 +10,10 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +31,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 
 /**
  * Class que implementa testes para o EmpresaService.
- * 
+ *
  * @author
  * @since
  */
@@ -63,7 +61,7 @@ public class EmpresaServiceTest {
 
     /**
      * Metodo para testar a criacao de um EmpresaModel com save.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
@@ -83,13 +81,13 @@ public class EmpresaServiceTest {
 
     /**
      * Metodo para testar o metodo findAll.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
     @Test
     public void testFindAll() {
-        
+
         BDDMockito.given(empresaService.findAll())
                 .willReturn(getMockEmpresaLista());
         // .willReturn(List.of(getMockEmpresa()));
@@ -100,7 +98,7 @@ public class EmpresaServiceTest {
 
     /**
      * Metodo para testar o findById.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
@@ -115,7 +113,7 @@ public class EmpresaServiceTest {
 
     /**
      * Metodo para testar o update.
-     * 
+     *
      * @author Bruno Eiki
      * @throws InvalidRequestException
      * @since 27/04/2023
@@ -125,7 +123,7 @@ public class EmpresaServiceTest {
 
         EmpresaModel empresa = getMockEmpresa();
         String NOME_ATUALIZADO = "NOME ATUALIZADO";
-        
+
         BDDMockito.given(repository.save(Mockito.any(EmpresaModel.class)))
                 .willReturn(empresa);
 
@@ -138,7 +136,7 @@ public class EmpresaServiceTest {
 
     /**
      * Metodo para testar o deleteById.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
@@ -154,27 +152,28 @@ public class EmpresaServiceTest {
 
     /**
      * Metodo para testar o existsByIdAndCreatedById.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
-    
-    //  @Test
+
+    // @Test
     // public void testExistsByIdAndCreatedById() {
 
-    //     BDDMockito.given(empresaService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
-    //             .willReturn(true);
+    // BDDMockito.given(empresaService.existsByIdAndCreatedById(Mockito.anyInt(),
+    // Mockito.anyInt()))
+    // .willReturn(true);
 
-    //     Boolean response = empresaService.existsByIdAndCreatedById(ID, ID);
-    //     assertTrue(response);
+    // Boolean response = empresaService.existsByIdAndCreatedById(ID, ID);
+    // assertTrue(response);
     // }
 
     /**
      * Metodo que preenche um mock de um EmpresaModel para retorno dos testes
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
-     * 
+     *
      * @return <code>empresaTeste</code> object
      */
     private EmpresaModel getMockEmpresa() {

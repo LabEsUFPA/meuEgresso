@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -31,7 +30,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.endereco.EnderecoRepository;
 
 /**
  * Class que implementa testes para o EnderecoService.
- * 
+ *
  * @author
  * @since
  */
@@ -62,7 +61,7 @@ public class EnderecoServiceTest {
 
     /**
      * Metodo para testar a criacao de um EnderecoModel com save.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
@@ -84,7 +83,7 @@ public class EnderecoServiceTest {
 
     /**
      * Metodo para testar o metodo findAll.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
@@ -100,7 +99,7 @@ public class EnderecoServiceTest {
 
     /**
      * Metodo para testar o findById.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
@@ -114,7 +113,7 @@ public class EnderecoServiceTest {
 
     /**
      * Metodo para testar o update.
-     * 
+     *
      * @author Bruno Eiki
      * @throws InvalidRequestException
      * @since 27/04/2023
@@ -137,7 +136,7 @@ public class EnderecoServiceTest {
 
     /**
      * Metodo para testar o deleteById.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
@@ -153,7 +152,7 @@ public class EnderecoServiceTest {
 
     /**
      * Metodo para testar o existsByIdAndCreatedById.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
@@ -161,19 +160,20 @@ public class EnderecoServiceTest {
     // @Test
     // public void testExistsByIdAndCreatedById() {
 
-    //     BDDMockito.given(enderecoService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
-    //             .willReturn(true);
+    // BDDMockito.given(enderecoService.existsByIdAndCreatedById(Mockito.anyInt(),
+    // Mockito.anyInt()))
+    // .willReturn(true);
 
-    //     Boolean response = enderecoService.existsByIdAndCreatedById(ID, ID);
-    //     assertTrue(response);
+    // Boolean response = enderecoService.existsByIdAndCreatedById(ID, ID);
+    // assertTrue(response);
     // }
 
     /**
      * Metodo que preenche um mock de um EnderecoModel para retorno dos testes
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
-     * 
+     *
      * @return <code>enderecoTeste</code> object
      */
     private EnderecoModel getMockEndereco() {

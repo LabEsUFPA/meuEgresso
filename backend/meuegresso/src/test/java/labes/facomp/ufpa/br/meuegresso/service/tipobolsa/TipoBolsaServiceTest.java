@@ -26,13 +26,12 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.repository.tipobolsa.TipoBolsaRepository;
 
 /**
  * classe que implementa os testes da TipoBolsaService
- * 
+ *
  * @author Pedro Inácio
  * @since 27/04/2023
  */
@@ -56,7 +55,7 @@ public class TipoBolsaServiceTest {
 
     /**
      * metodo para criar um PesquisaCientifica para uso nos testes.
-     * 
+     *
      * @author Pedro Inácio
      * @since 27/04/2023
      */
@@ -118,10 +117,10 @@ public class TipoBolsaServiceTest {
 
     /**
      * metodo que preenche um mock de um tipobolsa para usar como return nos testes.
-     * 
+     *
      * @author Pedro Inácio
      * @since 27/04/2023
-     * 
+     *
      * @return <code>TipoBolsaModel</code> object
      */
     private TipoBolsaModel getMockTipoBolsaModel() {
@@ -144,7 +143,7 @@ public class TipoBolsaServiceTest {
 
     /**
      * Metodo para remover todos os dados do teste de tipobolsa
-     * 
+     *
      * @author Pedro Inácio
      * @since 27/04/2023
      */

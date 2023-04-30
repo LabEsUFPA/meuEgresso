@@ -11,7 +11,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -31,7 +30,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 
 /**
  * Classe que implementa testes para o EgressoService.
- * 
+ *
  * @author Pedro Inácio
  * @since 28/04/2023
  */
@@ -56,7 +55,7 @@ public class EgressoServiceTest {
 
     /**
      * Metodo para testar a criacao de um EgressoModel com adicionar Egresso.
-     * 
+     *
      * @author Bruno Eiki, Pedro Inácio
      * @since 27/04/2023
      */
@@ -79,7 +78,7 @@ public class EgressoServiceTest {
 
     /**
      * Metodo para testar o metodo findAll.
-     * 
+     *
      * @author Bruno Eiki, Pedro Inácio
      * @since 27/04/2023
      */
@@ -94,7 +93,7 @@ public class EgressoServiceTest {
 
     /**
      * Metodo para testar o findById.
-     * 
+     *
      * @author Bruno Eiki, Pedro Inácio
      * @since 27/04/2023
      */
@@ -109,7 +108,7 @@ public class EgressoServiceTest {
 
     /**
      * Metodo para testar o update.
-     * 
+     *
      * @author Bruno Eiki, Pedro Inácio
      * @since 27/04/2023
      */
@@ -121,14 +120,14 @@ public class EgressoServiceTest {
 
             EgressoModel response = egressoService.updateEgresso(getMockEgresso());
             assertNotNull(response);
-        } catch(Exception e) {
-                e.getMessage();
+        } catch (Exception e) {
+            e.getMessage();
         }
     }
 
     /**
      * Metodo para testar o deleteById.
-     * 
+     *
      * @author Bruno Eiki, Pedro Inácio
      * @since 27/04/2023
      */
@@ -144,7 +143,7 @@ public class EgressoServiceTest {
 
     /**
      * Metodo para testar o existsByIdAndCreatedById.
-     * 
+     *
      * @author Bruno Eiki, Pedro Inácio
      * @since 27/04/2023
      */
@@ -160,10 +159,10 @@ public class EgressoServiceTest {
 
     /**
      * Metodo que preenche um mock de um EgressoModel para retorno dos testes
-     * 
+     *
      * @author Bruno Eiki, Pedro Inácio
      * @since 27/04/2023
-     * 
+     *
      * @return <code>egressoTeste</code> object
      */
     private EgressoModel getMockEgresso() {
