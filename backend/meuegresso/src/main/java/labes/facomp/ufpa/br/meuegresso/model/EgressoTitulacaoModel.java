@@ -20,20 +20,20 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "egresso_colacao")
+@Entity(name = "egresso_titulacao")
 @EqualsAndHashCode(callSuper = false)
-public class EgressoColacaoModel extends Auditable {
+public class EgressoTitulacaoModel extends Auditable {
 
     @EmbeddedId
-    private EgressoColacaoModelId id;
+    private EgressoTitulacaoModelId id;
 
     @MapsId(value = "egressoId")
     @ManyToOne(fetch = FetchType.LAZY)
     private EgressoModel egresso;
 
-    @MapsId(value = "colacaoId")
+    @MapsId(value = "titulacaoId")
     @ManyToOne(fetch = FetchType.LAZY)
-    private TitulacaoModel colacao;
+    private TitulacaoModel titulacao;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "data_ingresso", unique = false, nullable = false)
