@@ -4,8 +4,8 @@ import routes from './routes'
 const router = createRouter({
   history: createWebHistory(),
 
-  routes,
-});
+  routes
+})
 
 router.beforeEach((to) => {
   const loggedUser = JSON.parse(localStorage.getItem('loggedUser') || '{}')
