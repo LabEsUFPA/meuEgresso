@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -10,10 +11,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.UniqueConstraint;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -72,5 +76,11 @@ public class EgressoModel extends Auditable {
 
     @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
     private DepoimentoModel depoimento;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "egresso_tipo_bolsa", joinColumns = { @JoinColumn(name = "id_egresso") }, inverseJoinColumns = {
+            @JoinColumn(name = "id_tipo_bolsa") }, uniqueConstraints = @UniqueConstraint(columnNames = { "id_egresso",
+                    "id_tipo_bolsa" }))
+    private Set<TipoBolsaModel> bolsas;
 
 }
