@@ -12,6 +12,7 @@ INSERT INTO usuario (id_usuario,ativo,created_date,last_modified_date,email,nome
 
 INSERT INTO usuario (id_usuario,ativo,created_date,last_modified_date,email,nome_usuario,senha_usuario,login_usuario) VALUES (3,true,'2023-04-22 14:35:30.354','2023-04-22 14:35:30.354','egresso@egresso.com','EGRESSO EGRESSO','{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO','EGRESSO') ON CONFLICT DO NOTHING;
 
+INSERT INTO usuario_grupo values (1,1), (2,2), (3,3) ON CONFLICT DO NOTHING;
 
 insert into egresso_valido (id_egresso_valido, nome_egresso_valido , matricula_egresso_valido , email_egresso_valido) values
 (1,'ADALBERTO DOS REMEDIOS SILVA JUNIOR','200411140009',null),

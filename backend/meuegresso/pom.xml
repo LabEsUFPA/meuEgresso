@@ -18,6 +18,7 @@
 		<java.version>17</java.version>
 		<sonar.organization>labesufpa</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<com.fasterxml.jackson.version>2.15.0</com.fasterxml.jackson.version>
 	</properties>
 	<dependencies>
 
@@ -138,6 +139,18 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!-- END -->
+		<!-- JackSON LocalDate-->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${com.fasterxml.jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>${com.fasterxml.jackson.version}</version>
+		</dependency>
+		<!-- END  -->
 	</dependencies>
 
 	<build>

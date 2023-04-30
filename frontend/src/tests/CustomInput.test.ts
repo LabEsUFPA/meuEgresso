@@ -10,7 +10,7 @@ describe('CustomInput', () => {
         label: 'Testing',
         name: 'testing',
         value: 'Initial value',
-        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
+        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: e }) }
       }
     })
 
@@ -23,7 +23,7 @@ describe('CustomInput', () => {
         label: 'Testing',
         name: 'testing',
         value: 'Initial value',
-        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
+        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: e }) }
       }
     })
 
@@ -42,7 +42,7 @@ describe('CustomInput', () => {
         placeholder: 'Placeholder',
         required: true,
         value: 'Initial value',
-        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
+        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: e }) }
       }
     })
 

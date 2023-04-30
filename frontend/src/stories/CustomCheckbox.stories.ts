@@ -28,5 +28,5 @@ export const Default: Story = {
     },
     components: { CustomCheckbox },
     template: '<CustomCheckbox v-model="value" />'
-  }),
+  })
 }

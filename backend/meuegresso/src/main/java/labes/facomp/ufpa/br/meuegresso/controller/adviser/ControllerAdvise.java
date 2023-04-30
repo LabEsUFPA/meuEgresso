@@ -12,9 +12,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.mail.MessagingException;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
@@ -25,6 +25,7 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.EmptyBodyRequestListException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 
 /**
@@ -34,7 +35,7 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
  * @since 26/03/2023
  * @version 1.0
  */
-@ControllerAdvice
+@RestControllerAdvice
 public class ControllerAdvise {
 
 	/**
@@ -86,13 +87,23 @@ public class ControllerAdvise {
 	 * @author Alfredo Gabriel
 	 * @since 26/03/2023
 	 */
-	@ExceptionHandler(BadCredentialsException.class)
 	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(BadCredentialsException.class)
 	public ErrorResponse handleBadCredentialsException(BadCredentialsException ex) {
 		return ErrorResponse.builder()
 				.message(ErrorType.USER_002.getMessage())
 				.technicalMessage(ex.getLocalizedMessage())
 				.internalCode(ErrorType.USER_002.getInternalCode())
+				.build();
+	}
+
+	@ExceptionHandler(NotValidEgressoException.class)
+	@ResponseStatus(code = HttpStatus.EXPECTATION_FAILED)
+	public ErrorResponse handleNotValidEgressoException(NotValidEgressoException ex) {
+		return ErrorResponse.builder()
+				.message(ex.getMessage())
+				.technicalMessage(ex.getLocalizedMessage())
+				.internalCode(ex.getInternalCode())
 				.build();
 	}
 
@@ -105,8 +116,8 @@ public class ControllerAdvise {
 	 * @author Alfredo Gabriel
 	 * @since 26/03/2023
 	 */
-	@ExceptionHandler(AuthenticationException.class)
 	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(AuthenticationException.class)
 	public ErrorResponse handleAuthenticationException(AuthenticationException ex) {
 		return ErrorResponse.builder()
 				.message(ErrorType.USER_002.getMessage())
@@ -123,13 +134,13 @@ public class ControllerAdvise {
 	 * @author Alfredo Gabriel
 	 * @since 26/03/2023
 	 */
+	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
 	@ExceptionHandler(UnauthorizedRequestException.class)
-	public ResponseEntity<ErrorResponse> handleUnauthorizedRequestException(UnauthorizedRequestException ex) {
-		ErrorResponse error = new ErrorResponse(
+	public ErrorResponse handleUnauthorizedRequestException(UnauthorizedRequestException ex) {
+		return new ErrorResponse(
 				ex.getMessage(),
 				ex.getLocalizedMessage(),
 				ex.getInternalCode());
-		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
 	}
 
 	/**
@@ -140,13 +151,13 @@ public class ControllerAdvise {
 	 * @author Alfredo Gabriel
 	 * @since 26/03/2023
 	 */
+	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
 	@ExceptionHandler(InvalidRequestException.class)
-	public ResponseEntity<ErrorResponse> handleInvalidRequestException(InvalidRequestException ex) {
-		ErrorResponse error = new ErrorResponse(
+	public ErrorResponse handleInvalidRequestException(InvalidRequestException ex) {
+		return new ErrorResponse(
 				ex.getMessage(),
-				null,
+				ex.getMessage(),
 				ex.getInternalCode());
-		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
 	}
 
 	/**
@@ -158,12 +169,12 @@ public class ControllerAdvise {
 	 * @since 26/03/2023
 	 */
 	@ExceptionHandler(DataNotDeletedException.class)
-	public ResponseEntity<ErrorResponse> handleDataNotDeletedException(DataNotDeletedException ex) {
-		ErrorResponse error = new ErrorResponse(
+	@ResponseStatus(code = HttpStatus.UNPROCESSABLE_ENTITY)
+	public ErrorResponse handleDataNotDeletedException(DataNotDeletedException ex) {
+		return new ErrorResponse(
 				ex.getMessage(),
-				null,
+				ex.getMessage(),
 				ex.getInternalCode());
-		return new ResponseEntity<>(error, HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
 	/**
@@ -174,13 +185,13 @@ public class ControllerAdvise {
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
 	 */
+	@ResponseStatus(code = HttpStatus.NOT_FOUND)
 	@ExceptionHandler(NoSuchElementException.class)
-	public ResponseEntity<ErrorResponse> handleNotFound(NoSuchElementException ex) {
-		ErrorResponse error = new ErrorResponse(
+	public ErrorResponse handleNoSuchElementException(NoSuchElementException ex) {
+		return new ErrorResponse(
 				ErrorType.REPORT_004.getMessage(),
 				ex.getLocalizedMessage(),
 				ErrorType.REPORT_004.getInternalCode());
-		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
 
 	/**
@@ -191,13 +202,13 @@ public class ControllerAdvise {
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
 	 */
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<ErrorResponse> handleNotFound(HttpMessageNotReadableException ex) {
-		ErrorResponse error = new ErrorResponse(
+	public ErrorResponse handleNotFound(HttpMessageNotReadableException ex) {
+		return new ErrorResponse(
 				ErrorType.REPORT_005.getMessage(),
 				ex.getLocalizedMessage(),
 				ErrorType.REPORT_005.getInternalCode());
-		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 
 	/**
@@ -210,11 +221,10 @@ public class ControllerAdvise {
 	 * @since 21/04/2023
 	 * @see {@link EmptyBodyRequestListException}
 	 */
-	@ExceptionHandler({ EmptyBodyRequestListException.class })
+	@ExceptionHandler(EmptyBodyRequestListException.class)
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	public ErrorResponse handleEmptyBodyRequestListException(
 			EmptyBodyRequestListException ex) {
-
 		return new ErrorResponse(
 				ex.getMessage(),
 				ex.getLocalizedMessage(),
@@ -249,14 +259,13 @@ public class ControllerAdvise {
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
 	 */
-	@ExceptionHandler({ MailException.class, MessagingException.class })
 	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
-	public ResponseEntity<ErrorResponse> handleMailException(MailException ex) {
-		ErrorResponse error = new ErrorResponse(
+	@ExceptionHandler({ MailException.class, MessagingException.class })
+	public ErrorResponse handleMailException(MailException ex) {
+		return new ErrorResponse(
 				ErrorType.REPORT_006.getMessage(),
 				ex.getLocalizedMessage(),
 				ErrorType.REPORT_006.getInternalCode());
-		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	/**
