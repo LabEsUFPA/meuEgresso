@@ -1,18 +1,73 @@
--- Grupos Padrões
-
-INSERT INTO grupo (id_grupo, ativo, created_date , last_modified_date , nome_grupo) values (1,	true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'ADMIN') ON CONFLICT DO NOTHING;
-INSERT INTO grupo (id_grupo, ativo, created_date , last_modified_date , nome_grupo) values (2,	true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'SECRETARIO') ON CONFLICT DO NOTHING;
-INSERT INTO grupo (id_grupo, ativo, created_date , last_modified_date , nome_grupo) values (3,	true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'EGRESSO') ON CONFLICT DO NOTHING;
-
 -- Usuario Padrão
 
 INSERT INTO usuario (id_usuario,ativo,created_date,last_modified_date,email,nome_usuario,senha_usuario,login_usuario) VALUES (1,true,'2023-04-22 14:34:40.702','2023-04-22 14:34:40.702','admin@admin.com','ADMIN ADMIN','{bcrypt}$2a$10$vh9/MkL4XQyd.fqkQdnWSelTUxPBpDb6qL5W2uWLxLUN0JR9vwRZm','ADMIN') ON CONFLICT DO NOTHING;
-
 INSERT INTO usuario (id_usuario,ativo,created_date,last_modified_date,email,nome_usuario,senha_usuario,login_usuario) VALUES (2,true,'2023-04-22 14:35:09.149','2023-04-22 14:35:09.149','secretario@secretario.com','SECRETARIO SECRETARIO','{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy','SECRETARIO') ON CONFLICT DO NOTHING;
-
 INSERT INTO usuario (id_usuario,ativo,created_date,last_modified_date,email,nome_usuario,senha_usuario,login_usuario) VALUES (3,true,'2023-04-22 14:35:30.354','2023-04-22 14:35:30.354','egresso@egresso.com','EGRESSO EGRESSO','{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO','EGRESSO') ON CONFLICT DO NOTHING;
 
-INSERT INTO usuario_grupo values (1,1), (2,2), (3,3) ON CONFLICT DO NOTHING;
+-- Grupos Padrões
+
+INSERT INTO grupo (id_grupo, ativo, created_date , last_modified_date , nome_grupo, created_by) values (1,	true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'ADMIN', 1) ON CONFLICT DO NOTHING;
+INSERT INTO grupo (id_grupo, ativo, created_date , last_modified_date , nome_grupo, created_by) values (2,	true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'SECRETARIO', 1) ON CONFLICT DO NOTHING;
+INSERT INTO grupo (id_grupo, ativo, created_date , last_modified_date , nome_grupo, created_by) values (3,	true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'EGRESSO', 1) ON CONFLICT DO NOTHING;
+
+
+-- Usuarios por Grupo
+
+INSERT INTO public.usuario_grupo VALUES (1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.usuario_grupo VALUES (2, 2) ON CONFLICT DO NOTHING;
+INSERT INTO public.usuario_grupo VALUES (3, 3) ON CONFLICT DO NOTHING;
+
+--- Tipos de Cota
+
+INSERT INTO public.cota VALUES (1, true, '2023-04-23 20:20:46.237', '2023-04-23 20:20:46.237', 'ESCOLA', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.cota VALUES (2, true, '2023-04-23 20:20:56.222', '2023-04-23 20:20:56.222', 'RENDA', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.cota VALUES (3, true, '2023-04-23 20:21:02.559', '2023-04-23 20:21:02.559', 'AUTODECLARAÇÃO DE RAÇA', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.cota VALUES (4, true, '2023-04-23 20:21:08.142', '2023-04-23 20:21:08.142', 'QUILOMBOLAS/INDÍGENAS', 1, 1) ON CONFLICT DO NOTHING;
+
+--- Cursos
+
+INSERT INTO public.curso VALUES (1, true, '2023-04-23 20:20:28.327', '2023-04-23 20:20:28.327', 'CIÊNCIA DA COMPUTAÇÃO', 1, 1) ON CONFLICT DO NOTHING;
+
+--- Empresa/Instituição
+
+INSERT INTO public.empresa VALUES (1, true, '2023-04-23 20:19:41.579', '2023-04-23 20:19:41.579', 'UNIVERSIDADE FEDERAL DO PARA', 'EDUCAÇÃO', 1, 1) ON CONFLICT DO NOTHING;
+
+--- Endereço
+
+INSERT INTO public.endereco VALUES (1, true, '2023-04-23 20:19:14.43', '2023-04-23 20:19:14.43', 'BARCARENA', 'PARÁ', 'BRASIL', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.endereco VALUES (2, true, '2023-04-23 20:19:14.43', '2023-04-23 20:19:14.43', 'BELÉM', 'PARÁ', 'BRASIL', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.endereco VALUES (3, true, '2023-04-23 20:19:14.43', '2023-04-23 20:19:14.43', 'CAPANEMA', 'PARÁ', 'BRASIL', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.endereco VALUES (4, true, '2023-04-23 20:19:14.43', '2023-04-23 20:19:14.43', 'BRAGANÇA', 'PARÁ', 'BRASIL', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.endereco VALUES (5, true, '2023-04-23 20:19:14.43', '2023-04-23 20:19:14.43', 'SÃO MIGUEL DO GUAMÁ', 'PARÁ', 'BRASIL', 1, 1) ON CONFLICT DO NOTHING;
+
+--- Faixa Salarial
+
+INSERT INTO public.faixa_salarial VALUES (1, true, '2023-04-23 20:17:21.199', '2023-04-23 20:17:21.199', '1 salário mínimo', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.faixa_salarial VALUES (2, true, '2023-04-23 20:17:33.688', '2023-04-23 20:17:33.688', '1 a 2 salários mínimo', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.faixa_salarial VALUES (3, true, '2023-04-23 20:17:40.664', '2023-04-23 20:17:40.664', '3 a 5 salários mínimo', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.faixa_salarial VALUES (4, true, '2023-04-23 20:17:57.34', '2023-04-23 20:17:57.34', '6 ou mais salários mínimo', 1, 1) ON CONFLICT DO NOTHING;
+
+--- Genero
+
+INSERT INTO public.genero VALUES (1, true, '2023-04-23 20:16:27.119', '2023-04-23 20:16:27.119', 'MASCULINO', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.genero VALUES (2, true, '2023-04-23 20:16:33.481', '2023-04-23 20:16:33.481', 'FEMININO', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.genero VALUES (3, true, '2023-04-23 20:16:37.465', '2023-04-23 20:16:37.465', 'NÃO BINÁRIO', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.genero VALUES (4, true, '2023-04-23 20:16:37.465', '2023-04-23 20:16:37.465', 'TRANSSEXUAL', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.genero VALUES (5, true, '2023-04-23 20:16:37.465', '2023-04-23 20:16:37.465', 'NÃO QUERO DECLARAR', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.genero VALUES (6, true, '2023-04-23 20:16:37.465', '2023-04-23 20:16:37.465', 'OUTROS', 1, 1) ON CONFLICT DO NOTHING;
+
+--- Tipo de Bolsa
+
+INSERT INTO public.tipo_bolsa VALUES (1, true, '2023-04-23 20:15:48.237', '2023-04-23 20:15:48.237', 'PIBIC', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa VALUES (2, true, '2023-04-23 20:15:56.48', '2023-04-23 20:15:56.48', 'PIBIX', 1, 1) ON CONFLICT DO NOTHING;
+
+--- Titulação
+
+INSERT INTO public.titulacao VALUES (1, true, '2023-04-23 20:21:28.472', '2023-04-23 20:21:28.472', 'GRADUAÇÃO', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.titulacao VALUES (3, true, '2023-04-23 20:21:42.103', '2023-04-23 20:21:42.103', 'MESTRADO', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.titulacao VALUES (4, true, '2023-04-23 20:21:48.189', '2023-04-23 20:21:48.189', 'DOUTORADO', 1, 1) ON CONFLICT DO NOTHING;
+
+--- Egressos Validos (Dados pela Marcele)
 
 insert into egresso_valido (id_egresso_valido, nome_egresso_valido , matricula_egresso_valido , email_egresso_valido) values
 (1,'ADALBERTO DOS REMEDIOS SILVA JUNIOR','200411140009',null),
@@ -1010,131 +1065,128 @@ insert into egresso_valido (id_egresso_valido, nome_egresso_valido , matricula_e
 (993,'YVAN PEREIRA DOS SANTOS BRITO','201304940016','yvanbrito96@gmail.com'),
 (994,'Abraham Lincoln Rabelo De Sousa',null,'rabelo.lincoln@gmail.com'),
 (995,'ADAILTON MAGALHAES LIMA',null,'adailtulima@gmail.com'),
-(997,'Adalberto Cavalcante de Melo ',null,'adalbertocmelo@gmail.com'),
+(997,'Adalberto Cavalcante de Melo',null,'adalbertocmelo@gmail.com'),
 (998,'Adrianne Veras de Almeida',null,'adrianne.veras@outlook.com'),
-(999,'Alen Costa Vieira ',null,'alencv@gmail.com'),
-(1001,'Allan Douglas Bento da Costa ',null,'allandoug@gmail.com'),
+(999,'Alen Costa Vieira',null,'alencv@gmail.com'),
+(1001,'Allan Douglas Bento da Costa',null,'allandoug@gmail.com'),
 (1005,'Ana Larissa da Silva Dias',null,'larissa.engcomp@gmail.com'),
 (1006,'Anderson Gregório Marques Soares',null,'andersonsoares@ufra.edu.br'),
-(1009,'Anderson Gregório Marques Soares ',null,'anderson.gmarques@gmail.com'),
+(1009,'Anderson Gregório Marques Soares',null,'anderson.gmarques@gmail.com'),
 (1011,'Anderson Trindade Maia',null,'anderson_detran@hotmail.com'),
-(1013,'André de Jesus Araújo Ramos ',null,'andre.rammos7@gmail.com'),
-(1014,'André Figueira Riker ',null,'andre.riker@gmail.com'),
+(1013,'André de Jesus Araújo Ramos',null,'andre.rammos7@gmail.com'),
+(1014,'André Figueira Riker',null,'andre.riker@gmail.com'),
 (1019,'Benedito de Souza Ribeiro Neto',null,'ditoneto@gmail.com'),
-(1022,'Breno Bernard Nicolau de França ',null,'bfranca@unicamp.br'),
-(1024,'Bruno Garcia da Costa ',null,'upbrunogc@gmail.com'),
-(1025,'Bruno Pereira Brito ',null,'britodi@gmail.com'),
-(1030,'Carlos Gustavo Resque dos Santos ',null,'gustavo.cbcc@gmail.com'),
-(1032,'Carlos Takeshi Kudo Yasojima ',null,'takeshiyasojima@gmail.com'),
-(1033,'Cassio Trindade Batista ',null,'cassio.batista.13@gmail.com'),
+(1022,'Breno Bernard Nicolau de França',null,'bfranca@unicamp.br'),
+(1024,'Bruno Garcia da Costa',null,'upbrunogc@gmail.com'),
+(1025,'Bruno Pereira Brito',null,'britodi@gmail.com'),
+(1030,'Carlos Gustavo Resque dos Santos',null,'gustavo.cbcc@gmail.com'),
+(1032,'Carlos Takeshi Kudo Yasojima',null,'takeshiyasojima@gmail.com'),
+(1033,'Cassio Trindade Batista',null,'cassio.batista.13@gmail.com'),
 (1034,'Cesar Siqueira de Oliveira',null,'avcesar@gmail.com'),
-(1035,'Claudomir Cardoso de Carvalho Junior ',null,'claudomir.junior@ifma.edu.br'),
-(1036,'Clay Palmeira da Silva  ',null,'dom.clay@yahoo.com.br'),
-(1037,'Cleyton Aparecido Dim ',null,'cleytondim@ufpa.br'),
-(1038,'Cynthya Letícia Teles De Oliveira ',null,'cynthya.telles@gmail.com'),
+(1035,'Claudomir Cardoso de Carvalho Junior',null,'claudomir.junior@ifma.edu.br'),
+(1036,'Clay Palmeira da Silva',null,'dom.clay@yahoo.com.br'),
+(1037,'Cleyton Aparecido Dim',null,'cleytondim@ufpa.br'),
+(1038,'Cynthya Letícia Teles De Oliveira',null,'cynthya.telles@gmail.com'),
 (1041,'Daniel Leal Souza',null,'daniel.leal.souza@gmail.com'),
-(1042,'Danileno Meireles do Rosario ',null,'lenomeireles@gmail.com'),
-(1045,'Diego Bento Aires Teixeira ',null,'diegoaires@gmail.com'),
-(1046,'Diego Hortêncio dos Santos ',null,'hortencio1983@gmail.com'),
+(1042,'Danileno Meireles do Rosario',null,'lenomeireles@gmail.com'),
+(1045,'Diego Bento Aires Teixeira',null,'diegoaires@gmail.com'),
+(1046,'Diego Hortêncio dos Santos',null,'hortencio1983@gmail.com'),
 (1047,'Diego Oliveira Abreu',null,'diegoabreuengcomp@gmail.com'),
 (1051,'Eddas Josue Bertrand Martinez',null,'eddasjbertrand@gmail.com'),
 (1054,'Edian Franklin Franco De Los Santos',null,'edianfranklin@gmail.com'),
-(1055,'Edinaldo João Costa de La-roque ',null,'edinaldo.laroque@gmail.com'),
-(1056,'Edson Koiti Kudo Yasojima ',null,'koitiyasojima@gmail.com'),
+(1055,'Edinaldo João Costa de La-roque',null,'edinaldo.laroque@gmail.com'),
+(1056,'Edson Koiti Kudo Yasojima',null,'koitiyasojima@gmail.com'),
 (1059,'Eduardo Gabriel Lima da Silva',null,'eduardolima.ufpa@gmail.com'),
-(1060,'Eduardo Paulo Marques Raiol ',null,'marquesraiol@gmail.com'),
+(1060,'Eduardo Paulo Marques Raiol',null,'marquesraiol@gmail.com'),
 (1061,'Edwin Jahir Rueda Rojas',null,'ejrueda95g@gmail.com'),
-(1063,'Elisiane Monteiro Soares ',null,'elismclean@gmail.com'),
+(1063,'Elisiane Monteiro Soares',null,'elismclean@gmail.com'),
 (1065,'Elziane Monteiro Soares',null,'msoares.elziane@gmail.com'),
 (1066,'Emanuel Montero Espaillat',null,'emanuel.montero.e@gmail.com'),
 (1068,'Erick Modesto Campos',null,'erick.c.modesto@gmail.com'),
-(1070,'Ericson Sarmento Costa ',null,'ericsonsarmento+ppgcc@gmail.com'),
+(1070,'Ericson Sarmento Costa',null,'ericsonsarmento+ppgcc@gmail.com'),
 (1073,'Estêvão Damasceno Santos',null,'estevaosantos265@gmail.com'),
-(1074,'Fabio Malcher Miranda ',null,'fabiomm@ufmg.br'),
+(1074,'Fabio Malcher Miranda',null,'fabiomm@ufmg.br'),
 (1075,'Fabio Rocha de Araujo',null,'fabioaraujo289@gmail.com'),
 (1076,'Fabricio wickey da silva garcia',null,'fabriciogarcia@ufpa.br'),
-(1077,'Fabricio Wickey da Silva Garcia ',null,'fabriciowsgarcia@gmail.com'),
+(1077,'Fabricio Wickey da Silva Garcia',null,'fabriciowsgarcia@gmail.com'),
 (1078,'Felipe Rocha de Araújo',null,'felipearaujo289@gmail.com'),
 (1079,'Fernando Nazareno Nascimento Farias',null,'fernnf@gmail.com'),
 (1081,'Gilson Rocha Silva',null,'gilsonrocha@gmail.com'),
-(1083,'Hernan Dario Carreño Laguado ',null,'hernan.laguado@gmail.com'),
+(1083,'Hernan Dario Carreño Laguado',null,'hernan.laguado@gmail.com'),
 (1084,'Hilton Prado de Castro Junior',null,'hilton.castro@ifap.edu.br'),
-(1085,'Hugo Brito Lima ',null,'hugoblim@gmail.com'),
+(1085,'Hugo Brito Lima',null,'hugoblim@gmail.com'),
 (1088,'Iago Lins de Medeiros',null,'iagolmedeiros@gmail.com'),
 (1089,'Igor da Penha Natal',null,'igorpnatal@gmail.com'),
-(1091,'Igor Ernesto Ferreira Costa ',null,'IGGOR16@GMAIL.COM'),
-(1096,'Isadora Mendes dos Santos ',null,'isadoramsantos@gmail.com'),
+(1091,'Igor Ernesto Ferreira Costa',null,'IGGOR16@GMAIL.COM'),
+(1096,'Isadora Mendes dos Santos',null,'isadoramsantos@gmail.com'),
 (1097,'Ivo de Abreu Araújo',null,'ivoabreu94@gmail.com'),
-(1098,'Jadielly Fernandes Oliveira Treccani ',null,'jadielly.oliveira@gmail.com'),
+(1098,'Jadielly Fernandes Oliveira Treccani',null,'jadielly.oliveira@gmail.com'),
 (1100,'Jailton Wagner Rodrigues Tavares',null,'jwagner28@gmail.com'),
 (1101,'Jair da Silva Ferreira Junior',null,'jair.jr.j2@gmail.com'),
-(1104,'Jean Carlos Arouche Freire ',null,'jeanarouche@gmail.com'),
-(1106,'Jefferson Magalhães de Morais ',null,'jeffersonmorais@gmail.com'),
-(1107,'Joahannes Bruno Dias da Costa ',null,'joahannes@gmail.com'),
+(1104,'Jean Carlos Arouche Freire',null,'jeanarouche@gmail.com'),
+(1106,'Jefferson Magalhães de Morais',null,'jeffersonmorais@gmail.com'),
+(1107,'Joahannes Bruno Dias da Costa',null,'joahannes@gmail.com'),
 (1108,'João Júlio Salvatti Neto',null,'salvatti@gmail.com'),
 (1109,'Jonathas Pinheiro Trindade',null,'jonathasp6@gmail.com'),
 (1110,'José de Sousa Ribeiro Filho',null,'jose.sousa.filho@gmail.com'),
-(1111,'José Flávio de Souza Dias Júnior ',null,'joseflaviojr@gmail.com'),
+(1111,'José Flávio de Souza Dias Júnior',null,'joseflaviojr@gmail.com'),
 (1112,'Julio Cezar Costa Furtado',null,'furtado@unifap.br'),
-(1115,'Karla Suely Diniz da Costa  ',null,'k_info_04@yahoo.com.br'),
-(1116,'Larissa Monteiro Pimentel  ',null,'larissamonteiropimentel@gmail.com'),
+(1115,'Karla Suely Diniz da Costa',null,'k_info_04@yahoo.com.br'),
+(1116,'Larissa Monteiro Pimentel',null,'larissamonteiropimentel@gmail.com'),
 (1118,'Lena Patrícia Souza Rodrigues',null,'patricia.souza@ufra.edu.br'),
 (1119,'Lennon Sales Furtado',null,'lennonsfurtado@gmail.com'),
-(1123,'Leonardo Hirokazu de Souza Hamada ',null,'hamadaleonardo@gmail.com'),
-(1124,'Leonardo Sarraff Nunes de Moraes ',null,'matakura@gmail.com'),
+(1123,'Leonardo Hirokazu de Souza Hamada',null,'hamadaleonardo@gmail.com'),
+(1124,'Leonardo Sarraff Nunes de Moraes',null,'matakura@gmail.com'),
 (1125,'Lucas de Melo Silva',null,'lucas.melo04@gmail.com'),
 (1127,'Lucelia Pereira Goncalves',null,'lucelia.matsumoto@serpro.gov.br'),
 (1128,'Luciana Abdon Almeida',null,'lu.abdon.si@gmail.com'),
 (1129,'LUCIANO RIBEIRO DUARTE',null,'duartelucianoribeiro@gmail.com'),
-(1131,'Marcelle Pereira Mota ',null,'cellemota@gmail.com'),
-(1133,'Marcia Priscila Furtado Pantoja ',null,'marciapantoja13@gmail.com'),
-(1134,'Marcio Goes do Nascimento ',null,'goes.nascimento@gmail.com'),
-(1135,'Márcio José Moutinho da Ponte ',null,'mjmponte@gmail.com'),
-(1136,'Marco Antonio Balieiro Da Silva ',null,'ma.balieiro@gmail.com'),
+(1131,'Marcelle Pereira Mota',null,'cellemota@gmail.com'),
+(1133,'Marcia Priscila Furtado Pantoja',null,'marciapantoja13@gmail.com'),
+(1134,'Marcio Goes do Nascimento',null,'goes.nascimento@gmail.com'),
+(1135,'Márcio José Moutinho da Ponte',null,'mjmponte@gmail.com'),
+(1136,'Marco Antonio Balieiro Da Silva',null,'ma.balieiro@gmail.com'),
 (1137,'Marcos César da Rocha Seruffo',null,'marcos.seruffo@gmail.com'),
-(1138,'Marcos Felipe Carvalho Nazario ',null,'carvalhonazario@yahoo.com.br'),
+(1138,'Marcos Felipe Carvalho Nazario',null,'carvalhonazario@yahoo.com.br'),
 (1139,'Marisa Cristina Moreno Alves de Andrade',null,'mm.marisamoreno@gmail.com'),
-(1142,'Mauricio Ronny de Almeida Souza ',null,'mauricio.ronny@gmail.com'),
+(1142,'Mauricio Ronny de Almeida Souza',null,'mauricio.ronny@gmail.com'),
 (1144,'Mauro Rodrigo Larrat Frota e Silva',null,'maurolarrat@ufpa.br'),
-(1146,'Mayara Costa Figueiredo  ',null,'mayfigueiredo@gmail.com'),
-(1150,'Mireille Pinheiro Moreira Balieiro ',null,'mireillepm@gmail.com'),
-(1151,'Müller Gabriel Da Silva Miranda ',null,'mulgsm@gmail.com'),
+(1146,'Mayara Costa Figueiredo',null,'mayfigueiredo@gmail.com'),
+(1150,'Mireille Pinheiro Moreira Balieiro',null,'mireillepm@gmail.com'),
+(1151,'Müller Gabriel Da Silva Miranda',null,'mulgsm@gmail.com'),
 (1153,'Nágila Natália Torres Vale',null,'nagila.ufpa@gmail.com'),
 (1154,'Nielsen Alves Gonçalves',null,'engenilk@gmail.com'),
 (1156,'Olavo Nylander Brito Neto',null,'olavo.nylander@gmail.com'),
 (1157,'Paulo Igor Alves Godinho',null,'piagodinho@gmail.com'),
-(1160,'Paulo Vitor Rodrigues Cardoso ',null,'paulo.cardoso12@gmail.com'),
-(1161,'Pedro Alberto Bento Gomes ',null,'pedroabg@gmail.com'),
-(1162,'Pedro Luiz Magalhães Cumino ',null,'pedro.cumino@gmail.com'),
-(1163,'Pedro Montibeler Salvador ',null,'pedro.montibeler@gmail.com'),
-(1164,'Phelipe Luiz Dias Feio  ',null,'phelipefeio09@gmail.com'),
+(1160,'Paulo Vitor Rodrigues Cardoso',null,'paulo.cardoso12@gmail.com'),
+(1161,'Pedro Alberto Bento Gomes',null,'pedroabg@gmail.com'),
+(1162,'Pedro Luiz Magalhães Cumino',null,'pedro.cumino@gmail.com'),
+(1163,'Pedro Montibeler Salvador',null,'pedro.montibeler@gmail.com'),
+(1164,'Phelipe Luiz Dias Feio',null,'phelipefeio09@gmail.com'),
 (1166,'Rafael Martins Feitosa',null,'rafael.feito@gmail.com'),
 (1168,'Rafael Pereira Esteves',null,'rafesteves@gmail.com'),
 (1169,'Rafael Santana Oliveira',null,'rafaelstnoliveira@gmail.com'),
 (1174,'Reinaldo Junior Lopes Cardoso',null,'reinald28@gmail.com'),
-(1175,'Renata Kelly Dantas Cascaes ',null,'renatadcascaes@gmail.com'),
-(1176,'Renato de Pina Ferreira ',null,'renpina@gmail.com'),
-(1177,'Renato Hidaka Torres ',null,'renatohidaka@gmail.com'),
-(1179,'Rennan Jose Maia da Silva ',null,'rennanmaia@gmail.com'),
-(1180,'Ricardo Rodrigo Marinho Melo ',null,'ricardorodrigomm@gmail.com'),
+(1175,'Renata Kelly Dantas Cascaes',null,'renatadcascaes@gmail.com'),
+(1176,'Renato de Pina Ferreira',null,'renpina@gmail.com'),
+(1177,'Renato Hidaka Torres',null,'renatohidaka@gmail.com'),
+(1179,'Rennan Jose Maia da Silva',null,'rennanmaia@gmail.com'),
+(1180,'Ricardo Rodrigo Marinho Melo',null,'ricardorodrigomm@gmail.com'),
 (1182,'Roberto Yuri da Silva Franco',null,'roberto.yuri.franco@gmail.com'),
 (1185,'Rodrigo Santos do Amor Divino Lima',null,'rodrigo.sad.lima@gmail.com'),
-(1186,'Romulo Silva Pinheiro  ',null,'romulo.s.pinheiro@gmail.com'),
+(1186,'Romulo Silva Pinheiro',null,'romulo.s.pinheiro@gmail.com'),
 (1188,'Sandro de Paula Mendonça ',null,'sandrodpm@gmail.com'),
 (1189,'Sara das Merces Silva',null,'maru.merces18@gmail.com'),
 (1190,'Saul Campos Berardo',null,'saulberardo@gmail.com'),
 (1191,'sebastião rodrigues da costa neto',null,'s.rodriguescn@gmail.com'),
 (1193,'Silvério Sirotheau Corrêa Neto',null,'silverio@ufpa.br'),
-(1194,'Silvério Sirotheau Corrêa Neto ',null,'ssirotheau@gmail.com'),
+(1194,'Silvério Sirotheau Corrêa Neto',null,'ssirotheau@gmail.com'),
 (1195,'Suelene de Jesus do Carmo Corrêa ',null,'suelene.correa@ifpa.edu.br'),
-(1196,'Thiago Antônio Sidônio Coqueiro ',null,'tcoqueiro@hotmail.com'),
+(1196,'Thiago Antônio Sidônio Coqueiro',null,'tcoqueiro@hotmail.com'),
 (1200,'Vagner de Brito Nascimento',null,'vagner@ufpa.br'),
 (1202,'Vitor de Souza Castro',null,'vitor@unifesspa.edu.br'),
 (1203,'Walbert Cunha Monteiro',null,'walbertcm@gmail.com'),
 (1204,'Wendy Mendes Galeno',null,'wendymgaleno@gmail.com'),
-(1205,'Wilson Luiz da Silva Farias ',null,'wilsonluiz.dsf@gmail.com'),
-(1206,'Yuri Lima Cavalcante  ',null,'yurilimacavalcante@gmail.com'),
-(1207,'Yuri Santa Rosa Nassar dos Santos ',null,'yuri.nassar@gmail.com')  ON CONFLICT DO NOTHING;
-
-
-insert into cota (id_cota, ativo, nome_cota) values  (1, true, 'ESCOLA'), (2, true, 'COTA RENDA'), (3, true, 'COTA RAÇA'), (4, true, 'COTA INDIGINA')  ON CONFLICT DO NOTHING;
+(1205,'Wilson Luiz da Silva Farias',null,'wilsonluiz.dsf@gmail.com'),
+(1206,'Yuri Lima Cavalcante',null,'yurilimacavalcante@gmail.com'),
+(1207,'Yuri Santa Rosa Nassar dos Santos',null,'yuri.nassar@gmail.com')  ON CONFLICT DO NOTHING;

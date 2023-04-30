@@ -45,8 +45,11 @@ public class EgressoModel extends Auditable {
     @Column(name = "matricula_egresso", unique = true, nullable = true, length = 12)
     private String matricula;
 
-    @Column(name = "pcd_egresso", unique = false, nullable = false)
-    private Boolean pcd = false;
+    @Column(name = "pcd_egresso", unique = false, nullable = true)
+    private Boolean pcd;
+
+    @Column(name = "cotista_egresso", unique = false, nullable = true)
+    private Boolean cotista;
 
     @Column(name = "interesse_em_pos_egresso", unique = false, nullable = false)
     private Boolean interesseEmPos = false;
@@ -62,14 +65,14 @@ public class EgressoModel extends Auditable {
     private EnderecoModel endereco; // TODO não existe mais aqui so na empresa
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "cota_id", unique = false, nullable = false)
-    private CotaModel cota;
+    @JoinColumn(name = "cota_id", unique = false, nullable = true)
+    private CotaModel cota; // TODO talvez aqui seja N to N optional
 
     @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "usuario_id", unique = true, nullable = true)
     private UsuarioModel usuario;
 
-    @OneToMany(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
-    private Set<DepoimentoModel> depoimentos;
+    @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+    private DepoimentoModel depoimento;
 
 }
