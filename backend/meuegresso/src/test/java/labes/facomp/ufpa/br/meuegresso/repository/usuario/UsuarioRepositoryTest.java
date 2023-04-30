@@ -38,7 +38,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 // @TestInstance(Lifecycle.PER_CLASS)
 // @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,MockitoTestExecutionListener.class })
-public class UsuarioRepositoryTest {
+class UsuarioRepositoryTest {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -50,7 +50,7 @@ public class UsuarioRepositoryTest {
     UsuarioModel usuario = new UsuarioModel();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         GrupoModel grupoModel = GrupoModel.builder().nomeGrupo("ADMINNN").build();
         grupoModel = grupoRepository.save(grupoModel);
 
@@ -73,34 +73,34 @@ public class UsuarioRepositoryTest {
     }
 
     @Test
-    public void test_Given_Usuario_Login_Should_Correspondent_User_Ignoring_Case() {
+    void test_Given_Usuario_Login_Should_Correspondent_User_Ignoring_Case() {
         UsuarioModel user = usuarioRepository.findByUsernameIgnoreCase("JOHN123").get();
         assertEquals(usuario, user);
     }
 
     @Test
-    public void test_Should_Return_All_Userdata() {
+    void test_Should_Return_All_Userdata() {
         List<UsuarioModel> users = usuarioRepository.findAll();
         assertEquals(2, users.size());
     }
 
     @Test
-    public void test_Given_Correct_Username_Should_Return_True() {
+    void test_Given_Correct_Username_Should_Return_True() {
         assertTrue(usuarioRepository.existsByUsername("john123"));
     }
 
     @Test
-    public void test_Given_Incorrect_Username_Should_Return_False() {
+    void test_Given_Incorrect_Username_Should_Return_False() {
         assertFalse(usuarioRepository.existsByUsername("Carla"));
     }
 
     @Test
-    public void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_False_If_Wrong() {
+    void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_False_If_Wrong() {
         assertFalse(usuarioRepository.existsByIdAndCreatedById(1, 2));
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         usuarioRepository.deleteAll();
         grupoRepository.deleteAll();
         usuario = null;

@@ -37,7 +37,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 @SpringBootTest
 @DirtiesContext
 @ActiveProfiles("test")
-public class UsuarioServiceImplTest {
+class UsuarioServiceImplTest {
 
 	@Mock
 	private PasswordEncoder passwordEncoder;
@@ -53,7 +53,7 @@ public class UsuarioServiceImplTest {
 	private List<UsuarioModel> usuarios = new ArrayList<>();
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		usuario.setId(1);
 		usuario.setNome("John");
 		usuario.setUsername("john123");
@@ -74,7 +74,7 @@ public class UsuarioServiceImplTest {
 	}
 
 	@Test
-	public void test_Given_Valid_Username_Should_Return_Userdata() {
+	void test_Given_Valid_Username_Should_Return_Userdata() {
 
 		Mockito.when(usuarioRepository.findByUsernameIgnoreCase("john123")).thenReturn(Optional.of(usuario));
 
@@ -82,14 +82,14 @@ public class UsuarioServiceImplTest {
 	}
 
 	@Test
-	public void test_Given_Invalid_Username_Should_Not_Return_Userdata() {
+	void test_Given_Invalid_Username_Should_Not_Return_Userdata() {
 		Mockito.when(usuarioRepository.findByUsernameIgnoreCase("carla123")).thenReturn(Optional.empty());
 
 		assertThrows(UsernameNotFoundException.class, () -> usuarioService.loadUserByUsername("carla123"));
 	}
 
 	@Test
-	public void test_Given_Valid_Username_Should_Return_True() {
+	void test_Given_Valid_Username_Should_Return_True() {
 		Boolean username_in_database = true;
 		Mockito.when(usuarioRepository.existsByUsername("john123")).thenReturn(username_in_database);
 
@@ -97,7 +97,7 @@ public class UsuarioServiceImplTest {
 	}
 
 	@Test
-	public void test_Given_Invalid_Username_Should_False() {
+	void test_Given_Invalid_Username_Should_False() {
 		Boolean username_in_database = true;
 		Mockito.when(usuarioRepository.existsByUsername("carla123")).thenReturn(username_in_database);
 
@@ -105,19 +105,19 @@ public class UsuarioServiceImplTest {
 	}
 
 	@Test
-	public void test_Given_Valid_Id_Should_Return_Userdata() {
+	void test_Given_Valid_Id_Should_Return_Userdata() {
 		Mockito.when(usuarioRepository.findById(1)).thenReturn(Optional.of(usuario));
 		assertEquals(usuario, usuarioService.findById(1));
 	}
 
 	@Test
-	public void test_Given_Invalid_Id_Should_Not_Return_Userdata() {
+	void test_Given_Invalid_Id_Should_Not_Return_Userdata() {
 		Mockito.when(usuarioRepository.findById(10)).thenReturn(Optional.of(usuario));
 		assertThrows(NoSuchElementException.class, () -> usuarioService.findById(1));
 	}
 
 	@Test
-	public void test_Should_Return_All_Userdata() {
+	void test_Should_Return_All_Userdata() {
 		List<UsuarioModel> users = new ArrayList<>();
 		Mockito.when(usuarioRepository.findAll()).thenReturn(usuarios);
 		users = usuarioService.findAll();
@@ -125,14 +125,14 @@ public class UsuarioServiceImplTest {
 	}
 
 	@Test
-	public void test_Save_Should_Save_On_Repository() {
+	void test_Save_Should_Save_On_Repository() {
 		Mockito.when(usuarioRepository.save(usuario)).thenReturn(usuario);
 		UsuarioModel usuariotest = usuarioService.save(usuario);
 		assertEquals(usuario, usuariotest);
 	}
 
 	@Test
-	public void test_Given_New_Credentials_Return_Updated_User() throws InvalidRequestException {
+	void test_Given_New_Credentials_Return_Updated_User() throws InvalidRequestException {
 		usuario.setNome("Michael");
 		usuario.setEmail("michel@hotmail.com");
 		usuario.setUsername("michel123");
@@ -157,32 +157,32 @@ public class UsuarioServiceImplTest {
 	}
 
 	@Test
-	public void test_Given_Correct_Id_Should_Delete_User_Data() {
+	void test_Given_Correct_Id_Should_Delete_User_Data() {
 		Mockito.when(usuarioService.deleteById(1)).thenReturn(true);
 		assertThrows(NoSuchElementException.class, () -> usuarioService.findById(1));
 	}
 
 	@Test
-	public void test_Given_Incorrect_Id_Should_Not_Delete_User_Data() {
+	void test_Given_Incorrect_Id_Should_Not_Delete_User_Data() {
 		assertFalse(usuarioService.deleteById(10));
 	}
 
 	@Test
-	public void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_True_If_Right() {
+	void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_True_If_Right() {
 		Boolean right = true;
 		Mockito.when(usuarioRepository.existsByIdAndCreatedById(2, 1)).thenReturn(right);
 		assertEquals(right, usuarioService.existsByIdAndCreatedById(2, 1));
 	}
 
 	@Test
-	public void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_False_If_Wrong() {
+	void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_False_If_Wrong() {
 		Boolean right = false;
 		Mockito.when(usuarioRepository.existsByIdAndCreatedById(1, 2)).thenReturn(right);
 		assertEquals(right, usuarioService.existsByIdAndCreatedById(1, 2));
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		usuario = null;
 	}
 }
