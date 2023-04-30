@@ -41,7 +41,7 @@ public class UsuarioAdmController {
 
 	/**
 	 * Endpoint responsável por retornar a lista de usuários cadastrados no banco de dados.
-	 * 
+	 *
 	 * @return {@link UsuarioAuthDTO} Lista de usuários cadastrados
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 18/04/2023
@@ -55,7 +55,7 @@ public class UsuarioAdmController {
 
 	/**
 	 * Endpoint responsavel por atualizar o usuário.
-	 * 
+	 *
 	 * @param usuarioDTO Estrutura de dados contendo as informações necessárias para
 	 *                   atualizar o Usuário.
 	 * @return {@link UsuarioAuthDTO} Dados gravados no banco com a Id atualizada.
@@ -66,7 +66,7 @@ public class UsuarioAdmController {
 	@PutMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
-	public UsuarioAuthDTO atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) throws UnauthorizedRequestException {
+	public UsuarioAuthDTO atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 		usuarioModel = usuarioService.save(usuarioModel);
 		return mapper.map(usuarioModel, UsuarioAuthDTO.class);
@@ -74,7 +74,7 @@ public class UsuarioAdmController {
 
 	/**
 	 * Endpoint responsável por deletar usuário por sua ID>
-	 * 
+	 *
 	 * @param id Integer
 	 * @return Boolean
 	 * @author Camilo Santos

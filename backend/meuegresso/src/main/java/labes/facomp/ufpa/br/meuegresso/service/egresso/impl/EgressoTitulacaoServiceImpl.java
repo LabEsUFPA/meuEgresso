@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoColacaoRepository;
-import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoColacaoService;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoTitulacaoRepository;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -20,14 +20,14 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
-public class EgressoColacaoServiceImpl implements EgressoColacaoService {
+public class EgressoTitulacaoServiceImpl implements EgressoTitulacaoService {
 
-    private final EgressoColacaoRepository egressoColacaoRepository;
+    private final EgressoTitulacaoRepository egressoTitulacaoRepository;
 
     @Override
     public boolean deleteById(EgressoTitulacaoModelId id) {
-        if (egressoColacaoRepository.existsById(id)) {
-            egressoColacaoRepository.deleteById(id);
+        if (egressoTitulacaoRepository.existsById(id)) {
+            egressoTitulacaoRepository.deleteById(id);
             return true;
         }
         return false;
@@ -35,23 +35,23 @@ public class EgressoColacaoServiceImpl implements EgressoColacaoService {
 
     @Override
     public List<EgressoTitulacaoModel> findAll() {
-        return egressoColacaoRepository.findAll();
+        return egressoTitulacaoRepository.findAll();
     }
 
     @Override
     public EgressoTitulacaoModel findById(EgressoTitulacaoModelId id) {
-        return egressoColacaoRepository.findById(id).orElseThrow();
+        return egressoTitulacaoRepository.findById(id).orElseThrow();
     }
 
     @Override
-    public EgressoTitulacaoModel save(EgressoTitulacaoModel egressoColacaoModel) {
-        return egressoColacaoRepository.save(egressoColacaoModel);
+    public EgressoTitulacaoModel save(EgressoTitulacaoModel egressoTitulacaoModel) {
+        return egressoTitulacaoRepository.save(egressoTitulacaoModel);
     }
 
     @Override
-    public EgressoTitulacaoModel update(EgressoTitulacaoModel egressoColacao) throws InvalidRequestException {
-        if (egressoColacao.getId() != null) {
-            return egressoColacaoRepository.save(egressoColacao);
+    public EgressoTitulacaoModel update(EgressoTitulacaoModel egressoTitulacao) throws InvalidRequestException {
+        if (egressoTitulacao.getId() != null) {
+            return egressoTitulacaoRepository.save(egressoTitulacao);
         } else {
             throw new InvalidRequestException();
         }
@@ -59,7 +59,7 @@ public class EgressoColacaoServiceImpl implements EgressoColacaoService {
 
     @Override
     public boolean existsByIdAndCreatedById(EgressoTitulacaoModelId id, Integer createdBy) {
-        return egressoColacaoRepository.existsByIdAndCreatedById(id, createdBy);
+        return egressoTitulacaoRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
 }

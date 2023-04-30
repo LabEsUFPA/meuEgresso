@@ -27,11 +27,11 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
-import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoColacaoService;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Responsável por fornecer um end-point para criar um novo EgressoColacao.
+ * Responsável por fornecer um end-point para criar um novo EgressoTitulacao.
  *
  * @author Alfredo Gabriel
  * @since 21/04/2023
@@ -39,32 +39,32 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/EgressoColacao")
-public class EgressoColacaoController {
+@RequestMapping("/egressoTitulacao")
+public class EgressoTitulacaoController {
 
-	private final EgressoColacaoService egressoColacaoService;
+	private final EgressoTitulacaoService egressoTitulacaoService;
 
 	private final ModelMapper mapper;
 
 	private final JwtService jwtService;
 
 	/**
-	 * Endpoint responsável por retornar a lista de EgressoColacao cadastrados no
+	 * Endpoint responsável por retornar a lista de EgressoTitulacao cadastrados no
 	 * banco de dados.
 	 *
-	 * @return {@link EgressoTitulacaoDTO} Lista de EgressoColacao cadastrados
+	 * @return {@link EgressoTitulacaoDTO} Lista de EgressoTitulacao cadastrados
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
 	 */
 	@GetMapping
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<EgressoTitulacaoDTO> consultarEgressoColacaos() {
-		return mapper.map(egressoColacaoService.findAll(), new TypeToken<List<EgressoTitulacaoDTO>>() {
+	public List<EgressoTitulacaoDTO> consultarEgressoTitulacaos() {
+		return mapper.map(egressoTitulacaoService.findAll(), new TypeToken<List<EgressoTitulacaoDTO>>() {
 		}.getType());
 	}
 
 	/**
-	 * Endpoint responsável por retornar um EgressoColacao por sua ID.
+	 * Endpoint responsável por retornar um EgressoTitulacao por sua ID.
 	 *
 	 * @param id Integer
 	 * @return {@link EgressoTitulacaoDTO} Dados gravados no banco.
@@ -77,16 +77,17 @@ public class EgressoColacaoController {
 	public EgressoTitulacaoDTO findById(@RequestParam(required = false) Integer egressoId,
 			@RequestParam(required = false) Integer titulacaoId) {
 		return mapper.map(
-				egressoColacaoService
-						.findById(EgressoTitulacaoModelId.builder().egressoId(egressoId).titulacaoId(titulacaoId).build()),
+				egressoTitulacaoService
+						.findById(EgressoTitulacaoModelId.builder().egressoId(egressoId).titulacaoId(titulacaoId)
+								.build()),
 				EgressoTitulacaoDTO.class);
 	}
 
 	/**
-	 * Endpoint responsavel por cadastrar o EgressoColacao.
+	 * Endpoint responsavel por cadastrar o EgressoTitulacao.
 	 *
 	 * @param EgressoTitulacaoDTO Estrutura de dados contendo as informações
-	 *                            necessárias para persistir o EgressoColacao.
+	 *                            necessárias para persistir o EgressoTitulacao.
 	 * @return String confirmando a transação.
 	 * @author Alfredo Gabriel
 	 * @see {@link EgressoTitulacaoDTO}
@@ -94,18 +95,18 @@ public class EgressoColacaoController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public String cadastrarEgressoColacao(@RequestBody @Valid EgressoTitulacaoDTO egressoColacaoDTO) {
-		EgressoTitulacaoModel egressoColacaoModel = mapper.map(egressoColacaoDTO, EgressoTitulacaoModel.class);
-		egressoColacaoService.save(egressoColacaoModel);
+	public String cadastrarEgressoTitulacao(@RequestBody @Valid EgressoTitulacaoDTO egressoTitulacaoDTO) {
+		EgressoTitulacaoModel egressoTitulacaoModel = mapper.map(egressoTitulacaoDTO, EgressoTitulacaoModel.class);
+		egressoTitulacaoService.save(egressoTitulacaoModel);
 		return ResponseType.SUCESS_SAVE.getMessage();
 	}
 
 	/**
-	 * Endpoint responsavel por atualizar o EgressoColacao.
+	 * Endpoint responsavel por atualizar o EgressoTitulacao.
 	 *
 	 * @param EgressoTitulacaoDTO Estrutura de dados contendo as informações
 	 *                            necessárias para
-	 *                            atualizar o EgressoColacao.
+	 *                            atualizar o EgressoTitulacao.
 	 * @return {@link EgressoTitulacaoDTO} Dados gravados no banco com a Id
 	 *         atualizada.
 	 * @author Alfredo Gabriel
@@ -116,18 +117,19 @@ public class EgressoColacaoController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String atualizarEgressoColacao(@RequestBody @Valid EgressoTitulacaoDTO egressoColacaoDTO,
+	public String atualizarEgressoTitulacao(@RequestBody @Valid EgressoTitulacaoDTO egressoTitulacaoDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (egressoColacaoService.existsByIdAndCreatedById(egressoColacaoDTO.getId(), jwtService.getIdUsuario(token))) {
-			EgressoTitulacaoModel egressoColacaoModel = mapper.map(egressoColacaoDTO, EgressoTitulacaoModel.class);
-			egressoColacaoService.update(egressoColacaoModel);
+		if (egressoTitulacaoService.existsByIdAndCreatedById(egressoTitulacaoDTO.getId(),
+				jwtService.getIdUsuario(token))) {
+			EgressoTitulacaoModel egressoTitulacaoModel = mapper.map(egressoTitulacaoDTO, EgressoTitulacaoModel.class);
+			egressoTitulacaoService.update(egressoTitulacaoModel);
 			return ResponseType.SUCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}
 
 	/**
-	 * Endpoint responsavel por deletar a colacao do egresso.
+	 * Endpoint responsavel por deletar a t do egresso.
 	 *
 	 * @param tituloAcademico Estrutura de dados contendo as informações
 	 *                        necessárias para deletar o titulo academico.
@@ -141,7 +143,7 @@ public class EgressoColacaoController {
 	public boolean deleteById(
 			@RequestParam(required = false) Integer egressoId,
 			@RequestParam(required = false) Integer titulacaoId) {
-		return egressoColacaoService
+		return egressoTitulacaoService
 				.deleteById(EgressoTitulacaoModelId.builder().egressoId(egressoId).titulacaoId(titulacaoId).build());
 	}
 

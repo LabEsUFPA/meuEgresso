@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
 
-public interface EgressoColacaoRepository extends CrudRepository<EgressoTitulacaoModel, EgressoTitulacaoModelId> {
+public interface EgressoTitulacaoRepository extends CrudRepository<EgressoTitulacaoModel, EgressoTitulacaoModelId> {
 
     List<EgressoTitulacaoModel> findAll();
 
