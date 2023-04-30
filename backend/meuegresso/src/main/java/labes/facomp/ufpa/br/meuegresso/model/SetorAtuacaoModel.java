@@ -12,21 +12,34 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.UniqueConstraint;
+import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "setor_atuacao")
-public class SetorAtuacaoModel {
+@ToString(exclude = "empresas")
+@EqualsAndHashCode(callSuper = false, exclude = "empresas")
+public class SetorAtuacaoModel extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_setor_atuacao", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "nome_setor_atuacao", unique = true, nullable = false)
+    @Column(name = "nome_setor_atuacao", unique = true, nullable = false, length = 60)
     private String nome;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "setor_atuacao_empresa", joinColumns = { @JoinColumn(name = "id_setor_atuacao") }, inverseJoinColumns = {
-            @JoinColumn(name = "id_empresa") }, uniqueConstraints = @UniqueConstraint(columnNames = { "id_setor_atuacao",
-                    "id_empresa" }))
+    @JoinTable(name = "setor_atuacao_empresa", joinColumns = {
+            @JoinColumn(name = "id_setor_atuacao") }, inverseJoinColumns = {
+                    @JoinColumn(name = "id_empresa") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+                            "id_setor_atuacao",
+                            "id_empresa" }))
     private Set<EmpresaModel> empresas;
 }
