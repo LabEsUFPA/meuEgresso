@@ -12,9 +12,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.mail.MessagingException;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
@@ -35,7 +35,7 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
  * @since 26/03/2023
  * @version 1.0
  */
-@ControllerAdvice
+@RestControllerAdvice
 public class ControllerAdvise {
 
 	/**
