@@ -24,6 +24,15 @@
               v-model="userRegisterData.name"
             />
             <CustomInput
+              type="number"
+              label="Matrícula"
+              :required="true"
+              :icon-path="mdiSchool"
+              :max-length="12"
+              :min-length="12"
+              v-model="userRegisterData.registration"
+            />
+            <CustomInput
               type="email"
               label="Email"
               error-text="O email deve ser o mesmo cadastrado no SIGAA"
@@ -88,10 +97,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import CustomInput from 'src/components/CustomInput.vue'
-import { mdiAccount, mdiEmail, mdiLock } from '@mdi/js'
+import { mdiAccount, mdiSchool, mdiEmail, mdiLock } from '@mdi/js'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
+import router from 'src/router'
 
 const error = ref(false)
 const errorMessages = ref({
@@ -99,7 +109,8 @@ const errorMessages = ref({
   email: 'Os e-mails informados são diferentes',
   standard: 'Por favor, preencha todos os campos abaixo',
   accessLevel: 'Por favor, informe o nível de acesso',
-  errorRequest: 'Requisição não aceita'
+  errorRequest: 'Requisição não aceita',
+  userNotFound: 'Usuario não cadastrado pela faculdade'
 })
 const errorText = ref('')
 const submitSuccess = ref(false)
@@ -127,19 +138,33 @@ const handleSubmit = async ($event: Event) => {
     errorText.value = errorMessages.value.senha
     error.value = true
   } else {
-    await useCadastroPerfilStore().userProfileRegister(
-      userRegisterData.value.email,
-      userRegisterData.value.password,
-      userRegisterData.value.email,
-      userRegisterData.value.name
+    const responseValidation = await useCadastroPerfilStore().egressValidation(
+      userRegisterData.value.name,
+      userRegisterData.value.registration,
+      userRegisterData.value.email
     )
-    const response = useCadastroPerfilStore().response
 
-    if (response === 201) {
+    if (responseValidation === 200) {
       error.value = false
-      submitSuccess.value = true
+      const responseRegister = await useCadastroPerfilStore().userProfileRegister(
+        userRegisterData.value.email,
+        userRegisterData.value.password,
+        userRegisterData.value.email,
+        userRegisterData.value.name,
+        [{
+          id: 3
+        }]
+      )
+
+      if (responseRegister === 201) {
+        submitSuccess.value = true
+        router.push({ path: '/cadastro' })
+      } else {
+        errorText.value = errorMessages.value.errorRequest
+        error.value = true
+      }
     } else {
-      errorText.value = errorMessages.value.errorRequest
+      errorText.value = errorMessages.value.userNotFound
       error.value = true
     }
   }

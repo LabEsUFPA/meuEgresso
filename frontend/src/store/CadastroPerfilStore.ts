@@ -1,13 +1,33 @@
 import { defineStore } from "pinia"
 import Api from 'src/services/api'
 import userModel from "src/model/usuarioModel"
+import validateEgress from "src/model/validarEgressoModel"
 
 export const useCadastroPerfilStore = defineStore('CadastroPerfilStore', {
   state: () => ({
-    response: 0
   }),
 
   actions: {
+    async egressValidation (
+      nome: string,
+      matricula: string,
+      email: string,
+    ) {
+      const data: validateEgress = {
+        nome,
+        matricula,
+        email
+      }
+
+      const response = await Api.request({
+        method: 'post',
+        route: '/egressoValido',
+        body: data
+      })
+
+      return response?.status ? response.status : 500
+    },
+
     async userProfileRegister (
       username: string,
       password: string,
@@ -31,7 +51,7 @@ export const useCadastroPerfilStore = defineStore('CadastroPerfilStore', {
         body: data
       })
 
-      this.response = response?.status? response.status : 500
+      return response?.status? response.status : 500
     }
   }
 })
