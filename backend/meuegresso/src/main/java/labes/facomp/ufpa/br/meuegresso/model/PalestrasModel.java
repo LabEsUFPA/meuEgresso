@@ -9,26 +9,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
-import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@Entity(name = "depoimento")
-public class DepoimentoModel extends Auditable {
+@Entity(name = "palestras")
+public class PalestrasModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id_depoimento", unique = true, nullable = false)
+    @Column(name = "id_palestra", unique = true, nullable = false)
     private Integer id;
 
     @Lob
-    @Column(name = "descricao_depoimento", unique = false, nullable = false)
+    @Column(name = "nome_palestra", unique = true, nullable = false)
     private String descricao;
 
     @OneToOne(fetch = FetchType.LAZY)

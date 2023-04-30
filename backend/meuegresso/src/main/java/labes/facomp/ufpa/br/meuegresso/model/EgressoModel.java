@@ -37,16 +37,15 @@ public class EgressoModel extends Auditable {
     private Integer id;
 
     @Temporal(TemporalType.DATE)
-	  @Column(name = "nascimento_egresso", unique = false, nullable = false)
+    @Column(name = "nascimento_egresso", unique = false, nullable = false)
     private LocalDate nascimento;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genero_id", unique = false, nullable = false)
     private GeneroModel genero;
 
     @Column(name = "matricula_egresso", unique = true, nullable = true, length = 12)
-	  private String matricula;
+    private String matricula;
 
     @Column(name = "pcd_egresso", unique = false, nullable = false)
     private Boolean pcd = false;
@@ -64,18 +63,32 @@ public class EgressoModel extends Auditable {
     @JoinColumn(name = "endereco_id", unique = false, nullable = false)
     private EnderecoModel endereco;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cota_id", unique = false, nullable = false)
     private CotaModel cota;
 
-    @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.MERGE })
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "usuario_id", unique = true, nullable = true)
     private UsuarioModel usuario;
 
-    @OneToMany(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
-    private Set<DepoimentoModel> depoimentos;
+    @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REMOVE })
+    private PalestrasModel assuntosPalestras;
 
-    @ManyToMany(mappedBy = "egressos", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+    @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REMOVE })
+    private ContribuicaoModel contribuicao;
+
+    @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REMOVE })
+    private DepoimentoModel depoimento;
+
+    @OneToMany(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REMOVE })
+    private Set<EgressoTitulacaoModel> titulacoes;
+
+    @ManyToMany(mappedBy = "egressos", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REMOVE })
     private Set<TrabalhoPublicadoModel> trabalhoPublicados = new HashSet<>();
 
 }

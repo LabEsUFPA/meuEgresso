@@ -2,7 +2,6 @@ package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,11 +22,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
-import labes.facomp.ufpa.br.meuegresso.model.PesquisaCientificaModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.contribuicao.ContribuicaoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoColacaoService;
@@ -59,30 +54,39 @@ public class EgressoController {
     private final JwtService jwtService;
 
     @PostMapping
+    @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public ResponseEntity<EgressoPublicDTO> cadastrarEgresso(@RequestBody EgressoPublicDTO egresso) {
+    public EgressoPublicDTO cadastrarEgresso(@RequestBody EgressoPublicDTO egresso) {
         EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
         egressoModel = egressoService.adicionarEgresso(egressoModel);
-        return ResponseEntity.ok(mapper.map(egressoModel, EgressoPublicDTO.class));
+        return mapper.map(egressoModel, EgressoPublicDTO.class);
     }
 
     @PostMapping(value = "/cadastrar")
+    @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public ResponseEntity<EgressoPublicDTO> cadastrarEgressoPrimeiroCadastro(@RequestBody EgressoCadastroDTO cadastro) {
+    public EgressoPublicDTO cadastrarEgressoPrimeiroCadastro(@RequestBody EgressoCadastroDTO cadastro,
+            JwtAuthenticationToken token) {
 
-        EgressoModel egresso = mapper.map(cadastro.egresso, EgressoModel.class);
-        EgressoColacaoModel academico = mapper.map(cadastro.acdemico, EgressoColacaoModel.class);
-        EgressoEmpresaModel carreira = mapper.map(cadastro.carreira, EgressoEmpresaModel.class);
-        PesquisaCientificaModel pesquisa = mapper.map(cadastro.pesquisa, PesquisaCientificaModel.class);
-        ContribuicaoModel contribuicao = mapper.map(cadastro.contribuicao, ContribuicaoModel.class);
+        // TODO refactor
+        // EgressoModel egresso = mapper.map(cadastro.egresso, EgressoModel.class);
+        // EgressoTitulacaoModel academico = mapper.map(cadastro.acdemico,
+        // EgressoTitulacaoModel.class);
+        // EgressoEmpresaModel carreira = mapper.map(cadastro.carreira,
+        // EgressoEmpresaModel.class);
+        // PesquisaCientificaModel pesquisa = mapper.map(cadastro.pesquisa,
+        // PesquisaCientificaModel.class);
+        // ContribuicaoModel contribuicao = mapper.map(cadastro.contribuicao,
+        // ContribuicaoModel.class);
 
-        egresso = egressoService.adicionarEgresso(egresso);
-        academico = egressoColacaoService.save(academico);
-        carreira = egressoEmpresaService.save(carreira);
-        pesquisa = pesquisaCientificaService.save(pesquisa);
-        contribuicao = contribuicaoService.save(contribuicao);
+        // egresso = egressoService.adicionarEgresso(egresso);
+        // academico = egressoColacaoService.save(academico);
+        // carreira = egressoEmpresaService.save(carreira);
+        // pesquisa = pesquisaCientificaService.save(pesquisa);
+        // contribuicao = contribuicaoService.save(contribuicao);
 
-        return ResponseEntity.ok(mapper.map(egresso, EgressoPublicDTO.class));
+        // return mapper.map(egresso, EgressoPublicDTO.class);
+        return null;
     }
 
     @GetMapping
@@ -121,6 +125,7 @@ public class EgressoController {
      * @since 16/04/2023
      */
     @PutMapping
+    @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(
             @RequestBody EgressoPublicDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
@@ -143,10 +148,15 @@ public class EgressoController {
      */
     @DeleteMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public ResponseEntity<String> deletarEgresso(@RequestBody @Valid EgressoPublicDTO egressoPublicDTO) {
+    public String deletarEgresso(@RequestBody @Valid EgressoPublicDTO egressoPublicDTO) {
         EgressoModel egressoModel = mapper.map(egressoPublicDTO, EgressoModel.class);
-        return egressoService.deletarEgresso(egressoModel);
+        if (egressoService.deletarEgresso(egressoModel)) {
+            return ResponseType.SUCESS_DELETE.getMessage();
+        } else {
+            return ResponseType.FAIL_DELETE.getMessage();
+        }
     }
 
 }

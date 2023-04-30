@@ -3,8 +3,8 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso;
 import java.util.List;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModelId;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
 
 /**
  * Interface responsável por especificar os metodos a serem implementados.
@@ -16,12 +16,13 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModelId;
 public interface EgressoColacaoService {
 
 	/**
-	 * Método responsável por persistir determinado egressoColacao no banco de dados.
+	 * Método responsável por persistir determinado egressoColacao no banco de
+	 * dados.
 	 *
 	 * @param egressoColacaoModel Dados do egressoColacao
 	 * @return Dados após serem gravados no banco de dados.
 	 */
-	public EgressoColacaoModel save(EgressoColacaoModel egressoColacaoModel);
+	public EgressoTitulacaoModel save(EgressoTitulacaoModel egressoColacaoModel);
 
 	/**
 	 * Método responsável por encontrar um determinado egressoColacao por sua ID.
@@ -29,14 +30,14 @@ public interface EgressoColacaoService {
 	 * @param id ID de um egressoColacao
 	 * @return
 	 */
-	public EgressoColacaoModel findById(EgressoColacaoModelId id);
+	public EgressoTitulacaoModel findById(EgressoTitulacaoModelId id);
 
 	/**
 	 * Método responsável por encontrar todos os egressoColacaos cadastrados.
 	 *
 	 * @return Lista de objetos da classe EgressoColacaoModel.
 	 */
-	public List<EgressoColacaoModel> findAll();
+	public List<EgressoTitulacaoModel> findAll();
 
 	/**
 	 * Método responsável por atualizar dados de um egressoColacao cadastrado.
@@ -44,14 +45,14 @@ public interface EgressoColacaoService {
 	 * @param egressoColacao objeto egressoColacao
 	 * @return
 	 */
-	public EgressoColacaoModel update(EgressoColacaoModel egressoColacao) throws InvalidRequestException;
+	public EgressoTitulacaoModel update(EgressoTitulacaoModel egressoColacao) throws InvalidRequestException;
 
 	/**
 	 * Método responsável por deletar um egressoColacao cadastrado por sua ID.
 	 *
 	 * @param id ID de um egressoColacao
 	 */
-	public boolean deleteById(EgressoColacaoModelId id);
+	public boolean deleteById(EgressoTitulacaoModelId id);
 
 	/**
 	 * Método responsável por verificar se existe um determinado elemento.
@@ -60,5 +61,5 @@ public interface EgressoColacaoService {
 	 * @param createdBy
 	 * @return
 	 */
-    boolean existsByIdAndCreatedById(EgressoColacaoModelId id, Integer createdBy);
+	boolean existsByIdAndCreatedById(EgressoTitulacaoModelId id, Integer createdBy);
 }
