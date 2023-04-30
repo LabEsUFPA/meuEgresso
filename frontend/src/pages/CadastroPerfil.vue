@@ -40,7 +40,7 @@
               name="email"
               type="email"
               label="Email"
-              error-text="O email deve ser o mesmo cadastrado no SIGAA"
+              helper-text="O email deve ser o mesmo cadastrado no SIGAA"
               :required="true"
               :icon-path="mdiEmail"
             />
@@ -123,7 +123,7 @@ const submitSuccess = ref(false)
 const schema = object().shape({
   name: string().required(),
   registration: string().required().length(12),
-  email: string().required(),
+  email: string().email().required(),
   password: string().required(),
   confirmationPassword: string().required().oneOf([refYup('password')])
 })
