@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios"
-import API from 'src/model/ApiModel'
+import API from 'src/model/apiModel'
 
 const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
@@ -43,7 +43,7 @@ const request: API.Request = async ({
     })
 
     return {
-      status: response ? response.status : statusError? statusError : 500,
+      status: response ? response.status : statusError,
       data: response ? response.data : null
     }
 }

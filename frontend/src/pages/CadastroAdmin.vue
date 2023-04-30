@@ -174,7 +174,7 @@ const handleSubmit = async ($event: Event) => {
     error.value = true
   } else {
     setSelectedAccessLevel()
-    await useCadastroPerfilStore().userProfileRegister(
+    const response = await useCadastroPerfilStore().userProfileRegister(
       userRegisterData.value.userName,
       userRegisterData.value.password,
       userRegisterData.value.email,
@@ -183,7 +183,6 @@ const handleSubmit = async ($event: Event) => {
         id: userRegisterData.value.idAccessLevel
       }]
     )
-    const response = useCadastroPerfilStore().response
 
     if (response === 201) {
       error.value = false

@@ -34,7 +34,7 @@ export const useLoginStore = defineStore('LoginStore', {
         route: '/usuario'
       })
       if (response?.status === 200) {
-        localStorage.setItem('user', JSON.stringify(response.data))
+        localStorage.setItem('loggedUser', JSON.stringify(response.data))
       }
     }
   }

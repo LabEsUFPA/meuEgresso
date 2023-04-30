@@ -56,7 +56,7 @@
     </div>
     <div
       v-if="errorText"
-      class="text-xs text-red-600 mt-1 ml-1 max-w-[250px] sm:max-w-fit"
+      class="text-xs text-blue-400 mt-1 ml-1 max-w-[250px] sm:max-w-fit"
     >
       {{ errorText }}
     </div>
