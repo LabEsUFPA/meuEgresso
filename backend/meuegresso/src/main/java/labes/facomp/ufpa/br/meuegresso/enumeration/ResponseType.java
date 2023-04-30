@@ -9,7 +9,9 @@ public enum ResponseType {
 
     SUCESS_UPDATE("Dado atualizado com sucesso"),
 
-    SUCESS_DELETE("Dado não deletado com sucesso");
+    SUCESS_DELETE("Dado deletado com sucesso"),
+
+    FAIL_DELETE("Dado não deletado");
 
     private String message;
 
