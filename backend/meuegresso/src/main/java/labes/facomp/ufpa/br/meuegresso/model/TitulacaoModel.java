@@ -26,5 +26,4 @@ public class TitulacaoModel extends Auditable {
     @Column(name = "nome_titulacao", unique = true, nullable = false, length = 30)
     private String nome;
 
-    //TODO Verificar se existe e se é N to N
 }

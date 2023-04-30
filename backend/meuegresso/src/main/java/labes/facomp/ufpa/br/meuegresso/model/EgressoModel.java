@@ -48,10 +48,13 @@ public class EgressoModel extends Auditable {
     private String matricula;
 
     @Column(name = "pcd_egresso", unique = false, nullable = true)
-    private Boolean pcd;
+    private Boolean pcd = false;
 
-    @Column(name = "cotista_egresso", unique = false, nullable = true)
-    private Boolean cotista;
+    @Column(name = "cotista_egresso", unique = false, nullable = false)
+    private Boolean cotista = false;
+
+    @Column(name = "bolsista_egresso", unique = false, nullable = false)
+    private Boolean bolsista = false;
 
     @Column(name = "interesse_em_pos_egresso", unique = false, nullable = false)
     private Boolean interesseEmPos = false;
@@ -64,11 +67,14 @@ public class EgressoModel extends Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "endereco_id", unique = false, nullable = false)
-    private EnderecoModel endereco; // TODO não existe mais aqui so na empresa
+    private EnderecoModel endereco;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "cota_id", unique = false, nullable = true)
-    private CotaModel cota; // TODO talvez aqui seja N to N optional
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "egresso_cota", joinColumns = { @JoinColumn(name = "id_egresso") }, inverseJoinColumns = {
+            @JoinColumn(name = "id_cota") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+                    "id_egresso",
+                    "id_cota" }))
+    private Set<CotaModel> cotas;
 
     @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "usuario_id", unique = true, nullable = true)
@@ -77,10 +83,11 @@ public class EgressoModel extends Auditable {
     @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
     private DepoimentoModel depoimento;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "egresso_tipo_bolsa", joinColumns = { @JoinColumn(name = "id_egresso") }, inverseJoinColumns = {
-            @JoinColumn(name = "id_tipo_bolsa") }, uniqueConstraints = @UniqueConstraint(columnNames = { "id_egresso",
-                    "id_tipo_bolsa" }))
-    private Set<TipoBolsaModel> bolsas;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tipo_bolsa_id", unique = false, nullable = true)
+    private TipoBolsaModel bolsa;
+
+    @Column(name = "remuneracao_bolsa_egresso", unique = false, nullable = true)
+    private Double remuneracaoBolsa;
 
 }

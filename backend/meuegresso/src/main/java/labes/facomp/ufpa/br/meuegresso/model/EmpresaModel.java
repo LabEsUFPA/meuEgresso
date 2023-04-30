@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -7,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
@@ -29,8 +32,8 @@ public class EmpresaModel extends Auditable {
     @Column(name = "nome_empresa", unique = false, nullable = false, length = 130)
     private String nome;
 
-    @Column(name = "setor_atuacao_empresa", unique = false, nullable = false, length = 130)
-    private String setorAtuacao;
+    @ManyToMany(mappedBy = "empresas", fetch = FetchType.LAZY)
+    private Set<SetorAtuacaoModel> setorAtuacoes;
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "endereco_empresa", unique = false, nullable = true)
