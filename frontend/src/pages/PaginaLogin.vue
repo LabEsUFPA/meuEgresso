@@ -1,5 +1,9 @@
 <template>
-  <form @submit.prevent="handleSubmit($event)">
+  <Form
+    @submit="handleSubmit"
+    @invalid-submit="onInvalid"
+    :validation-schema="schema"
+  >
     <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
       <div
         class="flex flex-col items-center justify-center bg-white w-[960px] py-10 mx-6 rounded-2xl shadow-md"
@@ -16,17 +20,19 @@
         </p>
         <div class="flex flex-col gap-y-5 mb-4">
           <CustomInput
+            name="username"
             label="Usuário"
             :icon-path="mdiAccount"
-            v-model="userLoginData.userName"
-            :required="true"
+            error-message="Informe o seu usuário"
+            required
           />
           <CustomInput
+            name="password"
             label="Senha"
             type="password"
             :icon-path="mdiLock"
-            v-model="userLoginData.password"
-            :required="true"
+            error-message="Informe a sua senha"
+            required
           />
         </div>
         <p class="mb-14">
@@ -53,34 +59,46 @@
         </p>
       </div>
     </div>
-  </form>
+  </Form>
 </template>
 
 <script setup lang="ts">
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import { ref } from 'vue'
+import { Form } from 'vee-validate'
+import { object, string } from 'yup'
 import { mdiAccount, mdiLock } from '@mdi/js'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import { useLoginStore } from 'src/store/LoginStore'
+import router from 'src/router'
+import { models } from 'src/@types'
+interface LoginModel extends models.LoginModel {}
 
 const error = ref(false)
 
-interface loginData {
-  userName: string
-  password: string
-}
-
-const userLoginData = ref<loginData>({
-  userName: '',
-  password: ''
+const schema = object().shape({
+  username: string().required(),
+  password: string().required()
 })
 
-const handleSubmit = ($event: Event) => {
-  if (userLoginData.value.userName || userLoginData.value.password) {
-    error.value = false
-    console.log(userLoginData.value)
+const handleSubmit = async (loginData: LoginModel) => {
+  if (loginData.username || loginData.password) {
+    const response = await useLoginStore().userLogin(loginData.username, loginData.password)
+    await useLoginStore().saveUser()
+
+    if (response === 200) {
+      error.value = false
+      router.push('/')
+    } else {
+      error.value = true
+    }
   } else {
     error.value = true
   }
+}
+
+const onInvalid = (e: any) => {
+  console.log(e)
 }
 </script>

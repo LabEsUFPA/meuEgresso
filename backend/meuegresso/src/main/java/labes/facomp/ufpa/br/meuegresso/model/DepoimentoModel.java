@@ -7,7 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToOne;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,10 +27,11 @@ public class DepoimentoModel extends Auditable {
     @Column(name = "id_depoimento", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "descricao_depoimento", unique = false, nullable = false, length = 255)
+    @Lob
+    @Column(name = "descricao_depoimento", unique = false, nullable = false)
     private String descricao;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "egresso_id", unique = true, nullable = false)
     private EgressoModel egresso;
 }

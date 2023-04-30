@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="showAlert"
-    class="flex h-12 gap-x-4 bg-red-500 py-2 px-2 items-center justify-between rounded-md"
+    class="flex h-12 gap-x-4 bg-red-500 py-2 px-2 mb-1 items-center justify-between rounded-md"
   >
     <SvgIcon
       type="mdi"

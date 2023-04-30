@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,7 +39,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 	 */
 	@Override
 	public UsuarioModel loadUserByUsername(String login) throws UsernameNotFoundException {
-		return usuarioRepository.findByUsernameIgnoreCase(login).orElseThrow();
+		try {
+			return usuarioRepository.findByUsernameIgnoreCase(login).orElseThrow();
+		} catch (NoSuchElementException e) {
+			throw new UsernameNotFoundException("User not found", e);
+		}
 	}
 
 	@Override
