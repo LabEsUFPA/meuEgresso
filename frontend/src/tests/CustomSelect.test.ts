@@ -15,7 +15,7 @@ describe('CustomSelect', () => {
         ],
         name: 'test',
         value: '',
-        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
+        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: e }) }
       }
     })
 
@@ -33,7 +33,7 @@ describe('CustomSelect', () => {
         ],
         name: 'test',
         value: '',
-        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
+        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: e }) }
       }
     })
 
@@ -58,7 +58,7 @@ describe('CustomSelect', () => {
         ],
         name: 'test',
         value: '',
-        'onUpdate:value': (e: any) => wrapper.setProps({ value: e })
+        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: e }) }
       }
     })
 
