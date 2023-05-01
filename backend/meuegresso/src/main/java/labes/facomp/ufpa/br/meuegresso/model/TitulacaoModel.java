@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "titulacao")
 @EqualsAndHashCode(callSuper = false)
-@Builder
 public class TitulacaoModel extends Auditable {
 
     @Id
