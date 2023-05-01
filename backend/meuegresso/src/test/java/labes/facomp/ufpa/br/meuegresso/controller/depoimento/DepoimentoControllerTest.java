@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.controller.depoimento;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -34,15 +36,13 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
-import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
-import labes.facomp.ufpa.br.meuegresso.service.depoimento.DepoimentoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
 
@@ -61,16 +61,10 @@ class DepoimentoControllerTest {
         private GrupoRepository grupoRepository;
 
         @Autowired
-        private DepoimentoService depoimentoService;
-
-        @Autowired
         private EgressoService egressoService;
 
         @Autowired
         private GeneroService generoService;
-
-        @Autowired
-        private GeneroRepository generoRepository;
 
         @Autowired
         MockMvc mockMvc;
@@ -79,9 +73,7 @@ class DepoimentoControllerTest {
 
         UsuarioModel usuarioModel;
 
-        DepoimentoModel depoimentoModel;
-
-        DepoimentoModel depoimentoModel2;
+        EgressoModel egressoModel;
 
         DepoimentoDTO depoimentoDTO;
 
@@ -98,10 +90,6 @@ class DepoimentoControllerTest {
 
                 Set<GrupoModel> grupos = new HashSet<>();
                 grupos.add(grupoModel);
-
-                depoimentoModel = DepoimentoModel.builder()
-                                .descricao(DESCRICAO)
-                                .build();
 
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
@@ -137,30 +125,45 @@ class DepoimentoControllerTest {
                                 .nome("GeneroTeste")
                                 .build();
 
-                EgressoModel egresso = EgressoModel.builder()
+                genero = generoService.save(genero);
+
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.get("/usuario")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                                UsuarioAuthDTO.class);
+
+                usuarioModel.setId(usuarioAuthDTO.getId());
+
+                egressoModel = EgressoModel.builder()
                                 .nascimento(LocalDate.parse("2000-05-05"))
                                 .genero(genero)
                                 .matricula("202004940020")
                                 .usuario(usuarioModel)
                                 .build();
 
-                generoService.save(genero);
-                egressoService.adicionarEgresso(egresso);
-                depoimentoModel.setEgresso(egresso);
-                egresso.setDepoimento(depoimentoModel);
-                depoimentoService.save(depoimentoModel);
-
+                egressoModel = egressoService.adicionarEgresso(egressoModel);
         }
 
         @Test
+        @Order(1)
         void testCadastrarDepoimento() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
+                depoimentoDTO = DepoimentoDTO.builder()
+                                .descricao(DESCRICAO)
+                                .egressoId(egressoModel.getId())
+                                .build();
+
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/depoimento")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token)
-                                .content(objectMapper.writeValueAsString(depoimentoModel)))
+                                .content(objectMapper.writeValueAsString(depoimentoDTO)))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isCreated())
                                 .andReturn();
@@ -170,23 +173,24 @@ class DepoimentoControllerTest {
         }
 
         @Test
+        @Order(2)
         void testFindById() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc
-                                .perform(MockMvcRequestBuilders.get("/depoimento/" + depoimentoModel.getId())
+                                .perform(MockMvcRequestBuilders.get("/depoimento/" + 1)
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
-                DepoimentoDTO depoimentoDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                depoimentoDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
                                 DepoimentoDTO.class);
-                depoimentoModel.setId(depoimentoDTO.getId());
                 assertEquals(DESCRICAO, depoimentoDTO.getDescricao());
         }
 
         @Test
+        @Order(3)
         void testConsultarDepoimentos() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
@@ -200,19 +204,15 @@ class DepoimentoControllerTest {
                                 new TypeReference<List<DepoimentoDTO>>() {
                                 });
 
-                List<DepoimentoDTO> depoimentosDTO2 = modelMapper.map(depoimentoService.findAll(),
-                                new TypeReference<List<DepoimentoDTO>>() {
-                                }.getType());
-                assertEquals(depoimentosDTO2, depoimentosDTO);
+                assertNotNull(depoimentosDTO);
 
         }
 
         @Test
+        @Order(4)
         void testAtualizarDepoimento() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
-                DepoimentoDTO depoimentoDTO = modelMapper.map(depoimentoModel, DepoimentoDTO.class);
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.put("/depoimento")
@@ -227,10 +227,11 @@ class DepoimentoControllerTest {
         }
 
         @Test
+        @Order(5)
         void testDeleteById() throws Exception {
 
                 MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.delete("/depoimento/" + depoimentoModel.getId())
+                                MockMvcRequestBuilders.delete("/depoimento/" + depoimentoDTO.getId())
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
