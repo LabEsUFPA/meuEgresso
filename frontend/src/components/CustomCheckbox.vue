@@ -1,8 +1,12 @@
 <template>
   <button
-    class="flex flex-row items-center cursor-pointer w-fit"
+    class="flex flex-row items-center w-fit"
+    :class="{
+      ['cursor-not-allowed opacity-80']: disabled,
+      ['cursor-pointer']: !disabled
+    }"
     type="button"
-    @click="handleChange(!inputValue); $emit('update:value', inputValue)"
+    @click="!disabled && handleChange(!inputValue); $emit('update:value', inputValue)"
   >
     <div class="text-teal-600">
       <SvgIcon
@@ -22,6 +26,10 @@
 
     <label
       class="ml-1"
+      :class="{
+        ['cursor-not-allowed opacity-80']: disabled,
+        ['cursor-pointer']: !disabled
+      }"
       :for="id"
     >
       {{ label }}
@@ -39,6 +47,7 @@ const props = defineProps<{
   value?: boolean
   label: string
   name: string
+  disabled?: boolean
 }>()
 
 const $emit = defineEmits(['update:value'])

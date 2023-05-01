@@ -1,8 +1,9 @@
 <template>
   <div class="container mx-auto p-3 pb-0 mt-10">
     <Form
+      ref="form"
       @submit="handleSubmit"
-      @invalid-submit="onInvalid"
+      @invalid-submit="handle"
       :validation-schema="schema"
     >
       <h1 class="text-cyan-800 text-2xl font-semibold">
@@ -42,7 +43,7 @@
               class="mb-5"
               name="geral.genero"
               label="Genero"
-              :options="selectOpts.genero"
+              :options="$store.generos"
               required
             />
 
@@ -64,10 +65,17 @@
             />
 
             <CustomInput
+              class="mb-5"
               label="Curriculo Lattes"
               name="geral.lattes"
-              icon-path="src/assets/Lattes.svg"
+              icon-path="src/assets/lattesCinza.svg"
               img-icon
+            />
+
+            <CustomCheckbox
+              class="mb-5"
+              name="geral.pcd"
+              label="Pessoa com Deficiência"
             />
           </div>
         </template>
@@ -93,7 +101,7 @@
               name="localizacao.pais"
               label="País"
               :options="countries"
-              v-model:value="selections.pais"
+              v-model:value="pais"
               required
             />
 
@@ -102,7 +110,7 @@
               name="localizacao.estado"
               label="Estado"
               :options="states"
-              v-model:value="selections.estado"
+              v-model:value="estado"
               required
             />
 
@@ -125,7 +133,7 @@
               class="inline mr-2"
               :path="mdiSchool"
             />
-            Academico
+            Acadêmico
           </h1>
         </template>
 
@@ -140,23 +148,6 @@
               required
             />
 
-            <CustomInput
-              class="mb-5"
-              name="academico.email"
-              label="Email institucional"
-              placeholder="Selecione"
-              required
-            />
-
-            <CustomSelect
-              class="mb-5"
-              name="academico.tipoAluno"
-              label="Tipo de Aluno"
-              placeholder="Selecione"
-              :options="selectOpts.tipoAluno"
-              required
-            />
-
             <div class="mb-5 text-sm font-semibold text-cyan-600">
               Marque todos as opções que sejam verdadeiras abaixo:
             </div>
@@ -168,15 +159,38 @@
               v-model:value="bools.cotista"
             />
 
-            <CustomSelect
-              class="mb-5"
-              name="academico.cotista.tipo"
-              label="Tipo de Cota"
-              placeholder="Selecione"
-              :options="selectOpts.tipoCota"
-              :required="bools.cotista"
-              :disabled="!bools.cotista"
-            />
+            <div class="mb-5 text-sm font-semibold text-cyan-600">
+              Tipos de cota:
+            </div>
+
+            <div class="w-fit p-3 pr-5 rounded-xl bg-gray-100 mb-5">
+              <CustomCheckbox
+                class="mb-5"
+                name="academico.cotista.tipos.renda"
+                label="Cota Renda"
+                :disabled="!bools.cotista"
+              />
+
+              <CustomCheckbox
+                class="mb-5"
+                name="academico.cotista.tipos.escola"
+                label="Cota Escola"
+                :disabled="!bools.cotista"
+              />
+
+              <CustomCheckbox
+                class="mb-5"
+                name="academico.cotista.tipos.raca"
+                label="Autodeclaração de Raça"
+                :disabled="!bools.cotista"
+              />
+
+              <CustomCheckbox
+                name="academico.cotista.tipos.quilombolaIndigena"
+                label="Quilombola/Indigena"
+                :disabled="!bools.cotista"
+              />
+            </div>
 
             <CustomCheckbox
               class="mb-5"
@@ -190,7 +204,7 @@
               name="academico.bolsista.tipo"
               label="Tipo de Bolsa"
               placeholder="Selecione"
-              :options="selectOpts.tipoBolsa"
+              :options="$store.tiposBolsa"
               :required="bools.bolsista"
               :disabled="!bools.bolsista"
             />
@@ -216,7 +230,7 @@
             <CustomInput
               class="mb-5"
               name="academico.posGrad.local"
-              label="Local da pós-graduação"
+              label="Instituição da pós-graduação"
               placeholder="Selecione"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
@@ -260,7 +274,7 @@
               name="carreira.area"
               label="Area de Atuação"
               placeholder="Selecione"
-              v-model:value="selections.area"
+              v-model:value="area"
               :options="selectOpts.areaAtuacao"
             />
 
@@ -270,8 +284,8 @@
               label="Setor de Atuação"
               placeholder="Selecione"
               :options="selectOpts.setorAtuacao"
-              :required="selections.area !== 'Desempregado'"
-              :disabled="selections.area === 'Desempregado'"
+              :required="area !== 'Desempregado'"
+              :disabled="area === 'Desempregado'"
             />
 
             <CustomInput
@@ -279,18 +293,17 @@
               name="carreira.empresa"
               label="Empresa"
               placeholder="Ex: Google"
-              :required="selections.area !== 'Desempregado'"
-              :disabled="selections.area === 'Desempregado'"
+              :required="area !== 'Desempregado'"
+              :disabled="area === 'Desempregado'"
             />
 
-            <CustomInput
+            <CustomSelect
               class="mb-5"
               name="carreira.faixaSalarial"
               label="Faixa Salarial"
-              type="number"
-              step="0.01"
-              :required="selections.area !== 'Desempregado'"
-              :disabled="selections.area === 'Desempregado'"
+              :options="$store.faixasSalariais"
+              :required="area !== 'Desempregado'"
+              :disabled="area === 'Desempregado'"
             />
           </div>
         </template>
@@ -355,6 +368,52 @@
         </CustomButton>
       </div>
     </Form>
+    <CustomDialog v-model="dialogSucesso">
+      <div class="h-full flex justify-center items-center">
+        <div class="w-1/2">
+          <div class="text-green-500 text-center mb-3">
+            <SvgIcon
+              type="mdi"
+              size="100"
+              class="inline"
+              :path="mdiCheckCircle"
+            />
+          </div>
+          <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+            Dados cadastrados com sucesso!
+          </h1>
+          <div class="text-center">
+            <CustomButton variant="outlined">
+              <SvgIcon
+                type="mdi"
+                class="inline mr-3 mb-1"
+                size="20"
+                :path="mdiShareVariant"
+              />
+              Compartilhar
+            </CustomButton>
+          </div>
+        </div>
+      </div>
+    </CustomDialog>
+
+    <CustomDialog v-model="dialogFalha">
+      <div class="h-full flex justify-center items-center">
+        <div class="w-1/2">
+          <div class="text-red-600 text-center mb-3">
+            <SvgIcon
+              type="mdi"
+              size="100"
+              class="inline"
+              :path="mdiAlertCircle"
+            />
+          </div>
+          <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+            Falha ao cadastrar os dados
+          </h1>
+        </div>
+      </div>
+    </CustomDialog>
   </div>
 </template>
 
@@ -365,26 +424,39 @@ import CustomTextarea from 'src/components/CustomTextarea.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
+import CustomDialog from 'src/components/CustomDialog.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { Country, State, City } from 'country-state-city'
 import svgPath from 'src/assets/svgPaths.json'
-import { object, string, date, boolean } from 'yup'
+import { object, string, date, boolean, InferType } from 'yup'
 import {
   mdiAccount,
   mdiBriefcase,
   mdiEmail,
   mdiMapMarker,
   mdiMessage,
-  mdiSchool
+  mdiSchool,
+  mdiCheckCircle,
+  mdiShareVariant,
+  mdiAlertCircle
 } from '@mdi/js'
+import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
+import LocalStorage from 'src/services/localStorage'
 
-const selections = ref({
-  pais: '',
-  estado: '',
-  area: ''
-})
+const $store = useCadastroEgressoStore()
+const storage = new LocalStorage()
+
+$store.fetchAll()
+
+const dialogSucesso = ref(false)
+const dialogFalha = ref(false)
+
+const pais = ref('')
+const estado = ref('')
+const area = ref('')
+const form = ref<typeof Form | null>(null)
 
 const bools = ref({
   cotista: false,
@@ -394,10 +466,7 @@ const bools = ref({
 })
 
 const selectOpts = ref({
-  genero: ['Masculino', 'Feminino', 'Não-Binário', 'Transsexual'],
   tipoAluno: ['Graduação', 'Pós-graduação'],
-  tipoCota: ['Escola', 'Renda', 'Autodeclaração de Raça', 'Quilombola/Indígena'],
-  tipoBolsa: ['PIBIC', 'PROAD', 'PROEX', 'Permanência', 'Outros'],
   areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Outros'],
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
 })
@@ -416,7 +485,7 @@ const countries = computed(() => {
 })
 
 const states = computed(() => {
-  const states = State.getStatesOfCountry(selections.value.pais)
+  const states = State.getStatesOfCountry(pais.value)
   const filteredStates = []
 
   for (const state of states) {
@@ -429,7 +498,7 @@ const states = computed(() => {
 })
 
 const cities = computed(() => {
-  const cities = City.getCitiesOfState(selections.value.pais, selections.value.estado)
+  const cities = City.getCitiesOfState(pais.value, estado.value)
   const filteredCities = []
 
   for (const city of cities) {
@@ -438,12 +507,75 @@ const cities = computed(() => {
   return filteredCities
 })
 
-function handleSubmit (values: any) {
-  console.log(values)
-}
+async function handleSubmit (values: InferType<typeof schema>) {
+  const cotas: Array<{ id: number }> = []
 
-function onInvalid (e: any) {
-  console.log(e)
+  if (values.academico.cotista.tipos.escola) {
+    cotas.push({
+      id: 1
+    })
+  }
+
+  if (values.academico.cotista.tipos.renda) {
+    cotas.push({
+      id: 2
+    })
+  }
+
+  if (values.academico.cotista.tipos.raca) {
+    cotas.push({
+      id: 3
+    })
+  }
+
+  if (values.academico.cotista.tipos.quilombolaIndigena) {
+    cotas.push({
+      id: 4
+    })
+  }
+
+  console.log(cotas)
+
+  const status = await $store.cadastrarEgresso({
+    nascimento: values.geral.nascimento.toString(),
+    generoId: parseInt(values.geral.genero),
+    matricula: values.academico.matricula,
+    pcd: values.geral.pcd,
+    cotista: Boolean(values.academico.cotista.value),
+    bolsista: Boolean(values.academico.bolsista.value),
+    interesseEmPos: Boolean(values.academico.desejaPos),
+    lattes: values.geral.lattes || null,
+    linkedin: values.geral.linkedin || null,
+    posGraduacao: Boolean(values.academico.posGrad.value),
+    cotas,
+    nome: values.geral.nome,
+    palestras: {
+      descricao: values.adicionais.assuntosPalestras
+    },
+    contribuicao: {
+      descricao: values.adicionais.contribuicoes
+    },
+    depoimento: {
+      descricao: values.adicionais.experiencias
+    },
+    bolsaId: values.academico.bolsista.tipo ? parseInt(values.academico.bolsista.tipo) : null,
+    empresa: {
+      faixaSalarialId: values.carreira.faixaSalarial ? parseInt(values.carreira.faixaSalarial) : null,
+      setorAtuacao: values.carreira.setor,
+      nome: values.carreira.empresa,
+      endereco: values.localizacao
+    },
+    titulacao: {
+      instituicao: values.academico.posGrad.local,
+      curso: values.academico.posGrad.curso
+    }
+  })
+
+  if (status !== 201) {
+    dialogFalha.value = true
+  } else {
+    dialogSucesso.value = true
+  }
 }
 
 const schema = object().shape({
@@ -453,7 +585,8 @@ const schema = object().shape({
     email: string().email().required(),
     genero: string().required(),
     linkedin: string(),
-    lattes: string()
+    lattes: string(),
+    pcd: boolean().required()
   }),
   localizacao: object({
     pais: string().required(),
@@ -462,12 +595,14 @@ const schema = object().shape({
   }),
   academico: object({
     matricula: string().required(),
-    email: string().email().required(),
-    tipoAluno: string().required(),
+    tipoAluno: string(),
     cotista: object({
       value: boolean(),
-      tipo: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+      tipos: object({
+        renda: boolean(),
+        escola: boolean(),
+        raca: boolean(),
+        quilombolaIndigena: boolean()
       })
     }),
     bolsista: object({
@@ -511,4 +646,28 @@ const schema = object().shape({
     contribuicoes: string().required()
   })
 })
+
+onMounted(() => {
+  watch(pais, () => {
+    form.value?.setFieldValue('localizacao.cidade', '')
+    form.value?.setFieldValue('localizacao.estado', '')
+  })
+
+  watch(estado, () => {
+    form.value?.setFieldValue('localizacao.cidade', '')
+  })
+
+  if (storage.has('loggedUser')) {
+    const userData = JSON.parse(storage.get('loggedUser'))
+
+    form.value?.setFieldValue('geral.email', userData.email)
+    form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
+      return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
+    }).join(' '))
+  }
+})
+
+function handle (e: any) {
+  console.log(e)
+}
 </script>

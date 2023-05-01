@@ -1,3 +1,5 @@
+type id = number
+
 export namespace API {
   export interface RequestParams {
     method: string
@@ -73,4 +75,50 @@ export namespace models {
     email: string
   }
 
+  export interface ComplexOpts {
+    label: string
+    value: any
+  }
+
+  export interface EgressoModel {
+    nascimento: string
+    generoId: id
+    matricula: string
+    pcd: boolean
+    cotista: boolean
+    bolsista: boolean
+    interesseEmPos: boolean
+    lattes?: string | null
+    linkedin?: string | null
+    posGraduacao: boolean
+    cotas: Array<{
+      id: id
+    }>
+    nome: string
+    palestras?: {
+      descricao?: string
+    }
+    contribuicao: {
+      descricao: string
+    }
+    depoimento: {
+      descricao: string
+    }
+    bolsaId?: id | null
+    remuneracaoBolsa?: number
+    empresa: {
+      faixaSalarialId?: id | null
+      setorAtuacao?: string
+      nome?: string
+      endereco?: {
+        pais: string
+        estado: string
+        cidade: string
+      }
+    }
+    titulacao?: {
+      instituicao?: string
+      curso?: string
+    }
+  }
 }
