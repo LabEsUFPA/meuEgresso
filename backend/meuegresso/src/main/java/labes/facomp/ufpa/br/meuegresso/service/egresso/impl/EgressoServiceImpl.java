@@ -49,7 +49,7 @@ public class EgressoServiceImpl implements EgressoService {
     @Override
     public EgressoModel updateEgresso(EgressoModel egresso) {
         if (egresso.getId() != null) {
-            egressoRepository.save(egresso);
+            return egressoRepository.save(egresso);
         }
         return null;
     }
