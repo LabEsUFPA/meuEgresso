@@ -44,7 +44,6 @@ public class CotaRepositoryTest {
     private final static Integer ID2 = 2;
     private final static String NOME2 = "ESCOLA PUBLICA";
 
-  
     @Test
     @Order(1)
     public void testSave() {
@@ -62,7 +61,7 @@ public class CotaRepositoryTest {
         cotaRepository.save(getMockCota2());
 
         List<CotaModel> listaCota = cotaRepository.findAll();
-    
+
         assertNotNull(listaCota);
         assertEquals(getMockCota().getNome(), listaCota.get(0).getNome());
         assertEquals(getMockCota2().getNome(), listaCota.get(1).getNome());
@@ -73,16 +72,18 @@ public class CotaRepositoryTest {
         CotaModel cotaTest = new CotaModel(ID, NOME, null);
         return cotaTest;
     }
+
     private CotaModel getMockCota2() {
 
         CotaModel cotaTest2 = new CotaModel(ID2, NOME2, null);
         return cotaTest2;
     }
+
     private List<CotaModel> getMockCotaLista() {
         List<CotaModel> listaCota = new ArrayList<>();
 
-       CotaModel cota1 = new CotaModel(ID, NOME, null);
-       CotaModel cota2 = new CotaModel(ID2, NOME2, null);
+        CotaModel cota1 = new CotaModel(ID, NOME, null);
+        CotaModel cota2 = new CotaModel(ID2, NOME2, null);
 
         listaCota.add(cota1);
         listaCota.add(cota2);
@@ -90,5 +91,3 @@ public class CotaRepositoryTest {
         return listaCota;
     }
 }
-
-

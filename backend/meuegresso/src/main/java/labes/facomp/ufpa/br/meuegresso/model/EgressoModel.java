@@ -49,15 +49,19 @@ public class EgressoModel extends Auditable {
     @Column(name = "matricula_egresso", unique = true, nullable = true, length = 12)
     private String matricula;
 
+    @Builder.Default
     @Column(name = "pcd_egresso", unique = false, nullable = true)
     private Boolean pcd = false;
 
+    @Builder.Default
     @Column(name = "cotista_egresso", unique = false, nullable = false)
     private Boolean cotista = false;
 
+    @Builder.Default
     @Column(name = "bolsista_egresso", unique = false, nullable = false)
     private Boolean bolsista = false;
 
+    @Builder.Default
     @Column(name = "interesse_em_pos_egresso", unique = false, nullable = false)
     private Boolean interesseEmPos = false;
 
@@ -66,10 +70,6 @@ public class EgressoModel extends Auditable {
 
     @Column(name = "linkedin_egresso", unique = true, nullable = true)
     private String linkedin;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "endereco_id", unique = false, nullable = false)
-    private EnderecoModel endereco;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "egresso_cota", joinColumns = { @JoinColumn(name = "id_egresso") }, inverseJoinColumns = {

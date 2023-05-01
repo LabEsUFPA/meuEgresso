@@ -45,11 +45,9 @@ public class EmpresaServiceTest {
 
     private static final Integer ID = 1;
     private static final String NOME = "Empresa";
-    private static final String SETORATUACAO = "Empresarial";
 
     private static final Integer ID2 = 2;
     private static final String NOME2 = "Ufpa";
-    private static final String SETORATUACAO2 = "Público";
 
     @Autowired
     private EmpresaService empresaService;
@@ -76,7 +74,6 @@ public class EmpresaServiceTest {
         assertNotNull(response);
         assertEquals(ID, response.getId());
         assertEquals(NOME, response.getNome());
-        assertEquals(SETORATUACAO, response.getSetorAtuacao());
     }
 
     /**
@@ -180,7 +177,6 @@ public class EmpresaServiceTest {
         EmpresaModel empresaTest = EmpresaModel.builder()
                 .id(ID)
                 .nome(NOME)
-                .setorAtuacao(SETORATUACAO)
                 .build();
         return empresaTest;
     }
@@ -190,13 +186,11 @@ public class EmpresaServiceTest {
         EmpresaModel empresaTest = EmpresaModel.builder()
                 .id(ID)
                 .nome(NOME)
-                .setorAtuacao(SETORATUACAO)
                 .build();
 
         EmpresaModel empresaTest2 = EmpresaModel.builder()
                 .id(ID2)
                 .nome(NOME2)
-                .setorAtuacao(SETORATUACAO2)
                 .build();
 
         empresaLista.add(empresaTest);

@@ -32,9 +32,7 @@ public class TipoBolsaRepositoryTest {
     private final static String NOME = "PIBIC";
 
     private final static Integer ID2 = 2;
-    private final static String NOME2 = "PROEX";
 
-    private final static Double RENUMERACAO = 100.0;
 
     @Test
     @Order(1)
@@ -60,21 +58,21 @@ public class TipoBolsaRepositoryTest {
 
     private TipoBolsaModel getMockTipoBolsaModel() {
 
-        TipoBolsaModel tipoBolsaModel = new TipoBolsaModel(ID, NOME, RENUMERACAO);
+        TipoBolsaModel tipoBolsaModel = TipoBolsaModel.builder().id(ID).nome(NOME).build();
         return tipoBolsaModel;
     }
 
     private TipoBolsaModel getMockTipoBolsaModel2() {
 
-        TipoBolsaModel tipoBolsaModel = new TipoBolsaModel(ID2, NOME2, RENUMERACAO);
+        TipoBolsaModel tipoBolsaModel = TipoBolsaModel.builder().id(ID2).nome(NOME).build();
         return tipoBolsaModel;
     }
 
     private List<TipoBolsaModel> getMockTipoBolsaLista() {
         List<TipoBolsaModel> tipoBolsaLista = new ArrayList<>();
 
-        TipoBolsaModel bolsaTeste1 = new TipoBolsaModel(ID, NOME, RENUMERACAO);
-        TipoBolsaModel bolsaTeste2 = new TipoBolsaModel(ID2, NOME2, RENUMERACAO);
+        TipoBolsaModel bolsaTeste1 = TipoBolsaModel.builder().id(ID).nome(NOME).build();
+        TipoBolsaModel bolsaTeste2 = TipoBolsaModel.builder().id(ID2).nome(NOME).build();
 
         tipoBolsaLista.add(bolsaTeste1);
         tipoBolsaLista.add(bolsaTeste2);

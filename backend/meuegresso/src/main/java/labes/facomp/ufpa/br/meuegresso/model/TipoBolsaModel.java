@@ -17,11 +17,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "tipo_bolsa")
 @EqualsAndHashCode(callSuper = false)
-@Builder
 public class TipoBolsaModel extends Auditable {
 
     @Id

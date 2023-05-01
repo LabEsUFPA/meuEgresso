@@ -26,16 +26,16 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoColacaoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoTitulacaoRepository;
 
 /**
- * Classe que implementa testes para o EgressoColacaoService.
- * 
+ * Classe que implementa testes para o EgressoTitulacaoService.
+ *
  * @author Pedro Inácio
  * @since 28/04/2023
  */
@@ -44,9 +44,9 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoColacaoReposito
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class EgressoColacaoServiceTest {
+public class EgressoTitulacaoServiceTest {
 
-    private static final EgressoColacaoModelId ID = new EgressoColacaoModelId();
+    private static final EgressoTitulacaoModelId ID = new EgressoTitulacaoModelId();
     private static final EgressoModel EGRESSO = new EgressoModel();
     private static final TitulacaoModel COLACAO = new TitulacaoModel();
     private static final LocalDate DATA_INGRESSO = LocalDate.parse("2016-06-06");
@@ -55,16 +55,16 @@ public class EgressoColacaoServiceTest {
     private static final CursoModel CURSO = new CursoModel();
 
     @Autowired
-    private EgressoColacaoService egressoColacaoService;
+    private EgressoTitulacaoService EgressoTitulacaoService;
 
-    EgressoColacaoModel testEgresso;
+    EgressoTitulacaoModel testEgresso;
 
     @MockBean
-    private EgressoColacaoRepository repository;
+    private EgressoTitulacaoRepository repository;
 
     /**
-     * Metodo para testar a criacao de um EgressoColacaoModel com save.
-     * 
+     * Metodo para testar a criacao de um EgressoTitulacaoModel com save.
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
      */
@@ -72,15 +72,15 @@ public class EgressoColacaoServiceTest {
     @Test
     public void testSave() {
 
-        BDDMockito.given(repository.save(Mockito.any(EgressoColacaoModel.class)))
-                .willReturn(getMockEgressoColacao());
+        BDDMockito.given(repository.save(Mockito.any(EgressoTitulacaoModel.class)))
+                .willReturn(getMockEgressoTitulacao());
 
-        EgressoColacaoModel response = egressoColacaoService.save(new EgressoColacaoModel());
+        EgressoTitulacaoModel response = EgressoTitulacaoService.save(new EgressoTitulacaoModel());
 
         assertNotNull(response);
         assertEquals(ID, response.getId());
         assertEquals(EGRESSO, response.getEgresso());
-        assertEquals(COLACAO, response.getColacao());
+        assertEquals(COLACAO, response.getTitulacao());
         assertEquals(DATA_INGRESSO, response.getIngresso());
         assertEquals(DATA_CONCLUSAO, response.getConclusao());
         assertEquals(EMPRESA, response.getEmpresa());
@@ -89,46 +89,46 @@ public class EgressoColacaoServiceTest {
 
     /**
      * Metodo para testar o metodo findAll.
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
      */
     @Test
     public void testFindAll() {
         BDDMockito.given(repository.findAll())
-                .willReturn(getMockEgressoColacaoLista());
+                .willReturn(getMockEgressoTitulacaoLista());
 
-        List<EgressoColacaoModel> response = egressoColacaoService.findAll();
+        List<EgressoTitulacaoModel> response = EgressoTitulacaoService.findAll();
         assertNotNull(response);
     }
 
     /**
      * Metodo para testar o findById.
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
      */
     @Test
     public void testFindById() {
-        BDDMockito.given(repository.findById(Mockito.any(EgressoColacaoModelId.class)))
-                .willReturn(Optional.ofNullable(getMockEgressoColacao()));
+        BDDMockito.given(repository.findById(Mockito.any(EgressoTitulacaoModelId.class)))
+                .willReturn(Optional.ofNullable(getMockEgressoTitulacao()));
 
-        EgressoColacaoModel response = egressoColacaoService.findById(ID);
+        EgressoTitulacaoModel response = EgressoTitulacaoService.findById(ID);
         assertNotNull(response);
     }
 
     /**
      * Metodo para testar o update.
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
      */
     @Test
     public void testUpdate() {
         try {
-            BDDMockito.given(repository.save(Mockito.any(EgressoColacaoModel.class)))
-                    .willReturn(getMockEgressoColacao());
-            EgressoColacaoModel response = egressoColacaoService.update(getMockEgressoColacao());
+            BDDMockito.given(repository.save(Mockito.any(EgressoTitulacaoModel.class)))
+                    .willReturn(getMockEgressoTitulacao());
+            EgressoTitulacaoModel response = EgressoTitulacaoService.update(getMockEgressoTitulacao());
             assertNotNull(response);
         } catch (Exception e) {
             e.getMessage();
@@ -137,7 +137,7 @@ public class EgressoColacaoServiceTest {
 
     /**
      * Metodo para testar o existsByIdAndCreatedById.
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
      */
@@ -145,65 +145,67 @@ public class EgressoColacaoServiceTest {
     public void testExistsByIdAndCreatedById() {
 
         BDDMockito.given(repository.existsByIdAndCreatedById(Mockito.any(
-                EgressoColacaoModelId.class), Mockito.anyInt()))
+                EgressoTitulacaoModelId.class), Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = egressoColacaoService.existsByIdAndCreatedById(ID, 1);
+        Boolean response = EgressoTitulacaoService.existsByIdAndCreatedById(ID, 1);
         assertTrue(response);
     }
 
     /**
      * Metodo para testar o deleteById.
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
      */
     @Test
     public void testDeletarEgresso() {
 
-        BDDMockito.given(egressoColacaoService.deleteById(Mockito.any(
-                EgressoColacaoModelId.class)))
+        BDDMockito.given(EgressoTitulacaoService.deleteById(Mockito.any(
+                EgressoTitulacaoModelId.class)))
                 .willReturn(true);
 
-        Boolean response = egressoColacaoService.deleteById(ID);
+        Boolean response = EgressoTitulacaoService.deleteById(ID);
         assertTrue(response);
     }
 
     /**
-     * Metodo que preenche um mock de um EgressoColacaoModel para retorno dos testes
-     * 
+     * Metodo que preenche um mock de um EgressoTitulacaoModel para retorno dos
+     * testes
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
-     * 
-     * @return <code>egressoColacaoTeste</code> object
+     *
+     * @return <code>EgressoTitulacaoTeste</code> object
      */
-    private EgressoColacaoModel getMockEgressoColacao() {
-        EgressoColacaoModel egressoColacaoTest = new EgressoColacaoModel(ID, EGRESSO, COLACAO, DATA_INGRESSO,
+    private EgressoTitulacaoModel getMockEgressoTitulacao() {
+        EgressoTitulacaoModel EgressoTitulacaoTest = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, DATA_INGRESSO,
                 DATA_CONCLUSAO, EMPRESA, CURSO);
-        
-        return egressoColacaoTest;
+
+        return EgressoTitulacaoTest;
     }
 
     /**
-     * Metodo que preenche um mock de uma lista de EgressoColacaoModel para retorno
+     * Metodo que preenche um mock de uma lista de EgressoTitulacaoModel para
+     * retorno
      * dos testes
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
-     * 
-     * @return <code>egressoColacaoLista</code> object
+     *
+     * @return <code>EgressoTitulacaoLista</code> object
      */
-    private List<EgressoColacaoModel> getMockEgressoColacaoLista() {
-        List<EgressoColacaoModel> egressoColacaoLista = new ArrayList<>();
-        EgressoColacaoModel egressoColacaoTest = new EgressoColacaoModel(ID, EGRESSO, COLACAO, DATA_INGRESSO,
+    private List<EgressoTitulacaoModel> getMockEgressoTitulacaoLista() {
+        List<EgressoTitulacaoModel> EgressoTitulacaoLista = new ArrayList<>();
+        EgressoTitulacaoModel EgressoTitulacaoTest = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, DATA_INGRESSO,
                 DATA_CONCLUSAO, EMPRESA, CURSO);
-        EgressoColacaoModel egressoColacaoTest2 = new EgressoColacaoModel(ID, EGRESSO, COLACAO, DATA_INGRESSO,
+        EgressoTitulacaoModel EgressoTitulacaoTest2 = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, DATA_INGRESSO,
                 DATA_CONCLUSAO, EMPRESA, CURSO);
 
-        egressoColacaoLista.add(egressoColacaoTest);
-        egressoColacaoLista.add(egressoColacaoTest2);
+        EgressoTitulacaoLista.add(EgressoTitulacaoTest);
+        EgressoTitulacaoLista.add(EgressoTitulacaoTest2);
 
-        return egressoColacaoLista;
+        return EgressoTitulacaoLista;
     }
 
     @AfterAll

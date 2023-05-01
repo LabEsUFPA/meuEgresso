@@ -34,7 +34,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoEmpresaReposito
 
 /**
  * Class que implementa testes para o EgressoEmpresaService.
- * 
+ *
  * @author Pedro Inácio
  * @since 28/04/2023
  */
@@ -48,7 +48,6 @@ public class EgressoEmpresaServiceTest {
     private static final EgressoEmpresaModelId ID = new EgressoEmpresaModelId();
     private static final EgressoModel EGRESSO = new EgressoModel();
     private static final EmpresaModel EMPRESA = new EmpresaModel();
-    private static final String AREA_ATUACAO = "area";
     private static final FaixaSalarialModel FAIXA_SALARIAL = new FaixaSalarialModel();
 
     @Autowired
@@ -59,7 +58,7 @@ public class EgressoEmpresaServiceTest {
 
     /**
      * Metodo para testar a criacao de um EgressoEmpresaModel com adicionar Egresso.
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
      */
@@ -77,13 +76,12 @@ public class EgressoEmpresaServiceTest {
         assertEquals(ID, response.getId());
         assertEquals(EGRESSO, response.getEgresso());
         assertEquals(EMPRESA, response.getEmpresa());
-        assertEquals(AREA_ATUACAO, response.getAreaAtuacao());
         assertEquals(FAIXA_SALARIAL, response.getFaixaSalarial());
     }
 
     /**
      * Metodo para testar o metodo findAll.
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
      */
@@ -99,7 +97,7 @@ public class EgressoEmpresaServiceTest {
 
     /**
      * Metodo para testar o findById.
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
      */
@@ -114,7 +112,7 @@ public class EgressoEmpresaServiceTest {
 
     /**
      * Metodo para testar o update.
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
      */
@@ -132,7 +130,7 @@ public class EgressoEmpresaServiceTest {
 
     /**
      * Metodo para testar o existsByIdAndCreatedById.
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
      */
@@ -149,7 +147,7 @@ public class EgressoEmpresaServiceTest {
 
     /**
      * Metodo para testar o deleteById.
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
      */
@@ -166,33 +164,33 @@ public class EgressoEmpresaServiceTest {
 
     /**
      * Metodo que preenche um mock de um EgressoEmpresaModel para retorno dos testes
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
-     * 
+     *
      * @return <code>egressoEmpresaTeste</code> object
      */
     private EgressoEmpresaModel getMockEgressoEmpresa() {
-        EgressoEmpresaModel egressoEmpresaTest = new EgressoEmpresaModel(ID, EGRESSO, EMPRESA, AREA_ATUACAO,
-                FAIXA_SALARIAL);
+        EgressoEmpresaModel egressoEmpresaTest = EgressoEmpresaModel.builder().id(ID).egresso(EGRESSO).empresa(EMPRESA)
+                .faixaSalarial(FAIXA_SALARIAL).build();
         return egressoEmpresaTest;
     }
 
     /**
      * Metodo que preenche um mock de uma lista de EgressoEmpresaModel para retorno
      * dos testes
-     * 
+     *
      * @author Pedro Inácio
      * @since 28/04/2023
-     * 
+     *
      * @return <code>egressoEmpresaLista</code> object
      */
     private List<EgressoEmpresaModel> getMockEgressoEmpresaLista() {
         List<EgressoEmpresaModel> egressoEmpresaLista = new ArrayList<>();
-        EgressoEmpresaModel egressoEmpresaTest = new EgressoEmpresaModel(ID, EGRESSO, EMPRESA, AREA_ATUACAO,
-                FAIXA_SALARIAL);
-        EgressoEmpresaModel egressoEmpresaTest2 = new EgressoEmpresaModel(ID, EGRESSO, EMPRESA, AREA_ATUACAO,
-                FAIXA_SALARIAL);
+        EgressoEmpresaModel egressoEmpresaTest = EgressoEmpresaModel.builder().id(ID).egresso(EGRESSO).empresa(EMPRESA)
+                .faixaSalarial(FAIXA_SALARIAL).build();
+        EgressoEmpresaModel egressoEmpresaTest2 = EgressoEmpresaModel.builder().id(ID).egresso(EGRESSO).empresa(EMPRESA)
+                .faixaSalarial(FAIXA_SALARIAL).build();
 
         egressoEmpresaLista.add(egressoEmpresaTest);
         egressoEmpresaLista.add(egressoEmpresaTest2);

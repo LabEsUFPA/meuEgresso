@@ -19,11 +19,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "empresa")
 @EqualsAndHashCode(callSuper = false)
-@Builder
 public class EmpresaModel extends Auditable {
 
     @Id

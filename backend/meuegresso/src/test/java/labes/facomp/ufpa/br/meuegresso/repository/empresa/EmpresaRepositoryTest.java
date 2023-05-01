@@ -31,7 +31,6 @@ public class EmpresaRepositoryTest {
         empresa = new EmpresaModel();
         empresa.setId(1);
         empresa.setNome("El Cabis");
-        empresa.setSetorAtuacao("Capivaras");
         /*
          * testarEgresso.setGenero(null);
          * testarEgresso.setEndereco(null);
@@ -40,8 +39,8 @@ public class EmpresaRepositoryTest {
          */
 
         repository.save(empresa);
-    
-    
+
+
     }
     @Test
     public void testFindAll() {
@@ -53,13 +52,13 @@ public class EmpresaRepositoryTest {
     public void testSave() {
 
         BDDMockito.given(repository.save(Mockito.any(EmpresaModel.class)))
-                .willReturn(EmpresaModel.builder().id(2).nome("El Cabis").setorAtuacao("Capivaras").build());
+                .willReturn(EmpresaModel.builder().id(2).nome("El Cabis").build());
         EmpresaModel response = repository.save(new EmpresaModel());
 
         assertNotNull(response);
         assertEquals("El Cabis", response.getNome());
     }
 
-    
-    
+
+
 }
