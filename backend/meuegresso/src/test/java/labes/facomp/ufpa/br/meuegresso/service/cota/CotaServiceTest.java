@@ -18,12 +18,11 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
@@ -36,11 +35,12 @@ import labes.facomp.ufpa.br.meuegresso.repository.cota.CotaRepository;
  * @since
  */
 @SpringBootTest
+@DirtiesContext
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class CotaServiceTest {
+class CotaServiceTest {
 
     private static final Integer ID = 1;
     private static final String NOME = "Escola Pública";
@@ -64,7 +64,7 @@ public class CotaServiceTest {
      */
     @Test
     @Order(1)
-    public void testSave() {
+    void testSave() {
 
         BDDMockito.given(repository.save(Mockito.any(CotaModel.class)))
                 .willReturn(getMockCota());
@@ -85,7 +85,7 @@ public class CotaServiceTest {
      */
     @Test
     @Order(2)
-    public void testFindAll() {
+    void testFindAll() {
         BDDMockito.given(cotaService.findAll())
                 .willReturn(getMockCotaLista());
 
@@ -95,7 +95,7 @@ public class CotaServiceTest {
 
     @Test
     @Order(3)
-    public void testFindById() {
+    void testFindById() {
         BDDMockito.given(repository.findById(ID))
                 .willReturn(Optional.of(getMockCota()));
 
@@ -112,7 +112,7 @@ public class CotaServiceTest {
      */
     @Test
     @Order(4)
-    public void testUpdate() throws InvalidRequestException {
+    void testUpdate() throws InvalidRequestException {
         BDDMockito.given(repository.save(Mockito.any(CotaModel.class)))
                 .willReturn(getMockCota());
 
