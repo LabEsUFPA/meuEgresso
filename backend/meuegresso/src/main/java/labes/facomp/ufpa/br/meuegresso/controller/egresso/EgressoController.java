@@ -79,64 +79,78 @@ public class EgressoController {
             JwtAuthenticationToken token) {
 
         // em cima ok
+        EgressoModel egresso = mapper.map(egressoCadastroDTO, EgressoModel.class);
+        TitulacaoModel titulacao = titulacaoService
+                .findById(egressoCadastroDTO.getPosGraduacao().booleanValue() ? 2 : 1);
 
+        TitulacaoEgressoDTO titulacaoEgressoDTO;
+        EmpresaModel instituicao;
+        CursoModel curso;
+        EgressoTitulacaoModel egressoTitulacao;
         // Cadastro da titulacao POS-Graduação ou n
-        TitulacaoEgressoDTO titulacaoEgressoDTO = egressoCadastroDTO.getTitulacao();
-        // Cadastro do curso
-        CursoModel curso = cursoService.findByNome(titulacaoEgressoDTO.getCurso());
-        if (curso == null) {
-            curso = CursoModel.builder().nome(titulacaoEgressoDTO.getCurso()).build();
-            curso = cursoService.save(curso);
-        }
-
-        // Cadastro do Instituição ex: UFPA
-        EmpresaModel instituicao = empresaService.findByNome(titulacaoEgressoDTO.getInstituicao());
-        if (instituicao == null) {
-            instituicao = EmpresaModel.builder().nome(titulacaoEgressoDTO.getInstituicao()).build();
-            instituicao = empresaService.save(instituicao);
+        if (egressoCadastroDTO.getTitulacao() != null) {
+            titulacaoEgressoDTO = egressoCadastroDTO.getTitulacao();
+            // Cadastro do curso
+            curso = cursoService.findByNome(titulacaoEgressoDTO.getCurso());
+            if (curso == null) {
+                curso = CursoModel.builder().nome(titulacaoEgressoDTO.getCurso()).build();
+                curso = cursoService.save(curso);
+            }
+            // Cadastro do Instituição ex: UFPA
+            instituicao = empresaService.findByNome(titulacaoEgressoDTO.getInstituicao());
+            if (instituicao == null) {
+                instituicao = EmpresaModel.builder().nome(titulacaoEgressoDTO.getInstituicao()).build();
+                instituicao = empresaService.save(instituicao);
+            }
+            egressoTitulacao = EgressoTitulacaoModel.builder().empresa(instituicao)
+                    .titulacao(titulacao).egresso(egresso)
+                    .curso(curso).build();
+            egresso.setTitulacao(egressoTitulacao);
         }
 
         // Cadastro EMPRESA - EMPREGO
-        EmpresaDTO empresaDTO = egressoCadastroDTO.getEmpresa();
-        SetorAtuacaoModel setorAtuacao = setorAtuacaoService.findByNome(empresaDTO.getSetorAtuacao());
-        if (setorAtuacao == null) {
-            setorAtuacao = setorAtuacaoService
-                    .save(SetorAtuacaoModel.builder().nome(empresaDTO.getSetorAtuacao()).build());
+        EmpresaDTO empresaDTO;
+        SetorAtuacaoModel setorAtuacao;
+        EmpresaModel empresa;
+        if (egressoCadastroDTO.getEmpresa() != null) {
+            empresaDTO = egressoCadastroDTO.getEmpresa();
+            setorAtuacao = setorAtuacaoService.findByNome(empresaDTO.getSetorAtuacao());
+            if (setorAtuacao == null) {
+                setorAtuacao = setorAtuacaoService
+                        .save(SetorAtuacaoModel.builder().nome(empresaDTO.getSetorAtuacao()).build());
+            }
+            EnderecoModel enderecoEmpresa = enderecoService.findByCidadeAndEstadoAndPais(
+                    empresaDTO.getEndereco().getCidade(),
+                    empresaDTO.getEndereco().getEstado(), empresaDTO.getEndereco().getPais());
+            if (enderecoEmpresa == null) {
+                enderecoEmpresa = mapper.map(empresaDTO.getEndereco(), EnderecoModel.class);
+                enderecoEmpresa = enderecoService.save(enderecoEmpresa);
+            }
+            empresa = empresaService.findByNome(empresaDTO.getNome());
+            if (empresa == null) {
+                empresa = mapper.map(empresaDTO, EmpresaModel.class);
+                empresa.setEndereco(enderecoEmpresa);
+                setorAtuacao.getEmpresas().add(empresa);
+                empresa.setSetorAtuacoes(new HashSet<>(Set.of(setorAtuacao)));
+                empresa = empresaService.save(empresa);
+            }
+            egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
+                    .faixaSalarial(FaixaSalarialModel.builder().id(empresaDTO.getFaixaSalarialId()).build()).build());
         }
 
-        EnderecoModel enderecoEmpresa = enderecoService.findByCidadeAndEstadoAndPais(
-                empresaDTO.getEndereco().getCidade(),
-                empresaDTO.getEndereco().getEstado(), empresaDTO.getEndereco().getPais());
-        if (enderecoEmpresa == null) {
-            enderecoEmpresa = mapper.map(empresaDTO.getEndereco(), EnderecoModel.class);
-            enderecoEmpresa = enderecoService.save(enderecoEmpresa);
-        }
-        EmpresaModel empresa = empresaService.findByNome(empresaDTO.getNome());
-        if (empresa == null) {
-            empresa = mapper.map(empresaDTO, EmpresaModel.class);
-            empresa.setEndereco(enderecoEmpresa);
-            setorAtuacao.getEmpresas().add(empresa);
-            empresa.setSetorAtuacoes(new HashSet<>(Set.of(setorAtuacao)));
-            empresa = empresaService.save(empresa);
-        }
-
-        TitulacaoModel titulacao = titulacaoService.findById(egressoCadastroDTO.getPosGraduacao().booleanValue() ? 2 : 1);
-
-        EgressoModel egresso = mapper.map(egressoCadastroDTO, EgressoModel.class);
-        EgressoTitulacaoModel egressoTitulacao = EgressoTitulacaoModel.builder().empresa(instituicao)
-                .titulacao(titulacao).egresso(egresso)
-                .curso(curso).build();
-        egresso.setTitulacao(egressoTitulacao);
         egresso.setUsuario(usuarioService.findById(jwtService.getIdUsuario(token)));
         egresso.getUsuario().setNome(egressoCadastroDTO.getNome());
-        PalestraModel palestra = egresso.getPalestras();
+        PalestraModel palestra;
+        if (egresso.getPalestras() != null) {
+            palestra = egresso.getPalestras();
+            palestra.setEgresso(egresso);
+
+        }
         DepoimentoModel depoimento = egresso.getDepoimento();
         ContribuicaoModel contribuicao = egresso.getContribuicao();
-        palestra.setEgresso(egresso);
         depoimento.setEgresso(egresso);
         contribuicao.setEgresso(egresso);
-        egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
-                .faixaSalarial(FaixaSalarialModel.builder().id(empresaDTO.getFaixaSalarialId()).build()).build());
+
         egressoService.adicionarEgresso(egresso);
 
         return ResponseType.SUCESS_SAVE.getMessage();
