@@ -150,8 +150,8 @@ const setIdAccessLevel = (accessLevel: string) => {
 const schema = object().shape({
   name: string().required(),
   username: string().required(),
-  email: string().required(),
-  confirmationEmail: string().required().oneOf([refYup('email')]),
+  email: string().email().required(),
+  confirmationEmail: string().email().required().oneOf([refYup('email')]),
   password: string().required(),
   confirmationPassword: string().required().oneOf([refYup('password')]),
   accessLevel: string().required(),

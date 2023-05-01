@@ -65,9 +65,8 @@ public class EgressoModel extends Auditable {
     @Column(name = "linkedin_egresso", unique = true, nullable = true)
     private String linkedin;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "endereco_id", unique = false, nullable = false)
-    private EnderecoModel endereco;
+    @Column(name = "pos_graducao_egresso", unique = true, nullable = true)
+    private Boolean posGraduacao = false;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "egresso_cota", joinColumns = { @JoinColumn(name = "id_egresso") }, inverseJoinColumns = {
@@ -76,11 +75,17 @@ public class EgressoModel extends Auditable {
                     "id_cota" }))
     private Set<CotaModel> cotas;
 
-    @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.MERGE })
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "usuario_id", unique = true, nullable = true)
     private UsuarioModel usuario;
 
-    @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+    @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    private PalestraModel palestras;
+
+    @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    private ContribuicaoModel contribuicao;
+
+    @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private DepoimentoModel depoimento;
 
     @ManyToOne(fetch = FetchType.LAZY)

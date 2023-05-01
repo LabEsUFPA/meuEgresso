@@ -111,7 +111,8 @@ public class ContribuicaoController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO, JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
+	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO,
+			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (contribuicaoService.existsByIdAndCreatedById(contribuicaoDTO.getId(), jwtService.getIdUsuario(token))) {
 			ContribuicaoModel contribuicaoModel = mapper.map(contribuicaoDTO, ContribuicaoModel.class);
 			contribuicaoService.update(contribuicaoModel);

@@ -157,7 +157,6 @@ CREATE TABLE IF NOT EXISTS public.egresso (
     created_by integer,
     last_modified_by integer,
     tipo_bolsa_id integer,
-    endereco_id integer NOT NULL,
     genero_id integer NOT NULL,
     usuario_id integer
 );
@@ -1214,8 +1213,6 @@ ADD CONSTRAINT fk86mqotohj7rghjrby21y54sr7 FOREIGN KEY (id_setor_atuacao) REFERE
 -- Name: egresso fk8fxxf75hx1hh70l37mgssxq7x; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.egresso
-ADD CONSTRAINT fk8fxxf75hx1hh70l37mgssxq7x FOREIGN KEY (endereco_id) REFERENCES public.endereco(id_endereco);
 --
 -- TOC entry 3467 (class 2606 OID 33360)
 -- Name: faixa_salarial fk96o103aeo1xeuhgnn0hhs6bl0; Type: FK CONSTRAINT; Schema: public; Owner: -
