@@ -59,5 +59,8 @@ public interface CursoService {
 	 * @param createdBy
 	 * @return
 	 */
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
+ 	public CursoModel findByNome(String nome);
+
 }

@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class DepoimentoModel extends Auditable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_depoimento", unique = true, nullable = false)
     private Integer id;
 
@@ -31,7 +32,7 @@ public class DepoimentoModel extends Auditable {
     @Column(name = "descricao_depoimento", unique = false, nullable = false)
     private String descricao;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "egresso_id", unique = true, nullable = false)
     private EgressoModel egresso;
 }
