@@ -112,7 +112,7 @@ public class bolsaControllerTest {
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 TipoBolsaDTO bolsaDTO = new TipoBolsaDTO();
-                bolsaDTO.setNome("bolsa");
+                bolsaDTO.setNome("PIBIC");
                 bolsaDTO.setId(1);
 
                 MvcResult resposta = mockMvc.perform(
@@ -151,7 +151,7 @@ public class bolsaControllerTest {
         void testAtualizarCota() throws Exception {
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-                final String NOVO_NOME = "ESCOLA PUBLICA";
+                final String NOVO_NOME = "PROEX";
                 bolsaDTO.setNome(NOVO_NOME);
 
                 MvcResult resposta = mockMvc.perform(
