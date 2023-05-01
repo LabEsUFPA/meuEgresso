@@ -153,7 +153,6 @@ CREATE TABLE IF NOT EXISTS public.egresso (
     linkedin_egresso character varying(255),
     matricula_egresso character varying(12),
     nascimento_egresso date NOT NULL,
-    pcd_egresso boolean,
     pos_graducao_egresso boolean,
     remuneracao_bolsa_egresso double precision,
     created_by integer,

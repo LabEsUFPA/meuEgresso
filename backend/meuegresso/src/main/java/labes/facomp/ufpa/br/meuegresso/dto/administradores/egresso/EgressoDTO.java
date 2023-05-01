@@ -30,8 +30,6 @@ public class EgressoDTO {
 
     private CotaDTO cota;
 
-    private Boolean pcd = false;
-
     private Boolean interesseEmPos = false;
 
     private String lattes;
