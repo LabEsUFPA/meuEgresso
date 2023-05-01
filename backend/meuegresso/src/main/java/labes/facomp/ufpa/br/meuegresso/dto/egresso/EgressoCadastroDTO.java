@@ -1,14 +1,12 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
-import labes.facomp.ufpa.br.meuegresso.dto.administradores.trabalhopublicado.TrabalhoPublicadoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.palestras.PalestrasDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,13 +19,19 @@ public class EgressoCadastroDTO {
 
     private Integer id;
 
+    private String nome;
+
     private LocalDate nascimento;
 
-    private GeneroDTO genero;
+    private Integer generoId;
 
     private String matricula;
 
     private Boolean pcd = false;
+
+    private Boolean cotista = false;
+
+    private Boolean bolsista = false;
 
     private Boolean interesseEmPos = false;
 
@@ -35,14 +39,19 @@ public class EgressoCadastroDTO {
 
     private String linkedin;
 
-    private EnderecoDTO endereco;
+    private Boolean posGraduacao = false;
 
-    private CotaDTO cota;
+    private Set<CotaDTO> cotas;
 
     private UsuarioDTO usuario;
 
-    private Set<DepoimentoDTO> depoimentos;
+    private PalestrasDTO palestras;
 
-    private Set<TrabalhoPublicadoDTO> trabalhoPublicados = new HashSet<>();
+    private ContribuicaoDTO contribuicao;
 
+    private DepoimentoDTO depoimento;
+
+    private Integer bolsaId;
+
+    private Double remuneracaoBolsa;
 }

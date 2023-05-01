@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
@@ -21,12 +21,18 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
+import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.PalestraModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.contribuicao.ContribuicaoService;
+import labes.facomp.ufpa.br.meuegresso.service.depoimento.DepoimentoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoEmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
+import labes.facomp.ufpa.br.meuegresso.service.palestra.PalestraService;
+import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -42,6 +48,9 @@ import lombok.RequiredArgsConstructor;
 public class EgressoController {
 
     private final EgressoService egressoService;
+    private final UsuarioService usuarioService;
+    private final DepoimentoService depoimentoService;
+    private final PalestraService palestraService;
     private final EgressoTitulacaoService egressoTitulacaoService;
     private final EgressoEmpresaService egressoEmpresaService;
     private final ContribuicaoService contribuicaoService;
@@ -60,33 +69,32 @@ public class EgressoController {
     // return mapper.map(egressoModel, EgressoPublicDTO.class);
     // }
 
-    @PostMapping(value = "/cadastrar")
+    @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public EgressoPublicDTO cadastrarEgressoPrimeiroCadastro(@RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO,
+    public String cadastrarEgressoPrimeiroCadastro(@RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO,
             JwtAuthenticationToken token) {
 
         EgressoModel egresso = mapper.map(egressoCadastroDTO, EgressoModel.class);
-        System.out.println(egresso);
-        // TODO refactor
-        // EgressoModel egresso = mapper.map(cadastro.egresso, EgressoModel.class);
-        // EgressoTitulacaoModel academico = mapper.map(cadastro.acdemico,
-        // EgressoTitulacaoModel.class);
-        // EgressoEmpresaModel carreira = mapper.map(cadastro.carreira,
-        // EgressoEmpresaModel.class);
-        // PesquisaCientificaModel pesquisa = mapper.map(cadastro.pesquisa,
-        // PesquisaCientificaModel.class);
-        // ContribuicaoModel contribuicao = mapper.map(cadastro.contribuicao,
-        // ContribuicaoModel.class);
+        egresso.setUsuario(usuarioService.findById(jwtService.getIdUsuario(token)));
+        egresso.getUsuario().setNome(egressoCadastroDTO.getNome());
+        PalestraModel palestra = egresso.getPalestras();
+        DepoimentoModel depoimento = egresso.getDepoimento();
+        ContribuicaoModel contribuicao = egresso.getContribuicao();
+        egresso.setDepoimento(null);
+        egresso.setPalestras(null);
+        egresso.setContribuicao(null);
+        egresso = egressoService.adicionarEgresso(egresso);
+        palestra.setEgresso(egresso);
+        palestraService.save(palestra);
+        depoimento.setEgresso(egresso);
+        depoimentoService.save(depoimento);
 
-        // egresso = egressoService.adicionarEgresso(egresso);
-        // academico = egressoColacaoService.save(academico);
-        // carreira = egressoEmpresaService.save(carreira);
-        // pesquisa = pesquisaCientificaService.save(pesquisa);
-        // contribuicao = contribuicaoService.save(contribuicao);
+        contribuicao.setEgresso(egresso);
+        contribuicaoService.save(contribuicao);
+        System.out.println("aaaaaa");
 
-        // return mapper.map(egresso, EgressoPublicDTO.class);
-        return null;
+        return ResponseType.SUCESS_SAVE.getMessage();
     }
 
     @GetMapping

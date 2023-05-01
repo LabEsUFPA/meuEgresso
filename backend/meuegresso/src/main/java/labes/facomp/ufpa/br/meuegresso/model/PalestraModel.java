@@ -12,8 +12,8 @@ import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 @Data
-@Entity(name = "palestras")
-public class PalestrasModel {
+@Entity(name = "palestra")
+public class PalestraModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

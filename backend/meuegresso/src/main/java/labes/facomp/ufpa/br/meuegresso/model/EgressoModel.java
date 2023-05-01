@@ -80,7 +80,7 @@ public class EgressoModel extends Auditable {
     private UsuarioModel usuario;
 
     @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
-    private PalestrasModel palestras;
+    private PalestraModel palestras;
 
     @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private ContribuicaoModel contribuicao;
