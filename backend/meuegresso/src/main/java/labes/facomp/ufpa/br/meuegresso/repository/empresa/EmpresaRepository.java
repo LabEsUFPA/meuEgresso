@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.repository.empresa;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
@@ -11,4 +12,6 @@ public interface EmpresaRepository extends CrudRepository<EmpresaModel, Integer>
     List<EmpresaModel> findAll();
 
     boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
+    Optional<EmpresaModel> findByNomeIgnoreCase(String nome);
 }

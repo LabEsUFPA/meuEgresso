@@ -6,7 +6,9 @@ import java.util.Set;
 import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.palestras.PalestrasDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -54,4 +56,8 @@ public class EgressoCadastroDTO {
     private Integer bolsaId;
 
     private Double remuneracaoBolsa;
+
+    private EmpresaDTO empresa;
+
+    private TitulacaoEgressoDTO titulacao;
 }

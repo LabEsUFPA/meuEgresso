@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.repository.titulacao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
@@ -17,6 +18,8 @@ import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 public interface TitulacaoRepository extends CrudRepository<TitulacaoModel, Integer> {
 
     List<TitulacaoModel> findAll();
-    
+
     boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
+    Optional<TitulacaoModel> findByNomeIgnoreCase(String nome);
 }

@@ -61,4 +61,9 @@ public class EmpresaServiceImpl implements EmpresaService {
         return empresaRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
+    @Override
+    public EmpresaModel findByNome(String nome) {
+        return empresaRepository.findByNomeIgnoreCase(nome).orElse(null);
+    }
+
 }
