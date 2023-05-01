@@ -1,7 +1,10 @@
 import { defineStore } from 'pinia'
 import Api from 'src/services/api'
 import { type models } from 'src/@types'
+import LocalStorage from 'src/services/localStorage'
 interface LoginModel extends models.LoginModel {}
+
+const storage = new LocalStorage()
 
 export const useLoginStore = defineStore('LoginStore', {
   state: () => ({
@@ -37,7 +40,7 @@ export const useLoginStore = defineStore('LoginStore', {
         route: '/usuario'
       })
       if (response?.status === 200) {
-        localStorage.setItem('loggedUser', JSON.stringify(response.data))
+        storage.set('loggedUser', JSON.stringify(response.data))
       }
     }
   }
