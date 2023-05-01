@@ -113,7 +113,7 @@ public class DepoimentoController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarDepoimento(@RequestBody @Valid DepoimentoDTO depoimentoDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (depoimentoService.existsByIdAndCreatedById(depoimentoDTO.getId(), jwtService.getIdUsuario(token))) {
+		if (jwtService.getIdUsuario(token).equals(depoimentoDTO.getId())) {
 			DepoimentoModel depoimentoModel = mapper.map(depoimentoDTO, DepoimentoModel.class);
 			depoimentoService.update(depoimentoModel);
 			return ResponseType.SUCESS_UPDATE.getMessage();
@@ -130,11 +130,16 @@ public class DepoimentoController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping
+	@DeleteMapping(value = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(Integer id) {
-		return depoimentoService.deleteById(id);
+	public String deleteById(@PathVariable(name = "id") Integer id) {
+		if (depoimentoService.deleteById(id)) {
+			return ResponseType.SUCESS_DELETE.getMessage();
+		} else {
+			return ResponseType.FAIL_DELETE.getMessage();
+		}
 	}
 
 }

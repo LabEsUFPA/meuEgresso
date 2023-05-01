@@ -111,8 +111,9 @@ public class ContribuicaoController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO, JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (contribuicaoService.existsByIdAndCreatedById(contribuicaoDTO.getId(), jwtService.getIdUsuario(token))) {
+	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO,
+			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
+		if (jwtService.getIdUsuario(token).equals(contribuicaoDTO.getId())) {
 			ContribuicaoModel contribuicaoModel = mapper.map(contribuicaoDTO, ContribuicaoModel.class);
 			contribuicaoService.update(contribuicaoModel);
 			return ResponseType.SUCESS_UPDATE.getMessage();
@@ -129,11 +130,16 @@ public class ContribuicaoController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping
+	@DeleteMapping(value = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(Integer id) {
-		return contribuicaoService.deleteById(id);
+	public String deleteById(@PathVariable(name = "id") Integer id) {
+		if (contribuicaoService.deleteById(id)) {
+			return ResponseType.SUCESS_DELETE.getMessage();
+		} else {
+			return ResponseType.FAIL_DELETE.getMessage();
+		}
 	}
 
 }

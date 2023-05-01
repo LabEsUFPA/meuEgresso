@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -20,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -33,15 +33,16 @@ import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 /**
  * Class que implementa testes para o DepoimentoService.
  * 
- * @author
- * @since
+ * @author Bruno Eiki
+ * @since 27/04/2023
  */
+@DirtiesContext
 @SpringBootTest
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class DepoimentoServiceTest {
+class DepoimentoServiceTest {
 
     private static final Integer ID = 1;
     private static final String DESCRICAO = "Me formei";
@@ -62,13 +63,12 @@ public class DepoimentoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(1)
-    public void testSave() {
+    void testSave() {
 
         BDDMockito.given(depoimentoRepository.save(Mockito.any(DepoimentoModel.class)))
                 .willReturn(getMockDepoimento());
 
-        DepoimentoModel response = depoimentoService.save(new DepoimentoModel());
+        DepoimentoModel response = depoimentoService.save(getMockDepoimento());
 
         assertNotNull(response);
         assertEquals(ID, response.getId());
@@ -82,9 +82,8 @@ public class DepoimentoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(2)
-    public void testFindAll() {
-        BDDMockito.given(depoimentoService.findAll())
+    void testFindAll() {
+        BDDMockito.given(depoimentoRepository.findAll())
                 .willReturn(List.of(getMockDepoimento()));
 
         List<DepoimentoModel> response = depoimentoService.findAll();
@@ -100,8 +99,7 @@ public class DepoimentoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(3)
-    public void testFindById() {
+    void testFindById() {
         BDDMockito.given(depoimentoRepository.findById(ID))
                 .willReturn(Optional.of(getMockDepoimento()));
 
@@ -119,8 +117,7 @@ public class DepoimentoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(4)
-    public void testUpdate() throws InvalidRequestException {
+    void testUpdate() throws InvalidRequestException {
         BDDMockito.given(depoimentoRepository.save(Mockito.any(DepoimentoModel.class)))
                 .willReturn(getMockDepoimento());
 
@@ -137,8 +134,7 @@ public class DepoimentoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(5)
-    public void testDeleteById() {
+    void testDeleteById() {
 
         BDDMockito.given(depoimentoService.deleteById(ID))
                 .willReturn(true);
@@ -154,8 +150,7 @@ public class DepoimentoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(6)
-    public void testExistsByIdAndCreatedById() {
+    void testExistsByIdAndCreatedById() {
 
         BDDMockito.given(depoimentoRepository.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
