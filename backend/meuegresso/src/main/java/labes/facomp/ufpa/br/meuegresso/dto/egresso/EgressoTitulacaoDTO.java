@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModelId;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
 import lombok.Data;
 
 /**
@@ -15,9 +15,9 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
-public class EgressoColacaoDTO {
+public class EgressoTitulacaoDTO {
 
-    private EgressoColacaoModelId id;
+    private EgressoTitulacaoModelId id;
 
     private LocalDate ingresso;
 

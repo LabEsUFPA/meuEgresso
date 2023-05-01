@@ -1,5 +1,9 @@
 <template>
-  <form @submit.prevent="handleSubmit($event)">
+  <Form
+    @submit="handleSubmit"
+    @invalid-submit="onInvalid"
+    :validation-schema="schema"
+  >
     <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
       <div
         v-if="!submitSuccess"
@@ -18,41 +22,42 @@
           </p>
           <div class="flex flex-col gap-y-5 mb-4">
             <CustomInput
+              name="name"
               label="Nome Completo"
               :required="true"
               :icon-path="mdiAccount"
-              v-model="userRegisterData.name"
             />
             <CustomInput
+              name="registration"
               type="number"
               label="Matrícula"
               :required="true"
               :icon-path="mdiSchool"
               :max-length="12"
               :min-length="12"
-              v-model="userRegisterData.registration"
             />
             <CustomInput
+              name="email"
               type="email"
               label="Email"
-              error-text="O email deve ser o mesmo cadastrado no SIGAA"
+              helper-text="O email deve ser o mesmo cadastrado no SIGAA"
               :required="true"
               :icon-path="mdiEmail"
-              v-model="userRegisterData.email"
             />
             <CustomInput
+              name="password"
               type="password"
               label="Senha"
               :required="true"
               :icon-path="mdiLock"
-              v-model="userRegisterData.password"
             />
             <CustomInput
+              name="confirmationPassword"
               type="password"
               label="Confirme Senha"
+              error-message="As senhas informadas são diferentes"
               :required="true"
               :icon-path="mdiLock"
-              v-model="userRegisterData.confirmationPassword"
             />
           </div>
         </div>
@@ -76,7 +81,7 @@
       >
         <div class="flex flex-col items-center text-center gap-y-28 mx-4">
           <h1 class="text-blue-900 text-4xl font-bold">
-            Suas informações estão sendo analisadas
+            Suas inFormações estão sendo analisadas
           </h1>
           <img
             class="animate-spin mr-3 max-w-[100px]"
@@ -91,57 +96,72 @@
         </div>
       </div>
     </div>
-  </form>
+  </Form>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import { mdiAccount, mdiSchool, mdiEmail, mdiLock } from '@mdi/js'
+import { Form } from 'vee-validate'
+import { object, string, ref as refYup } from 'yup'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
+import router from 'src/router'
+import { models } from 'src/@types'
+interface ProfileRegisterModel extends models.ProfileRegisterModel {}
 
 const error = ref(false)
 const errorMessages = ref({
-  senha: 'As senhas informadas são diferentes',
-  email: 'Os e-mails informados são diferentes',
-  standard: 'Por favor, preencha todos os campos abaixo',
-  accessLevel: 'Por favor, informe o nível de acesso',
-  registrationLength: 'Matrícula inválida, por favor digite novamente'
+  errorRequest: 'Requisição não aceita',
+  userNotFound: 'Usuario não cadastrado pela faculdade'
 })
 const errorText = ref('')
 const submitSuccess = ref(false)
 
-interface registerData {
-  name: string
-  registration: string
-  email: string
-  password: string
-  confirmationPassword: string
-}
-
-const userRegisterData = ref<registerData>({
-  name: '',
-  registration: '',
-  email: '',
-  password: '',
-  confirmationPassword: ''
+const schema = object().shape({
+  name: string().required(),
+  registration: string().required().length(12),
+  email: string().email().required(),
+  password: string().required(),
+  confirmationPassword: string().required().oneOf([refYup('password')])
 })
 
-const handleSubmit = ($event: Event) => {
-  if (
-    userRegisterData.value.password !== userRegisterData.value.confirmationPassword
-  ) {
-    errorText.value = String(errorMessages.value.senha)
-    error.value = true
-  } else if (userRegisterData.value.registration.length < 12) {
-    errorText.value = String(errorMessages.value.registrationLength)
-    error.value = true
-  } else {
+const handleSubmit = async (profileData: ProfileRegisterModel) => {
+  const responseValidation = await useCadastroPerfilStore().egressValidation(
+    profileData.name,
+    profileData.registration,
+    profileData.email
+  )
+
+  if (responseValidation === 200) {
     error.value = false
-    console.log(userRegisterData.value)
-    submitSuccess.value = true
+    const responseRegister = await useCadastroPerfilStore().userProfileRegister(
+      profileData.email,
+      profileData.password,
+      profileData.email,
+      profileData.name,
+      [{
+        id: 3
+      }]
+    )
+
+    if (responseRegister === 201) {
+      submitSuccess.value = true
+      router.push({ path: '/cadastro' })
+    } else {
+      errorText.value = errorMessages.value.errorRequest
+      error.value = true
+    }
+  } else {
+    errorText.value = errorMessages.value.userNotFound
+    error.value = true
   }
+}
+
+const onInvalid = (e: any) => {
+  console.log(e)
 }
 </script>
 
