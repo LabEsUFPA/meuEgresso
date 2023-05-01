@@ -38,7 +38,7 @@ import lombok.ToString;
 public class GrupoModel extends Auditable implements GrantedAuthority {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_grupo", unique = true, nullable = false)
 	private Integer id;
 

@@ -61,4 +61,9 @@ public class EnderecoServiceImpl implements EnderecoService {
         return enderecoRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
+    @Override
+    public EnderecoModel findByCidadeAndEstadoAndPais(String cidade, String estado, String pais) {
+        return enderecoRepository.findByCidadeIgnoreCaseAndEstadoIgnoreCaseAndPaisIgnoreCase(cidade, estado, pais).orElse(null);
+    }
+
 }

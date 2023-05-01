@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class FaixaSalarialModel extends Auditable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_faixa_salarial", unique = true, nullable = false)
     private Integer id;
 

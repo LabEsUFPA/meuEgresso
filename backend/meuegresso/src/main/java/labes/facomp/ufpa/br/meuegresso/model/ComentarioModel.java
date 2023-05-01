@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 public class ComentarioModel extends Auditable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_comentario", unique = true, nullable = false)
     private Integer id;
 
