@@ -2,7 +2,6 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso.impl;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
@@ -29,16 +28,10 @@ public class EgressoServiceImpl implements EgressoService {
         return egressoRepository.save(egresso);
     }
 
-
-    
-
     @Override
     public List<EgressoModel> findAll() {
         return egressoRepository.findAll();
     }
-
-
-
 
     @Override
     public EgressoModel findByUsuarioId(Integer idUsuario) {
@@ -61,7 +54,6 @@ public class EgressoServiceImpl implements EgressoService {
         return null;
     }
 
-
     @Override
     public boolean deleteById(Integer id) {
         if (egressoRepository.existsById(id)) {
@@ -72,19 +64,18 @@ public class EgressoServiceImpl implements EgressoService {
 
     }
 
-
     @Override
-    public ResponseEntity<String> deletarEgresso(EgressoModel egresso) {
+    public boolean deletarEgresso(EgressoModel egresso) {
         if (egressoRepository.existsById(egresso.getId())) {
             egressoRepository.deleteById(egresso.getId());
-            return ResponseEntity.ok("Egresso deletado");
+            return true;
         } else {
-            return ResponseEntity.ok("Egresso nao encontrado");
+            return false;
         }
     }
 
     @Override
-    public Boolean existsById(Integer id) {
+    public boolean existsById(Integer id) {
         return egressoRepository.existsById(id);
     }
 

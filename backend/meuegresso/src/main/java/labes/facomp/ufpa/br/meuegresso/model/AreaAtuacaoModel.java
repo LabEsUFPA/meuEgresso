@@ -27,19 +27,19 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false, exclude = "egressos")
 public class AreaAtuacaoModel extends Auditable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id_area_atuacao", unique = true, nullable = false)
-    private Integer id;
+        @Id
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        @Column(name = "id_area_atuacao", unique = true, nullable = false)
+        private Integer id;
 
-    @Column(name = "nome_area_atuacao", unique = true, nullable = false, length = 60)
-    private String nome;
+        @Column(name = "nome_area_atuacao", unique = true, nullable = false, length = 60)
+        private String nome;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "egresso_area_atuacao", joinColumns = {
-            @JoinColumn(name = "id_area_atuacao") }, inverseJoinColumns = {
-                    @JoinColumn(name = "id_egresso") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-                            "id_area_atuacao",
-                            "id_egresso" }))
-    private Set<EgressoModel> egressos;
+        @ManyToMany(fetch = FetchType.LAZY)
+        @JoinTable(name = "egresso_area_atuacao", joinColumns = {
+                        @JoinColumn(name = "id_area_atuacao") }, inverseJoinColumns = {
+                                        @JoinColumn(name = "id_egresso") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+                                                        "id_area_atuacao",
+                                                        "id_egresso" }))
+        private Set<EgressoModel> egressos;
 }

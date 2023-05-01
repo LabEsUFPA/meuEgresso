@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.model;
 
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,17 +28,17 @@ import lombok.NoArgsConstructor;
 public class EmpresaModel extends Auditable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_empresa", unique = true, nullable = false)
     private Integer id;
 
     @Column(name = "nome_empresa", unique = false, nullable = false, length = 130)
     private String nome;
 
-    @ManyToMany(mappedBy = "empresas", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "empresas", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Set<SetorAtuacaoModel> setorAtuacoes;
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "endereco_empresa", unique = false, nullable = true)
-    private EnderecoModel enderecoModel;
+    private EnderecoModel endereco;
 }

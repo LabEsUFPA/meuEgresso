@@ -90,7 +90,7 @@ public class AnuncioController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO) {
+	public String cadastrarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO, JwtAuthenticationToken token) {
 		AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
 		anuncioService.save(anuncioModel);
 		return ResponseType.SUCESS_SAVE.getMessage();

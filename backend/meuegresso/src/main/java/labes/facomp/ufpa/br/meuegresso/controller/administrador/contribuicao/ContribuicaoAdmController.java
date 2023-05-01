@@ -39,7 +39,7 @@ public class ContribuicaoAdmController {
 	 * Endpoint responsavel por atualizar a contribuições do egresso.
 	 *
 	 * @param contribuicaoDTO Estrutura de dados contendo as informações necessárias
-	 *                    para atualizar a contribuicao.
+	 *                        para atualizar a contribuicao.
 	 * @return Mensagem de confirmacao.
 	 * @author Alfredo Gabriel.
 	 * @throws InvalidRequestException
@@ -48,7 +48,8 @@ public class ContribuicaoAdmController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
-	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO) throws InvalidRequestException {
+	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO)
+			throws InvalidRequestException {
 		ContribuicaoModel contribuicaoModel = mapper.map(contribuicaoDTO, ContribuicaoModel.class);
 		contribuicaoService.update(contribuicaoModel);
 		return ResponseType.SUCESS_UPDATE.getMessage();

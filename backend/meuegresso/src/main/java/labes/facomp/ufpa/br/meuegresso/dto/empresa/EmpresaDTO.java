@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.empresa;
 
+import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,4 +25,8 @@ public class EmpresaDTO {
     private String nome;
 
     private String setorAtuacao;
+
+    private Integer faixaSalarialId;
+
+    private EnderecoDTO endereco;
 }

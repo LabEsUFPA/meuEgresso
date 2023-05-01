@@ -86,7 +86,6 @@ public class EgressoRepositoryTest {
                 .nascimento(LocalDate.parse("1999-10-20"))
                 .genero(genero)
                 .matricula("202003940011")
-                .pcd(true)
                 .interesseEmPos(true)
                 .lattes("null")
                 .linkedin("null")
@@ -101,7 +100,7 @@ public class EgressoRepositoryTest {
          * depoimentoModel = depoimentoRepository.save(depoimentoModel);
          * Set<DepoimentoModel> depoimentos = new HashSet<>();
          * depoimentos.add(depoimentoModel);
-         * 
+         *
          * egressoModel.setDepoimentos(depoimentos);
          */
         /*
@@ -131,7 +130,7 @@ public class EgressoRepositoryTest {
     /*
      * @Test
      * public void testSave() {
-     * 
+     *
      * EgressoModel.builder()
      * .id(1)
      * .nascimento(LocalDate.parse("1999-10-20"))

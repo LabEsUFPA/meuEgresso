@@ -61,4 +61,9 @@ public class TitulacaoServiceImpl implements TitulacaoService {
         return titulacaoRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
+    @Override
+    public TitulacaoModel findByNome(String nome) {
+        return titulacaoRepository.findByNomeIgnoreCase(nome).orElse(null);
+    }
+
 }

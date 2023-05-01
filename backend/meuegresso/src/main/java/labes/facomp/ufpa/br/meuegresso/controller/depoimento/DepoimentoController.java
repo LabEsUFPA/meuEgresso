@@ -25,6 +25,7 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.depoimento.DepoimentoService;
 import lombok.RequiredArgsConstructor;
@@ -90,8 +91,9 @@ public class DepoimentoController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarDepoimento(@RequestBody @Valid DepoimentoDTO depoimentoDTO) {
+	public String cadastrarDepoimento(@RequestBody @Valid DepoimentoDTO depoimentoDTO, JwtAuthenticationToken token) {
 		DepoimentoModel depoimentoModel = mapper.map(depoimentoDTO, DepoimentoModel.class);
+		depoimentoModel.setEgresso(EgressoModel.builder().id(jwtService.getIdUsuario(token)).build());
 		depoimentoService.save(depoimentoModel);
 		return ResponseType.SUCESS_SAVE.getMessage();
 	}

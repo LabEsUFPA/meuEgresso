@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,8 +48,6 @@ public class EgressoTitulacaoServiceTest {
     private static final EgressoTitulacaoModelId ID = new EgressoTitulacaoModelId();
     private static final EgressoModel EGRESSO = new EgressoModel();
     private static final TitulacaoModel COLACAO = new TitulacaoModel();
-    private static final LocalDate DATA_INGRESSO = LocalDate.parse("2016-06-06");
-    private static final LocalDate DATA_CONCLUSAO = LocalDate.parse("2020-06-06");
     private static final EmpresaModel EMPRESA = new EmpresaModel();
     private static final CursoModel CURSO = new CursoModel();
 
@@ -81,8 +78,6 @@ public class EgressoTitulacaoServiceTest {
         assertEquals(ID, response.getId());
         assertEquals(EGRESSO, response.getEgresso());
         assertEquals(COLACAO, response.getTitulacao());
-        assertEquals(DATA_INGRESSO, response.getIngresso());
-        assertEquals(DATA_CONCLUSAO, response.getConclusao());
         assertEquals(EMPRESA, response.getEmpresa());
         assertEquals(CURSO, response.getCurso());
     }
@@ -179,8 +174,7 @@ public class EgressoTitulacaoServiceTest {
      * @return <code>EgressoTitulacaoTeste</code> object
      */
     private EgressoTitulacaoModel getMockEgressoTitulacao() {
-        EgressoTitulacaoModel EgressoTitulacaoTest = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, DATA_INGRESSO,
-                DATA_CONCLUSAO, EMPRESA, CURSO);
+        EgressoTitulacaoModel EgressoTitulacaoTest = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, EMPRESA, CURSO);
 
         return EgressoTitulacaoTest;
     }
@@ -197,10 +191,8 @@ public class EgressoTitulacaoServiceTest {
      */
     private List<EgressoTitulacaoModel> getMockEgressoTitulacaoLista() {
         List<EgressoTitulacaoModel> EgressoTitulacaoLista = new ArrayList<>();
-        EgressoTitulacaoModel EgressoTitulacaoTest = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, DATA_INGRESSO,
-                DATA_CONCLUSAO, EMPRESA, CURSO);
-        EgressoTitulacaoModel EgressoTitulacaoTest2 = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, DATA_INGRESSO,
-                DATA_CONCLUSAO, EMPRESA, CURSO);
+        EgressoTitulacaoModel EgressoTitulacaoTest = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, EMPRESA, CURSO);
+        EgressoTitulacaoModel EgressoTitulacaoTest2 = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, EMPRESA, CURSO);
 
         EgressoTitulacaoLista.add(EgressoTitulacaoTest);
         EgressoTitulacaoLista.add(EgressoTitulacaoTest2);

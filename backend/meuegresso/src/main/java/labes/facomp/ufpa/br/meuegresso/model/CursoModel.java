@@ -13,15 +13,15 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "curso")
 @EqualsAndHashCode(callSuper = false)
-@Builder
 public class CursoModel extends Auditable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_curso", unique = true, nullable = false)
     private Integer id;
 

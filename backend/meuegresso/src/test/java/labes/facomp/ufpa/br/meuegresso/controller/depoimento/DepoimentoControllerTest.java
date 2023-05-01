@@ -157,7 +157,6 @@ class DepoimentoControllerTest {
 
                 depoimentoDTO = DepoimentoDTO.builder()
                                 .descricao(DESCRICAO)
-                                .egressoId(egressoModel.getId())
                                 .build();
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/depoimento")
@@ -184,7 +183,7 @@ class DepoimentoControllerTest {
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
-                                
+
                 depoimentoDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
                                 DepoimentoDTO.class);
                 assertEquals(DESCRICAO, depoimentoDTO.getDescricao());

@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 
+ *
  *
  * @author João Paulo
  * @since 16/04/2023
@@ -22,5 +22,4 @@ public class DepoimentoDTO {
 
     private String descricao;
 
-    private Integer egressoId;
 }

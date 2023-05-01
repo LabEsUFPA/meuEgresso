@@ -3,7 +3,6 @@ package labes.facomp.ufpa.br.meuegresso.repository.egresso;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -41,8 +40,6 @@ public class EgressoTitulacaoRepositoryTest {
         testarEgressoTitulacao.setId(new EgressoTitulacaoModelId(1, 1));
         testarEgressoTitulacao.setEgresso(new EgressoModel());
         testarEgressoTitulacao.setTitulacao(new TitulacaoModel(1, "Graduacao"));
-        testarEgressoTitulacao.setIngresso(LocalDate.parse("2020-03-01"));
-        testarEgressoTitulacao.setConclusao(LocalDate.parse("2025-03-01"));
         testarEgressoTitulacao.setEmpresa(EmpresaModel.builder().id(1).nome("El Cabis").build());
         testarEgressoTitulacao.setCurso(new CursoModel(1, "Computacao"));
 
