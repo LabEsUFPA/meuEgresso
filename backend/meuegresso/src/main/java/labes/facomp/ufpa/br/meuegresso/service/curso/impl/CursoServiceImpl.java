@@ -61,4 +61,9 @@ public class CursoServiceImpl implements CursoService {
         return cursoRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
+    @Override
+    public CursoModel findByNome(String nome) {
+        return cursoRepository.findByNomeIgnoreCase(nome).orElse(null);
+    }
+
 }

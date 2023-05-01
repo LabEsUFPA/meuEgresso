@@ -1,5 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,19 +22,30 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.PalestraModel;
+import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.contribuicao.ContribuicaoService;
+import labes.facomp.ufpa.br.meuegresso.service.curso.CursoService;
 import labes.facomp.ufpa.br.meuegresso.service.depoimento.DepoimentoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoEmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
+import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.palestra.PalestraService;
+import labes.facomp.ufpa.br.meuegresso.service.setoratuacao.SetorAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -51,9 +65,12 @@ public class EgressoController {
     private final UsuarioService usuarioService;
     private final DepoimentoService depoimentoService;
     private final PalestraService palestraService;
-    private final EgressoTitulacaoService egressoTitulacaoService;
-    private final EgressoEmpresaService egressoEmpresaService;
     private final ContribuicaoService contribuicaoService;
+    private final EmpresaService empresaService;
+    private final SetorAtuacaoService setorAtuacaoService;
+    private final EgressoEmpresaService egressoEmpresaService;
+    private final CursoService cursoService;
+    private final EgressoTitulacaoService egressoTitulacaoService;
 
     private final ModelMapper mapper;
 
@@ -89,11 +106,39 @@ public class EgressoController {
         palestraService.save(palestra);
         depoimento.setEgresso(egresso);
         depoimentoService.save(depoimento);
-
         contribuicao.setEgresso(egresso);
         contribuicaoService.save(contribuicao);
-        System.out.println("aaaaaa");
+        EmpresaDTO empresaDTO = egressoCadastroDTO.getEmpresa();
+        SetorAtuacaoModel setorAtuacao = setorAtuacaoService.findByNome(empresaDTO.getSetorAtuacao());
+        if (setorAtuacao == null) {
+            setorAtuacao = setorAtuacaoService
+                    .save(SetorAtuacaoModel.builder().nome(empresaDTO.getSetorAtuacao()).build());
+        }
+        TitulacaoEgressoDTO titulacaoEgressoDTO = egressoCadastroDTO.getTitulacao();
+        CursoModel curso = cursoService.findByNome(titulacaoEgressoDTO.getCurso());
+        if (curso == null) {
+            curso = CursoModel.builder().nome(titulacaoEgressoDTO.getCurso()).build();
+            curso = cursoService.save(curso);
+        }
+        EmpresaModel instituicao = empresaService.findByNome(titulacaoEgressoDTO.getInstituicao());
 
+        if (instituicao == null) {
+            instituicao = EmpresaModel.builder().nome(titulacaoEgressoDTO.getInstituicao()).build();
+            instituicao = empresaService.save(instituicao);
+        }
+        EgressoTitulacaoModel egressoTitulacao = EgressoTitulacaoModel.builder().empresa(instituicao).egresso(egresso)
+                .curso(curso).build();
+        egressoTitulacaoService.save(egressoTitulacao);
+
+        EmpresaModel empresa = empresaService.findByNome(empresaDTO.getNome());
+        if (empresa == null) {
+            empresa = mapper.map(empresaDTO, EmpresaModel.class);
+            empresa.setSetorAtuacoes(new HashSet<>(Set.of(setorAtuacao)));
+            empresa = empresaService.save(empresa);
+        }
+        EgressoEmpresaModel egressoEmpresaModel = EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
+                .faixaSalarial(FaixaSalarialModel.builder().id(empresaDTO.getFaixaSalarialId()).build()).build();
+        egressoEmpresaService.save(egressoEmpresaModel);
         return ResponseType.SUCESS_SAVE.getMessage();
     }
 

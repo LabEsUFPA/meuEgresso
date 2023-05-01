@@ -13,11 +13,13 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "empresa")
@@ -37,5 +39,5 @@ public class EmpresaModel extends Auditable {
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "endereco_empresa", unique = false, nullable = true)
-    private EnderecoModel enderecoModel;
+    private EnderecoModel endereco;
 }
