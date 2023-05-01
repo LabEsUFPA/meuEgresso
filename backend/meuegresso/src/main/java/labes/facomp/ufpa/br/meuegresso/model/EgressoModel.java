@@ -75,7 +75,7 @@ public class EgressoModel extends Auditable {
                     "id_cota" }))
     private Set<CotaModel> cotas;
 
-    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
+    @OneToOne(cascade = { CascadeType.MERGE })
     @JoinColumn(name = "usuario_id", unique = true, nullable = true)
     private UsuarioModel usuario;
 
