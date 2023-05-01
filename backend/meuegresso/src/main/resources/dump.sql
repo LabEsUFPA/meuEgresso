@@ -153,7 +153,6 @@ CREATE TABLE IF NOT EXISTS public.egresso (
     linkedin_egresso character varying(255),
     matricula_egresso character varying(12),
     nascimento_egresso date NOT NULL,
-    pcd_egresso boolean,
     pos_graducao_egresso boolean,
     remuneracao_bolsa_egresso double precision,
     created_by integer,
@@ -908,13 +907,7 @@ ADD CONSTRAINT uk_rvnwm2n5juoh0aj3qnssh52nm UNIQUE (nome_titulacao);
 
 ALTER TABLE ONLY public.egresso_valido
 ADD CONSTRAINT uk_snrp717wd5d36lg78t56wefwt UNIQUE (email_egresso_valido);
---
--- TOC entry 3369 (class 2606 OID 36389)
--- Name: egresso uk_tlc46fdlkmcqyqi95xif18idc; Type: CONSTRAINT; Schema: public; Owner: -
---
 
-ALTER TABLE ONLY public.egresso
-ADD CONSTRAINT uk_tlc46fdlkmcqyqi95xif18idc UNIQUE (pos_graducao_egresso);
 --
 -- TOC entry 3429 (class 2606 OID 36371)
 -- Name: usuario_grupo usuario_grupo_pkey; Type: CONSTRAINT; Schema: public; Owner: -

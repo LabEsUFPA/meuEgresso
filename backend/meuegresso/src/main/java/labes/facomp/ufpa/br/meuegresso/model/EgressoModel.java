@@ -62,7 +62,7 @@ public class EgressoModel extends Auditable {
         @Column(name = "linkedin_egresso", unique = true, nullable = true)
         private String linkedin;
 
-        @Column(name = "pos_graducao_egresso", unique = true, nullable = true)
+        @Column(name = "pos_graducao_egresso", unique = false, nullable = true)
         private Boolean posGraduacao = false;
 
         @ManyToMany(fetch = FetchType.LAZY)
