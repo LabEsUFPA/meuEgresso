@@ -30,7 +30,7 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class })
-public class CotaRepositoryTest {
+class CotaRepositoryTest {
 
     @Autowired
     CotaRepository cotaRepository;
@@ -45,7 +45,7 @@ public class CotaRepositoryTest {
 
     @Test
     @Order(1)
-    public void testSave() {
+    void testSave() {
 
         CotaModel response = cotaRepository.save(getMockCota());
         assertNotNull(response);
@@ -54,7 +54,7 @@ public class CotaRepositoryTest {
 
     @Test
     @Order(2)
-    public void testFindAll() {
+    void testFindAll() {
 
         cotaRepository.save(getMockCota());
         cotaRepository.save(getMockCota2());
