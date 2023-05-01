@@ -32,7 +32,7 @@ import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 
 /**
- * classe que implementa os testes da GeneroService
+ * Classe que implementa os testes da GeneroService
  * 
  * @author Pedro Inácio
  * @since 27/04/2023
@@ -42,7 +42,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class GeneroServiceTest {
+class GeneroServiceTest {
 
     private static final Integer ID = 1;
     private static final Integer ID2 = 2;
@@ -55,7 +55,7 @@ public class GeneroServiceTest {
     private GeneroService service;
 
     @MockBean
-    private GeneroRepository repository;
+    private GeneroRepository generoRepository;
         
     /**
      * Método para criar um genero para uso nos testes.
@@ -76,7 +76,7 @@ public class GeneroServiceTest {
 
     /**
      * Teste da função deleteById() do atributo de "gênero", que deleta
-     * um gênero cadastrados a partir de seu ID
+     * um gênero cadastrado a partir de seu ID
      * 
      * @author Eude Monteiro
      * @since 29/04/2023     
@@ -112,7 +112,7 @@ public class GeneroServiceTest {
         generoLista.add(generoTest);
         generoLista.add(generoTest2);
 
-        given(repository.findAll()).willReturn(generoLista);
+        given(generoRepository.findAll()).willReturn(generoLista);
 
         List<GeneroModel> response = service.findAll();
 
@@ -120,9 +120,7 @@ public class GeneroServiceTest {
         assertEquals(generoTest, response.get(0));
         assertEquals(generoTest2, response.get(1));
     }
-    
-
-    
+   
     /**
      * Teste da função findById() do atributo de "gênero", 
      * que encontra um gênero pelo seu ID
@@ -132,11 +130,12 @@ public class GeneroServiceTest {
      */
     @Test
     void testFindById() {
+        
         GeneroModel generoTest = GeneroModel.builder()
                 .id(ID)
                 .nome(NOME).build();
 
-        given(repository.findById(ID)).willReturn(Optional.of(generoTest));
+        given(generoRepository.findById(ID)).willReturn(Optional.of(generoTest));
 
         GeneroModel response = service.findById(ID);
 
@@ -144,6 +143,7 @@ public class GeneroServiceTest {
         assertEquals(ID, response.getId());
         assertEquals(NOME, response.getNome());
     }
+
 
     /**
      * Teste da função de update do atributo de "gênero",
@@ -159,17 +159,17 @@ public class GeneroServiceTest {
             .id(ID)
             .nome(NOME).build();
 
-        given(repository.save(generoTest)).willReturn(generoTest);
+        given(generoRepository.save(generoTest)).willReturn(generoTest);
         
         GeneroModel updatedGenero = service.update(generoTest);
 
         assertEquals(generoTest, updatedGenero);
-        verify(repository, times(1)).save(generoTest);
+        verify(generoRepository, times(1)).save(generoTest);
     }
     
     
     /**
-     * Método preenche um mock de um GeneroModel para retorno dos testes
+     * Método que preenche um mock de um GeneroModel para retorno dos testes
      * 
      * @author Eude Monteiro
      * @since 29/04/2023
@@ -189,6 +189,6 @@ public class GeneroServiceTest {
      */
     @AfterAll
     public void tearDown() {
-        repository.deleteAll();
+        generoRepository.deleteAll();
     }
 }
