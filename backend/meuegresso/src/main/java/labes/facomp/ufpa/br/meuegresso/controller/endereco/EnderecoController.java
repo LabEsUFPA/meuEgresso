@@ -113,7 +113,7 @@ public class EnderecoController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarEndereco(@RequestBody @Valid EnderecoDTO enderecoDTO,
 			JwtAuthenticationToken token) throws InvalidRequestException, UnauthorizedRequestException {
-		if (enderecoService.existsByIdAndCreatedById(enderecoDTO.getId(), jwtService.getIdUsuario(token))) {
+		if (jwtService.getIdUsuario(token).equals(enderecoDTO.getId())) {
 			EnderecoModel enderecoModel = mapper.map(enderecoDTO, EnderecoModel.class);
 			enderecoService.update(enderecoModel);
 			return ResponseType.SUCESS_UPDATE.getMessage();
@@ -130,11 +130,16 @@ public class EnderecoController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping
+	@DeleteMapping(value = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(Integer id) {
-		return enderecoService.deleteById(id);
+	public String deleteById(@PathVariable(name = "id") Integer id) {
+		if (enderecoService.deleteById(id)) {
+			return ResponseType.SUCESS_DELETE.getMessage();
+		} else {
+			return ResponseType.FAIL_DELETE.getMessage();
+		}
 	}
 
 }

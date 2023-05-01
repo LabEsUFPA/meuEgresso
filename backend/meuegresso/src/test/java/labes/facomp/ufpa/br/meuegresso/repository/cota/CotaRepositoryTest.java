@@ -78,16 +78,4 @@ public class CotaRepositoryTest {
         CotaModel cotaTest2 = new CotaModel(ID2, NOME2, null);
         return cotaTest2;
     }
-
-    private List<CotaModel> getMockCotaLista() {
-        List<CotaModel> listaCota = new ArrayList<>();
-
-        CotaModel cota1 = new CotaModel(ID, NOME, null);
-        CotaModel cota2 = new CotaModel(ID2, NOME2, null);
-
-        listaCota.add(cota1);
-        listaCota.add(cota2);
-
-        return listaCota;
-    }
 }

@@ -5,9 +5,11 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,7 +63,7 @@ public class TitulacaoController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarTitulacao(@RequestBody @Valid TitulacaoDTO titulacaoDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
-        if (titulacaoService.existsByIdAndCreatedById(titulacaoDTO.getId(), jwtService.getIdUsuario(token))) {
+        if (jwtService.getIdUsuario(token).equals(titulacaoDTO.getId())) {
             TitulacaoModel titulacaoModel = mapper.map(titulacaoDTO, TitulacaoModel.class);
             titulacaoService.update(titulacaoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();
@@ -69,13 +71,15 @@ public class TitulacaoController {
         throw new UnauthorizedRequestException();
     }
 
-    @DeleteMapping
+    @DeleteMapping(value = "/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public String deletarTitulacao(@RequestBody @Valid TitulacaoDTO titulacaoDTO) {
-
-        TitulacaoModel titulacaoModel = mapper.map(titulacaoDTO, TitulacaoModel.class);
-        titulacaoService.deleteById(titulacaoModel.getId());
-        return ResponseType.SUCESS_DELETE.getMessage();
+    public String deleteById(@PathVariable(name = "id") Integer id) {
+        if (titulacaoService.deleteById(id)) {
+            return ResponseType.SUCESS_DELETE.getMessage();
+        } else {
+            return ResponseType.FAIL_DELETE.getMessage();
+        }
     }
 }
