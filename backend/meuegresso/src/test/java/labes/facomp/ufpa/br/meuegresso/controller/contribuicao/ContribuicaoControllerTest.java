@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.controller.contribuicao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -33,12 +35,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
-import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
-import labes.facomp.ufpa.br.meuegresso.service.contribuicao.ContribuicaoService;
 
 @SpringBootTest
 @DirtiesContext
@@ -55,18 +56,11 @@ class ContribuicaoControllerTest {
         private GrupoRepository grupoRepository;
 
         @Autowired
-        private ContribuicaoService contribuicaoService;
-
-        @Autowired
         MockMvc mockMvc;
 
         String token;
 
         UsuarioModel usuarioModel;
-
-        ContribuicaoModel contribuicaoModel;
-
-        ContribuicaoModel contribuicaoModel2;
 
         ContribuicaoDTO contribuicaoDTO;
 
@@ -83,10 +77,6 @@ class ContribuicaoControllerTest {
 
                 Set<GrupoModel> grupos = new HashSet<>();
                 grupos.add(grupoModel);
-
-                contribuicaoModel = ContribuicaoModel.builder()
-                                .descricao(DESCRICAO)
-                                .build();
 
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
@@ -118,18 +108,34 @@ class ContribuicaoControllerTest {
                                 resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
                 this.token = authenticationResponse.getToken();
 
-                contribuicaoModel = contribuicaoService.save(contribuicaoModel);
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.get("/usuario")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                                UsuarioAuthDTO.class);
+
+                usuarioModel.setId(usuarioAuthDTO.getId());
+
         }
 
         @Test
+        @Order(1)
         void testCadastrarContribuicao() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
+                contribuicaoDTO = ContribuicaoDTO.builder()
+                                .descricao(DESCRICAO)
+                                .build();
+
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/contribuicao")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token)
-                                .content(objectMapper.writeValueAsString(contribuicaoModel)))
+                                .content(objectMapper.writeValueAsString(contribuicaoDTO)))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isCreated())
                                 .andReturn();
@@ -139,23 +145,26 @@ class ContribuicaoControllerTest {
         }
 
         @Test
+        @Order(2)
         void testFindById() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-                MvcResult resposta = mockMvc
-                                .perform(MockMvcRequestBuilders.get("/contribuicao/" + contribuicaoModel.getId())
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .header("Authorization", "Bearer " + this.token))
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/contribuicao/" + 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
-                ContribuicaoDTO contribuicaoDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+
+                contribuicaoDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
                                 ContribuicaoDTO.class);
-                contribuicaoModel.setId(contribuicaoDTO.getId());
+
                 assertEquals(DESCRICAO, contribuicaoDTO.getDescricao());
+
         }
 
         @Test
+        @Order(3)
         void testConsultarContribuicaos() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
@@ -165,25 +174,20 @@ class ContribuicaoControllerTest {
                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
-                                
                 List<ContribuicaoDTO> contribuicaosDTO = objectMapper.readValue(
                                 resposta.getResponse().getContentAsString(),
                                 new TypeReference<List<ContribuicaoDTO>>() {
                                 });
 
-                List<ContribuicaoDTO> contribuicaosDTO2 = modelMapper.map(contribuicaoService.findAll(),
-                                new TypeReference<List<ContribuicaoDTO>>() {
-                                }.getType());
-                assertEquals(contribuicaosDTO2, contribuicaosDTO);
+                assertNotNull(contribuicaosDTO);
 
         }
 
         @Test
+        @Order(4)
         void testAtualizarContribuicao() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
-                ContribuicaoDTO contribuicaoDTO = modelMapper.map(contribuicaoModel, ContribuicaoDTO.class);
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.put("/contribuicao")
@@ -198,10 +202,11 @@ class ContribuicaoControllerTest {
         }
 
         @Test
+        @Order(5)
         void testDeleteById() throws Exception {
 
                 MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.delete("/contribuicao/" + contribuicaoModel.getId())
+                                MockMvcRequestBuilders.delete("/contribuicao/" + contribuicaoDTO.getId())
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())

@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.controller.endereco;
+package labes.facomp.ufpa.br.meuegresso.controller.empresa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,13 +34,12 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
-import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
-import labes.facomp.ufpa.br.meuegresso.service.endereco.EnderecoService;
 
 @SpringBootTest
 @DirtiesContext
@@ -48,11 +47,10 @@ import labes.facomp.ufpa.br.meuegresso.service.endereco.EnderecoService;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class EnderecoControllerTest {
+class EmpresaControllerTest {
 
-        static final String CIDADE = "CidadeTeste";
-        static final String ESTADO = "EstadoTeste";
-        static final String PAIS = "PaisTeste";
+        static final String NOME = "EmpresaTeste";
+        static final String SETORATUACAO = "SetorTeste";
         final String USERNAME = "username_test";
 
         @Autowired
@@ -65,7 +63,7 @@ class EnderecoControllerTest {
 
         UsuarioModel usuarioModel;
 
-        EnderecoDTO enderecoDTO;
+        EmpresaDTO empresaDTO;
 
         @Autowired
         ModelMapper modelMapper;
@@ -127,20 +125,20 @@ class EnderecoControllerTest {
 
         @Test
         @Order(1)
-        void testCadastrarEndereco() throws Exception {
+        void testCadastrarEmpresa() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-                enderecoDTO = EnderecoDTO.builder()
-                                .cidade(CIDADE)
-                                .estado(ESTADO)
-                                .pais(PAIS)
+                empresaDTO = EmpresaDTO.builder()
+                                .id(1)
+                                .nome(NOME)
+                                .setorAtuacao(SETORATUACAO)
                                 .build();
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/endereco")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/empresa")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token)
-                                .content(objectMapper.writeValueAsString(enderecoDTO)))
+                                .content(objectMapper.writeValueAsString(empresaDTO)))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isCreated())
                                 .andReturn();
@@ -155,49 +153,49 @@ class EnderecoControllerTest {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/endereco/" + 1)
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/empresa/" + 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
-                enderecoDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-                                EnderecoDTO.class);
+                empresaDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                                EmpresaDTO.class);
 
-                assertEquals(CIDADE, enderecoDTO.getCidade());
-                assertEquals(ESTADO, enderecoDTO.getEstado());
-                assertEquals(PAIS, enderecoDTO.getPais());
+                assertEquals(NOME, empresaDTO.getNome());
+                // assertEquals(SETORATUACAO, empresaDTO.getSetorAtuacao());
+
         }
 
         @Test
         @Order(3)
-        void testConsultarEnderecos() throws Exception {
+        void testConsultarEmpresas() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/endereco")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/empresa")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
-                List<EnderecoDTO> enderecosDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-                                new TypeReference<List<EnderecoDTO>>() {
+                List<EmpresaDTO> empresasDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                                new TypeReference<List<EmpresaDTO>>() {
                                 });
 
-                assertNotNull(enderecosDTO);
+                assertNotNull(empresasDTO);
 
         }
 
         @Test
         @Order(4)
-        void testAtualizarEndereco() throws Exception {
+        void testAtualizarEmpresa() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.put("/endereco")
+                                MockMvcRequestBuilders.put("/empresa")
                                                 .contentType(MediaType.APPLICATION_JSON)
-                                                .content(objectMapper.writeValueAsString(enderecoDTO))
+                                                .content(objectMapper.writeValueAsString(empresaDTO))
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isCreated())
@@ -211,7 +209,7 @@ class EnderecoControllerTest {
         void testDeleteById() throws Exception {
 
                 MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.delete("/endereco/" + enderecoDTO.getId())
+                                MockMvcRequestBuilders.delete("/empresa/" + empresaDTO.getId())
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())

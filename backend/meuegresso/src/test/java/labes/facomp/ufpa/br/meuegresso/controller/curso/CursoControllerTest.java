@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.controller.curso;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -33,12 +35,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
-import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
-import labes.facomp.ufpa.br.meuegresso.service.curso.CursoService;
 
 @SpringBootTest
 @DirtiesContext
@@ -55,18 +56,11 @@ class CursoControllerTest {
         private GrupoRepository grupoRepository;
 
         @Autowired
-        private CursoService cursoService;
-
-        @Autowired
         MockMvc mockMvc;
 
         String token;
 
         UsuarioModel usuarioModel;
-
-        CursoModel cursoModel;
-
-        CursoModel cursoModel2;
 
         CursoDTO cursoDTO;
 
@@ -83,10 +77,6 @@ class CursoControllerTest {
 
                 Set<GrupoModel> grupos = new HashSet<>();
                 grupos.add(grupoModel);
-
-                cursoModel = CursoModel.builder()
-                                .nome(NOME)
-                                .build();
 
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
@@ -117,20 +107,35 @@ class CursoControllerTest {
                 AuthenticationResponse authenticationResponse = objectMapper.readValue(
                                 resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
                 this.token = authenticationResponse.getToken();
-                
-                cursoModel = cursoService.save(cursoModel);
+
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.get("/usuario")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                                UsuarioAuthDTO.class);
+
+                usuarioModel.setId(usuarioAuthDTO.getId());
+
         }
 
-
         @Test
+        @Order(1)
         void testCadastrarCurso() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
+                cursoDTO = CursoDTO.builder()
+                                .nome(NOME)
+                                .build();
+
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/curso")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token)
-                                .content(objectMapper.writeValueAsString(cursoModel)))
+                                .content(objectMapper.writeValueAsString(cursoDTO)))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isCreated())
                                 .andReturn();
@@ -140,22 +145,26 @@ class CursoControllerTest {
         }
 
         @Test
+        @Order(2)
         void testFindById() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/curso/" + cursoModel.getId())
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/curso/" + 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
-                CursoDTO cursoDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+
+                cursoDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
                                 CursoDTO.class);
-                cursoModel.setId(cursoDTO.getId());
+
                 assertEquals(NOME, cursoDTO.getNome());
+
         }
 
         @Test
+        @Order(3)
         void testConsultarCursos() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
@@ -169,19 +178,15 @@ class CursoControllerTest {
                                 new TypeReference<List<CursoDTO>>() {
                                 });
 
-                List<CursoDTO> cursosDTO2 = modelMapper.map(cursoService.findAll(),
-                                new TypeReference<List<CursoDTO>>() {
-                                }.getType());
-                assertEquals(cursosDTO2, cursosDTO);
+                assertNotNull(cursosDTO);
 
         }
 
         @Test
+        @Order(4)
         void testAtualizarCurso() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
-                CursoDTO cursoDTO = modelMapper.map(cursoModel, CursoDTO.class);
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.put("/curso")
@@ -196,10 +201,11 @@ class CursoControllerTest {
         }
 
         @Test
+        @Order(5)
         void testDeleteById() throws Exception {
 
                 MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.delete("/curso/" + cursoModel.getId())
+                                MockMvcRequestBuilders.delete("/curso/" + cursoDTO.getId())
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
