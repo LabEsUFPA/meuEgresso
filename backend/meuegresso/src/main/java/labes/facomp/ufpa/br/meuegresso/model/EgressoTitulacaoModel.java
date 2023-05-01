@@ -6,6 +6,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,10 +23,11 @@ import lombok.NoArgsConstructor;
 public class EgressoTitulacaoModel extends Auditable {
 
     @EmbeddedId
-    private EgressoTitulacaoModelId id;
+    @Builder.Default
+    private EgressoTitulacaoModelId id = new EgressoTitulacaoModelId();
 
     @MapsId(value = "egressoId")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     private EgressoModel egresso;
 
     @MapsId(value = "titulacaoId")

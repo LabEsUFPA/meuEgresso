@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.service.setoratuacao;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;

@@ -43,7 +43,7 @@ import lombok.NoArgsConstructor;
 public class UsuarioModel extends Auditable implements UserDetails {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_usuario", unique = true, nullable = false)
 	private Integer id;
 

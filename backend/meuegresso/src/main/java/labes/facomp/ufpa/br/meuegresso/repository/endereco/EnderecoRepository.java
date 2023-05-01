@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.repository.endereco;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
@@ -11,4 +12,6 @@ public interface EnderecoRepository extends CrudRepository<EnderecoModel, Intege
     List<EnderecoModel> findAll();
 
     boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
+    Optional<EnderecoModel> findByCidadeIgnoreCaseAndEstadoIgnoreCaseAndPaisIgnoreCase(String cidade, String estado, String pais);
 }

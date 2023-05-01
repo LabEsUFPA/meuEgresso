@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.service.setoratuacao.impl;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 

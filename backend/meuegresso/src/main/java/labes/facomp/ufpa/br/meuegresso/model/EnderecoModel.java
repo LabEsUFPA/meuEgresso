@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class EnderecoModel extends Auditable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_endereco", unique = true, nullable = false)
     private Integer id;
 
