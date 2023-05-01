@@ -10,7 +10,13 @@ Para executar o projeto em modo de desenvolvimento, siga os passos abaixo:
 npm i
 ```
 
-2. Inicie o servidor de desenvolvimento:
+2. Copie o arquivo de ambiente
+
+```bash
+cp .env.example .env
+```
+
+3. Inicie o servidor de desenvolvimento:
 
 ```bash
 npm run dev

@@ -84,7 +84,6 @@ export namespace models {
     nascimento: string
     generoId: id
     matricula: string
-    pcd: boolean
     cotista: boolean
     bolsista: boolean
     interesseEmPos: boolean
@@ -93,11 +92,11 @@ export namespace models {
     posGraduacao: boolean
     cotas: Array<{
       id: id
-    }>
+    }> | null
     nome: string
     palestras?: {
       descricao?: string
-    }
+    } | null
     contribuicao: {
       descricao: string
     }
@@ -115,10 +114,10 @@ export namespace models {
         estado: string
         cidade: string
       }
-    }
+    } | null
     titulacao?: {
       instituicao?: string
       curso?: string
-    }
+    } | null
   }
 }

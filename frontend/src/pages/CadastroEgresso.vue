@@ -65,17 +65,10 @@
             />
 
             <CustomInput
-              class="mb-5"
               label="Curriculo Lattes"
               name="geral.lattes"
               icon-path="src/assets/lattesCinza.svg"
               img-icon
-            />
-
-            <CustomCheckbox
-              class="mb-5"
-              name="geral.pcd"
-              label="Pessoa com Deficiência"
             />
           </div>
         </template>
@@ -508,7 +501,7 @@ const cities = computed(() => {
 })
 
 async function handleSubmit (values: InferType<typeof schema>) {
-  const cotas: Array<{ id: number }> = []
+  let cotas: Array<{ id: number }> | null = []
 
   if (values.academico.cotista.tipos.escola) {
     cotas.push({
@@ -534,13 +527,36 @@ async function handleSubmit (values: InferType<typeof schema>) {
     })
   }
 
-  console.log(cotas)
+  if (cotas.length === 0) {
+    cotas = null
+  }
+
+  const empresa = values.carreira.area !== 'Desempregado'
+    ? {
+        faixaSalarialId: values.carreira.faixaSalarial ? parseInt(values.carreira.faixaSalarial) : null,
+        setorAtuacao: values.carreira.setor,
+        nome: values.carreira.empresa,
+        endereco: values.localizacao
+      }
+    : null
+
+  const titulacao = values.academico.posGrad.value
+    ? {
+        instituicao: values.academico.posGrad.local,
+        curso: values.academico.posGrad.curso
+      }
+    : null
+
+  const palestras = values.adicionais.palestras
+    ? {
+        descricao: values.adicionais.assuntosPalestras
+      }
+    : null
 
   const status = await $store.cadastrarEgresso({
     nascimento: values.geral.nascimento.toString(),
     generoId: parseInt(values.geral.genero),
     matricula: values.academico.matricula,
-    pcd: values.geral.pcd,
     cotista: Boolean(values.academico.cotista.value),
     bolsista: Boolean(values.academico.bolsista.value),
     interesseEmPos: Boolean(values.academico.desejaPos),
@@ -549,9 +565,7 @@ async function handleSubmit (values: InferType<typeof schema>) {
     posGraduacao: Boolean(values.academico.posGrad.value),
     cotas,
     nome: values.geral.nome,
-    palestras: {
-      descricao: values.adicionais.assuntosPalestras
-    },
+    palestras,
     contribuicao: {
       descricao: values.adicionais.contribuicoes
     },
@@ -559,16 +573,8 @@ async function handleSubmit (values: InferType<typeof schema>) {
       descricao: values.adicionais.experiencias
     },
     bolsaId: values.academico.bolsista.tipo ? parseInt(values.academico.bolsista.tipo) : null,
-    empresa: {
-      faixaSalarialId: values.carreira.faixaSalarial ? parseInt(values.carreira.faixaSalarial) : null,
-      setorAtuacao: values.carreira.setor,
-      nome: values.carreira.empresa,
-      endereco: values.localizacao
-    },
-    titulacao: {
-      instituicao: values.academico.posGrad.local,
-      curso: values.academico.posGrad.curso
-    }
+    empresa,
+    titulacao
   })
 
   if (status !== 201) {
