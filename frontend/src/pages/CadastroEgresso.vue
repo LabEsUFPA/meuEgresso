@@ -3,7 +3,7 @@
     <Form
       ref="form"
       @submit="handleSubmit"
-      @invalid-submit="handle"
+      @invalid-submit="handleFail"
       :validation-schema="schema"
     >
       <h1 class="text-cyan-800 text-2xl font-semibold">
@@ -352,7 +352,13 @@
           </div>
         </template>
       </FolderSection>
-      <div class="py-10 flex flex-row justify-center items-center">
+      <div class="py-10 flex flex-col justify-center items-center">
+        <InvalidInsert
+          :show-alert="camposFaltosos"
+          text="Campos inválidos ou faltando"
+          class="mb-3"
+        />
+
         <CustomButton
           color="emerald"
           type="submit"
@@ -418,6 +424,7 @@ import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
+import InvalidInsert from 'src/components/InvalidInsert.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
 import { ref, computed, watch, onMounted } from 'vue'
@@ -445,6 +452,7 @@ $store.fetchAll()
 
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
+const camposFaltosos = ref(false)
 
 const pais = ref('')
 const estado = ref('')
@@ -501,6 +509,7 @@ const cities = computed(() => {
 })
 
 async function handleSubmit (values: InferType<typeof schema>) {
+  camposFaltosos.value = false
   let cotas: Array<{ id: number }> | null = []
 
   if (values.academico.cotista.tipos.escola) {
@@ -531,6 +540,7 @@ async function handleSubmit (values: InferType<typeof schema>) {
     cotas = null
   }
 
+  console.log(values.carreira.area !== 'Desempregado')
   const empresa = values.carreira.area !== 'Desempregado'
     ? {
         faixaSalarialId: values.carreira.faixaSalarial ? parseInt(values.carreira.faixaSalarial) : null,
@@ -584,6 +594,11 @@ async function handleSubmit (values: InferType<typeof schema>) {
   }
 }
 
+function handleFail (e: any) {
+  console.log(e)
+  camposFaltosos.value = true
+}
+
 const schema = object().shape({
   geral: object({
     nome: string().required(),
@@ -591,8 +606,7 @@ const schema = object().shape({
     email: string().email().required(),
     genero: string().required(),
     linkedin: string(),
-    lattes: string(),
-    pcd: boolean().required()
+    lattes: string()
   }),
   localizacao: object({
     pais: string().required(),
@@ -600,7 +614,7 @@ const schema = object().shape({
     cidade: string().required()
   }),
   academico: object({
-    matricula: string().required(),
+    matricula: string().min(12).max(12).required(),
     tipoAluno: string(),
     cotista: object({
       value: boolean(),
@@ -672,8 +686,4 @@ onMounted(() => {
     }).join(' '))
   }
 })
-
-function handle (e: any) {
-  console.log(e)
-}
 </script>
