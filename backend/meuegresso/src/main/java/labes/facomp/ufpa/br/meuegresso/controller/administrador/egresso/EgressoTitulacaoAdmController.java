@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoColacaoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoTitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.DataNotDeletedException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoColacaoModelId;
-import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoColacaoService;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -33,33 +33,34 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/administrador/EgressoColacao")
-public class EgressoColacaoAdmController {
+@RequestMapping("/administrador/EgressoTitulacao")
+public class EgressoTitulacaoAdmController {
 
-	private final EgressoColacaoService egressoColacaoService;
+	private final EgressoTitulacaoService egressoTitulacaoService;
 
 	private final ModelMapper mapper;
 
 	/**
-     * Endpoint responsavel por buscar todas as cotas no banco.
-     *
-     * @param void
-     * @return {@link EgressoColacaoDTO} Retorna uma lista com todos as cotas.
-     * @author Bruno Eiki
-     * @since 21/04/2023
-     */
-    @GetMapping
-    @ResponseStatus(code = HttpStatus.OK)
-    public List<EgressoColacaoDTO> buscarEgressoColacaos() {
-        return mapper.map(egressoColacaoService.findAll(), new TypeToken<List<EgressoColacaoDTO>>() {
-        }.getType());
-    }
+	 * Endpoint responsavel por buscar todas as cotas no banco.
+	 *
+	 * @param void
+	 * @return {@link EgressoTitulacaoDTO} Retorna uma lista com todos as cotas.
+	 * @author Bruno Eiki
+	 * @since 21/04/2023
+	 */
+	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
+	public List<EgressoTitulacaoDTO> buscarEgressoTitulacaos() {
+		return mapper.map(egressoTitulacaoService.findAll(), new TypeToken<List<EgressoTitulacaoDTO>>() {
+		}.getType());
+	}
 
 	/**
-	 * Endpoint responsavel por atualizar a EgressoColacao do egressoColacao.
+	 * Endpoint responsavel por atualizar a EgressoTitulacao do EgressoTitulacao.
 	 *
-	 * @param EgressoColacaoDTO Estrutura de dados contendo as informações necessárias
-	 *                    para atualizar a EgressoColacao.
+	 * @param EgressoTitulacaoDTO Estrutura de dados contendo as informações
+	 *                            necessárias
+	 *                            para atualizar a EgressoTitulacao.
 	 * @return Mensagem de confirmacao.
 	 * @author Alfredo Gabriel.
 	 * @throws InvalidRequestException
@@ -68,16 +69,17 @@ public class EgressoColacaoAdmController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
-	public String atualizarEgressoColacao(@RequestBody @Valid EgressoColacaoDTO egressoColacaoDTO) throws InvalidRequestException {
-		EgressoColacaoModel egressoColacaoModel = mapper.map(egressoColacaoDTO, EgressoColacaoModel.class);
-		egressoColacaoService.update(egressoColacaoModel);
+	public String atualizarEgressoTitulacao(@RequestBody @Valid EgressoTitulacaoDTO egressoTitulacaoDTO)
+			throws InvalidRequestException {
+		EgressoTitulacaoModel egressoTitulacaoModel = mapper.map(egressoTitulacaoDTO, EgressoTitulacaoModel.class);
+		egressoTitulacaoService.update(egressoTitulacaoModel);
 		return ResponseType.SUCESS_UPDATE.getMessage();
 	}
 
 	/**
-	 * Endpoint responsavel por deletar a EgressoColacao do egressoColacao.
+	 * Endpoint responsavel por deletar a EgressoTitulacao do EgressoTitulacao.
 	 *
-	 * @param id Integer corresponde a Id de uma EgressoColacao.
+	 * @param id Integer corresponde a Id de uma EgressoTitulacao.
 	 * @return Mensagem de confirmacao.
 	 * @author Alfredo Gabriel
 	 * @throws DataNotDeletedException
@@ -86,8 +88,8 @@ public class EgressoColacaoAdmController {
 	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	public String deleteById(EgressoColacaoModelId egressoColacaoModelId) throws DataNotDeletedException {
-		if (egressoColacaoService.deleteById(egressoColacaoModelId)) {
+	public String deleteById(EgressoTitulacaoModelId egressoTitulacaoModelId) throws DataNotDeletedException {
+		if (egressoTitulacaoService.deleteById(egressoTitulacaoModelId)) {
 			return ResponseType.SUCESS_DELETE.getMessage();
 		}
 		throw new DataNotDeletedException();

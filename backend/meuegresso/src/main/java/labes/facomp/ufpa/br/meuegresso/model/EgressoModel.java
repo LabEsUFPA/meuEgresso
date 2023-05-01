@@ -11,11 +11,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.UniqueConstraint;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,20 +39,27 @@ public class EgressoModel extends Auditable {
     private Integer id;
 
     @Temporal(TemporalType.DATE)
-	  @Column(name = "nascimento_egresso", unique = false, nullable = false)
+    @Column(name = "nascimento_egresso", unique = false, nullable = false)
     private LocalDate nascimento;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genero_id", unique = false, nullable = false)
     private GeneroModel genero;
 
     @Column(name = "matricula_egresso", unique = true, nullable = true, length = 12)
-	  private String matricula;
+    private String matricula;
 
     @Builder.Default
-    @Column(name = "pcd_egresso", unique = false, nullable = false)
+    @Column(name = "pcd_egresso", unique = false, nullable = true)
     private Boolean pcd = false;
+
+    @Builder.Default
+    @Column(name = "cotista_egresso", unique = false, nullable = false)
+    private Boolean cotista = false;
+
+    @Builder.Default
+    @Column(name = "bolsista_egresso", unique = false, nullable = false)
+    private Boolean bolsista = false;
 
     @Builder.Default
     @Column(name = "interesse_em_pos_egresso", unique = false, nullable = false)
@@ -62,19 +71,25 @@ public class EgressoModel extends Auditable {
     @Column(name = "linkedin_egresso", unique = true, nullable = true)
     private String linkedin;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "endereco_id", unique = false, nullable = false)
-    private EnderecoModel endereco;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "cota_id", unique = false, nullable = false)
-    private CotaModel cota;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "egresso_cota", joinColumns = { @JoinColumn(name = "id_egresso") }, inverseJoinColumns = {
+            @JoinColumn(name = "id_cota") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+                    "id_egresso",
+                    "id_cota" }))
+    private Set<CotaModel> cotas;
 
     @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "usuario_id", unique = true, nullable = true)
     private UsuarioModel usuario;
 
-    @OneToMany(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
-    private Set<DepoimentoModel> depoimentos;
+    @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+    private DepoimentoModel depoimento;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tipo_bolsa_id", unique = false, nullable = true)
+    private TipoBolsaModel bolsa;
+
+    @Column(name = "remuneracao_bolsa_egresso", unique = false, nullable = true)
+    private Double remuneracaoBolsa;
 
 }

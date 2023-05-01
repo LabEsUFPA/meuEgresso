@@ -1,6 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,7 +29,7 @@ public class ComentarioModel extends Auditable {
     @Column(name = "descricao_comentario", unique = false, nullable = false)
     private String descricaoComentario;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "anuncio_id", unique = false, nullable = false)
     private AnuncioModel anuncio;
 }

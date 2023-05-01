@@ -38,7 +38,6 @@ public class EgressoEmpresaRepositoryTest {
     public void setUp() {
         testarEgressoEmpresa = new EgressoEmpresaModel();
         testarEgressoEmpresa.setId(new EgressoEmpresaModelId());
-        testarEgressoEmpresa.setAreaAtuacao("area");
         testarEgressoEmpresa.setEgresso(new EgressoModel());
         testarEgressoEmpresa.setEmpresa(new EmpresaModel());
         testarEgressoEmpresa.setFaixaSalarial(new FaixaSalarialModel());
@@ -58,7 +57,8 @@ public class EgressoEmpresaRepositoryTest {
      * .linkedin("https://linkedin.com/")
      * .build();
      *
-     * EgressoEmpresaModel response = egressoEmpresaRepository.save(testarEgressoEmpresa);
+     * EgressoEmpresaModel response =
+     * egressoEmpresaRepository.save(testarEgressoEmpresa);
      * assertNotNull(response);
      * }
      */
@@ -70,7 +70,7 @@ public class EgressoEmpresaRepositoryTest {
 
         assertNotNull(testar);
     }
-    
+
     @Test
     public void testExistsByIdAndCreatedById() {
 
