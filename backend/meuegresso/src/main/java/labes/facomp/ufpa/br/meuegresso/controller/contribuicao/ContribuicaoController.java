@@ -25,6 +25,7 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.contribuicao.ContribuicaoService;
 import lombok.RequiredArgsConstructor;
@@ -90,8 +91,10 @@ public class ContribuicaoController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO) {
+	public String cadastrarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO,
+			JwtAuthenticationToken token) {
 		ContribuicaoModel contribuicaoModel = mapper.map(contribuicaoDTO, ContribuicaoModel.class);
+		contribuicaoModel.setEgresso(EgressoModel.builder().id(jwtService.getIdUsuario(token)).build());
 		contribuicaoService.save(contribuicaoModel);
 		return ResponseType.SUCESS_SAVE.getMessage();
 	}

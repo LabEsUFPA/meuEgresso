@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -30,7 +32,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.anuncio.AnuncioRepository;
 
 /**
  * Class que implementa testes para o AnuncioService.
- * 
+ *
  * @author
  * @since
  */
@@ -39,7 +41,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.anuncio.AnuncioRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class AnuncioServiceTest {
+class AnuncioServiceTest {
 
     private static final Integer ID = 1;
     private static final String DESCRICAO = "Escola Pública";
@@ -53,19 +55,28 @@ public class AnuncioServiceTest {
     AnuncioModel testAnuncio;
 
     @MockBean
-    private AnuncioRepository repository;
+    private AnuncioRepository anuncioRepository;
+
+    @BeforeAll
+    void setUp() {
+        BDDMockito.given(anuncioRepository.save(Mockito.any(AnuncioModel.class)))
+                .willReturn(getMockAnuncio());
+        BDDMockito.given(anuncioRepository.findById(Mockito.anyInt()))
+                .willReturn(Optional.of(getMockAnuncio()));
+
+    }
 
     /**
      * Metodo para testar a criacao de um AnuncioModel com save.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
     @Test
     @Order(1)
-    public void testSave() {
+    void testSave() {
 
-        BDDMockito.given(repository.save(Mockito.any(AnuncioModel.class)))
+        BDDMockito.given(anuncioRepository.save(Mockito.any(AnuncioModel.class)))
                 .willReturn(getMockAnuncio());
 
         AnuncioModel response = anuncioService.save(new AnuncioModel());
@@ -78,13 +89,13 @@ public class AnuncioServiceTest {
 
     /**
      * Metodo para testar o metodo findAll.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
     @Test
     @Order(2)
-    public void testFindAll() {
+    void testFindAll() {
         BDDMockito.given(anuncioService.findAll())
                 .willReturn(getMockAnuncioLista());
         // .willReturn(List.of(getMockAnuncio()));
@@ -95,15 +106,13 @@ public class AnuncioServiceTest {
 
     /**
      * Metodo para testar o findById.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
     @Test
     @Order(3)
-    public void testFindById() {
-        BDDMockito.given(anuncioService.findById(Mockito.anyInt()))
-                .willReturn(getMockAnuncio());
+    void testFindById() {
 
         AnuncioModel response = anuncioService.findById(ID);
         assertNotNull(response);
@@ -111,16 +120,14 @@ public class AnuncioServiceTest {
 
     /**
      * Metodo para testar o update.
-     * 
+     *
      * @author Bruno Eiki
      * @throws InvalidRequestException
      * @since 27/04/2023
      */
     @Test
     @Order(4)
-    public void testUpdate() throws InvalidRequestException {
-        BDDMockito.given(anuncioService.update(Mockito.any(AnuncioModel.class)))
-                .willReturn(getMockAnuncio());
+    void testUpdate() throws InvalidRequestException {
 
         AnuncioModel response = anuncioService.update(getMockAnuncio());
         assertNotNull(response);
@@ -128,13 +135,13 @@ public class AnuncioServiceTest {
 
     /**
      * Metodo para testar o deleteById.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
     @Test
     @Order(4)
-    public void testDeleteById() {
+    void testDeleteById() {
 
         BDDMockito.given(anuncioService.deleteById(Mockito.anyInt()))
                 .willReturn(true);
@@ -145,13 +152,13 @@ public class AnuncioServiceTest {
 
     /**
      * Metodo para testar o existsByIdAndCreatedById.
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
      */
     @Test
     @Order(5)
-    public void testExistsByIdAndCreatedById() {
+    void testExistsByIdAndCreatedById() {
 
         BDDMockito.given(anuncioService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
@@ -162,10 +169,10 @@ public class AnuncioServiceTest {
 
     /**
      * Metodo que preenche um mock de um AnuncioModel para retorno dos testes
-     * 
+     *
      * @author Bruno Eiki
      * @since 27/04/2023
-     * 
+     *
      * @return <code>anuncioTeste</code> object
      */
     private AnuncioModel getMockAnuncio() {
@@ -195,7 +202,7 @@ public class AnuncioServiceTest {
     }
 
     @AfterAll
-    public void tearDown() {
-        repository.deleteAll();
+    void tearDown() {
+        anuncioRepository.deleteAll();
     }
 }

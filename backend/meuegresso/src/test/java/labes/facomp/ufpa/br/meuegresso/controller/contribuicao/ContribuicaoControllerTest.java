@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,8 +38,12 @@ import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 
 @SpringBootTest
@@ -56,6 +61,12 @@ class ContribuicaoControllerTest {
         private GrupoRepository grupoRepository;
 
         @Autowired
+        private EgressoRepository egressoRepository;
+
+        @Autowired
+        private GeneroRepository generoRepository;
+
+        @Autowired
         MockMvc mockMvc;
 
         String token;
@@ -63,6 +74,8 @@ class ContribuicaoControllerTest {
         UsuarioModel usuarioModel;
 
         ContribuicaoDTO contribuicaoDTO;
+
+        EgressoModel egresso;
 
         @Autowired
         ModelMapper modelMapper;
@@ -118,7 +131,13 @@ class ContribuicaoControllerTest {
                 UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
                                 UsuarioAuthDTO.class);
 
+                GeneroModel genero = GeneroModel.builder().nome("AAAAAAA").build();
+                genero = generoRepository.save(genero);
+
                 usuarioModel.setId(usuarioAuthDTO.getId());
+                egresso = EgressoModel.builder().genero(genero).nascimento(LocalDate.now())
+                                .matricula("12345678").build();
+                egresso = egressoRepository.save(egresso);
 
         }
 

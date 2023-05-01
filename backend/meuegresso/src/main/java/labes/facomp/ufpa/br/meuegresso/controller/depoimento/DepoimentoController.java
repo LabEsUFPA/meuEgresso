@@ -117,6 +117,7 @@ public class DepoimentoController {
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (jwtService.getIdUsuario(token).equals(depoimentoDTO.getId())) {
 			DepoimentoModel depoimentoModel = mapper.map(depoimentoDTO, DepoimentoModel.class);
+			depoimentoModel.setEgresso(EgressoModel.builder().id(jwtService.getIdUsuario(token)).build());
 			depoimentoService.update(depoimentoModel);
 			return ResponseType.SUCESS_UPDATE.getMessage();
 		}

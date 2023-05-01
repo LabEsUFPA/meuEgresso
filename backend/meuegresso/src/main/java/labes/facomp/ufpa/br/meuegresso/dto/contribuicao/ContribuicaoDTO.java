@@ -22,4 +22,6 @@ public class ContribuicaoDTO {
 
     private String descricao;
 
+    private Integer egressoId;
+
 }
