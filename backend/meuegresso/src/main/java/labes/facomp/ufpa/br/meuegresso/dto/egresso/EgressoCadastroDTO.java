@@ -31,8 +31,6 @@ public class EgressoCadastroDTO {
 
     private String matricula;
 
-    private Boolean pcd = false;
-
     private Boolean cotista = false;
 
     private Boolean bolsista = false;
