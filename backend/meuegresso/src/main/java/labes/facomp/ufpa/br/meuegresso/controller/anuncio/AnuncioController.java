@@ -108,7 +108,7 @@ public class AnuncioController {
 	 * @since 21/04/2023
 	 */
 	@PutMapping
-	@ResponseStatus(code = HttpStatus.CREATED)
+	@ResponseStatus(code = HttpStatus.ACCEPTED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO, JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (anuncioService.existsByIdAndCreatedById(anuncioDTO.getId(), jwtService.getIdUsuario(token))) {
@@ -131,8 +131,11 @@ public class AnuncioController {
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(Integer id) {
-		return anuncioService.deleteById(id);
-	}
+	public String deletarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO) {
+
+        AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
+        anuncioService.deleteById(anuncioModel.getId());
+        return ResponseType.SUCESS_DELETE.getMessage();
+    }
 
 }

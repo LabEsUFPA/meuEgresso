@@ -29,10 +29,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
-import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
-import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
 
 /**
  * Classe que implementa testes para o EgressoService.

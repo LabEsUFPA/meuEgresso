@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.controller.bolsa;
+package labes.facomp.ufpa.br.meuegresso.controller.tipobolsa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -35,7 +35,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.tipobolsa.TipoBolsaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
-import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
@@ -48,11 +47,11 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 
-public class bolsaControllerTest {
+public class TipoBolsaControllerTest {
 
         UsuarioModel usuarioModel;
 
-        TipoBolsaDTO bolsaDTO;
+        TipoBolsaDTO tipoBolsaDTO;
 
         @Autowired
         private GrupoRepository grupoRepository;
@@ -108,17 +107,17 @@ public class bolsaControllerTest {
 
         @Test
         @Order(1)
-        void testCadastrarBolsa() throws Exception {
+        void testCadastrarTipoBolsa() throws Exception {
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-                TipoBolsaDTO bolsaDTO = new TipoBolsaDTO();
-                bolsaDTO.setNome("PIBIC");
-                bolsaDTO.setId(1);
+                TipoBolsaDTO tipoBolsaDTO = new TipoBolsaDTO();
+                tipoBolsaDTO.setNome("PIBIC");
+                tipoBolsaDTO.setId(1);
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.post("/tipoBolsa")
                                                 .contentType(MediaType.APPLICATION_JSON)
-                                                .content(objectMapper.writeValueAsString(bolsaDTO))
+                                                .content(objectMapper.writeValueAsString(tipoBolsaDTO))
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isCreated()).andReturn();
@@ -128,7 +127,7 @@ public class bolsaControllerTest {
 
         @Test
         @Order(2)
-        void testBuscarCotas() throws Exception {
+        void testBuscarTipoBolsa() throws Exception {
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
@@ -138,26 +137,26 @@ public class bolsaControllerTest {
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
-                List<TipoBolsaDTO> cotas = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                List<TipoBolsaDTO> bolsas = objectMapper.readValue(resposta.getResponse().getContentAsString(),
                                 new TypeReference<List<TipoBolsaDTO>>() {
                                 });
 
-                bolsaDTO = cotas.get(0);
-                assertNotNull(bolsaDTO);
+                tipoBolsaDTO = bolsas.get(0);
+                assertNotNull(tipoBolsaDTO);
         }
 
         @Test
         @Order(3)
-        void testAtualizarCota() throws Exception {
+        void testAtualizarTipoBolsa() throws Exception {
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 final String NOVO_NOME = "PROEX";
-                bolsaDTO.setNome(NOVO_NOME);
+                tipoBolsaDTO.setNome(NOVO_NOME);
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.put("/tipoBolsa")
                                                 .contentType(MediaType.APPLICATION_JSON)
-                                                .content(objectMapper.writeValueAsString(bolsaDTO))
+                                                .content(objectMapper.writeValueAsString(tipoBolsaDTO))
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isAccepted()).andReturn();
@@ -169,14 +168,14 @@ public class bolsaControllerTest {
 
         @Test
         @Order(4)
-        void testDeletarCota() throws Exception {
+        void testDeletarTipoBolsa() throws Exception {
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.delete("/tipoBolsa")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .content(objectMapper.writeValueAsString(
-                                                                bolsaDTO))
+                                                                tipoBolsaDTO))
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();

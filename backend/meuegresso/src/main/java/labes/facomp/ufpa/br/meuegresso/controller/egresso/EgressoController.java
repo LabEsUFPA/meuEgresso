@@ -80,8 +80,6 @@ public class EgressoController {
 
         // em cima ok
         EgressoModel egresso = mapper.map(egressoCadastroDTO, EgressoModel.class);
-        TitulacaoModel titulacao = titulacaoService
-                .findById(egressoCadastroDTO.getPosGraduacao().booleanValue() ? 2 : 1);
 
         TitulacaoEgressoDTO titulacaoEgressoDTO;
         EmpresaModel instituicao;
@@ -89,6 +87,8 @@ public class EgressoController {
         EgressoTitulacaoModel egressoTitulacao;
         // Cadastro da titulacao POS-Graduação ou n
         if (egressoCadastroDTO.getTitulacao() != null) {
+            TitulacaoModel titulacao = titulacaoService
+                .findById(egressoCadastroDTO.getPosGraduacao().booleanValue() ? 2 : 1);
             titulacaoEgressoDTO = egressoCadastroDTO.getTitulacao();
             // Cadastro do curso
             curso = cursoService.findByNome(titulacaoEgressoDTO.getCurso());
@@ -175,7 +175,7 @@ public class EgressoController {
      * @since 16/04/2023
      */
     @PutMapping
-    @ResponseStatus(code = HttpStatus.CREATED)
+    @ResponseStatus(code = HttpStatus.ACCEPTED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(
             @RequestBody EgressoPublicDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
