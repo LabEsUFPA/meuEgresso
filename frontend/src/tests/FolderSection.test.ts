@@ -2,7 +2,6 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import FolderSection from 'src/components/FolderSection.vue'
 
-
 describe('FolderSection', () => {
   it('Runs properly', () => {
     const wrapper = mount(FolderSection)

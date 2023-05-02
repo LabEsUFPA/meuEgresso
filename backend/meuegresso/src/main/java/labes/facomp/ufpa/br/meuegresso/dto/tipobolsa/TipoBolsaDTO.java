@@ -1,6 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.dto.tipobolsa;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Encapsulamento da tabela TipoBolsa a fim de representar somente os dados não
@@ -11,11 +13,11 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TipoBolsaDTO {
-    
-    private Integer id;
-    
-    private String nome;
 
-    private Double remuneracao;
+    private Integer id;
+
+    private String nome;
 }

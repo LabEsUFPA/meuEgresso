@@ -3,40 +3,38 @@ CREATE TABLE IF NOT EXISTS public.anuncio (
     ativo boolean DEFAULT true NOT NULL,
     created_date timestamp(6) without time zone,
     last_modified_date timestamp(6) without time zone,
-    descricao_anuncio character varying(600) NOT NULL,
+    descricao_anuncio oid NOT NULL,
     created_by integer,
     last_modified_by integer
 );
-
-
 --
--- TOC entry 230 (class 1259 OID 17927)
+-- TOC entry 239 (class 1259 OID 36418)
 -- Name: anuncio_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.anuncio_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.anuncio_seq START WITH 1 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 223 (class 1259 OID 17552)
--- Name: colacao_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- TOC entry 215 (class 1259 OID 36230)
+-- Name: area_atuacao; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.colacao_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE TABLE IF NOT EXISTS public.area_atuacao (
+    id_area_atuacao integer NOT NULL,
+    ativo boolean DEFAULT true NOT NULL,
+    created_date timestamp(6) without time zone,
+    last_modified_date timestamp(6) without time zone,
+    nome_area_atuacao character varying(60) NOT NULL,
+    created_by integer,
+    last_modified_by integer
+);
 --
--- TOC entry 237 (class 1259 OID 21066)
+-- TOC entry 240 (class 1259 OID 36419)
+-- Name: area_atuacao_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE IF NOT EXISTS public.area_atuacao_seq START WITH 2 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
+--
+-- TOC entry 216 (class 1259 OID 36236)
 -- Name: comentario; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -50,23 +48,14 @@ CREATE TABLE IF NOT EXISTS public.comentario (
     last_modified_by integer,
     anuncio_id integer NOT NULL
 );
-
-
 --
--- TOC entry 231 (class 1259 OID 17936)
+-- TOC entry 241 (class 1259 OID 36420)
 -- Name: comentario_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.comentario_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.comentario_seq START WITH 1 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 238 (class 1259 OID 21072)
+-- TOC entry 217 (class 1259 OID 36242)
 -- Name: contribuicao; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -75,40 +64,19 @@ CREATE TABLE IF NOT EXISTS public.contribuicao (
     ativo boolean DEFAULT true NOT NULL,
     created_date timestamp(6) without time zone,
     last_modified_date timestamp(6) without time zone,
-    descricao_contribuicao character varying(255) NOT NULL,
+    descricao_contribuicao oid NOT NULL,
     created_by integer,
-    last_modified_by integer
+    last_modified_by integer,
+    egresso_id integer NOT NULL
 );
-
-
 --
--- TOC entry 216 (class 1259 OID 17300)
--- Name: contribuicao_model_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE IF NOT EXISTS public.contribuicao_model_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- TOC entry 222 (class 1259 OID 17533)
+-- TOC entry 242 (class 1259 OID 36421)
 -- Name: contribuicao_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.contribuicao_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.contribuicao_seq START WITH 1 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 239 (class 1259 OID 21078)
+-- TOC entry 218 (class 1259 OID 36248)
 -- Name: cota; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -121,23 +89,14 @@ CREATE TABLE IF NOT EXISTS public.cota (
     created_by integer,
     last_modified_by integer
 );
-
-
 --
--- TOC entry 232 (class 1259 OID 19524)
+-- TOC entry 243 (class 1259 OID 36422)
 -- Name: cota_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.cota_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.cota_seq START WITH 5 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 240 (class 1259 OID 21084)
+-- TOC entry 219 (class 1259 OID 36254)
 -- Name: curso; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -150,23 +109,14 @@ CREATE TABLE IF NOT EXISTS public.curso (
     created_by integer,
     last_modified_by integer
 );
-
-
 --
--- TOC entry 224 (class 1259 OID 17583)
+-- TOC entry 244 (class 1259 OID 36423)
 -- Name: curso_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.curso_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.curso_seq START WITH 3 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 241 (class 1259 OID 21090)
+-- TOC entry 220 (class 1259 OID 36260)
 -- Name: depoimento; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -175,28 +125,19 @@ CREATE TABLE IF NOT EXISTS public.depoimento (
     ativo boolean DEFAULT true NOT NULL,
     created_date timestamp(6) without time zone,
     last_modified_date timestamp(6) without time zone,
-    descricao_depoimento character varying(255) NOT NULL,
+    descricao_depoimento oid NOT NULL,
     created_by integer,
     last_modified_by integer,
     egresso_id integer NOT NULL
 );
-
-
 --
--- TOC entry 217 (class 1259 OID 17301)
+-- TOC entry 245 (class 1259 OID 36424)
 -- Name: depoimento_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.depoimento_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.depoimento_seq START WITH 1 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 242 (class 1259 OID 21096)
+-- TOC entry 221 (class 1259 OID 36266)
 -- Name: egresso; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -205,54 +146,41 @@ CREATE TABLE IF NOT EXISTS public.egresso (
     ativo boolean DEFAULT true NOT NULL,
     created_date timestamp(6) without time zone,
     last_modified_date timestamp(6) without time zone,
+    bolsista_egresso boolean NOT NULL,
+    cotista_egresso boolean NOT NULL,
     interesse_em_pos_egresso boolean NOT NULL,
     lattes_egresso character varying(255),
     linkedin_egresso character varying(255),
     matricula_egresso character varying(12),
     nascimento_egresso date NOT NULL,
-    pcd_egresso boolean NOT NULL,
+    pos_graducao_egresso boolean,
+    remuneracao_bolsa_egresso double precision,
     created_by integer,
     last_modified_by integer,
-    cota_id integer NOT NULL,
-    endereco_id integer NOT NULL,
+    tipo_bolsa_id integer,
     genero_id integer NOT NULL,
     usuario_id integer
 );
-
-
 --
--- TOC entry 243 (class 1259 OID 21104)
--- Name: egresso_colacao; Type: TABLE; Schema: public; Owner: -
+-- TOC entry 222 (class 1259 OID 36274)
+-- Name: egresso_area_atuacao; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE IF NOT EXISTS public.egresso_colacao (
-    ativo boolean DEFAULT true NOT NULL,
-    created_date timestamp(6) without time zone,
-    last_modified_date timestamp(6) without time zone,
-    data_conclusao date,
-    data_ingresso date NOT NULL,
-    egresso_id_egresso integer NOT NULL,
-    colacao_id_titulacao integer NOT NULL,
-    created_by integer,
-    last_modified_by integer,
-    curso_id integer NOT NULL,
-    empresa_id integer NOT NULL
+CREATE TABLE IF NOT EXISTS public.egresso_area_atuacao (
+    id_area_atuacao integer NOT NULL,
+    id_egresso integer NOT NULL
 );
-
-
 --
--- TOC entry 244 (class 1259 OID 21110)
--- Name: egresso_contribuicao; Type: TABLE; Schema: public; Owner: -
+-- TOC entry 223 (class 1259 OID 36279)
+-- Name: egresso_cota; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE IF NOT EXISTS public.egresso_contribuicao (
-    id_contribuicao integer NOT NULL,
-    egresso_id integer NOT NULL
+CREATE TABLE IF NOT EXISTS public.egresso_cota (
+    id_egresso integer NOT NULL,
+    id_cota integer NOT NULL
 );
-
-
 --
--- TOC entry 245 (class 1259 OID 21115)
+-- TOC entry 224 (class 1259 OID 36284)
 -- Name: egresso_empresa; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -260,41 +188,36 @@ CREATE TABLE IF NOT EXISTS public.egresso_empresa (
     ativo boolean DEFAULT true NOT NULL,
     created_date timestamp(6) without time zone,
     last_modified_date timestamp(6) without time zone,
-    area_atuacao character varying(50) NOT NULL,
     empresa_id_empresa integer NOT NULL,
     egresso_id_egresso integer NOT NULL,
     created_by integer,
     last_modified_by integer,
     faixa_salarial_id integer NOT NULL
 );
-
-
 --
--- TOC entry 218 (class 1259 OID 17302)
+-- TOC entry 246 (class 1259 OID 36425)
 -- Name: egresso_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.egresso_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.egresso_seq START WITH 1 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 246 (class 1259 OID 21121)
--- Name: egresso_tabalho_publicado; Type: TABLE; Schema: public; Owner: -
+-- TOC entry 225 (class 1259 OID 36290)
+-- Name: egresso_titulacao; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE IF NOT EXISTS public.egresso_tabalho_publicado (
-    id_trabalho_publicado integer NOT NULL,
-    id_usuario integer NOT NULL
+CREATE TABLE IF NOT EXISTS public.egresso_titulacao (
+    ativo boolean DEFAULT true NOT NULL,
+    created_date timestamp(6) without time zone,
+    last_modified_date timestamp(6) without time zone,
+    egresso_id_egresso integer NOT NULL,
+    titulacao_id_titulacao integer NOT NULL,
+    created_by integer,
+    last_modified_by integer,
+    curso_id integer NOT NULL,
+    empresa_id integer NOT NULL
 );
-
-
 --
--- TOC entry 247 (class 1259 OID 21126)
+-- TOC entry 226 (class 1259 OID 36296)
 -- Name: egresso_valido; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -304,36 +227,14 @@ CREATE TABLE IF NOT EXISTS public.egresso_valido (
     matricula_egresso_valido character varying(12),
     nome_egresso_valido character varying(100) NOT NULL
 );
-
-
 --
--- TOC entry 235 (class 1259 OID 20065)
+-- TOC entry 247 (class 1259 OID 36426)
 -- Name: egresso_valido_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.egresso_valido_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.egresso_valido_seq START WITH 1121 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 233 (class 1259 OID 19525)
--- Name: egressos_validos_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE IF NOT EXISTS public.egressos_validos_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- TOC entry 248 (class 1259 OID 21131)
+-- TOC entry 227 (class 1259 OID 36301)
 -- Name: empresa; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -343,27 +244,18 @@ CREATE TABLE IF NOT EXISTS public.empresa (
     created_date timestamp(6) without time zone,
     last_modified_date timestamp(6) without time zone,
     nome_empresa character varying(130) NOT NULL,
-    setor_atuacao_empresa character varying(130) NOT NULL,
     created_by integer,
-    last_modified_by integer
+    last_modified_by integer,
+    endereco_empresa integer
 );
-
-
 --
--- TOC entry 221 (class 1259 OID 17348)
+-- TOC entry 248 (class 1259 OID 36427)
 -- Name: empresa_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.empresa_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.empresa_seq START WITH 4 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 249 (class 1259 OID 21137)
+-- TOC entry 228 (class 1259 OID 36307)
 -- Name: endereco; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -378,52 +270,14 @@ CREATE TABLE IF NOT EXISTS public.endereco (
     created_by integer,
     last_modified_by integer
 );
-
-
 --
--- TOC entry 220 (class 1259 OID 17332)
+-- TOC entry 249 (class 1259 OID 36428)
 -- Name: endereco_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.endereco_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.endereco_seq START WITH 7 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 250 (class 1259 OID 21145)
--- Name: etnia; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE IF NOT EXISTS public.etnia (
-    id_etnia integer NOT NULL,
-    ativo boolean DEFAULT true NOT NULL,
-    created_date timestamp(6) without time zone,
-    last_modified_date timestamp(6) without time zone,
-    nome_etnia character varying(30),
-    created_by integer,
-    last_modified_by integer
-);
-
-
---
--- TOC entry 226 (class 1259 OID 17622)
--- Name: etnia_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE IF NOT EXISTS public.etnia_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- TOC entry 251 (class 1259 OID 21151)
+-- TOC entry 229 (class 1259 OID 36315)
 -- Name: faixa_salarial; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -432,27 +286,18 @@ CREATE TABLE IF NOT EXISTS public.faixa_salarial (
     ativo boolean DEFAULT true NOT NULL,
     created_date timestamp(6) without time zone,
     last_modified_date timestamp(6) without time zone,
-    faixa_faixa_salarial character varying(255) NOT NULL,
+    faixa_faixa_salarial character varying(60) NOT NULL,
     created_by integer,
     last_modified_by integer
 );
-
-
 --
--- TOC entry 227 (class 1259 OID 17642)
+-- TOC entry 250 (class 1259 OID 36429)
 -- Name: faixa_salarial_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.faixa_salarial_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.faixa_salarial_seq START WITH 1 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 252 (class 1259 OID 21157)
+-- TOC entry 230 (class 1259 OID 36321)
 -- Name: genero; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -461,27 +306,18 @@ CREATE TABLE IF NOT EXISTS public.genero (
     ativo boolean DEFAULT true NOT NULL,
     created_date timestamp(6) without time zone,
     last_modified_date timestamp(6) without time zone,
-    nome_genero character varying(100),
+    nome_genero character varying(60) NOT NULL,
     created_by integer,
     last_modified_by integer
 );
-
-
 --
--- TOC entry 225 (class 1259 OID 17609)
+-- TOC entry 251 (class 1259 OID 36430)
 -- Name: genero_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.genero_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.genero_seq START WITH 1 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 253 (class 1259 OID 21163)
+-- TOC entry 231 (class 1259 OID 36327)
 -- Name: grupo; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -494,56 +330,59 @@ CREATE TABLE IF NOT EXISTS public.grupo (
     created_by integer,
     last_modified_by integer
 );
-
-
 --
--- TOC entry 214 (class 1259 OID 17250)
+-- TOC entry 252 (class 1259 OID 36431)
 -- Name: grupo_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.grupo_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.grupo_seq START WITH 4 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 254 (class 1259 OID 21169)
--- Name: pesquisa_cientifica; Type: TABLE; Schema: public; Owner: -
+-- TOC entry 232 (class 1259 OID 36333)
+-- Name: palestra; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE IF NOT EXISTS public.pesquisa_cientifica (
-    id_pesquisa_cientifica integer NOT NULL,
+CREATE TABLE IF NOT EXISTS public.palestra (
+    id_palestra integer NOT NULL,
+    nome_palestra oid NOT NULL,
+    egresso_id integer NOT NULL
+);
+--
+-- TOC entry 253 (class 1259 OID 36432)
+-- Name: palestra_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE IF NOT EXISTS public.palestra_seq START WITH 1 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
+--
+-- TOC entry 233 (class 1259 OID 36338)
+-- Name: setor_atuacao; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE IF NOT EXISTS public.setor_atuacao (
+    id_setor_atuacao integer NOT NULL,
     ativo boolean DEFAULT true NOT NULL,
     created_date timestamp(6) without time zone,
     last_modified_date timestamp(6) without time zone,
-    fim date NOT NULL,
-    inicio date NOT NULL,
-    nome_pesquisa_cientifica character varying(100) NOT NULL,
+    nome_setor_atuacao character varying(60) NOT NULL,
     created_by integer,
-    last_modified_by integer,
-    empresa_id integer NOT NULL,
-    tipo_bolsa_id integer NOT NULL
+    last_modified_by integer
 );
-
-
 --
--- TOC entry 234 (class 1259 OID 19526)
--- Name: pesquisa_cientifica_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- TOC entry 234 (class 1259 OID 36344)
+-- Name: setor_atuacao_empresa; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.pesquisa_cientifica_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE TABLE IF NOT EXISTS public.setor_atuacao_empresa (
+    id_setor_atuacao integer NOT NULL,
+    id_empresa integer NOT NULL
+);
 --
--- TOC entry 255 (class 1259 OID 21175)
+-- TOC entry 254 (class 1259 OID 36433)
+-- Name: setor_atuacao_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE IF NOT EXISTS public.setor_atuacao_seq START WITH 3 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
+--
+-- TOC entry 235 (class 1259 OID 36349)
 -- Name: tipo_bolsa; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -553,27 +392,17 @@ CREATE TABLE IF NOT EXISTS public.tipo_bolsa (
     created_date timestamp(6) without time zone,
     last_modified_date timestamp(6) without time zone,
     nome_tipo_bolsa character varying(100) NOT NULL,
-    remuneracao_tipo_bolsa double precision NOT NULL,
     created_by integer,
     last_modified_by integer
 );
-
-
 --
--- TOC entry 228 (class 1259 OID 17892)
+-- TOC entry 255 (class 1259 OID 36434)
 -- Name: tipo_bolsa_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.tipo_bolsa_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.tipo_bolsa_seq START WITH 1 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 256 (class 1259 OID 21181)
+-- TOC entry 236 (class 1259 OID 36355)
 -- Name: titulacao; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -586,53 +415,14 @@ CREATE TABLE IF NOT EXISTS public.titulacao (
     created_by integer,
     last_modified_by integer
 );
-
-
 --
--- TOC entry 229 (class 1259 OID 17913)
+-- TOC entry 256 (class 1259 OID 36435)
 -- Name: titulacao_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.titulacao_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.titulacao_seq START WITH 3 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 257 (class 1259 OID 21187)
--- Name: trabalho_publicado; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE IF NOT EXISTS public.trabalho_publicado (
-    id_trabalho_publicado integer NOT NULL,
-    ativo boolean DEFAULT true NOT NULL,
-    created_date timestamp(6) without time zone,
-    last_modified_date timestamp(6) without time zone,
-    link_trabalho_publico character varying(255) NOT NULL,
-    nome_trabalho_publicado character varying(255) NOT NULL,
-    created_by integer,
-    last_modified_by integer
-);
-
-
---
--- TOC entry 219 (class 1259 OID 17303)
--- Name: trabalho_publicado_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE IF NOT EXISTS public.trabalho_publicado_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- TOC entry 258 (class 1259 OID 21195)
+-- TOC entry 237 (class 1259 OID 36361)
 -- Name: usuario; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -642,16 +432,14 @@ CREATE TABLE IF NOT EXISTS public.usuario (
     created_date timestamp(6) without time zone,
     last_modified_date timestamp(6) without time zone,
     email character varying(50) NOT NULL,
-    nome_usuario character varying(30) NOT NULL,
+    nome_usuario character varying(100) NOT NULL,
     senha_usuario character varying(80) NOT NULL,
-    login_usuario character varying(100) NOT NULL,
+    login_usuario character varying(30) NOT NULL,
     created_by integer,
     last_modified_by integer
 );
-
-
 --
--- TOC entry 259 (class 1259 OID 21201)
+-- TOC entry 238 (class 1259 OID 36367)
 -- Name: usuario_grupo; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -659,1312 +447,909 @@ CREATE TABLE IF NOT EXISTS public.usuario_grupo (
     id_usuario integer NOT NULL,
     id_grupo integer NOT NULL
 );
-
-
 --
--- TOC entry 215 (class 1259 OID 17251)
+-- TOC entry 257 (class 1259 OID 36436)
 -- Name: usuario_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE IF NOT EXISTS public.usuario_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
+CREATE SEQUENCE IF NOT EXISTS public.usuario_seq START WITH 5 INCREMENT BY 50 NO MINVALUE NO MAXVALUE CACHE 1;
 --
--- TOC entry 3626 (class 0 OID 18399)
--- Dependencies: 232
+-- TOC entry 3633 (class 0 OID 36224)
+-- Dependencies: 214
 -- Data for Name: anuncio; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-
-
 --
--- TOC entry 3627 (class 0 OID 18407)
--- Dependencies: 233
--- Data for Name: comentario; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- TOC entry 3628 (class 0 OID 18413)
--- Dependencies: 234
--- Data for Name: contribuicao; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- TOC entry 3629 (class 0 OID 18419)
--- Dependencies: 235
--- Data for Name: cota; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.cota VALUES (1, true, '2023-04-23 20:20:46.237', '2023-04-23 20:20:46.237', 'BAIXA RENDA', 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.cota VALUES (2, true, '2023-04-23 20:20:56.222', '2023-04-23 20:20:56.222', 'PRETO PARDO INDIGENA', 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.cota VALUES (3, true, '2023-04-23 20:21:02.559', '2023-04-23 20:21:02.559', 'PRETO PARDO INDIGENA E BAIXA RENDA', 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.cota VALUES (4, true, '2023-04-23 20:21:08.142', '2023-04-23 20:21:08.142', 'ESCOLA', 1, 1) ON CONFLICT DO NOTHING;
-
-
---
--- TOC entry 3630 (class 0 OID 18425)
--- Dependencies: 236
--- Data for Name: curso; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.curso VALUES (1, true, '2023-04-23 20:20:28.327', '2023-04-23 20:20:28.327', 'CIÊNCIA DA COMPUTAÇÃO', 1, 1) ON CONFLICT DO NOTHING;
-
-
---
--- TOC entry 3631 (class 0 OID 18431)
--- Dependencies: 237
--- Data for Name: depoimento; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- TOC entry 3632 (class 0 OID 18437)
--- Dependencies: 238
--- Data for Name: egresso; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- TOC entry 3633 (class 0 OID 18445)
+-- TOC entry 3683 (class 0 OID 0)
 -- Dependencies: 239
--- Data for Name: egresso_colacao; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- TOC entry 3634 (class 0 OID 18451)
--- Dependencies: 240
--- Data for Name: egresso_contribuicao; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- TOC entry 3635 (class 0 OID 18456)
--- Dependencies: 241
--- Data for Name: egresso_empresa; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- TOC entry 3636 (class 0 OID 18462)
--- Dependencies: 242
--- Data for Name: egresso_tabalho_publicado; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- TOC entry 3637 (class 0 OID 18467)
--- Dependencies: 243
--- Data for Name: empresa; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.empresa VALUES (1, true, '2023-04-23 20:19:41.579', '2023-04-23 20:19:41.579', 'UNIVERSIDADE FEDERAL DO PARA', 'EDUCAÇÃO', 1, 1) ON CONFLICT DO NOTHING;
-
-
---
--- TOC entry 3638 (class 0 OID 18473)
--- Dependencies: 244
--- Data for Name: endereco; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.endereco VALUES (1, true, '2023-04-23 20:19:14.43', '2023-04-23 20:19:14.43', 'BARCARENA', 'PARÁ', 'BRASIL', 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.endereco VALUES (2, true, '2023-04-23 20:19:15.903', '2023-04-23 20:19:15.903', 'BARCARENA', 'PARÁ', 'BRASIL', 1, 1) ON CONFLICT DO NOTHING;
-
-
---
--- TOC entry 3639 (class 0 OID 18481)
--- Dependencies: 245
--- Data for Name: etnia; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.etnia VALUES (1, true, '2023-04-23 20:18:34.115', '2023-04-23 20:18:34.115', 'BRANCO', 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.etnia VALUES (2, true, '2023-04-23 20:18:44.645', '2023-04-23 20:18:44.645', 'PARDO', 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.etnia VALUES (3, true, '2023-04-23 20:18:48.579', '2023-04-23 20:18:48.579', 'PRETO', 1, 1) ON CONFLICT DO NOTHING;
-
-
---
--- TOC entry 3640 (class 0 OID 18487)
--- Dependencies: 246
--- Data for Name: faixa_salarial; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.faixa_salarial VALUES (1, true, '2023-04-23 20:17:21.199', '2023-04-23 20:17:21.199', '1 salário mínimo', 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.faixa_salarial VALUES (2, true, '2023-04-23 20:17:33.688', '2023-04-23 20:17:33.688', '1 a 2 salários mínimo', 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.faixa_salarial VALUES (3, true, '2023-04-23 20:17:40.664', '2023-04-23 20:17:40.664', '3 a 5 salários mínimo', 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.faixa_salarial VALUES (4, true, '2023-04-23 20:17:57.34', '2023-04-23 20:17:57.34', '6 ou mais salários mínimo', 1, 1) ON CONFLICT DO NOTHING;
-
-
---
--- TOC entry 3641 (class 0 OID 18493)
--- Dependencies: 247
--- Data for Name: genero; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.genero VALUES (1, true, '2023-04-23 20:16:27.119', '2023-04-23 20:16:27.119', 'Masculino', 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.genero VALUES (2, true, '2023-04-23 20:16:33.481', '2023-04-23 20:16:33.481', 'Feminino', 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.genero VALUES (3, true, '2023-04-23 20:16:37.465', '2023-04-23 20:16:37.465', 'Outros', 1, 1) ON CONFLICT DO NOTHING;
-
-
---
--- TOC entry 3642 (class 0 OID 18499)
--- Dependencies: 248
--- Data for Name: grupo; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.grupo VALUES (1, true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'ADMIN', NULL, NULL) ON CONFLICT DO NOTHING;
-INSERT INTO public.grupo VALUES (2, true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'SECRETARIO', NULL, NULL) ON CONFLICT DO NOTHING;
-INSERT INTO public.grupo VALUES (3, true, '2023-04-22 01:38:25.666', '2023-04-22 01:38:25.666', 'EGRESSO', NULL, NULL) ON CONFLICT DO NOTHING;
-
-
---
--- TOC entry 3643 (class 0 OID 18505)
--- Dependencies: 249
--- Data for Name: pesquisa_cientifica; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- TOC entry 3644 (class 0 OID 18511)
--- Dependencies: 250
--- Data for Name: tipo_bolsa; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.tipo_bolsa VALUES (1, true, '2023-04-23 20:15:48.237', '2023-04-23 20:15:48.237', 'PIBIC', 700, 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.tipo_bolsa VALUES (2, true, '2023-04-23 20:15:56.48', '2023-04-23 20:15:56.48', 'PIBIX', 1400, 1, 1) ON CONFLICT DO NOTHING;
-
-
---
--- TOC entry 3645 (class 0 OID 18517)
--- Dependencies: 251
--- Data for Name: titulacao; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.titulacao VALUES (1, true, '2023-04-23 20:21:28.472', '2023-04-23 20:21:28.472', 'GRADUAÇÃO', 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.titulacao VALUES (3, true, '2023-04-23 20:21:42.103', '2023-04-23 20:21:42.103', 'MESTRADO', 1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.titulacao VALUES (4, true, '2023-04-23 20:21:48.189', '2023-04-23 20:21:48.189', 'DOUTORADO', 1, 1) ON CONFLICT DO NOTHING;
-
-
---
--- TOC entry 3646 (class 0 OID 18523)
--- Dependencies: 252
--- Data for Name: trabalho_publicado; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- TOC entry 3647 (class 0 OID 18531)
--- Dependencies: 253
--- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.usuario VALUES (1, true, '2023-04-22 14:34:40.702', '2023-04-22 14:34:40.702', 'admin@admin.com', '123456789', 'ADMIN ADMIN', '{bcrypt}$2a$10$vh9/MkL4XQyd.fqkQdnWSelTUxPBpDb6qL5W2uWLxLUN0JR9vwRZm', 'ADMIN', NULL, NULL) ON CONFLICT DO NOTHING;
-INSERT INTO public.usuario VALUES (2, true, '2023-04-22 14:35:09.149', '2023-04-22 14:35:09.149', 'secretario@secretario.com', '3131313', 'SECRETARIO SECRETARIO', '{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy', 'SECRETARIO', NULL, NULL) ON CONFLICT DO NOTHING;
-INSERT INTO public.usuario VALUES (3, true, '2023-04-22 14:35:30.354', '2023-04-22 14:35:30.354', 'egresso@egresso.com', '9466165', 'EGRESSO EGRESSO', '{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO', 'EGRESSO', NULL, NULL) ON CONFLICT DO NOTHING;
-INSERT INTO public.usuario VALUES (102, true, '2023-04-23 19:57:41.838', '2023-04-23 19:57:41.838', 'ssss@egresso.com', 'teste', 'teste EGRESSO', '{bcrypt}$2a$10$Ual6FYgLOGVcntrBBdbb0Of8J7X4QMTS5sFm8NSEY2DWDCx0P4vAO', 'teste', NULL, NULL) ON CONFLICT DO NOTHING;
-
-
---
--- TOC entry 3648 (class 0 OID 18894)
--- Dependencies: 254
--- Data for Name: usuario_grupo; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.usuario_grupo VALUES (1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.usuario_grupo VALUES (2, 2) ON CONFLICT DO NOTHING;
-INSERT INTO public.usuario_grupo VALUES (3, 3) ON CONFLICT DO NOTHING;
-
-
---
--- TOC entry 3655 (class 0 OID 0)
--- Dependencies: 214
 -- Name: anuncio_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.anuncio_seq', 1, false);
-
-
 --
--- TOC entry 3656 (class 0 OID 0)
--- Dependencies: 215
+-- TOC entry 3684 (class 0 OID 0)
+-- Dependencies: 240
+-- Name: area_atuacao_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.area_atuacao_seq', 1, false);
+--
+-- TOC entry 3685 (class 0 OID 0)
+-- Dependencies: 241
 -- Name: comentario_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.comentario_seq', 1, false);
-
-
 --
--- TOC entry 3657 (class 0 OID 0)
--- Dependencies: 216
+-- TOC entry 3686 (class 0 OID 0)
+-- Dependencies: 242
 -- Name: contribuicao_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.contribuicao_seq', 1, false);
-
-
+SELECT pg_catalog.setval('public.contribuicao_seq', 1, true);
 --
--- TOC entry 3658 (class 0 OID 0)
--- Dependencies: 217
+-- TOC entry 3687 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: cota_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.cota_seq', 51, true);
-
-
+SELECT pg_catalog.setval('public.cota_seq', 1, false);
 --
--- TOC entry 3659 (class 0 OID 0)
--- Dependencies: 218
+-- TOC entry 3688 (class 0 OID 0)
+-- Dependencies: 244
 -- Name: curso_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.curso_seq', 1, true);
-
-
+SELECT pg_catalog.setval('public.curso_seq', 51, true);
 --
--- TOC entry 3660 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3689 (class 0 OID 0)
+-- Dependencies: 245
 -- Name: depoimento_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.depoimento_seq', 1, false);
-
-
+SELECT pg_catalog.setval('public.depoimento_seq', 1, true);
 --
--- TOC entry 3661 (class 0 OID 0)
--- Dependencies: 220
+-- TOC entry 3690 (class 0 OID 0)
+-- Dependencies: 246
 -- Name: egresso_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.egresso_seq', 1, false);
-
-
+SELECT pg_catalog.setval('public.egresso_seq', 1, true);
 --
--- TOC entry 3662 (class 0 OID 0)
--- Dependencies: 221
+-- TOC entry 3691 (class 0 OID 0)
+-- Dependencies: 247
+-- Name: egresso_valido_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.egresso_valido_seq', 1, false);
+--
+-- TOC entry 3692 (class 0 OID 0)
+-- Dependencies: 248
 -- Name: empresa_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.empresa_seq', 1, true);
-
-
+SELECT pg_catalog.setval('public.empresa_seq', 51, true);
 --
--- TOC entry 3663 (class 0 OID 0)
--- Dependencies: 222
+-- TOC entry 3693 (class 0 OID 0)
+-- Dependencies: 249
 -- Name: endereco_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.endereco_seq', 51, true);
-
-
 --
--- TOC entry 3664 (class 0 OID 0)
--- Dependencies: 223
--- Name: etnia_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.etnia_seq', 51, true);
-
-
---
--- TOC entry 3665 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3694 (class 0 OID 0)
+-- Dependencies: 250
 -- Name: faixa_salarial_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.faixa_salarial_seq', 51, true);
-
-
+SELECT pg_catalog.setval('public.faixa_salarial_seq', 1, false);
 --
--- TOC entry 3666 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3695 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: genero_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.genero_seq', 51, true);
-
-
+SELECT pg_catalog.setval('public.genero_seq', 1, false);
 --
--- TOC entry 3667 (class 0 OID 0)
--- Dependencies: 226
+-- TOC entry 3696 (class 0 OID 0)
+-- Dependencies: 252
 -- Name: grupo_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.grupo_seq', 1, false);
-
-
 --
--- TOC entry 3668 (class 0 OID 0)
--- Dependencies: 227
--- Name: pesquisa_cientifica_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- TOC entry 3697 (class 0 OID 0)
+-- Dependencies: 253
+-- Name: palestra_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.pesquisa_cientifica_seq', 1, false);
-
-
+SELECT pg_catalog.setval('public.palestra_seq', 1, true);
 --
--- TOC entry 3669 (class 0 OID 0)
--- Dependencies: 228
+-- TOC entry 3698 (class 0 OID 0)
+-- Dependencies: 254
+-- Name: setor_atuacao_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.setor_atuacao_seq', 51, true);
+--
+-- TOC entry 3699 (class 0 OID 0)
+-- Dependencies: 255
 -- Name: tipo_bolsa_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.tipo_bolsa_seq', 51, true);
-
-
+SELECT pg_catalog.setval('public.tipo_bolsa_seq', 1, false);
 --
--- TOC entry 3670 (class 0 OID 0)
--- Dependencies: 229
+-- TOC entry 3700 (class 0 OID 0)
+-- Dependencies: 256
 -- Name: titulacao_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.titulacao_seq', 51, true);
-
-
+SELECT pg_catalog.setval('public.titulacao_seq', 1, false);
 --
--- TOC entry 3671 (class 0 OID 0)
--- Dependencies: 230
--- Name: trabalho_publicado_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.trabalho_publicado_seq', 1, false);
-
-
---
--- TOC entry 3672 (class 0 OID 0)
--- Dependencies: 231
+-- TOC entry 3701 (class 0 OID 0)
+-- Dependencies: 257
 -- Name: usuario_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.usuario_seq', 151, true);
-
-
+SELECT pg_catalog.setval('public.usuario_seq', 51, true);
 --
--- TOC entry 3327 (class 2606 OID 18406)
+-- TOC entry 3335 (class 2606 OID 36229)
 -- Name: anuncio anuncio_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.anuncio
-    ADD CONSTRAINT anuncio_pkey PRIMARY KEY (id_anuncio);
-
-
+ADD CONSTRAINT anuncio_pkey PRIMARY KEY (id_anuncio);
 --
--- TOC entry 3329 (class 2606 OID 18412)
+-- TOC entry 3337 (class 2606 OID 36235)
+-- Name: area_atuacao area_atuacao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.area_atuacao
+ADD CONSTRAINT area_atuacao_pkey PRIMARY KEY (id_area_atuacao);
+--
+-- TOC entry 3341 (class 2606 OID 36241)
 -- Name: comentario comentario_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.comentario
-    ADD CONSTRAINT comentario_pkey PRIMARY KEY (id_comentario);
-
-
+ADD CONSTRAINT comentario_pkey PRIMARY KEY (id_comentario);
 --
--- TOC entry 3331 (class 2606 OID 18418)
+-- TOC entry 3343 (class 2606 OID 36247)
 -- Name: contribuicao contribuicao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.contribuicao
-    ADD CONSTRAINT contribuicao_pkey PRIMARY KEY (id_contribuicao);
-
-
+ADD CONSTRAINT contribuicao_pkey PRIMARY KEY (id_contribuicao);
 --
--- TOC entry 3333 (class 2606 OID 18424)
+-- TOC entry 3347 (class 2606 OID 36253)
 -- Name: cota cota_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cota
-    ADD CONSTRAINT cota_pkey PRIMARY KEY (id_cota);
-
-
+ADD CONSTRAINT cota_pkey PRIMARY KEY (id_cota);
 --
--- TOC entry 3337 (class 2606 OID 18430)
+-- TOC entry 3351 (class 2606 OID 36259)
 -- Name: curso curso_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.curso
-    ADD CONSTRAINT curso_pkey PRIMARY KEY (id_curso);
-
-
+ADD CONSTRAINT curso_pkey PRIMARY KEY (id_curso);
 --
--- TOC entry 3341 (class 2606 OID 18436)
+-- TOC entry 3355 (class 2606 OID 36265)
 -- Name: depoimento depoimento_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.depoimento
-    ADD CONSTRAINT depoimento_pkey PRIMARY KEY (id_depoimento);
-
-
+ADD CONSTRAINT depoimento_pkey PRIMARY KEY (id_depoimento);
 --
--- TOC entry 3349 (class 2606 OID 18450)
--- Name: egresso_colacao egresso_colacao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3371 (class 2606 OID 36278)
+-- Name: egresso_area_atuacao egresso_area_atuacao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.egresso_colacao
-    ADD CONSTRAINT egresso_colacao_pkey PRIMARY KEY (colacao_id_titulacao, egresso_id_egresso);
-
-
+ALTER TABLE ONLY public.egresso_area_atuacao
+ADD CONSTRAINT egresso_area_atuacao_pkey PRIMARY KEY (id_area_atuacao, id_egresso);
 --
--- TOC entry 3351 (class 2606 OID 18455)
--- Name: egresso_contribuicao egresso_contribuicao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3373 (class 2606 OID 36283)
+-- Name: egresso_cota egresso_cota_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.egresso_contribuicao
-    ADD CONSTRAINT egresso_contribuicao_pkey PRIMARY KEY (id_contribuicao, egresso_id);
-
-
+ALTER TABLE ONLY public.egresso_cota
+ADD CONSTRAINT egresso_cota_pkey PRIMARY KEY (id_egresso, id_cota);
 --
--- TOC entry 3353 (class 2606 OID 18461)
+-- TOC entry 3375 (class 2606 OID 36289)
 -- Name: egresso_empresa egresso_empresa_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.egresso_empresa
-    ADD CONSTRAINT egresso_empresa_pkey PRIMARY KEY (egresso_id_egresso, empresa_id_empresa);
-
-
+ADD CONSTRAINT egresso_empresa_pkey PRIMARY KEY (egresso_id_egresso, empresa_id_empresa);
 --
--- TOC entry 3345 (class 2606 OID 18444)
+-- TOC entry 3359 (class 2606 OID 36273)
 -- Name: egresso egresso_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.egresso
-    ADD CONSTRAINT egresso_pkey PRIMARY KEY (id_egresso);
-
-
+ADD CONSTRAINT egresso_pkey PRIMARY KEY (id_egresso);
 --
--- TOC entry 3355 (class 2606 OID 18466)
--- Name: egresso_tabalho_publicado egresso_tabalho_publicado_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3379 (class 2606 OID 36295)
+-- Name: egresso_titulacao egresso_titulacao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.egresso_tabalho_publicado
-    ADD CONSTRAINT egresso_tabalho_publicado_pkey PRIMARY KEY (id_trabalho_publicado, id_usuario);
-
-
+ALTER TABLE ONLY public.egresso_titulacao
+ADD CONSTRAINT egresso_titulacao_pkey PRIMARY KEY (egresso_id_egresso, titulacao_id_titulacao);
 --
--- TOC entry 3357 (class 2606 OID 18472)
+-- TOC entry 3383 (class 2606 OID 36300)
+-- Name: egresso_valido egresso_valido_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso_valido
+ADD CONSTRAINT egresso_valido_pkey PRIMARY KEY (id_egresso_valido);
+--
+-- TOC entry 3389 (class 2606 OID 36306)
 -- Name: empresa empresa_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.empresa
-    ADD CONSTRAINT empresa_pkey PRIMARY KEY (id_empresa);
-
-
+ADD CONSTRAINT empresa_pkey PRIMARY KEY (id_empresa);
 --
--- TOC entry 3359 (class 2606 OID 18480)
+-- TOC entry 3391 (class 2606 OID 36314)
 -- Name: endereco endereco_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.endereco
-    ADD CONSTRAINT endereco_pkey PRIMARY KEY (id_endereco);
-
-
+ADD CONSTRAINT endereco_pkey PRIMARY KEY (id_endereco);
 --
--- TOC entry 3361 (class 2606 OID 18486)
--- Name: etnia etnia_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.etnia
-    ADD CONSTRAINT etnia_pkey PRIMARY KEY (id_etnia);
-
-
---
--- TOC entry 3363 (class 2606 OID 18492)
+-- TOC entry 3393 (class 2606 OID 36320)
 -- Name: faixa_salarial faixa_salarial_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.faixa_salarial
-    ADD CONSTRAINT faixa_salarial_pkey PRIMARY KEY (id_faixa_salarial);
-
-
+ADD CONSTRAINT faixa_salarial_pkey PRIMARY KEY (id_faixa_salarial);
 --
--- TOC entry 3367 (class 2606 OID 18498)
+-- TOC entry 3397 (class 2606 OID 36326)
 -- Name: genero genero_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.genero
-    ADD CONSTRAINT genero_pkey PRIMARY KEY (id_genero);
-
-
+ADD CONSTRAINT genero_pkey PRIMARY KEY (id_genero);
 --
--- TOC entry 3369 (class 2606 OID 18504)
+-- TOC entry 3401 (class 2606 OID 36332)
 -- Name: grupo grupo_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.grupo
-    ADD CONSTRAINT grupo_pkey PRIMARY KEY (id_grupo);
-
-
+ADD CONSTRAINT grupo_pkey PRIMARY KEY (id_grupo);
 --
--- TOC entry 3373 (class 2606 OID 18510)
--- Name: pesquisa_cientifica pesquisa_cientifica_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3405 (class 2606 OID 36337)
+-- Name: palestra palestra_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.pesquisa_cientifica
-    ADD CONSTRAINT pesquisa_cientifica_pkey PRIMARY KEY (id_pesquisa_cientifica);
-
-
+ALTER TABLE ONLY public.palestra
+ADD CONSTRAINT palestra_pkey PRIMARY KEY (id_palestra);
 --
--- TOC entry 3385 (class 2606 OID 18516)
+-- TOC entry 3415 (class 2606 OID 36348)
+-- Name: setor_atuacao_empresa setor_atuacao_empresa_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.setor_atuacao_empresa
+ADD CONSTRAINT setor_atuacao_empresa_pkey PRIMARY KEY (id_setor_atuacao, id_empresa);
+--
+-- TOC entry 3411 (class 2606 OID 36343)
+-- Name: setor_atuacao setor_atuacao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.setor_atuacao
+ADD CONSTRAINT setor_atuacao_pkey PRIMARY KEY (id_setor_atuacao);
+--
+-- TOC entry 3417 (class 2606 OID 36354)
 -- Name: tipo_bolsa tipo_bolsa_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_bolsa
-    ADD CONSTRAINT tipo_bolsa_pkey PRIMARY KEY (id_tipo_bolsa);
-
-
+ADD CONSTRAINT tipo_bolsa_pkey PRIMARY KEY (id_tipo_bolsa);
 --
--- TOC entry 3389 (class 2606 OID 18522)
+-- TOC entry 3421 (class 2606 OID 36360)
 -- Name: titulacao titulacao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.titulacao
-    ADD CONSTRAINT titulacao_pkey PRIMARY KEY (id_titulacao);
-
-
+ADD CONSTRAINT titulacao_pkey PRIMARY KEY (id_titulacao);
 --
--- TOC entry 3393 (class 2606 OID 18530)
--- Name: trabalho_publicado trabalho_publicado_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.trabalho_publicado
-    ADD CONSTRAINT trabalho_publicado_pkey PRIMARY KEY (id_trabalho_publicado);
-
-
---
--- TOC entry 3403 (class 2606 OID 18898)
--- Name: usuario_grupo uk344o72atx8e0qj0fkrrjo4pvw; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.usuario_grupo
-    ADD CONSTRAINT uk344o72atx8e0qj0fkrrjo4pvw UNIQUE (id_usuario, id_grupo);
-
-
---
--- TOC entry 3397 (class 2606 OID 18569)
--- Name: usuario uk_1j9q7kkp12suxliwuyopqovnd; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.usuario
-    ADD CONSTRAINT uk_1j9q7kkp12suxliwuyopqovnd UNIQUE (matricula_usuario);
-
-
---
--- TOC entry 3365 (class 2606 OID 18549)
+-- TOC entry 3395 (class 2606 OID 36401)
 -- Name: faixa_salarial uk_2bn1lsqed44xqtrtq17s7tjue; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.faixa_salarial
-    ADD CONSTRAINT uk_2bn1lsqed44xqtrtq17s7tjue UNIQUE (faixa_faixa_salarial);
-
-
+ADD CONSTRAINT uk_2bn1lsqed44xqtrtq17s7tjue UNIQUE (faixa_faixa_salarial);
 --
--- TOC entry 3375 (class 2606 OID 18561)
--- Name: pesquisa_cientifica uk_3rka6fa74y70gole2j84l4se6; Type: CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3407 (class 2606 OID 36409)
+-- Name: palestra uk_2h2mxjetrwvc8sg1wx5ttyq07; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.pesquisa_cientifica
-    ADD CONSTRAINT uk_3rka6fa74y70gole2j84l4se6 UNIQUE (tipo_bolsa_id);
-
-
+ALTER TABLE ONLY public.palestra
+ADD CONSTRAINT uk_2h2mxjetrwvc8sg1wx5ttyq07 UNIQUE (egresso_id);
 --
--- TOC entry 3347 (class 2606 OID 18547)
+-- TOC entry 3385 (class 2606 OID 36399)
+-- Name: egresso_valido uk_2jwojv1fccodf62r2wa6st1i1; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso_valido
+ADD CONSTRAINT uk_2jwojv1fccodf62r2wa6st1i1 UNIQUE (matricula_egresso_valido);
+--
+-- TOC entry 3361 (class 2606 OID 36391)
 -- Name: egresso uk_3tmslc9ltmjdyy2mbstgpf1un; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.egresso
-    ADD CONSTRAINT uk_3tmslc9ltmjdyy2mbstgpf1un UNIQUE (usuario_id);
-
-
+ADD CONSTRAINT uk_3tmslc9ltmjdyy2mbstgpf1un UNIQUE (usuario_id);
 --
--- TOC entry 3377 (class 2606 OID 18555)
--- Name: pesquisa_cientifica uk_4p8pb1j2o2cb350tekkdcmfxi; Type: CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3363 (class 2606 OID 36387)
+-- Name: egresso uk_4datilmpr40t15bnmxyve5t0y; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.pesquisa_cientifica
-    ADD CONSTRAINT uk_4p8pb1j2o2cb350tekkdcmfxi UNIQUE (inicio);
-
-
+ALTER TABLE ONLY public.egresso
+ADD CONSTRAINT uk_4datilmpr40t15bnmxyve5t0y UNIQUE (matricula_egresso);
 --
--- TOC entry 3399 (class 2606 OID 18571)
+-- TOC entry 3399 (class 2606 OID 36403)
+-- Name: genero uk_6xfypuejpx9h55hdouj112ocw; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.genero
+ADD CONSTRAINT uk_6xfypuejpx9h55hdouj112ocw UNIQUE (nome_genero);
+--
+-- TOC entry 3365 (class 2606 OID 36385)
+-- Name: egresso uk_7wtwbdgn55nu31nx24ib5revf; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso
+ADD CONSTRAINT uk_7wtwbdgn55nu31nx24ib5revf UNIQUE (linkedin_egresso);
+--
+-- TOC entry 3425 (class 2606 OID 36417)
 -- Name: usuario uk_8efax56av7vfdquauh0gyl9cx; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.usuario
-    ADD CONSTRAINT uk_8efax56av7vfdquauh0gyl9cx UNIQUE (login_usuario);
-
-
+ADD CONSTRAINT uk_8efax56av7vfdquauh0gyl9cx UNIQUE (login_usuario);
 --
--- TOC entry 3335 (class 2606 OID 18541)
+-- TOC entry 3367 (class 2606 OID 36383)
+-- Name: egresso uk_919oulldbx88ntvtrq5r6sdkt; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso
+ADD CONSTRAINT uk_919oulldbx88ntvtrq5r6sdkt UNIQUE (lattes_egresso);
+--
+-- TOC entry 3349 (class 2606 OID 36377)
 -- Name: cota uk_9k3kf2b9f2mjv11ksekdha97k; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cota
-    ADD CONSTRAINT uk_9k3kf2b9f2mjv11ksekdha97k UNIQUE (nome_cota);
-
-
+ADD CONSTRAINT uk_9k3kf2b9f2mjv11ksekdha97k UNIQUE (nome_cota);
 --
--- TOC entry 3395 (class 2606 OID 18567)
--- Name: trabalho_publicado uk_auqx5ujp3bqhc5gla7lmmhmc5; Type: CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3381 (class 2606 OID 36395)
+-- Name: egresso_titulacao uk_du19rk6x1k7pg5tmh7k2xphgd; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.trabalho_publicado
-    ADD CONSTRAINT uk_auqx5ujp3bqhc5gla7lmmhmc5 UNIQUE (nome_trabalho_publicado);
-
-
+ALTER TABLE ONLY public.egresso_titulacao
+ADD CONSTRAINT uk_du19rk6x1k7pg5tmh7k2xphgd UNIQUE (egresso_id_egresso);
 --
--- TOC entry 3379 (class 2606 OID 18557)
--- Name: pesquisa_cientifica uk_c59t92u7dloaowxaxyoou9n3; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pesquisa_cientifica
-    ADD CONSTRAINT uk_c59t92u7dloaowxaxyoou9n3 UNIQUE (nome_pesquisa_cientifica);
-
-
---
--- TOC entry 3381 (class 2606 OID 18559)
--- Name: pesquisa_cientifica uk_cl6mu5f6c7u8201hyvmj50yl6; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pesquisa_cientifica
-    ADD CONSTRAINT uk_cl6mu5f6c7u8201hyvmj50yl6 UNIQUE (empresa_id);
-
-
---
--- TOC entry 3383 (class 2606 OID 18553)
--- Name: pesquisa_cientifica uk_g78g7we6eclwcec6f6yflh9jw; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pesquisa_cientifica
-    ADD CONSTRAINT uk_g78g7we6eclwcec6f6yflh9jw UNIQUE (fim);
-
-
---
--- TOC entry 3339 (class 2606 OID 18543)
+-- TOC entry 3353 (class 2606 OID 36379)
 -- Name: curso uk_i35k8uavr3s5cxr12aefe00e; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.curso
-    ADD CONSTRAINT uk_i35k8uavr3s5cxr12aefe00e UNIQUE (nome_curso);
-
-
+ADD CONSTRAINT uk_i35k8uavr3s5cxr12aefe00e UNIQUE (nome_curso);
 --
--- TOC entry 3371 (class 2606 OID 18551)
+-- TOC entry 3403 (class 2606 OID 36405)
 -- Name: grupo uk_is0kvc71ivi2o1nhe7h19m47p; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.grupo
-    ADD CONSTRAINT uk_is0kvc71ivi2o1nhe7h19m47p UNIQUE (nome_grupo);
-
-
+ADD CONSTRAINT uk_is0kvc71ivi2o1nhe7h19m47p UNIQUE (nome_grupo);
 --
--- TOC entry 3387 (class 2606 OID 18563)
+-- TOC entry 3413 (class 2606 OID 36411)
+-- Name: setor_atuacao uk_j59f23omfkincud4bx0f8x3vp; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.setor_atuacao
+ADD CONSTRAINT uk_j59f23omfkincud4bx0f8x3vp UNIQUE (nome_setor_atuacao);
+--
+-- TOC entry 3419 (class 2606 OID 36413)
 -- Name: tipo_bolsa uk_j6yqoqsrpie5ipmlh6c5jbrx1; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_bolsa
-    ADD CONSTRAINT uk_j6yqoqsrpie5ipmlh6c5jbrx1 UNIQUE (nome_tipo_bolsa);
-
-
+ADD CONSTRAINT uk_j6yqoqsrpie5ipmlh6c5jbrx1 UNIQUE (nome_tipo_bolsa);
 --
--- TOC entry 3343 (class 2606 OID 18545)
+-- TOC entry 3339 (class 2606 OID 36373)
+-- Name: area_atuacao uk_mu4kvuf03rl6w7vpqgvtt78pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.area_atuacao
+ADD CONSTRAINT uk_mu4kvuf03rl6w7vpqgvtt78pk UNIQUE (nome_area_atuacao);
+--
+-- TOC entry 3409 (class 2606 OID 36407)
+-- Name: palestra uk_nhn2buqnf290o7umjxd7b1av7; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.palestra
+ADD CONSTRAINT uk_nhn2buqnf290o7umjxd7b1av7 UNIQUE (nome_palestra);
+--
+-- TOC entry 3377 (class 2606 OID 36393)
+-- Name: egresso_empresa uk_r0sm8hpv921bqw3nrmnnjt99x; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso_empresa
+ADD CONSTRAINT uk_r0sm8hpv921bqw3nrmnnjt99x UNIQUE (egresso_id_egresso);
+--
+-- TOC entry 3357 (class 2606 OID 36381)
 -- Name: depoimento uk_rpha5d7rfphcjvj0nbjb1nvxs; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.depoimento
-    ADD CONSTRAINT uk_rpha5d7rfphcjvj0nbjb1nvxs UNIQUE (egresso_id);
-
-
+ADD CONSTRAINT uk_rpha5d7rfphcjvj0nbjb1nvxs UNIQUE (egresso_id);
 --
--- TOC entry 3391 (class 2606 OID 18565)
+-- TOC entry 3345 (class 2606 OID 36375)
+-- Name: contribuicao uk_rpvny7ejlpmi3fk8mbwva6qjy; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.contribuicao
+ADD CONSTRAINT uk_rpvny7ejlpmi3fk8mbwva6qjy UNIQUE (egresso_id);
+--
+-- TOC entry 3423 (class 2606 OID 36415)
 -- Name: titulacao uk_rvnwm2n5juoh0aj3qnssh52nm; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.titulacao
-    ADD CONSTRAINT uk_rvnwm2n5juoh0aj3qnssh52nm UNIQUE (nome_titulacao);
+ADD CONSTRAINT uk_rvnwm2n5juoh0aj3qnssh52nm UNIQUE (nome_titulacao);
+--
+-- TOC entry 3387 (class 2606 OID 36397)
+-- Name: egresso_valido uk_snrp717wd5d36lg78t56wefwt; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
+ALTER TABLE ONLY public.egresso_valido
+ADD CONSTRAINT uk_snrp717wd5d36lg78t56wefwt UNIQUE (email_egresso_valido);
 
 --
--- TOC entry 3401 (class 2606 OID 18536)
+-- TOC entry 3429 (class 2606 OID 36371)
+-- Name: usuario_grupo usuario_grupo_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.usuario_grupo
+ADD CONSTRAINT usuario_grupo_pkey PRIMARY KEY (id_usuario, id_grupo);
+--
+-- TOC entry 3427 (class 2606 OID 36366)
 -- Name: usuario usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.usuario
-    ADD CONSTRAINT usuario_pkey PRIMARY KEY (id_usuario);
-
-
+ADD CONSTRAINT usuario_pkey PRIMARY KEY (id_usuario);
 --
--- TOC entry 3440 (class 2606 OID 18752)
+-- TOC entry 3467 (class 2606 OID 36622)
 -- Name: empresa fk1252u5xj526ufsf5c3c9fcic2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.empresa
-    ADD CONSTRAINT fk1252u5xj526ufsf5c3c9fcic2 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk1252u5xj526ufsf5c3c9fcic2 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3446 (class 2606 OID 18787)
+-- TOC entry 3472 (class 2606 OID 36652)
 -- Name: faixa_salarial fk12fuee7y4kjstxd7xwk3fageo; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.faixa_salarial
-    ADD CONSTRAINT fk12fuee7y4kjstxd7xwk3fageo FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk12fuee7y4kjstxd7xwk3fageo FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3411 (class 2606 OID 18612)
+-- TOC entry 3461 (class 2606 OID 36602)
+-- Name: egresso_titulacao fk1bu3y46jwvfc24y707b8hr57s; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso_titulacao
+ADD CONSTRAINT fk1bu3y46jwvfc24y707b8hr57s FOREIGN KEY (curso_id) REFERENCES public.curso(id_curso);
+--
+-- TOC entry 3440 (class 2606 OID 36492)
 -- Name: cota fk1lve8o0jw4i8ksl2dxp0lm8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cota
-    ADD CONSTRAINT fk1lve8o0jw4i8ksl2dxp0lm8 FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk1lve8o0jw4i8ksl2dxp0lm8 FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3444 (class 2606 OID 18772)
--- Name: etnia fk2gady9tv8ecy50ushe4dahyll; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3437 (class 2606 OID 36482)
+-- Name: contribuicao fk2ccawuj4bpvj1vk6mhrb6b0op; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.etnia
-    ADD CONSTRAINT fk2gady9tv8ecy50ushe4dahyll FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ALTER TABLE ONLY public.contribuicao
+ADD CONSTRAINT fk2ccawuj4bpvj1vk6mhrb6b0op FOREIGN KEY (egresso_id) REFERENCES public.egresso(id_egresso);
 --
--- TOC entry 3456 (class 2606 OID 18837)
+-- TOC entry 3462 (class 2606 OID 36607)
+-- Name: egresso_titulacao fk2pj0kns83aqiewk5pf2wxj1n9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso_titulacao
+ADD CONSTRAINT fk2pj0kns83aqiewk5pf2wxj1n9 FOREIGN KEY (egresso_id_egresso) REFERENCES public.egresso(id_egresso);
+--
+-- TOC entry 3454 (class 2606 OID 36562)
+-- Name: egresso_cota fk2rs3m3oq3ujpj3nvgbyaqwata; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso_cota
+ADD CONSTRAINT fk2rs3m3oq3ujpj3nvgbyaqwata FOREIGN KEY (id_egresso) REFERENCES public.egresso(id_egresso);
+--
+-- TOC entry 3483 (class 2606 OID 36707)
 -- Name: tipo_bolsa fk3c5grr0qggvj0dw2fada2xhyv; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_bolsa
-    ADD CONSTRAINT fk3c5grr0qggvj0dw2fada2xhyv FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk3c5grr0qggvj0dw2fada2xhyv FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3418 (class 2606 OID 18672)
+-- TOC entry 3447 (class 2606 OID 36542)
 -- Name: egresso fk3lb1ai4t6bvvsu9jc9qm0fisi; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.egresso
-    ADD CONSTRAINT fk3lb1ai4t6bvvsu9jc9qm0fisi FOREIGN KEY (usuario_id) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk3lb1ai4t6bvvsu9jc9qm0fisi FOREIGN KEY (usuario_id) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3438 (class 2606 OID 18742)
--- Name: egresso_tabalho_publicado fk3sf576u4g9plod0u1p97rte3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.egresso_tabalho_publicado
-    ADD CONSTRAINT fk3sf576u4g9plod0u1p97rte3 FOREIGN KEY (id_usuario) REFERENCES public.egresso(id_egresso);
-
-
---
--- TOC entry 3413 (class 2606 OID 18617)
+-- TOC entry 3442 (class 2606 OID 36497)
 -- Name: curso fk3tu6gxj4fe3b8vgyhhr17p5d1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.curso
-    ADD CONSTRAINT fk3tu6gxj4fe3b8vgyhhr17p5d1 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk3tu6gxj4fe3b8vgyhhr17p5d1 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3415 (class 2606 OID 18632)
+-- TOC entry 3444 (class 2606 OID 36512)
 -- Name: depoimento fk4282xxihuiq8nqknlkrlmn6k7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.depoimento
-    ADD CONSTRAINT fk4282xxihuiq8nqknlkrlmn6k7 FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk4282xxihuiq8nqknlkrlmn6k7 FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3431 (class 2606 OID 18707)
--- Name: egresso_contribuicao fk4gvopbnet1mmho04h7co01nac; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.egresso_contribuicao
-    ADD CONSTRAINT fk4gvopbnet1mmho04h7co01nac FOREIGN KEY (egresso_id) REFERENCES public.egresso(id_egresso);
-
-
---
--- TOC entry 3448 (class 2606 OID 18792)
+-- TOC entry 3474 (class 2606 OID 36657)
 -- Name: genero fk4hmk8te4ct41ket6gewknyld3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.genero
-    ADD CONSTRAINT fk4hmk8te4ct41ket6gewknyld3 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk4hmk8te4ct41ket6gewknyld3 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3450 (class 2606 OID 18807)
+-- TOC entry 3479 (class 2606 OID 36682)
+-- Name: setor_atuacao fk4qba75lalso4wg21v2lldr81c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.setor_atuacao
+ADD CONSTRAINT fk4qba75lalso4wg21v2lldr81c FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
+--
+-- TOC entry 3476 (class 2606 OID 36672)
 -- Name: grupo fk4x87bpegbq5yd4awx0jpyl7rf; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.grupo
-    ADD CONSTRAINT fk4x87bpegbq5yd4awx0jpyl7rf FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk4x87bpegbq5yd4awx0jpyl7rf FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3406 (class 2606 OID 18587)
+-- TOC entry 3434 (class 2606 OID 36462)
 -- Name: comentario fk5k6dqdx9kn983dj5jx5orhss0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.comentario
-    ADD CONSTRAINT fk5k6dqdx9kn983dj5jx5orhss0 FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk5k6dqdx9kn983dj5jx5orhss0 FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3425 (class 2606 OID 18697)
--- Name: egresso_colacao fk5s4jvmhaxcxqf9ns9emjxsfcl; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3432 (class 2606 OID 36452)
+-- Name: area_atuacao fk5oqxk24ttn7xfiqojcd3hrxqp; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.egresso_colacao
-    ADD CONSTRAINT fk5s4jvmhaxcxqf9ns9emjxsfcl FOREIGN KEY (egresso_id_egresso) REFERENCES public.egresso(id_egresso);
-
-
+ALTER TABLE ONLY public.area_atuacao
+ADD CONSTRAINT fk5oqxk24ttn7xfiqojcd3hrxqp FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3445 (class 2606 OID 18777)
--- Name: etnia fk61v53y0v0kn5dqm3lk01nmyla; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.etnia
-    ADD CONSTRAINT fk61v53y0v0kn5dqm3lk01nmyla FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
---
--- TOC entry 3409 (class 2606 OID 18597)
+-- TOC entry 3438 (class 2606 OID 36472)
 -- Name: contribuicao fk7x5ccymo3mvys7sdoar4w27jy; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.contribuicao
-    ADD CONSTRAINT fk7x5ccymo3mvys7sdoar4w27jy FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk7x5ccymo3mvys7sdoar4w27jy FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3419 (class 2606 OID 18657)
--- Name: egresso fk8fxxf75hx1hh70l37mgssxq7x; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3481 (class 2606 OID 36697)
+-- Name: setor_atuacao_empresa fk86mqotohj7rghjrby21y54sr7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.egresso
-    ADD CONSTRAINT fk8fxxf75hx1hh70l37mgssxq7x FOREIGN KEY (endereco_id) REFERENCES public.endereco(id_endereco);
-
-
+ALTER TABLE ONLY public.setor_atuacao_empresa
+ADD CONSTRAINT fk86mqotohj7rghjrby21y54sr7 FOREIGN KEY (id_setor_atuacao) REFERENCES public.setor_atuacao(id_setor_atuacao);
 --
--- TOC entry 3447 (class 2606 OID 18782)
+-- TOC entry 3473 (class 2606 OID 36647)
 -- Name: faixa_salarial fk96o103aeo1xeuhgnn0hhs6bl0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.faixa_salarial
-    ADD CONSTRAINT fk96o103aeo1xeuhgnn0hhs6bl0 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk96o103aeo1xeuhgnn0hhs6bl0 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3457 (class 2606 OID 18832)
+-- TOC entry 3484 (class 2606 OID 36702)
 -- Name: tipo_bolsa fk9brd9pf3m513c4qwotx7j5l5f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_bolsa
-    ADD CONSTRAINT fk9brd9pf3m513c4qwotx7j5l5f FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk9brd9pf3m513c4qwotx7j5l5f FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3464 (class 2606 OID 18904)
+-- TOC entry 3489 (class 2606 OID 36737)
 -- Name: usuario_grupo fk9huj1upwjyabwkwnpnhnernnu; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.usuario_grupo
-    ADD CONSTRAINT fk9huj1upwjyabwkwnpnhnernnu FOREIGN KEY (id_usuario) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fk9huj1upwjyabwkwnpnhnernnu FOREIGN KEY (id_usuario) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3441 (class 2606 OID 18757)
+-- TOC entry 3468 (class 2606 OID 36627)
 -- Name: empresa fka0nk763e7luto0itr7it6y5gr; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.empresa
-    ADD CONSTRAINT fka0nk763e7luto0itr7it6y5gr FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fka0nk763e7luto0itr7it6y5gr FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3407 (class 2606 OID 18582)
+-- TOC entry 3455 (class 2606 OID 36557)
+-- Name: egresso_cota fka58rgwpq37hoof2640cw7j2l1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso_cota
+ADD CONSTRAINT fka58rgwpq37hoof2640cw7j2l1 FOREIGN KEY (id_cota) REFERENCES public.cota(id_cota);
+--
+-- TOC entry 3435 (class 2606 OID 36457)
 -- Name: comentario fkac7bpbirc6r6vcplb0fptftnx; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.comentario
-    ADD CONSTRAINT fkac7bpbirc6r6vcplb0fptftnx FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkac7bpbirc6r6vcplb0fptftnx FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3426 (class 2606 OID 18677)
--- Name: egresso_colacao fkad0lc8uoy6j5vi41gtjxwjmbx; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.egresso_colacao
-    ADD CONSTRAINT fkad0lc8uoy6j5vi41gtjxwjmbx FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
---
--- TOC entry 3416 (class 2606 OID 18627)
+-- TOC entry 3445 (class 2606 OID 36507)
 -- Name: depoimento fkadydhxggbqc2ahkodd8du6s2t; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.depoimento
-    ADD CONSTRAINT fkadydhxggbqc2ahkodd8du6s2t FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkadydhxggbqc2ahkodd8du6s2t FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3420 (class 2606 OID 18662)
--- Name: egresso fkais2tyr121r8riq5shnxis9a5; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3463 (class 2606 OID 36617)
+-- Name: egresso_titulacao fkb7ankaa93u5fr4nmbmyw46kmc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.egresso
-    ADD CONSTRAINT fkais2tyr121r8riq5shnxis9a5 FOREIGN KEY (etnia_id) REFERENCES public.etnia(id_etnia);
-
-
+ALTER TABLE ONLY public.egresso_titulacao
+ADD CONSTRAINT fkb7ankaa93u5fr4nmbmyw46kmc FOREIGN KEY (titulacao_id_titulacao) REFERENCES public.titulacao(id_titulacao);
 --
--- TOC entry 3452 (class 2606 OID 18822)
--- Name: pesquisa_cientifica fkb1v55t12ysomaf0pjgmbm0ol4; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3480 (class 2606 OID 36687)
+-- Name: setor_atuacao fkb7luqi69van4vdyylsmgv32hn; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.pesquisa_cientifica
-    ADD CONSTRAINT fkb1v55t12ysomaf0pjgmbm0ol4 FOREIGN KEY (empresa_id) REFERENCES public.empresa(id_empresa);
-
-
+ALTER TABLE ONLY public.setor_atuacao
+ADD CONSTRAINT fkb7luqi69van4vdyylsmgv32hn FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3427 (class 2606 OID 18702)
--- Name: egresso_colacao fkcbfx8yqfdky3xvvpa2ueglokf; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3464 (class 2606 OID 36612)
+-- Name: egresso_titulacao fkbympkqdq4ugh9r707xwyxmx0i; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.egresso_colacao
-    ADD CONSTRAINT fkcbfx8yqfdky3xvvpa2ueglokf FOREIGN KEY (empresa_id) REFERENCES public.empresa(id_empresa);
-
-
+ALTER TABLE ONLY public.egresso_titulacao
+ADD CONSTRAINT fkbympkqdq4ugh9r707xwyxmx0i FOREIGN KEY (empresa_id) REFERENCES public.empresa(id_empresa);
 --
--- TOC entry 3412 (class 2606 OID 18607)
+-- TOC entry 3465 (class 2606 OID 36597)
+-- Name: egresso_titulacao fkc2t7d851vn3eko0rgmg8uonqj; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso_titulacao
+ADD CONSTRAINT fkc2t7d851vn3eko0rgmg8uonqj FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
+--
+-- TOC entry 3441 (class 2606 OID 36487)
 -- Name: cota fkcqjq3oy1bo82gon5venmvjw98; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cota
-    ADD CONSTRAINT fkcqjq3oy1bo82gon5venmvjw98 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkcqjq3oy1bo82gon5venmvjw98 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3465 (class 2606 OID 18899)
+-- TOC entry 3448 (class 2606 OID 36532)
+-- Name: egresso fkcqqxhbp7hpudbb1dcyouyaq79; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso
+ADD CONSTRAINT fkcqqxhbp7hpudbb1dcyouyaq79 FOREIGN KEY (tipo_bolsa_id) REFERENCES public.tipo_bolsa(id_tipo_bolsa);
+--
+-- TOC entry 3490 (class 2606 OID 36732)
 -- Name: usuario_grupo fkcu6om65mvqr6ct95ijgqgx7ww; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.usuario_grupo
-    ADD CONSTRAINT fkcu6om65mvqr6ct95ijgqgx7ww FOREIGN KEY (id_grupo) REFERENCES public.grupo(id_grupo);
-
-
+ADD CONSTRAINT fkcu6om65mvqr6ct95ijgqgx7ww FOREIGN KEY (id_grupo) REFERENCES public.grupo(id_grupo);
 --
--- TOC entry 3433 (class 2606 OID 18737)
+-- TOC entry 3452 (class 2606 OID 36552)
+-- Name: egresso_area_atuacao fkd4e7n9hayio2dibmad734t0ra; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso_area_atuacao
+ADD CONSTRAINT fkd4e7n9hayio2dibmad734t0ra FOREIGN KEY (id_area_atuacao) REFERENCES public.area_atuacao(id_area_atuacao);
+--
+-- TOC entry 3456 (class 2606 OID 36587)
 -- Name: egresso_empresa fkdut9kbfj1c87myf42xmao3aja; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.egresso_empresa
-    ADD CONSTRAINT fkdut9kbfj1c87myf42xmao3aja FOREIGN KEY (faixa_salarial_id) REFERENCES public.faixa_salarial(id_faixa_salarial);
-
-
+ADD CONSTRAINT fkdut9kbfj1c87myf42xmao3aja FOREIGN KEY (faixa_salarial_id) REFERENCES public.faixa_salarial(id_faixa_salarial);
 --
--- TOC entry 3460 (class 2606 OID 18857)
--- Name: trabalho_publicado fkejj6gibgk52smjgtgls1ghvcw; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.trabalho_publicado
-    ADD CONSTRAINT fkejj6gibgk52smjgtgls1ghvcw FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
---
--- TOC entry 3453 (class 2606 OID 18827)
--- Name: pesquisa_cientifica fkewerpa5ejhivluvp6biw6ml10; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pesquisa_cientifica
-    ADD CONSTRAINT fkewerpa5ejhivluvp6biw6ml10 FOREIGN KEY (tipo_bolsa_id) REFERENCES public.tipo_bolsa(id_tipo_bolsa);
-
-
---
--- TOC entry 3421 (class 2606 OID 18652)
--- Name: egresso fkexkpbpskvab604sytj2vwkbbi; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.egresso
-    ADD CONSTRAINT fkexkpbpskvab604sytj2vwkbbi FOREIGN KEY (cota_id) REFERENCES public.cota(id_cota);
-
-
---
--- TOC entry 3404 (class 2606 OID 18577)
+-- TOC entry 3430 (class 2606 OID 36442)
 -- Name: anuncio fkf2afyb5u9a2g5kv1wce78ur8t; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.anuncio
-    ADD CONSTRAINT fkf2afyb5u9a2g5kv1wce78ur8t FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkf2afyb5u9a2g5kv1wce78ur8t FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3422 (class 2606 OID 18642)
+-- TOC entry 3449 (class 2606 OID 36522)
 -- Name: egresso fkf322p240i2h2i9sgcn5wjfaot; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.egresso
-    ADD CONSTRAINT fkf322p240i2h2i9sgcn5wjfaot FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkf322p240i2h2i9sgcn5wjfaot FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3461 (class 2606 OID 18852)
--- Name: trabalho_publicado fkh9i8ep2j6ifsmtl46j8pakcfo; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3433 (class 2606 OID 36447)
+-- Name: area_atuacao fkfhdbeqpt6ruvdwof7m4acwoup; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.trabalho_publicado
-    ADD CONSTRAINT fkh9i8ep2j6ifsmtl46j8pakcfo FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ALTER TABLE ONLY public.area_atuacao
+ADD CONSTRAINT fkfhdbeqpt6ruvdwof7m4acwoup FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3434 (class 2606 OID 18717)
+-- TOC entry 3482 (class 2606 OID 36692)
+-- Name: setor_atuacao_empresa fkfjvgsmkx1gif8glw7y6uxjxos; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.setor_atuacao_empresa
+ADD CONSTRAINT fkfjvgsmkx1gif8glw7y6uxjxos FOREIGN KEY (id_empresa) REFERENCES public.empresa(id_empresa);
+--
+-- TOC entry 3457 (class 2606 OID 36567)
 -- Name: egresso_empresa fkhytqndbt06s83doal9nmgcksj; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.egresso_empresa
-    ADD CONSTRAINT fkhytqndbt06s83doal9nmgcksj FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkhytqndbt06s83doal9nmgcksj FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3442 (class 2606 OID 18767)
+-- TOC entry 3470 (class 2606 OID 36642)
 -- Name: endereco fki98kyuu68rp4942s3r9vkko6x; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.endereco
-    ADD CONSTRAINT fki98kyuu68rp4942s3r9vkko6x FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fki98kyuu68rp4942s3r9vkko6x FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3414 (class 2606 OID 18622)
+-- TOC entry 3443 (class 2606 OID 36502)
 -- Name: curso fkiiafe2qpikwi45ggt4p8a5mik; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.curso
-    ADD CONSTRAINT fkiiafe2qpikwi45ggt4p8a5mik FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkiiafe2qpikwi45ggt4p8a5mik FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3405 (class 2606 OID 18572)
+-- TOC entry 3453 (class 2606 OID 36547)
+-- Name: egresso_area_atuacao fkivuyjh4ny3uxkawybgpgxq96a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso_area_atuacao
+ADD CONSTRAINT fkivuyjh4ny3uxkawybgpgxq96a FOREIGN KEY (id_egresso) REFERENCES public.egresso(id_egresso);
+--
+-- TOC entry 3431 (class 2606 OID 36437)
 -- Name: anuncio fkjw0029cxurvkx45044e65h64x; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.anuncio
-    ADD CONSTRAINT fkjw0029cxurvkx45044e65h64x FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkjw0029cxurvkx45044e65h64x FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3423 (class 2606 OID 18667)
+-- TOC entry 3450 (class 2606 OID 36537)
 -- Name: egresso fkk0wr6p5gu54r773ttv5iira6f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.egresso
-    ADD CONSTRAINT fkk0wr6p5gu54r773ttv5iira6f FOREIGN KEY (genero_id) REFERENCES public.genero(id_genero);
-
-
+ADD CONSTRAINT fkk0wr6p5gu54r773ttv5iira6f FOREIGN KEY (genero_id) REFERENCES public.genero(id_genero);
 --
--- TOC entry 3462 (class 2606 OID 18862)
+-- TOC entry 3487 (class 2606 OID 36722)
 -- Name: usuario fkkkymwf8xy047tl0035rhlfpq5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.usuario
-    ADD CONSTRAINT fkkkymwf8xy047tl0035rhlfpq5 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkkkymwf8xy047tl0035rhlfpq5 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3463 (class 2606 OID 18867)
+-- TOC entry 3478 (class 2606 OID 36677)
+-- Name: palestra fkku18fu56mnqdkfwbukwah002; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.palestra
+ADD CONSTRAINT fkku18fu56mnqdkfwbukwah002 FOREIGN KEY (egresso_id) REFERENCES public.egresso(id_egresso);
+--
+-- TOC entry 3488 (class 2606 OID 36727)
 -- Name: usuario fkl4ghr4b3u1vycv960y09ss9a4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.usuario
-    ADD CONSTRAINT fkl4ghr4b3u1vycv960y09ss9a4 FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkl4ghr4b3u1vycv960y09ss9a4 FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3428 (class 2606 OID 18692)
--- Name: egresso_colacao fklv0r9bo87w7g07k5sxdq528n6; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.egresso_colacao
-    ADD CONSTRAINT fklv0r9bo87w7g07k5sxdq528n6 FOREIGN KEY (curso_id) REFERENCES public.curso(id_curso);
-
-
---
--- TOC entry 3408 (class 2606 OID 18592)
+-- TOC entry 3436 (class 2606 OID 36467)
 -- Name: comentario fkm8q6r8t4jmqia3plcao1pih8r; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.comentario
-    ADD CONSTRAINT fkm8q6r8t4jmqia3plcao1pih8r FOREIGN KEY (anuncio_id) REFERENCES public.anuncio(id_anuncio);
-
-
+ADD CONSTRAINT fkm8q6r8t4jmqia3plcao1pih8r FOREIGN KEY (anuncio_id) REFERENCES public.anuncio(id_anuncio);
 --
--- TOC entry 3451 (class 2606 OID 18802)
+-- TOC entry 3477 (class 2606 OID 36667)
 -- Name: grupo fkmabbfeklclq6kit2wnnkgfak0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.grupo
-    ADD CONSTRAINT fkmabbfeklclq6kit2wnnkgfak0 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkmabbfeklclq6kit2wnnkgfak0 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3417 (class 2606 OID 18637)
+-- TOC entry 3446 (class 2606 OID 36517)
 -- Name: depoimento fkmh11nyrmuejhtnlbo1tdxp88v; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.depoimento
-    ADD CONSTRAINT fkmh11nyrmuejhtnlbo1tdxp88v FOREIGN KEY (egresso_id) REFERENCES public.egresso(id_egresso);
-
-
+ADD CONSTRAINT fkmh11nyrmuejhtnlbo1tdxp88v FOREIGN KEY (egresso_id) REFERENCES public.egresso(id_egresso);
 --
--- TOC entry 3439 (class 2606 OID 18747)
--- Name: egresso_tabalho_publicado fkms1rd8cb5i9kwchng3bn8xx72; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.egresso_tabalho_publicado
-    ADD CONSTRAINT fkms1rd8cb5i9kwchng3bn8xx72 FOREIGN KEY (id_trabalho_publicado) REFERENCES public.trabalho_publicado(id_trabalho_publicado);
-
-
---
--- TOC entry 3424 (class 2606 OID 18647)
+-- TOC entry 3451 (class 2606 OID 36527)
 -- Name: egresso fkn1xoojso0x5qw602exgvv7v84; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.egresso
-    ADD CONSTRAINT fkn1xoojso0x5qw602exgvv7v84 FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkn1xoojso0x5qw602exgvv7v84 FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3454 (class 2606 OID 18817)
--- Name: pesquisa_cientifica fknykoy5ti3sn6kqj400se34h1k; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pesquisa_cientifica
-    ADD CONSTRAINT fknykoy5ti3sn6kqj400se34h1k FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
---
--- TOC entry 3458 (class 2606 OID 18847)
+-- TOC entry 3485 (class 2606 OID 36717)
 -- Name: titulacao fko1m66fdoqs86cucbvl928kes4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.titulacao
-    ADD CONSTRAINT fko1m66fdoqs86cucbvl928kes4 FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fko1m66fdoqs86cucbvl928kes4 FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3429 (class 2606 OID 18687)
--- Name: egresso_colacao fkoa0s7u5ldhsvj60d9k8me0pm; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- TOC entry 3466 (class 2606 OID 36592)
+-- Name: egresso_titulacao fkp74iffsl9ivplq4gkuhyuvsh8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.egresso_colacao
-    ADD CONSTRAINT fkoa0s7u5ldhsvj60d9k8me0pm FOREIGN KEY (colacao_id_titulacao) REFERENCES public.titulacao(id_titulacao);
-
-
+ALTER TABLE ONLY public.egresso_titulacao
+ADD CONSTRAINT fkp74iffsl9ivplq4gkuhyuvsh8 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3410 (class 2606 OID 18602)
+-- TOC entry 3439 (class 2606 OID 36477)
 -- Name: contribuicao fkpm3k93anx938a8ab7bnw2ct0u; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.contribuicao
-    ADD CONSTRAINT fkpm3k93anx938a8ab7bnw2ct0u FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkpm3k93anx938a8ab7bnw2ct0u FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3455 (class 2606 OID 18812)
--- Name: pesquisa_cientifica fkpy956mebthp6xe40htvdiij85; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pesquisa_cientifica
-    ADD CONSTRAINT fkpy956mebthp6xe40htvdiij85 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
---
--- TOC entry 3432 (class 2606 OID 18712)
--- Name: egresso_contribuicao fkq9mn4tfe8aa2ja8eqyqkh2bmi; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.egresso_contribuicao
-    ADD CONSTRAINT fkq9mn4tfe8aa2ja8eqyqkh2bmi FOREIGN KEY (id_contribuicao) REFERENCES public.contribuicao(id_contribuicao);
-
-
---
--- TOC entry 3435 (class 2606 OID 18722)
+-- TOC entry 3458 (class 2606 OID 36572)
 -- Name: egresso_empresa fkqdv2ixbxjn0jihxwra9tadgkb; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.egresso_empresa
-    ADD CONSTRAINT fkqdv2ixbxjn0jihxwra9tadgkb FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkqdv2ixbxjn0jihxwra9tadgkb FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3430 (class 2606 OID 18682)
--- Name: egresso_colacao fkqo0363yfvw2wtwmhpmcstw5se; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.egresso_colacao
-    ADD CONSTRAINT fkqo0363yfvw2wtwmhpmcstw5se FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
---
--- TOC entry 3449 (class 2606 OID 18797)
+-- TOC entry 3475 (class 2606 OID 36662)
 -- Name: genero fkqpmjfeicduajada8ttfr6fvbn; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.genero
-    ADD CONSTRAINT fkqpmjfeicduajada8ttfr6fvbn FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkqpmjfeicduajada8ttfr6fvbn FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3436 (class 2606 OID 18727)
+-- TOC entry 3459 (class 2606 OID 36577)
 -- Name: egresso_empresa fkrrdwo5y0sss2aq6r989sngy0g; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.egresso_empresa
-    ADD CONSTRAINT fkrrdwo5y0sss2aq6r989sngy0g FOREIGN KEY (egresso_id_egresso) REFERENCES public.egresso(id_egresso);
-
-
+ADD CONSTRAINT fkrrdwo5y0sss2aq6r989sngy0g FOREIGN KEY (egresso_id_egresso) REFERENCES public.egresso(id_egresso);
 --
--- TOC entry 3437 (class 2606 OID 18732)
+-- TOC entry 3460 (class 2606 OID 36582)
 -- Name: egresso_empresa fks0wngwsneahqe1p80rh1olamu; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.egresso_empresa
-    ADD CONSTRAINT fks0wngwsneahqe1p80rh1olamu FOREIGN KEY (empresa_id_empresa) REFERENCES public.empresa(id_empresa);
-
-
+ADD CONSTRAINT fks0wngwsneahqe1p80rh1olamu FOREIGN KEY (empresa_id_empresa) REFERENCES public.empresa(id_empresa);
 --
--- TOC entry 3443 (class 2606 OID 18762)
+-- TOC entry 3469 (class 2606 OID 36632)
+-- Name: empresa fks5bj6jkkca1s0d3jgw4wioi9g; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.empresa
+ADD CONSTRAINT fks5bj6jkkca1s0d3jgw4wioi9g FOREIGN KEY (endereco_empresa) REFERENCES public.endereco(id_endereco);
+--
+-- TOC entry 3471 (class 2606 OID 36637)
 -- Name: endereco fkse5padocuj89r79jwdeif1l5i; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.endereco
-    ADD CONSTRAINT fkse5padocuj89r79jwdeif1l5i FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
+ADD CONSTRAINT fkse5padocuj89r79jwdeif1l5i FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
 --
--- TOC entry 3459 (class 2606 OID 18842)
+-- TOC entry 3486 (class 2606 OID 36712)
 -- Name: titulacao fkt7h0tods16trs2x26gd6fkmca; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.titulacao
-    ADD CONSTRAINT fkt7h0tods16trs2x26gd6fkmca FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
--- Completed on 2023-04-23 20:46:49 -03
-
+ADD CONSTRAINT fkt7h0tods16trs2x26gd6fkmca FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
+-- Completed on 2023-05-01 12:28:07 -03
 --
 -- PostgreSQL database dump complete
 --
-

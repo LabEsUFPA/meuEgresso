@@ -6,7 +6,6 @@ import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,6 +20,7 @@ import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -35,6 +35,7 @@ import lombok.NoArgsConstructor;
  * @version 1.0
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "usuario")
@@ -42,11 +43,11 @@ import lombok.NoArgsConstructor;
 public class UsuarioModel extends Auditable implements UserDetails {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_usuario", unique = true, nullable = false)
 	private Integer id;
 
-	@Column(name = "login_usuario", unique = true, nullable = false, updatable = false, length = 100)
+	@Column(name = "login_usuario", unique = true, nullable = false, updatable = false, length = 30)
 	private String username;
 
 	@Column(name = "senha_usuario", nullable = false, unique = false, length = 80)
@@ -55,13 +56,13 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Column(name = "email", nullable = false, unique = false, length = 50)
 	private String email;
 
-	@Column(name = "nome_usuario", nullable = false, unique = false, length = 30)
+	@Column(name = "nome_usuario", nullable = false, unique = false, length = 100)
 	private String nome;
 
 	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
 	private transient EgressoModel egresso;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "usuario_grupo", joinColumns = { @JoinColumn(name = "id_usuario") }, inverseJoinColumns = {
 			@JoinColumn(name = "id_grupo") }, uniqueConstraints = @UniqueConstraint(columnNames = { "id_usuario",
 					"id_grupo" }))

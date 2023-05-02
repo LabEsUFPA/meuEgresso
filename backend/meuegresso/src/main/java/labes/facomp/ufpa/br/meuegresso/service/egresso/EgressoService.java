@@ -1,7 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
-import org.springframework.http.ResponseEntity;
-
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 
 /**
@@ -36,7 +34,7 @@ public interface EgressoService {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	public ResponseEntity<String> deletarEgresso(EgressoModel egresso);
+	public boolean deletarEgresso(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por verificar se egresso existe no banco de dados.
@@ -46,7 +44,7 @@ public interface EgressoService {
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
-	public Boolean existsById(Integer id);
+	public boolean existsById(Integer id);
 
 	/**
 	 * Metodo responsavel por deletar informacoes do egresso no banco de dados a
@@ -66,5 +64,5 @@ public interface EgressoService {
 	 * @param createdBy
 	 * @return
 	 */
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

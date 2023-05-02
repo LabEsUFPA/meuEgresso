@@ -27,5 +27,5 @@ export const Default: Story = {
   render: () => ({
     components: { CustomInput },
     template: '<CustomInput />'
-  }),
+  })
 }

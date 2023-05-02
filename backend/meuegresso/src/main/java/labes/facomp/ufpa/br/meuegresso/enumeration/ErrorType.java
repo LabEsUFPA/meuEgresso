@@ -25,7 +25,9 @@ public enum ErrorType {
 
     USER_001("Usuário %s ja existe.", "US-001"),
 
-    USER_002("Usuario ou Senha inválida.", "US-002");
+    USER_002("Usuario ou Senha inválida.", "US-002"),
+
+    EGRESSO_NAO_VALIDO("Usuario não cadastrado pela faculdade", "EV-001");
 
     private String message;
     private String internalCode;

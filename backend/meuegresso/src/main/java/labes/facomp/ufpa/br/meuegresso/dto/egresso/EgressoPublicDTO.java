@@ -28,8 +28,6 @@ public class EgressoPublicDTO {
 
     private Boolean cotista;
 
-    private Boolean pcd = false;
-
     private Boolean interesseEmPos = false;
 
     private String lattes;

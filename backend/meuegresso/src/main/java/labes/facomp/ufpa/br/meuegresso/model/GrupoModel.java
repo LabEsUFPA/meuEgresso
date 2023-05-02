@@ -12,8 +12,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -26,15 +29,18 @@ import lombok.ToString;
  * @version 1.0
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "grupo")
 @ToString(exclude = { "usuarios" })
 @EqualsAndHashCode(callSuper = false, exclude = "usuarios")
 public class GrupoModel extends Auditable implements GrantedAuthority {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_grupo", unique = true, nullable = false)
-	private Integer idGrupo;
+	private Integer id;
 
 	@Column(name = "nome_grupo", unique = true, nullable = false, length = 50)
 	private String nomeGrupo;

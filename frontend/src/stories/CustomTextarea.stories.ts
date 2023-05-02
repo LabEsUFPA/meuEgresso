@@ -27,5 +27,5 @@ export const Default: Story = {
   render: () => ({
     components: { CustomTextarea },
     template: '<CustomTextarea />'
-  }),
+  })
 }
