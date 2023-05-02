@@ -58,6 +58,7 @@
                 <CustomInput
                   class="mb-5"
                   name="geral.nome"
+                  :value="dataEgresso.profileHead.nome"
                   label=""
                   placeholder="Ex: Marcelle Mota"
 
@@ -112,6 +113,7 @@
                     input-class="w-[150px] h-[31px] "
                     :icon-path="mdiLinkVariant"
                     name="geral.linkedin"
+                    :value="dataEgresso.profileHead.linkedin"
                   />
                 </template>
               </CustomButtonLink>
@@ -133,6 +135,7 @@
                     label=""
                     :icon-path="mdiLinkVariant"
                     name="geral.lattes"
+                    :value="dataEgresso.profileHead.lattes"
                   />
                 </template>
               </Custombuttonlink>
@@ -211,7 +214,7 @@
                   class="mb-1"
                   name="geral.nascimento"
                   :vmodel="dataEgresso.geral.nascimento"
-                  label="dataEgresso Nascimento"
+                  label="Data de Nascimento"
                   placeholder="01/01/2001"
                   :icon-path="mdiCake"
                 />
@@ -221,6 +224,7 @@
                 <CustomSelect
                   class="mb-5"
                   name="geral.genero"
+                  :value="dataEgresso.geral.genero"
                   label="Genero"
                   :options="selectOpts.genero"
                   required
@@ -228,6 +232,7 @@
                 <CustomInput
                   class="mb-5"
                   name="geral.email"
+                  :value="dataEgresso.geral.email"
                   label="E-mail"
                   placeholder="Ex: marcelle.mota.@gov.br"
                   helper-text="Use um email válido: hotmail, outlook, gmail, etc."
@@ -237,6 +242,7 @@
                 <CustomInput
                   class="mb-5"
                   name="geral.nascimento"
+                  :value="dataEgresso.geral.nascimento"
                   label="Data de Nascimento"
                   type="date"
                 />
@@ -334,6 +340,7 @@
                 <CustomSelect
                   class="mb-5"
                   name="localizacao.pais"
+                  :value="dataEgresso.localizacao.pais"
                   label="País"
                   :options="countries"
                   v-model:value="selections.pais"
@@ -343,6 +350,7 @@
                 <CustomSelect
                   class="mb-5"
                   name="localizacao.estado"
+                  :value="dataEgresso.localizacao.estado"
                   label="Estado"
                   :options="states"
                   v-model:value="selections.estado"
@@ -351,6 +359,7 @@
 
                 <CustomSelect
                   name="localizacao.cidade"
+                  :value="dataEgresso.localizacao.cidade"
                   label="Cidade"
                   :options="cities"
                   required
@@ -482,6 +491,7 @@
                 <CustomInput
                   class="mb-5"
                   name="academico.matricula"
+                  :value="dataEgresso.academico.matricula"
                   label="Matrícula"
                   mask="############"
                   placeholder="205004940001"
@@ -491,6 +501,7 @@
                 <CustomInput
                   class="mb-5"
                   name="academico.email"
+                  :value="dataEgresso.academico.email"
                   label="Email institucional"
                   placeholder="Selecione"
                   required
@@ -499,6 +510,7 @@
                 <CustomSelect
                   class="mb-5"
                   name="academico.tipoAluno"
+                  :value="dataEgresso.academico.tipoAluno"
                   label="Tipo de Aluno"
                   placeholder="Selecione"
                   :options="selectOpts.tipoAluno"
@@ -512,6 +524,7 @@
                 <CustomCheckbox
                   class="mb-5"
                   name="academico.cotista.value"
+                  :value="dataEgresso.academico.cotista.value"
                   label="Cotista"
                   v-model:value="bools.cotista"
                 />
@@ -519,6 +532,7 @@
                 <CustomSelect
                   class="mb-5"
                   name="academico.cotista.tipo"
+                  :value="dataEgresso.academico.cotista.tipo"
                   label="Tipo de Cota"
                   placeholder="Selecione"
                   :options="selectOpts.tipoCota"
@@ -529,6 +543,7 @@
                 <CustomCheckbox
                   class="mb-5"
                   name="academico.bolsista.value"
+                  :value="dataEgresso.academico.bolsista.value"
                   label="Bolsista"
                   v-model:value="bools.bolsista"
                 />
@@ -536,6 +551,7 @@
                 <CustomSelect
                   class="mb-5"
                   name="academico.bolsista.tipo"
+                  :value="dataEgresso.academico.bolsista.tipo"
                   label="Tipo de Bolsa"
                   placeholder="Selecione"
                   :options="selectOpts.tipoBolsa"
@@ -546,6 +562,7 @@
                 <CustomInput
                   class="mb-5"
                   name="academico.bolsista.remuneracao"
+                  :value="dataEgresso.academico.bolsista.remuneracao"
                   label="Remuneração da bolsa"
                   placeholder="Selecione"
                   type="number"
@@ -557,6 +574,7 @@
                 <CustomCheckbox
                   class="mb-5"
                   name="academico.posGrad.value"
+                  :value="dataEgresso.academico.posGrad.value"
                   v-model:value="bools.posGrad"
                   label="Pós-graduação"
                 />
@@ -564,6 +582,7 @@
                 <CustomInput
                   class="mb-5"
                   name="academico.posGrad.local"
+                  :value="dataEgresso.academico.posGrad.local"
                   label="Local da pós-graduação"
                   placeholder="Selecione"
                   :required="bools.posGrad"
@@ -573,6 +592,7 @@
                 <CustomInput
                   class="mb-5"
                   name="academico.posGrad.curso"
+                  :value="dataEgresso.academico.posGrad.curso"
                   label="Curso de pós-graduação"
                   placeholder="Selecione"
                   :required="bools.posGrad"
@@ -581,6 +601,7 @@
 
                 <CustomCheckbox
                   name="academico.posGrad.desejaPos"
+                  :value="dataEgresso.academico.posGrad.desejaPos"
                   label="Deseja realizar pós graduação?"
                   v-if="!bools.posGrad"
                 />
@@ -659,6 +680,7 @@
                 <CustomSelect
                   class="mb-5"
                   name="carreira.area"
+                  :value="dataEgresso.carreira.area"
                   label="Area de Atuação"
                   placeholder="Selecione"
                   v-model:value="selections.area"
@@ -668,6 +690,7 @@
                 <CustomSelect
                   class="mb-5"
                   name="carreira.setor"
+                  :value="dataEgresso.carreira.setor"
                   label="Setor de Atuação"
                   placeholder="Selecione"
                   :options="selectOpts.setorAtuacao"
@@ -678,6 +701,7 @@
                 <CustomInput
                   class="mb-5"
                   name="carreira.empresa"
+                  :value="dataEgresso.carreira.empresa"
                   label="Empresa"
                   placeholder="Ex: Google"
                   :required="selections.area !== 'Desempregado'"
@@ -687,6 +711,7 @@
                 <CustomInput
                   class="mb-5"
                   name="carreira.faixaSalarial"
+                  :value="dataEgresso.carreira.faixaSalarial"
                   label="Faixa Salarial"
                   type="number"
                   step="0.01"
@@ -762,6 +787,7 @@
               <div v-else>
                 <CustomCheckbox
                   name="adicionais.palestras"
+                  :value="dataEgresso.adicionais.palestras"
                   label="Gostaria de apresentar palestras"
                   class="mb-5"
                   v-model:value="bools.palestras"
@@ -774,6 +800,7 @@
                 <CustomTextarea
                   class="mb-5"
                   name="adicionais.assuntosPalestras"
+                  :value="dataEgresso.adicionais.assuntosPalestras"
                   :required="bools.palestras"
                   :disabled="!bools.palestras"
                 />
@@ -785,13 +812,17 @@
                 <CustomTextarea
                   class="mb-5"
                   name="adicionais.experiencias"
+                  :value="dataEgresso.adicionais.experiencias"
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
                   Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto:
                 </div>
 
-                <CustomTextarea name="adicionais.contribuicoes" />
+                <CustomTextarea
+                  name="adicionais.contribuicoes"
+                  :value="dataEgresso.adicionais.contribuicoes"
+                />
               </div>
             </template>
           </FolderSection>
@@ -815,8 +846,8 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
-import { computed, ref } from 'vue'
-
+import { computed, ref, onMounted, watch } from 'vue'
+import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import svgPath from 'src/assets/svgPaths.json'
 import CustomTextarea from 'src/components/CustomTextarea.vue'
 import { Form } from 'vee-validate'
@@ -824,6 +855,7 @@ import { object, string, date, boolean } from 'yup'
 import CustomButton from 'src/components/CustomButton.vue'
 import egressoModel from 'src/model/egressoModel'
 import { updateEgressoDataModel } from 'src/store/ResponseStore.vue'
+import LocalStorage from 'src/services/localStorage'
 
 import {
   mdiAccount,
@@ -842,24 +874,13 @@ import {
 import { getRandomValues } from 'crypto'
 import { userInfo } from 'os'
 // mdiHome CEP,
+const $store = usePerfilEgressoStore()
+const storage = new LocalStorage()
+
+$store.fetchAll()
 
 const myForm = ref<HTMLFormElement>()
-
-function Test () {
-  console.log('231231234')
-}
-function callSubmit () {
-  // call the submit method of the form element
-  console.log('23123123')
-  myForm.value?.submit()
-}
-// defineExpose({
-
-//   callSubmit () {
-//     // call the submit method of the form element
-//     myForm.value?.submit(Test)
-//   }
-// })
+const form = ref<typeof Form | null>(null)
 
 // Futuro: 1 Autenticar usr ('/auth/register' ? ,), 2 get egresso, 3 update egresso
 async function handleSubmitHeader (values: any) {
@@ -867,106 +888,75 @@ async function handleSubmitHeader (values: any) {
   toggleIsInput('profileHead')
   console.log(values)
   // const valuesJSON = JSON.stringify(values, null, 2)
-  dataEgresso.value.profileHead.nome = values.geral.nome
-  dataEgresso.value.profileHead.linkedin = values.geral.linkedin
-  dataEgresso.value.profileHead.lattes = values.geral.lattes
+  // dataEgresso.value.profileHead.nome = values.geral.nome
+  // dataEgresso.value.profileHead.linkedin = values.geral.linkedin
+  // dataEgresso.value.profileHead.lattes = values.geral.lattes
+  dataEgresso.value.profileHead = values.geral
+  $store.atualizarEgresso(dataEgresso.value.profileHead)
+
+  const status = await $store.atualizarEgresso({
+    nascimento: values.geral.nascimento.toString(),
+    generoId: parseInt(values.geral.genero),
+    matricula: values.academico.matricula,
+    cotista: Boolean(values.academico.cotista.value),
+    bolsista: Boolean(values.academico.bolsista.value),
+    interesseEmPos: Boolean(values.academico.desejaPos),
+    lattes: values.geral.lattes || null,
+    linkedin: values.geral.linkedin || null,
+    posGraduacao: Boolean(values.academico.posGrad.value),
+    cotas,
+    nome: values.geral.nome,
+    palestras,
+    contribuicao: {
+      descricao: values.adicionais.contribuicoes
+    },
+    depoimento: {
+      descricao: values.adicionais.experiencias
+    },
+    bolsaId: values.academico.bolsista.tipo ? parseInt(values.academico.bolsista.tipo) : null,
+    empresa,
+    titulacao
+  })
+
+  if (status !== 201) {
+    dialogFalha.value = true
+  } else {
+    dialogSucesso.value = true
+  }
 }
+
 async function handleSubmitGeral (values: any) {
   console.log('handleSubmitGeral')
   toggleIsInput('geral')
   console.log(JSON.stringify(values, null, 2))
-  dataEgresso.value.geral.genero = values.geral.genero
-  dataEgresso.value.geral.genero = values.geral.genero
-  dataEgresso.value.geral.genero = values.geral.genero
+  dataEgresso.value.geral = values.geral
+  $store.atualizarEgresso({})
 }
 
 async function handleSubmitAcademico (values: any) {
   console.log('handleSubmitAcademico')
   toggleIsInput('academico')
   console.log(JSON.stringify(values, null, 2))
+  dataEgresso.value.academico = values.academico
 }
 async function handleSubmitLocalizacao (values: any) {
   console.log('handleSubmitLocalizacao')
   toggleIsInput('localizacao')
   console.log(JSON.stringify(values, null, 2))
+  dataEgresso.value.localizacao = values.localizacao
 }
 async function handleSubmitCarreira (values: any) {
   console.log('handleSubmitCarreira')
   toggleIsInput('carreira')
   console.log(JSON.stringify(values, null, 2))
+  dataEgresso.value.carreira = values.carreira
 }
 async function handleSubmitAdicionais (values: any) {
   console.log('handleSubmitAdicionais')
   toggleIsInput('adicionais')
   console.log(JSON.stringify(values, null, 2))
+  dataEgresso.value.adicionais = values.adicionais
 }
-
-async function handleSubmit (values: any) {
-  // $event.preventDefault()
-  console.log('HandleSubmit')
-  console.log('Values: ' + values)
-  toggleIsInput(FolderLabel)
-  // const data: egressoModel = {
-  //   // String to number >:)
-
-  //   matricula: +dataEgresso.value.academico.matricula,
-  //   email: dataEgresso.value.geral.email,
-  //   genero: {
-  //     nome: dataEgresso.value.geral.genero
-  //   },
-  //   cotista: dataEgresso.value.academico.cotista.value,
-  //   pcd: dataEgresso.value.academico.bolsista.value,
-  //   interesseEmPos: dataEgresso.value.academico.posGrad.value,
-  //   lattes: dataEgresso.value.geral.lattes,
-  //   linkedin: dataEgresso.value.geral.linkedin,
-  //   endereco: {
-  //     cidade: dataEgresso.value.localizacao.cidade,
-  //     estado: dataEgresso.value.localizacao.estado,
-  //     pais: dataEgresso.value.localizacao.pais
-  //   }
-  // }
-  // const data: egressoModel = {
-  //   matricula: 0,
-  //   email: 'string',
-  //   genero: {
-  //     nome: 'string'
-  //   },
-  //   cotista: true,
-  //   pcd: true,
-  //   interesseEmPos: true,
-  //   lattes: 'string',
-  //   linkedin: 'string',
-  //   endereco: {
-  //     cidade: 'string',
-  //     estado: 'string',
-  //     pais: 'string'
-  //   }
-  // }
-  // updateEgressoDataModel(data)
-  switch (FolderLabel) {
-    case 'profileHead':
-      dataEgresso.value.profileHead.isInput = !dataEgresso.value.profileHead.isInput
-      break
-    case 'geral':
-      dataEgresso.value.geral.isInput = !dataEgresso.value.geral.isInput
-      break
-    case 'localizacao':
-      dataEgresso.value.localizacao.isInput = !dataEgresso.value.localizacao.isInput
-      break
-    case 'academico':
-      dataEgresso.value.academico.isInput = !dataEgresso.value.academico.isInput
-      break
-    case 'carreira':
-      dataEgresso.value.carreira.isInput = !dataEgresso.value.carreira.isInput
-      break
-    case 'adicionais':
-      dataEgresso.value.adicionais.isInput = !dataEgresso.value.adicionais.isInput
-  }
-}
-
-// function submit () {
-//   $emit('submit')
-// }
 
 let isInputLocal = false
 function toggleIsInput (FolderLabel: string) {
@@ -975,47 +965,26 @@ function toggleIsInput (FolderLabel: string) {
   switch (FolderLabel) {
     case 'profileHead':
       dataEgresso.value.profileHead.isInput = !dataEgresso.value.profileHead.isInput
-      if (isInputLocal) {
-        // handleSubmitHeader()
-        // callSubmit()
-      }
-
-      // handleSubmitHeader()
 
       break
     case 'geral':
       dataEgresso.value.geral.isInput = !dataEgresso.value.geral.isInput
-      if (isInputLocal) {
-        // handleSubmitGeral()
-      }
 
       break
     case 'localizacao':
       dataEgresso.value.localizacao.isInput = !dataEgresso.value.localizacao.isInput
-      if (isInputLocal) {
-        // handleSubmitLocalizacao()
-      }
 
       break
     case 'academico':
       dataEgresso.value.academico.isInput = !dataEgresso.value.academico.isInput
-      if (isInputLocal) {
-        // handleSubmitAcademico()
-      }
 
       break
     case 'carreira':
       dataEgresso.value.carreira.isInput = !dataEgresso.value.carreira.isInput
-      if (isInputLocal) {
-        // handleSubmitCarreira()
-      }
 
       break
     case 'adicionais':
       dataEgresso.value.adicionais.isInput = !dataEgresso.value.adicionais.isInput
-      if (isInputLocal) {
-        // handleSubmitAdicionais()
-      }
   }
 
   isInputLocal = !isInputLocal
@@ -1263,7 +1232,8 @@ const dataEgresso = ref({
       value: false,
       tipo: '',
       local: '',
-      curso: ''
+      curso: '',
+      desejaPos: false
     },
     isInput: false
   },
@@ -1291,6 +1261,27 @@ const dataEgresso = ref({
   }
 })
 
+onMounted(() => {
+  // watch(pais, () => {
+  //   form.value?.setFieldValue('localizacao.cidade', '')
+  //   form.value?.setFieldValue('localizacao.estado', '')
+  // })
+
+  // watch(estado, () => {
+  //   form.value?.setFieldValue('localizacao.cidade', '')
+  // })
+
+  if (storage.has('loggedUser')) {
+    const userData = JSON.parse(storage.get('loggedUser'))
+
+    form.value?.setFieldValue('geral.email', userData.email)
+    form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
+      return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
+    }).join(' '))
+    dataEgresso.value.profileHead.nome = userData.nome
+    dataEgresso.value.geral.email = userData.email
+  }
+})
 </script>
 <style>
 </style>
