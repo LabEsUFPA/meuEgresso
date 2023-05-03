@@ -14,7 +14,6 @@
 
       <div class="items-center flex relative w-[7000px] flex-col">
         <Form
-          ref="myForm"
           @submit="handleSubmitHeader"
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
@@ -854,7 +853,6 @@ import { Form } from 'vee-validate'
 import { object, string, date, boolean } from 'yup'
 import CustomButton from 'src/components/CustomButton.vue'
 import egressoModel from 'src/model/egressoModel'
-import { updateEgressoDataModel } from 'src/store/ResponseStore.vue'
 import LocalStorage from 'src/services/localStorage'
 
 import {
@@ -879,7 +877,6 @@ const storage = new LocalStorage()
 
 $store.fetchAll()
 
-const myForm = ref<HTMLFormElement>()
 const form = ref<typeof Form | null>(null)
 
 // Futuro: 1 Autenticar usr ('/auth/register' ? ,), 2 get egresso, 3 update egresso
@@ -892,37 +889,37 @@ async function handleSubmitHeader (values: any) {
   // dataEgresso.value.profileHead.linkedin = values.geral.linkedin
   // dataEgresso.value.profileHead.lattes = values.geral.lattes
   dataEgresso.value.profileHead = values.geral
-  $store.atualizarEgresso(dataEgresso.value.profileHead)
+  // $store.atualizarEgresso(dataEgresso.value.profileHead)
+  $store.atualizarEgresso(values.geral)
+  // const status = await $store.atualizarEgresso({
+  //   nascimento: values.geral.nascimento.toString(),
+  //   generoId: parseInt(values.geral.genero),
+  //   matricula: values.academico.matricula,
+  //   cotista: Boolean(values.academico.cotista.value),
+  //   bolsista: Boolean(values.academico.bolsista.value),
+  //   interesseEmPos: Boolean(values.academico.desejaPos),
+  //   lattes: values.geral.lattes || null,
+  //   linkedin: values.geral.linkedin || null,
+  //   posGraduacao: Boolean(values.academico.posGrad.value),
+  //   cotas,
+  //   nome: values.geral.nome,
+  //   palestras,
+  //   contribuicao: {
+  //     descricao: values.adicionais.contribuicoes
+  //   },
+  //   depoimento: {
+  //     descricao: values.adicionais.experiencias
+  //   },
+  //   bolsaId: values.academico.bolsista.tipo ? parseInt(values.academico.bolsista.tipo) : null,
+  //   empresa,
+  //   titulacao
+  // })
 
-  const status = await $store.atualizarEgresso({
-    nascimento: values.geral.nascimento.toString(),
-    generoId: parseInt(values.geral.genero),
-    matricula: values.academico.matricula,
-    cotista: Boolean(values.academico.cotista.value),
-    bolsista: Boolean(values.academico.bolsista.value),
-    interesseEmPos: Boolean(values.academico.desejaPos),
-    lattes: values.geral.lattes || null,
-    linkedin: values.geral.linkedin || null,
-    posGraduacao: Boolean(values.academico.posGrad.value),
-    cotas,
-    nome: values.geral.nome,
-    palestras,
-    contribuicao: {
-      descricao: values.adicionais.contribuicoes
-    },
-    depoimento: {
-      descricao: values.adicionais.experiencias
-    },
-    bolsaId: values.academico.bolsista.tipo ? parseInt(values.academico.bolsista.tipo) : null,
-    empresa,
-    titulacao
-  })
-
-  if (status !== 201) {
-    dialogFalha.value = true
-  } else {
-    dialogSucesso.value = true
-  }
+  // if (status !== 201) {
+  //   dialogFalha.value = true
+  // } else {
+  //   dialogSucesso.value = true
+  // }
 }
 
 async function handleSubmitGeral (values: any) {
@@ -965,7 +962,6 @@ function toggleIsInput (FolderLabel: string) {
   switch (FolderLabel) {
     case 'profileHead':
       dataEgresso.value.profileHead.isInput = !dataEgresso.value.profileHead.isInput
-
       break
     case 'geral':
       dataEgresso.value.geral.isInput = !dataEgresso.value.geral.isInput
@@ -1048,78 +1044,10 @@ function onInvalid (e: any) {
   console.log('INVALID')
   console.log(e)
 }
-const schema = object().shape({
-  geral: object({
-    nome: string().required(),
-    nascimento: date().required(),
-    email: string().email().required(),
-    genero: string().required(),
-    linkedin: string(),
-    lattes: string()
-  }),
-  localizacao: object({
-    pais: string().required(),
-    estado: string().required(),
-    cidade: string().required()
-  }),
-  academico: object({
-    matricula: string().required(),
-    email: string().email().required(),
-    tipoAluno: string().required(),
-    cotista: object({
-      value: boolean(),
-      tipo: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
-      })
-    }),
-    bolsista: object({
-      value: boolean(),
-      tipo: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
-      }),
-      remuneracao: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
-      })
-    }),
-    posGrad: object({
-      value: boolean(),
-      local: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
-      }),
-      curso: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
-      })
-    }),
-    desejaPos: boolean()
-  }),
-
-  carreira: object({
-    area: string().required(),
-    setor: string().when('area', ([area], schema) => {
-      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
-    }),
-    empresa: string().when('area', ([area], schema) => {
-      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
-    }),
-    faixaSalarial: string().when('area', ([area], schema) => {
-      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
-    })
-  }),
-  adicionais: object({
-    palestras: boolean(),
-    assuntosPalestras: string().when('palestras', ([palestras], schema) => {
-      return palestras ? schema.required() : schema.notRequired()
-    }),
-    experiencias: string().required(),
-    contribuicoes: string().required()
-  })
-})
-
-// Add email para resquest
 
 const schemaHeader = object().shape({
   geral: object({
-    nome: string(),
+    nome: string().required(),
     linkedin: string(),
     lattes: string()
   })
@@ -1278,8 +1206,9 @@ onMounted(() => {
     form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
       return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
     }).join(' '))
-    dataEgresso.value.profileHead.nome = userData.nome
-    dataEgresso.value.geral.email = userData.email
+    console.log('Logged in')
+    // dataEgresso.value.profileHead.nome = userData.nome
+    // dataEgresso.value.geral.email = userData.email
   }
 })
 </script>
