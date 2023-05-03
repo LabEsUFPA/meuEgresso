@@ -341,7 +341,7 @@
                   :value="dataEgresso.localizacao.pais"
                   label="País"
                   :options="countries"
-                  v-model:value="selections.pais"
+                  v-model:value="dataEgresso.localizacao.pais"
                   required
                 />
 
@@ -351,7 +351,7 @@
                   :value="dataEgresso.localizacao.estado"
                   label="Estado"
                   :options="states"
-                  v-model:value="selections.estado"
+                  v-model:value="dataEgresso.localizacao.estado"
                   required
                 />
 
@@ -524,7 +524,7 @@
                   name="academico.cotista.value"
                   :value="dataEgresso.academico.cotista.value"
                   label="Cotista"
-                  v-model:value="bools.cotista"
+                  v-model:value="dataEgresso.academico.cotista.value"
                 />
 
                 <CustomSelect
@@ -534,8 +534,8 @@
                   label="Tipo de Cota"
                   placeholder="Selecione"
                   :options="selectOpts.tipoCota"
-                  :required="bools.cotista"
-                  :disabled="!bools.cotista"
+                  :required="dataEgresso.academico.cotista.value"
+                  :disabled="!dataEgresso.academico.cotista.value"
                 />
 
                 <CustomCheckbox
@@ -543,7 +543,7 @@
                   name="academico.bolsista.value"
                   :value="dataEgresso.academico.bolsista.value"
                   label="Bolsista"
-                  v-model:value="bools.bolsista"
+                  v-model:value="dataEgresso.academico.bolsista.value"
                 />
 
                 <CustomSelect
@@ -553,8 +553,8 @@
                   label="Tipo de Bolsa"
                   placeholder="Selecione"
                   :options="selectOpts.tipoBolsa"
-                  :required="bools.bolsista"
-                  :disabled="!bools.bolsista"
+                  :required="dataEgresso.academico.bolsista.value"
+                  :disabled="!dataEgresso.academico.bolsista.value"
                 />
 
                 <CustomInput
@@ -565,15 +565,15 @@
                   placeholder="Selecione"
                   type="number"
                   step="0.01"
-                  :required="bools.bolsista"
-                  :disabled="!bools.bolsista"
+                  :required="dataEgresso.academico.bolsista.value"
+                  :disabled="!dataEgresso.academico.bolsista.value"
                 />
 
                 <CustomCheckbox
                   class="mb-5"
                   name="academico.posGrad.value"
                   :value="dataEgresso.academico.posGrad.value"
-                  v-model:value="bools.posGrad"
+                  v-model:value="dataEgresso.academico.posGrad.value"
                   label="Pós-graduação"
                 />
 
@@ -583,8 +583,8 @@
                   :value="dataEgresso.academico.posGrad.local"
                   label="Local da pós-graduação"
                   placeholder="Selecione"
-                  :required="bools.posGrad"
-                  :disabled="!bools.posGrad"
+                  :required="dataEgresso.academico.posGrad.value"
+                  :disabled="!dataEgresso.academico.posGrad.value"
                 />
 
                 <CustomInput
@@ -593,15 +593,15 @@
                   :value="dataEgresso.academico.posGrad.curso"
                   label="Curso de pós-graduação"
                   placeholder="Selecione"
-                  :required="bools.posGrad"
-                  :disabled="!bools.posGrad"
+                  :required="dataEgresso.academico.posGrad.value"
+                  :disabled="!dataEgresso.academico.posGrad.value"
                 />
 
                 <CustomCheckbox
                   name="academico.posGrad.desejaPos"
                   :value="dataEgresso.academico.posGrad.desejaPos"
                   label="Deseja realizar pós graduação?"
-                  v-if="!bools.posGrad"
+                  v-if="!dataEgresso.academico.posGrad.value"
                 />
               </div>
             </template>
@@ -681,7 +681,7 @@
                   :value="dataEgresso.carreira.area"
                   label="Area de Atuação"
                   placeholder="Selecione"
-                  v-model:value="selections.area"
+                  v-model:value="dataEgresso.localizacao.area"
                   :options="selectOpts.areaAtuacao"
                 />
 
@@ -692,8 +692,8 @@
                   label="Setor de Atuação"
                   placeholder="Selecione"
                   :options="selectOpts.setorAtuacao"
-                  :required="selections.area !== 'Desempregado'"
-                  :disabled="selections.area === 'Desempregado'"
+                  :required="dataEgresso.localizacao.area !== 'Desempregado'"
+                  :disabled="dataEgresso.localizacao.area === 'Desempregado'"
                 />
 
                 <CustomInput
@@ -702,8 +702,8 @@
                   :value="dataEgresso.carreira.empresa"
                   label="Empresa"
                   placeholder="Ex: Google"
-                  :required="selections.area !== 'Desempregado'"
-                  :disabled="selections.area === 'Desempregado'"
+                  :required="dataEgresso.localizacao.area !== 'Desempregado'"
+                  :disabled="dataEgresso.localizacao.area === 'Desempregado'"
                 />
 
                 <CustomInput
@@ -713,8 +713,8 @@
                   label="Faixa Salarial"
                   type="number"
                   step="0.01"
-                  :required="selections.area !== 'Desempregado'"
-                  :disabled="selections.area === 'Desempregado'"
+                  :required="dataEgresso.localizacao.area !== 'Desempregado'"
+                  :disabled="dataEgresso.localizacao.area === 'Desempregado'"
                 />
               </div>
             </template>
@@ -788,7 +788,7 @@
                   :value="dataEgresso.adicionais.palestras"
                   label="Gostaria de apresentar palestras"
                   class="mb-5"
-                  v-model:value="bools.palestras"
+                  v-model:value="dataEgresso.adicionais.palestras"
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -799,8 +799,8 @@
                   class="mb-5"
                   name="adicionais.assuntosPalestras"
                   :value="dataEgresso.adicionais.assuntosPalestras"
-                  :required="bools.palestras"
-                  :disabled="!bools.palestras"
+                  :required="dataEgresso.adicionais.palestras"
+                  :disabled="!dataEgresso.adicionais.palestras"
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -996,17 +996,6 @@ function toggleIsInput (FolderLabel: string) {
 
 //
 
-const selections = ref({
-  pais: '',
-  estado: '',
-  area: ''
-})
-const bools = ref({
-  cotista: false,
-  bolsista: false,
-  posGrad: false,
-  palestras: false
-})
 const selectOpts = ref({
   genero: ['Masculino', 'Feminino', 'Não-Binário', 'Transsexual'],
   tipoAluno: ['Graduação', 'Pós-graduação'],
@@ -1027,7 +1016,7 @@ const countries = computed(() => {
   return filteredCountries
 })
 const states = computed(() => {
-  const states = State.getStatesOfCountry(selections.value.pais)
+  const states = State.getStatesOfCountry(dataEgresso.value.localizacao.value.pais)
   const filteredStates = []
   for (const state of states) {
     filteredStates.push({
@@ -1038,7 +1027,7 @@ const states = computed(() => {
   return filteredStates
 })
 const cities = computed(() => {
-  const cities = City.getCitiesOfState(selections.value.pais, selections.value.estado)
+  const cities = City.getCitiesOfState(dataEgresso.value.localizacao.value.pais, dataEgresso.value.localizacao.value.estado)
   const filteredCities = []
   for (const city of cities) {
     filteredCities.push(city.name)
@@ -1136,11 +1125,16 @@ const schemaAdicionais = object().shape({
     contribuicoes: string().required()
   })
 })
+
+const bools = ref({
+  palestras: false
+})
 const dataEgresso = ref({
   geral: {
     email: '',
     genero: '',
     confirmacaoEmail: '',
+    nascimento: '',
     isInput: false
   },
   localizacao: {
@@ -1214,8 +1208,19 @@ onMounted(() => {
       return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
     }).join(' '))
     console.log('Logged in')
-    // dataEgresso.value.profileHead.nome = userData.nome
-    // dataEgresso.value.geral.email = userData.email
+    dataEgresso.value.profileHead.nome = userData.nome
+    dataEgresso.value.geral.email = userData.email
+    console.log('DATA')
+    console.log(userData)
+    // const responseEgresso = JSON.parse($store.fetchEgresso())
+
+    // console.log(response)
+    // dataEgresso.value = response
+    // if (response?.status === 200) {
+    //   console.log(response)
+    // }
+
+    // const egressoData = JSON.parse($store.fetchEgresso())
   }
 })
 </script>
