@@ -68,9 +68,10 @@ class EmpresaControllerTest {
         @Autowired
         ModelMapper modelMapper;
 
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
         @BeforeAll
         void setUp() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
                 GrupoModel grupoModel = new GrupoModel();
                 grupoModel.setNomeGrupo("ADMIN");
 
@@ -127,8 +128,6 @@ class EmpresaControllerTest {
         @Order(1)
         void testCadastrarEmpresa() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 empresaDTO = EmpresaDTO.builder()
                                 .id(1)
                                 .nome(NOME)
@@ -151,8 +150,6 @@ class EmpresaControllerTest {
         @Order(2)
         void testFindById() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/empresa/" + 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token))
@@ -171,8 +168,6 @@ class EmpresaControllerTest {
         @Order(3)
         void testConsultarEmpresas() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/empresa")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token))
@@ -189,8 +184,6 @@ class EmpresaControllerTest {
         @Test
         @Order(4)
         void testAtualizarEmpresa() throws Exception {
-
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.put("/empresa")

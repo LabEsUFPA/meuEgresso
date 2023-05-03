@@ -67,9 +67,10 @@ class TitulacaoControllerTest {
         @Autowired
         ModelMapper modelMapper;
 
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
         @BeforeAll
         void setUp() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
                 GrupoModel grupoModel = new GrupoModel();
                 grupoModel.setNomeGrupo("ADMIN");
 
@@ -126,8 +127,6 @@ class TitulacaoControllerTest {
         @Order(1)
         void testCadastrarTitulacao() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 titulacaoDTO = TitulacaoDTO.builder()
                                 .id(1)
                                 .nome(NOME)
@@ -170,8 +169,6 @@ class TitulacaoControllerTest {
         @Order(2)
         void testConsultarTitulacaos() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/titulacao")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token))
@@ -188,8 +185,6 @@ class TitulacaoControllerTest {
         @Test
         @Order(3)
         void testAtualizarTitulacao() throws Exception {
-
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.put("/titulacao")

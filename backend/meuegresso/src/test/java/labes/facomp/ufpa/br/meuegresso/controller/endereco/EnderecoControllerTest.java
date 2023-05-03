@@ -69,9 +69,10 @@ class EnderecoControllerTest {
         @Autowired
         ModelMapper modelMapper;
 
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
         @BeforeAll
         void setUp() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
                 GrupoModel grupoModel = new GrupoModel();
                 grupoModel.setNomeGrupo("ADMIN");
 
@@ -128,8 +129,6 @@ class EnderecoControllerTest {
         @Order(1)
         void testCadastrarEndereco() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 enderecoDTO = EnderecoDTO.builder()
                                 .cidade(CIDADE)
                                 .estado(ESTADO)
@@ -152,8 +151,6 @@ class EnderecoControllerTest {
         @Order(2)
         void testFindById() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/endereco/" + 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token))
@@ -172,8 +169,6 @@ class EnderecoControllerTest {
         @Order(3)
         void testConsultarEnderecos() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/endereco")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token))
@@ -190,8 +185,6 @@ class EnderecoControllerTest {
         @Test
         @Order(4)
         void testAtualizarEndereco() throws Exception {
-
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.put("/endereco")

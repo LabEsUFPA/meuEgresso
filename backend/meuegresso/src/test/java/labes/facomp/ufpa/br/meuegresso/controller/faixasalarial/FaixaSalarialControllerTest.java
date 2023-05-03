@@ -73,9 +73,10 @@ class FaixaSalarialControllerTest {
         @Autowired
         ModelMapper modelMapper;
 
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
         @BeforeAll
         void setUp() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
                 GrupoModel grupoModel = new GrupoModel();
                 grupoModel.setNomeGrupo("ADMIN");
 
@@ -124,8 +125,6 @@ class FaixaSalarialControllerTest {
         @Test
         void testCadastrarFaixaSalarial() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/faixaSalarial")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token)
@@ -141,8 +140,6 @@ class FaixaSalarialControllerTest {
 
         @Test
         void testConsultarFaixaSalarials() throws Exception {
-
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/faixaSalarial")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -163,8 +160,6 @@ class FaixaSalarialControllerTest {
 
         @Test
         void testAtualizarFaixaSalarial() throws Exception {
-
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 FaixaSalarialDTO faixaSalarialDTO = modelMapper.map(faixaSalarialModel, FaixaSalarialDTO.class);
 

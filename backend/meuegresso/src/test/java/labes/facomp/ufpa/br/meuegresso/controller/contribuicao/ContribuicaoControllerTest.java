@@ -80,9 +80,10 @@ class ContribuicaoControllerTest {
         @Autowired
         ModelMapper modelMapper;
 
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
         @BeforeAll
         void setUp() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
                 GrupoModel grupoModel = new GrupoModel();
                 grupoModel.setNomeGrupo("ADMIN");
 
@@ -145,8 +146,6 @@ class ContribuicaoControllerTest {
         @Order(1)
         void testCadastrarContribuicao() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 contribuicaoDTO = ContribuicaoDTO.builder()
                                 .descricao(DESCRICAO)
                                 .build();
@@ -167,8 +166,6 @@ class ContribuicaoControllerTest {
         @Order(2)
         void testFindById() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/contribuicao/" + 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token))
@@ -185,8 +182,6 @@ class ContribuicaoControllerTest {
         @Test
         @Order(3)
         void testConsultarContribuicaos() throws Exception {
-
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/contribuicao")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -205,8 +200,6 @@ class ContribuicaoControllerTest {
         @Test
         @Order(4)
         void testAtualizarContribuicao() throws Exception {
-
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.put("/contribuicao")

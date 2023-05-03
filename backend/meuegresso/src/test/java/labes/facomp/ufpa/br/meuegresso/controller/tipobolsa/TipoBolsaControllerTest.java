@@ -64,9 +64,10 @@ public class TipoBolsaControllerTest {
         @Autowired
         ModelMapper modelMapper;
 
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
         @BeforeAll
         void setUp() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
                 GrupoModel grupoModel = new GrupoModel();
                 grupoModel.setNomeGrupo("ADMIN");
 
@@ -108,7 +109,6 @@ public class TipoBolsaControllerTest {
         @Test
         @Order(1)
         void testCadastrarTipoBolsa() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 TipoBolsaDTO tipoBolsaDTO = new TipoBolsaDTO();
                 tipoBolsaDTO.setNome("PIBIC");
@@ -128,7 +128,6 @@ public class TipoBolsaControllerTest {
         @Test
         @Order(2)
         void testBuscarTipoBolsa() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.get("/tipoBolsa")
@@ -148,7 +147,6 @@ public class TipoBolsaControllerTest {
         @Test
         @Order(3)
         void testAtualizarTipoBolsa() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 final String NOVO_NOME = "PROEX";
                 tipoBolsaDTO.setNome(NOVO_NOME);
@@ -169,7 +167,6 @@ public class TipoBolsaControllerTest {
         @Test
         @Order(4)
         void testDeletarTipoBolsa() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.delete("/tipoBolsa")

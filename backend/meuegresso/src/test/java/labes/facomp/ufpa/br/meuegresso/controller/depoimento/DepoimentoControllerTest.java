@@ -80,6 +80,8 @@ class DepoimentoControllerTest {
         @Autowired
         ModelMapper modelMapper;
 
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
         @BeforeAll
         void setUp() throws Exception {
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
@@ -143,7 +145,6 @@ class DepoimentoControllerTest {
                                 .nascimento(LocalDate.parse("2000-05-05"))
                                 .genero(genero)
                                 .matricula("202004940020")
-                                .usuario(usuarioModel)
                                 .build();
 
                 egressoModel = egressoService.adicionarEgresso(egressoModel);
@@ -153,16 +154,14 @@ class DepoimentoControllerTest {
         @Order(1)
         void testCadastrarDepoimento() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 depoimentoDTO = DepoimentoDTO.builder()
                                 .descricao(DESCRICAO)
                                 .build();
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/depoimento")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer " + this.token)
-                                .content(objectMapper.writeValueAsString(depoimentoDTO)))
+                                .content(objectMapper.writeValueAsString(depoimentoDTO))
+                                .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isCreated())
                                 .andReturn();
@@ -174,8 +173,6 @@ class DepoimentoControllerTest {
         @Test
         @Order(2)
         void testFindById() throws Exception {
-
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc
                                 .perform(MockMvcRequestBuilders.get("/depoimento/" + 1)
@@ -193,8 +190,6 @@ class DepoimentoControllerTest {
         @Order(3)
         void testConsultarDepoimentos() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/depoimento")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token))
@@ -211,8 +206,6 @@ class DepoimentoControllerTest {
         @Test
         @Order(4)
         void testAtualizarDepoimento() throws Exception {
-
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.put("/depoimento")

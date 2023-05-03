@@ -67,9 +67,10 @@ class CursoControllerTest {
         @Autowired
         ModelMapper modelMapper;
 
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
         @BeforeAll
         void setUp() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
                 GrupoModel grupoModel = new GrupoModel();
                 grupoModel.setNomeGrupo("ADMIN");
 
@@ -126,8 +127,6 @@ class CursoControllerTest {
         @Order(1)
         void testCadastrarCurso() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 cursoDTO = CursoDTO.builder()
                                 .nome(NOME)
                                 .build();
@@ -148,8 +147,6 @@ class CursoControllerTest {
         @Order(2)
         void testFindById() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/curso/" + 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token))
@@ -166,8 +163,6 @@ class CursoControllerTest {
         @Test
         @Order(3)
         void testConsultarCursos() throws Exception {
-
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/curso")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -186,7 +181,6 @@ class CursoControllerTest {
         @Order(4)
         void testAtualizarCurso() throws Exception {
 
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.put("/curso")

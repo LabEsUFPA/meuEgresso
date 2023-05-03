@@ -61,9 +61,10 @@ class UsuarioControllerTest {
         @Autowired
         ModelMapper modelMapper;
 
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
         @BeforeAll
         void setUp() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
                 GrupoModel grupoModel = new GrupoModel();
                 grupoModel.setNomeGrupo("ADMIN");
 
@@ -105,7 +106,6 @@ class UsuarioControllerTest {
         @Test
         @Order(1)
         void testFindById() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.get("/usuario")
@@ -122,7 +122,6 @@ class UsuarioControllerTest {
         @Test
         @Order(2)
         void testAtualizarUsuario() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 UsuarioDTO usuarioDTO = modelMapper.map(usuarioModel, UsuarioDTO.class);
 

@@ -63,9 +63,10 @@ public class CotaControllerTest {
     @Autowired
     ModelMapper modelMapper;
 
+    ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
     @BeforeAll
     void setUp() throws Exception {
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
         GrupoModel grupoModel = new GrupoModel();
         grupoModel.setNomeGrupo("ADMIN");
 
@@ -107,7 +108,6 @@ public class CotaControllerTest {
     @Test
     @Order(1)
     void testCadastrarCota() throws Exception {
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
         CotaDTO cotaDTO = new CotaDTO();
         cotaDTO.setNome("cota1");
@@ -127,8 +127,6 @@ public class CotaControllerTest {
     @Test
     @Order(2)
     void testBuscarCotas() throws Exception{
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
 
         MvcResult resposta = mockMvc.perform(
                 MockMvcRequestBuilders.get("/cota")
@@ -148,7 +146,6 @@ public class CotaControllerTest {
     @Test
     @Order(3)
     void testAtualizarCota() throws Exception{
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
         final String NOVO_NOME = "cota2222";
         cotaDTO.setNome(NOVO_NOME);
@@ -169,7 +166,6 @@ public class CotaControllerTest {
     @Test
     @Order(4)
     void testDeletarCota() throws Exception{
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
         MvcResult resposta = mockMvc.perform(
                 MockMvcRequestBuilders.delete("/cota")
