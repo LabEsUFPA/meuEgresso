@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model.audit;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedBy;
@@ -21,7 +21,8 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import lombok.Data;
 
 /**
- * Encapsulamento dos atributos comuns a todas as classes a fim de rastrar alterações no banco de dados.
+ * Encapsulamento dos atributos comuns a todas as classes a fim de rastrar
+ * alterações no banco de dados.
  *
  * @author Alfredo Gabriel
  * @since 26/03/2023
@@ -38,9 +39,9 @@ public class Auditable {
 	protected UsuarioModel createdBy;
 
 	@CreatedDate
-	@Column(name = "created_date", updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	protected Date createdDate;
+	@Column(name = "created_date", updatable = false)
+	protected LocalDateTime createdDate;
 
 	@LastModifiedBy
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -48,11 +49,11 @@ public class Auditable {
 	protected UsuarioModel lastModifiedBy;
 
 	@LastModifiedDate
-	@Column(name = "last_modified_date")
 	@Temporal(TemporalType.TIMESTAMP)
-	protected Date lastModifiedDate;
+	@Column(name = "last_modified_date")
+	protected LocalDateTime lastModifiedDate;
 
-	@Column(name = "ativo", nullable = false)
 	@ColumnDefault(value = "TRUE")
+	@Column(name = "ativo", nullable = false)
 	protected Boolean ativo = true;
 }

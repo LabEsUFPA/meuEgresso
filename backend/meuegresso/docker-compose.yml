@@ -7,25 +7,27 @@ services:
     image: mongo:6
     restart: unless-stopped
     ports:
-      - ${MONGO_PORT}:27017
+      - ${MONGO_EXPOSE_PORT}:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    volumes:
-      - ./mongoDB:/data/db
+    #volumes:
+    #  - ./mongoDB:/data/db
 
   postgres:
     container_name: postgres-meu-egresso
-    image: postgres:15
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       PGDATA: /data/postgres
-    volumes:
-       - ./postgresDB:/data/postgres
+    #volumes:
+    #   - ./postgresDB:/data/postgres
     ports:
-      - ${POSTGRES_PORT}:5432
+      - ${POSTGRES_EXPOSE_PORT}:5432
     restart: unless-stopped
 
   backend:
@@ -37,12 +39,12 @@ services:
       - .env
     image: meu-egresso-api:latest
     ports:
-      - ${APP_PORT}:8080
+      - ${APP_PORT}:${APP_PORT}
     restart: always
     depends_on:
       - mongodb
       - postgres
 
-volumes:
-  mongo_report:
-    driver: local
+#volumes:
+#  mongo_report:
+#    driver: local

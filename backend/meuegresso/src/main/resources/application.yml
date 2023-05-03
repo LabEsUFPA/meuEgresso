@@ -6,6 +6,9 @@ spring:
   #configuração do jackson
   jackson:
     default-property-inclusion: NON_NULL
+  jpa:
+    defer-datasource-initialization: true
+
 
 # Email configuration
   mail:
@@ -49,7 +52,7 @@ rsa:
 
 # Server configuration
 server:
-  port: 8080
+  port: ${APP_PORT}
   compression:
     enabled: true
     min-response-size: 2048

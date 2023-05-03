@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
-import java.util.HashSet;
+import java.time.LocalDate;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -11,10 +11,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.persistence.UniqueConstraint;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,46 +31,76 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class EgressoModel extends Auditable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id_egresso", unique = true, nullable = false)
-    private Integer id;
+        @Id
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        @Column(name = "id_egresso", unique = true, nullable = false)
+        private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "etnia_id", nullable = false, unique = false)
-    private EtniaModel etnia;
+        @Temporal(TemporalType.DATE)
+        @Column(name = "nascimento_egresso", unique = false, nullable = false)
+        private LocalDate nascimento;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "genero_id", nullable = false, unique = false)
-    private SexoModel sexo;
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "genero_id", unique = false, nullable = false)
+        private GeneroModel genero;
 
-    @Column(name = "cotista_egresso", nullable = false, unique = false)
-    private Boolean cotista;
+        @Column(name = "matricula_egresso", unique = true, nullable = true, length = 12)
+        private String matricula;
 
-    @Column(name = "pcd_egresso", nullable = false, unique = false)
-    private Boolean pcd = false;
+        @Column(name = "cotista_egresso", unique = false, nullable = false)
+        private Boolean cotista = false;
 
-    @Column(name = "interesse_em_pos_egresso", nullable = false, unique = false)
-    private Boolean interesseEmPos = false;
+        @Column(name = "bolsista_egresso", unique = false, nullable = false)
+        private Boolean bolsista = false;
 
-    @Column(name = "lattes_egresso", nullable = false, unique = false)
-    private String lattes;
+        @Column(name = "interesse_em_pos_egresso", unique = false, nullable = false)
+        private Boolean interesseEmPos = false;
 
-    @Column(name = "linkedin_egresso", nullable = false, unique = false)
-    private String linkedin;
+        @Column(name = "lattes_egresso", unique = true, nullable = true)
+        private String lattes;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "endereco_id", unique = false, nullable = false)
-    private EnderecoModel endereco;
+        @Column(name = "linkedin_egresso", unique = true, nullable = true)
+        private String linkedin;
 
-    @OneToOne
-    @JoinColumn(name = "usuario_id", unique = true, nullable = false)
-    private UsuarioModel usuario;
+        @Column(name = "pos_graducao_egresso", unique = false, nullable = true)
+        private Boolean posGraduacao = false;
 
-    @OneToMany(mappedBy = "egresso", fetch = FetchType.LAZY)
-    private Set<DepoimentoModel> depoimentos;
+        @ManyToMany(fetch = FetchType.LAZY)
+        @JoinTable(name = "egresso_cota", joinColumns = { @JoinColumn(name = "id_egresso") }, inverseJoinColumns = {
+                        @JoinColumn(name = "id_cota") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+                                        "id_egresso",
+                                        "id_cota" }))
+        private Set<CotaModel> cotas;
 
-    @ManyToMany(mappedBy = "egressos", fetch = FetchType.LAZY)
-    private Set<TrabalhoPublicadoModel> trabalhoPublicados = new HashSet<>();
+        @OneToOne(cascade = { CascadeType.MERGE })
+        @JoinColumn(name = "usuario_id", unique = true, nullable = true)
+        private UsuarioModel usuario;
+
+        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+                        CascadeType.REMOVE }, orphanRemoval = true)
+        private PalestraModel palestras;
+
+        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+                        CascadeType.REMOVE }, orphanRemoval = true)
+        private ContribuicaoModel contribuicao;
+
+        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+                        CascadeType.REMOVE }, orphanRemoval = true)
+        private EgressoTitulacaoModel titulacao;
+
+        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+                        CascadeType.REMOVE }, orphanRemoval = true)
+        private EgressoEmpresaModel emprego;
+
+        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+                        CascadeType.REMOVE }, orphanRemoval = true)
+        private DepoimentoModel depoimento;
+
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "tipo_bolsa_id", unique = false, nullable = true)
+        private TipoBolsaModel bolsa;
+
+        @Column(name = "remuneracao_bolsa_egresso", unique = false, nullable = true)
+        private Double remuneracaoBolsa;
 
 }

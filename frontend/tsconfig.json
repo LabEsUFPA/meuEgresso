@@ -17,11 +17,9 @@
       "vite/client"
     ],
     "paths": {
-      "src/*": ["src/*"],
-      "components/*": ["src/components/*"],
-      "pages/*": ["src/pages/*"]
+      "src/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "decs.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "decs.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
