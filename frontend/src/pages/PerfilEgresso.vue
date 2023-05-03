@@ -39,7 +39,6 @@
           <div class="head">
             <h1 class="grid place-items-center text-cyan-800 text-xl font-bold mt-5 ">
               <!-- name="geral.nome" -->
-
               <div v-if="!dataEgresso.profileHead.isInput">
                 <slot v-if="dataEgresso.profileHead.nome">
                   {{ dataEgresso.profileHead.nome }}
@@ -890,6 +889,10 @@ async function handleSubmitHeader (values: any) {
   // dataEgresso.value.profileHead.lattes = values.geral.lattes
   dataEgresso.value.profileHead = values.geral
   // $store.atualizarEgresso(dataEgresso.value.profileHead)
+  // $store.atualizarEgresso(values.geral)
+  const userData = JSON.parse(storage.get('loggedUser'))
+  console.log(userData)
+  // $store.fetchEgresso()
   $store.atualizarEgresso(values.geral)
   // const status = await $store.atualizarEgresso({
   //   nascimento: values.geral.nascimento.toString(),
@@ -927,7 +930,7 @@ async function handleSubmitGeral (values: any) {
   toggleIsInput('geral')
   console.log(JSON.stringify(values, null, 2))
   dataEgresso.value.geral = values.geral
-  $store.atualizarEgresso({})
+  $store.atualizarEgresso(values.geral)
 }
 
 async function handleSubmitAcademico (values: any) {
@@ -935,24 +938,28 @@ async function handleSubmitAcademico (values: any) {
   toggleIsInput('academico')
   console.log(JSON.stringify(values, null, 2))
   dataEgresso.value.academico = values.academico
+  $store.atualizarEgresso(values.academico)
 }
 async function handleSubmitLocalizacao (values: any) {
   console.log('handleSubmitLocalizacao')
   toggleIsInput('localizacao')
   console.log(JSON.stringify(values, null, 2))
   dataEgresso.value.localizacao = values.localizacao
+  $store.atualizarEgresso(values.localizacao)
 }
 async function handleSubmitCarreira (values: any) {
   console.log('handleSubmitCarreira')
   toggleIsInput('carreira')
   console.log(JSON.stringify(values, null, 2))
   dataEgresso.value.carreira = values.carreira
+  $store.atualizarEgresso(values.carreira)
 }
 async function handleSubmitAdicionais (values: any) {
   console.log('handleSubmitAdicionais')
   toggleIsInput('adicionais')
   console.log(JSON.stringify(values, null, 2))
   dataEgresso.value.adicionais = values.adicionais
+  $store.atualizarEgresso(values.adicionais)
 }
 
 let isInputLocal = false

@@ -88,13 +88,16 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       await this.fetchCotas()
     },
 
-    async fetchEgresso () {
+    async getEgresso () {
       const response = await Api.request({
         method: 'get',
         route: '/egresso'
       })
 
       return (response?.status) !== undefined ? response.status : 500
+    },
+    async fetchEgresso () {
+
     },
 
     async atualizarEgresso (dadosEgresso: EgressoModel) {
