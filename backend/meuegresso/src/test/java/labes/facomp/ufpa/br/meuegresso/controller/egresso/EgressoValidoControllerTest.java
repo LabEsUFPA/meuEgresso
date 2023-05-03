@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -64,7 +63,7 @@ public class EgressoValidoControllerTest {
     GeneroModel generoModel = new GeneroModel();
 
     @Autowired
-    ModelMapper modelMapper;
+    ObjectMapper objectMapper;
 
     @BeforeAll
     void setUp() throws Exception {
@@ -98,7 +97,8 @@ public class EgressoValidoControllerTest {
                         .content(objectMapper.writeValueAsString(egressoValidoDTO)))
                 .andExpect(status().isOk()).andReturn();
 
-        EgressoValidoDTO egressoValidado = modelMapper.map(resposta, EgressoValidoDTO.class);
-        assertEquals(egressoValidoDTO, egressoValidado); // egresso validado retornando valores null
+        EgressoValidoDTO egressoValidado = objectMapper.readValue(resposta.getResponse().getContentAsString(), 
+                EgressoValidoDTO.class);
+        assertEquals(egressoValidoDTO, egressoValidado);
     }
 }
