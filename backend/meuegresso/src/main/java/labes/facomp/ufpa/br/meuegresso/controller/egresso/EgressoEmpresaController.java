@@ -138,10 +138,12 @@ public class EgressoEmpresaController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(params = { "egressoId", "empresaId" })
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(@RequestParam(required = false) Integer egressoId,
-			@RequestParam(required = false) Integer empresaId) {
-		return egressoEmpresaService
-				.deleteById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).build());
+	public String deleteById(@RequestParam(required = false) Integer egressoId, @RequestParam(required = false) Integer empresaId) {
+		if (egressoEmpresaService.deleteById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).build())) {
+			return ResponseType.SUCESS_DELETE.getMessage();
+		} else {
+			return ResponseType.FAIL_DELETE.getMessage();
+		}
 	}
 
 }

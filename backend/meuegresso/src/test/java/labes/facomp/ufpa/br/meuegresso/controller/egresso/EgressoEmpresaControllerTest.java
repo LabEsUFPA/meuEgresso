@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,16 +35,24 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
+import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 
 @SpringBootTest
@@ -54,8 +63,10 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @TestMethodOrder(OrderAnnotation.class)
 public class EgressoEmpresaControllerTest {
 
+    static final Integer EMRPESA_ID = 1;
     static final String NOME = "EmpresaTeste";
     static final String SETORATUACAO = "SetorTeste";
+
     final String USERNAME = "username_test";
 
     static final Integer EGRESSO_ID = 1;
@@ -64,11 +75,22 @@ public class EgressoEmpresaControllerTest {
     static final Integer FAIXASALARIAL_ID = 1;
     static final String FAIXASALARIAL = "5000 - 15000";
 
-    static final Integer EMRPESA_ID = 1;
 
 
     @Autowired
     private GrupoRepository grupoRepository;
+
+    @Autowired
+    private EgressoRepository egressoRepository;
+
+    @Autowired
+    private GeneroRepository generoRepository;
+
+    @Autowired
+    private EmpresaRepository empresaRepository;
+    
+    @Autowired
+    private FaixaSalarialRepository faixaSalarialRepository;
 
     @Autowired
     MockMvc mockMvc;
@@ -78,12 +100,13 @@ public class EgressoEmpresaControllerTest {
     UsuarioModel usuarioModel;
 
     EmpresaDTO empresaDTO;
+    EmpresaModel empresaModel;
 
     EgressoEmpresaDTO egressoEmpresaDTO;
-
     EgressoEmpresaModelId egressoEmpresaModelId;
     
     EgressoPublicDTO egressoPublicDTO;
+    EgressoModel egressoModel;
 
     FaixaSalarialDTO faixaSalarialDTO;
 
@@ -94,14 +117,32 @@ public class EgressoEmpresaControllerTest {
     void setUp() throws Exception {
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-        egressoPublicDTO = new EgressoPublicDTO(EGRESSO_ID, null, EGRESSO_EMAIL, null, null, null, null, null, null);
-        empresaDTO = EmpresaDTO.builder().id(EGRESSO_ID).nome(NOME).setorAtuacao(SETORATUACAO).faixaSalarialId(FAIXASALARIAL_ID).build();
+        /*Gênero */
+        GeneroModel genero = new GeneroModel(1, "genero X");
+        GeneroDTO generoDTO = modelMapper.map(genero, GeneroDTO.class);
+        genero = generoRepository.save(genero);
 
+
+        /*Egresso */
+        egressoPublicDTO = new EgressoPublicDTO(EGRESSO_ID, null, EGRESSO_EMAIL, generoDTO, true, true, null, null, null);
+        egressoModel = EgressoModel.builder().id(EGRESSO_ID).cotista(true).interesseEmPos(true).nascimento(LocalDate.parse("1999-10-20")).genero(genero).build();
+        egressoRepository.save(this.egressoModel);
+        
+        /*Empresa */
+        empresaDTO = EmpresaDTO.builder().id(EGRESSO_ID).nome(NOME).setorAtuacao(SETORATUACAO).faixaSalarialId(FAIXASALARIAL_ID).build();
+        empresaModel = EmpresaModel.builder().id(EMRPESA_ID).nome(NOME).setorAtuacoes(null).endereco(null).build();
+        empresaRepository.save(empresaModel);
+
+        /*ModelId */
         egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(EGRESSO_ID).empresaId(EMRPESA_ID).build();
 
+        /*FaixaSalarial */
         faixaSalarialDTO = FaixaSalarialDTO.builder().id(FAIXASALARIAL_ID).faixa(FAIXASALARIAL).build();
+        FaixaSalarialModel faixaSalarialModel = FaixaSalarialModel.builder().id(FAIXASALARIAL_ID).faixa(FAIXASALARIAL).build();
+        faixaSalarialRepository.save(faixaSalarialModel);
 
-        egressoEmpresaDTO = EgressoEmpresaDTO.builder().id(egressoEmpresaModelId).egresso(egressoPublicDTO).empresa(empresaDTO).faixaSalarial(faixaSalarialDTO).build();
+        /*EgressoEmpresa */
+        egressoEmpresaDTO = EgressoEmpresaDTO.builder().id(egressoEmpresaModelId).egresso(egressoPublicDTO).empresa(empresaDTO).areaAtuacao(SETORATUACAO).faixaSalarial(faixaSalarialDTO).build();
 
         GrupoModel grupoModel = new GrupoModel();
         grupoModel.setNomeGrupo("ADMIN");
@@ -154,12 +195,6 @@ public class EgressoEmpresaControllerTest {
     }
 
     @Test
-    @Order(3)
-    void testAtualizarEgressoEmpresa() throws Exception {
-        
-    }
-
-    @Test
     @Order(1)
     void testCadastrarEgressoEmpresa() throws Exception {
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
@@ -167,13 +202,48 @@ public class EgressoEmpresaControllerTest {
         MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/egressoEmpresa")
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("Authorization", "Bearer " + this.token)
-                    .content(objectMapper.writeValueAsString(this.egressoEmpresaDTO)))
+                    .content(objectMapper.writeValueAsString(egressoEmpresaDTO)))
                     .andDo(MockMvcResultHandlers.print())
                     .andExpect(status().isCreated())
                     .andReturn();
 
         String retornoString = resposta.getResponse().getContentAsString();
         assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString);
+    }
+
+    @Test
+    @Order(2)
+    void testFindById() throws Exception {
+
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
+        MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/egressoEmpresa?egressoId=" + egressoPublicDTO.getId() + "&empresaId=" + empresaDTO.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + this.token))
+                        .andDo(MockMvcResultHandlers.print())
+                        .andExpect(status().isOk()).andReturn();
+
+        EgressoEmpresaDTO egressoEmpresaDTOresponse = objectMapper.readValue(resposta.getResponse().getContentAsString(), EgressoEmpresaDTO.class);
+        assertEquals(NOME, egressoEmpresaDTOresponse.getEmpresa().getNome());
+
+    }
+    
+    @Test
+    @Order(3)
+    void testAtualizarEgressoEmpresa() throws Exception {
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
+        MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.put("/egressoEmpresa")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", "Bearer " + this.token)
+                    .content(objectMapper.writeValueAsString(egressoEmpresaDTO)))
+                    .andDo(MockMvcResultHandlers.print())
+                    .andExpect(status().isCreated())
+                    .andReturn();
+
+        String retornoString = resposta.getResponse().getContentAsString();
+        assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
+        
     }
 
     @Test
@@ -193,19 +263,22 @@ public class EgressoEmpresaControllerTest {
                                 });
 
         assertNotNull(egressoEmpresasDTO);
-        assertEquals(0, egressoEmpresasDTO.size());
+        assertEquals(1, egressoEmpresasDTO.size());
 
     }
 
     @Test
     @Order(5)
     void testDeleteById() throws Exception {
-
+        MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.delete("/egressoEmpresa?egressoId=" + egressoPublicDTO.getId() + "&empresaId=" + empresaDTO.getId())
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk())
+                                .andReturn();
+        String resultado = resposta.getResponse().getContentAsString();
+        assertEquals(ResponseType.SUCESS_DELETE.getMessage(), resultado);
     }
 
-    @Test
-    @Order(2)
-    void testFindById() throws Exception {
-
-    }
 }
