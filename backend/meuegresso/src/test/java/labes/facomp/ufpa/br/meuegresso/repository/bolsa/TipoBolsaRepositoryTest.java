@@ -1,9 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.repository.bolsa;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Order;
@@ -29,7 +27,7 @@ public class TipoBolsaRepositoryTest {
     TipoBolsaRepository tipoBolsaRepository;
 
     private final static String NOME = "PIBIC";
-    private final static String NOME2 = "PIBIX";
+    //private final static String NOME2 = "PIBIX";
 
 
 

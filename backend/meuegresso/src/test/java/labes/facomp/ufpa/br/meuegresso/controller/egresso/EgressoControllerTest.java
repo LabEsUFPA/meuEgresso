@@ -38,11 +38,13 @@ import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 
@@ -61,7 +63,13 @@ class EgressoControllerTest {
         private GeneroRepository generoRepository;
 
         @Autowired
+        private EgressoRepository egressoRepository;
+
+        @Autowired
         MockMvc mockMvc;
+
+        @Autowired
+        ModelMapper modelMapper;
 
         String token;
 
@@ -72,28 +80,28 @@ class EgressoControllerTest {
         
         GeneroModel genero;
 
-        /*ContribuicaoModel contribuicao;
-
-        DepoimentoModel depoimento;*/
-
-        @Autowired
-        ModelMapper modelMapper;
 
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
-	EgressoDTO egresso;
 
         EgressoPublicDTO egressoPublicDTO;
 
         EgressoCadastroDTO egressoCadastro;
 
-        //private ModelMapper mapper;
+        static final Integer EGRESSO_ID = 1;
+        static final String EGRESSO_EMAIL = "algo@gmail.com";
 
 
         @BeforeAll
         void setUp() throws Exception {
+            /*Gênero */
             genero = new GeneroModel(1, "genero X");
+            GeneroDTO generoDTO = modelMapper.map(genero, GeneroDTO.class);
             genero = generoRepository.save(genero);
+
+            /*Egresso */
+            egressoPublicDTO = new EgressoPublicDTO(EGRESSO_ID, null, EGRESSO_EMAIL, generoDTO, true, true, null, null, null);
+            egressoModel = EgressoModel.builder().id(EGRESSO_ID).cotista(true).interesseEmPos(true).nascimento(LocalDate.parse("1999-10-20")).genero(genero).build();
+            egressoRepository.save(this.egressoModel);
 
             GrupoModel grupoModel = new GrupoModel();
             grupoModel.setNomeGrupo("ADMIN");
@@ -165,7 +173,6 @@ class EgressoControllerTest {
         @Test
         @Order(2)
         void testgetEgresso() throws Exception {
-            egresso = modelMapper.map(egressoCadastro, EgressoDTO.class);
 
             MvcResult resposta = mockMvc.perform(
 				MockMvcRequestBuilders.get("/egresso")
@@ -175,21 +182,13 @@ class EgressoControllerTest {
 				.andExpect(status().isOk()).andReturn();
 
             EgressoDTO egressos = modelMapper.map(resposta.getResponse().getContentAsString(),EgressoDTO.class);
-            //.readValue(resposta.getResponse().getContentAsString());
-            //egresso = egressos.get(0);
-            //EgressoDTO egresso = mapper.map(resposta, EgressoDTO.class);
             assertNotNull(egressos);
         }
 
         @Test
         @Order(3)
         void testAtualizarEgresso() throws Exception {
-            egressoPublicDTO = modelMapper.map(egresso, EgressoPublicDTO.class);    
-            //final String NOVA_MATRICULA = "265565466516";
-            //egressoPublicDTO.setMatricula(NOVA_MATRICULA);
-            egressoPublicDTO.setCotista(true);
 
-    
             MvcResult resposta = mockMvc.perform(
                     MockMvcRequestBuilders.put("/egresso")
                             .contentType(MediaType.APPLICATION_JSON)
