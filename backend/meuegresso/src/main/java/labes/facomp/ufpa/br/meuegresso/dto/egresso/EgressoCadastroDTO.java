@@ -7,7 +7,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.palestras.PalestrasDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.palestra.PalestraDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
 import lombok.AllArgsConstructor;
@@ -22,6 +22,8 @@ public class EgressoCadastroDTO {
     private Integer id;
 
     private String nome;
+
+    private String email;
 
     private LocalDate nascimento;
 
@@ -45,7 +47,7 @@ public class EgressoCadastroDTO {
 
     private UsuarioDTO usuario;
 
-    private PalestrasDTO palestras;
+    private PalestraDTO palestras;
 
     private ContribuicaoDTO contribuicao;
 

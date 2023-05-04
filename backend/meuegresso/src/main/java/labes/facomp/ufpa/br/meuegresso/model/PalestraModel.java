@@ -16,7 +16,7 @@ import lombok.Data;
 public class PalestraModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_palestra", unique = true, nullable = false)
     private Integer id;
 
