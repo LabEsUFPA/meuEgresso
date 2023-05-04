@@ -5,31 +5,32 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 
 /**
  * Class that implements tests of the UserAccountRepository functionalities
  *
- * @author Mariana Azevedo
- * @since 06/12/2020
+ * @author Bruno Eiki
+ * @since 29/04/2023
  */
+@SpringBootTest
+@DirtiesContext
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class })
+@TestMethodOrder(OrderAnnotation.class)
 class CotaRepositoryTest {
 
     @Autowired
