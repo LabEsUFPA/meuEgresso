@@ -58,7 +58,7 @@ public class EgressoTitulacaoController {
 	 */
 	@GetMapping
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<EgressoTitulacaoDTO> consultarEgressoTitulacaos() {
+	public List<EgressoTitulacaoDTO> consultarEgressoTitulacao() {
 		return mapper.map(egressoTitulacaoService.findAll(), new TypeToken<List<EgressoTitulacaoDTO>>() {
 		}.getType());
 	}
