@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.controller.contribuicao;
+package labes.facomp.ufpa.br.meuegresso.controller.palestra;
 
 import java.util.List;
 
@@ -20,17 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.palestra.PalestraDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.PalestraModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
-import labes.facomp.ufpa.br.meuegresso.service.contribuicao.ContribuicaoService;
+import labes.facomp.ufpa.br.meuegresso.service.palestra.PalestraService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Responsável por fornecer um end-point para criar um novo contribuicao.
+ * Responsável por fornecer um end-point para criar um novo palestra.
  *
  * @author Alfredo Gabriel
  * @since 21/04/2023
@@ -38,61 +38,61 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/contribuicao")
-public class ContribuicaoController {
+@RequestMapping("/palestra")
+public class PalestraController {
 
-	private final ContribuicaoService contribuicaoService;
+	private final PalestraService palestraService;
 
 	private final ModelMapper mapper;
 
 	private final JwtService jwtService;
 
 	/**
-	 * Endpoint responsável por retornar a lista de contribuicao cadastrados no
+	 * Endpoint responsável por retornar a lista de palestra cadastrados no
 	 * banco de dados.
 	 *
-	 * @return {@link ContribuicaoDTO} Lista de contribuicao cadastrados
+	 * @return {@link PalestraDTO} Lista de palestra cadastrados
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
 	 */
 	@GetMapping
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<ContribuicaoDTO> consultarContribuicaos() {
-		return mapper.map(contribuicaoService.findAll(), new TypeToken<List<ContribuicaoDTO>>() {
+	public List<PalestraDTO> consultarPalestras() {
+		return mapper.map(palestraService.findAll(), new TypeToken<List<PalestraDTO>>() {
 		}.getType());
 	}
 
 	/**
-	 * Endpoint responsável por retornar um contribuicao por sua ID.
+	 * Endpoint responsável por retornar um palestra por sua ID.
 	 *
 	 * @param id Integer
-	 * @return {@link ContribuicaoDTO} Dados gravados no banco.
+	 * @return {@link PalestraDTO} Dados gravados no banco.
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public ContribuicaoDTO findById(@PathVariable Integer id) {
-		return mapper.map(contribuicaoService.findById(id), ContribuicaoDTO.class);
+	public PalestraDTO findById(@PathVariable Integer id) {
+		return mapper.map(palestraService.findById(id), PalestraDTO.class);
 	}
 
 	/**
-	 * Endpoint responsavel por cadastrar o contribuicao.
+	 * Endpoint responsavel por cadastrar o palestra.
 	 *
-	 * @param contribuicaoDTO Estrutura de dados contendo as informações necessárias
-	 *                        para persistir o contribuicao.
+	 * @param palestraDTO Estrutura de dados contendo as informações necessárias
+	 *                        para persistir o palestra.
 	 * @return String confirmando a transação.
 	 * @author Alfredo Gabriel
-	 * @see {@link ContribuicaoDTO}
+	 * @see {@link PalestraDTO}
 	 * @since 21/04/2023
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO) {
-		ContribuicaoModel contribuicaoModel = mapper.map(contribuicaoDTO, ContribuicaoModel.class);
-		contribuicaoService.save(contribuicaoModel);
+	public String cadastrarPalestra(@RequestBody @Valid PalestraDTO palestraDTO) {
+		PalestraModel palestraModel = mapper.map(palestraDTO, PalestraModel.class);
+		palestraService.save(palestraModel);
 		return ResponseType.SUCESS_SAVE.getMessage();
 	}
 
@@ -100,8 +100,8 @@ public class ContribuicaoController {
 	 * Endpoint responsavel por atualizar a contribuições do egresso.
 	 *
 	 * @param contribucao Estrutura de dados contendo as informações necessárias
-	 *                    para atualizar a contribuicao.
-	 * @return {@link ContribuicaoModel} Dados gravados no banco com a Id
+	 *                    para atualizar a palestra.
+	 * @return {@link PalestraModel} Dados gravados no banco com a Id
 	 *         atualizada.
 	 * @author Pedro Inácio
 	 * @throws UnauthorizedRequestException
@@ -111,22 +111,22 @@ public class ContribuicaoController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO,
+	public String atualizarPalestra(@RequestBody @Valid PalestraDTO palestraDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (contribuicaoService.existsByIdAndCreatedById(contribuicaoDTO.getId(), jwtService.getIdUsuario(token))) {
-			ContribuicaoModel contribuicaoModel = contribuicaoService.findByEgressoUsuarioId(jwtService.getIdUsuario(token));
-			contribuicaoModel.setDescricao(contribuicaoDTO.getDescricao());
-			contribuicaoService.update(contribuicaoModel);
+		if (palestraService.existsByIdAndCreatedById(palestraDTO.getId(), jwtService.getIdUsuario(token))) {
+			PalestraModel palestraModel = palestraService.findByEgressoUsuarioId(jwtService.getIdUsuario(token));
+			palestraModel.setDescricao(palestraDTO.getDescricao());
+			palestraService.update(palestraModel);
 			return ResponseType.SUCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}
 
 	/**
-	 * Endpoint responsavel por deletar a contribuicao do egresso.
+	 * Endpoint responsavel por deletar a palestra do egresso.
 	 *
-	 * @param contribuicao Estrutura de dados contendo as informações
-	 *                     necessárias para deletar a contribuicao.
+	 * @param palestra Estrutura de dados contendo as informações
+	 *                     necessárias para deletar a palestra.
 	 * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
@@ -135,7 +135,7 @@ public class ContribuicaoController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(Integer id) {
-		return contribuicaoService.deleteById(id);
+		return palestraService.deleteById(id);
 	}
 
 }
