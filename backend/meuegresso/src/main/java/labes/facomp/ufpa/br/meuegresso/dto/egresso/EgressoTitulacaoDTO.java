@@ -1,12 +1,13 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
-import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
@@ -17,15 +18,19 @@ import lombok.Data;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EgressoTitulacaoDTO {
 
-    private EgressoTitulacaoModelId id;
+    @Builder.Default
+    private EgressoTitulacaoModelId id = new EgressoTitulacaoModelId();
 
-    private EgressoModel egresso;
+    private EgressoDTO egresso;
+    
+    private TitulacaoDTO titulacao;
 
-    private EmpresaModel empresa;
+    private EmpresaDTO empresa;
 
     private CursoDTO curso;
 
-    private TitulacaoDTO titulacao;
 }

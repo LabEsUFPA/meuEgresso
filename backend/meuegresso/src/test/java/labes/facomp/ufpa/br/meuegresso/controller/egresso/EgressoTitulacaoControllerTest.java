@@ -28,22 +28,22 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import aj.org.objectweb.asm.TypeReference;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoTitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
@@ -51,7 +51,9 @@ import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.curso.CursoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
@@ -81,10 +83,16 @@ class EgressoTitulacaoControllerTest {
     static final String FAIXASALARIAL = "5000 - 15000";
 
     @Autowired
+    private CursoRepository cursoRepository;
+
+    @Autowired
     private GrupoRepository grupoRepository;
 
     @Autowired
     private EgressoRepository egressoRepository;
+    
+    @Autowired
+    private EmpresaRepository empresaRepository;
 
     @Autowired
     private GeneroRepository generoRepository;
@@ -99,15 +107,17 @@ class EgressoTitulacaoControllerTest {
 
     UsuarioModel usuarioModel;
 
+    CursoModel cursoModel;
     CursoDTO cursoDTO;
 
     EmpresaDTO empresaDTO;
     EmpresaModel empresaModel;
+    
 
     EgressoTitulacaoDTO egressoTitulacaoDTO;
     EgressoTitulacaoModelId egressoTitulacaoModelId;
     
-    EgressoPublicDTO egressoPublicDTO;
+    EgressoDTO egressoDTO;
     EgressoModel egressoModel;
 
     FaixaSalarialDTO faixaSalarialDTO;
@@ -127,34 +137,36 @@ class EgressoTitulacaoControllerTest {
 
         /*Gênero */
         GeneroModel genero = new GeneroModel(1, "genero X");
-        GeneroDTO generoDTO = modelMapper.map(genero, GeneroDTO.class);
         genero = generoRepository.save(genero);
 
 
         /*Egresso */
-        egressoPublicDTO = new EgressoPublicDTO(EGRESSO_ID, null, EGRESSO_EMAIL, generoDTO, true, true, null, null, null);
-        egressoModel = EgressoModel.builder().id(EGRESSO_ID).cotista(true).interesseEmPos(true).nascimento(LocalDate.parse("1999-10-20")).genero(genero).build();
-        egressoRepository.save(this.egressoModel);
+        egressoModel = EgressoModel.builder().cotista(true).interesseEmPos(true).nascimento(LocalDate.parse("1999-10-20")).genero(genero).build();
+        egressoModel = egressoRepository.save(this.egressoModel);
+        egressoDTO = modelMapper.map(egressoModel, EgressoDTO.class);
         
         
         /*ModelId */
         egressoTitulacaoModelId = EgressoTitulacaoModelId.builder().egressoId(EGRESSO_ID).titulacaoId(TITULACAO_ID).build();
         
         /*Curso */
-        cursoDTO = CursoDTO.builder().id(10).nome("Ciência da Computação").build();
+        cursoModel = CursoModel.builder().nome("Ciência da Computação").build();
+        cursoModel = cursoRepository.save(cursoModel);
+        cursoDTO = modelMapper.map(cursoModel, CursoDTO.class);   
 
         /*Empresa */
-        empresaModel = EmpresaModel.builder().id(EMPRESA_ID).nome(NOME).setorAtuacoes(null).endereco(null).build();
+        empresaModel = EmpresaModel.builder().nome(NOME).setorAtuacoes(null).endereco(null).build();
+        empresaModel = empresaRepository.save(empresaModel);
+        empresaDTO = modelMapper.map(empresaModel, EmpresaDTO.class);   
 
         /*Titulação */
-        titulacaoDTO = TitulacaoDTO.builder().id(5).nome("Mestrado").build();
-        titulacaoModel = TitulacaoModel.builder().id(5).nome("Mestrado").build();
-        titulacaoRepository.save(titulacaoModel);
+        titulacaoModel = TitulacaoModel.builder().nome("Mestrado").build();
+        titulacaoModel = titulacaoRepository.save(titulacaoModel);
+        titulacaoDTO = modelMapper.map(titulacaoModel, TitulacaoDTO.class);        
 
         /*EgressoTitulacao */
-        egressoTitulacaoDTO = EgressoTitulacaoDTO.builder().id(egressoTitulacaoModelId)
-                                                           .egresso(egressoModel)
-                                                           .empresa(empresaModel)
+        egressoTitulacaoDTO = EgressoTitulacaoDTO.builder().egresso(egressoDTO)
+                                                           .empresa(empresaDTO)
                                                            .curso(cursoDTO)
                                                            .titulacao(titulacaoDTO).build();
 
@@ -237,12 +249,13 @@ class EgressoTitulacaoControllerTest {
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
-        List<EgressoTitulacaoDTO> egressoTitulacaoDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+        List<EgressoTitulacaoDTO> egressoTitulacaoDTOs = objectMapper.readValue(resposta.getResponse().getContentAsString(),
                                 new TypeReference<List<EgressoTitulacaoDTO>>() {
                                 });
 
-        assertNotNull(egressoTitulacaoDTO);
-        assertEquals(1, egressoTitulacaoDTO.size());
+        assertNotNull(egressoTitulacaoDTOs);
+        egressoTitulacaoDTO.setId(egressoTitulacaoDTOs.get(0).getId());
+        assertEquals(1, egressoTitulacaoDTOs.size());
         
     }
 
@@ -266,10 +279,12 @@ class EgressoTitulacaoControllerTest {
 
     @Test
     @Order(4)
-    void testDeleteById(){
+    void testDeleteById() throws Exception{
         MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.delete("/egressoTitulacao")
                                                 .contentType(MediaType.APPLICATION_JSON)
+                                                .param("egressoId", egressoTitulacaoDTO.getId().getEgressoId().toString())
+                                                .param("titulacaoId", egressoTitulacaoDTO.getId().getTitulacaoId().toString())
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk())
