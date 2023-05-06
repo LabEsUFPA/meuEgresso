@@ -69,7 +69,7 @@ public class EgressoAdmController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
 	public String atualizarEgresso(@RequestBody @Valid EgressoDTO egressoDTO) throws InvalidRequestException {
 		EgressoModel egressoModel = mapper.map(egressoDTO, EgressoModel.class);
-		egressoService.updateEgresso(egressoModel);
+		egressoService.update(egressoModel);
 		return ResponseType.SUCESS_UPDATE.getMessage();
 	}
 

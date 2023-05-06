@@ -24,7 +24,7 @@ public class EgressoServiceImpl implements EgressoService {
     private final EgressoRepository egressoRepository;
 
     @Override
-    public EgressoModel adicionarEgresso(EgressoModel egresso) {
+    public EgressoModel save(EgressoModel egresso) {
         return egressoRepository.save(egresso);
     }
 
@@ -47,7 +47,7 @@ public class EgressoServiceImpl implements EgressoService {
      * @since 16/04/2023
      */
     @Override
-    public EgressoModel updateEgresso(EgressoModel egresso) {
+    public EgressoModel update(EgressoModel egresso) {
         if (egresso.getId() != null) {
             return egressoRepository.save(egresso);
         }
@@ -65,7 +65,7 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
-    public boolean deletarEgresso(EgressoModel egresso) {
+    public boolean deleteEgresso(EgressoModel egresso) {
         if (egressoRepository.existsById(egresso.getId())) {
             egressoRepository.deleteById(egresso.getId());
             return true;

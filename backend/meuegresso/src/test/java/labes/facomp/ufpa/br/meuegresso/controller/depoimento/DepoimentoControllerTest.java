@@ -147,7 +147,7 @@ class DepoimentoControllerTest {
                                 .matricula("202004940020")
                                 .build();
 
-                egressoModel = egressoService.adicionarEgresso(egressoModel);
+                egressoModel = egressoService.save(egressoModel);
         }
 
         @Test

@@ -151,7 +151,7 @@ public class EgressoController {
         depoimento.setEgresso(egresso);
         contribuicao.setEgresso(egresso);
 
-        egressoService.adicionarEgresso(egresso);
+        egressoService.save(egresso);
 
         return ResponseType.SUCESS_SAVE.getMessage();
     }
@@ -181,7 +181,7 @@ public class EgressoController {
             @RequestBody EgressoPublicDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
         if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
-            egressoService.updateEgresso(egressoModel);
+            egressoService.update(egressoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
@@ -202,7 +202,7 @@ public class EgressoController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarEgresso(@RequestBody @Valid EgressoPublicDTO egressoPublicDTO) {
         EgressoModel egressoModel = mapper.map(egressoPublicDTO, EgressoModel.class);
-        if (egressoService.deletarEgresso(egressoModel)) {
+        if (egressoService.deleteEgresso(egressoModel)) {
             return ResponseType.SUCESS_DELETE.getMessage();
         } else {
             return ResponseType.FAIL_DELETE.getMessage();
