@@ -64,6 +64,15 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
+
+/**
+ * Classe de testes para EgressoTitulacaoController:
+ * Implementa testes para as funções de cadastro, consulta,
+ * atualização e deleção por ID
+ * 
+ * @author Eude Monteiro
+ * @since 03/05/2023 
+ */
 class EgressoTitulacaoControllerTest {
     
     static final Integer TITULACAO_ID = 1;
