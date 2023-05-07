@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
@@ -88,7 +87,7 @@ class EgressoControllerTest {
         EgressoCadastroDTO egressoCadastro;
 
         static final Integer EGRESSO_ID = 1;
-        static final String EGRESSO_EMAIL = "algo@gmail.com";
+        static final String EGRESSO_EMAIL = "teste@gmail.com";
 
 
         @BeforeAll
@@ -181,8 +180,8 @@ class EgressoControllerTest {
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isOk()).andReturn();
 
-            EgressoDTO egressos = modelMapper.map(resposta.getResponse().getContentAsString(),EgressoDTO.class);
-            assertNotNull(egressos);
+            EgressoDTO egresso = objectMapper.readValue(resposta.getResponse().getContentAsString(),EgressoDTO.class);
+            assertEquals(egressoCadastro.getMatricula(), egresso.getMatricula());
         }
 
         @Test
@@ -194,8 +193,8 @@ class EgressoControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(egressoPublicDTO))
                             .header("Authorization", "Bearer " + this.token))
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(status().isAccepted()).andReturn();
+                            .andDo(MockMvcResultHandlers.print())
+                            .andExpect(status().isAccepted()).andReturn();
     
             String resp = resposta.getResponse().getContentAsString();
             assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), resp);
