@@ -13,7 +13,9 @@ public enum ResponseType {
 
     FAIL_DELETE("Dado não deletado"),
     
-    EGRESSO_ENCONTRADO("Egresso encontrado");
+    EGRESSO_ENCONTRADO("Egresso encontrado"),
+
+    SUCESS_IMAGE_UPDATE("Imagem atualizada com sucesso");
 
     private String message;
 

@@ -139,7 +139,6 @@ public class EgressoController {
         }
 
         egresso.setUsuario(usuarioService.findById(jwtService.getIdUsuario(token)));
-        // TODO fazer update de email futuramente.
         egresso.getUsuario().setNome(egressoCadastroDTO.getNome());
         PalestraModel palestra;
         if (egresso.getPalestras() != null) {
@@ -209,5 +208,18 @@ public class EgressoController {
             return ResponseType.FAIL_DELETE.getMessage();
         }
     }
+
+    @PostMapping
+    @RequestMapping(value = "/imagem")
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") }) // futuro controller pra foto
+    public String atualizarFoto(@RequestBody EgressoPublicDTO egresso, JwtAuthenticationToken token, String imagemString) throws Exception {
+        if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
+
+            egresso.setFoto(egressoService.getFileAsResource(e.getFotoNome()).getContentAsByteArray());
+            return ResponseType.SUCESS_IMAGE_UPDATE.getMessage();
+        }
+    }
+
 
 }

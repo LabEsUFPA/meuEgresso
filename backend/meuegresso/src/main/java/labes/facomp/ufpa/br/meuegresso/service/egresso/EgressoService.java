@@ -1,5 +1,13 @@
 package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.nimbusds.jose.util.Resource;
+
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 
 /**
@@ -65,4 +73,28 @@ public interface EgressoService {
 	 * @return
 	 */
 	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
+	/**
+	 * Método responsável por
+	 * 
+	 * @param fotoNomeString
+	 * @return
+	 * @throws MalformedURLException
+	 * @throws FileNotFoundException
+	 * @author Camilo Santos
+	 * @since 07/05/2023
+	 */
+	Resource getFileAsResource(String fotoNomeString);
+
+	/**
+	 * Método responsável por
+	 * 
+	 * @param nomeAnexo
+	 * @param arquivo
+	 * @throws IOException
+	 * @author Camilo Santos
+	 * @since 07/05/2023
+	 */
+	public void saveAnexo(String nomeAnexo, MultipartFile arquivo);
+
 }

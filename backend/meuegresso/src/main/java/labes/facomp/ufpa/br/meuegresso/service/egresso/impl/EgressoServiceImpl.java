@@ -1,6 +1,18 @@
 package labes.facomp.ufpa.br.meuegresso.service.egresso.impl;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
@@ -74,5 +86,31 @@ public class EgressoServiceImpl implements EgressoService {
     public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
         return egressoRepository.existsByIdAndCreatedById(id, createdBy);
     }
+
+    @Override
+    public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException {
+        Path file = Paths.get(String.format("%s%s", diretório, fotoNomeString));
+        if (file != null) {
+            return new UrlResource(file.toUri());
+        } else {
+            throw new FileNotFoundException(fotoNomeString); 
+        } // função incompleta
+    }
+
+    @Override
+	public void saveAnexo(String nomeAnexo, MultipartFile arquivo) throws IOException {
+		Path uploadPath = Paths.get(diretório + "/");
+
+		if (!Files.exists(uploadPath)) {
+			Files.createDirectories(uploadPath);
+		}
+
+		try (InputStream inputStream = arquivo.getInputStream()) {
+			Path filePath = uploadPath.resolve(nomeAnexo);
+			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException ioe) {
+			throw new IOException("Could not save file: " + arquivo.getOriginalFilename(), ioe)
+		} // função incompleta
+	}
 
 }

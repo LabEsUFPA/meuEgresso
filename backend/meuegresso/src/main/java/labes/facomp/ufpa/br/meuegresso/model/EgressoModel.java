@@ -67,6 +67,9 @@ public class EgressoModel extends Auditable {
         @Column(name = "linkedin_egresso", unique = true, nullable = true)
         private String linkedin;
 
+        @Column(name = "foto_egresso", unique = false, nullable = true)
+        private String fotoNome;
+
         @Builder.Default
         @Column(name = "pos_graducao_egresso", unique = false, nullable = true)
         private Boolean posGraduacao = false;
