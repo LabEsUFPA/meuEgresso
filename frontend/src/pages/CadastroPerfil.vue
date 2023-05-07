@@ -48,6 +48,8 @@
               name="password"
               type="password"
               label="Senha"
+              helper-text="Letras e números com no mínimo oito caracteres"
+              error-message="Senha inválida"
               :required="true"
               :icon-path="mdiLock"
             />
@@ -81,7 +83,7 @@
       >
         <div class="flex flex-col items-center text-center gap-y-28 mx-4">
           <h1 class="text-blue-900 text-4xl font-bold">
-            Suas inFormações estão sendo analisadas
+            Suas informações estão sendo analisadas
           </h1>
           <img
             class="animate-spin mr-3 max-w-[100px]"
@@ -110,7 +112,7 @@ import InvalidInsert from 'src/components/InvalidInsert.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 import router from 'src/router'
 import { models } from 'src/@types'
-interface ProfileRegisterModel extends models.ProfileRegisterModel {}
+interface ProfileRegisterModel extends models.ProfileRegisterModel { }
 
 const error = ref(false)
 const errorMessages = ref({
@@ -121,10 +123,10 @@ const errorText = ref('')
 const submitSuccess = ref(false)
 
 const schema = object().shape({
-  name: string().required(),
-  registration: string().required().length(12),
-  email: string().email().required(),
-  password: string().required(),
+  name: string().required().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
+  registration: string().optional().matches(/^(\d{1,12})?$/),
+  email: string().optional().matches(/^([^\s@]+@[^\s@]+\.[^\s@]+)?$/),
+  password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/),
   confirmationPassword: string().required().oneOf([refYup('password')])
 })
 
@@ -147,9 +149,12 @@ const handleSubmit = async (profileData: ProfileRegisterModel) => {
       }]
     )
 
-    if (responseRegister === 201) {
+    if (responseRegister.status === 201) {
       submitSuccess.value = true
       router.push({ path: '/cadastro' })
+    } else if (responseRegister.status === 400) {
+      errorText.value = responseRegister.data?.message
+      error.value = true
     } else {
       errorText.value = errorMessages.value.errorRequest
       error.value = true
@@ -170,10 +175,12 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   /* display: none; <- Crashes Chrome on hover */
   -webkit-appearance: none;
-  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  margin: 0;
+  /* <-- Apparently some margin are still there even though it's hidden */
 }
 
 input[type="number"] {
-  -moz-appearance: textfield; /* Firefox */
+  -moz-appearance: textfield;
+  /* Firefox */
 }
 </style>

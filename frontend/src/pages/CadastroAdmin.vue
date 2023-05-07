@@ -31,6 +31,7 @@
               <CustomInput
                 name="username"
                 label="Usuário"
+                helper-text="Letras minúsculas e números, sem espaços"
                 :required="true"
                 :icon-path="mdiAccount"
               />
@@ -57,6 +58,7 @@
                 name="password"
                 label="Senha"
                 type="password"
+                helper-text="Letras e números com no mínimo oito caracteres"
                 :required="true"
                 :icon-path="mdiLock"
               />
@@ -91,28 +93,23 @@
         </CustomButton>
       </div>
 
-      <div
-        v-if="submitSuccess"
-        class="flex flex-col bg-white w-[818px] mx-6 rounded-2xl"
-      >
-        <RouterLink
-          to="/"
-          class="flex self-end justify-center w-36 py-3 bg-red-400 font-semibold text-xl text-white rounded-tl-lg rounded-tr-lg rounded-bl-lg"
+      <CustomDialog v-model="submitSuccess">
+        <div
+          class="flex flex-col bg-whit mx-6 rounded-2xl"
         >
-          Fechar
-        </RouterLink>
-        <div class="flex flex-col items-center text-center pt-16 pb-28 gap-y-12">
-          <img
-            class="max-w-max"
-            src="../assets/check.svg"
-            alt="Loading"
-          >
-          <h1 class="text-blue-900 text-4xl font-bold">
-            Perfil {{ 123 }} <br>
-            criado com sucesso!
-          </h1>
+          <div class="flex flex-col items-center text-center pt-16 pb-28 gap-y-12">
+            <img
+              class="max-w-max"
+              src="../assets/check.svg"
+              alt="Loading"
+            >
+            <h1 class="text-blue-900 text-4xl font-bold">
+              Perfil {{ username }} <br>
+              criado com sucesso!
+            </h1>
+          </div>
         </div>
-      </div>
+      </CustomDialog>
     </div>
   </Form>
 </template>
@@ -128,6 +125,7 @@ import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 import { models } from 'src/@types'
+import CustomDialog from 'src/components/CustomDialog.vue'
 interface ProfileRegisterModel extends models.ProfileRegisterModel {}
 
 const error = ref(false)
@@ -136,6 +134,7 @@ const errorMessages = ref({
 })
 const errorText = ref('')
 const submitSuccess = ref(false)
+const username = ref('')
 
 const setIdAccessLevel = (accessLevel: string) => {
   if (accessLevel === 'Administrador') {
@@ -148,11 +147,11 @@ const setIdAccessLevel = (accessLevel: string) => {
 }
 
 const schema = object().shape({
-  name: string().required(),
-  username: string().required(),
-  email: string().email().required(),
+  name: string().required().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
+  username: string().required().matches(/^[a-z0-9_-]+$/),
+  email: string().email().required().matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
   confirmationEmail: string().email().required().oneOf([refYup('email')]),
-  password: string().required(),
+  password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/),
   confirmationPassword: string().required().oneOf([refYup('password')]),
   accessLevel: string().required(),
   idAccessLevel: number()
@@ -160,7 +159,7 @@ const schema = object().shape({
 
 const handleSubmit = async (profileData: ProfileRegisterModel) => {
   profileData.idAccessLevel = setIdAccessLevel(profileData.accessLevel)
-  console.log(profileData)
+
   const response = await useCadastroPerfilStore().userProfileRegister(
     profileData.username,
     profileData.password,
@@ -171,7 +170,8 @@ const handleSubmit = async (profileData: ProfileRegisterModel) => {
     }]
   )
 
-  if (response === 201) {
+  if (response.status === 201) {
+    username.value = profileData.username
     error.value = false
     submitSuccess.value = true
   } else {
