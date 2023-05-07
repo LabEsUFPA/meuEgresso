@@ -6,6 +6,5 @@ describe('PerfilEgresso Page Test', () => {
   it('PerfilEgresso rendering test', () => {
     const wrapper = mount(ProfilePage)
     expect(wrapper.vm).toBeDefined()
-    console.log(wrapper.vm.CustomInput)
   })
 })
