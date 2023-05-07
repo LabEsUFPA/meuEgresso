@@ -32,6 +32,7 @@
                 name="username"
                 label="Usuário"
                 helper-text="Letras minúsculas e números, sem espaços"
+                class-helper-text="text-gray-600"
                 :required="true"
                 :icon-path="mdiAccount"
               />
@@ -59,6 +60,7 @@
                 label="Senha"
                 type="password"
                 helper-text="Letras e números com no mínimo oito caracteres"
+                class-helper-text="text-gray-600"
                 :required="true"
                 :icon-path="mdiLock"
               />
@@ -148,7 +150,7 @@ const setIdAccessLevel = (accessLevel: string) => {
 
 const schema = object().shape({
   name: string().required().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
-  username: string().required().matches(/^[a-z0-9_-]+$/),
+  username: string().required().matches(/^[a-z0-9_.-]+$/),
   email: string().email().required().matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
   confirmationEmail: string().email().required().oneOf([refYup('email')]),
   password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/),

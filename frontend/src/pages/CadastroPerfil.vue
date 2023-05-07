@@ -7,13 +7,13 @@
     <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
       <div
         v-if="!submitSuccess"
-        class="flex flex-col items-center bg-white w-[960px] py-10 mx-6 rounded-2xl shadow-md"
+        class="flex flex-col items-center bg-white w-[960px] py-6 mx-6 rounded-2xl shadow-md"
       >
         <InvalidInsert
           :text="errorText"
           :show-alert="error"
         />
-        <h1 class="text-blue-900 text-4xl font-bold mb-12">
+        <h1 class="text-blue-900 text-4xl font-bold mb-6">
           Cadastro
         </h1>
         <div class="mb-8">
@@ -31,7 +31,6 @@
               name="registration"
               type="number"
               label="Matrícula"
-              :required="true"
               :icon-path="mdiSchool"
               :max-length="12"
               :min-length="12"
@@ -40,7 +39,8 @@
               name="email"
               type="email"
               label="Email"
-              helper-text="O email deve ser o mesmo cadastrado no SIGAA"
+              helper-text="Se possível informe o mesmo e-mail que está cadastrado no SIGAA"
+              class-helper-text="text-gray-600"
               :required="true"
               :icon-path="mdiEmail"
             />
@@ -49,6 +49,7 @@
               type="password"
               label="Senha"
               helper-text="Letras e números com no mínimo oito caracteres"
+              class-helper-text="text-gray-600"
               error-message="Senha inválida"
               :required="true"
               :icon-path="mdiLock"
@@ -112,6 +113,7 @@ import InvalidInsert from 'src/components/InvalidInsert.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 import router from 'src/router'
 import { models } from 'src/@types'
+import { useLoginStore } from 'src/store/LoginStore'
 interface ProfileRegisterModel extends models.ProfileRegisterModel { }
 
 const error = ref(false)
@@ -121,11 +123,12 @@ const errorMessages = ref({
 })
 const errorText = ref('')
 const submitSuccess = ref(false)
+const storeLogin = useLoginStore()
 
 const schema = object().shape({
   name: string().required().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
   registration: string().optional().matches(/^(\d{1,12})?$/),
-  email: string().optional().matches(/^([^\s@]+@[^\s@]+\.[^\s@]+)?$/),
+  email: string().optional().matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
   password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/),
   confirmationPassword: string().required().oneOf([refYup('password')])
 })
@@ -151,6 +154,8 @@ const handleSubmit = async (profileData: ProfileRegisterModel) => {
 
     if (responseRegister.status === 201) {
       submitSuccess.value = true
+      await storeLogin.userLogin(profileData.email, profileData.password)
+      await storeLogin.saveUser()
       router.push({ path: '/cadastro' })
     } else if (responseRegister.status === 400) {
       errorText.value = responseRegister.data?.message
