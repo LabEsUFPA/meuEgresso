@@ -1,53 +1,44 @@
 import axios, { type AxiosError } from 'axios'
 import type { API } from 'src/@types'
+import LocalStorage from 'src/services/localStorage'
 
 const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
 const Axios = axios.create({
-  baseURL
+  baseURL,
+  headers: {
+    'Content-type': 'application/json'
+  },
+  withCredentials: true
 })
 
 Axios.interceptors.request.use((config) => {
-  const cookies = getCookies()
-  if (Object.keys(cookies).includes('token')) {
-    config.headers.Authorization = `Bearer ${cookies.token}`
-  }
+  const Token = new LocalStorage().getToken()
+  if (Token !== undefined) config.headers.Authorization = `Bearer ${Token}`
   return config
 })
-
-const getCookies = (): Record<string, string> => {
-  const cookieString = document.cookie
-  const cookies: Record<string, string> = {}
-
-  cookieString.split(';').forEach(cookie => {
-    const [name, value] = cookie.split('=').map(c => c.trim())
-    cookies[name] = value
-  })
-
-  return cookies
-}
 
 const request: API.Request = async ({
   method,
   route,
   body
 }) => {
-  let statusError: any = null
+  let statusError: any
+  let message: any
   const response = await Axios({
     method,
     url: route,
     data: body
   }).catch((error: AxiosError) => {
     statusError = (error.response != null) ? error.response.status : null
+    message = (error.response != null) ? error.response.data : null
   })
-
   return {
     status: (response != null) ? response.status : statusError,
-    data: (response != null) ? response.data : null
+    data: (response != null) ? response.data : message
   }
 }
 
 export default {
-  getCookies,
   request
 }

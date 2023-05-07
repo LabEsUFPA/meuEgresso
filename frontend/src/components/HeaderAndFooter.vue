@@ -7,6 +7,7 @@
             <img
               class="w-12"
               src="src/assets/logo.svg"
+              alt="Logo"
             >
             <div class="ml-8">
               <div class="text-lx md:text-xl">
@@ -20,7 +21,24 @@
           <!-- Div que preenche o espaco vazio no container flexbox -->
           <div class="flex-1" />
 
-          <div class="px-8 hidden gap-x-2 md:flex">
+          <div
+            v-if="userLogged"
+            class="px-8 hidden gap-x-2 md:flex"
+          >
+            <CustomButton
+              class="ml-4"
+              color="white"
+              variant="flat"
+              tag="button"
+              @click="userLogout()"
+            >
+              Sair
+            </CustomButton>
+          </div>
+          <div
+            v-else
+            class="px-8 hidden gap-x-2 md:flex"
+          >
             <CustomButton
               color="white"
               variant="flat"
@@ -148,6 +166,7 @@
           <img
             class="w-14"
             src="src/assets/brasão.png"
+            alt="Brasão"
           >
         </div>
         <div class="text-white font-semibold">
@@ -169,5 +188,19 @@
 <script lang="ts" setup>
 import CustomButton from 'src/components/CustomButton.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
+import { watch, ref } from 'vue'
 import { mdiMenu } from '@mdi/js'
+import { useLoginStore } from 'src/store/LoginStore'
+import router from 'src/router'
+
+const store = useLoginStore()
+const userLogged = ref(store.userLogged)
+watch(() => store.userLogged, () => {
+  userLogged.value = store.userLogged
+})
+
+const userLogout = () => {
+  store.userLogout()
+  router.push({ path: '/entrar' })
+}
 </script>
