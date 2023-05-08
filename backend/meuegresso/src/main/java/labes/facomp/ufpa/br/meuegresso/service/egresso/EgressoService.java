@@ -21,7 +21,7 @@ public interface EgressoService {
 
 	public EgressoModel findByUsuarioId(Integer idUsuario);
 
-	public EgressoModel adicionarEgresso(EgressoModel egresso);
+	public EgressoModel adicionarEgresso(EgressoModel egresso, MultipartFile arquivo);
 
 	/**
 	 * Metodo responsavel por atualizar informacoes do egresso no banco de dados.

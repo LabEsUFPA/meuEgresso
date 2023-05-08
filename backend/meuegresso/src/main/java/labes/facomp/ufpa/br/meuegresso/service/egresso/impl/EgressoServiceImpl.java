@@ -9,6 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -31,12 +33,18 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class EgressoServiceImpl implements EgressoService {
-
+    
     private final EgressoRepository egressoRepository;
 
+    @Value("${env.anexosDir}")
+    private String UPLOAD_DIRECTORY;
+
     @Override
-    public EgressoModel adicionarEgresso(EgressoModel egresso) {
-        return egressoRepository.save(egresso);
+    public EgressoModel adicionarEgresso(EgressoModel egressoModel, MultipartFile arquivo) throws IOException { // adicionado código para salvar foto
+        String fileCode = RandomStringUtils.randomAlphanumeric(16) + ".png";
+        egressoModel.setFotoNome(fileCode);
+        saveAnexo(fileCode, arquivo);
+        return egressoRepository.save(egressoModel);
     }
 
     @Override
@@ -89,7 +97,7 @@ public class EgressoServiceImpl implements EgressoService {
 
     @Override
     public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException {
-        Path file = Paths.get(String.format("%s%s", diretório, fotoNomeString));
+        Path file = Paths.get(String.format("%s%s", UPLOAD_DIRECTORY, fotoNomeString));
         if (file != null) {
             return new UrlResource(file.toUri());
         } else {
@@ -99,7 +107,7 @@ public class EgressoServiceImpl implements EgressoService {
 
     @Override
 	public void saveAnexo(String nomeAnexo, MultipartFile arquivo) throws IOException {
-		Path uploadPath = Paths.get(diretório + "/");
+		Path uploadPath = Paths.get(UPLOAD_DIRECTORY + "/");
 
 		if (!Files.exists(uploadPath)) {
 			Files.createDirectories(uploadPath);
@@ -109,7 +117,7 @@ public class EgressoServiceImpl implements EgressoService {
 			Path filePath = uploadPath.resolve(nomeAnexo);
 			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException ioe) {
-			throw new IOException("Could not save file: " + arquivo.getOriginalFilename(), ioe)
+			throw new IOException("Could not save file: " + arquivo.getOriginalFilename(), ioe);
 		} // função incompleta
 	}
 
