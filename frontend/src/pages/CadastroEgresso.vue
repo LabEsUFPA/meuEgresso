@@ -586,6 +586,8 @@ async function handleSubmit (values: InferType<typeof schema>) {
     empresa,
     titulacao
   })
+  console.log('Staus: ')
+  console.log(status)
 
   if (status !== 201) {
     dialogFalha.value = true

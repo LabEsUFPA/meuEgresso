@@ -59,7 +59,6 @@
                   :value="dataEgresso.profileHead.nome"
                   label=""
                   placeholder="Ex: Marcelle Mota"
-
                   :icon-path="mdiAccount"
                 />
               </div>
@@ -171,9 +170,7 @@
               </h1>
             </template>
             <template #title>
-              <h1
-                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-              >
+              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
                 <SvgIcon
                   type="mdi"
                   size="20"
@@ -270,9 +267,7 @@
               </h1>
             </template>
             <template #title>
-              <h1
-                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-              >
+              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
                 <SvgIcon
                   type="mdi"
                   size="20"
@@ -388,9 +383,7 @@
               </h1>
             </template>
             <template #title>
-              <h1
-                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-              >
+              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
                 <SvgIcon
                   type="mdi"
                   size="20"
@@ -629,9 +622,7 @@
               </h1>
             </template>
             <template #title>
-              <h1
-                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-              >
+              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
                 <SvgIcon
                   type="mdi"
                   size="20"
@@ -742,9 +733,7 @@
               </h1>
             </template>
             <template #title>
-              <h1
-                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-              >
+              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
                 <SvgIcon
                   type="mdi"
                   size="20"
@@ -764,9 +753,9 @@
                   name="adicionais.experiencias"
                   label="Depoimento"
                   placeholder="Lorem ipsum dolor sit amet, consect
-            etur adipiscing elit, sed do eiusmod tempor incididun
-            t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-            ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+              etur adipiscing elit, sed do eiusmod tempor incididun
+              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                   icon-path=""
                 />
                 <CustomPerfilData
@@ -776,9 +765,9 @@
                   name="adicionais.contribuicoes"
                   label="Contribuições"
                   placeholder="Lorem ipsum dolor sit amet, consect
-            etur adipiscing elit, sed do eiusmod tempor incididun
-            t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-            ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+              etur adipiscing elit, sed do eiusmod tempor incididun
+              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                   icon-path=""
                 />
               </div>
@@ -804,7 +793,8 @@
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso:
+                  Use o campo abaixo para de forma simples e resumida compartilhar com outras pessoas experiências
+                  positivas ao realizar o curso:
                 </div>
 
                 <CustomTextarea
@@ -814,7 +804,8 @@
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto:
+                  Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja
+                  pequena ou grande, pois tudo tem seu impacto:
                 </div>
 
                 <CustomTextarea
@@ -1183,7 +1174,6 @@ const dataEgresso = ref({
   },
   profileHead: {
     nome: '',
-    email: '',
     linkedin: '',
     lattes: '',
     isInput: false
@@ -1212,17 +1202,74 @@ onMounted(() => {
     dataEgresso.value.geral.email = userData.email
     console.log('DATA')
     console.log(userData)
-    // const responseEgresso = JSON.parse($store.fetchEgresso())
+    console.log($store.fetchEgresso())
+    const json = JSON.parse(storage.get('loggedEgresso'))
+    console.log(json)
+    console.log(json.nascimento)
 
-    // console.log(response)
-    // dataEgresso.value = response
-    // if (response?.status === 200) {
-    //   console.log(response)
-    // }
+    dataEgresso.value = {
+      geral:
+      {
+        email: userData.email,
+        genero: json.genero.nome,
+        confirmacaoEmail: '',
+        nascimento: json.nascimento,
+        isInput: false
+      },
 
-    // const egressoData = JSON.parse($store.fetchEgresso())
+      localizacao: {
+        cep: '',
+        pais: 'json.emprego.empresa.endereco.pais,',
+        estado: 'json.emprego.empresa.endereco.estado,',
+        cidade: '',
+        isInput: false
+      },
+      academico: {
+        matricula: json.matricula,
+        email: json.usuario.email,
+        tipoAluno: '',
+        cotista: {
+          value: json.cotista,
+          tipo: ''
+        },
+        bolsista: {
+          value: json.bolsista,
+          tipo: '',
+          remuneracao: json.remuneracaoBolsa
+        },
+        posGrad: {
+          value: json.posGraduacao,
+          tipo: '',
+          local: '',
+          curso: '',
+          desejaPos: json.interesseEmPos
+        },
+        isInput: false
+      },
+      carreira: {
+        area: 'json.emprego.areaAtuacao',
+        setor: 'json.emprego.empresa.setorAtuacao',
+        empresa: 'json.emprego.empresa.nome',
+        faixaSalarial: 'json.emprego.faixaSalarial.faixa',
+        remuneracao: '',
+        isInput: false
+      },
+      adicionais: {
+        palestras: json.palestras !== null,
+        assuntosPalestras: json.palestras?.descricao || '',
+        experiencias: json.depoimento?.descricao || '',
+        contribuicoes: json.contribuicao?.descricao || '',
+        isInput: false
+      },
+      profileHead: {
+        nome: userData.nome,
+        linkedin: json.linkedin || '',
+        lattes: json.lattes || '',
+        isInput: false
+      }
+    }
+    console.log()
   }
 })
 </script>
-<style>
-</style>
+<style></style>
