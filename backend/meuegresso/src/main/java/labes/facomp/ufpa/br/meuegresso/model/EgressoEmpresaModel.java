@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "egresso_empresa")
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = false, exclude = "egresso")
 public class EgressoEmpresaModel extends Auditable {
 
     @EmbeddedId
