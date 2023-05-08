@@ -19,8 +19,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @Entity(name = "depoimento")
+@EqualsAndHashCode(callSuper = false, exclude = "egresso")
 public class DepoimentoModel extends Auditable {
 
     @Id
