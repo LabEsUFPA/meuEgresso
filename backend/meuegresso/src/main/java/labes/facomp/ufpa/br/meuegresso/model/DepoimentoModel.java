@@ -17,15 +17,15 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @Entity(name = "depoimento")
-@Builder
+@EqualsAndHashCode(callSuper = false, exclude = "egresso")
 public class DepoimentoModel extends Auditable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_depoimento", unique = true, nullable = false)
     private Integer id;
 

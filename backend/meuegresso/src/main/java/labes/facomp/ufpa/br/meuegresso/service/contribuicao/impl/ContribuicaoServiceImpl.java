@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.contribuicao.ContribuicaoRepository;
@@ -33,11 +34,13 @@ public class ContribuicaoServiceImpl implements ContribuicaoService {
     }
 
     @Override
+    @Transactional
     public List<ContribuicaoModel> findAll() {
         return anuncioRepository.findAll();
     }
 
     @Override
+    @Transactional
     public ContribuicaoModel findById(Integer id) {
         return anuncioRepository.findById(id).orElseThrow();
     }
@@ -61,5 +64,16 @@ public class ContribuicaoServiceImpl implements ContribuicaoService {
         return anuncioRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
+    @Override
+    @Transactional
+    public ContribuicaoModel findByEgressoId(Integer idEgresso) {
+        return anuncioRepository.findByEgressoId(idEgresso).orElseThrow();
+    }
+
+    @Override
+    @Transactional
+    public ContribuicaoModel findByEgressoUsuarioId(Integer idUsuario) {
+        return anuncioRepository.findByEgressoUsuarioId(idUsuario).orElseThrow();
+    }
 
 }

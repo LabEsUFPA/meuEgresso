@@ -12,7 +12,7 @@ import lombok.Data;
 public class EgressoValidoModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_egresso_valido", unique = true, nullable = false)
     private Integer id;
 

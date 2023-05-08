@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.dto.palestras;
+package labes.facomp.ufpa.br.meuegresso.dto.palestra;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PalestrasDTO {
+public class PalestraDTO {
 
     private Integer id;
 

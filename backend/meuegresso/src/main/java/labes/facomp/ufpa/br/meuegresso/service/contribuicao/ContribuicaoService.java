@@ -15,40 +15,56 @@ import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
 public interface ContribuicaoService {
 
 	/**
-	 * Método responsável por persistir determinado anuncio no banco de dados.
+	 * Método responsável por persistir determinado contribuicao no banco de dados.
 	 *
-	 * @param anuncioModel Dados do anuncio
+	 * @param contribuicaoModel Dados do contribuicao
 	 * @return Dados após serem gravados no banco de dados.
 	 */
-	public ContribuicaoModel save(ContribuicaoModel anuncioModel);
+	public ContribuicaoModel save(ContribuicaoModel contribuicaoModel);
 
 	/**
-	 * Método responsável por encontrar um determinado anuncio por sua ID.
+	 * Método responsável por encontrar um determinado contribuicao por sua ID.
 	 *
-	 * @param id ID de um anuncio
+	 * @param id ID de um contribuicao
 	 * @return
 	 */
 	public ContribuicaoModel findById(Integer id);
 
 	/**
-	 * Método responsável por encontrar todos os anuncios cadastrados.
+	 * Método responsável por encontrar um determinado contribuicao pelo seu egresso.
+	 *
+	 * @param id ID de um contribuicao
+	 * @return
+	 */
+	public ContribuicaoModel findByEgressoId(Integer idEgresso);
+
+	/**
+	 * Método responsável por encontrar um determinado contribuicao pelo seu egresso.
+	 *
+	 * @param id ID de um contribuicao
+	 * @return
+	 */
+	public ContribuicaoModel findByEgressoUsuarioId(Integer idUsuario);
+
+	/**
+	 * Método responsável por encontrar todos os contribuicaos cadastrados.
 	 *
 	 * @return Lista de objetos da classe ContribuicaoModel.
 	 */
 	public List<ContribuicaoModel> findAll();
 
 	/**
-	 * Método responsável por atualizar dados de um anuncio cadastrado.
+	 * Método responsável por atualizar dados de um contribuicao cadastrado.
 	 *
-	 * @param anuncio objeto anuncio
+	 * @param contribuicao objeto contribuicao
 	 * @return
 	 */
-	public ContribuicaoModel update(ContribuicaoModel anuncio) throws InvalidRequestException;
+	public ContribuicaoModel update(ContribuicaoModel contribuicao) throws InvalidRequestException;
 
 	/**
-	 * Método responsável por deletar um anuncio cadastrado por sua ID.
+	 * Método responsável por deletar um contribuicao cadastrado por sua ID.
 	 *
-	 * @param id ID de um anuncio
+	 * @param id ID de um contribuicao
 	 */
 	public boolean deleteById(Integer id);
 

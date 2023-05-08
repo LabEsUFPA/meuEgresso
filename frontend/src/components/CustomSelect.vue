@@ -66,7 +66,7 @@
         >
           <div
             class="p-2 hover:bg-gray-200 text-left"
-            @click="handleChange('')"
+            @click="handleEmit('')"
           >
             ...
           </div>
@@ -105,11 +105,8 @@ import { ref, toRef } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronDown } from '@mdi/js'
 import { useField } from 'vee-validate'
-
-interface ComplexOpts {
-  label: string,
-  value: any
-}
+import { type models } from 'src/@types'
+interface ComplexOpts extends models.ComplexOpts {}
 
 type IOpts = string | ComplexOpts
 
