@@ -1,10 +1,4 @@
 <template>
-  <!-- <Form
-    @submit="handleSubmit"
-    @invalid-submit="onInvalid"
-    :validation-schema="schema"
-  > -->
-
   <div class="flex-1 min-h-screen items-center justify-center bg-neutral-100">
     <div
       class="flex place-items-center justify-between flex-wrap relative w-full h-[335px] pin-t bg-gradient-to-b from-sky-200 to-indigo-200 "
@@ -146,7 +140,6 @@
       <!-- <ProfileBodyView /> -->
       <!-- Body Start -->
       <div class="container mx-auto p-3 pb-0">
-        <!-- <form @submit.prevent="handleSubmit($event)"> -->
         <Form
           @submit="handleSubmitGeral"
           @invalid-submit="onInvalid"
@@ -182,8 +175,6 @@
             </template>
             <template #default>
               <div v-if="!dataEgresso.geral.isInput">
-                <!-- Talvez problema com v-model -->
-                <!-- Add um v-if aq pro botão de ativar edição -->
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
@@ -390,18 +381,12 @@
                   class="inline mr-2"
                   :path="mdiSchool"
                 />
-                Academico
+                Acadêmico
               </h1>
             </template>
 
             <template #default>
               <div v-if="!dataEgresso.academico.isInput">
-                <!-- class="mb-1"
-            name="localizacao.cidade"
-            label="Cidade"
-            placeholder="Belém"
-            :icon-path="mdiMapMarkerRadius""
-          /> -->
                 <CustomPerfilData
                   type="number"
                   class="mb-5"
@@ -412,14 +397,6 @@
                   icon-path=""
                 />
 
-                <!-- <CustomPerfilData
-            class="mb-5"
-            name="academico.email"
-            label="Email institucional"
-            placeholder="Selecione"
-            icon-path=""
-          />
-          -->
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
@@ -439,14 +416,6 @@
                   placeholder="Selecione"
                   icon-path=""
                 />
-
-                <!-- <CustomPerfilData
-            class="mb-5"
-            name="academico.posGrad.tipo"
-            label="Tipo de Aluno"
-            placeholder="Tipo"
-            icon-path=""
-          /> -->
 
                 <CustomPerfilData
                   type="text"
@@ -824,8 +793,7 @@
 </template>
 
 <script setup lang="ts">
-// import ProfileHead from 'src/components/ProfileHead.vue'
-// import ProfileBodyView from 'src/components/ProfileBodyView.vue'
+
 import CustomButtonLink from 'src/components/CustomButtonLink.vue'
 import ButtonEdit from 'src/components/ButtonEdit.vue'
 import FolderSection from 'src/components/FolderSection.vue'
@@ -837,7 +805,6 @@ import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
 import { computed, ref, onMounted, watch } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
-import svgPath from 'src/assets/svgPaths.json'
 import CustomTextarea from 'src/components/CustomTextarea.vue'
 import { Form } from 'vee-validate'
 import { object, string, date, boolean } from 'yup'
@@ -856,11 +823,8 @@ import {
   mdiWeb,
   mdiMapOutline,
   mdiMapMarkerRadius,
-  mdiLinkVariant,
-  mdiYoutubeSubscription
+  mdiLinkVariant
 } from '@mdi/js'
-import { getRandomValues } from 'crypto'
-import { userInfo } from 'os'
 // mdiHome CEP,
 const $store = usePerfilEgressoStore()
 const storage = new LocalStorage()
@@ -1117,9 +1081,6 @@ const schemaAdicionais = object().shape({
   })
 })
 
-const bools = ref({
-  palestras: false
-})
 const dataEgresso = ref({
   geral: {
     email: '',
@@ -1193,19 +1154,15 @@ onMounted(() => {
   if (storage.has('loggedUser')) {
     const userData = JSON.parse(storage.get('loggedUser'))
 
-    form.value?.setFieldValue('geral.email', userData.email)
-    form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
-      return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
-    }).join(' '))
     console.log('Logged in')
-    dataEgresso.value.profileHead.nome = userData.nome
-    dataEgresso.value.geral.email = userData.email
+    // dataEgresso.value.profileHead.nome = userData.nome
+    // dataEgresso.value.geral.email = userData.email
     console.log('DATA')
     console.log(userData)
-    console.log($store.fetchEgresso())
+    $store.fetchEgresso()
     const json = JSON.parse(storage.get('loggedEgresso'))
+    console.log('BackResponse:')
     console.log(json)
-    console.log(json.nascimento)
 
     dataEgresso.value = {
       geral:
@@ -1219,9 +1176,9 @@ onMounted(() => {
 
       localizacao: {
         cep: '',
-        pais: 'json.emprego.empresa.endereco.pais,',
-        estado: 'json.emprego.empresa.endereco.estado,',
-        cidade: '',
+        pais: json.emprego.empresa.endereco.pais,
+        estado: json.emprego.empresa.endereco.estado,
+        cidade: json.emprego.empresa.endereco.cidade,
         isInput: false
       },
       academico: {
@@ -1230,16 +1187,16 @@ onMounted(() => {
         tipoAluno: '',
         cotista: {
           value: json.cotista,
-          tipo: ''
+          tipo: json.cotas.nome
         },
         bolsista: {
           value: json.bolsista,
-          tipo: '',
+          tipo: json.bolsa.nome,
           remuneracao: json.remuneracaoBolsa
         },
         posGrad: {
           value: json.posGraduacao,
-          tipo: '',
+          tipo: json.posGraducao,
           local: '',
           curso: '',
           desejaPos: json.interesseEmPos
@@ -1247,10 +1204,10 @@ onMounted(() => {
         isInput: false
       },
       carreira: {
-        area: 'json.emprego.areaAtuacao',
-        setor: 'json.emprego.empresa.setorAtuacao',
-        empresa: 'json.emprego.empresa.nome',
-        faixaSalarial: 'json.emprego.faixaSalarial.faixa',
+        area: json.emprego.areaAtuacao,
+        setor: json.emprego.empresa.setorAtuacao,
+        empresa: json.emprego.empresa.nome,
+        faixaSalarial: json.emprego.faixaSalarial.faixa,
         remuneracao: '',
         isInput: false
       },
