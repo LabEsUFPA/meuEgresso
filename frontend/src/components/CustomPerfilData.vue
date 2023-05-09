@@ -40,7 +40,9 @@
           <slot -->
           <div v-else>
             <div v-if="vmodel">
-              {{ vmodel }}
+              <div class="whitespace-pre-wrap">
+                {{ vmodel }}
+              </div>
             </div>
 
             <div v-else>

@@ -402,7 +402,7 @@
                   class="mb-5"
                   :vmodel="dataEgresso.academico.cotista.tipo"
                   name="academico.cotista.tipo"
-                  label="Cota"
+                  label="Cotas"
                   placeholder="Tipo de cota"
                   icon-path=""
                 />
@@ -1163,6 +1163,17 @@ onMounted(() => {
     const json = JSON.parse(storage.get('loggedEgresso'))
     console.log('BackResponse:')
     console.log(json)
+    console.log('grupo:')
+    console.log(json.usuario.grupos[0].nomeGrupo)
+    // Cotas
+
+    // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
+    // Caso contrario: cotasEgresso += json.cotas[i].nome
+
+    let cotasEgresso = ''
+    for (let i = 0; i < json.cotas.length; i++) {
+      cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
+    }
 
     dataEgresso.value = {
       geral:
@@ -1184,10 +1195,10 @@ onMounted(() => {
       academico: {
         matricula: json.matricula,
         email: json.usuario.email,
-        tipoAluno: '',
+        tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
         cotista: {
           value: json.cotista,
-          tipo: json.cotas.nome
+          tipo: cotasEgresso
         },
         bolsista: {
           value: json.bolsista,
@@ -1212,7 +1223,7 @@ onMounted(() => {
         isInput: false
       },
       adicionais: {
-        palestras: json.palestras !== null,
+        palestras: json.palestras?.descricao,
         assuntosPalestras: json.palestras?.descricao || '',
         experiencias: json.depoimento?.descricao || '',
         contribuicoes: json.contribuicao?.descricao || '',
