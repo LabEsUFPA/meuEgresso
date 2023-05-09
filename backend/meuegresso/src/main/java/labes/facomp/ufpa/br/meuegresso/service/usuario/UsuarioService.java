@@ -1,4 +1,4 @@
-zzzpackage labes.facomp.ufpa.br.meuegresso.service.usuario;
+package labes.facomp.ufpa.br.meuegresso.service.usuario;
 
 import java.util.List;
 
