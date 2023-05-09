@@ -433,7 +433,7 @@
                   :vmodel="dataEgresso.academico.posGrad.local"
                   name="academico.posGrad.local"
                   label="Local da pós-graduação"
-                  placeholder="UFPA"
+                  placeholder="Local da pós-graduação"
                   icon-path=""
                 />
 
@@ -826,7 +826,7 @@ import {
   mdiLinkVariant
 } from '@mdi/js'
 // mdiHome CEP,
-const $store = await usePerfilEgressoStore()
+const $store = usePerfilEgressoStore()
 const storage = new LocalStorage()
 
 $store.fetchAll()
@@ -1156,7 +1156,6 @@ onMounted(() => {
     console.log(json)
     console.log('grupo:')
     console.log(json.usuario.grupos[0].nomeGrupo)
-    console.log(json.curso)
     // Cotas
 
     // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
@@ -1180,9 +1179,9 @@ onMounted(() => {
 
       localizacao: {
         cep: '',
-        pais: json.emprego.empresa.endereco.pais,
-        estado: json.emprego.empresa.endereco.estado,
-        cidade: json.emprego.empresa.endereco.cidade,
+        pais: json.emprego?.empresa.endereco.pais,
+        estado: json.emprego?.empresa.endereco.estado,
+        cidade: json.emprego?.empresa.endereco.cidade,
         isInput: false
       },
       academico: {
@@ -1201,17 +1200,17 @@ onMounted(() => {
         posGrad: {
           value: json.posGraduacao,
           tipo: json.posGraducao,
-          local: json.titulacao.titulacao.nome,
-          curso: json.titulacao.curso.nome,
+          local: json.titulacao?.titulacao.nome,
+          curso: json.titulacao?.curso.nome,
           desejaPos: json.interesseEmPos
         },
         isInput: false
       },
       carreira: {
-        area: json.emprego.areaAtuacao,
-        setor: json.emprego.empresa.setorAtuacao,
-        empresa: json.emprego.empresa.nome,
-        faixaSalarial: json.emprego.faixaSalarial.faixa,
+        area: json.emprego?.areaAtuacao,
+        setor: json.emprego?.empresa.setorAtuacao,
+        empresa: json.emprego?.empresa.nome,
+        faixaSalarial: json.emprego?.faixaSalarial.faixa,
         remuneracao: '',
         isInput: false
       },
