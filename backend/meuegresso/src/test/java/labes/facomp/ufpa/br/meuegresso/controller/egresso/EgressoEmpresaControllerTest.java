@@ -71,7 +71,7 @@ public class EgressoEmpresaControllerTest {
 
     static final Integer EGRESSO_ID = 1;
     static final String EGRESSO_EMAIL = "cantao162@gmail.com";
-    
+
     static final Integer FAIXASALARIAL_ID = 1;
     static final String FAIXASALARIAL = "5000 - 15000";
 
@@ -88,7 +88,7 @@ public class EgressoEmpresaControllerTest {
 
     @Autowired
     private EmpresaRepository empresaRepository;
-    
+
     @Autowired
     private FaixaSalarialRepository faixaSalarialRepository;
 
@@ -104,7 +104,7 @@ public class EgressoEmpresaControllerTest {
 
     EgressoEmpresaDTO egressoEmpresaDTO;
     EgressoEmpresaModelId egressoEmpresaModelId;
-    
+
     EgressoPublicDTO egressoPublicDTO;
     EgressoModel egressoModel;
 
@@ -124,10 +124,10 @@ public class EgressoEmpresaControllerTest {
 
 
         /*Egresso */
-        egressoPublicDTO = new EgressoPublicDTO(EGRESSO_ID, null, EGRESSO_EMAIL, generoDTO, true, true, null, null, null);
+        egressoPublicDTO = EgressoPublicDTO.builder().email(EGRESSO_EMAIL).genero(generoDTO).build();;
         egressoModel = EgressoModel.builder().id(EGRESSO_ID).cotista(true).interesseEmPos(true).nascimento(LocalDate.parse("1999-10-20")).genero(genero).build();
         egressoRepository.save(this.egressoModel);
-        
+
         /*Empresa */
         empresaDTO = EmpresaDTO.builder().id(EGRESSO_ID).nome(NOME).setorAtuacao(SETORATUACAO).faixaSalarialId(FAIXASALARIAL_ID).build();
         empresaModel = EmpresaModel.builder().id(EMRPESA_ID).nome(NOME).setorAtuacoes(null).endereco(null).build();
@@ -227,7 +227,7 @@ public class EgressoEmpresaControllerTest {
         assertEquals(NOME, egressoEmpresaDTOresponse.getEmpresa().getNome());
 
     }
-    
+
     @Test
     @Order(3)
     void testAtualizarEgressoEmpresa() throws Exception {
@@ -243,7 +243,7 @@ public class EgressoEmpresaControllerTest {
 
         String retornoString = resposta.getResponse().getContentAsString();
         assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
-        
+
     }
 
     @Test

@@ -147,6 +147,7 @@ class ContribuicaoControllerTest {
         void testCadastrarContribuicao() throws Exception {
 
                 contribuicaoDTO = ContribuicaoDTO.builder()
+                                .egressoId(egresso.getId())
                                 .descricao(DESCRICAO)
                                 .build();
 

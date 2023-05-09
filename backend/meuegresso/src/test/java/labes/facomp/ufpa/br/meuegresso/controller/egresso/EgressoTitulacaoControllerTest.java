@@ -36,7 +36,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoTitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
@@ -69,14 +69,14 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
  * Classe de testes para EgressoTitulacaoController:
  * Implementa testes para as funções de cadastro, consulta,
  * atualização e deleção por ID
- * 
+ *
  * @author Eude Monteiro
- * @since 03/05/2023 
+ * @since 03/05/2023
  */
 class EgressoTitulacaoControllerTest {
-    
+
     static final Integer TITULACAO_ID = 1;
-    static final String NOME = "TituloTeste";    
+    static final String NOME = "TituloTeste";
     static final String SETORATUACAO = "SetorTeste";
     static final Integer EMPRESA_ID = 2;
 
@@ -84,9 +84,9 @@ class EgressoTitulacaoControllerTest {
 
     static final Integer EGRESSO_ID = 1;
     static final String EGRESSO_EMAIL = "cantao162@gmail.com";
-    
+
     static final LocalDate INGRESSO = LocalDate.of(2023, 4, 1);
-    static final LocalDate CONCLUSAO = LocalDate.of(2023, 4, 10);  
+    static final LocalDate CONCLUSAO = LocalDate.of(2023, 4, 10);
 
     static final Integer FAIXASALARIAL_ID = 1;
     static final String FAIXASALARIAL = "5000 - 15000";
@@ -99,7 +99,7 @@ class EgressoTitulacaoControllerTest {
 
     @Autowired
     private EgressoRepository egressoRepository;
-    
+
     @Autowired
     private EmpresaRepository empresaRepository;
 
@@ -107,8 +107,8 @@ class EgressoTitulacaoControllerTest {
     private GeneroRepository generoRepository;
 
     @Autowired
-    private TitulacaoRepository titulacaoRepository;    
-    
+    private TitulacaoRepository titulacaoRepository;
+
     @Autowired
     MockMvc mockMvc;
 
@@ -121,19 +121,19 @@ class EgressoTitulacaoControllerTest {
 
     EmpresaDTO empresaDTO;
     EmpresaModel empresaModel;
-    
+
 
     EgressoTitulacaoDTO egressoTitulacaoDTO;
     EgressoTitulacaoModelId egressoTitulacaoModelId;
-    
-    EgressoDTO egressoDTO;
+
+    EgressoPublicDTO egressoDTO;
     EgressoModel egressoModel;
 
     FaixaSalarialDTO faixaSalarialDTO;
 
     TitulacaoDTO titulacaoDTO;
     TitulacaoModel titulacaoModel;
-    
+
 
     @Autowired
     ModelMapper modelMapper;
@@ -152,26 +152,26 @@ class EgressoTitulacaoControllerTest {
         /*Egresso */
         egressoModel = EgressoModel.builder().cotista(true).interesseEmPos(true).nascimento(LocalDate.parse("1999-10-20")).genero(genero).build();
         egressoModel = egressoRepository.save(this.egressoModel);
-        egressoDTO = modelMapper.map(egressoModel, EgressoDTO.class);
-        
-        
+        egressoDTO = modelMapper.map(egressoModel, EgressoPublicDTO.class);
+
+
         /*ModelId */
         egressoTitulacaoModelId = EgressoTitulacaoModelId.builder().egressoId(EGRESSO_ID).titulacaoId(TITULACAO_ID).build();
-        
+
         /*Curso */
         cursoModel = CursoModel.builder().nome("Ciência da Computação").build();
         cursoModel = cursoRepository.save(cursoModel);
-        cursoDTO = modelMapper.map(cursoModel, CursoDTO.class);   
+        cursoDTO = modelMapper.map(cursoModel, CursoDTO.class);
 
         /*Empresa */
         empresaModel = EmpresaModel.builder().nome(NOME).setorAtuacoes(null).endereco(null).build();
         empresaModel = empresaRepository.save(empresaModel);
-        empresaDTO = modelMapper.map(empresaModel, EmpresaDTO.class);   
+        empresaDTO = modelMapper.map(empresaModel, EmpresaDTO.class);
 
         /*Titulação */
         titulacaoModel = TitulacaoModel.builder().nome("Mestrado").build();
         titulacaoModel = titulacaoRepository.save(titulacaoModel);
-        titulacaoDTO = modelMapper.map(titulacaoModel, TitulacaoDTO.class);        
+        titulacaoDTO = modelMapper.map(titulacaoModel, TitulacaoDTO.class);
 
         /*EgressoTitulacao */
         egressoTitulacaoDTO = EgressoTitulacaoDTO.builder().egresso(egressoDTO)
@@ -228,7 +228,7 @@ class EgressoTitulacaoControllerTest {
         usuarioModel.setId(usuarioAuthDTO.getId());
 
     }
-    
+
     @Test
     @Order(1)
     void testCadastrarTitulacao() throws Exception{
@@ -265,7 +265,7 @@ class EgressoTitulacaoControllerTest {
         assertNotNull(egressoTitulacaoDTOs);
         egressoTitulacaoDTO.setId(egressoTitulacaoDTOs.get(0).getId());
         assertEquals(1, egressoTitulacaoDTOs.size());
-        
+
     }
 
     @Test
@@ -283,7 +283,7 @@ class EgressoTitulacaoControllerTest {
 
         String retornoString = resposta.getResponse().getContentAsString();
         assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
-        
+
     }
 
     @Test
@@ -300,6 +300,6 @@ class EgressoTitulacaoControllerTest {
                                 .andReturn();
         String resultado = resposta.getResponse().getContentAsString();
         assertEquals(ResponseType.SUCESS_DELETE.getMessage(), resultado);
-        
+
     }
 }

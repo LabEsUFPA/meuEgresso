@@ -61,13 +61,6 @@ public class EgressoRepositoryTest {
         CotaModel cota = CotaModel.builder().nome("cota Trans").build();
         cota = cotaRepository.save(cota);
 
-        /*
-         * EnderecoModel endereco =
-         * EnderecoModel.builder().pais("Brasil").cidade("Ananindeua").estado("Para").
-         * build();
-         * endereco = enderecoRepository.save(endereco);
-         */
-
         GrupoModel grupoModel = GrupoModel.builder().nomeGrupo("ADMINNN").build();
         grupoModel = grupoRepository.save(grupoModel);
         Set<GrupoModel> grupos = new HashSet<>();
@@ -91,6 +84,7 @@ public class EgressoRepositoryTest {
                 .linkedin("null")
                 .usuario(usuarioModel)
                 .build();
+        egressoModel.setCreatedBy(usuarioModel);
 
         /*
          * DepoimentoModel depoimentoModel = DepoimentoModel.builder()
@@ -145,9 +139,7 @@ public class EgressoRepositoryTest {
 
     @Test
     public void testFindAll() {
-
         List<EgressoModel> testar = egressoRepository.findAll();
-
         assertNotNull(testar);
     }
 
