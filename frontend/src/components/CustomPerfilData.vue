@@ -1,5 +1,15 @@
 <template>
+  <!-- Ftre selecionar visivel ou desabilitado pela prop por nivel de acesso -->
+  <!-- v-if="visible"
+    :class="{
+      'opacity-50': !enabled
+    }" -->
+
   <div
+    v-if="visible"
+    :class="{
+      'opacity-50': !enabled || !vmodel
+    }"
     class="flex-auto relative"
     alt="one"
   >
@@ -76,22 +86,9 @@ interface Props {
   isinput?: boolean;
   vmodel?: string;
   iconSize?: string;
+  visible?: boolean;
+  enabled?: boolean;
 }
-
-// interface Props {
-//   name: string;
-//   label: string;
-//   helperText?: string;
-//   placeholder?: string;
-//   type: inputs;
-//   iconPath?: string;
-//   inputClass?: string;
-//   required?: boolean;
-//   mask?: string;
-//   isinput?: boolean;
-//   vmodel: string;
-// }
-
 withDefaults(defineProps<Props>(), {
   name: '',
   label: '',
@@ -103,6 +100,8 @@ withDefaults(defineProps<Props>(), {
   placeholder: 'placeholder',
   isinput: false,
   vmodel: '',
-  iconSize: '20'
+  iconSize: '20',
+  visible: true,
+  enabled: true
 })
 </script>
