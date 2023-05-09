@@ -8,9 +8,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  const loggedUser = JSON.parse(localStorage.getItem('loggedUser') || '{}')
+  const loggedUser = JSON.parse(localStorage.getItem('loggedUser') ?? '{}')
   try {
-    if (to.meta.requiresAuth && loggedUser.grupos[0].nomeGrupo != 'ADMIN') {
+    if (to.meta.requiresAuth === true && loggedUser.grupos[0].nomeGrupo !== 'ADMIN') {
       return {
         path: '/'
       }

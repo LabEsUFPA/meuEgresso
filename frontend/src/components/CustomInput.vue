@@ -81,7 +81,8 @@
 
     <div
       v-if="helperText"
-      class="text-xs mt-1 max-w-[250px] sm:max-w-fit"
+      :class="classHelperText"
+      class="text-xs mt-1 max-w-[250px]"
     >
       {{ helperText }}
     </div>
@@ -114,7 +115,8 @@ interface Props {
   minLength?: number
   imgIcon?: boolean
   step?: number | string
-  disabled?: boolean
+  disabled?: boolean,
+  classHelperText?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -129,7 +131,8 @@ const props = withDefaults(defineProps<Props>(), {
   successMessage: 'Campo correto',
   maxLength: 300,
   minLength: 1,
-  step: 1
+  step: 1,
+  classHelperText: ''
 })
 
 const focused = ref(false)

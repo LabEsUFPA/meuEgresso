@@ -20,7 +20,7 @@ public class GeneroModel extends Auditable {
 
     @Id
     @Column(name = "id_genero")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "nome_genero", unique = true, nullable = false, length = 60)

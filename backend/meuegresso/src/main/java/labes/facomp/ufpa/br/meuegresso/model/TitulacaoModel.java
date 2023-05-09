@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class TitulacaoModel extends Auditable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_titulacao", unique = true, nullable = false)
     private Integer id;
 

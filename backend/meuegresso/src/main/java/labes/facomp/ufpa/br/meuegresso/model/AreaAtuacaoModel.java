@@ -28,7 +28,7 @@ import lombok.ToString;
 public class AreaAtuacaoModel extends Auditable {
 
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id_area_atuacao", unique = true, nullable = false)
         private Integer id;
 

@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class CursoModel extends Auditable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_curso", unique = true, nullable = false)
     private Integer id;
 

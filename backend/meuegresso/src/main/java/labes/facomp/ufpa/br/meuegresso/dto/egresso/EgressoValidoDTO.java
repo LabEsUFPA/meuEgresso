@@ -11,8 +11,8 @@ public class EgressoValidoDTO {
     @NotNull(message = "Insira seu nome.")
     private String nome;
 
-    private String matricula;
+    private String matricula = "";
 
-    private String email;
+    private String email = "";
 
 }

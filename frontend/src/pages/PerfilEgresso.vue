@@ -1141,7 +1141,96 @@ const dataEgresso = ref({
     isInput: false
   }
 })
-// onMounted(() => { })
+onMounted(() => {
+  if (storage.has('loggedUser')) {
+    const userData = JSON.parse(storage.get('loggedUser'))
+
+    console.log('Logged in')
+    // dataEgresso.value.profileHead.nome = userData.nome
+    // dataEgresso.value.geral.email = userData.email
+    console.log('DATA')
+    console.log(userData)
+    $store.fetchEgresso()
+    const json = JSON.parse(storage.get('loggedEgresso'))
+    console.log('BackResponse:')
+    console.log(json)
+    console.log('grupo:')
+    console.log(json.usuario.grupos[0].nomeGrupo)
+    console.log(json.curso)
+    // Cotas
+
+    // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
+    // Caso contrario: cotasEgresso += json.cotas[i].nome
+
+    let cotasEgresso = ''
+    for (let i = 0; i < json.cotas.length; i++) {
+      cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
+    }
+    // Email e nome vem do usuario loggado
+
+    dataEgresso.value = {
+      geral:
+      {
+        email: userData.email,
+        genero: json.genero.nome,
+        confirmacaoEmail: '',
+        nascimento: json.nascimento,
+        isInput: false
+      },
+
+      localizacao: {
+        cep: '',
+        pais: json.emprego.empresa.endereco.pais,
+        estado: json.emprego.empresa.endereco.estado,
+        cidade: json.emprego.empresa.endereco.cidade,
+        isInput: false
+      },
+      academico: {
+        matricula: json.matricula,
+        email: json.usuario.email,
+        tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
+        cotista: {
+          value: json.cotista,
+          tipo: cotasEgresso
+        },
+        bolsista: {
+          value: json.bolsista,
+          tipo: json.bolsa.nome,
+          remuneracao: json.remuneracaoBolsa
+        },
+        posGrad: {
+          value: json.posGraduacao,
+          tipo: json.posGraducao,
+          local: json.titulacao.titulacao.nome,
+          curso: json.titulacao.curso.nome,
+          desejaPos: json.interesseEmPos
+        },
+        isInput: false
+      },
+      carreira: {
+        area: json.emprego.areaAtuacao,
+        setor: json.emprego.empresa.setorAtuacao,
+        empresa: json.emprego.empresa.nome,
+        faixaSalarial: json.emprego.faixaSalarial.faixa,
+        remuneracao: '',
+        isInput: false
+      },
+      adicionais: {
+        palestras: json.palestras?.descricao,
+        assuntosPalestras: json.palestras?.descricao || '',
+        experiencias: json.depoimento?.descricao || '',
+        contribuicoes: json.contribuicao?.descricao || '',
+        isInput: false
+      },
+      profileHead: {
+        nome: userData.nome,
+        linkedin: json.linkedin || '',
+        lattes: json.lattes || '',
+        isInput: false
+      }
+    }
+  }
+})
 
 // watch(pais, () => {
 //   form.value?.setFieldValue('localizacao.cidade', '')
@@ -1151,96 +1240,6 @@ const dataEgresso = ref({
 // watch(estado, () => {
 //   form.value?.setFieldValue('localizacao.cidade', '')
 // })
-
-if (storage.has('loggedUser')) {
-  const userData = JSON.parse(storage.get('loggedUser'))
-
-  console.log('Logged in')
-  // dataEgresso.value.profileHead.nome = userData.nome
-  // dataEgresso.value.geral.email = userData.email
-  console.log('DATA')
-  console.log(userData)
-  $store.fetchEgresso()
-  const json = JSON.parse(storage.get('loggedEgresso'))
-  console.log('BackResponse:')
-  console.log(json)
-  console.log('grupo:')
-  console.log(json.usuario.grupos[0].nomeGrupo)
-  console.log(json.curso)
-  // Cotas
-
-  // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
-  // Caso contrario: cotasEgresso += json.cotas[i].nome
-
-  let cotasEgresso = ''
-  for (let i = 0; i < json.cotas.length; i++) {
-    cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
-  }
-  // Email e nome vem do usuario loggado
-
-  dataEgresso.value = {
-    geral:
-      {
-        email: userData.email,
-        genero: json.genero.nome,
-        confirmacaoEmail: '',
-        nascimento: json.nascimento,
-        isInput: false
-      },
-
-    localizacao: {
-      cep: '',
-      pais: json.emprego.empresa.endereco.pais,
-      estado: json.emprego.empresa.endereco.estado,
-      cidade: json.emprego.empresa.endereco.cidade,
-      isInput: false
-    },
-    academico: {
-      matricula: json.matricula,
-      email: json.usuario.email,
-      tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
-      cotista: {
-        value: json.cotista,
-        tipo: cotasEgresso
-      },
-      bolsista: {
-        value: json.bolsista,
-        tipo: json.bolsa.nome,
-        remuneracao: json.remuneracaoBolsa
-      },
-      posGrad: {
-        value: json.posGraduacao,
-        tipo: json.posGraducao,
-        local: json.titulacao.titulacao.nome,
-        curso: json.titulacao.curso.nome,
-        desejaPos: json.interesseEmPos
-      },
-      isInput: false
-    },
-    carreira: {
-      area: json.emprego.areaAtuacao,
-      setor: json.emprego.empresa.setorAtuacao,
-      empresa: json.emprego.empresa.nome,
-      faixaSalarial: json.emprego.faixaSalarial.faixa,
-      remuneracao: '',
-      isInput: false
-    },
-    adicionais: {
-      palestras: json.palestras?.descricao,
-      assuntosPalestras: json.palestras?.descricao || '',
-      experiencias: json.depoimento?.descricao || '',
-      contribuicoes: json.contribuicao?.descricao || '',
-      isInput: false
-    },
-    profileHead: {
-      nome: userData.nome,
-      linkedin: json.linkedin || '',
-      lattes: json.lattes || '',
-      isInput: false
-    }
-  }
-  console.log()
-}
 
 </script>
 <style></style>
