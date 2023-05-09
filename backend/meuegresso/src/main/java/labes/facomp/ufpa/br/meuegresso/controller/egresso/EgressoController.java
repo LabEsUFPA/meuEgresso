@@ -176,7 +176,7 @@ public class EgressoController {
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") }) // TODO atualizar foto junto com egresso 
     public String atualizarEgresso(
             @RequestBody EgressoPublicDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
         if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
@@ -212,7 +212,7 @@ public class EgressoController {
     @PostMapping
     @RequestMapping(value = "/imagem")
     @ResponseStatus(code = HttpStatus.CREATED)
-    @Operation(security = { @SecurityRequirement(name = "Bearer") }) // futuro controller pra foto
+    @Operation(security = { @SecurityRequirement(name = "Bearer") }) // TODO verificar necessidade de post próprio
     public String atualizarFoto(@RequestBody EgressoPublicDTO egresso, JwtAuthenticationToken token, String imagemString) throws Exception {
         if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
 

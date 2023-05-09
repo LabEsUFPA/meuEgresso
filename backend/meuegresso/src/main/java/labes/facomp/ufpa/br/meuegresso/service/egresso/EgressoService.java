@@ -21,7 +21,7 @@ public interface EgressoService {
 
 	public EgressoModel findByUsuarioId(Integer idUsuario);
 
-	public EgressoModel adicionarEgresso(EgressoModel egresso, MultipartFile arquivo);
+	public EgressoModel adicionarEgresso(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por atualizar informacoes do egresso no banco de dados.
@@ -84,7 +84,7 @@ public interface EgressoService {
 	 * @author Camilo Santos
 	 * @since 07/05/2023
 	 */
-	Resource getFileAsResource(String fotoNomeString);
+	Resource getFileAsResource(String fotoNomeString); // TODO documentação incompleta
 
 	/**
 	 * Método responsável por
@@ -95,6 +95,6 @@ public interface EgressoService {
 	 * @author Camilo Santos
 	 * @since 07/05/2023
 	 */
-	public void saveAnexo(String nomeAnexo, MultipartFile arquivo);
+	public void saveAnexo(String nomeAnexo, MultipartFile arquivo); // TODO documentação incompleta
 
 }

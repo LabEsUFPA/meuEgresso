@@ -40,10 +40,7 @@ public class EgressoServiceImpl implements EgressoService {
     private String UPLOAD_DIRECTORY;
 
     @Override
-    public EgressoModel adicionarEgresso(EgressoModel egressoModel, MultipartFile arquivo) throws IOException { // adicionado código para salvar foto
-        String fileCode = RandomStringUtils.randomAlphanumeric(16) + ".png";
-        egressoModel.setFotoNome(fileCode);
-        saveAnexo(fileCode, arquivo);
+    public EgressoModel adicionarEgresso(EgressoModel egressoModel) {
         return egressoRepository.save(egressoModel);
     }
 
@@ -96,17 +93,17 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
-    public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException {
+    public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException { // TODO método incompleto
         Path file = Paths.get(String.format("%s%s", UPLOAD_DIRECTORY, fotoNomeString));
         if (file != null) {
             return new UrlResource(file.toUri());
         } else {
             throw new FileNotFoundException(fotoNomeString); 
-        } // função incompleta
+        }
     }
 
     @Override
-	public void saveAnexo(String nomeAnexo, MultipartFile arquivo) throws IOException {
+	public void saveAnexo(String nomeAnexo, MultipartFile arquivo) throws IOException { // TODO método incompleto
 		Path uploadPath = Paths.get(UPLOAD_DIRECTORY + "/");
 
 		if (!Files.exists(uploadPath)) {
@@ -118,7 +115,7 @@ public class EgressoServiceImpl implements EgressoService {
 			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException ioe) {
 			throw new IOException("Could not save file: " + arquivo.getOriginalFilename(), ioe);
-		} // função incompleta
+		}
 	}
 
 }
