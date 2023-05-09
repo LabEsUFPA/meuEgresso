@@ -81,7 +81,6 @@ class UsuarioServiceImplTest {
 
 		usuarios.add(usuario);
 		usuarios.add(usuario2);
-
 	}
 
 	@Test
