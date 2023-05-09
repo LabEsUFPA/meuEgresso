@@ -826,7 +826,7 @@ import {
   mdiLinkVariant
 } from '@mdi/js'
 // mdiHome CEP,
-const $store = usePerfilEgressoStore()
+const $store = await usePerfilEgressoStore()
 const storage = new LocalStorage()
 
 $store.fetchAll()
