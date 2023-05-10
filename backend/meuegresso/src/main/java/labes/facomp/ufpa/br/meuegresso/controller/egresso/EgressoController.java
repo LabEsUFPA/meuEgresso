@@ -127,7 +127,7 @@ public class EgressoController {
             areaAtuacaoModel = areaAtuacaoService.findByNome(empresaDTO.getAreaAtuacao());
             if (areaAtuacaoModel == null) {
                 areaAtuacaoModel = areaAtuacaoService
-                        .save(AreaAtuacaoModel.builder().nome(empresaDTO.getNome()).build());
+                        .save(AreaAtuacaoModel.builder().nome(empresaDTO.getAreaAtuacao()).build());
             }
             EnderecoModel enderecoEmpresa = enderecoService.findByCidadeAndEstadoAndPais(
                     empresaDTO.getEndereco().getCidade(),
@@ -192,7 +192,7 @@ public class EgressoController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(
-            @RequestBody EgressoPublicDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
+            @RequestBody EgressoDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
         if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
             egressoService.updateEgresso(egressoModel);
