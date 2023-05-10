@@ -543,6 +543,7 @@ async function handleSubmit (values: InferType<typeof schema>) {
   console.log(values.carreira.area !== 'Desempregado')
   const empresa = values.carreira.area !== 'Desempregado'
     ? {
+        areaAtuacao: values.carreira.area,
         faixaSalarialId: values.carreira.faixaSalarial ? parseInt(values.carreira.faixaSalarial) : null,
         setorAtuacao: values.carreira.setor,
         nome: values.carreira.empresa,
