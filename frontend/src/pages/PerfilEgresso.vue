@@ -1178,9 +1178,9 @@ onMounted(() => {
 
       localizacao: {
         cep: '',
-        pais: json.emprego?.empresa.endereco.pais,
-        estado: json.emprego?.empresa.endereco.estado,
-        cidade: json.emprego?.empresa.endereco.cidade,
+        pais: json.emprego?.empresa.endereco.pais || '',
+        estado: json.emprego?.empresa.endereco.estado || '',
+        cidade: json.emprego?.empresa.endereco.cidade || '',
         isInput: false
       },
       academico: {
@@ -1189,27 +1189,27 @@ onMounted(() => {
         tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
         cotista: {
           value: json.cotista,
-          tipo: cotasEgresso
+          tipo: cotasEgresso || ''
         },
         bolsista: {
           value: json.bolsista,
-          tipo: json.bolsa.nome || '',
+          tipo: json.bolsa?.nome || '',
           remuneracao: json.remuneracaoBolsa || ''
         },
         posGrad: {
           value: json.posGraduacao,
           tipo: json.posGraducao || '',
-          local: json.titulacao?.titulacao.nome,
-          curso: json.titulacao?.curso.nome,
+          local: json.titulacao?.titulacao?.nome || '',
+          curso: json.titulacao?.curso?.nome || '',
           desejaPos: json.interesseEmPos
         },
         isInput: false
       },
       carreira: {
-        area: json.emprego?.areaAtuacao,
-        setor: json.emprego?.empresa.setorAtuacao,
-        empresa: json.emprego?.empresa.nome,
-        faixaSalarial: json.emprego?.faixaSalarial.faixa,
+        area: json.emprego?.areaAtuacao || '',
+        setor: json.emprego?.empresa.setorAtuacao || '',
+        empresa: json.emprego?.empresa.nome || '',
+        faixaSalarial: json.emprego?.faixaSalarial.faixa || '',
         remuneracao: '',
         isInput: false
       },
