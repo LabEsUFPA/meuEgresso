@@ -20,11 +20,13 @@ import jakarta.persistence.TemporalType;
 import jakarta.persistence.UniqueConstraint;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "egresso")
@@ -32,7 +34,7 @@ import lombok.NoArgsConstructor;
 public class EgressoModel extends Auditable {
 
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id_egresso", unique = true, nullable = false)
         private Integer id;
 
@@ -47,12 +49,15 @@ public class EgressoModel extends Auditable {
         @Column(name = "matricula_egresso", unique = true, nullable = true, length = 12)
         private String matricula;
 
+        @Builder.Default
         @Column(name = "cotista_egresso", unique = false, nullable = false)
         private Boolean cotista = false;
 
+        @Builder.Default
         @Column(name = "bolsista_egresso", unique = false, nullable = false)
         private Boolean bolsista = false;
 
+        @Builder.Default
         @Column(name = "interesse_em_pos_egresso", unique = false, nullable = false)
         private Boolean interesseEmPos = false;
 
@@ -62,6 +67,7 @@ public class EgressoModel extends Auditable {
         @Column(name = "linkedin_egresso", unique = true, nullable = true)
         private String linkedin;
 
+        @Builder.Default
         @Column(name = "pos_graducao_egresso", unique = false, nullable = true)
         private Boolean posGraduacao = false;
 

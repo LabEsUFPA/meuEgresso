@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.PalestraModel;
 import labes.facomp.ufpa.br.meuegresso.repository.palestra.PalestraRepository;
@@ -33,21 +34,25 @@ public class PalestraServiceImpl implements PalestraService {
     }
 
     @Override
+    @Transactional
     public List<PalestraModel> findAll() {
         return palestraRepository.findAll();
     }
 
     @Override
+    @Transactional
     public PalestraModel findById(Integer id) {
         return palestraRepository.findById(id).orElseThrow();
     }
 
     @Override
+    @Transactional
     public PalestraModel save(PalestraModel palestraModel) {
         return palestraRepository.save(palestraModel);
     }
 
     @Override
+    @Transactional
     public PalestraModel update(PalestraModel palestra) throws InvalidRequestException {
         if (palestra.getId() != null) {
             return palestraRepository.save(palestra);
@@ -57,8 +62,21 @@ public class PalestraServiceImpl implements PalestraService {
     }
 
     @Override
-    public boolean existsByIdAndEgressoId(Integer id, Integer egressoId) {
-        return palestraRepository.existsByIdAndEgressoId(id, egressoId);
+    public boolean existsByIdAndCreatedById(Integer id, Integer egressoId) {
+        return palestraRepository.existsByIdAndCreatedById(id, egressoId);
     }
+
+    @Override
+    @Transactional
+    public PalestraModel findByEgressoId(Integer idEgresso) {
+        return palestraRepository.findByEgressoId(idEgresso).orElseThrow();
+    }
+
+    @Override
+    @Transactional
+    public PalestraModel findByEgressoUsuarioId(Integer idUsuario) {
+        return palestraRepository.findByEgressoUsuarioId(idUsuario).orElseThrow();
+    }
+
 
 }

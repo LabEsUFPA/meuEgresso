@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.repository.grupo;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -18,4 +19,6 @@ import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 public interface GrupoRepository extends CrudRepository<GrupoModel, Integer> {
 
 	Optional<GrupoModel> findByNomeGrupo(String nomeGrupo);
+
+	List<GrupoModel> findAll();
 }

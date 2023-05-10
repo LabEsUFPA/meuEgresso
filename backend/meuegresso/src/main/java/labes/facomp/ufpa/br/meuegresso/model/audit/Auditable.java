@@ -40,6 +40,7 @@ public class Auditable {
 
 	@CreatedDate
 	@Temporal(TemporalType.TIMESTAMP)
+	@ColumnDefault(value = "now()")
 	@Column(name = "created_date", updatable = false)
 	protected LocalDateTime createdDate;
 

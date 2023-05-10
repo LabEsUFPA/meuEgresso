@@ -59,7 +59,6 @@
                   :value="dataEgresso.profileHead.nome"
                   label=""
                   placeholder="Ex: Marcelle Mota"
-
                   :icon-path="mdiAccount"
                 />
               </div>
@@ -147,7 +146,6 @@
       <!-- <ProfileBodyView /> -->
       <!-- Body Start -->
       <div class="container mx-auto p-3 pb-0">
-        <!-- <form @submit.prevent="handleSubmit($event)"> -->
         <Form
           @submit="handleSubmitGeral"
           @invalid-submit="onInvalid"
@@ -171,9 +169,7 @@
               </h1>
             </template>
             <template #title>
-              <h1
-                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-              >
+              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
                 <SvgIcon
                   type="mdi"
                   size="20"
@@ -185,8 +181,6 @@
             </template>
             <template #default>
               <div v-if="!dataEgresso.geral.isInput">
-                <!-- Talvez problema com v-model -->
-                <!-- Add um v-if aq pro botão de ativar edição -->
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
@@ -270,9 +264,7 @@
               </h1>
             </template>
             <template #title>
-              <h1
-                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-              >
+              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
                 <SvgIcon
                   type="mdi"
                   size="20"
@@ -341,7 +333,7 @@
                   :value="dataEgresso.localizacao.pais"
                   label="País"
                   :options="countries"
-                  v-model:value="selections.pais"
+                  v-model:value="dataEgresso.localizacao.pais"
                   required
                 />
 
@@ -351,7 +343,7 @@
                   :value="dataEgresso.localizacao.estado"
                   label="Estado"
                   :options="states"
-                  v-model:value="selections.estado"
+                  v-model:value="dataEgresso.localizacao.estado"
                   required
                 />
 
@@ -388,27 +380,19 @@
               </h1>
             </template>
             <template #title>
-              <h1
-                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-              >
+              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
                 <SvgIcon
                   type="mdi"
                   size="20"
                   class="inline mr-2"
                   :path="mdiSchool"
                 />
-                Academico
+                Acadêmico
               </h1>
             </template>
 
             <template #default>
               <div v-if="!dataEgresso.academico.isInput">
-                <!-- class="mb-1"
-            name="localizacao.cidade"
-            label="Cidade"
-            placeholder="Belém"
-            :icon-path="mdiMapMarkerRadius""
-          /> -->
                 <CustomPerfilData
                   type="number"
                   class="mb-5"
@@ -419,20 +403,12 @@
                   icon-path=""
                 />
 
-                <!-- <CustomPerfilData
-            class="mb-5"
-            name="academico.email"
-            label="Email institucional"
-            placeholder="Selecione"
-            icon-path=""
-          />
-          -->
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
                   :vmodel="dataEgresso.academico.cotista.tipo"
                   name="academico.cotista.tipo"
-                  label="Cota"
+                  label="Cotas"
                   placeholder="Tipo de cota"
                   icon-path=""
                 />
@@ -446,14 +422,6 @@
                   placeholder="Selecione"
                   icon-path=""
                 />
-
-                <!-- <CustomPerfilData
-            class="mb-5"
-            name="academico.posGrad.tipo"
-            label="Tipo de Aluno"
-            placeholder="Tipo"
-            icon-path=""
-          /> -->
 
                 <CustomPerfilData
                   type="text"
@@ -471,7 +439,7 @@
                   :vmodel="dataEgresso.academico.posGrad.local"
                   name="academico.posGrad.local"
                   label="Local da pós-graduação"
-                  placeholder="UFPA"
+                  placeholder="Local da pós-graduação"
                   icon-path=""
                 />
 
@@ -524,7 +492,7 @@
                   name="academico.cotista.value"
                   :value="dataEgresso.academico.cotista.value"
                   label="Cotista"
-                  v-model:value="bools.cotista"
+                  v-model:value="dataEgresso.academico.cotista.value"
                 />
 
                 <CustomSelect
@@ -534,8 +502,8 @@
                   label="Tipo de Cota"
                   placeholder="Selecione"
                   :options="selectOpts.tipoCota"
-                  :required="bools.cotista"
-                  :disabled="!bools.cotista"
+                  :required="dataEgresso.academico.cotista.value"
+                  :disabled="!dataEgresso.academico.cotista.value"
                 />
 
                 <CustomCheckbox
@@ -543,7 +511,7 @@
                   name="academico.bolsista.value"
                   :value="dataEgresso.academico.bolsista.value"
                   label="Bolsista"
-                  v-model:value="bools.bolsista"
+                  v-model:value="dataEgresso.academico.bolsista.value"
                 />
 
                 <CustomSelect
@@ -553,8 +521,8 @@
                   label="Tipo de Bolsa"
                   placeholder="Selecione"
                   :options="selectOpts.tipoBolsa"
-                  :required="bools.bolsista"
-                  :disabled="!bools.bolsista"
+                  :required="dataEgresso.academico.bolsista.value"
+                  :disabled="!dataEgresso.academico.bolsista.value"
                 />
 
                 <CustomInput
@@ -565,15 +533,15 @@
                   placeholder="Selecione"
                   type="number"
                   step="0.01"
-                  :required="bools.bolsista"
-                  :disabled="!bools.bolsista"
+                  :required="dataEgresso.academico.bolsista.value"
+                  :disabled="!dataEgresso.academico.bolsista.value"
                 />
 
                 <CustomCheckbox
                   class="mb-5"
                   name="academico.posGrad.value"
                   :value="dataEgresso.academico.posGrad.value"
-                  v-model:value="bools.posGrad"
+                  v-model:value="dataEgresso.academico.posGrad.value"
                   label="Pós-graduação"
                 />
 
@@ -583,8 +551,8 @@
                   :value="dataEgresso.academico.posGrad.local"
                   label="Local da pós-graduação"
                   placeholder="Selecione"
-                  :required="bools.posGrad"
-                  :disabled="!bools.posGrad"
+                  :required="dataEgresso.academico.posGrad.value"
+                  :disabled="!dataEgresso.academico.posGrad.value"
                 />
 
                 <CustomInput
@@ -593,15 +561,15 @@
                   :value="dataEgresso.academico.posGrad.curso"
                   label="Curso de pós-graduação"
                   placeholder="Selecione"
-                  :required="bools.posGrad"
-                  :disabled="!bools.posGrad"
+                  :required="dataEgresso.academico.posGrad.value"
+                  :disabled="!dataEgresso.academico.posGrad.value"
                 />
 
                 <CustomCheckbox
                   name="academico.posGrad.desejaPos"
                   :value="dataEgresso.academico.posGrad.desejaPos"
                   label="Deseja realizar pós graduação?"
-                  v-if="!bools.posGrad"
+                  v-if="!dataEgresso.academico.posGrad.value"
                 />
               </div>
             </template>
@@ -629,9 +597,7 @@
               </h1>
             </template>
             <template #title>
-              <h1
-                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-              >
+              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
                 <SvgIcon
                   type="mdi"
                   size="20"
@@ -681,7 +647,7 @@
                   :value="dataEgresso.carreira.area"
                   label="Area de Atuação"
                   placeholder="Selecione"
-                  v-model:value="selections.area"
+                  v-model:value="dataEgresso.carreira.area"
                   :options="selectOpts.areaAtuacao"
                 />
 
@@ -692,8 +658,8 @@
                   label="Setor de Atuação"
                   placeholder="Selecione"
                   :options="selectOpts.setorAtuacao"
-                  :required="selections.area !== 'Desempregado'"
-                  :disabled="selections.area === 'Desempregado'"
+                  :required="dataEgresso.carreira.area !== 'Desempregado'"
+                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
                 />
 
                 <CustomInput
@@ -702,8 +668,8 @@
                   :value="dataEgresso.carreira.empresa"
                   label="Empresa"
                   placeholder="Ex: Google"
-                  :required="selections.area !== 'Desempregado'"
-                  :disabled="selections.area === 'Desempregado'"
+                  :required="dataEgresso.carreira.area !== 'Desempregado'"
+                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
                 />
 
                 <CustomInput
@@ -713,8 +679,8 @@
                   label="Faixa Salarial"
                   type="number"
                   step="0.01"
-                  :required="selections.area !== 'Desempregado'"
-                  :disabled="selections.area === 'Desempregado'"
+                  :required="dataEgresso.carreira.area !== 'Desempregado'"
+                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
                 />
               </div>
             </template>
@@ -742,9 +708,7 @@
               </h1>
             </template>
             <template #title>
-              <h1
-                class="text-lg text-cyan-800 font-semibold flex flex-row items-center"
-              >
+              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
                 <SvgIcon
                   type="mdi"
                   size="20"
@@ -764,9 +728,9 @@
                   name="adicionais.experiencias"
                   label="Depoimento"
                   placeholder="Lorem ipsum dolor sit amet, consect
-            etur adipiscing elit, sed do eiusmod tempor incididun
-            t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-            ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+              etur adipiscing elit, sed do eiusmod tempor incididun
+              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                   icon-path=""
                 />
                 <CustomPerfilData
@@ -776,9 +740,9 @@
                   name="adicionais.contribuicoes"
                   label="Contribuições"
                   placeholder="Lorem ipsum dolor sit amet, consect
-            etur adipiscing elit, sed do eiusmod tempor incididun
-            t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-            ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+              etur adipiscing elit, sed do eiusmod tempor incididun
+              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                   icon-path=""
                 />
               </div>
@@ -788,7 +752,7 @@
                   :value="dataEgresso.adicionais.palestras"
                   label="Gostaria de apresentar palestras"
                   class="mb-5"
-                  v-model:value="bools.palestras"
+                  v-model:value="dataEgresso.adicionais.palestras"
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -799,12 +763,13 @@
                   class="mb-5"
                   name="adicionais.assuntosPalestras"
                   :value="dataEgresso.adicionais.assuntosPalestras"
-                  :required="bools.palestras"
-                  :disabled="!bools.palestras"
+                  :required="dataEgresso.adicionais.palestras"
+                  :disabled="!dataEgresso.adicionais.palestras"
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso:
+                  Use o campo abaixo para de forma simples e resumida compartilhar com outras pessoas experiências
+                  positivas ao realizar o curso:
                 </div>
 
                 <CustomTextarea
@@ -814,7 +779,8 @@
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto:
+                  Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja
+                  pequena ou grande, pois tudo tem seu impacto:
                 </div>
 
                 <CustomTextarea
@@ -833,8 +799,7 @@
 </template>
 
 <script setup lang="ts">
-// import ProfileHead from 'src/components/ProfileHead.vue'
-// import ProfileBodyView from 'src/components/ProfileBodyView.vue'
+
 import CustomButtonLink from 'src/components/CustomButtonLink.vue'
 import ButtonEdit from 'src/components/ButtonEdit.vue'
 import FolderSection from 'src/components/FolderSection.vue'
@@ -846,7 +811,6 @@ import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
 import { computed, ref, onMounted, watch } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
-import svgPath from 'src/assets/svgPaths.json'
 import CustomTextarea from 'src/components/CustomTextarea.vue'
 import { Form } from 'vee-validate'
 import { object, string, date, boolean } from 'yup'
@@ -865,11 +829,8 @@ import {
   mdiWeb,
   mdiMapOutline,
   mdiMapMarkerRadius,
-  mdiLinkVariant,
-  mdiYoutubeSubscription
+  mdiLinkVariant
 } from '@mdi/js'
-import { getRandomValues } from 'crypto'
-import { userInfo } from 'os'
 // mdiHome CEP,
 const $store = usePerfilEgressoStore()
 const storage = new LocalStorage()
@@ -996,17 +957,6 @@ function toggleIsInput (FolderLabel: string) {
 
 //
 
-const selections = ref({
-  pais: '',
-  estado: '',
-  area: ''
-})
-const bools = ref({
-  cotista: false,
-  bolsista: false,
-  posGrad: false,
-  palestras: false
-})
 const selectOpts = ref({
   genero: ['Masculino', 'Feminino', 'Não-Binário', 'Transsexual'],
   tipoAluno: ['Graduação', 'Pós-graduação'],
@@ -1026,8 +976,9 @@ const countries = computed(() => {
   }
   return filteredCountries
 })
+
 const states = computed(() => {
-  const states = State.getStatesOfCountry(selections.value.pais)
+  const states = State.getStatesOfCountry(dataEgresso.value.localizacao.pais)
   const filteredStates = []
   for (const state of states) {
     filteredStates.push({
@@ -1038,7 +989,7 @@ const states = computed(() => {
   return filteredStates
 })
 const cities = computed(() => {
-  const cities = City.getCitiesOfState(selections.value.pais, selections.value.estado)
+  const cities = City.getCitiesOfState(dataEgresso.value.localizacao.pais, dataEgresso.value.localizacao.estado)
   const filteredCities = []
   for (const city of cities) {
     filteredCities.push(city.name)
@@ -1141,6 +1092,7 @@ const dataEgresso = ref({
     email: '',
     genero: '',
     confirmacaoEmail: '',
+    nascimento: '',
     isInput: false
   },
   localizacao: {
@@ -1189,35 +1141,108 @@ const dataEgresso = ref({
   },
   profileHead: {
     nome: '',
-    email: '',
     linkedin: '',
     lattes: '',
     isInput: false
   }
 })
-
 onMounted(() => {
-  // watch(pais, () => {
-  //   form.value?.setFieldValue('localizacao.cidade', '')
-  //   form.value?.setFieldValue('localizacao.estado', '')
-  // })
-
-  // watch(estado, () => {
-  //   form.value?.setFieldValue('localizacao.cidade', '')
-  // })
-
   if (storage.has('loggedUser')) {
     const userData = JSON.parse(storage.get('loggedUser'))
-
-    form.value?.setFieldValue('geral.email', userData.email)
-    form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
-      return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
-    }).join(' '))
     console.log('Logged in')
     // dataEgresso.value.profileHead.nome = userData.nome
     // dataEgresso.value.geral.email = userData.email
+    console.log('DATA')
+    console.log(userData)
+    $store.fetchEgresso()
+    const json = JSON.parse(storage.get('loggedEgresso'))
+    console.log('BackResponse:')
+    console.log(json)
+    console.log('grupo:')
+    console.log(json.usuario.grupos[0].nomeGrupo)
+    // Cotas
+
+    // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
+    // Caso contrario: cotasEgresso += json.cotas[i].nome
+
+    let cotasEgresso = ''
+    for (let i = 0; i < json.cotas.length; i++) {
+      cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
+    }
+    // Email e nome vem do usuario loggado
+
+    dataEgresso.value = {
+      geral:
+      {
+        email: userData.email,
+        genero: json.genero.nome,
+        confirmacaoEmail: '',
+        nascimento: json.nascimento,
+        isInput: false
+      },
+
+      localizacao: {
+        cep: '',
+        pais: json.emprego?.empresa.endereco.pais || '',
+        estado: json.emprego?.empresa.endereco.estado || '',
+        cidade: json.emprego?.empresa.endereco.cidade || '',
+        isInput: false
+      },
+      academico: {
+        matricula: json.matricula || '',
+        email: json.usuario.email || '',
+        tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
+        cotista: {
+          value: json.cotista,
+          tipo: cotasEgresso || ''
+        },
+        bolsista: {
+          value: json.bolsista,
+          tipo: json.bolsa?.nome || '',
+          remuneracao: json.remuneracaoBolsa || ''
+        },
+        posGrad: {
+          value: json.posGraduacao,
+          tipo: json.posGraducao || '',
+          local: json.titulacao?.titulacao?.nome || '',
+          curso: json.titulacao?.curso?.nome || '',
+          desejaPos: json.interesseEmPos
+        },
+        isInput: false
+      },
+      carreira: {
+        area: json.emprego?.areaAtuacao || '',
+        setor: json.emprego?.empresa.setorAtuacao || '',
+        empresa: json.emprego?.empresa.nome || '',
+        faixaSalarial: json.emprego?.faixaSalarial.faixa || '',
+        remuneracao: '',
+        isInput: false
+      },
+      adicionais: {
+        palestras: json.palestras?.descricao,
+        assuntosPalestras: json.palestras?.descricao || '',
+        experiencias: json.depoimento?.descricao || '',
+        contribuicoes: json.contribuicao?.descricao || '',
+        isInput: false
+      },
+      profileHead: {
+        nome: userData.nome,
+        linkedin: json.linkedin || '',
+        lattes: json.lattes || '',
+        isInput: false
+      }
+    }
   }
 })
+
+// watch(pais, () => {
+//   form.value?.setFieldValue('localizacao.cidade', '')
+//   form.value?.setFieldValue('localizacao.estado', '')
+// })
+
+// watch(estado, () => {
+//   form.value?.setFieldValue('localizacao.cidade', '')
+// })
+
 </script>
-<style>
-</style>
+<style></style>

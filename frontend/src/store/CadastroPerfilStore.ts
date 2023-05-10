@@ -54,7 +54,10 @@ export const useCadastroPerfilStore = defineStore('CadastroPerfilStore', {
         body: data
       })
 
-      return (response?.status) !== undefined ? response.status : 500
+      return {
+        status: (response?.status) !== undefined ? response.status : 500,
+        data: (response?.data !== undefined) ? response?.data : null
+      }
     }
   }
 })
