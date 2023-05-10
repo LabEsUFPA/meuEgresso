@@ -35,6 +35,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
@@ -70,6 +71,7 @@ public class EgressoEmpresaControllerTest {
     final String USERNAME = "username_test";
 
     static final Integer EGRESSO_ID = 1;
+    static final LocalDate EGRESSO_NASCIMENTO = LocalDate.parse("1999-10-20");
     static final String EGRESSO_EMAIL = "cantao162@gmail.com";
 
     static final Integer FAIXASALARIAL_ID = 1;
@@ -106,6 +108,7 @@ public class EgressoEmpresaControllerTest {
     EgressoEmpresaModelId egressoEmpresaModelId;
 
     EgressoPublicDTO egressoPublicDTO;
+    EgressoCadastroDTO egressoCadastroDTO;
     EgressoModel egressoModel;
 
     FaixaSalarialDTO faixaSalarialDTO;
@@ -124,13 +127,13 @@ public class EgressoEmpresaControllerTest {
 
 
         /*Egresso */
-        egressoPublicDTO = EgressoPublicDTO.builder().email(EGRESSO_EMAIL).genero(generoDTO).build();;
-        egressoModel = EgressoModel.builder().id(EGRESSO_ID).cotista(true).interesseEmPos(true).nascimento(LocalDate.parse("1999-10-20")).genero(genero).build();
+        egressoPublicDTO = EgressoPublicDTO.builder().id(EGRESSO_ID).email(EGRESSO_EMAIL).nascimento(EGRESSO_NASCIMENTO).genero(generoDTO).build();
+        egressoModel = modelMapper.map(egressoPublicDTO, EgressoModel.class);
         egressoRepository.save(this.egressoModel);
 
         /*Empresa */
         empresaDTO = EmpresaDTO.builder().id(EGRESSO_ID).nome(NOME).setorAtuacao(SETORATUACAO).faixaSalarialId(FAIXASALARIAL_ID).build();
-        empresaModel = EmpresaModel.builder().id(EMRPESA_ID).nome(NOME).setorAtuacoes(null).endereco(null).build();
+        empresaModel = modelMapper.map(empresaDTO, EmpresaModel.class);
         empresaRepository.save(empresaModel);
 
         /*ModelId */
@@ -138,7 +141,7 @@ public class EgressoEmpresaControllerTest {
 
         /*FaixaSalarial */
         faixaSalarialDTO = FaixaSalarialDTO.builder().id(FAIXASALARIAL_ID).faixa(FAIXASALARIAL).build();
-        FaixaSalarialModel faixaSalarialModel = FaixaSalarialModel.builder().id(FAIXASALARIAL_ID).faixa(FAIXASALARIAL).build();
+        FaixaSalarialModel faixaSalarialModel = modelMapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
         faixaSalarialRepository.save(faixaSalarialModel);
 
         /*EgressoEmpresa */
