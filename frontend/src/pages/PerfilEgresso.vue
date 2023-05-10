@@ -832,6 +832,10 @@ import {
   mdiLinkVariant
 } from '@mdi/js'
 // mdiHome CEP,
+const dialogSucesso = ref(false)
+const dialogFalha = ref(false)
+const camposFaltosos = ref(false)
+
 const $store = usePerfilEgressoStore()
 const storage = new LocalStorage()
 
@@ -839,7 +843,17 @@ $store.fetchAll()
 
 const form = ref<typeof Form | null>(null)
 
-// Futuro: 1 Autenticar usr ('/auth/register' ? ,), 2 get egresso, 3 update egresso
+function handleStatus (status : any) {
+  console.log('Staus: ')
+  console.log(status)
+
+  if (status !== 201) {
+    dialogFalha.value = true
+  } else {
+    dialogSucesso.value = true
+  }
+}
+
 async function handleSubmitHeader (values: any) {
   console.log('handleSubmitHeader')
   toggleIsInput('profileHead')
@@ -851,39 +865,13 @@ async function handleSubmitHeader (values: any) {
   dataEgresso.value.profileHead = values.geral
   // $store.atualizarEgresso(dataEgresso.value.profileHead)
   // $store.atualizarEgresso(values.geral)
-  const userData = JSON.parse(storage.get('loggedUser'))
-  console.log(userData)
-  // $store.fetchEgresso()
-  $store.atualizarEgresso(values.geral)
-  // const status = await $store.atualizarEgresso({
-  //   nascimento: values.geral.nascimento.toString(),
-  //   generoId: parseInt(values.geral.genero),
-  //   matricula: values.academico.matricula,
-  //   cotista: Boolean(values.academico.cotista.value),
-  //   bolsista: Boolean(values.academico.bolsista.value),
-  //   interesseEmPos: Boolean(values.academico.desejaPos),
-  //   lattes: values.geral.lattes || null,
-  //   linkedin: values.geral.linkedin || null,
-  //   posGraduacao: Boolean(values.academico.posGrad.value),
-  //   cotas,
-  //   nome: values.geral.nome,
-  //   palestras,
-  //   contribuicao: {
-  //     descricao: values.adicionais.contribuicoes
-  //   },
-  //   depoimento: {
-  //     descricao: values.adicionais.experiencias
-  //   },
-  //   bolsaId: values.academico.bolsista.tipo ? parseInt(values.academico.bolsista.tipo) : null,
-  //   empresa,
-  //   titulacao
-  // })
 
-  // if (status !== 201) {
-  //   dialogFalha.value = true
-  // } else {
-  //   dialogSucesso.value = true
-  // }
+  // $store.fetchEgresso()
+  // futuro add foto
+  jsonResponse.usuario.nome = values.geral.nome
+  console.log(jsonResponse)
+  const status = await $store.atualizarEgresso(jsonResponse)
+  handleStatus(status)
 }
 
 async function handleSubmitGeral (values: any) {
@@ -891,22 +879,41 @@ async function handleSubmitGeral (values: any) {
   toggleIsInput('geral')
   console.log(JSON.stringify(values, null, 2))
   dataEgresso.value.geral = values.geral
-  $store.atualizarEgresso(values.geral)
+
+  jsonResponse.usuario.email = values.geral.email
+  jsonResponse.genero.nome = values.geral.genero
+  jsonResponse.nascimento = values.geral.nascimento
+  const status = await $store.atualizarEgresso(jsonResponse)
+  console.log(jsonResponse)
+  handleStatus(status)
 }
 
 async function handleSubmitAcademico (values: any) {
   console.log('handleSubmitAcademico')
   toggleIsInput('academico')
   console.log(JSON.stringify(values, null, 2))
-  dataEgresso.value.academico = values.academico
-  $store.atualizarEgresso(values.academico)
+  jsonResponse.matricula = values.academico.matricula
+  jsonResponse.posGraduacao = values.academico.posGrad.value
+  jsonResponse.cotista = values.academico.cotista.value
+  jsonResponse.bolsista = values.academico.bolsista.value
+  jsonResponse.bolsa = values.academico.bolsista.tipo
+  jsonResponse.remuneracaoBolsa = values.academico.bolsista.remuneracao
+  const status = await $store.atualizarEgresso(jsonResponse)
+  console.log(jsonResponse)
+  handleStatus(status)
 }
 async function handleSubmitLocalizacao (values: any) {
   console.log('handleSubmitLocalizacao')
   toggleIsInput('localizacao')
   console.log(JSON.stringify(values, null, 2))
-  dataEgresso.value.localizacao = values.localizacao
-  $store.atualizarEgresso(values.localizacao)
+  jsonResponse.emprego.empresa.endereco.pais = values.localizacao.pais
+  jsonResponse.emprego.empresa.endereco.estado = values.localizacao.estado
+  jsonResponse.emprego.empresa.endereco.cidade = values.localizacao.cidade
+  console.log('HandleSubmit Response: ')
+  console.log(jsonResponse)
+  const status = await $store.atualizarEgresso(jsonResponse)
+
+  handleStatus(status)
 }
 async function handleSubmitCarreira (values: any) {
   console.log('handleSubmitCarreira')
@@ -1037,9 +1044,7 @@ const schemaAcademico = object().shape({
       tipo: string().when('value', ([value], schemaAcademico) => {
         return value ? schemaAcademico.required() : schemaAcademico.notRequired()
       })
-      // tipo: string().when('value', ([value], schema) => {
-      //   return value ? schema.required() : schema.notRequired()
-      // })
+
     }),
     bolsista: object({
       value: boolean(),
@@ -1088,6 +1093,14 @@ const schemaAdicionais = object().shape({
   })
 })
 const dataEgresso = ref({
+  id: 0,
+  // generoId:0,
+  // tipoAlunoId:0,
+  // tipoCotaId:0,
+  // tipoBolsaId:0,
+  // areaAtuacaoId:0,
+  // setorAtuacaoId:0,
+
   geral: {
     email: '',
     genero: '',
@@ -1146,33 +1159,41 @@ const dataEgresso = ref({
     isInput: false
   }
 })
-onMounted(() => {
-  if (storage.has('loggedUser')) {
-    const userData = JSON.parse(storage.get('loggedUser'))
-    console.log('Logged in')
-    // dataEgresso.value.profileHead.nome = userData.nome
-    // dataEgresso.value.geral.email = userData.email
-    console.log('DATA')
-    console.log(userData)
-    $store.fetchEgresso()
-    const json = JSON.parse(storage.get('loggedEgresso'))
-    console.log('BackResponse:')
-    console.log(json)
-    console.log('grupo:')
-    console.log(json.usuario.grupos[0].nomeGrupo)
-    // Cotas
+let jsonResponse: any
+fetchEgressoIfLoggedUser()
+function fetchEgressoIfLoggedUser () {
+  onMounted(() => {
+    if (storage.has('loggedUser')) {
+      const userData = JSON.parse(storage.get('loggedUser'))
+      console.log('Logged in')
+      // dataEgresso.value.profileHead.nome = userData.nome
+      // dataEgresso.value.geral.email = userData.email
+      console.log('DATA')
+      console.log(userData)
+      $store.fetchEgresso()
+      // getEgresso
+      const json = JSON.parse(storage.get('loggedEgresso'))
+      jsonResponse = JSON.parse(storage.get('loggedEgresso'))
 
-    // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
-    // Caso contrario: cotasEgresso += json.cotas[i].nome
+      console.log('BackResponse:')
+      console.log(json)
+      console.log('grupo:')
+      console.log(json.usuario.grupos[0].nomeGrupo)
+      console.log(json.id)
+      // Cotas
 
-    let cotasEgresso = ''
-    for (let i = 0; i < json.cotas.length; i++) {
-      cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
-    }
-    // Email e nome vem do usuario loggado
+      // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
+      // Caso contrario: cotasEgresso += json.cotas[i].nome
 
-    dataEgresso.value = {
-      geral:
+      let cotasEgresso = ''
+      for (let i = 0; i < json.cotas.length; i++) {
+        cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
+      }
+      // Email e nome vem do usuario loggado
+
+      dataEgresso.value = {
+        id: json.id,
+        geral:
       {
         email: userData.email,
         genero: json.genero.nome,
@@ -1180,60 +1201,60 @@ onMounted(() => {
         nascimento: json.nascimento,
         isInput: false
       },
-
-      localizacao: {
-        cep: '',
-        pais: json.emprego?.empresa.endereco.pais || '',
-        estado: json.emprego?.empresa.endereco.estado || '',
-        cidade: json.emprego?.empresa.endereco.cidade || '',
-        isInput: false
-      },
-      academico: {
-        matricula: json.matricula || '',
-        email: json.usuario.email || '',
-        tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
-        cotista: {
-          value: json.cotista,
-          tipo: cotasEgresso || ''
+        localizacao: {
+          cep: '',
+          pais: json.emprego?.empresa.endereco.pais || '',
+          estado: json.emprego?.empresa.endereco.estado || '',
+          cidade: json.emprego?.empresa.endereco.cidade || '',
+          isInput: false
         },
-        bolsista: {
-          value: json.bolsista,
-          tipo: json.bolsa?.nome || '',
-          remuneracao: json.remuneracaoBolsa || ''
+        academico: {
+          matricula: json.matricula || '',
+          email: json.usuario.email || '',
+          tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
+          cotista: {
+            value: json.cotista,
+            tipo: cotasEgresso || ''
+          },
+          bolsista: {
+            value: json.bolsista,
+            tipo: json.bolsa?.nome || '',
+            remuneracao: json.remuneracaoBolsa || ''
+          },
+          posGrad: {
+            value: json.posGraduacao,
+            tipo: json.posGraducao || '',
+            local: json.titulacao?.titulacao?.nome || '',
+            curso: json.titulacao?.curso?.nome || '',
+            desejaPos: json.interesseEmPos
+          },
+          isInput: false
         },
-        posGrad: {
-          value: json.posGraduacao,
-          tipo: json.posGraducao || '',
-          local: json.titulacao?.titulacao?.nome || '',
-          curso: json.titulacao?.curso?.nome || '',
-          desejaPos: json.interesseEmPos
+        carreira: {
+          area: json.emprego?.areaAtuacao?.nome || '',
+          setor: json.emprego?.empresa?.setorAtuacoes[0].nome || '',
+          empresa: json.emprego?.empresa.nome || '',
+          faixaSalarial: json.emprego?.faixaSalarial.faixa || '',
+          remuneracao: '',
+          isInput: false
         },
-        isInput: false
-      },
-      carreira: {
-        area: json.emprego?.areaAtuacao || '',
-        setor: json.emprego?.empresa.setorAtuacao || '',
-        empresa: json.emprego?.empresa.nome || '',
-        faixaSalarial: json.emprego?.faixaSalarial.faixa || '',
-        remuneracao: '',
-        isInput: false
-      },
-      adicionais: {
-        palestras: json.palestras?.descricao,
-        assuntosPalestras: json.palestras?.descricao || '',
-        experiencias: json.depoimento?.descricao || '',
-        contribuicoes: json.contribuicao?.descricao || '',
-        isInput: false
-      },
-      profileHead: {
-        nome: userData.nome,
-        linkedin: json.linkedin || '',
-        lattes: json.lattes || '',
-        isInput: false
+        adicionais: {
+          palestras: json.palestras?.descricao,
+          assuntosPalestras: json.palestras?.descricao || '',
+          experiencias: json.depoimento?.descricao || '',
+          contribuicoes: json.contribuicao?.descricao || '',
+          isInput: false
+        },
+        profileHead: {
+          nome: userData.nome,
+          linkedin: json.linkedin || '',
+          lattes: json.lattes || '',
+          isInput: false
+        }
       }
     }
-  }
-})
+  })
+}
 
 // watch(pais, () => {
 //   form.value?.setFieldValue('localizacao.cidade', '')

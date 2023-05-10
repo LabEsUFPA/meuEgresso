@@ -5,7 +5,7 @@ import Api from 'src/services/api'
 import LocalStorage from 'src/services/localStorage'
 interface ComplexOpts extends models.ComplexOpts {}
 interface EgressoModel extends models.EgressoModel {}
-
+interface EgressoModelUpdate extends models.EgressoModelUpdate {}
 const storage = new LocalStorage()
 
 interface State {
@@ -99,17 +99,16 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
 
       return (response?.status) !== undefined ? response.status : 500
     },
-    async getEgresso (id: number) {
+    async getEgresso () {
       const response = await Api.request({
         method: 'get',
-        route: '/egresso',
-        body: { id }
+        route: '/egresso'
       })
-      // if (response?.status === 500) {
-      //   return response?.status
-      // }
-      return response
+      if (response?.status === 200) {
+        return JSON.stringify(response.data)
+      }
     },
+
     async fetchEgresso () {
       const response = await Api.request({
         method: 'get',
@@ -117,16 +116,116 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       })
 
       if (response?.status === 200) {
+        storage.remove('loggedEgresso')
         storage.set('loggedEgresso', JSON.stringify(response.data))
         return JSON.stringify(response.data)
       }
     },
 
-    async atualizarEgresso (dadosEgresso: EgressoModel) {
+    async atualizarEgresso (dataEgresso: any) {
+      //   const data: EgressoModelUpdate = {
+      //     id: number,
+      // nascimento: string,
+      // genero: {
+      //   id: number,
+      //   nome: string,
+      // },
+      // matricula: string,
+      // cotista: boolean,
+      // bolsista: boolean,
+      // interesseEmPos: boolean,
+      // lattes: string,
+      // linkedin: string,
+      // posGraduacao: boolean,
+      // cotas: [
+      //   {
+      //     id: number,
+      //     nome: string,
+      //   },
+      //   {
+      //     id: number,
+      //     nome: string,
+      //   }
+      // ]
+      // usuario: {
+      //   id: 1,
+      //   username: "string",
+      //   email: "string",
+      //   nome: "string",
+      //   grupos: [
+      //     {
+      //       id: number,
+      //       nomeGrupo: string
+      //     }
+      //   ]
+      // }
+      // palestras: {
+      //   id: number,
+      //   descricao: string,
+      // }
+      // contribuicao: {
+      //   id: number,
+      //   descricao: string,
+      // }
+      // titulacao: {
+      //   id: {
+      //     egressoId: number,
+      //     titulacaoId: number,
+      //   }
+      //   curso: {
+      //     id: number,
+      //     nome: string,
+      //   }
+      //   titulacao: {
+      //     id: number,
+      //     nome: string,
+      //   }
+      // }
+      // emprego: {
+      //   id: {
+      //     egressoId: number,
+      //     empresaId: number,
+      //   }
+      //   empresa: {
+      //     id: number,
+      //     nome: string,
+      //     setorAtuacoes: [
+      //       {
+      //         id: number,
+      //         nome: string,
+      //       }
+      //     ]
+      //     endereco: {
+      //       id: number,
+      //       cidade: string,
+      //       estado: string,
+      //       pais: string,
+      //     }
+      //   }
+      //   faixaSalarial: {
+      //     id: number,
+      //     faixa: string,
+      //   }
+      //   areaAtuacao: {
+      //     id: number,
+      //     nome: string,
+      //   }
+      // }
+      // depoimento: {
+      //   id: number,
+      //   descricao: string,
+      // }
+      // bolsa: {
+      //   id: number,
+      //   nome: string,
+      // }
+
+      //  }
+
       const response = await Api.request({
         method: 'put',
         route: '/egresso',
-        body: dadosEgresso
+        body: dataEgresso
       })
       return (response?.status) !== undefined ? response.status : 500
     }
