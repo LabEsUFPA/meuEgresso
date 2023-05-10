@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -194,7 +195,21 @@ public class EgressoController {
     public String atualizarEgresso(
             @RequestBody EgressoDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
         if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
+            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
+            if (egressoModel.getContribuicao() != null) {
+                egressoModel.getContribuicao().setEgresso(egressoModel);
+            }
+            if (egressoModel.getDepoimento() != null) {
+                egressoModel.getDepoimento().setEgresso(egressoModel);
+            }
+            if (egressoModel.getEmprego() != null) {
+                egressoModel.getEmprego().setEgresso(egressoModel);
+            }
+            if (egressoModel.getPalestras() != null) {
+                egressoModel.getPalestras().setEgresso(egressoModel);
+            }
+            egressoModel.getUsuario().setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
             egressoService.updateEgresso(egressoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();
         }
