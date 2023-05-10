@@ -60,5 +60,5 @@ public interface EgressoEmpresaService {
 	 * @param createdBy
 	 * @return
 	 */
-    boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy);
+    public boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy);
 }
