@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
 import java.util.List;
 
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoMapaDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
@@ -16,7 +17,8 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 public interface EgressoEmpresaService {
 
 	/**
-	 * Método responsável por persistir determinado egressoEmpresa no banco de dados.
+	 * Método responsável por persistir determinado egressoEmpresa no banco de
+	 * dados.
 	 *
 	 * @param egressoEmpresaModel Dados do egressoEmpresa
 	 * @return Dados após serem gravados no banco de dados.
@@ -60,5 +62,14 @@ public interface EgressoEmpresaService {
 	 * @param createdBy
 	 * @return
 	 */
-    boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy);
+	boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy);
+
+	/**
+	 * Método responsável por retornar os dados para o mapa sociodemográfico
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+	public List<EgressoMapaDTO> findAllEgressoMapaDTO();
 }

@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.controller.usuario;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoMapaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -23,6 +26,7 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoEmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -39,6 +43,8 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioController {
 
 	private final UsuarioService usuarioService;
+
+	private final EgressoEmpresaService egressoEmpresaService;
 
 	private final ModelMapper mapper;
 
@@ -57,6 +63,22 @@ public class UsuarioController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public UsuarioAuthDTO findById(JwtAuthenticationToken token) {
 		return mapper.map(usuarioService.findById(jwtService.getIdUsuario(token)), UsuarioAuthDTO.class);
+	}
+
+	/**
+	 * Endpoint responsável por retornar uma lista de egressoMapaDTO para
+	 * disponibilizar dados no mapa sociodemográfico
+	 *
+	 * @param id Integer
+	 * @return {@link TIPO_RETORNO}
+	 * @author Bruno Eiki, Pedro Inácio
+	 * @since 08/05/2023
+	 */
+	@GetMapping(value = "/mapa")
+	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public List<EgressoMapaDTO> findAllEgressoMapaDTO() {
+		return egressoEmpresaService.findAllEgressoMapaDTO();
 	}
 
 	/**

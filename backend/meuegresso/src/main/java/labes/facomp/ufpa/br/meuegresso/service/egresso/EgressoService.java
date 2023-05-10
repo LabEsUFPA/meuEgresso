@@ -65,4 +65,5 @@ public interface EgressoService {
 	 * @return
 	 */
 	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
 }
