@@ -1,12 +1,10 @@
 package labes.facomp.ufpa.br.meuegresso.dto.usuario;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import labes.facomp.ufpa.br.meuegresso.dto.grupo.GrupoDTO;
 import lombok.Data;
 
@@ -33,9 +31,6 @@ public class UsuarioAuthDTO {
 
     @NotBlank(message = "Infome um nome.")
     private String nome;
-
-    @NotNull(message = "Infome uma data de nascimento.")
-    private LocalDate nascimento;
 
     private Set<GrupoDTO> grupos = new HashSet<>();
 }

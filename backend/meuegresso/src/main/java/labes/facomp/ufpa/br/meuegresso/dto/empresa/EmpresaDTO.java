@@ -20,6 +20,8 @@ public class EmpresaDTO {
 
     private String setorAtuacao;
 
+    private String areaAtuacao;
+
     private Integer faixaSalarialId;
 
     private EnderecoDTO endereco;

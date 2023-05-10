@@ -105,5 +105,6 @@ public class UsuarioController {
 			return ResponseType.FAIL_DELETE.getMessage();
 		}
 	}
+	
 
 }

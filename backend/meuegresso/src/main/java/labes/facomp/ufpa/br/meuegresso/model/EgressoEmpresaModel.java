@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "egresso_empresa")
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = false, exclude = "egresso")
 public class EgressoEmpresaModel extends Auditable {
 
     @EmbeddedId
@@ -37,5 +37,9 @@ public class EgressoEmpresaModel extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faixa_salarial_id", unique = false, nullable = false)
     private FaixaSalarialModel faixaSalarial;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "area_atuacao_id", unique = false, nullable = true) // TODO FRONT N MANDA ISSO acho q é not null
+    private AreaAtuacaoModel areaAtuacao;
 
 }
