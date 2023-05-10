@@ -38,4 +38,8 @@ public class EgressoEmpresaModel extends Auditable {
     @JoinColumn(name = "faixa_salarial_id", unique = false, nullable = false)
     private FaixaSalarialModel faixaSalarial;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "area_atuacao_id", unique = false, nullable = false)
+    private AreaAtuacaoModel areaAtuacao;
+
 }

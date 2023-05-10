@@ -26,6 +26,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
+import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
@@ -38,6 +39,7 @@ import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.PalestraModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
+import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.curso.CursoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
@@ -67,6 +69,7 @@ public class EgressoController {
     private final CursoService cursoService;
     private final EnderecoService enderecoService;
     private final TitulacaoService titulacaoService;
+    private final AreaAtuacaoService areaAtuacaoService;
 
     private final ModelMapper mapper;
 
@@ -112,12 +115,19 @@ public class EgressoController {
         EmpresaDTO empresaDTO;
         SetorAtuacaoModel setorAtuacao;
         EmpresaModel empresa;
+        AreaAtuacaoModel areaAtuacaoModel;
         if (egressoCadastroDTO.getEmpresa() != null) {
             empresaDTO = egressoCadastroDTO.getEmpresa();
-            setorAtuacao = setorAtuacaoService.findByNome(empresaDTO.getSetorAtuacao());
+            setorAtuacao = setorAtuacaoService.findByNome(empresaDTO.getSetorAtuacao()); // TODO no primeiro cadastro a
+                                                                                         // empresa buga, verificar
             if (setorAtuacao == null) {
                 setorAtuacao = setorAtuacaoService
                         .save(SetorAtuacaoModel.builder().nome(empresaDTO.getSetorAtuacao()).build());
+            }
+            areaAtuacaoModel = areaAtuacaoService.findByNome(empresaDTO.getAreaAtuacao());
+            if (areaAtuacaoModel == null) {
+                areaAtuacaoModel = areaAtuacaoService
+                        .save(AreaAtuacaoModel.builder().nome(empresaDTO.getNome()).build());
             }
             EnderecoModel enderecoEmpresa = enderecoService.findByCidadeAndEstadoAndPais(
                     empresaDTO.getEndereco().getCidade(),
@@ -130,11 +140,14 @@ public class EgressoController {
             if (empresa == null) {
                 empresa = mapper.map(empresaDTO, EmpresaModel.class);
                 empresa.setEndereco(enderecoEmpresa);
+                if (setorAtuacao.getEmpresas() == null)
+                    setorAtuacao.setEmpresas(new HashSet<>());
                 setorAtuacao.getEmpresas().add(empresa);
                 empresa.setSetorAtuacoes(new HashSet<>(Set.of(setorAtuacao)));
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
+                    .areaAtuacao(areaAtuacaoModel)
                     .faixaSalarial(FaixaSalarialModel.builder().id(empresaDTO.getFaixaSalarialId()).build()).build());
         }
 
