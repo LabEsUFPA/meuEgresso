@@ -39,7 +39,7 @@ public class EgressoEmpresaModel extends Auditable {
     private FaixaSalarialModel faixaSalarial;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "area_atuacao_id", unique = false, nullable = false)
+    @JoinColumn(name = "area_atuacao_id", unique = false, nullable = true) // TODO FRONT N MANDA ISSO acho q é not null
     private AreaAtuacaoModel areaAtuacao;
 
 }

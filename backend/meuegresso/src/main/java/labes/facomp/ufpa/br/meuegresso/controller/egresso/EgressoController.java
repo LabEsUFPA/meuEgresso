@@ -125,11 +125,11 @@ public class EgressoController {
                 setorAtuacao = setorAtuacaoService
                         .save(SetorAtuacaoModel.builder().nome(empresaDTO.getSetorAtuacao()).build());
             }
-            areaAtuacaoModel = areaAtuacaoService.findByNome(empresaDTO.getAreaAtuacao());
-            if (areaAtuacaoModel == null) {
-                areaAtuacaoModel = areaAtuacaoService
-                        .save(AreaAtuacaoModel.builder().nome(empresaDTO.getAreaAtuacao()).build());
-            }
+            // areaAtuacaoModel = areaAtuacaoService.findByNome(empresaDTO.getAreaAtuacao());
+            // if (areaAtuacaoModel == null) {
+            //     areaAtuacaoModel = areaAtuacaoService
+            //             .save(AreaAtuacaoModel.builder().nome(empresaDTO.getAreaAtuacao()).build());
+            // } //TODO AQUI não recebe do front
             EnderecoModel enderecoEmpresa = enderecoService.findByCidadeAndEstadoAndPais(
                     empresaDTO.getEndereco().getCidade(),
                     empresaDTO.getEndereco().getEstado(), empresaDTO.getEndereco().getPais());
