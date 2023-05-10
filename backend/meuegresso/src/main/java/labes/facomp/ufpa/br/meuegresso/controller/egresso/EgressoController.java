@@ -148,7 +148,7 @@ public class EgressoController {
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
-                    .areaAtuacao(areaAtuacaoModel)
+                    //.areaAtuacao(areaAtuacaoModel) // TODO habilitar aqui
                     .faixaSalarial(FaixaSalarialModel.builder().id(empresaDTO.getFaixaSalarialId()).build()).build());
         }
 
