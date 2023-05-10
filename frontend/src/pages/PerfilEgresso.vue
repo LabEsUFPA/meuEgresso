@@ -885,7 +885,7 @@ async function handleSubmitGeral (values: any) {
   toggleIsInput('geral')
   console.log(JSON.stringify(values, null, 2))
   dataEgresso.value.geral = values.geral
-  $store.atualizarEgresso(values.geral)
+  //$store.atualizarEgresso(dataEgresso)
 }
 
 async function handleSubmitAcademico (values: any) {
@@ -1175,7 +1175,6 @@ onMounted(() => {
         nascimento: json.nascimento,
         isInput: false
       },
-
       localizacao: {
         cep: '',
         pais: json.emprego?.empresa.endereco.pais || '',
@@ -1206,8 +1205,8 @@ onMounted(() => {
         isInput: false
       },
       carreira: {
-        area: json.emprego?.areaAtuacao || '',
-        setor: json.emprego?.empresa.setorAtuacao || '',
+        area: json.emprego?.areaAtuacao.nome || '',
+        setor: json.emprego?.empresa?.setorAtuacoes[0].nome || '',
         empresa: json.emprego?.empresa.nome || '',
         faixaSalarial: json.emprego?.faixaSalarial.faixa || '',
         remuneracao: '',
