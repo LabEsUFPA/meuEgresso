@@ -5,7 +5,7 @@ import Api from 'src/services/api'
 import LocalStorage from 'src/services/localStorage'
 interface ComplexOpts extends models.ComplexOpts {}
 interface EgressoModel extends models.EgressoModel {}
-
+interface EgressoModelUpdate extends models.EgressoModelUpdate {}
 const storage = new LocalStorage()
 
 interface State {
@@ -122,7 +122,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       }
     },
 
-    async atualizarEgresso (dadosEgresso: EgressoModel) {
+    async atualizarEgresso (dadosEgresso: EgressoModelUpdate) {
       const response = await Api.request({
         method: 'put',
         route: '/egresso',
