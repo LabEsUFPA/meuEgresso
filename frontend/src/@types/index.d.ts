@@ -83,7 +83,7 @@ export namespace models {
   export interface EgressoModel {
     nascimento: string
     generoId: id
-    matricula: string
+    matricula: string | null
     cotista: boolean
     bolsista: boolean
     interesseEmPos: boolean

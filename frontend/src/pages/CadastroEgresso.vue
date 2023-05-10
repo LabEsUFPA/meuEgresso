@@ -566,7 +566,7 @@ async function handleSubmit (values: InferType<typeof schema>) {
   const status = await $store.cadastrarEgresso({
     nascimento: values.geral.nascimento.toString(),
     generoId: parseInt(values.geral.genero),
-    matricula: values.academico.matricula,
+    matricula: values.academico.matricula || null,
     cotista: Boolean(values.academico.cotista.value),
     bolsista: Boolean(values.academico.bolsista.value),
     interesseEmPos: Boolean(values.academico.desejaPos),
@@ -616,7 +616,7 @@ const schema = object().shape({
     cidade: string().required()
   }),
   academico: object({
-    matricula: string().min(12).max(12).required(),
+    matricula: string().min(12).max(12),
     tipoAluno: string(),
     cotista: object({
       value: boolean(),
