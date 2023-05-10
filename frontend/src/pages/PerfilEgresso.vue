@@ -1144,7 +1144,6 @@ const dataEgresso = ref({
 onMounted(() => {
   if (storage.has('loggedUser')) {
     const userData = JSON.parse(storage.get('loggedUser'))
-
     console.log('Logged in')
     // dataEgresso.value.profileHead.nome = userData.nome
     // dataEgresso.value.geral.email = userData.email
@@ -1185,8 +1184,8 @@ onMounted(() => {
         isInput: false
       },
       academico: {
-        matricula: json.matricula,
-        email: json.usuario.email,
+        matricula: json.matricula || '',
+        email: json.usuario.email || '',
         tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
         cotista: {
           value: json.cotista,
@@ -1194,12 +1193,12 @@ onMounted(() => {
         },
         bolsista: {
           value: json.bolsista,
-          tipo: json.bolsa.nome,
-          remuneracao: json.remuneracaoBolsa
+          tipo: json.bolsa.nome || '',
+          remuneracao: json.remuneracaoBolsa || ''
         },
         posGrad: {
           value: json.posGraduacao,
-          tipo: json.posGraducao,
+          tipo: json.posGraducao || '',
           local: json.titulacao?.titulacao.nome,
           curso: json.titulacao?.curso.nome,
           desejaPos: json.interesseEmPos
