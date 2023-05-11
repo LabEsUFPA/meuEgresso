@@ -67,7 +67,7 @@ public class EgressoModel extends Auditable {
         @Column(name = "linkedin_egresso", unique = true, nullable = true)
         private String linkedin;
 
-        @Column(name = "foto_egresso", unique = false, nullable = true) // adicionar b64 de foto padrão caso nulo?
+        @Column(name = "foto_egresso", unique = false, nullable = true)
         private String fotoNome;
 
         @Builder.Default

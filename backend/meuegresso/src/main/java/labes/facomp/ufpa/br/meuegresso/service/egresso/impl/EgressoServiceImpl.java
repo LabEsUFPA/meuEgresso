@@ -9,7 +9,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -33,10 +32,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class EgressoServiceImpl implements EgressoService {
-    
+
     private final EgressoRepository egressoRepository;
 
-    @Value("${env.anexosDir}")
+    @Value("${fotosDir}")
     private String UPLOAD_DIRECTORY;
 
     @Override
@@ -94,28 +93,30 @@ public class EgressoServiceImpl implements EgressoService {
 
     @Override
     public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException { // TODO método incompleto
+        
         Path file = Paths.get(String.format("%s%s", UPLOAD_DIRECTORY, fotoNomeString));
         if (file != null) {
             return new UrlResource(file.toUri());
         } else {
-            throw new FileNotFoundException(fotoNomeString); 
+            throw new FileNotFoundException(fotoNomeString);
         }
+         
     }
 
     @Override
-	public void saveAnexo(String nomeAnexo, MultipartFile arquivo) throws IOException { // TODO método incompleto
-		Path uploadPath = Paths.get(UPLOAD_DIRECTORY + "/");
+    public void saveFoto(String nomeFoto, MultipartFile arquivo) throws IOException { // TODO método incompleto
+        Path uploadPath = Paths.get(UPLOAD_DIRECTORY + "/");
 
-		if (!Files.exists(uploadPath)) {
-			Files.createDirectories(uploadPath);
-		}
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
 
-		try (InputStream inputStream = arquivo.getInputStream()) {
-			Path filePath = uploadPath.resolve(nomeAnexo);
-			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException ioe) {
-			throw new IOException("Could not save file: " + arquivo.getOriginalFilename(), ioe);
-		}
-	}
+        try (InputStream inputStream = arquivo.getInputStream()) {
+            Path filePath = uploadPath.resolve(nomeFoto);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioe) {
+            throw new IOException("Could not save file: " + arquivo.getOriginalFilename(), ioe);
+        }
+    }
 
 }

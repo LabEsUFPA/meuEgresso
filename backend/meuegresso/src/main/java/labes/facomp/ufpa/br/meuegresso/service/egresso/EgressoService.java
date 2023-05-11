@@ -4,9 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.nimbusds.jose.util.Resource;
 
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 
@@ -84,7 +83,7 @@ public interface EgressoService {
 	 * @author Camilo Santos
 	 * @since 07/05/2023
 	 */
-	Resource getFileAsResource(String fotoNomeString); // TODO documentação incompleta
+	public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException; // TODO documentação incompleta
 
 	/**
 	 * Método responsável por
@@ -95,6 +94,6 @@ public interface EgressoService {
 	 * @author Camilo Santos
 	 * @since 07/05/2023
 	 */
-	public void saveAnexo(String nomeAnexo, MultipartFile arquivo); // TODO documentação incompleta
+	public void saveFoto(String nomeAnexo, MultipartFile arquivo) throws IOException; // TODO documentação incompleta
 
 }

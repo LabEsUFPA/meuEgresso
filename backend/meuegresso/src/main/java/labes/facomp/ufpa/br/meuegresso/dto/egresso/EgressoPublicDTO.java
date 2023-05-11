@@ -36,4 +36,5 @@ public class EgressoPublicDTO {
 
     private EnderecoDTO endereco;
 
+    private String fotoNome;
 }

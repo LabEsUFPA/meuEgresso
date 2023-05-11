@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
 
 import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EgressoDTO {
+public class EgressoImagemDTO {
 
     private Integer id;
 
@@ -67,7 +67,7 @@ public class EgressoDTO {
 
     private Double remuneracaoBolsa;
 
-    private MultipartFile foto;
+    private Resource foto;
 
 
 }

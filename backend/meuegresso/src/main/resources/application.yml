@@ -67,3 +67,5 @@ token:
 cors:
   allowedOriginPatterns:
   - http://localhost:*
+
+fotosDir: ${PATHFOTOS}
