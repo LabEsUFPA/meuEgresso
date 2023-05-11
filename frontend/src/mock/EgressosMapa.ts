@@ -12,7 +12,8 @@ export function getRandomEgresso (): EgressoMapa {
       pais: faker.address.countryCode(),
       latitude: parseInt(faker.address.latitude()),
       longitude: parseInt(faker.address.longitude())
-    }
+    },
+    empresa: faker.company.name()
   }
 }
 

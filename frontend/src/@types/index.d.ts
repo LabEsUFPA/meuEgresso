@@ -131,5 +131,6 @@ export namespace models {
       latitude: number
       longitude: number
     }
+    empresa?: string
   }
 }
