@@ -120,4 +120,16 @@ export namespace models {
       curso?: string
     } | null
   }
+
+  export interface EgressoMapa {
+    id: number
+    nome: string
+    localizacao: {
+      cidade: string
+      estado: string
+      pais: string
+      latitude: number
+      longitude: number
+    }
+  }
 }
