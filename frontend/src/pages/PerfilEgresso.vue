@@ -815,13 +815,11 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
-import { computed, ref, onMounted, watch, onBeforeUpdate, onUpdated } from 'vue'
+import { computed, ref } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import CustomTextarea from 'src/components/CustomTextarea.vue'
 import { Form } from 'vee-validate'
 import { object, string, date, boolean } from 'yup'
-import CustomButton from 'src/components/CustomButton.vue'
-import egressoModel from 'src/model/egressoModel'
 import LocalStorage from 'src/services/localStorage'
 
 import {
@@ -840,14 +838,14 @@ import {
 // mdiHome CEP,
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
-const camposFaltosos = ref(false)
+// const camposFaltosos = ref(false)
 
 const egressoStore = usePerfilEgressoStore()
 const storage = new LocalStorage()
 
 egressoStore.fetchAll()
 
-const form = ref<typeof Form | null>(null)
+// const form = ref<typeof Form | null>(null)
 
 function handleStatus (status : any) {
   console.log('Staus: ')
@@ -1271,26 +1269,26 @@ const dataResquestFront: EgressoModelUpdate = {
 }
 console.log(dataEgresso)
 
-const stateFolders = ref({
-  geral: {
-    isInput: false
-  },
-  localizacao: {
-    isInput: false
-  },
-  academico: {
-    isInput: false
-  },
-  carreira: {
-    isInput: false
-  },
-  adicionais: {
-    isInput: false
-  },
-  profileHead: {
-    isInput: false
-  }
-})
+// const stateFolders = ref({
+//   geral: {
+//     isInput: false
+//   },
+//   localizacao: {
+//     isInput: false
+//   },
+//   academico: {
+//     isInput: false
+//   },
+//   carreira: {
+//     isInput: false
+//   },
+//   adicionais: {
+//     isInput: false
+//   },
+//   profileHead: {
+//     isInput: false
+//   }
+// })
 
 let jsonResponse : any
 let userData : any
@@ -1313,13 +1311,6 @@ async function fetchUpdateEgresso () {
   console.log('MOUNTED async')
   console.log('Back Response:')
 
-  // console.log(egressoStore.generos)
-  let generos : any
-  generos = egressoStore.generos
-  for (const option in egressoStore.generos) {
-    console.log('option')
-    console.log(option)
-  }
   let json = JSON.parse(storage.get('loggedEgresso'))
   const ResponseBack = await egressoResponseBack
 
