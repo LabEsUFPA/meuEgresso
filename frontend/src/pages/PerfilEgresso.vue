@@ -212,7 +212,7 @@
                   name="geral.genero"
                   :value="dataEgresso.geral.genero"
                   label="Genero"
-                  :options="selectOpts.genero"
+                  :options="egressoStore.generos"
                   required
                 />
                 <CustomInput
@@ -803,7 +803,7 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, onMounted, watch, onBeforeUpdate, onUpdated } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import CustomTextarea from 'src/components/CustomTextarea.vue'
 import { Form } from 'vee-validate'
@@ -830,10 +830,10 @@ const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const camposFaltosos = ref(false)
 
-const $store = usePerfilEgressoStore()
+const egressoStore = usePerfilEgressoStore()
 const storage = new LocalStorage()
 
-$store.fetchAll()
+egressoStore.fetchAll()
 
 const form = ref<typeof Form | null>(null)
 
@@ -857,15 +857,16 @@ async function handleSubmitHeader (values: any) {
   // dataEgresso.value.profileHead.linkedin = values.geral.linkedin
   // dataEgresso.value.profileHead.lattes = values.geral.lattes
   dataEgresso.value.profileHead = values.geral
-  // $store.atualizarEgresso(dataEgresso.value.profileHead)
-  // $store.atualizarEgresso(values.geral)
+  // egressoStore.atualizarEgresso(dataEgresso.value.profileHead)
+  // egressoStore.atualizarEgresso(values.geral)
 
-  // $store.fetchEgresso()
+  // egressoStore.fetchEgresso()
   // futuro add foto
   jsonResponse.usuario.nome = values.geral.nome
   console.log(jsonResponse)
-  const status = await $store.atualizarEgresso(jsonResponse)
+  const status = await egressoStore.atualizarEgresso(jsonResponse)
   handleStatus(status)
+  fetchEgresso()
 }
 
 async function handleSubmitGeral (values: any) {
@@ -875,11 +876,14 @@ async function handleSubmitGeral (values: any) {
   dataEgresso.value.geral = values.geral
 
   jsonResponse.usuario.email = values.geral.email
-  jsonResponse.genero.nome = values.geral.genero
+  // ID request
+  // jsonResponse.genero.nome = values.geral.genero
+  jsonResponse.genero.id = values.geral.genero
   jsonResponse.nascimento = values.geral.nascimento
-  const status = await $store.atualizarEgresso(jsonResponse)
+  const status = await egressoStore.atualizarEgresso(jsonResponse)
   console.log(jsonResponse)
   handleStatus(status)
+  fetchUpdateEgresso()
 }
 
 async function handleSubmitAcademico (values: any) {
@@ -892,21 +896,21 @@ async function handleSubmitAcademico (values: any) {
   jsonResponse.bolsista = values.academico.bolsista.value
   jsonResponse.bolsa = values.academico.bolsista.tipo
   jsonResponse.remuneracaoBolsa = values.academico.bolsista.remuneracao
-  const status = await $store.atualizarEgresso(jsonResponse)
+  const status = await egressoStore.atualizarEgresso(jsonResponse)
   console.log(jsonResponse)
   handleStatus(status)
 }
 async function handleSubmitLocalizacao (values: any) {
   console.log('handleSubmitLocalizacao')
-  toggleIsInput('localizacao')
+
   console.log(JSON.stringify(values, null, 2))
   jsonResponse.emprego.empresa.endereco.pais = values.localizacao.pais
   jsonResponse.emprego.empresa.endereco.estado = values.localizacao.estado
   jsonResponse.emprego.empresa.endereco.cidade = values.localizacao.cidade
   console.log('HandleSubmit Response: ')
   console.log(jsonResponse)
-  const status = await $store.atualizarEgresso(jsonResponse)
-
+  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  toggleIsInput('localizacao')
   handleStatus(status)
 }
 async function handleSubmitCarreira (values: any) {
@@ -914,14 +918,14 @@ async function handleSubmitCarreira (values: any) {
   toggleIsInput('carreira')
   console.log(JSON.stringify(values, null, 2))
   dataEgresso.value.carreira = values.carreira
-  $store.atualizarEgresso(values.carreira)
+  egressoStore.atualizarEgresso(values.carreira)
 }
 async function handleSubmitAdicionais (values: any) {
   console.log('handleSubmitAdicionais')
   toggleIsInput('adicionais')
   console.log(JSON.stringify(values, null, 2))
   dataEgresso.value.adicionais = values.adicionais
-  $store.atualizarEgresso(values.adicionais)
+  egressoStore.atualizarEgresso(values.adicionais)
 }
 
 let isInputLocal = false
@@ -1089,23 +1093,23 @@ const schemaAdicionais = object().shape({
 
 const dataEgresso = ref({
   egressoId: 0,
-  generoId: 0,
-  cotasIds: [0, 0],
+  // generoId: 0,
+  // cotasIds: [0, 0],
 
-  usuarioId: 0,
-  usuarioGruposId: [0],
+  // usuarioId: 0,
+  // usuarioGruposId: [0],
 
-  palestrasId: 0,
-  contribuicaoId: 0,
-  titulacaoId: 0,
-  empregoId: 0,
-  empresaId: 0,
-  setorAtuacaoId: 0,
-  endereçoId: 0,
-  faixaSalarialId: 0,
-  areaAtuacaoId: 0,
-  depoimentoId: 0,
-  bolsaId: 0,
+  // palestrasId: 0,
+  // contribuicaoId: 0,
+  // titulacaoId: 0,
+  // empregoId: 0,
+  // empresaId: 0,
+  // setorAtuacaoId: 0,
+  // endereçoId: 0,
+  // faixaSalarialId: 0,
+  // areaAtuacaoId: 0,
+  // depoimentoId: 0,
+  // bolsaId: 0,
 
   grupos: [''],
 
@@ -1168,7 +1172,7 @@ const dataEgresso = ref({
   }
 })
 
-const dataEgressoResquest: EgressoModelUpdate = {
+const dataResquestFront: EgressoModelUpdate = {
   id: dataEgresso.value.egressoId,
   nascimento: '',
   genero: {
@@ -1274,42 +1278,61 @@ const stateFolders = ref({
     isInput: false
   }
 })
-let jsonResponse: any
+
+let jsonResponse : any
+let userData : any
+let egressoResponseBack: any
 fetchEgressoIfLoggedUser()
-function fetchEgressoIfLoggedUser () {
-  onMounted(() => {
-    if (storage.has('loggedUser')) {
-      const userData = JSON.parse(storage.get('loggedUser'))
-      console.log('Logged in')
-      // dataEgresso.value.profileHead.nome = userData.nome
-      // dataEgresso.value.geral.email = userData.email
-      console.log('DATA')
-      console.log(userData)
-      $store.fetchEgresso()
-      // getEgresso
-      const json = JSON.parse(storage.get('loggedEgresso'))
-      jsonResponse = JSON.parse(storage.get('loggedEgresso'))
-      dataEgressoResquest.values = jsonResponse
-      console.log(dataEgressoResquest.values)
-      console.log('BackResponse:')
-      console.log(json)
-      console.log('grupo:')
-      console.log(json.usuario.grupos[0].nomeGrupo)
-      console.log(json.id)
-      // Cotas
+async function fetchUpdateEgresso () {
+  if (storage.has('loggedUser')) {
+    userData = JSON.parse(storage.get('loggedUser'))
+    console.log('Logged in')
+    // dataEgresso.value.profileHead.nome = userData.nome
+    // dataEgresso.value.geral.email = userData.email
+    console.log('DATA')
+    console.log(userData)
 
-      // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
-      // Caso contrario: cotasEgresso += json.cotas[i].nome
+    // getEgresso
+    egressoResponseBack = fetchEgresso()
+  }
 
-      let cotasEgresso = ''
-      for (let i = 0; i < json.cotas.length; i++) {
-        cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
-      }
-      // Email e nome vem do usuario loggado
+  console.log('MOUNTED async')
+  console.log('Back Response:')
 
-      dataEgresso.value = {
-        egressoId: json.id,
-        geral:
+  // console.log(egressoStore.generos)
+  let generos : any
+  generos = egressoStore.generos
+  for (const option in egressoStore.generos) {
+    console.log('option')
+    console.log(option)
+  }
+  let json = JSON.parse(storage.get('loggedEgresso'))
+  const ResponseBack = await egressoResponseBack
+
+  json = JSON.parse(ResponseBack)
+
+  jsonResponse = json
+
+  dataResquestFront.values = jsonResponse
+  console.log(dataResquestFront.values)
+
+  console.log('grupo:')
+  console.log(json.usuario.grupos[0].nomeGrupo)
+  console.log(json.id)
+  // Cotas
+
+  // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
+  // Caso contrario: cotasEgresso += json.cotas[i].nome
+
+  let cotasEgresso = ''
+  for (let i = 0; i < json.cotas.length; i++) {
+    cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
+  }
+  // Email e nome vem do usuario loggado
+
+  dataEgresso.value = {
+    egressoId: json.id,
+    geral:
       {
         email: userData.email,
         genero: json.genero.nome,
@@ -1317,56 +1340,176 @@ function fetchEgressoIfLoggedUser () {
         nascimento: json.nascimento,
         isInput: false
       },
-        localizacao: {
-          cep: '',
-          pais: json.emprego?.empresa.endereco.pais || '',
-          estado: json.emprego?.empresa.endereco.estado || '',
-          cidade: json.emprego?.empresa.endereco.cidade || '',
-          isInput: false
+    localizacao: {
+      cep: '',
+      pais: json.emprego?.empresa.endereco.pais || '',
+      estado: json.emprego?.empresa.endereco.estado || '',
+      cidade: json.emprego?.empresa.endereco.cidade || '',
+      isInput: false
+    },
+    academico: {
+      matricula: json.matricula || '',
+      email: json.usuario.email || '',
+      tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
+      cotista: {
+        value: json.cotista,
+        tipo: cotasEgresso || ''
+      },
+      bolsista: {
+        value: json.bolsista,
+        tipo: json.bolsa?.nome || '',
+        remuneracao: json.remuneracaoBolsa || ''
+      },
+      posGrad: {
+        value: json.posGraduacao,
+        tipo: json.posGraducao || '',
+        local: json.titulacao?.titulacao?.nome || '',
+        curso: json.titulacao?.curso?.nome || '',
+        desejaPos: json.interesseEmPos
+      },
+      isInput: false
+    },
+    carreira: {
+      area: json.emprego?.areaAtuacao?.nome || '',
+      setor: json.emprego?.empresa?.setorAtuacoes[0].nome || '',
+      empresa: json.emprego?.empresa.nome || '',
+      faixaSalarial: json.emprego?.faixaSalarial.faixa || '',
+      remuneracao: '',
+      isInput: false
+    },
+    adicionais: {
+      palestras: json.palestras?.descricao,
+      assuntosPalestras: json.palestras?.descricao || '',
+      experiencias: json.depoimento?.descricao || '',
+      contribuicoes: json.contribuicao?.descricao || '',
+      isInput: false
+    },
+    profileHead: {
+      nome: userData.nome,
+      linkedin: json.linkedin || '',
+      lattes: json.lattes || '',
+      isInput: false
+    }
+  }
+
+  return egressoStore.fetchEgresso()
+}
+
+function fetchEgresso () {
+  return egressoStore.fetchEgresso()
+}
+interface ComplexOpts extends models.ComplexOpts {}
+type IOpts = string | ComplexOpts
+
+function fetchEgressoIfLoggedUser () {
+  onMounted(() => {
+    if (storage.has('loggedUser')) {
+      userData = JSON.parse(storage.get('loggedUser'))
+      console.log('Logged in')
+      // dataEgresso.value.profileHead.nome = userData.nome
+      // dataEgresso.value.geral.email = userData.email
+      console.log('DATA')
+      console.log(userData)
+
+      // getEgresso
+      egressoResponseBack = fetchEgresso()
+    }
+  })
+
+  onMounted(async () => {
+    console.log('MOUNTED async')
+    console.log('Back Response:')
+
+    // console.log(egressoStore.generos)
+    let generos : any
+    generos = egressoStore.generos
+    for (const option in egressoStore.generos) {
+      console.log('option')
+      console.log(option)
+    }
+    let json = JSON.parse(storage.get('loggedEgresso'))
+    const ResponseBack = await egressoResponseBack
+
+    json = JSON.parse(ResponseBack)
+
+    jsonResponse = json
+
+    dataResquestFront.values = jsonResponse
+    console.log(dataResquestFront.values)
+
+    console.log('grupo:')
+    console.log(json.usuario.grupos[0].nomeGrupo)
+    console.log(json.id)
+    // Cotas
+
+    // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
+    // Caso contrario: cotasEgresso += json.cotas[i].nome
+
+    let cotasEgresso = ''
+    for (let i = 0; i < json.cotas.length; i++) {
+      cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
+    }
+    // Email e nome vem do usuario loggado
+
+    dataEgresso.value = {
+      egressoId: json.id,
+      geral:
+      {
+        email: userData.email,
+        genero: json.genero.nome,
+        confirmacaoEmail: '',
+        nascimento: json.nascimento,
+        isInput: false
+      },
+      localizacao: {
+        cep: '',
+        pais: json.emprego?.empresa.endereco.pais || '',
+        estado: json.emprego?.empresa.endereco.estado || '',
+        cidade: json.emprego?.empresa.endereco.cidade || '',
+        isInput: false
+      },
+      academico: {
+        matricula: json.matricula || '',
+        email: json.usuario.email || '',
+        tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
+        cotista: {
+          value: json.cotista,
+          tipo: cotasEgresso || ''
         },
-        academico: {
-          matricula: json.matricula || '',
-          email: json.usuario.email || '',
-          tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
-          cotista: {
-            value: json.cotista,
-            tipo: cotasEgresso || ''
-          },
-          bolsista: {
-            value: json.bolsista,
-            tipo: json.bolsa?.nome || '',
-            remuneracao: json.remuneracaoBolsa || ''
-          },
-          posGrad: {
-            value: json.posGraduacao,
-            tipo: json.posGraducao || '',
-            local: json.titulacao?.titulacao?.nome || '',
-            curso: json.titulacao?.curso?.nome || '',
-            desejaPos: json.interesseEmPos
-          },
-          isInput: false
+        bolsista: {
+          value: json.bolsista,
+          tipo: json.bolsa?.nome || '',
+          remuneracao: json.remuneracaoBolsa || ''
         },
-        carreira: {
-          area: json.emprego?.areaAtuacao?.nome || '',
-          setor: json.emprego?.empresa?.setorAtuacoes[0].nome || '',
-          empresa: json.emprego?.empresa.nome || '',
-          faixaSalarial: json.emprego?.faixaSalarial.faixa || '',
-          remuneracao: '',
-          isInput: false
+        posGrad: {
+          value: json.posGraduacao,
+          tipo: json.posGraducao || '',
+          local: json.titulacao?.titulacao?.nome || '',
+          curso: json.titulacao?.curso?.nome || '',
+          desejaPos: json.interesseEmPos
         },
-        adicionais: {
-          palestras: json.palestras?.descricao,
-          assuntosPalestras: json.palestras?.descricao || '',
-          experiencias: json.depoimento?.descricao || '',
-          contribuicoes: json.contribuicao?.descricao || '',
-          isInput: false
-        },
-        profileHead: {
-          nome: userData.nome,
-          linkedin: json.linkedin || '',
-          lattes: json.lattes || '',
-          isInput: false
-        }
+        isInput: false
+      },
+      carreira: {
+        area: json.emprego?.areaAtuacao?.nome || '',
+        setor: json.emprego?.empresa?.setorAtuacoes[0].nome || '',
+        empresa: json.emprego?.empresa.nome || '',
+        faixaSalarial: json.emprego?.faixaSalarial.faixa || '',
+        remuneracao: '',
+        isInput: false
+      },
+      adicionais: {
+        palestras: json.palestras?.descricao,
+        assuntosPalestras: json.palestras?.descricao || '',
+        experiencias: json.depoimento?.descricao || '',
+        contribuicoes: json.contribuicao?.descricao || '',
+        isInput: false
+      },
+      profileHead: {
+        nome: userData.nome,
+        linkedin: json.linkedin || '',
+        lattes: json.lattes || '',
+        isInput: false
       }
     }
   })
