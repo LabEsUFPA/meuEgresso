@@ -873,7 +873,7 @@ async function handleSubmitGeral (values: any) {
   console.log('handleSubmitGeral')
   toggleIsInput('geral')
   console.log(JSON.stringify(values, null, 2))
-  dataEgresso.value.geral = values.geral
+  // dataEgresso.value.geral = values.geral
 
   jsonResponse.usuario.email = values.geral.email
   // ID request
@@ -1093,7 +1093,7 @@ const schemaAdicionais = object().shape({
 
 const dataEgresso = ref({
   egressoId: 0,
-  // generoId: 0,
+  generoId: 0,
   // cotasIds: [0, 0],
 
   // usuarioId: 0,
@@ -1282,7 +1282,8 @@ const stateFolders = ref({
 let jsonResponse : any
 let userData : any
 let egressoResponseBack: any
-fetchEgressoIfLoggedUser()
+// fetchEgressoIfLoggedUser()
+fetchUpdateEgresso()
 async function fetchUpdateEgresso () {
   if (storage.has('loggedUser')) {
     userData = JSON.parse(storage.get('loggedUser'))
