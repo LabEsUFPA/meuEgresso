@@ -1,4 +1,10 @@
 <template>
+  <!-- <Form
+      @submit="handleSubmit"
+      @invalid-submit="onInvalid"
+      :validation-schema="schema"
+    > -->
+
   <div class="flex-1 min-h-screen items-center justify-center bg-neutral-100">
     <div
       class="flex place-items-center justify-between flex-wrap relative w-full h-[335px] pin-t bg-gradient-to-b from-sky-200 to-indigo-200 "
@@ -272,15 +278,15 @@
             <template #default>
               <div v-if="!dataEgresso.localizacao.isInput">
                 <!-- <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.localizacao.cep"
-                  name="localizacao.cep"
-                  label="CEP"
-                  placeholder="00000-000"
-                  mask="#####-###"
-                  :icon-path="mdiHome"
-                /> -->
+                    type="text"
+                    class="mb-5"
+                    :vmodel="dataEgresso.localizacao.cep"
+                    name="localizacao.cep"
+                    label="CEP"
+                    placeholder="00000-000"
+                    mask="#####-###"
+                    :icon-path="mdiHome"
+                  /> -->
 
                 <CustomPerfilData
                   type="text"
@@ -314,12 +320,12 @@
               </div>
               <div v-else>
                 <!-- <CustomInput
-                  class="mb-5"
-                  name="localizacao.cep"
-                  label="CEP"
-                  placeholder="00000-000"
-                  mask="#####-###"
-                /> -->
+                    class="mb-5"
+                    name="localizacao.cep"
+                    label="CEP"
+                    placeholder="00000-000"
+                    mask="#####-###"
+                  /> -->
 
                 <CustomSelect
                   class="mb-5"
@@ -722,9 +728,9 @@
                   name="adicionais.experiencias"
                   label="Depoimento"
                   placeholder="Lorem ipsum dolor sit amet, consect
-              etur adipiscing elit, sed do eiusmod tempor incididun
-              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                etur adipiscing elit, sed do eiusmod tempor incididun
+                t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                   icon-path=""
                 />
                 <CustomPerfilData
@@ -734,9 +740,9 @@
                   name="adicionais.contribuicoes"
                   label="Contribuições"
                   placeholder="Lorem ipsum dolor sit amet, consect
-              etur adipiscing elit, sed do eiusmod tempor incididun
-              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                etur adipiscing elit, sed do eiusmod tempor incididun
+                t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                   icon-path=""
                 />
               </div>
@@ -825,7 +831,8 @@ import {
   mdiMapMarkerRadius,
   mdiLinkVariant
 } from '@mdi/js'
-// mdiHome CEP,
+  interface EgressoModelUpdate extends models.EgressoModelUpdate {}
+  // mdiHome CEP,
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const camposFaltosos = ref(false)
@@ -1087,89 +1094,8 @@ const schemaAdicionais = object().shape({
   })
 })
 
-const dataEgresso = ref({
-  egressoId: 0,
-  generoId: 0,
-  cotasIds: [0, 0],
-
-  usuarioId: 0,
-  usuarioGruposId: [0],
-
-  palestrasId: 0,
-  contribuicaoId: 0,
-  titulacaoId: 0,
-  empregoId: 0,
-  empresaId: 0,
-  setorAtuacaoId: 0,
-  endereçoId: 0,
-  faixaSalarialId: 0,
-  areaAtuacaoId: 0,
-  depoimentoId: 0,
-  bolsaId: 0,
-
-  grupos: [''],
-
-  geral: {
-    email: '',
-    genero: '',
-    confirmacaoEmail: '',
-    nascimento: '',
-    isInput: false
-  },
-  localizacao: {
-    cep: '',
-    pais: '',
-    estado: '',
-    cidade: '',
-    isInput: false
-  },
-  academico: {
-    matricula: '',
-    email: '',
-    tipoAluno: '',
-    cotista: {
-      value: false,
-      tipo: ''
-    },
-    bolsista: {
-      value: false,
-      tipo: '',
-      remuneracao: ''
-    },
-    posGrad: {
-      value: false,
-      tipo: '',
-      local: '',
-      curso: '',
-      desejaPos: false
-    },
-    isInput: false
-  },
-  carreira: {
-    area: '',
-    setor: '',
-    empresa: '',
-    faixaSalarial: '',
-    remuneracao: '',
-    isInput: false
-  },
-  adicionais: {
-    palestras: false,
-    assuntosPalestras: '',
-    experiencias: '',
-    contribuicoes: '',
-    isInput: false
-  },
-  profileHead: {
-    nome: '',
-    linkedin: '',
-    lattes: '',
-    isInput: false
-  }
-})
-
-const dataEgressoResquest: EgressoModelUpdate = {
-  id: dataEgresso.value.egressoId,
+const dataEgresso: EgressoModelUpdate = ref({
+  id: 0,
   nascimento: '',
   genero: {
     id: 0,
@@ -1182,12 +1108,8 @@ const dataEgressoResquest: EgressoModelUpdate = {
   lattes: '',
   linkedin: '',
   posGraduacao: false,
-  cotas: [{
-    id: 0,
-    tipo: ''
-  }
+  cotas: [''],
 
-  ],
   usuario: {
     id: 0,
     username: '',
@@ -1251,8 +1173,7 @@ const dataEgressoResquest: EgressoModelUpdate = {
     nome: ''
   },
   remuneracaoBolsa: 0
-}
-console.log(dataEgresso)
+})
 
 const stateFolders = ref({
   geral: {
@@ -1274,6 +1195,74 @@ const stateFolders = ref({
     isInput: false
   }
 })
+
+// const dataEgresso = ref({
+//   id: 0,
+//   // generoId:0,
+//   // tipoAlunoId:0,
+//   // tipoCotaId:0,
+//   // tipoBolsaId:0,
+//   // areaAtuacaoId:0,
+//   // setorAtuacaoId:0,
+
+//   geral: {
+//     email: '',
+//     genero: '',
+//     confirmacaoEmail: '',
+//     nascimento: '',
+//     isInput: false
+//   },
+//   localizacao: {
+//     cep: '',
+//     pais: '',
+//     estado: '',
+//     cidade: '',
+//     isInput: false
+//   },
+//   academico: {
+//     matricula: '',
+//     email: '',
+//     tipoAluno: '',
+//     cotista: {
+//       value: false,
+//       tipo: ''
+//     },
+//     bolsista: {
+//       value: false,
+//       tipo: '',
+//       remuneracao: ''
+//     },
+//     posGrad: {
+//       value: false,
+//       tipo: '',
+//       local: '',
+//       curso: '',
+//       desejaPos: false
+//     },
+//     isInput: false
+//   },
+//   carreira: {
+//     area: '',
+//     setor: '',
+//     empresa: '',
+//     faixaSalarial: '',
+//     remuneracao: '',
+//     isInput: false
+//   },
+//   adicionais: {
+//     palestras: false,
+//     assuntosPalestras: '',
+//     experiencias: '',
+//     contribuicoes: '',
+//     isInput: false
+//   },
+//   profileHead: {
+//     nome: '',
+//     linkedin: '',
+//     lattes: '',
+//     isInput: false
+//   }
+// })
 let jsonResponse: any
 fetchEgressoIfLoggedUser()
 function fetchEgressoIfLoggedUser () {
@@ -1289,8 +1278,7 @@ function fetchEgressoIfLoggedUser () {
       // getEgresso
       const json = JSON.parse(storage.get('loggedEgresso'))
       jsonResponse = JSON.parse(storage.get('loggedEgresso'))
-      dataEgressoResquest.values = jsonResponse
-      console.log(dataEgressoResquest.values)
+
       console.log('BackResponse:')
       console.log(json)
       console.log('grupo:')
@@ -1308,15 +1296,15 @@ function fetchEgressoIfLoggedUser () {
       // Email e nome vem do usuario loggado
 
       dataEgresso.value = {
-        egressoId: json.id,
+        id: json.id,
         geral:
-      {
-        email: userData.email,
-        genero: json.genero.nome,
-        confirmacaoEmail: '',
-        nascimento: json.nascimento,
-        isInput: false
-      },
+        {
+          email: userData.email,
+          genero: json.genero.nome,
+          confirmacaoEmail: '',
+          nascimento: json.nascimento,
+          isInput: false
+        },
         localizacao: {
           cep: '',
           pais: json.emprego?.empresa.endereco.pais || '',
@@ -1382,4 +1370,4 @@ function fetchEgressoIfLoggedUser () {
 // })
 
 </script>
-<style></style>
+  <style></style>
