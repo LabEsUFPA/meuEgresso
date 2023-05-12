@@ -12,6 +12,7 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -134,10 +134,11 @@ public class EgressoController {
                 setorAtuacao = setorAtuacaoService
                         .save(SetorAtuacaoModel.builder().nome(empresaDTO.getSetorAtuacao()).build());
             }
-            // areaAtuacaoModel = areaAtuacaoService.findByNome(empresaDTO.getAreaAtuacao());
+            // areaAtuacaoModel =
+            // areaAtuacaoService.findByNome(empresaDTO.getAreaAtuacao());
             // if (areaAtuacaoModel == null) {
-            //     areaAtuacaoModel = areaAtuacaoService
-            //             .save(AreaAtuacaoModel.builder().nome(empresaDTO.getAreaAtuacao()).build());
+            // areaAtuacaoModel = areaAtuacaoService
+            // .save(AreaAtuacaoModel.builder().nome(empresaDTO.getAreaAtuacao()).build());
             // } //TODO AQUI não recebe do front
             EnderecoModel enderecoEmpresa = enderecoService.findByCidadeAndEstadoAndPais(
                     empresaDTO.getEndereco().getCidade(),
@@ -157,7 +158,7 @@ public class EgressoController {
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
-                    //.areaAtuacao(areaAtuacaoModel) // TODO habilitar aqui
+                    // .areaAtuacao(areaAtuacaoModel) // TODO habilitar aqui
                     .faixaSalarial(FaixaSalarialModel.builder().id(empresaDTO.getFaixaSalarialId()).build()).build());
         }
 
@@ -201,7 +202,8 @@ public class EgressoController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(
-            @RequestBody EgressoDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException, IOException {
+            @RequestBody EgressoDTO egresso, JwtAuthenticationToken token)
+            throws UnauthorizedRequestException, IOException {
         if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
@@ -220,7 +222,8 @@ public class EgressoController {
             String fileCode = RandomStringUtils.randomAlphanumeric(16) + ".png";
             egressoService.saveFoto(fileCode, egresso.getFoto());
             egressoModel.setFotoNome(fileCode);
-            egressoModel.getUsuario().setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
+            egressoModel.getUsuario()
+                    .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
             egressoService.updateEgresso(egressoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();
         }
@@ -251,15 +254,16 @@ public class EgressoController {
 
     /**
      * Endpoint responsável pelo retorno do caminho do arquivo da foto do egresso
-     *  
+     *
      * @author Camilo Santos, Eude Monteiro
      * @since 11/05/2023
      * @param token
-     * @return Um arquivo do tipo resource correspondente ao caminho da foto do egresso
+     * @return Um arquivo do tipo resource correspondente ao caminho da foto do
+     *         egresso
      * @throws IOException
      */
-    @GetMapping(value = "/foto")
     @ResponseStatus(code = HttpStatus.OK)
+    @GetMapping(value = "/foto", produces = "image/png")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public Resource getFotoEgresso(JwtAuthenticationToken token) throws MalformedURLException, FileNotFoundException {
         EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
@@ -268,11 +272,12 @@ public class EgressoController {
 
     /**
      * Endpoint responsável pelo salvamento local do arquivo da foto do egresso
-     * 
+     *
      * @author Camilo Santos, Eude Monteiro
      * @since 11/05/2023
      * @param egressoDTO
-     * @return Uma string representando uma mensagem de êxito indicando que a foto foi salva.
+     * @return Uma string representando uma mensagem de êxito indicando que a foto
+     *         foi salva.
      * @throws IOException
      */
     @PostMapping(value = "/foto", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
