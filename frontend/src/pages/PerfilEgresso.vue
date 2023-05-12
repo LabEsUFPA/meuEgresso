@@ -458,14 +458,14 @@
                   required
                 />
 
-                <CustomInput
+                <!-- <CustomInput
                   class="mb-5"
                   name="academico.email"
                   :value="dataEgresso.academico.email"
                   label="Email institucional"
                   placeholder="Selecione"
                   required
-                />
+                /> -->
 
                 <CustomSelect
                   class="mb-5"
@@ -489,16 +489,38 @@
                   v-model:value="dataEgresso.academico.cotista.value"
                 />
 
-                <CustomSelect
-                  class="mb-5"
-                  name="academico.cotista.tipo"
-                  :value="dataEgresso.academico.cotista.tipo"
-                  label="Tipo de Cota"
-                  placeholder="Selecione"
-                  :options="selectOpts.tipoCota"
-                  :required="dataEgresso.academico.cotista.value"
-                  :disabled="!dataEgresso.academico.cotista.value"
-                />
+                <div class="mb-5 text-sm font-semibold text-cyan-600">
+                  Tipos de cota:
+                </div>
+
+                <div class="w-fit p-3 pr-5 rounded-xl bg-gray-100 mb-5">
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.renda"
+                    label="Cota Renda"
+                    :disabled="!dataEgresso.academico.cotista.value"
+                  />
+
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.escola"
+                    label="Cota Escola"
+                    :disabled="!dataEgresso.academico.cotista.value"
+                  />
+
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.raca"
+                    label="Autodeclaração de Raça"
+                    :disabled="!dataEgresso.academico.cotista.value"
+                  />
+
+                  <CustomCheckbox
+                    name="academico.cotista.tipos.quilombolaIndigena"
+                    label="Quilombola/Indigena"
+                    :disabled="!dataEgresso.academico.cotista.value"
+                  />
+                </div>
 
                 <CustomCheckbox
                   class="mb-5"
@@ -514,7 +536,7 @@
                   :value="dataEgresso.academico.bolsista.tipo"
                   label="Tipo de Bolsa"
                   placeholder="Selecione"
-                  :options="selectOpts.tipoBolsa"
+                  :options="egressoStore.tiposBolsa"
                   :required="dataEgresso.academico.bolsista.value"
                   :disabled="!dataEgresso.academico.bolsista.value"
                 />
@@ -808,9 +830,8 @@ import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import CustomTextarea from 'src/components/CustomTextarea.vue'
 import { Form } from 'vee-validate'
 import { object, string, date, boolean } from 'yup'
-import CustomButton from 'src/components/CustomButton.vue'
-import egressoModel from 'src/model/egressoModel'
 import LocalStorage from 'src/services/localStorage'
+import { useLoginStore } from 'src/store/LoginStore'
 
 import {
   mdiAccount,
@@ -852,21 +873,15 @@ async function handleSubmitHeader (values: any) {
   console.log('handleSubmitHeader')
   toggleIsInput('profileHead')
   console.log(values)
-  // const valuesJSON = JSON.stringify(values, null, 2)
-  // dataEgresso.value.profileHead.nome = values.geral.nome
-  // dataEgresso.value.profileHead.linkedin = values.geral.linkedin
-  // dataEgresso.value.profileHead.lattes = values.geral.lattes
-  dataEgresso.value.profileHead = values.geral
-  // egressoStore.atualizarEgresso(dataEgresso.value.profileHead)
-  // egressoStore.atualizarEgresso(values.geral)
-
-  // egressoStore.fetchEgresso()
   // futuro add foto
   jsonResponse.usuario.nome = values.geral.nome
+  jsonResponse.linkedin = values.geral.linkedin
+  jsonResponse.lattes = values.geral.lattes
   console.log(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   handleStatus(status)
-  fetchEgresso()
+  await useLoginStore().saveUser()
+  fetchUpdateEgresso()
 }
 
 async function handleSubmitGeral (values: any) {
@@ -883,6 +898,7 @@ async function handleSubmitGeral (values: any) {
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   console.log(jsonResponse)
   handleStatus(status)
+  await useLoginStore().saveUser()
   fetchUpdateEgresso()
 }
 
@@ -890,15 +906,47 @@ async function handleSubmitAcademico (values: any) {
   console.log('handleSubmitAcademico')
   toggleIsInput('academico')
   console.log(JSON.stringify(values, null, 2))
+  const cotas: Array<{ id: number }> | null = []
+
+  if (values.academico.cotista.tipos.escola) {
+    cotas.push({
+      id: 1
+    })
+  }
+
+  if (values.academico.cotista.tipos.renda) {
+    cotas.push({
+      id: 2
+    })
+  }
+
+  if (values.academico.cotista.tipos.raca) {
+    cotas.push({
+      id: 3
+    })
+  }
+
+  if (values.academico.cotista.tipos.quilombolaIndigena) {
+    cotas.push({
+      id: 4
+    })
+  }
+
   jsonResponse.matricula = values.academico.matricula
   jsonResponse.posGraduacao = values.academico.posGrad.value
+
   jsonResponse.cotista = values.academico.cotista.value
+  console.log('cota')
+  console.log(jsonResponse.cotista)
   jsonResponse.bolsista = values.academico.bolsista.value
-  jsonResponse.bolsa = values.academico.bolsista.tipo
+
+  jsonResponse.cotas = cotas
+  jsonResponse.bolsa.id = values.academico.bolsista.tipo
   jsonResponse.remuneracaoBolsa = values.academico.bolsista.remuneracao
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   console.log(jsonResponse)
   handleStatus(status)
+  fetchUpdateEgresso()
 }
 async function handleSubmitLocalizacao (values: any) {
   console.log('handleSubmitLocalizacao')
@@ -917,7 +965,8 @@ async function handleSubmitCarreira (values: any) {
   console.log('handleSubmitCarreira')
   toggleIsInput('carreira')
   console.log(JSON.stringify(values, null, 2))
-  dataEgresso.value.carreira = values.carreira
+  // dataEgresso.value.carreira = values.carreira
+
   egressoStore.atualizarEgresso(values.carreira)
 }
 async function handleSubmitAdicionais (values: any) {
@@ -926,6 +975,7 @@ async function handleSubmitAdicionais (values: any) {
   console.log(JSON.stringify(values, null, 2))
   dataEgresso.value.adicionais = values.adicionais
   egressoStore.atualizarEgresso(values.adicionais)
+  fetchUpdateEgresso()
 }
 
 let isInputLocal = false
@@ -1035,12 +1085,14 @@ const schemaLocalizacao = object().shape({
 const schemaAcademico = object().shape({
   academico: object({
     matricula: string().required(),
-    email: string().email().required(),
     tipoAluno: string().required(),
     cotista: object({
       value: boolean(),
-      tipo: string().when('value', ([value], schemaAcademico) => {
-        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
+      tipos: object({
+        renda: boolean(),
+        escola: boolean(),
+        raca: boolean(),
+        quilombolaIndigena: boolean()
       })
 
     }),
@@ -1290,7 +1342,7 @@ async function fetchUpdateEgresso () {
     console.log('Logged in')
     // dataEgresso.value.profileHead.nome = userData.nome
     // dataEgresso.value.geral.email = userData.email
-    console.log('DATA')
+    console.log('DATAa')
     console.log(userData)
 
     // getEgresso
@@ -1307,10 +1359,11 @@ async function fetchUpdateEgresso () {
     console.log('option')
     console.log(option)
   }
-  const generosArray = []
+  // const generosArray = []
 
-  generos.forEach(option => generosArray.push(option))
-  console.log(generosArray)
+  // generos.forEach(option => generosArray.push(option))
+
+  // console.log(generosArray[0].label)
 
   let json = JSON.parse(storage.get('loggedEgresso'))
   const ResponseBack = await egressoResponseBack
@@ -1364,7 +1417,7 @@ async function fetchUpdateEgresso () {
       bolsista: {
         value: json.bolsista,
         tipo: json.bolsa?.nome || '',
-        remuneracao: json.remuneracaoBolsa || ''
+        remuneracao: json.remuneracaoBolsa + '' || ''
       },
       posGrad: {
         value: json.posGraduacao,
