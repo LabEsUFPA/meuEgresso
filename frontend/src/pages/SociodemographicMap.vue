@@ -1,9 +1,6 @@
 <template>
-  <div class="flex flex-col md:flex-row justify-center items-center p-2">
-    <div
-      class="rounded-xl border border-gray-400 overflow-hidden"
-      style="height:600px; width:100%; max-width: 800px"
-    >
+  <div class="flex flex-col md:flex-row md:justify-center items-center p-2 relative h-full">
+    <div class="rounded-xl border border-gray-400 overflow-hidden h-96 w-96 md:h-[600px] md:w-full md:max-w-3xl">
       <LMap
         ref="map"
         v-model:zoom="zoom"
@@ -64,7 +61,7 @@
         class="flex flex-col"
         v-else
       >
-        <div class="text-sky-500 bg-white p-3 text-xs rounded-md mb-1">
+        <div class="text-sky-500 bg-white p-3 text-xs rounded-xl mb-1">
           <SvgIcon
             type="mdi"
             :path="mdiMapMarker"
@@ -77,11 +74,37 @@
         </div>
 
         <div
-          class="bg-white rounded-md mb-1 p-3"
+          class="bg-white rounded-xl mb-1 p-3"
           v-for="(egresso, index) in selectedMarker"
           :key="index"
         >
-          <span class="font-semibold">{{ egresso.nome }}</span>
+          <div
+            :title="egresso.nome"
+            class="font-semibold whitespace-nowrap overflow-hidden text-ellipsis"
+          >
+            {{ egresso.nome }}
+          </div>
+          <div
+            :title="egresso.empresa"
+            class="whitespace-nowrap overflow-hidden text-ellipsis"
+          >
+            {{ egresso.empresa }}
+          </div>
+          <div class="mt-3 flex justify-end">
+            <CustomButton
+              tag="router"
+              variant="outlined"
+              color="sky"
+              :link="`/egresso/${egresso.id}`"
+            >
+              Visitar
+              <SvgIcon
+                type="mdi"
+                class="inline"
+                :path="mdiChevronRight"
+              />
+            </CustomButton>
+          </div>
         </div>
       </div>
     </div>
@@ -96,8 +119,9 @@ import { getRandomEgressoList } from 'src/mock/EgressosMapa'
 import { computed, ref } from 'vue'
 import { type models } from 'src/@types'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiInformation, mdiMapMarker } from '@mdi/js'
+import { mdiChevronRight, mdiInformation, mdiMapMarker } from '@mdi/js'
 import { Country, State } from 'country-state-city'
+import CustomButton from 'src/components/CustomButton.vue'
 interface EgressoMapa extends models.EgressoMapa {}
 
 const zoom = 2
@@ -113,7 +137,8 @@ const egressos = computed(() => {
       pais: 'FJ',
       latitude: 60,
       longitude: 154
-    }
+    },
+    empresa: 'Marvin, Bartell and Stehr'
   },
   {
     nome: 'Rafael Wintheiser V',
@@ -124,7 +149,8 @@ const egressos = computed(() => {
       pais: 'FJ',
       latitude: 60,
       longitude: 154
-    }
+    },
+    empresa: 'Marvin, Bartell and Stehr'
   }, {
     nome: 'Rafael Wintheiser VI',
     id: 29082,
@@ -134,7 +160,8 @@ const egressos = computed(() => {
       pais: 'FJ',
       latitude: 60,
       longitude: 154
-    }
+    },
+    empresa: 'Marvin, Bartell and Stehr'
   }]
   const filtered = new Map<string, EgressoMapa[]>()
 

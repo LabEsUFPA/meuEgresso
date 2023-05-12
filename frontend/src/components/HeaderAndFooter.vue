@@ -157,8 +157,10 @@
         </nav>
       </div>
     </header>
-    <main>
-      <RouterView />
+    <main class="flex-1 flex">
+      <div class="flex-1">
+        <RouterView />
+      </div>
     </main>
     <footer>
       <div class="bg-gradient-to-br h-24 from-pacific-cyan to-bondi-blue flex flex-row items-center justify-start pl-20">
