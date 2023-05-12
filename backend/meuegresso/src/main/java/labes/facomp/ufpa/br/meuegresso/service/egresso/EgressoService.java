@@ -74,19 +74,19 @@ public interface EgressoService {
 	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
 	/**
-	 * Método responsável por
+	 * Método responsável pelo retorno do caminho da foto como um URI
 	 * 
 	 * @param fotoNomeString
 	 * @return
 	 * @throws MalformedURLException
 	 * @throws FileNotFoundException
-	 * @author Camilo Santos
+	 * @author Camilo Santos 
 	 * @since 07/05/2023
 	 */
 	public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException; // TODO documentação incompleta
 
 	/**
-	 * Método responsável por
+	 * Método responsável pelo salvamento da foto em um arquivo local
 	 * 
 	 * @param nomeAnexo
 	 * @param arquivo

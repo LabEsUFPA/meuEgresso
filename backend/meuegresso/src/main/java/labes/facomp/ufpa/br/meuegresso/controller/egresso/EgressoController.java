@@ -247,14 +247,34 @@ public class EgressoController {
         }
     }
 
+    /**
+     * Endpoint responsável pelo retorno do caminho do arquivo da foto do egresso
+     *  
+     * @author Camilo Santos, Eude Monteiro
+     * @since 11/05/2023
+     * @param token
+     * @return Um arquivo do tipo resource correspondente ao caminho da foto do egresso
+     * @throws IOException
+     */
     @GetMapping(value = "/foto")
+    @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public Resource getFotoEgresso(JwtAuthenticationToken token) throws MalformedURLException, FileNotFoundException {
         EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
         return egressoService.getFileAsResource(egressoModel.getFotoNome());
     }
 
+    /**
+     * Endpoint responsável pelo salvamento local do arquivo da foto do egresso
+     * 
+     * @author Camilo Santos, Eude Monteiro
+     * @since 11/05/2023
+     * @param egressoDTO
+     * @return Uma string representando uma mensagem de êxito indicando que a foto foi salva.
+     * @throws IOException
+     */
     @PostMapping(value = "/foto", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @ResponseStatus(code = HttpStatus.CREATED)
     public String saveFotoEgresso(@ModelAttribute @Valid EgressoDTO egressoDTO) throws IOException {
         String fileCode = RandomStringUtils.randomAlphanumeric(16) + ".png";
         egressoService.saveFoto(fileCode, egressoDTO.getFoto());
