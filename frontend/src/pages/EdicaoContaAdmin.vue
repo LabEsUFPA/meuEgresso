@@ -6,7 +6,7 @@
   >
     <div class="flex w-full justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
       <div class="flex w-[960px] justify-center border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl py-8 mt-10 shadow-md">
-        <h1 class="text-blue-900 text-4xl font-bold">
+        <h1 class="text-blue-900 text-3xl font-bold">
           Editar conta
         </h1>
       </div>
@@ -88,9 +88,11 @@
             />
           </div>
           <div class="flex w-full justify-center gap-16 border-t-[1px] pt-8 mt-8 border-gray-200">
-            <CustomButton type="reset" color="gray">
-              Cancelar
-            </CustomButton>
+            <RouterLink to="/">
+              <CustomButton type="button" color="gray">
+                Cancelar
+              </CustomButton>
+            </RouterLink>
             <CustomButton type="submit" color="emerald">
               Salvar
             </CustomButton>
@@ -99,44 +101,43 @@
         </div>
         
       </div>
-
-      <div
-        v-if="submitSuccess"
-        class="flex flex-col bg-white w-[818px] mx-6 rounded-2xl"
-      >
-        <RouterLink
-          to="/"
-          class="flex self-end justify-center w-36 py-3 bg-red-400 font-semibold text-xl text-white rounded-tl-lg rounded-tr-lg rounded-bl-lg"
-        >
-          Fechar
-        </RouterLink>
-        <div class="flex flex-col items-center text-center pt-16 pb-28 gap-y-12">
-          <img
-            class="max-w-max"
-            src="../assets/check.svg"
-            alt="Loading"
-          >
-          <h1 class="text-blue-900 text-4xl font-bold">
-            Perfil {{ 123 }} <br>
-            criado com sucesso!
-          </h1>
-        </div>
-      </div>
     </div>
   </Form>
+
+  <CustomDialog v-model="submitSuccess">
+    <div class="h-full flex justify-center items-center">
+      <div class="w-1/2">
+        <div class="text-green-500 text-center mb-3">
+          <SvgIcon
+            type="mdi"
+            size="100"
+            class="inline"
+            :path="mdiCheckCircle"
+          />
+        </div>
+        <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+          Dados atualizados com sucesso!
+        </h1>
+      </div>
+    </div>
+  </CustomDialog>
 </template>
 
 <script setup lang="ts">
+
 import { ref } from 'vue'
-import CustomInput from 'src/components/CustomInput.vue'
-import { mdiAccount, mdiEmail, mdiLock } from '@mdi/js'
+import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
 import { object, string, ref as refYup, number } from 'yup'
+import { mdiAccount, mdiEmail, mdiLock, mdiCheckCircle } from '@mdi/js'
+
+import { models } from 'src/@types'
+import CustomInput from 'src/components/CustomInput.vue'
 import CustomButton from 'src/components/CustomButton.vue'
+import CustomDialog from 'src/components/CustomDialog.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
-import { models } from 'src/@types'
 interface ProfileRegisterModel extends models.ProfileRegisterModel {}
 
 const error = ref(false)
