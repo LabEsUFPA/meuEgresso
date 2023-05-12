@@ -5,7 +5,7 @@
     :validation-schema="schema"
   >
     <div class="flex w-full justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
-      <div class="flex w-[960px] justify-center border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl py-8 mt-10 shadow-md">
+      <div class="flex w-[960px] justify-center border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl py-8 mt-10 mx-6 shadow-md">
         <h1 class="text-blue-900 text-3xl font-bold">
           Editar conta
         </h1>
@@ -77,16 +77,6 @@
             </div>
           </div>
 
-          <div v-if="true" class="flex flex-col gap-y-2 mt-8">
-            <CustomSelect
-              name="accessLevel"
-              label="Nível de Acesso"
-              placeholder="Selecionar"
-              :options="['Egresso', 'Secretário', 'Administrador']"
-              error-message="Selecione o nível de acesso"
-              :required="true"
-            />
-          </div>
           <div class="flex w-full justify-center gap-16 border-t-[1px] pt-8 mt-8 border-gray-200">
             <RouterLink to="/">
               <CustomButton type="button" color="gray">
@@ -136,7 +126,6 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
-import CustomSelect from 'src/components/CustomSelect.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 interface ProfileRegisterModel extends models.ProfileRegisterModel {}
 
@@ -146,16 +135,6 @@ const errorMessages = ref({
 })
 const errorText = ref('')
 const submitSuccess = ref(false)
-
-const setIdAccessLevel = (accessLevel: string) => {
-  if (accessLevel === 'Administrador') {
-    return 1
-  } else if (accessLevel === 'Secretário') {
-    return 2
-  } else {
-    return 3
-  }
-}
 
 const schema = object().shape({
   name: string().required(),
@@ -169,16 +148,12 @@ const schema = object().shape({
 })
 
 const handleSubmit = async (profileData: ProfileRegisterModel) => {
-  profileData.idAccessLevel = setIdAccessLevel(profileData.accessLevel)
   console.log(profileData)
   const response = await useCadastroPerfilStore().userProfileRegister(
     profileData.username,
     profileData.password,
     profileData.email,
     profileData.name,
-    [{
-      id: profileData.idAccessLevel
-    }]
   )
 
   if (response === 201) {

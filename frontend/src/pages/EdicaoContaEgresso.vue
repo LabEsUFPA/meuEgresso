@@ -6,7 +6,7 @@
       :validation-schema="schema"
     >
       <div class="flex w-full justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
-        <div class="flex w-[960px] justify-center border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl py-8 mt-10 shadow-md">
+        <div class="flex w-[960px] justify-center border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl py-8 mt-10 mx-6 shadow-md">
           <h1 class="text-blue-900 text-3xl font-bold">
             Editar conta
           </h1>

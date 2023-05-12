@@ -42,6 +42,10 @@ export const useLoginStore = defineStore('LoginStore', {
       if (response?.status === 200) {
         storage.set('loggedUser', JSON.stringify(response.data))
       }
+    },
+
+    getLoggedUser() {
+      return JSON.parse(storage.get('loggedUser'))
     }
   }
 })
