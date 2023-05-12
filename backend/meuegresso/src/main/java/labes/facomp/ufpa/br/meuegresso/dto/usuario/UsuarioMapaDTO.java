@@ -11,13 +11,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Encapsulamento da tabela Grupo a fim de representar somente os dados não
- * sensiveis.
- * Nota: Use este DTO somente para persistir o usuário, não retorne o mesmo.
+ * Representa os dados de nome e id do egresso para o mapa
+ * 
  *
- * @author Alfredo Gabriel, Camilo Santos
- * @since 26/03/2023
- * @version 1.0.1
+ * @author Bruno Eiki, Pedro Inácio
+ * @since 08/05/2023
+ * @version 1.0
  */
 @Data
 @Builder
@@ -35,7 +34,7 @@ public class UsuarioMapaDTO {
 	// private EgressoBasicDTO egresso;
 
 	// TODO tirar grupo?
-	@Builder.Default
-	private Set<GrupoDTO> grupos = new HashSet<>();
+	//@Builder.Default
+	//private Set<GrupoDTO> grupos = new HashSet<>();
 
 }

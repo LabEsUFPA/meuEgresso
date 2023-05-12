@@ -3,6 +3,7 @@ package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -57,13 +58,11 @@ public class EgressoEmpresaController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<EgressoMapaDTO> consultarEgressoEmpresas() {
-		return egressoEmpresaService.findAllEgressoMapaDTO();
-		// return mapper.map(egressoEmpresaService.findAll(), new
-		// TypeToken<List<EgressoEmpresaDTO>>() {
-		// }.getType());
-	}
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public List<EgressoMapaDTO> consultarEgressoEmpresas() {
+        return mapper.map(egressoEmpresaService.findAll(), new TypeToken<List<EgressoEmpresaDTO>>() {
+        }.getType());
+    }
 
 	/**
 	 * Endpoint responsável por retornar um egressoEmpresa por sua ID.

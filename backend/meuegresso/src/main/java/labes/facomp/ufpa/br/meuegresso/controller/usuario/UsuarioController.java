@@ -3,7 +3,6 @@ package labes.facomp.ufpa.br.meuegresso.controller.usuario;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -79,9 +78,7 @@ public class UsuarioController {
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<EgressoMapaDTO> findAllEgressoMapaDTO() {
-		// return egressoEmpresaService.findAll();
-		return mapper.map(egressoEmpresaService.findAllEgressoMapaDTO(), new TypeToken<List<EgressoMapaDTO>>() {
-		}.getType());
+		return egressoEmpresaService.findAllEgressoMapaDTO();
 	}
 
 	/**

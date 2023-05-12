@@ -1,13 +1,13 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.administradores.empresa.EmpresaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaMapaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioMapaDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 import lombok.Data;
 
 /**
- *
+ *  Representa os dados do egresso a serem mostrados no mapa
  *
  * @author Bruno Eiki, Pedro Inácio
  * @since 08/05/2023
@@ -22,5 +22,5 @@ public class EgressoMapaDTO {
     private UsuarioMapaDTO usuario;
 
     @Valid
-    private EmpresaDTO empresaDTO;
+    private EmpresaMapaDTO empresaMapaDTO;
 }
