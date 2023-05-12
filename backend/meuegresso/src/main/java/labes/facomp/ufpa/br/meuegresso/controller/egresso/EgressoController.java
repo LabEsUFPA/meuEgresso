@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +29,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoImagemDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
@@ -180,20 +180,9 @@ public class EgressoController {
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public EgressoImagemDTO getEgresso(JwtAuthenticationToken token) {
+    public EgressoDTO getEgresso(JwtAuthenticationToken token) {
         EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
-        EgressoImagemDTO egressoImageDTO = mapper.map(egressoModel, EgressoImagemDTO.class);
-        try {
-            if (egressoModel.getFotoNome() != null) {
-                egressoImageDTO.setFoto(egressoService.getFileAsResource(egressoModel.getFotoNome()));
-            }
-        } catch (MalformedURLException | FileNotFoundException e) {
-            //e.printStackTrace();
-        } finally {
-            return egressoImageDTO;
-        }
-
-        //return egressoImageDTO
+        return mapper.map(egressoModel, EgressoDTO.class);
     }
 
     /**
@@ -208,7 +197,7 @@ public class EgressoController {
      */
     @PutMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @ResponseStatus(code = HttpStatus.CREATED)
-    @Operation(security = { @SecurityRequirement(name = "Bearer") }) // TODO atualizar foto junto com egresso 
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(
             @RequestBody EgressoDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException, IOException {
         if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
@@ -258,10 +247,18 @@ public class EgressoController {
         }
     }
 
+    @GetMapping(value = "/foto")
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public Resource getFotoEgresso(JwtAuthenticationToken token) throws MalformedURLException, FileNotFoundException {
+        EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
+        return egressoService.getFileAsResource(egressoModel.getFotoNome());
+    }
+
     @PostMapping(value = "/foto", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public String save(@ModelAttribute @Valid EgressoDTO egressoDTO) throws IOException {
+    public String saveFotoEgresso(@ModelAttribute @Valid EgressoDTO egressoDTO) throws IOException {
         String fileCode = RandomStringUtils.randomAlphanumeric(16) + ".png";
         egressoService.saveFoto(fileCode, egressoDTO.getFoto());
-        return "Salvo com sucesso";
+        return ResponseType.SUCESS_IMAGE_SAVE.getMessage();
     }
+
 }

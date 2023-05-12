@@ -92,7 +92,7 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
-    public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException { // TODO método incompleto
+    public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException {
         
         Path file = Paths.get(String.format("%s%s", UPLOAD_DIRECTORY, fotoNomeString));
         if (file != null) {
@@ -104,7 +104,7 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
-    public void saveFoto(String nomeFoto, MultipartFile arquivo) throws IOException { // TODO método incompleto
+    public void saveFoto(String nomeFoto, MultipartFile arquivo) throws IOException {
         Path uploadPath = Paths.get(UPLOAD_DIRECTORY + "/");
 
         if (!Files.exists(uploadPath)) {

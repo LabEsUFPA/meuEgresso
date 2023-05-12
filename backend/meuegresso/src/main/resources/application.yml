@@ -3,6 +3,9 @@ spring:
     default: homol
   application:
     name: Meu Egresso API
+  servlet:
+    multipart:
+      max-file-size: 5MB
   #configuração do jackson
   jackson:
     default-property-inclusion: NON_NULL

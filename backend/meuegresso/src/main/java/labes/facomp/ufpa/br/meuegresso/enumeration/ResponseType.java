@@ -15,7 +15,7 @@ public enum ResponseType {
     
     EGRESSO_ENCONTRADO("Egresso encontrado"),
 
-    SUCESS_IMAGE_UPDATE("Imagem atualizada com sucesso");
+    SUCESS_IMAGE_SAVE("Imagem salva com sucesso");
 
     private String message;
 
