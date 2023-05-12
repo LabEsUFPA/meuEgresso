@@ -886,7 +886,6 @@ async function handleSubmitHeader (values: any) {
 
 async function handleSubmitGeral (values: any) {
   console.log('handleSubmitGeral')
-  toggleIsInput('geral')
   console.log(JSON.stringify(values, null, 2))
   // dataEgresso.value.geral = values.geral
 
@@ -896,6 +895,7 @@ async function handleSubmitGeral (values: any) {
   jsonResponse.genero.id = values.geral.genero
   jsonResponse.nascimento = values.geral.nascimento
   const status = await egressoStore.atualizarEgresso(jsonResponse)
+  toggleIsInput('geral')
   console.log(jsonResponse)
   handleStatus(status)
   await useLoginStore().saveUser()
@@ -904,7 +904,6 @@ async function handleSubmitGeral (values: any) {
 
 async function handleSubmitAcademico (values: any) {
   console.log('handleSubmitAcademico')
-  toggleIsInput('academico')
   console.log(JSON.stringify(values, null, 2))
   const cotas: Array<{ id: number }> | null = []
 
@@ -943,9 +942,17 @@ async function handleSubmitAcademico (values: any) {
   jsonResponse.cotas = cotas
   jsonResponse.bolsa.id = values.academico.bolsista.tipo
   jsonResponse.remuneracaoBolsa = values.academico.bolsista.remuneracao
+  // back fix titulacao / instituicao
+  // jsonResponse.titulacao.titulacao.nome = values.academico.posGrad.local
+
+  // jsonResponse.titulacao.curso = values.academico.posGrad.curso
+  // delete jsonResponse.titulacao.id.titulacaoId
+
   const status = await egressoStore.atualizarEgresso(jsonResponse)
+
   console.log(jsonResponse)
   handleStatus(status)
+  toggleIsInput('academico')
   fetchUpdateEgresso()
 }
 async function handleSubmitLocalizacao (values: any) {
@@ -958,16 +965,21 @@ async function handleSubmitLocalizacao (values: any) {
   console.log('HandleSubmit Response: ')
   console.log(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
-  toggleIsInput('localizacao')
   handleStatus(status)
+  toggleIsInput('localizacao')
+  fetchUpdateEgresso()
 }
 async function handleSubmitCarreira (values: any) {
   console.log('handleSubmitCarreira')
-  toggleIsInput('carreira')
   console.log(JSON.stringify(values, null, 2))
   // dataEgresso.value.carreira = values.carreira
-
-  egressoStore.atualizarEgresso(values.carreira)
+  console.log('HandleSubmit Response: ')
+  // jsonResponse.emprego.empresa.nome = ''
+  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  console.log(jsonResponse)
+  handleStatus(status)
+  toggleIsInput('carreira')
+  fetchUpdateEgresso()
 }
 async function handleSubmitAdicionais (values: any) {
   console.log('handleSubmitAdicionais')
