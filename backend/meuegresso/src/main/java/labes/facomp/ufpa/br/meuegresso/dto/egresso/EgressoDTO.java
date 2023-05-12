@@ -1,7 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
@@ -45,7 +46,8 @@ public class EgressoDTO {
     @Builder.Default
     private Boolean posGraduacao = false;
 
-    private Set<CotaDTO> cotas;
+    @Builder.Default
+    private List<CotaDTO> cotas = new ArrayList<>(0);
 
     private UsuarioAuthDTO usuario;
 
@@ -55,13 +57,12 @@ public class EgressoDTO {
 
     private EgressoTitulacaoDTO titulacao;
 
-    private EgressoEmpresaDTO emprego;
+    private EgressoEmpresaBasicDTO emprego;
 
     private DepoimentoDTO depoimento;
 
     private TipoBolsaDTO bolsa;
 
     private Double remuneracaoBolsa;
-
 
 }
