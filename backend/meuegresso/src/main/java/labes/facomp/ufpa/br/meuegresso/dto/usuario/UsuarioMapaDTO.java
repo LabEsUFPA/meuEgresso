@@ -1,10 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.usuario;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import jakarta.validation.constraints.NotBlank;
-import labes.facomp.ufpa.br.meuegresso.dto.grupo.GrupoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,13 +24,5 @@ public class UsuarioMapaDTO {
 
 	@NotBlank(message = "Infome um nome.")
 	private String nome;
-
-	// TODO Pode tirar o egresso aqui?
-	// @Valid
-	// private EgressoBasicDTO egresso;
-
-	// TODO tirar grupo?
-	//@Builder.Default
-	//private Set<GrupoDTO> grupos = new HashSet<>();
 
 }
