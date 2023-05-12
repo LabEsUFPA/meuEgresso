@@ -18,7 +18,7 @@ public class EgressoPublicDTO {
 
     private Integer id;
 
-    private Integer matricula;
+    private String matricula;
 
     @Email
     @NotBlank(message = "Infome um email.")

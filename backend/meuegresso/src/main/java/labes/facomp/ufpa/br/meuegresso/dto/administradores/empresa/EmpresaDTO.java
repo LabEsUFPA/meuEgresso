@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.empresa;
 
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.AuditableDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,5 +24,8 @@ public class EmpresaDTO extends AuditableDTO {
 
     private String nome;
 
+    private EnderecoDTO enderecoDTO;
+
+    // TODO tirar setor
     private String setorAtuacao;
 }

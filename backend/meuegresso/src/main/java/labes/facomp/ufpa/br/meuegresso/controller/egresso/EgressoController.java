@@ -140,6 +140,9 @@ public class EgressoController {
 
         egresso.setUsuario(usuarioService.findById(jwtService.getIdUsuario(token)));
         // TODO fazer update de email futuramente.
+        /**
+         * !DANGER 
+         */
         egresso.getUsuario().setNome(egressoCadastroDTO.getNome());
         PalestraModel palestra;
         if (egresso.getPalestras() != null) {

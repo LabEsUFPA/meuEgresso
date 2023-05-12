@@ -16,7 +16,7 @@ public class EgressoBasicDTO {
 
     private Integer id;
 
-    private Integer matricula;
+    private String matricula;
 
     private GeneroDTO genero;
 
