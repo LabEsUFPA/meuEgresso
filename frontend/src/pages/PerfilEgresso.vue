@@ -1307,6 +1307,11 @@ async function fetchUpdateEgresso () {
     console.log('option')
     console.log(option)
   }
+  const generosArray = []
+
+  generos.forEach(option => generosArray.push(option))
+  console.log(generosArray)
+
   let json = JSON.parse(storage.get('loggedEgresso'))
   const ResponseBack = await egressoResponseBack
 
@@ -1398,122 +1403,6 @@ async function fetchUpdateEgresso () {
 
 function fetchEgresso () {
   return egressoStore.fetchEgresso()
-}
-interface ComplexOpts extends models.ComplexOpts {}
-type IOpts = string | ComplexOpts
-
-function fetchEgressoIfLoggedUser () {
-  onMounted(() => {
-    if (storage.has('loggedUser')) {
-      userData = JSON.parse(storage.get('loggedUser'))
-      console.log('Logged in')
-      // dataEgresso.value.profileHead.nome = userData.nome
-      // dataEgresso.value.geral.email = userData.email
-      console.log('DATA')
-      console.log(userData)
-
-      // getEgresso
-      egressoResponseBack = fetchEgresso()
-    }
-  })
-
-  onMounted(async () => {
-    console.log('MOUNTED async')
-    console.log('Back Response:')
-
-    // console.log(egressoStore.generos)
-    let generos : any
-    generos = egressoStore.generos
-    for (const option in egressoStore.generos) {
-      console.log('option')
-      console.log(option)
-    }
-    let json = JSON.parse(storage.get('loggedEgresso'))
-    const ResponseBack = await egressoResponseBack
-
-    json = JSON.parse(ResponseBack)
-
-    jsonResponse = json
-
-    dataResquestFront.values = jsonResponse
-    console.log(dataResquestFront.values)
-
-    console.log('grupo:')
-    console.log(json.usuario.grupos[0].nomeGrupo)
-    console.log(json.id)
-    // Cotas
-
-    // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
-    // Caso contrario: cotasEgresso += json.cotas[i].nome
-
-    let cotasEgresso = ''
-    for (let i = 0; i < json.cotas.length; i++) {
-      cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
-    }
-    // Email e nome vem do usuario loggado
-
-    dataEgresso.value = {
-      egressoId: json.id,
-      geral:
-      {
-        email: userData.email,
-        genero: json.genero.nome,
-        confirmacaoEmail: '',
-        nascimento: json.nascimento,
-        isInput: false
-      },
-      localizacao: {
-        cep: '',
-        pais: json.emprego?.empresa.endereco.pais || '',
-        estado: json.emprego?.empresa.endereco.estado || '',
-        cidade: json.emprego?.empresa.endereco.cidade || '',
-        isInput: false
-      },
-      academico: {
-        matricula: json.matricula || '',
-        email: json.usuario.email || '',
-        tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
-        cotista: {
-          value: json.cotista,
-          tipo: cotasEgresso || ''
-        },
-        bolsista: {
-          value: json.bolsista,
-          tipo: json.bolsa?.nome || '',
-          remuneracao: json.remuneracaoBolsa || ''
-        },
-        posGrad: {
-          value: json.posGraduacao,
-          tipo: json.posGraducao || '',
-          local: json.titulacao?.titulacao?.nome || '',
-          curso: json.titulacao?.curso?.nome || '',
-          desejaPos: json.interesseEmPos
-        },
-        isInput: false
-      },
-      carreira: {
-        area: json.emprego?.areaAtuacao?.nome || '',
-        setor: json.emprego?.empresa?.setorAtuacoes[0].nome || '',
-        empresa: json.emprego?.empresa.nome || '',
-        faixaSalarial: json.emprego?.faixaSalarial.faixa || '',
-        remuneracao: '',
-        isInput: false
-      },
-      adicionais: {
-        palestras: json.palestras?.descricao,
-        assuntosPalestras: json.palestras?.descricao || '',
-        experiencias: json.depoimento?.descricao || '',
-        contribuicoes: json.contribuicao?.descricao || '',
-        isInput: false
-      },
-      profileHead: {
-        nome: userData.nome,
-        linkedin: json.linkedin || '',
-        lattes: json.lattes || '',
-        isInput: false
-      }
-    }
-  })
 }
 
 // watch(pais, () => {
