@@ -33,7 +33,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class ContribuicaoRepositoryTest {
+class ContribuicaoRepositoryTest {
 
     @MockBean
     ContribuicaoRepository contribuicaoRepository;
@@ -51,7 +51,7 @@ public class ContribuicaoRepositoryTest {
      */
     @Test
     @Order(1)
-    public void testSave() {
+    void testSave() {
         BDDMockito.given(contribuicaoRepository.save(Mockito.any(ContribuicaoModel.class)))
                 .willReturn(getMockContribuicao());
 
@@ -69,7 +69,7 @@ public class ContribuicaoRepositoryTest {
      */
     @Test
     @Order(2)
-    public void testFindAll() {
+    void testFindAll() {
 
         BDDMockito.given(contribuicaoRepository.findAll())
                 .willReturn(List.of(getMockContribuicao()));
@@ -95,7 +95,7 @@ public class ContribuicaoRepositoryTest {
      * @since 29/04/2023
      */
     @AfterAll
-    void tearDown() {
+    public void tearDown() {
         contribuicaoRepository.deleteAll();
     }
 }

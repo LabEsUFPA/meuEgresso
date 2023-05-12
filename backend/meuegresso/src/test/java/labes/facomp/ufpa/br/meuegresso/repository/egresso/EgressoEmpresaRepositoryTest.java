@@ -38,7 +38,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 @SpringBootTest
 @ActiveProfiles("test")
 
-public class EgressoEmpresaRepositoryTest {
+class EgressoEmpresaRepositoryTest {
 
     @Autowired
     private EgressoEmpresaRepository egressoEmpresaRepository;
@@ -76,7 +76,7 @@ public class EgressoEmpresaRepositoryTest {
     private FaixaSalarialModel faixaSalarialModel;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
 
         generoModel = new GeneroModel();
         generoModel.setId(1);
@@ -111,14 +111,15 @@ public class EgressoEmpresaRepositoryTest {
         egressoModel.setCreatedBy(usuarioModel);
 
         egressoModel = egressoRepository.save(egressoModel);
-        
+
         empresaModel = new EmpresaModel();
         empresaModel.setId(1);
         empresaModel.setNome("El Cabis");
 
         empresaModel = empresaRepository.save(empresaModel);
 
-        egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(egressoModel.getId()).empresaId(empresaModel.getId()).build();
+        egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(egressoModel.getId())
+                .empresaId(empresaModel.getId()).build();
 
         faixaSalarialModel = new FaixaSalarialModel();
         faixaSalarialModel.setId(1);
@@ -137,7 +138,7 @@ public class EgressoEmpresaRepositoryTest {
     }
 
     @Test
-    public void testFindAll() {
+    void testFindAll() {
 
         List<EgressoEmpresaModel> testar = egressoEmpresaRepository.findAll();
 
@@ -145,7 +146,7 @@ public class EgressoEmpresaRepositoryTest {
     }
 
     @Test
-    public void testExistsByIdAndCreatedById() {
+    void testExistsByIdAndCreatedById() {
 
         Boolean response = egressoEmpresaRepository.existsByIdAndCreatedById(
                 egressoEmpresaModelId, egressoEmpresaModel.getCreatedBy().getId());

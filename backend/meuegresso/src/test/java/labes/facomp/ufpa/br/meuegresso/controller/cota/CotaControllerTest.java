@@ -46,7 +46,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class CotaControllerTest {
+class CotaControllerTest {
 
     UsuarioModel usuarioModel;
 

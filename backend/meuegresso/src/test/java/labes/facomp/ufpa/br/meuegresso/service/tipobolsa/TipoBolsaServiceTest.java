@@ -40,7 +40,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.tipobolsa.TipoBolsaRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class TipoBolsaServiceTest {
+class TipoBolsaServiceTest {
     @Autowired
     private TipoBolsaService service;
 
@@ -61,7 +61,7 @@ public class TipoBolsaServiceTest {
      */
     @Test
     @Order(1)
-    public void testSave() {
+    void testSave() {
 
         BDDMockito.given(repository.save(Mockito.any(TipoBolsaModel.class)))
                 .willReturn(getMockTipoBolsaModel());
@@ -74,7 +74,7 @@ public class TipoBolsaServiceTest {
 
     @Test
     @Order(2)
-    public void testFindAll() {
+    void testFindAll() {
         BDDMockito.given(service.findAll())
                 .willReturn(getMockTipoBolsaLista());
 
@@ -84,7 +84,7 @@ public class TipoBolsaServiceTest {
 
     @Test
     @Order(3)
-    public void testFindById() {
+    void testFindById() {
         BDDMockito.given(repository.findById(ID))
                 .willReturn(Optional.of(getMockTipoBolsaModel()));
 
@@ -94,7 +94,7 @@ public class TipoBolsaServiceTest {
 
     @Test
     @Order(4)
-    public void testUpdate() throws InvalidRequestException {
+    void testUpdate() throws InvalidRequestException {
         BDDMockito.given(repository.save(Mockito.any(TipoBolsaModel.class)))
                 .willReturn(getMockTipoBolsaModel());
 
@@ -106,7 +106,7 @@ public class TipoBolsaServiceTest {
 
     @Test
     @Order(5)
-    public void testDeleteById() {
+    void testDeleteById() {
 
         BDDMockito.given(service.deleteById(ID))
                 .willReturn(true);

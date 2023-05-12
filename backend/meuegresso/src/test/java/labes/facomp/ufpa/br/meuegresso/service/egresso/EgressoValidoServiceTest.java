@@ -35,7 +35,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoValidoRepositor
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class EgressoValidoServiceTest {
+class EgressoValidoServiceTest {
 
     private static final Integer ID = 1;
     private static final String NOME = "Pedrao";
@@ -48,7 +48,6 @@ public class EgressoValidoServiceTest {
     @MockBean
     private EgressoValidoRepository repository;
 
-
     /**
      * Metodo para testar o metodo findAll.
      *
@@ -56,7 +55,7 @@ public class EgressoValidoServiceTest {
      * @since 30/04/2023
      */
     @Test
-    public void testFindAll() {
+    void testFindAll() {
         BDDMockito.given(repository.findAll())
                 .willReturn(getMockEgressoLista());
 
@@ -71,7 +70,7 @@ public class EgressoValidoServiceTest {
      * @since 30/04/2023
      */
     @Test
-    public void testFindByEmailIgnoreCase() {
+    void testFindByEmailIgnoreCase() {
         BDDMockito.given(repository.findByEmailIgnoreCase(EMAIL))
                 .willReturn(Optional.ofNullable(getMockEgresso()));
 
@@ -86,7 +85,7 @@ public class EgressoValidoServiceTest {
      * @since 30/04/2023
      */
     @Test
-    public void testfindByMatricula() {
+    void testfindByMatricula() {
         try {
             BDDMockito.given(repository.findByMatricula(MATRICULA))
                     .willReturn(Optional.ofNullable(getMockEgresso()));
@@ -105,7 +104,7 @@ public class EgressoValidoServiceTest {
      * @since 30/04/2023
      */
     @Test
-    public void testfindByNomeIgnoreCase() {
+    void testfindByNomeIgnoreCase() {
 
         BDDMockito.given(egressoValidoService.findByNomeIgnoreCase(NOME))
                 .willReturn(getMockEgressoLista());
@@ -128,7 +127,7 @@ public class EgressoValidoServiceTest {
         egressoTest.setNome(NOME);
         egressoTest.setMatricula(MATRICULA);
         egressoTest.setEmail(EMAIL);
-        
+
         return egressoTest;
     }
 

@@ -33,14 +33,14 @@ import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class EgressoTitulacaoRepositoryTest {
+class EgressoTitulacaoRepositoryTest {
 
     @MockBean
     private EgressoTitulacaoRepository egressoTitulacaoRepository;
 
 
     @BeforeAll
-    public void setUp() {
+    void setUp() {
         BDDMockito.given(egressoTitulacaoRepository.save(Mockito.any(EgressoTitulacaoModel.class)))
                 .willReturn(getMockEgressoTitulacao());
 
@@ -49,7 +49,7 @@ public class EgressoTitulacaoRepositoryTest {
     }
 
     @Test
-    public void testFindAll() {
+    void testFindAll() {
 
         List<EgressoTitulacaoModel> testar = egressoTitulacaoRepository.findAll();
 

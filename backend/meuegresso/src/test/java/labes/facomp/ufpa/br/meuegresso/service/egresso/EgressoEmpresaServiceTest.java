@@ -43,7 +43,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoEmpresaReposito
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class EgressoEmpresaServiceTest {
+class EgressoEmpresaServiceTest {
 
     private static final EgressoEmpresaModelId ID = new EgressoEmpresaModelId();
     private static final EgressoModel EGRESSO = new EgressoModel();
@@ -65,7 +65,7 @@ public class EgressoEmpresaServiceTest {
 
     @Test
     @Order(1)
-    public void testSave() {
+    void testSave() {
 
         BDDMockito.given(repository.save(Mockito.any(EgressoEmpresaModel.class)))
                 .willReturn(getMockEgressoEmpresa());
@@ -87,7 +87,7 @@ public class EgressoEmpresaServiceTest {
      */
     @Test
     @Order(2)
-    public void testFindAll() {
+    void testFindAll() {
         BDDMockito.given(egressoEmpresaService.findAll())
                 .willReturn(getMockEgressoEmpresaLista());
 
@@ -102,7 +102,7 @@ public class EgressoEmpresaServiceTest {
      * @since 28/04/2023
      */
     @Test
-    public void testFindById() {
+    void testFindById() {
         BDDMockito.given(repository.findById(Mockito.any(EgressoEmpresaModelId.class)))
                 .willReturn(Optional.ofNullable(getMockEgressoEmpresa()));
 
@@ -117,7 +117,7 @@ public class EgressoEmpresaServiceTest {
      * @since 28/04/2023
      */
     @Test
-    public void testUpdate() {
+    void testUpdate() {
         try {
             BDDMockito.given(repository.save(Mockito.any(EgressoEmpresaModel.class)))
                     .willReturn(getMockEgressoEmpresa());
@@ -135,7 +135,7 @@ public class EgressoEmpresaServiceTest {
      * @since 28/04/2023
      */
     @Test
-    public void testExistsByIdAndCreatedById() {
+    void testExistsByIdAndCreatedById() {
 
         BDDMockito.given(repository.existsByIdAndCreatedById(Mockito.any(
                 EgressoEmpresaModelId.class), Mockito.anyInt()))
@@ -152,7 +152,7 @@ public class EgressoEmpresaServiceTest {
      * @since 28/04/2023
      */
     @Test
-    public void testdeleteById() {
+    void testdeleteById() {
 
         BDDMockito.given(egressoEmpresaService.deleteById(Mockito.any(
                 EgressoEmpresaModelId.class)))

@@ -37,7 +37,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRep
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class FaixaSalarialServiceTest {
+class FaixaSalarialServiceTest {
 
     private static final Integer ID = 1;
     private static final String FAIXA = "15000-20000";
@@ -56,7 +56,7 @@ public class FaixaSalarialServiceTest {
      * @since 27/04/2023
      */
     @Test
-    public void testSave() {
+    void testSave() {
 
         BDDMockito.given(repository.save(Mockito.any(FaixaSalarialModel.class)))
                 .willReturn(getMockFaixaSalarialModel());
@@ -73,7 +73,7 @@ public class FaixaSalarialServiceTest {
      * @since 29/04/2023
      */
     @Test
-    public void testFindById() {
+    void testFindById() {
 
         BDDMockito.given(repository.findById(ID)).willReturn(Optional.of(getMockFaixaSalarialModel()));
 
@@ -89,7 +89,7 @@ public class FaixaSalarialServiceTest {
      */
     
     @Test
-    public void testUpdate() throws InvalidRequestException {
+    void testUpdate() throws InvalidRequestException {
 
         FaixaSalarialModel testeFaixaSalariaL = getMockFaixaSalarialModel();
         String FAIXA_ATUALIZADO = "R$100 - R$378,01";
@@ -112,7 +112,7 @@ public class FaixaSalarialServiceTest {
      * @since 29/04/2023
      */
     @Test
-    public void testDeleteById() {
+    void testDeleteById() {
 
         BDDMockito.given(faixaSalarialService.deleteById(Mockito.anyInt()))
                 .willReturn(true);
@@ -129,7 +129,7 @@ public class FaixaSalarialServiceTest {
      */
 
     // @Test
-    // public void testExistsByIdAndCreatedById() {
+    // void testExistsByIdAndCreatedById() {
 
     //     BDDMockito.given(faixaSalarialService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
     //             .willReturn(true);

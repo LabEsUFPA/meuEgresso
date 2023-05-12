@@ -41,7 +41,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
 @AutoConfigureMockMvc
-public class EmpresaServiceTest {
+class EmpresaServiceTest {
 
     private static final Integer ID = 1;
     private static final String NOME = "Empresa";
@@ -64,7 +64,7 @@ public class EmpresaServiceTest {
      * @since 27/04/2023
      */
     @Test
-    public void testSave() {
+    void testSave() {
 
         BDDMockito.given(repository.save(Mockito.any(EmpresaModel.class)))
                 .willReturn(getMockEmpresa());
@@ -83,7 +83,7 @@ public class EmpresaServiceTest {
      * @since 27/04/2023
      */
     @Test
-    public void testFindAll() {
+    void testFindAll() {
 
         BDDMockito.given(empresaService.findAll())
                 .willReturn(getMockEmpresaLista());
@@ -100,7 +100,7 @@ public class EmpresaServiceTest {
      * @since 27/04/2023
      */
     @Test
-    public void testFindById() {
+    void testFindById() {
 
         BDDMockito.given(repository.findById(ID)).willReturn(Optional.of(getMockEmpresa()));
 
@@ -116,7 +116,7 @@ public class EmpresaServiceTest {
      * @since 27/04/2023
      */
     @Test
-    public void testUpdate() throws InvalidRequestException {
+    void testUpdate() throws InvalidRequestException {
 
         EmpresaModel empresa = getMockEmpresa();
         String NOME_ATUALIZADO = "NOME ATUALIZADO";
@@ -138,7 +138,7 @@ public class EmpresaServiceTest {
      * @since 27/04/2023
      */
     @Test
-    public void testDeleteById() {
+    void testDeleteById() {
 
         BDDMockito.given(empresaService.deleteById(Mockito.anyInt()))
                 .willReturn(true);
@@ -155,7 +155,7 @@ public class EmpresaServiceTest {
      */
 
     // @Test
-    // public void testExistsByIdAndCreatedById() {
+    // void testExistsByIdAndCreatedById() {
 
     // BDDMockito.given(empresaService.existsByIdAndCreatedById(Mockito.anyInt(),
     // Mockito.anyInt()))

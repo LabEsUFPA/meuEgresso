@@ -31,7 +31,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
  */
 @SpringBootTest
 @ActiveProfiles("test")
-public class EgressoRepositoryTest {
+class EgressoRepositoryTest {
 
     @Autowired
     private EgressoRepository egressoRepository;
@@ -52,7 +52,7 @@ public class EgressoRepositoryTest {
     private GeneroModel generoModel;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         generoModel = new GeneroModel();
         generoModel.setId(1);
         generoModel.setNome("Masculino");
@@ -90,19 +90,19 @@ public class EgressoRepositoryTest {
     }
 
     @Test
-    public void testFindAll() {
+    void testFindAll() {
         List<EgressoModel> testar = egressoRepository.findAll();
         assertNotNull(testar);
     }
 
     @Test
-    public void testfindByUsuarioId() {
+    void testfindByUsuarioId() {
         EgressoModel testar = egressoRepository.findByUsuarioId(egressoModel.getUsuario().getId()).orElseThrow();
         assertNotNull(testar);
     }
 
     @Test
-    public void testExistsByIdAndCreatedById() {
+    void testExistsByIdAndCreatedById() {
 
         Boolean response = egressoRepository.existsByIdAndCreatedById(
                 egressoModel.getId(), egressoModel.getCreatedBy().getId());

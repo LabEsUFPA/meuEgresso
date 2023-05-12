@@ -18,7 +18,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class EmpresaRepositoryTest {
+class EmpresaRepositoryTest {
 
     @Autowired
     @MockBean
@@ -27,7 +27,7 @@ public class EmpresaRepositoryTest {
     private EmpresaModel empresa;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         empresa = new EmpresaModel();
         empresa.setId(1);
         empresa.setNome("El Cabis");
@@ -40,16 +40,16 @@ public class EmpresaRepositoryTest {
 
         repository.save(empresa);
 
-
     }
+
     @Test
-    public void testFindAll() {
+    void testFindAll() {
         List<EmpresaModel> empresas = repository.findAll();
         assertNotNull(empresas);
     }
 
     @Test
-    public void testSave() {
+    void testSave() {
 
         BDDMockito.given(repository.save(Mockito.any(EmpresaModel.class)))
                 .willReturn(EmpresaModel.builder().id(2).nome("El Cabis").build());
@@ -58,7 +58,5 @@ public class EmpresaRepositoryTest {
         assertNotNull(response);
         assertEquals("El Cabis", response.getNome());
     }
-
-
 
 }

@@ -46,7 +46,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class GeneroControllerTest {
+class GeneroControllerTest {
 
 	@Autowired
 	private GrupoRepository grupoRepository;
@@ -105,7 +105,7 @@ public class GeneroControllerTest {
 
 	@Test
 	@Order(1)
-	public void testCadastrarGenero() throws Exception {
+	void testCadastrarGenero() throws Exception {
 		genero = new GeneroDTO(null, "AAAAAA");
 
 		MvcResult resposta = mockMvc.perform(
@@ -122,7 +122,7 @@ public class GeneroControllerTest {
 
 	@Test
 	@Order(2)
-	public void testBuscarGeneros() throws Exception {
+	void testBuscarGeneros() throws Exception {
 
 		MvcResult resposta = mockMvc.perform(
 				MockMvcRequestBuilders.get("/genero")
@@ -140,7 +140,7 @@ public class GeneroControllerTest {
 
 	@Test
 	@Order(3)
-	public void testAtualizarGenero() throws Exception {
+	void testAtualizarGenero() throws Exception {
 		final String NOVO_NOME = "BBBBBBBBBBBBBBBBBB";
 		genero.setNome(NOVO_NOME);
 
@@ -159,7 +159,7 @@ public class GeneroControllerTest {
 
 	@Test
 	@Order(4)
-	public void testDeletarGenero() throws Exception {
+	void testDeletarGenero() throws Exception {
 
 		MvcResult resposta = mockMvc.perform(
 				MockMvcRequestBuilders.delete("/genero")

@@ -62,7 +62,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class EgressoEmpresaControllerTest {
+class EgressoEmpresaControllerTest {
 
     static final Integer EMRPESA_ID = 1;
     static final String NOME = "EmpresaTeste";
@@ -76,8 +76,6 @@ public class EgressoEmpresaControllerTest {
 
     static final Integer FAIXASALARIAL_ID = 1;
     static final String FAIXASALARIAL = "5000 - 15000";
-
-
 
     @Autowired
     private GrupoRepository grupoRepository;
@@ -120,32 +118,34 @@ public class EgressoEmpresaControllerTest {
     void setUp() throws Exception {
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-        /*Gênero */
+        /* Gênero */
         GeneroModel genero = new GeneroModel(1, "genero X");
         GeneroDTO generoDTO = modelMapper.map(genero, GeneroDTO.class);
         genero = generoRepository.save(genero);
 
-
-        /*Egresso */
-        egressoPublicDTO = EgressoPublicDTO.builder().id(EGRESSO_ID).email(EGRESSO_EMAIL).nascimento(EGRESSO_NASCIMENTO).genero(generoDTO).build();
+        /* Egresso */
+        egressoPublicDTO = EgressoPublicDTO.builder().id(EGRESSO_ID).email(EGRESSO_EMAIL).nascimento(EGRESSO_NASCIMENTO)
+                .genero(generoDTO).build();
         egressoModel = modelMapper.map(egressoPublicDTO, EgressoModel.class);
         egressoRepository.save(this.egressoModel);
 
-        /*Empresa */
-        empresaDTO = EmpresaDTO.builder().id(EGRESSO_ID).nome(NOME).setorAtuacao(SETORATUACAO).faixaSalarialId(FAIXASALARIAL_ID).build();
+        /* Empresa */
+        empresaDTO = EmpresaDTO.builder().id(EGRESSO_ID).nome(NOME).setorAtuacao(SETORATUACAO)
+                .faixaSalarialId(FAIXASALARIAL_ID).build();
         empresaModel = modelMapper.map(empresaDTO, EmpresaModel.class);
         empresaRepository.save(empresaModel);
 
-        /*ModelId */
+        /* ModelId */
         egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(EGRESSO_ID).empresaId(EMRPESA_ID).build();
 
-        /*FaixaSalarial */
+        /* FaixaSalarial */
         faixaSalarialDTO = FaixaSalarialDTO.builder().id(FAIXASALARIAL_ID).faixa(FAIXASALARIAL).build();
         FaixaSalarialModel faixaSalarialModel = modelMapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
         faixaSalarialRepository.save(faixaSalarialModel);
 
-        /*EgressoEmpresa */
-        egressoEmpresaDTO = EgressoEmpresaDTO.builder().id(egressoEmpresaModelId).egresso(egressoPublicDTO).empresa(empresaDTO).areaAtuacao(SETORATUACAO).faixaSalarial(faixaSalarialDTO).build();
+        /* EgressoEmpresa */
+        egressoEmpresaDTO = EgressoEmpresaDTO.builder().id(egressoEmpresaModelId).egresso(egressoPublicDTO)
+                .empresa(empresaDTO).areaAtuacao(SETORATUACAO).faixaSalarial(faixaSalarialDTO).build();
 
         GrupoModel grupoModel = new GrupoModel();
         grupoModel.setNomeGrupo("ADMIN");
@@ -162,11 +162,11 @@ public class EgressoEmpresaControllerTest {
         usuarioModel.setGrupos(grupos);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(usuarioModel)))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isCreated())
-                                .andReturn();
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(usuarioModel)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andReturn();
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
         authenticationRequest.setUsername(usuarioModel.getUsername());
@@ -174,24 +174,25 @@ public class EgressoEmpresaControllerTest {
         String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
         MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectJson))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk())
-                                .andReturn();
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectJson))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andReturn();
 
         AuthenticationResponse authenticationResponse = objectMapper.readValue(
-                                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
+                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
         this.token = authenticationResponse.getToken();
 
         MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.get("/usuario")
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk()).andReturn();
+                MockMvcRequestBuilders.get("/usuario")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk()).andReturn();
 
-        UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(), UsuarioAuthDTO.class);
+        UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                UsuarioAuthDTO.class);
 
         usuarioModel.setId(usuarioAuthDTO.getId());
 
@@ -203,12 +204,12 @@ public class EgressoEmpresaControllerTest {
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
         MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/egressoEmpresa")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("Authorization", "Bearer " + this.token)
-                    .content(objectMapper.writeValueAsString(egressoEmpresaDTO)))
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(status().isCreated())
-                    .andReturn();
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + this.token)
+                .content(objectMapper.writeValueAsString(egressoEmpresaDTO)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andReturn();
 
         String retornoString = resposta.getResponse().getContentAsString();
         assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString);
@@ -220,13 +221,17 @@ public class EgressoEmpresaControllerTest {
 
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-        MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/egressoEmpresa?egressoId=" + egressoPublicDTO.getId() + "&empresaId=" + empresaDTO.getId())
+        MvcResult resposta = mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/egressoEmpresa?egressoId=" + egressoPublicDTO.getId() + "&empresaId="
+                                + empresaDTO.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + this.token))
-                        .andDo(MockMvcResultHandlers.print())
-                        .andExpect(status().isOk()).andReturn();
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk()).andReturn();
 
-        EgressoEmpresaDTO egressoEmpresaDTOresponse = objectMapper.readValue(resposta.getResponse().getContentAsString(), EgressoEmpresaDTO.class);
+        EgressoEmpresaDTO egressoEmpresaDTOresponse = objectMapper
+                .readValue(resposta.getResponse().getContentAsString(), EgressoEmpresaDTO.class);
         assertEquals(NOME, egressoEmpresaDTOresponse.getEmpresa().getNome());
 
     }
@@ -237,12 +242,12 @@ public class EgressoEmpresaControllerTest {
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
         MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.put("/egressoEmpresa")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("Authorization", "Bearer " + this.token)
-                    .content(objectMapper.writeValueAsString(egressoEmpresaDTO)))
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(status().isCreated())
-                    .andReturn();
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + this.token)
+                .content(objectMapper.writeValueAsString(egressoEmpresaDTO)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andReturn();
 
         String retornoString = resposta.getResponse().getContentAsString();
         assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
@@ -251,19 +256,19 @@ public class EgressoEmpresaControllerTest {
 
     @Test
     @Order(4)
-    void testConsultarEgressoEmpresas() throws Exception{
+    void testConsultarEgressoEmpresas() throws Exception {
 
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
         MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/egressoEmpresa")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk()).andReturn();
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk()).andReturn();
 
         List<EgressoEmpresaDTO> egressoEmpresasDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-                                new TypeReference<List<EgressoEmpresaDTO>>() {
-                                });
+                new TypeReference<List<EgressoEmpresaDTO>>() {
+                });
 
         assertNotNull(egressoEmpresasDTO);
         assertEquals(1, egressoEmpresasDTO.size());
@@ -274,12 +279,14 @@ public class EgressoEmpresaControllerTest {
     @Order(5)
     void testDeleteById() throws Exception {
         MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.delete("/egressoEmpresa?egressoId=" + egressoPublicDTO.getId() + "&empresaId=" + empresaDTO.getId())
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk())
-                                .andReturn();
+                MockMvcRequestBuilders
+                        .delete("/egressoEmpresa?egressoId=" + egressoPublicDTO.getId() + "&empresaId="
+                                + empresaDTO.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andReturn();
         String resultado = resposta.getResponse().getContentAsString();
         assertEquals(ResponseType.SUCESS_DELETE.getMessage(), resultado);
     }

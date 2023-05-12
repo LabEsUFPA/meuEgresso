@@ -130,7 +130,7 @@ class CotaServiceTest {
      */
     @Test
     @Order(4)
-    public void testDeleteById() {
+    void testDeleteById() {
 
         BDDMockito.given(cotaService.deleteById(Mockito.anyInt()))
                 .willReturn(true);
@@ -147,7 +147,7 @@ class CotaServiceTest {
      */
     @Test
     @Order(5)
-    public void testExistsByIdAndCreatedById() {
+    void testExistsByIdAndCreatedById() {
 
         BDDMockito.given(cotaService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);

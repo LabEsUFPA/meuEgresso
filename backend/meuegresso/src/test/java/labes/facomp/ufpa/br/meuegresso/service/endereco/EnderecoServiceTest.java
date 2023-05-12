@@ -39,7 +39,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.endereco.EnderecoRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class EnderecoServiceTest {
+class EnderecoServiceTest {
 
     private static final Integer ID = 1;
     private static final String CIDADE = "Ananindeua";
@@ -66,7 +66,7 @@ public class EnderecoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    public void testSave() {
+    void testSave() {
 
         BDDMockito.given(repository.save(Mockito.any(EnderecoModel.class)))
                 .willReturn(getMockEndereco());
@@ -88,7 +88,7 @@ public class EnderecoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    public void testFindAll() {
+    void testFindAll() {
         BDDMockito.given(enderecoService.findAll())
                 .willReturn(getMockEnderecoLista());
         // .willReturn(List.of(getMockEndereco()));
@@ -104,7 +104,7 @@ public class EnderecoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    public void testFindById() {
+    void testFindById() {
         BDDMockito.given(repository.findById(ID)).willReturn(Optional.of(getMockEndereco()));
 
         EnderecoModel response = enderecoService.findById(ID);
@@ -119,7 +119,7 @@ public class EnderecoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    public void testUpdate() throws InvalidRequestException {
+    void testUpdate() throws InvalidRequestException {
 
         EnderecoModel testeEndereco = getMockEndereco();
         String CIDADE_ATUALIZADO = "GOTHAM_CITY";
@@ -141,7 +141,7 @@ public class EnderecoServiceTest {
      * @since 27/04/2023
      */
     @Test
-    public void testDeleteById() {
+    void testDeleteById() {
 
         BDDMockito.given(enderecoService.deleteById(Mockito.anyInt()))
                 .willReturn(true);
@@ -158,7 +158,7 @@ public class EnderecoServiceTest {
      */
 
     // @Test
-    // public void testExistsByIdAndCreatedById() {
+    // void testExistsByIdAndCreatedById() {
 
     // BDDMockito.given(enderecoService.existsByIdAndCreatedById(Mockito.anyInt(),
     // Mockito.anyInt()))

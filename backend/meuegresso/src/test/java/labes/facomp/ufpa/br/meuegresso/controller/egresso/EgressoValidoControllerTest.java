@@ -37,7 +37,7 @@ import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoValidoService;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class EgressoValidoControllerTest {
+class EgressoValidoControllerTest {
 
     final String NOME = "nome_test1";
     final String EMAIL = "test@gmail.com";

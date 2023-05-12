@@ -46,7 +46,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class AnuncioControllerTest {
+class AnuncioControllerTest {
 
 	@Autowired
 	private GrupoRepository grupoRepository;
@@ -105,7 +105,7 @@ public class AnuncioControllerTest {
 
 	@Test
 	@Order(1)
-	public void testCadastrarAnuncio() throws Exception {
+	void testCadastrarAnuncio() throws Exception {
 		anuncio = new AnuncioDTO(1, "Compre 1 leve 2");
 
 		MvcResult resposta = mockMvc.perform(
@@ -122,7 +122,7 @@ public class AnuncioControllerTest {
 
 	@Test
 	@Order(2)
-	public void testConsultarAnuncios() throws Exception {
+	void testConsultarAnuncios() throws Exception {
 
 		MvcResult resposta = mockMvc.perform(
 				MockMvcRequestBuilders.get("/anuncio")
@@ -140,7 +140,7 @@ public class AnuncioControllerTest {
 
 	@Test
 	@Order(3)
-	public void testAtualizaranuncio() throws Exception {
+	void testAtualizaranuncio() throws Exception {
 		final String NOVA_DESCRICAO = "Compre 2 leve 1";
 		anuncio.setDescricao(NOVA_DESCRICAO);
 
@@ -159,7 +159,7 @@ public class AnuncioControllerTest {
 
 	@Test
 	@Order(4)
-	public void testDeletarAnuncio() throws Exception {
+	void testDeletarAnuncio() throws Exception {
 
 		MvcResult resposta = mockMvc.perform(
 				MockMvcRequestBuilders.delete("/anuncio")
