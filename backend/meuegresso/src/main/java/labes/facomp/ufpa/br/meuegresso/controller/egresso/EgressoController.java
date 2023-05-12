@@ -16,13 +16,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -275,10 +277,15 @@ public class EgressoController {
      */
     @PostMapping(value = "/foto", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @ResponseStatus(code = HttpStatus.CREATED)
-    public String saveFotoEgresso(@ModelAttribute @Valid EgressoDTO egressoDTO) throws IOException {
+    public String saveFotoEgresso(JwtAuthenticationToken token, @RequestPart MultipartFile arquivo) throws IOException {
         String fileCode = RandomStringUtils.randomAlphanumeric(16) + ".png";
-        egressoService.saveFoto(fileCode, egressoDTO.getFoto());
+        EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
+        if (egressoModel.getFotoNome() != null) {
+            egressoService.deleteFile(egressoModel.getFotoNome());
+        }
+        egressoModel.setFotoNome(fileCode);
+        egressoService.updateEgresso(egressoModel);
+        egressoService.saveFoto(fileCode, arquivo);
         return ResponseType.SUCESS_IMAGE_SAVE.getMessage();
     }
-
 }

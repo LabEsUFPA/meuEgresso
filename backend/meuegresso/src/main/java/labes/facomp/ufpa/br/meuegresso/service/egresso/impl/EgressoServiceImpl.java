@@ -93,14 +93,20 @@ public class EgressoServiceImpl implements EgressoService {
 
     @Override
     public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException {
-        
-        Path file = Paths.get(String.format("%s%s", UPLOAD_DIRECTORY, fotoNomeString));
+
+        Path file = Paths.get(String.format("%s%s", UPLOAD_DIRECTORY + "/", fotoNomeString));
         if (file != null) {
             return new UrlResource(file.toUri());
         } else {
             throw new FileNotFoundException(fotoNomeString);
         }
-         
+
+    }
+    
+    @Override
+    public void deleteFile(String fotoNomeString) throws IOException {
+        Path file = Paths.get(String.format("%s%s", UPLOAD_DIRECTORY + "/", fotoNomeString));
+        Files.deleteIfExists(file);
     }
 
     @Override

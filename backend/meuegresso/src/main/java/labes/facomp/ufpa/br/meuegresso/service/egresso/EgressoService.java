@@ -83,7 +83,17 @@ public interface EgressoService {
 	 * @author Camilo Santos 
 	 * @since 07/05/2023
 	 */
-	public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException; // TODO documentação incompleta
+	public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException;
+
+	/**
+	 * Método responsável por deletar foto pelo nome
+	 * 
+	 * @param fotoNomeString
+	 * @throws IOException
+	 * @author Camilo Santos
+	 * @since 12/05/2023 
+	 */
+	public void deleteFile(String fotoNomeString) throws IOException;
 
 	/**
 	 * Método responsável pelo salvamento da foto em um arquivo local
@@ -94,6 +104,6 @@ public interface EgressoService {
 	 * @author Camilo Santos
 	 * @since 07/05/2023
 	 */
-	public void saveFoto(String nomeAnexo, MultipartFile arquivo) throws IOException; // TODO documentação incompleta
+	public void saveFoto(String nomeAnexo, MultipartFile arquivo) throws IOException;
 
 }
