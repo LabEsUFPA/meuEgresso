@@ -35,10 +35,10 @@ public class EmpresaModel extends Auditable {
     @Column(name = "nome_empresa", unique = true, nullable = false, length = 130)
     private String nome;
 
-    @ManyToMany(mappedBy = "empresas", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "empresas", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST })
     private Set<SetorAtuacaoModel> setorAtuacoes;
 
-    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     @JoinColumn(name = "endereco_empresa", unique = false, nullable = true)
     private EnderecoModel endereco;
 }

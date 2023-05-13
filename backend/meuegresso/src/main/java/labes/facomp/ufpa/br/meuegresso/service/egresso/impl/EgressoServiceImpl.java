@@ -45,7 +45,7 @@ public class EgressoServiceImpl implements EgressoService {
     @Transactional
     public EgressoModel updateEgresso(EgressoModel egresso) {
         if (egresso.getId() != null) {
-            egressoRepository.save(egresso);
+            return egressoRepository.save(egresso);
         }
         return null;
     }

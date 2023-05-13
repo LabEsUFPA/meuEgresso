@@ -231,7 +231,26 @@ public class EgressoController {
             }
             egressoModel.getUsuario()
                     .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
-            egressoService.updateEgresso(egressoModel);
+            Set<SetorAtuacaoModel> setorAtuacaoModels = egressoModel.getEmprego().getEmpresa().getSetorAtuacoes();
+            egressoModel = egressoService.updateEgresso(egressoModel);
+            for (SetorAtuacaoModel sa : setorAtuacaoModels) {
+                SetorAtuacaoModel setorAtuacaoModelNoBanco = setorAtuacaoService.findByNome(sa.getNome());
+                if (setorAtuacaoModelNoBanco == null) {
+                    setorAtuacaoModelNoBanco = SetorAtuacaoModel.builder().nome(sa.getNome())
+                            .empresas(new HashSet<>(Set.of(egressoModel.getEmprego().getEmpresa()))).build();
+                } else if (setorAtuacaoModelNoBanco != sa) {
+                    if (sa.getEmpresas() == null) {
+                        sa.setEmpresas(new HashSet<>());
+                    }
+                    sa.getEmpresas().add(egressoModel.getEmprego().getEmpresa());
+                } else {
+                    if (setorAtuacaoModelNoBanco.getEmpresas() == null) {
+                        setorAtuacaoModelNoBanco.setEmpresas(new HashSet<>());
+                    }
+                    setorAtuacaoModelNoBanco.getEmpresas().add(egressoModel.getEmprego().getEmpresa());
+                }
+                setorAtuacaoService.save(setorAtuacaoModelNoBanco);
+            }
             return ResponseType.SUCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
