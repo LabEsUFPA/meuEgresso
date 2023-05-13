@@ -36,7 +36,7 @@ public class EgressoServiceImpl implements EgressoService {
     private final EgressoRepository egressoRepository;
 
     @Value("${fotosDir}")
-    private String UPLOAD_DIRECTORY;
+    private String uploadDirectory;
 
     @Override
     public EgressoModel adicionarEgresso(EgressoModel egressoModel) {
@@ -94,7 +94,7 @@ public class EgressoServiceImpl implements EgressoService {
     @Override
     public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException {
 
-        Path file = Paths.get(String.format("%s%s", UPLOAD_DIRECTORY + "/", fotoNomeString));
+        Path file = Paths.get(String.format("%s%s", uploadDirectory + "/", fotoNomeString));
         if (file != null) {
             return new UrlResource(file.toUri());
         } else {
@@ -102,16 +102,16 @@ public class EgressoServiceImpl implements EgressoService {
         }
 
     }
-    
+
     @Override
     public void deleteFile(String fotoNomeString) throws IOException {
-        Path file = Paths.get(String.format("%s%s", UPLOAD_DIRECTORY + "/", fotoNomeString));
+        Path file = Paths.get(String.format("%s%s", uploadDirectory + "/", fotoNomeString));
         Files.deleteIfExists(file);
     }
 
     @Override
     public void saveFoto(String nomeFoto, MultipartFile arquivo) throws IOException {
-        Path uploadPath = Paths.get(UPLOAD_DIRECTORY + "/");
+        Path uploadPath = Paths.get(uploadDirectory + "/");
 
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);

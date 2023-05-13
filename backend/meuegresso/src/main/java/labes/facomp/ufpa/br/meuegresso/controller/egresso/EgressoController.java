@@ -12,7 +12,6 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -134,12 +133,11 @@ public class EgressoController {
                 setorAtuacao = setorAtuacaoService
                         .save(SetorAtuacaoModel.builder().nome(empresaDTO.getSetorAtuacao()).build());
             }
-            // areaAtuacaoModel =
-            // areaAtuacaoService.findByNome(empresaDTO.getAreaAtuacao());
-            // if (areaAtuacaoModel == null) {
-            // areaAtuacaoModel = areaAtuacaoService
-            // .save(AreaAtuacaoModel.builder().nome(empresaDTO.getAreaAtuacao()).build());
-            // } //TODO AQUI não recebe do front
+            areaAtuacaoModel = areaAtuacaoService.findByNome(empresaDTO.getAreaAtuacao());
+            if (areaAtuacaoModel == null) {
+                areaAtuacaoModel = areaAtuacaoService
+                        .save(AreaAtuacaoModel.builder().nome(empresaDTO.getAreaAtuacao()).build());
+            }
             EnderecoModel enderecoEmpresa = enderecoService.findByCidadeAndEstadoAndPais(
                     empresaDTO.getEndereco().getCidade(),
                     empresaDTO.getEndereco().getEstado(), empresaDTO.getEndereco().getPais());
@@ -158,7 +156,7 @@ public class EgressoController {
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
-                    // .areaAtuacao(areaAtuacaoModel) // TODO habilitar aqui
+                    .areaAtuacao(areaAtuacaoModel)
                     .faixaSalarial(FaixaSalarialModel.builder().id(empresaDTO.getFaixaSalarialId()).build()).build());
         }
 
