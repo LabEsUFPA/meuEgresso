@@ -40,6 +40,9 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @SpringBootTest
 @DirtiesContext
 @ActiveProfiles("test")
+// @AutoConfigureMockMvc
+// @TestInstance(Lifecycle.PER_CLASS)
+// @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
 class UsuarioRepositoryTest {
 
