@@ -95,7 +95,7 @@
         </CustomButton>
       </div>
 
-      <CustomDialog v-model="teste">
+      <CustomDialog v-model="submitSuccess">
         <div
           class="flex flex-col bg-whit mx-6 rounded-2xl"
         >
@@ -137,8 +137,6 @@ const errorMessages = ref({
 const errorText = ref('')
 const submitSuccess = ref(false)
 const username = ref('')
-
-const teste = ref(true)
 
 const setIdAccessLevel = (accessLevel: string) => {
   if (accessLevel === 'Administrador') {

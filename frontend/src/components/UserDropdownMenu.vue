@@ -1,21 +1,20 @@
 <template>
-  <div class="relative hidden w-fit gap-x-2 md:flex items-center justify-end">
+  <button 
+    class="relative hidden w-fit gap-x-2 md:flex rounded items-center justify-end"
+    @click="toggleUserMenu()"
+    @blur="delayedToggleUserMenu()"
+  >
 
     <h1 class="text-sm font-semibold">{{ userLoggedName }}</h1>
     
     <div class="flex flex-col justify-end">
 
-      <button 
-        class="hover:bg-sky-300/20 rounded" 
-        @click="toggleUserMenu()"
-      >
-        <SvgIcon 
-          type="mdi"
-          class="inline"
-          size="24" 
-          :path="userMenuIsOpen ? mdiMenuUp : mdiMenuDown" 
-        />
-      </button>
+      <SvgIcon 
+        type="mdi"
+        class="inline"
+        size="24" 
+        :path="userMenuIsOpen ? mdiMenuUp : mdiMenuDown" 
+      />
 
       <div 
         :class="userMenuIsOpen ? 'inline-block' : 'hidden'"
@@ -24,8 +23,9 @@
 
         <RouterLink :to="userLoggedGroupID === 3 ? '/conta-egresso' : '/conta-admin'">
           <div 
-            class="w-32 p-2 pr-8 hover:bg-sky-100 text-blue-900" 
+            class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900" 
             @click="toggleUserMenu()"
+            
           >
             Editar conta
           </div>
@@ -33,7 +33,7 @@
 
         <RouterLink to="/entrar">
           <div 
-            class="w-32 p-2 hover:bg-red-100 border-t text-red-500" 
+            class="w-32 p-2 hover:bg-red-100 border-t text-start text-red-500" 
             @click="userLogout()"
           >
             Sair
@@ -44,7 +44,7 @@
 
     </div>
 
-  </div>
+  </button>
 </template>
 
 <script lang="ts" setup>
@@ -72,6 +72,8 @@ const userMenuIsOpen = ref(false)
 const toggleUserMenu = () => {
   userMenuIsOpen.value = !userMenuIsOpen.value
 }
+
+const delayedToggleUserMenu = () => setTimeout(() => toggleUserMenu(), 150)
 
 const userLogout = () => {
   store.userLogout()
