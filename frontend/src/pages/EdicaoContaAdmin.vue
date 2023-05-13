@@ -8,7 +8,7 @@
     <div class="flex w-full justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
       <div class="flex w-[960px] justify-center border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl py-8 mt-10 mx-6 shadow-md">
         <h1 class="text-blue-900 text-3xl font-bold">
-          Editar conta admin
+          Editar conta
         </h1>
       </div>
       
@@ -118,27 +118,49 @@
 
 <script setup lang="ts">
 
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { Form } from 'vee-validate'
-import { object, string, ref as refYup, number } from 'yup'
-import { mdiAccount, mdiEmail, mdiLock, mdiCheckCircle } from '@mdi/js'
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import { Form } from 'vee-validate'
+import { models } from 'src/@types'
+import { object, string, ref as refYup, number } from 'yup'
+import { mdiAccount, mdiEmail, mdiLock, mdiCheckCircle } from '@mdi/js'
 import { useEditaContaUsuarioStore } from 'src/store/EditaContaUsuarioStore.js'
+interface ProfileRegisterModel extends models.ProfileRegisterModel { }
+
+
 const form = ref<typeof Form | null>(null)
-const nomeCompleto = ref('')
-const email = ref('')
 const username = ref('')
+const email = ref('')
+const nomeCompleto = ref('')
 
 
 
+let dataUserUpdate = {
+  id: 0,
+  username: "",
+  email: "",
+  nome: "",
+  password: "",
+  idGrupo: 0,
+  nomeGrupo: "",
+}
+
+
+const error = ref(false)
+const errorMessages = ref({
+  errorRequest: 'Requisição não aceita',
+  userNotFound: 'Usuario não cadastrado pela faculdade'
+})
+const errorText = ref('')
+const submitSuccess = ref(false)
 const schema = object().shape({
   name: string().required(),
-  username: string().required(),
   email: string().email().required(),
+  username: string().required(),
   confirmationEmail: string().email().required().oneOf([refYup('email')]),
   password: string().required(),
   confirmationPassword: string().required().oneOf([refYup('password')]),
@@ -146,7 +168,7 @@ const schema = object().shape({
 
 //Chamando getUsuario
 const $store = useEditaContaUsuarioStore()
-$store.fetchUsuario().then(usuario =>{
+$store.fetchUsuario().then(usuario => {
   console.log("THEN:", usuario)
   nomeCompleto.value = usuario?.nome
   username.value = usuario?.username
@@ -155,31 +177,43 @@ $store.fetchUsuario().then(usuario =>{
 
 
 
+//Update Usuario
+const handleSubmit = async (profileData: ProfileRegisterModel) => {
+  const usuario = await $store.fetchUsuario()
+  dataUserUpdate = {
+    id: usuario?.id,
+    username: usuario?.username,
+    email: profileData?.email,
+    nome: profileData?.name,
+    password: profileData?.password,
+    idGrupo: usuario?.grupos[0].id,
+    nomeGrupo: usuario?.grupos[0].nomeGrupo
+  }
+  console.log("Dados novos:", dataUserUpdate);
 
-/*
-async function handleSubmitForm(values: any){
-  console.log('handleSubmitForm')
-  console.log(JSON.stringify(values))
+
+  const responseValidation = await useEditaContaUsuarioStore().updateContaUsuario(
+    dataUserUpdate.id,
+    dataUserUpdate.username,
+    dataUserUpdate.email,
+    dataUserUpdate.nome,
+    dataUserUpdate.password,
+    dataUserUpdate.idGrupo,
+    dataUserUpdate.nomeGrupo,
+  )
+
+  console.log("Status:", responseValidation.status)
+
+  if (responseValidation.status === 201) {
+    error.value = false
+    console.log("Usuário atualizado: " + responseValidation.status)
+    submitSuccess.value = true
+  }
 
 }
-*/
-
-
-const handleSubmit = ()=>{
-
+const onInvalid = (e: any) => {
+  console.log(e)
 }
-
-const onInvalid = ()=>{
-
-}
-
-
-const error = ref(false)
-const errorMessages = ref({
-  errorRequest: 'Requisição não aceita.'
-})
-const errorText = ref('')
-const submitSuccess = ref(false)
 
 
 onMounted(() => {
@@ -188,15 +222,29 @@ onMounted(() => {
     console.log("watch front nomeCompleto:", nomeCompleto.value)
     form.value?.setFieldValue('name', nomeCompleto.value)
   })
-  watch(email, () => {
-    console.log("watch front email:", email.value)
-    form.value?.setFieldValue('email', email.value)
-  })
   watch(username, () => {
     console.log("watch front username:", username.value)
     form.value?.setFieldValue('username', username.value)
   })
-
+  watch(email, () => {
+    console.log("watch front email:", email.value)
+    form.value?.setFieldValue('email', email.value)
+  })
 })
 
 </script>
+
+<style>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0;
+  /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  /* Firefox */
+}
+</style>

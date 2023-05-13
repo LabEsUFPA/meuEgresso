@@ -40,30 +40,36 @@ export const useEditaContaUsuarioStore = defineStore('EditaContaUsuario', {
     
 
     async updateContaUsuario (
-      id: Number,
+      id: number,
       username: string,
       email: string,
       nome: string,
-      senha: string,
-      grupos?: [{
-        id: number
-        nomeGrupo: string
-      }]
+      password: string,
+      idGrupo: number,
+      nomeGrupo: string,
       ) {
-      const dataUsuario: ContaUsuario = {
+      const dataUsuario = {
         id,
         username,
         email,
-        senha,
         nome,
-        grupos
+        password,
+        grupos:[{
+          id:idGrupo,
+          nome:nomeGrupo
+        }]
       }
+      console.log("API UPDATE USUARIO DADOS:",dataUsuario);
 
       const response = await Api.request({
         method: 'put',
         route: '/usuario',
         body: dataUsuario
+
       })
+
+      console.log("API UPDATE USUARIO RESPOSTA:", response?.data)
+     
 
       return {
         status: (response?.status) !== undefined ? response.status : 500,
