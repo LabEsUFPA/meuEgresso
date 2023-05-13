@@ -111,7 +111,7 @@ public class EgressoServiceImpl implements EgressoService {
 
     @Override
     public void saveFoto(String nomeFoto, MultipartFile arquivo) throws IOException {
-        Path uploadPath = Paths.get(uploadDirectory + "/");
+        Path uploadPath = Paths.get(uploadDirectory);
 
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
