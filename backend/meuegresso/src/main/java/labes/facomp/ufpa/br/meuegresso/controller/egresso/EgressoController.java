@@ -278,8 +278,8 @@ public class EgressoController {
     @PostMapping(value = "/foto", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @ResponseStatus(code = HttpStatus.CREATED)
     public String saveFotoEgresso(JwtAuthenticationToken token, @RequestPart MultipartFile arquivo) throws IOException {
-        String fileCode = RandomStringUtils.randomAlphanumeric(16) + ".png";
         EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
+        String fileCode = egressoModel.getId().toString() + ".png";
         if (egressoModel.getFotoNome() != null) {
             egressoService.deleteFile(egressoModel.getFotoNome());
         }
