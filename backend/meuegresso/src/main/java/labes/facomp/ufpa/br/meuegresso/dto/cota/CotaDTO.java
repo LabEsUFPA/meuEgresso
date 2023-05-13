@@ -20,6 +20,6 @@ public class CotaDTO {
 
     private Integer id;
 
-    @NotBlank(message = "Informe o nome da cota.")
+    //@NotBlank(message = "Informe o nome da cota.") // TODO pedir para acrescentar no front
     private String nome;
 }
