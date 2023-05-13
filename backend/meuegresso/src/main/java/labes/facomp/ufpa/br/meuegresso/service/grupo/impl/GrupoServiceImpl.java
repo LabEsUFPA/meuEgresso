@@ -63,7 +63,7 @@ public class GrupoServiceImpl implements GrupoService {
 	 * @return
 	 */
 	public GrupoModel findByNomeGrupo(String nomeGrupo) {
-		return grupoRepository.findByNomeGrupoIgnoreCase(nomeGrupo).orElseThrow();
+		return grupoRepository.findByNomeGrupo(nomeGrupo).orElseThrow();
 	}
 
 }

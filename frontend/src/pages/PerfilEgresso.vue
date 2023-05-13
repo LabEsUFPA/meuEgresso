@@ -12,12 +12,20 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
         >
+          <ButtonActionIcon
+            icon-path="/src/assets/trashCan.svg"
+            icon-size="20"
+            custom-style="px-2 py-2"
+            color="whiteDanger"
+            @click="removeImage()"
+          />
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
             <img
               class="ml-[200px] mt-[37px] w-[120px] h-[120px] rounded-full"
               src="/src/assets/profile-pic.png"
               alt="Avatar"
             >
+
             <h1 class="mt-[5px] ml-[100px] ">
               <ButtonEdit
                 label="Editar"
@@ -839,6 +847,7 @@ import { Form } from 'vee-validate'
 import { object, string, date, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
 import { useLoginStore } from 'src/store/LoginStore'
+import ButtonActionIcon from 'src/components/ButtonActionIcon.vue'
 
 import {
   mdiAccount,
@@ -1486,6 +1495,10 @@ async function fetchUpdateEgresso () {
   }
 
   return egressoStore.fetchEgresso()
+}
+
+function removeImage () {
+  return ''
 }
 
 function fetchEgresso () {
