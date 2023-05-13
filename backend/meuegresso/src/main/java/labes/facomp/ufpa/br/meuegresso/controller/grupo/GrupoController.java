@@ -1,6 +1,9 @@
 package labes.facomp.ufpa.br.meuegresso.controller.grupo;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +40,12 @@ public class GrupoController {
 	private final GrupoService grupoService;
 
 	private final ModelMapper mapper;
+
+	@GetMapping
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	public List<GrupoDTO> consultarGrupos() {
+		return mapper.map(grupoService.findAll(), new TypeToken<List<GrupoDTO>>() {}.getType());
+	}
 
 	/**
 	 * Endpoint responsavel por buscar um grupo de acordo com a ID.

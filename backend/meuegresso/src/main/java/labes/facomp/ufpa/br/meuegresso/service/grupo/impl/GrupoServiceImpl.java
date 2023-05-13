@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.grupo.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
@@ -20,6 +22,11 @@ import lombok.RequiredArgsConstructor;
 public class GrupoServiceImpl implements GrupoService {
 
 	private final GrupoRepository grupoRepository;
+
+	@Override
+	public List<GrupoModel> findAll() {
+		return grupoRepository.findAll();
+	}
 
 	/**
 	 * Metodo responsavel por persistir determinado grupo no banco de dados.
@@ -56,7 +63,7 @@ public class GrupoServiceImpl implements GrupoService {
 	 * @return
 	 */
 	public GrupoModel findByNomeGrupo(String nomeGrupo) {
-		return grupoRepository.findByNomeGrupo(nomeGrupo).orElseThrow();
+		return grupoRepository.findByNomeGrupoIgnoreCase(nomeGrupo).orElseThrow();
 	}
 
 }
