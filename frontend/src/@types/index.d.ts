@@ -122,15 +122,22 @@ export namespace models {
   }
 
   export interface EgressoMapa {
-    id: number
-    nome: string
-    localizacao: {
-      cidade: string
-      estado: string
-      pais: string
-      latitude: number
-      longitude: number
+    id: {
+      egressoId: number
+      empresaId: number
     }
-    empresa?: string
+    nomeEgresso: string
+    empresa: {
+      id: number
+      nome: string
+      endereco: {
+        id: number
+        cidade: string
+        estado: string
+        pais: string
+        latitude: number
+        longitude: number
+      }
+    }
   }
 }

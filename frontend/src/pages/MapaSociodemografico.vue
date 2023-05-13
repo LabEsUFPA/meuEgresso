@@ -46,9 +46,9 @@
             class="inline"
             size="15"
           />
-          {{ selectedMarker[0].localizacao.cidade }},
-          {{ State.getStateByCode(selectedMarker[0].localizacao.estado).name /* deprecado, atualizar para getStateByCodeAndCountry quando tiver back */ }},
-          {{ Country.getCountryByCode(selectedMarker[0].localizacao.pais).name }}
+          {{ selectedMarker[0].empresa.endereco.cidade }},
+          {{ State.getStateByCode(selectedMarker[0].empresa.endereco.estado)?.name /* deprecado, atualizar para getStateByCodeAndCountry quando tiver back */ }},
+          {{ Country.getCountryByCode(selectedMarker[0].empresa.endereco.pais)?.name }}
         </div>
 
         <div
@@ -57,16 +57,16 @@
           :key="index"
         >
           <div
-            :title="egresso.nome"
+            :title="egresso.nomeEgresso"
             class="font-semibold whitespace-nowrap overflow-hidden text-ellipsis"
           >
-            {{ egresso.nome }}
+            {{ egresso.nomeEgresso }}
           </div>
           <div
-            :title="egresso.empresa"
+            :title="egresso.empresa.nome"
             class="whitespace-nowrap overflow-hidden text-ellipsis"
           >
-            {{ egresso.empresa }}
+            {{ egresso.empresa.nome }}
           </div>
           <div class="mt-3 flex justify-end">
             <CustomButton
@@ -92,7 +92,6 @@
 <script setup lang="ts">
 import 'leaflet/dist/leaflet.css'
 import { LMap, LTileLayer } from '@vue-leaflet/vue-leaflet'
-import { getRandomEgressoList } from 'src/mock/EgressosMapa'
 import { computed, ref } from 'vue'
 import { type models } from 'src/@types'
 import SvgIcon from '@jamescoyle/vue-icon'
@@ -101,6 +100,8 @@ import { Country, State } from 'country-state-city'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomMapMarker from 'src/components/CustomMapMarker.vue'
 import { LatLng } from 'leaflet'
+import { useHomeStore } from 'src/store/HomeStore'
+import { faker } from '@faker-js/faker'
 interface EgressoMapa extends models.EgressoMapa {}
 
 const zoom = 2
@@ -108,49 +109,19 @@ const selectedMarker = ref<EgressoMapa[]>([])
 function selectMarker ($event: LatLng) {
   const clickedMarkerKey = `${$event.lat}:${$event.lng}`
   selectedMarker.value = egressos.value.get(clickedMarkerKey) || []
-  console.log(selectedMarker.value)
 }
 
+const store = useHomeStore()
+store.getEgress()
+
 const egressos = computed(() => {
-  const data = [...getRandomEgressoList(12), {
-    nome: 'Rafael Wintheiser IV',
-    id: 29080,
-    localizacao: {
-      cidade: 'Apex',
-      estado: 'KS',
-      pais: 'FJ',
-      latitude: 60,
-      longitude: 154
-    },
-    empresa: 'Marvin, Bartell and Stehr'
-  },
-  {
-    nome: 'Rafael Wintheiser V',
-    id: 29081,
-    localizacao: {
-      cidade: 'Apex',
-      estado: 'KS',
-      pais: 'FJ',
-      latitude: 60,
-      longitude: 154
-    },
-    empresa: 'Marvin, Bartell and Stehr'
-  }, {
-    nome: 'Rafael Wintheiser VI',
-    id: 29082,
-    localizacao: {
-      cidade: 'Apex',
-      estado: 'KS',
-      pais: 'FJ',
-      latitude: 60,
-      longitude: 154
-    },
-    empresa: 'Marvin, Bartell and Stehr'
-  }]
+  const data = store.egressList
   const filtered = new Map<string, EgressoMapa[]>()
 
   data.forEach(egresso => {
-    const mapKey = `${egresso.localizacao.latitude}:${egresso.localizacao.longitude}`
+    egresso.empresa.endereco.latitude = parseInt(faker.address.latitude()) // dados fake
+    egresso.empresa.endereco.longitude = parseInt(faker.address.latitude()) // dados fake
+    const mapKey = `${egresso.empresa.endereco.latitude}:${egresso.empresa.endereco.longitude}`
     const mapElement = filtered.get(mapKey)
 
     if (mapElement) {
