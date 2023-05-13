@@ -40,8 +40,6 @@ public class UsuarioDTO {
 	@NotBlank(message = "Infome um email.")
 	private String email;
 
-	private String matricula;
-
 	@NotBlank(message = "Infome um nome.")
 	private String nome;
 

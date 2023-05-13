@@ -1,13 +1,16 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
@@ -63,6 +66,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	public UsuarioModel save(UsuarioModel usuario) {
 		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+		usuario.setGrupos(new HashSet<>(Set.of(GrupoModel.builder().id(3).build())));
 		return usuarioRepository.save(usuario);
 	}
 
