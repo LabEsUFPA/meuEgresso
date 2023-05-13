@@ -7,6 +7,8 @@ spring:
   jackson:
     default-property-inclusion: NON_NULL
 
+
+
 # Email configuration
   mail:
     host: smtp.gmail.com
@@ -49,7 +51,7 @@ rsa:
 
 # Server configuration
 server:
-  port: 8080
+  port: ${APP_PORT}
   compression:
     enabled: true
     min-response-size: 2048
