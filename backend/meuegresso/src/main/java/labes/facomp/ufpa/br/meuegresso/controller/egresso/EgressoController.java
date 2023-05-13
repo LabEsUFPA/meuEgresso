@@ -6,7 +6,6 @@ import java.net.MalformedURLException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.io.Resource;
