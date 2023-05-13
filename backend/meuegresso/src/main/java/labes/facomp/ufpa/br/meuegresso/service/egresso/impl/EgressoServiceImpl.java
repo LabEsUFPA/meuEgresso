@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
 
@@ -123,6 +124,11 @@ public class EgressoServiceImpl implements EgressoService {
         } catch (IOException ioe) {
             throw new IOException("Could not save file: " + arquivo.getOriginalFilename(), ioe);
         }
+    }
+
+    @Override
+    public EgressoModel findById(Integer id) {        
+        return egressoRepository.findById(id).orElseThrow();
     }
 
 }

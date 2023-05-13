@@ -20,6 +20,8 @@ public interface EgressoService {
 
 	public EgressoModel findByUsuarioId(Integer idUsuario);
 
+	public EgressoModel findById(Integer id);
+
 	public EgressoModel adicionarEgresso(EgressoModel egresso);
 
 	/**

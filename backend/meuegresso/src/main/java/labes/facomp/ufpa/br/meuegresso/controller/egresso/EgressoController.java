@@ -256,11 +256,10 @@ public class EgressoController {
      *         egresso
      * @throws IOException
      */
-    @ResponseStatus(code = HttpStatus.OK)
-    @GetMapping(value = "/foto", produces = "image/png")
-    @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public Resource getFotoEgresso(JwtAuthenticationToken token) throws MalformedURLException, FileNotFoundException {
-        EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
+    @GetMapping(value = "/foto/{id}")
+    @ResponseStatus(code = HttpStatus.OK)   
+    public Resource getFotoEgresso(Integer id) throws MalformedURLException, FileNotFoundException {
+        EgressoModel egressoModel = egressoService.findById(id);
         return egressoService.getFileAsResource(egressoModel.getFotoNome());
     }
 
