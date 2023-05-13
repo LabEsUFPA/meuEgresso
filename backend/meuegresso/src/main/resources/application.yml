@@ -1,6 +1,6 @@
 spring:
   profiles:
-    default: homol
+    default: prod
   application:
     name: Meu Egresso API
   #configuração do jackson

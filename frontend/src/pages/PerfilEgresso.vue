@@ -748,6 +748,18 @@
                 <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"
+                  :vmodel="dataEgresso.adicionais.assuntosPalestras"
+                  name="adicionais.assuntosPalestras"
+                  label="Palestras"
+                  placeholder="Lorem ipsum dolor sit amet, consect
+              etur adipiscing elit, sed do eiusmod tempor incididun
+              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                  icon-path=""
+                />
+                <CustomPerfilData
+                  type="text"
+                  class="flex-auto mb-5"
                   :vmodel="dataEgresso.adicionais.experiencias"
                   name="adicionais.experiencias"
                   label="Depoimento"
@@ -832,7 +844,7 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
-import { computed, ref, onMounted, watch, onBeforeUpdate, onUpdated } from 'vue'
+import { computed, ref } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import CustomTextarea from 'src/components/CustomTextarea.vue'
 import { Form } from 'vee-validate'
@@ -856,14 +868,14 @@ import {
 // mdiHome CEP,
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
-const camposFaltosos = ref(false)
+// const camposFaltosos = ref(false)
 
 const egressoStore = usePerfilEgressoStore()
 const storage = new LocalStorage()
 
 egressoStore.fetchAll()
 
-const form = ref<typeof Form | null>(null)
+// const form = ref<typeof Form | null>(null)
 
 function handleStatus (status : any) {
   console.log('Staus: ')
@@ -1344,26 +1356,26 @@ const dataResquestFront: EgressoModelUpdate = {
 }
 console.log(dataEgresso)
 
-const stateFolders = ref({
-  geral: {
-    isInput: false
-  },
-  localizacao: {
-    isInput: false
-  },
-  academico: {
-    isInput: false
-  },
-  carreira: {
-    isInput: false
-  },
-  adicionais: {
-    isInput: false
-  },
-  profileHead: {
-    isInput: false
-  }
-})
+// const stateFolders = ref({
+//   geral: {
+//     isInput: false
+//   },
+//   localizacao: {
+//     isInput: false
+//   },
+//   academico: {
+//     isInput: false
+//   },
+//   carreira: {
+//     isInput: false
+//   },
+//   adicionais: {
+//     isInput: false
+//   },
+//   profileHead: {
+//     isInput: false
+//   }
+// })
 
 let jsonResponse : any
 let userData : any
