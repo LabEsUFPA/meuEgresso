@@ -23,7 +23,7 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
@@ -113,14 +113,13 @@ public class EgressoController {
         }
 
         // Cadastro EMPRESA - EMPREGO
-        EmpresaDTO empresaDTO;
+        EmpresaCastroEgressoDTO empresaDTO;
         SetorAtuacaoModel setorAtuacao;
         EmpresaModel empresa;
         AreaAtuacaoModel areaAtuacaoModel;
         if (egressoCadastroDTO.getEmpresa() != null) {
             empresaDTO = egressoCadastroDTO.getEmpresa();
-            setorAtuacao = setorAtuacaoService.findByNome(empresaDTO.getSetorAtuacao()); // TODO no primeiro cadastro a
-                                                                                         // empresa buga, verificar
+            setorAtuacao = setorAtuacaoService.findByNome(empresaDTO.getSetorAtuacao());
             if (setorAtuacao == null) {
                 setorAtuacao = setorAtuacaoService
                         .save(SetorAtuacaoModel.builder().nome(empresaDTO.getSetorAtuacao()).build());
@@ -153,7 +152,6 @@ public class EgressoController {
         }
 
         egresso.setUsuario(usuarioService.findById(jwtService.getIdUsuario(token)));
-        // TODO fazer update de email futuramente.
         egresso.getUsuario().setNome(egressoCadastroDTO.getNome());
         PalestraModel palestra;
         if (egresso.getPalestras() != null) {
@@ -209,7 +207,8 @@ public class EgressoController {
             if (egressoModel.getPalestras() != null) {
                 egressoModel.getPalestras().setEgresso(egressoModel);
             }
-            egressoModel.getUsuario().setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
+            egressoModel.getUsuario()
+                    .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
             egressoService.updateEgresso(egressoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();
         }

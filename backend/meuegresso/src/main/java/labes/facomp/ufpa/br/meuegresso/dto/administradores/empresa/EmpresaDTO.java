@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.empresa;
 
+import jakarta.validation.constraints.NotBlank;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.AuditableDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class EmpresaDTO extends AuditableDTO {
 
     private Integer id;
 
+    @NotBlank(message = "Informe a faixa salarial.")
     private String nome;
 
     private String setorAtuacao;

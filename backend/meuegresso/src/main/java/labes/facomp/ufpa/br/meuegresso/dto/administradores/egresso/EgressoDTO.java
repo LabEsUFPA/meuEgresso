@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.depoimento.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.endereco.EnderecoDTO;
@@ -26,8 +28,12 @@ public class EgressoDTO {
 
     private String matricula;
 
+    @Valid
+    @NotNull(message = "Informe o genêro.")
     private GeneroDTO genero;
 
+    @Valid
+    @NotNull(message = "Informe a cota.")
     private CotaDTO cota;
 
     private Boolean interesseEmPos = false;
@@ -36,8 +42,11 @@ public class EgressoDTO {
 
     private String linkedin;
 
+    @Valid
     private EnderecoDTO endereco;
 
+    @Valid
+    @NotNull(message = "Informe um depoimento.")
     private DepoimentoDTO depoimento;
 
     private Integer usuarioId;
