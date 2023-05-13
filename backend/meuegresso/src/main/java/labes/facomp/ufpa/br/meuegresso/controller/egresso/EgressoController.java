@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -256,9 +257,9 @@ public class EgressoController {
      *         egresso
      * @throws IOException
      */
-    @GetMapping(value = "/foto/{id}")
+    @GetMapping(value = "/foto/{id}", produces = "image/png")
     @ResponseStatus(code = HttpStatus.OK)   
-    public Resource getFotoEgresso(Integer id) throws MalformedURLException, FileNotFoundException {
+    public Resource getFotoEgresso(@PathVariable Integer id) throws MalformedURLException, FileNotFoundException {
         EgressoModel egressoModel = egressoService.findById(id);
         return egressoService.getFileAsResource(egressoModel.getFotoNome());
     }
