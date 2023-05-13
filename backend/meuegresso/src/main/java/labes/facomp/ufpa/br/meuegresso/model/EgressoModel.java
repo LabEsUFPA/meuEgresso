@@ -82,23 +82,23 @@ public class EgressoModel extends Auditable {
         @JoinColumn(name = "usuario_id", unique = true, nullable = true)
         private UsuarioModel usuario;
 
-        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
                         CascadeType.REMOVE }, orphanRemoval = true)
         private PalestraModel palestras;
 
-        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
                         CascadeType.REMOVE }, orphanRemoval = true)
         private ContribuicaoModel contribuicao;
 
-        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
                         CascadeType.REMOVE }, orphanRemoval = true)
         private EgressoTitulacaoModel titulacao;
 
-        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
                         CascadeType.REMOVE }, orphanRemoval = true)
         private EgressoEmpresaModel emprego;
 
-        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+        @OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
                         CascadeType.REMOVE }, orphanRemoval = true)
         private DepoimentoModel depoimento;
 
