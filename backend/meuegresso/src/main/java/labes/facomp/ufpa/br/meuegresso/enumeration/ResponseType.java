@@ -15,7 +15,11 @@ public enum ResponseType {
     
     EGRESSO_ENCONTRADO("Egresso encontrado"),
 
-    SUCESS_IMAGE_SAVE("Imagem salva com sucesso");
+    SUCESS_IMAGE_SAVE("Imagem salva com sucesso"),
+
+    SUCESS_IMAGE_DELETE("Imagem deletada com sucesso"),
+
+    FAIL_IMAGE_DELETE("Usuário não tem imagem para deletar");
 
     private String message;
 

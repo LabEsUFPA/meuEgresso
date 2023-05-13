@@ -264,6 +264,21 @@ public class EgressoController {
         return egressoService.getFileAsResource(egressoModel.getFotoNome());
     }
 
+    @ResponseStatus(code = HttpStatus.OK)
+    @DeleteMapping(value = "/foto")
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public String deleteFotoEgresso(JwtAuthenticationToken token) throws IOException {
+        EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
+        if (egressoModel.getFotoNome() != null) {
+            egressoService.deleteFile(egressoModel.getFotoNome());
+            egressoModel.setFotoNome(null);
+            egressoService.updateEgresso(egressoModel);
+            return ResponseType.SUCESS_IMAGE_DELETE.getMessage();
+        }
+        return ResponseType.FAIL_IMAGE_DELETE.getMessage();
+
+    }
+
     /**
      * Endpoint responsável pelo salvamento local do arquivo da foto do egresso
      *
