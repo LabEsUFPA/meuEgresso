@@ -146,7 +146,11 @@ public class EgressoController {
                 if (setorAtuacao.getEmpresas() == null)
                     setorAtuacao.setEmpresas(new HashSet<>());
                 setorAtuacao.getEmpresas().add(empresa);
-                empresa.setSetorAtuacoes(new HashSet<>(Set.of(setorAtuacao)));
+                if (empresa.getSetorAtuacoes() == null) {
+                    empresa.setSetorAtuacoes(new HashSet<>(Set.of(setorAtuacao)));
+                } else {
+                    empresa.getSetorAtuacoes().add(setorAtuacao);
+                }
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
@@ -178,7 +182,7 @@ public class EgressoController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public EgressoDTO getEgresso(JwtAuthenticationToken token) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        
+
         EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
         return mapper.map(egressoModel, EgressoDTO.class);
     }
