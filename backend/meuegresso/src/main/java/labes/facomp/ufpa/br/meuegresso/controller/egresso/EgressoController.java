@@ -217,9 +217,6 @@ public class EgressoController {
             if (egressoModel.getPalestras() != null) {
                 egressoModel.getPalestras().setEgresso(egressoModel);
             }
-            String fileCode = RandomStringUtils.randomAlphanumeric(16) + ".png";
-            egressoService.saveFoto(fileCode, egresso.getFoto());
-            egressoModel.setFotoNome(fileCode);
             egressoModel.getUsuario()
                     .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
             egressoService.updateEgresso(egressoModel);
