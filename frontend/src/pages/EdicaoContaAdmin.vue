@@ -111,6 +111,7 @@
       </div>
     </div>
   </CustomDialog>
+
 </template>
 
 <script setup lang="ts">
@@ -156,7 +157,7 @@ const handleSubmit = async (profileData: ProfileRegisterModel) => {
     profileData.name,
   )
 
-  if (response === 201) {
+  if (response.status === 201) {
     error.value = false
     submitSuccess.value = true
   } else {

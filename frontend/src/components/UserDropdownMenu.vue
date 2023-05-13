@@ -1,21 +1,19 @@
 <template>
-  <div class="relative hidden w-fit gap-x-2 md:flex items-center justify-end">
+  <div 
+    class="relative hidden w-fit gap-x-2 md:flex cursor-[url(hand.cur),_pointer] rounded items-center justify-end"
+    @click="toggleUserMenu()"
+  >
 
     <h1 class="text-sm font-semibold">{{ userLoggedName }}</h1>
     
     <div class="flex flex-col justify-end">
 
-      <button 
-        class="hover:bg-sky-300/20 rounded" 
-        @click="toggleUserMenu()"
-      >
-        <SvgIcon 
-          type="mdi"
-          class="inline"
-          size="24" 
-          :path="userMenuIsOpen ? mdiMenuUp : mdiMenuDown" 
-        />
-      </button>
+      <SvgIcon 
+        type="mdi"
+        class="inline"
+        size="24" 
+        :path="userMenuIsOpen ? mdiMenuUp : mdiMenuDown" 
+      />
 
       <div 
         :class="userMenuIsOpen ? 'inline-block' : 'hidden'"
