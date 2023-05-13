@@ -832,6 +832,41 @@
       <!-- Body End-->
     </div>
   </div>
+  <CustomDialog v-model="dialogSucesso">
+    <div class="h-full flex justify-center items-center">
+      <div class="w-1/2">
+        <div class="text-green-500 text-center mb-3">
+          <SvgIcon
+            type="mdi"
+            size="100"
+            class="inline"
+            :path="mdiCheckCircle"
+          />
+        </div>
+        <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+          Dados Atualizados com sucesso!
+        </h1>
+      </div>
+    </div>
+  </CustomDialog>
+
+  <CustomDialog v-model="dialogFalha">
+    <div class="h-full flex justify-center items-center">
+      <div class="w-1/2">
+        <div class="text-red-600 text-center mb-3">
+          <SvgIcon
+            type="mdi"
+            size="100"
+            class="inline"
+            :path="mdiAlertCircle"
+          />
+        </div>
+        <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+          Falha ao atualizar os dados
+        </h1>
+      </div>
+    </div>
+  </CustomDialog>
 </template>
 
 <script setup lang="ts">
@@ -852,6 +887,7 @@ import { Form } from 'vee-validate'
 import { object, string, date, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
 import { useLoginStore } from 'src/store/LoginStore'
+import CustomDialog from 'src/components/CustomDialog.vue'
 
 import {
   mdiAccount,
@@ -864,7 +900,9 @@ import {
   mdiWeb,
   mdiMapOutline,
   mdiMapMarkerRadius,
-  mdiLinkVariant
+  mdiLinkVariant,
+  mdiCheckCircle,
+  mdiAlertCircle
 } from '@mdi/js'
 // mdiHome CEP,
 const dialogSucesso = ref(false)
@@ -889,7 +927,6 @@ function handleStatus (status : any) {
 
 async function handleSubmitHeader (values: any) {
   console.log('handleSubmitHeader')
-  toggleIsInput('profileHead')
   console.log(values)
   // futuro add foto
   jsonResponse.usuario.nome = values.geral.nome
@@ -899,6 +936,7 @@ async function handleSubmitHeader (values: any) {
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   handleStatus(status)
   await useLoginStore().saveUser()
+  toggleIsInput('profileHead')
   fetchUpdateEgresso()
 }
 
@@ -913,10 +951,10 @@ async function handleSubmitGeral (values: any) {
   jsonResponse.genero.id = values.geral.genero
   jsonResponse.nascimento = values.geral.nascimento
   const status = await egressoStore.atualizarEgresso(jsonResponse)
-  toggleIsInput('geral')
   console.log(jsonResponse)
   handleStatus(status)
   await useLoginStore().saveUser()
+  toggleIsInput('geral')
   fetchUpdateEgresso()
 }
 
@@ -1462,9 +1500,9 @@ async function fetchUpdateEgresso () {
     },
     carreira: {
       area: json.emprego?.areaAtuacao?.nome || '',
-      setor: json.emprego?.empresa?.setorAtuacoes[0].nome || '',
-      empresa: json.emprego?.empresa.nome || '',
-      faixaSalarial: json.emprego?.faixaSalarial.faixa || '',
+      setor: json.emprego?.empresa?.setorAtuacoes[0]?.nome || '',
+      empresa: json.emprego?.empresa?.nome || '',
+      faixaSalarial: json.emprego?.faixaSalarial?.faixa || '',
       remuneracao: '',
       isInput: false
     },
