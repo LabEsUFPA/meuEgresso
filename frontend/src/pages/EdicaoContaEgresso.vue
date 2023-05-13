@@ -1,6 +1,7 @@
 <template>
   <div>
     <Form
+      ref="form"
       @submit="handleSubmit"
       @invalid-submit="onInvalid"
       :validation-schema="schema"
@@ -8,7 +9,7 @@
       <div class="flex w-full justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
         <div class="flex w-[960px] justify-center border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl py-8 mt-10 mx-6 shadow-md">
           <h1 class="text-blue-900 text-3xl font-bold">
-            Editar conta
+            Editar conta egresso
           </h1>
         </div>
         
@@ -33,6 +34,7 @@
                 label="Nome Completo"
                 :required="true"
                 :icon-path="mdiAccount"
+      
               />
               <CustomInput
                 name="email"
@@ -40,6 +42,7 @@
                 label="E-mail"
                 :required="true"
                 :icon-path="mdiEmail"
+         
               />
               <CustomInput
                 name="confirmationEmail"
@@ -105,20 +108,30 @@
 
 <script setup lang="ts">
 
-import { ref } from 'vue'
-import { Form } from 'vee-validate'
+import { ref, computed, watch, onMounted } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiAccount, mdiCheckCircle, mdiEmail, mdiLock } from '@mdi/js'
-import { object, string, ref as refYup } from 'yup'
-
-import { models } from 'src/@types'
-import router from 'src/router'
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import router from 'src/router'
+import { Form } from 'vee-validate'
+import { models } from 'src/@types'
+import { object, string, ref as refYup, number } from 'yup'
+import { mdiAccount, mdiEmail, mdiLock, mdiCheckCircle } from '@mdi/js'
+import { useEditaContaUsuarioStore } from 'src/store/EditaContaUsuarioStore.js'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 interface ProfileRegisterModel extends models.ProfileRegisterModel {}
+
+
+const form = ref<typeof Form | null>(null)
+
+const id = ref(0)
+const username = ref('')
+const email = ref('')
+const nomeCompleto = ref('')
+const senha = ref('')
+const grupos = ref([{id: number, nomeGrupo: string}])
 
 const error = ref(false)
 const errorMessages = ref({
@@ -127,24 +140,39 @@ const errorMessages = ref({
 })
 const errorText = ref('')
 const submitSuccess = ref(false)
-
 const schema = object().shape({
   name: string().required(),
-  registration: string().required().length(12),
+  username: string().required(),
   email: string().email().required(),
   confirmationEmail: string().email().required().oneOf([refYup('email')]),
   password: string().required(),
-  confirmationPassword: string().required().oneOf([refYup('password')])
+  confirmationPassword: string().required().oneOf([refYup('password')]),
 })
 
+//Chamando getUsuario
+const $store = useEditaContaUsuarioStore()
+$store.fetchUsuario().then(usuario =>{
+  console.log("THEN:", usuario)
+  id.value = usuario?.id
+  nomeCompleto.value = usuario?.nome
+  username.value = usuario?.username
+  email.value = usuario?.email
+  grupos.value = usuario?.grupos
+})
+
+
+
+/*
 const handleSubmit = async (profileData: ProfileRegisterModel) => {
-  const responseValidation = await useCadastroPerfilStore().egressValidation(
-    profileData.name,
-    profileData.registration,
-    profileData.email
+  const responseValidation = await useEditaContaUsuarioStore().updateContaUsuario(
+    id.value,
+    username.value,
+    email.value,
+    nomeCompleto.value,
+    grupos.value,
   )
 
-  if (responseValidation === 200) {
+  if (responseValidation.status === 200) {
     error.value = false
     const responseRegister = await useCadastroPerfilStore().userProfileRegister(
       profileData.email,
@@ -156,7 +184,7 @@ const handleSubmit = async (profileData: ProfileRegisterModel) => {
       }]
     )
 
-    if (responseRegister === 201) {
+    if (responseRegister.status === 201) {
       submitSuccess.value = true
       router.push({ path: '/cadastro' })
     } else {
@@ -168,10 +196,24 @@ const handleSubmit = async (profileData: ProfileRegisterModel) => {
     error.value = true
   }
 }
-
+*/
 const onInvalid = (e: any) => {
   console.log(e)
-}
+} 
+
+
+onMounted(() => {
+  console.log("onMounted front iniciado...")
+  watch(nomeCompleto, () => {
+    console.log("watch front nomeCompleto:", nomeCompleto.value)
+    form.value?.setFieldValue('name', nomeCompleto.value)
+  })
+  watch(email, () => {
+    console.log("watch front email:", email.value)
+    form.value?.setFieldValue('email', email.value)
+  })
+})
+
 </script>
 
 <style>

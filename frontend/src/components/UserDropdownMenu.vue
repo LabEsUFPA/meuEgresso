@@ -74,8 +74,9 @@ const toggleUserMenu = () => {
 }
 
 const userLogout = () => {
-  toggleUserMenu();
   store.userLogout()
+  toggleUserMenu();
+
 }
 
 </script>

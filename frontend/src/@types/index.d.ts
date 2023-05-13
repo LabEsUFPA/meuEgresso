@@ -134,11 +134,12 @@ export namespace models {
     empresa?: string
   }
 
-  export interface ContaUsuario {
+  export interface ContaUsuarioModel {
       id: Number,
       username: string,
       email: string,
       nome: string,
+      senha: string,
       grupos?: [
         {
           id: number
