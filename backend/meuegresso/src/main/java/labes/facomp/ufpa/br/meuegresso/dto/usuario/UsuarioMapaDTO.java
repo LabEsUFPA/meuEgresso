@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Representa os dados de nome e id do egresso para o mapa
- * 
+ *
  *
  * @author Bruno Eiki, Pedro Inácio
  * @since 08/05/2023
@@ -22,7 +22,6 @@ public class UsuarioMapaDTO {
 
 	private Integer id;
 
-	@NotBlank(message = "Infome um nome.")
 	private String nome;
 
 }

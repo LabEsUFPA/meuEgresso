@@ -2,7 +2,6 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
 import java.util.List;
 
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoMapaDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
@@ -69,5 +68,5 @@ public interface EgressoEmpresaService {
 	 *
 	 * @return List<EgressoMapaDTO>
 	 */
-	public List<EgressoMapaDTO> findAllEgressoMapaDTO();
+	public List<EgressoEmpresaModel> findAllEgressoMapa();
 }

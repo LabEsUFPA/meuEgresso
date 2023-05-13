@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,7 +28,7 @@ public class EgressoEmpresaModel extends Auditable {
     private EgressoEmpresaModelId id = new EgressoEmpresaModelId();
 
     @MapsId(value = "egressoId")
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private EgressoModel egresso;
 
     @MapsId(value = "empresaId")
