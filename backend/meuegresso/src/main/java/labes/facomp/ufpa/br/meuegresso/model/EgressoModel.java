@@ -1,6 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
-import java.beans.Transient;
 import java.time.LocalDate;
 import java.util.Set;
 

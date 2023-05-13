@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaMapaDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioMapaDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 import lombok.Data;
 

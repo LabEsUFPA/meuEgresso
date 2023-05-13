@@ -3,7 +3,6 @@ package labes.facomp.ufpa.br.meuegresso.controller.mapa;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
