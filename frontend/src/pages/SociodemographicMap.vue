@@ -12,37 +12,15 @@
           layer-type="base"
           name="OpenStreetMap"
         />
-        <LCircleMarker
+        <CustomMapMarker
           v-for="(mapElement, index) in egressos"
+          @select="selectMarker"
+          :lat-long="mapElement[0]"
+          :egressos="mapElement[1]"
           :key="index"
-          @click="selectMarker"
-          :lat-lng="getLatLng(mapElement[0])"
-        >
-          <LTooltip :options="{ className: 'border border-red-500' }">
-            <div class="p-1 flex flex-col">
-              <div class="text-[16px] italic">
-                <SvgIcon
-                  type="mdi"
-                  :path="mdiMapMarker"
-                  class="inline text-gray-400"
-                  size="18"
-                />
-                {{ mapElement[1][0].localizacao.cidade }},
-                {{ State.getStateByCode(mapElement[1][0].localizacao.estado).name /* deprecado, atualizar para getStateByCodeAndCountry quando tiver back */ }},
-                {{ Country.getCountryByCode(mapElement[1][0].localizacao.pais).name }}
-              </div>
-
-              <div class="font-bold italic text-right text-[16px]">
-                {{ mapElement[1].length }} egresso{{ mapElement[1].length === 1 ? '' : 's' }}
-              </div>
-
-              <div class="text-gray-400 text-xs text-right mt-1">
-                Clique para ver detalhes
-              </div>
-            </div>
-          </LTooltip>
-        </LCircleMarker>
-      </LMap>
+        />
+        <l-map />
+      </lmap>
     </div>
     <div class="mt-2 md:mt-0 md:ml-2 w-full h-40 md:w-52 md:h-[600px] bg-gray-300 rounded-xl p-1">
       <div
@@ -113,8 +91,7 @@
 
 <script setup lang="ts">
 import 'leaflet/dist/leaflet.css'
-import { latLng } from 'leaflet'
-import { LMap, LTileLayer, LCircleMarker, LTooltip } from '@vue-leaflet/vue-leaflet'
+import { LMap, LTileLayer } from '@vue-leaflet/vue-leaflet'
 import { getRandomEgressoList } from 'src/mock/EgressosMapa'
 import { computed, ref } from 'vue'
 import { type models } from 'src/@types'
@@ -122,10 +99,17 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronRight, mdiInformation, mdiMapMarker } from '@mdi/js'
 import { Country, State } from 'country-state-city'
 import CustomButton from 'src/components/CustomButton.vue'
+import CustomMapMarker from 'src/components/CustomMapMarker.vue'
+import { LatLng } from 'leaflet'
 interface EgressoMapa extends models.EgressoMapa {}
 
 const zoom = 2
 const selectedMarker = ref<EgressoMapa[]>([])
+function selectMarker ($event: LatLng) {
+  const clickedMarkerKey = `${$event.lat}:${$event.lng}`
+  selectedMarker.value = egressos.value.get(clickedMarkerKey) || []
+  console.log(selectedMarker.value)
+}
 
 const egressos = computed(() => {
   const data = [...getRandomEgressoList(12), {
@@ -178,18 +162,4 @@ const egressos = computed(() => {
 
   return filtered
 })
-
-function getLatLng (key: string) {
-  const splitKey = key.split(':')
-  const lat = parseInt(splitKey[0])
-  const lng = parseInt(splitKey[1])
-
-  return latLng(lat, lng)
-}
-
-function selectMarker ($event: any) {
-  const clickedMarkerKey = `${$event.latlng.lat}:${$event.latlng.lng}`
-  selectedMarker.value = egressos.value.get(clickedMarkerKey) || []
-  console.log(selectedMarker.value)
-}
 </script>
