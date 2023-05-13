@@ -161,7 +161,6 @@ const schema = object().shape({
 
 const handleSubmit = async (profileData: ProfileRegisterModel) => {
   profileData.idAccessLevel = setIdAccessLevel(profileData.accessLevel)
-
   const response = await useCadastroPerfilStore().userProfileRegister(
     profileData.username,
     profileData.password,

@@ -14,12 +14,14 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.UniqueConstraint;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "area_atuacao")
