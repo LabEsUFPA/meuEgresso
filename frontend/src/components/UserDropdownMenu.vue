@@ -1,7 +1,8 @@
 <template>
-  <div 
-    class="relative hidden w-fit gap-x-2 md:flex cursor-[url(hand.cur),_pointer] rounded items-center justify-end"
+  <button 
+    class="relative hidden w-fit gap-x-2 md:flex rounded items-center justify-end"
     @click="toggleUserMenu()"
+    @blur="delayedToggleUserMenu()"
   >
 
     <h1 class="text-sm font-semibold">{{ userLoggedName }}</h1>
@@ -22,8 +23,9 @@
 
         <RouterLink :to="userLoggedGroupID === 3 ? '/conta-egresso' : '/conta-admin'">
           <div 
-            class="w-32 p-2 pr-8 hover:bg-sky-100 text-blue-900" 
+            class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900" 
             @click="toggleUserMenu()"
+            
           >
             Editar conta
           </div>
@@ -31,7 +33,7 @@
 
         <RouterLink to="/entrar">
           <div 
-            class="w-32 p-2 hover:bg-red-100 border-t text-red-500" 
+            class="w-32 p-2 hover:bg-red-100 border-t text-start text-red-500" 
             @click="userLogout()"
           >
             Sair
@@ -42,7 +44,7 @@
 
     </div>
 
-  </div>
+  </button>
 </template>
 
 <script lang="ts" setup>
@@ -70,6 +72,8 @@ const userMenuIsOpen = ref(false)
 const toggleUserMenu = () => {
   userMenuIsOpen.value = !userMenuIsOpen.value
 }
+
+const delayedToggleUserMenu = () => setTimeout(() => toggleUserMenu(), 150)
 
 const userLogout = () => {
   toggleUserMenu();
