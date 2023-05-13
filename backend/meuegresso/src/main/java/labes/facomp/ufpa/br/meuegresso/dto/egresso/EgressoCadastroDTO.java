@@ -62,7 +62,6 @@ public class EgressoCadastroDTO {
 
     private Boolean posGraduacao = false;
 
-    @Valid
     private Set<CotaDTO> cotas;
 
     @Valid
