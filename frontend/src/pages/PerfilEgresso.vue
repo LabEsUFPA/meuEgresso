@@ -875,7 +875,6 @@ const storage = new LocalStorage()
 
 egressoStore.fetchAll()
 
-
 function handleStatus (status : any) {
   console.log('Staus: ')
   console.log(status)
@@ -1011,7 +1010,7 @@ async function handleSubmitAdicionais (values: any) {
   // dataEgresso.value.adicionais = values.adicionais
   jsonResponse.depoimento.descricao = values.adicionais.experiencias
   jsonResponse.contribuicao.descricao = values.adicionais.contribuicoes
-  if (values.adicionais.palestras.descricao) {
+  if (values.adicionais.palestras) {
     jsonResponse.palestras.descricao = values.adicionais.assuntosPalestras
   }
   // jsonResponse.depoimento.descricao = values.adicionais.descricao
