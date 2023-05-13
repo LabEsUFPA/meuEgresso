@@ -677,7 +677,6 @@
                   :required="dataEgresso.carreira.area !== 'Desempregado'"
                   :disabled="dataEgresso.carreira.area === 'Desempregado'"
                 />
-
                 <CustomInput
                   class="mb-5"
                   name="carreira.empresa"
@@ -687,14 +686,11 @@
                   :required="dataEgresso.carreira.area !== 'Desempregado'"
                   :disabled="dataEgresso.carreira.area === 'Desempregado'"
                 />
-
-                <CustomInput
+                <CustomSelect
                   class="mb-5"
                   name="carreira.faixaSalarial"
-                  :value="dataEgresso.carreira.faixaSalarial"
                   label="Faixa Salarial"
-                  type="number"
-                  step="0.01"
+                  :options="egressoStore.faixasSalariais"
                   :required="dataEgresso.carreira.area !== 'Desempregado'"
                   :disabled="dataEgresso.carreira.area === 'Desempregado'"
                 />
@@ -737,6 +733,18 @@
 
             <template #default>
               <div v-if="!dataEgresso.adicionais.isInput">
+                <!-- <CustomPerfilData
+                  type="text"
+                  class="flex-auto mb-5"
+                  :vmodel="dataEgresso.adicionais.assuntosPalestras"
+                  name="adicionais.assuntosPalestras"
+                  label="Palestras"
+                  placeholder="Lorem ipsum dolor sit amet, consect
+              etur adipiscing elit, sed do eiusmod tempor incididun
+              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                  icon-path=""
+                /> -->
                 <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"
@@ -765,7 +773,6 @@
               <div v-else>
                 <CustomCheckbox
                   name="adicionais.palestras"
-                  :value="dataEgresso.adicionais.palestras"
                   label="Gostaria de apresentar palestras"
                   class="mb-5"
                   v-model:value="dataEgresso.adicionais.palestras"
@@ -972,9 +979,14 @@ async function handleSubmitLocalizacao (values: any) {
 async function handleSubmitCarreira (values: any) {
   console.log('handleSubmitCarreira')
   console.log(JSON.stringify(values, null, 2))
-  // dataEgresso.value.carreira = values.carreira
+
   console.log('HandleSubmit Response: ')
-  // jsonResponse.emprego.empresa.nome = ''
+  jsonResponse.emprego.empresa.nome = values.carreira.empresa
+  // jsonResponse.emprego.empresa.setorAtuacoes = values.carreira.setor
+  // jsonResponse.emprego.empresa.areaAtuacao = values.carreira.area
+
+  // jsonResponse.emprego.empresa.id = jsonResponse.emprego.id.empresaId
+  console.log(jsonResponse.emprego.empresa)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   console.log(jsonResponse)
   handleStatus(status)
@@ -983,10 +995,20 @@ async function handleSubmitCarreira (values: any) {
 }
 async function handleSubmitAdicionais (values: any) {
   console.log('handleSubmitAdicionais')
-  toggleIsInput('adicionais')
+
   console.log(JSON.stringify(values, null, 2))
-  dataEgresso.value.adicionais = values.adicionais
-  egressoStore.atualizarEgresso(values.adicionais)
+  // dataEgresso.value.adicionais = values.adicionais
+  jsonResponse.depoimento.descricao = values.adicionais.experiencias
+  jsonResponse.contribuicao.descricao = values.adicionais.contribuicoes
+  if (values.adicionais.palestras.descricao) {
+    jsonResponse.palestras.descricao = values.adicionais.assuntosPalestras
+  }
+  // jsonResponse.depoimento.descricao = values.adicionais.descricao
+  egressoStore.atualizarEgresso(jsonResponse)
+  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  console.log(jsonResponse)
+  handleStatus(status)
+  toggleIsInput('adicionais')
   fetchUpdateEgresso()
 }
 
@@ -1449,7 +1471,7 @@ async function fetchUpdateEgresso () {
       isInput: false
     },
     adicionais: {
-      palestras: json.palestras?.descricao,
+      palestras: !!json.palestras?.descricao,
       assuntosPalestras: json.palestras?.descricao || '',
       experiencias: json.depoimento?.descricao || '',
       contribuicoes: json.contribuicao?.descricao || '',
