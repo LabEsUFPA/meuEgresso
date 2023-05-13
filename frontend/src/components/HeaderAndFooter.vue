@@ -157,7 +157,7 @@
         </nav>
       </div>
     </header>
-    <main class="flex-1 flex">
+    <main class="flex-1 flex items-center">
       <div class="flex-1">
         <RouterView />
       </div>

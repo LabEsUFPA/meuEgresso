@@ -31,7 +31,7 @@
               <CustomInput
                 name="username"
                 label="Usuário"
-                helper-text="Letras minúsculas e números, sem espaços"
+                helper-text="Letras minúsculas e números com no mínimo seis caracteres"
                 class-helper-text="text-gray-600"
                 :required="true"
                 :icon-path="mdiAccount"
@@ -150,8 +150,8 @@ const setIdAccessLevel = (accessLevel: string) => {
 
 const schema = object().shape({
   name: string().required().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
-  username: string().required().matches(/^[a-z0-9_.-]+$/),
-  email: string().email().required().matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+  username: string().required().matches(/^[a-z0-9_.-]{6,}$/),
+  email: string().email().required().matches(/^[a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/),
   confirmationEmail: string().email().required().oneOf([refYup('email')]),
   password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/),
   confirmationPassword: string().required().oneOf([refYup('password')]),
