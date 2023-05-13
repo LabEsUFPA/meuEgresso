@@ -845,7 +845,6 @@ const storage = new LocalStorage()
 
 egressoStore.fetchAll()
 
-// const form = ref<typeof Form | null>(null)
 
 function handleStatus (status : any) {
   console.log('Staus: ')
@@ -1268,27 +1267,6 @@ const dataResquestFront: EgressoModelUpdate = {
   remuneracaoBolsa: 0
 }
 console.log(dataEgresso)
-
-// const stateFolders = ref({
-//   geral: {
-//     isInput: false
-//   },
-//   localizacao: {
-//     isInput: false
-//   },
-//   academico: {
-//     isInput: false
-//   },
-//   carreira: {
-//     isInput: false
-//   },
-//   adicionais: {
-//     isInput: false
-//   },
-//   profileHead: {
-//     isInput: false
-//   }
-// })
 
 let jsonResponse : any
 let userData : any

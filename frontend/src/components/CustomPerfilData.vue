@@ -1,9 +1,5 @@
 <template>
   <!-- Ftre selecionar visivel ou desabilitado pela prop por nivel de acesso -->
-  <!-- v-if="visible"
-    :class="{
-      'opacity-50': !enabled
-    }" -->
 
   <div
     v-if="vmodel || visible"
@@ -101,15 +97,7 @@ withDefaults(defineProps<Props>(), {
   isinput: false,
   vmodel: '',
   iconSize: '20',
-  visible: true,
+  visible: false,
   enabled: true
 })
-
-// const visibilty = computed(() => {
-//   const visibilty = true
-//   if (p) {
-
-//   }
-//   return visibilty
-// })
 </script>
