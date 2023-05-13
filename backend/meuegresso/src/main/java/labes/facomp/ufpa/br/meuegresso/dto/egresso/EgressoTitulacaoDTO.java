@@ -16,6 +16,7 @@ import lombok.Data;
 public class EgressoTitulacaoDTO {
 
     private EgressoTitulacaoModelId id;
+
     private CursoDTO curso;
 
     private TitulacaoDTO titulacao;

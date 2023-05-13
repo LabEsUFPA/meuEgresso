@@ -82,6 +82,8 @@ public class EgressoController {
     public String cadastrarEgressoPrimeiroCadastro(@RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO,
             JwtAuthenticationToken token) {
 
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+
         // em cima ok
         EgressoModel egresso = mapper.map(egressoCadastroDTO, EgressoModel.class);
         TitulacaoModel titulacao = titulacaoService
@@ -175,6 +177,8 @@ public class EgressoController {
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public EgressoDTO getEgresso(JwtAuthenticationToken token) {
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+        
         EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
         return mapper.map(egressoModel, EgressoDTO.class);
     }
@@ -204,12 +208,25 @@ public class EgressoController {
                 egressoModel.getDepoimento().setEgresso(egressoModel);
             }
             if (egressoModel.getEmprego() != null) {
-                egressoModel.getEmprego().setEgresso(egressoModel);
+                EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
+                egressoEmpresaModel.setEgresso(egressoModel);
+                EnderecoModel enderecoModel = egressoEmpresaModel.getEmpresa().getEndereco();
+                EnderecoModel enderecoModelNoBanco = enderecoService.findByCidadeAndEstadoAndPais(
+                        enderecoModel.getCidade(), enderecoModel.getEstado(),
+                        enderecoModel.getPais());
+                if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
+                    egressoEmpresaModel.getEmpresa().setEndereco(enderecoModelNoBanco);
+                } else if (enderecoModelNoBanco == null) {
+                    egressoEmpresaModel.getEmpresa()
+                            .setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
+                                    .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
+                }
             }
             if (egressoModel.getPalestras() != null) {
                 egressoModel.getPalestras().setEgresso(egressoModel);
             }
-            egressoModel.getUsuario().setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
+            egressoModel.getUsuario()
+                    .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
             egressoService.updateEgresso(egressoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();
         }
