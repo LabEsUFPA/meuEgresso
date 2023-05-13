@@ -135,32 +135,25 @@ export namespace models {
     cotista: boolean
     bolsista: boolean
     interesseEmPos: boolean
-    lattes: string
-    linkedin: string
+    lattes?: string | null
+    linkedin?: string | null
     posGraduacao: boolean
-    cotas: [
-      {
-        id: number
-        nome: string
-      },
-      {
-        id: number
-        nome: string
-      }
-    ]
+    cotas: Array<{
+      id: number
+      nome: string
+    }> | null
+
     usuario: {
       id: number
       username: string
       email: string
       nome: string
-      grupos: [
-        {
-          id: number
-          nomeGrupo: string
-        }
-      ]
+      grupos: Array<{
+        id: number
+        nomeGrupo: string
+      }> | null
     }
-    palestras: {
+    palestras?: {
       id: number
       descricao: string
     }
@@ -168,46 +161,45 @@ export namespace models {
       id: number
       descricao: string
     }
-    titulacao: {
+    titulacao?: {
       id: {
         egressoId: number
         titulacaoId: number
       }
-      curso: {
+      curso?: {
         id: number
         nome: string
       }
-      titulacao: {
+      titulacao?: {
         id: number
         nome: string
       }
     }
-    emprego: {
+    emprego?: {
       id: {
         egressoId: number
         empresaId: number
       }
-      empresa: {
+      empresa?: {
         id: number
-        nome: string
-        setorAtuacoes: [
-          {
-            id: number
-            nome: string
-          }
-        ]
-        endereco: {
+        nome?: string
+        setorAtuacoes?: Array<{
+          id: number
+          nome: string
+        }> | null
+
+        endereco?: {
           id: number
           cidade: string
           estado: string
           pais: string
         }
       }
-      faixaSalarial: {
+      faixaSalarial?: {
         id: number
         faixa: string
       }
-      areaAtuacao: {
+      areaAtuacao?: {
         id: number
         nome: string
       }
@@ -216,10 +208,11 @@ export namespace models {
       id: number
       descricao: string
     }
-    bolsa: {
+    bolsa?: {
       id: number
       nome: string
     }
+    remuneracaoBolsa?: number
   }
   // export interface EgressoModelUpdate {
   //   nascimento: string

@@ -90,6 +90,8 @@ public class EgressoController {
     public String cadastrarEgressoPrimeiroCadastro(@RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO,
             JwtAuthenticationToken token) {
 
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+
         // em cima ok
         EgressoModel egresso = mapper.map(egressoCadastroDTO, EgressoModel.class);
         TitulacaoModel titulacao = titulacaoService
@@ -152,7 +154,11 @@ public class EgressoController {
                 if (setorAtuacao.getEmpresas() == null)
                     setorAtuacao.setEmpresas(new HashSet<>());
                 setorAtuacao.getEmpresas().add(empresa);
-                empresa.setSetorAtuacoes(new HashSet<>(Set.of(setorAtuacao)));
+                if (empresa.getSetorAtuacoes() == null) {
+                    empresa.setSetorAtuacoes(new HashSet<>(Set.of(setorAtuacao)));
+                } else {
+                    empresa.getSetorAtuacoes().add(setorAtuacao);
+                }
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
@@ -182,6 +188,8 @@ public class EgressoController {
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public EgressoDTO getEgresso(JwtAuthenticationToken token) {
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+
         EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
         return mapper.map(egressoModel, EgressoDTO.class);
     }
@@ -212,14 +220,45 @@ public class EgressoController {
                 egressoModel.getDepoimento().setEgresso(egressoModel);
             }
             if (egressoModel.getEmprego() != null) {
-                egressoModel.getEmprego().setEgresso(egressoModel);
+                EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
+                egressoEmpresaModel.setEgresso(egressoModel);
+                EnderecoModel enderecoModel = egressoEmpresaModel.getEmpresa().getEndereco();
+                EnderecoModel enderecoModelNoBanco = enderecoService.findByCidadeAndEstadoAndPais(
+                        enderecoModel.getCidade(), enderecoModel.getEstado(),
+                        enderecoModel.getPais());
+                if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
+                    egressoEmpresaModel.getEmpresa().setEndereco(enderecoModelNoBanco);
+                } else if (enderecoModelNoBanco == null) {
+                    egressoEmpresaModel.getEmpresa()
+                            .setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
+                                    .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
+                }
             }
             if (egressoModel.getPalestras() != null) {
                 egressoModel.getPalestras().setEgresso(egressoModel);
             }
             egressoModel.getUsuario()
                     .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
-            egressoService.updateEgresso(egressoModel);
+            Set<SetorAtuacaoModel> setorAtuacaoModels = egressoModel.getEmprego().getEmpresa().getSetorAtuacoes();
+            egressoModel = egressoService.updateEgresso(egressoModel);
+            for (SetorAtuacaoModel sa : setorAtuacaoModels) {
+                SetorAtuacaoModel setorAtuacaoModelNoBanco = setorAtuacaoService.findByNome(sa.getNome());
+                if (setorAtuacaoModelNoBanco == null) {
+                    setorAtuacaoModelNoBanco = SetorAtuacaoModel.builder().nome(sa.getNome())
+                            .empresas(new HashSet<>(Set.of(egressoModel.getEmprego().getEmpresa()))).build();
+                } else if (setorAtuacaoModelNoBanco != sa) {
+                    if (sa.getEmpresas() == null) {
+                        sa.setEmpresas(new HashSet<>());
+                    }
+                    sa.getEmpresas().add(egressoModel.getEmprego().getEmpresa());
+                } else {
+                    if (setorAtuacaoModelNoBanco.getEmpresas() == null) {
+                        setorAtuacaoModelNoBanco.setEmpresas(new HashSet<>());
+                    }
+                    setorAtuacaoModelNoBanco.getEmpresas().add(egressoModel.getEmprego().getEmpresa());
+                }
+                setorAtuacaoService.save(setorAtuacaoModelNoBanco);
+            }
             return ResponseType.SUCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();

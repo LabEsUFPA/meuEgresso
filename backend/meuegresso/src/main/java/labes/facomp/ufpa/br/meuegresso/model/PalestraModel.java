@@ -26,7 +26,7 @@ public class PalestraModel extends Auditable {
     private Integer id;
 
     @Lob
-    @Column(name = "descricao_palestra", unique = true, nullable = false)
+    @Column(name = "descricao_palestra", unique = false, nullable = false)
     private String descricao;
 
     @OneToOne(fetch = FetchType.LAZY)

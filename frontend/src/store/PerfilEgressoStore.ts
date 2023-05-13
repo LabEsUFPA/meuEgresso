@@ -108,7 +108,9 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         return JSON.stringify(response.data)
       }
     },
-
+    returnEgresso (response: any) {
+      return response
+    },
     async fetchEgresso () {
       const response = await Api.request({
         method: 'get',
@@ -118,7 +120,8 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       if (response?.status === 200) {
         storage.remove('loggedEgresso')
         storage.set('loggedEgresso', JSON.stringify(response.data))
-        return JSON.stringify(response.data)
+        const returnValue = JSON.stringify(response.data)
+        return this.returnEgresso(returnValue)
       }
     },
 
