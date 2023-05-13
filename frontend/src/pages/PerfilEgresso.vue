@@ -715,7 +715,7 @@
 
             <template #default>
               <div v-if="!dataEgresso.adicionais.isInput">
-                <CustomPerfilData
+                <!-- <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"
                   :vmodel="dataEgresso.adicionais.assuntosPalestras"
@@ -726,7 +726,7 @@
               t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
               ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                   icon-path=""
-                />
+                /> -->
                 <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"

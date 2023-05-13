@@ -6,7 +6,7 @@
     }" -->
 
   <div
-    v-if="visible"
+    v-if="vmodel || visible"
     :class="{
       'opacity-50': !enabled || !vmodel
     }"
@@ -104,4 +104,12 @@ withDefaults(defineProps<Props>(), {
   visible: true,
   enabled: true
 })
+
+// const visibilty = computed(() => {
+//   const visibilty = true
+//   if (p) {
+
+//   }
+//   return visibilty
+// })
 </script>
