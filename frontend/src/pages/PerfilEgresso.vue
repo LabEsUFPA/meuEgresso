@@ -1404,4 +1404,3 @@ function fetchEgresso () {
   return egressoStore.fetchEgresso()
 }
 </script>
-<style></style>
