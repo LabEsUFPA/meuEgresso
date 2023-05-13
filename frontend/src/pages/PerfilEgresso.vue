@@ -211,6 +211,7 @@
                   class="mb-5"
                   name="geral.genero"
                   :value="dataEgresso.geral.genero"
+                  :value-id="dataEgresso.generoId"
                   label="Genero"
                   :options="egressoStore.generos"
                   required
@@ -947,9 +948,15 @@ async function handleSubmitAcademico (values: any) {
       id: 4
     })
   }
+  jsonResponse.posGraduacao = values.academico.posGrad.value
+  if (!values.academico.posGrad.value) {
+    jsonResponse.interesseEmPos = values.academico.posGrad.desejaPos
+  } else {
+    jsonResponse.titulacao.titulacao.nome = values.academico.posGrad.local
+    jsonResponse.titulacao.curso = values.academico.posGrad.curso
+  }
 
   jsonResponse.matricula = values.academico.matricula
-  jsonResponse.posGraduacao = values.academico.posGrad.value
 
   jsonResponse.cotista = values.academico.cotista.value
   console.log('cota')
@@ -979,6 +986,7 @@ async function handleSubmitLocalizacao (values: any) {
   jsonResponse.emprego.empresa.endereco.pais = values.localizacao.pais
   jsonResponse.emprego.empresa.endereco.estado = values.localizacao.estado
   jsonResponse.emprego.empresa.endereco.cidade = values.localizacao.cidade
+  // delete jsonResponse.emprego.empresa.endereco.id
   console.log('HandleSubmit Response: ')
   console.log(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
@@ -1373,7 +1381,7 @@ async function fetchUpdateEgresso () {
   }
 
   console.log('MOUNTED async')
-  console.log('Back Response:')
+  console.log('Back Response:a')
 
   // console.log(egressoStore.generos)
   let generos : any
@@ -1414,6 +1422,7 @@ async function fetchUpdateEgresso () {
 
   dataEgresso.value = {
     egressoId: json.id,
+    generoId: json.genero.id,
     geral:
       {
         email: userData.email,
