@@ -214,6 +214,7 @@
                   :value-id="dataEgresso.generoId"
                   label="Genero"
                   :options="egressoStore.generos"
+                  :pre-filled="true"
                   required
                 />
                 <CustomInput
@@ -329,6 +330,7 @@
                   label="País"
                   :options="countries"
                   v-model:value="dataEgresso.localizacao.pais"
+                  :pre-filled="true"
                   required
                 />
 
@@ -339,6 +341,7 @@
                   label="Estado"
                   :options="states"
                   v-model:value="dataEgresso.localizacao.estado"
+                  :pre-filled="true"
                   required
                 />
 
@@ -347,6 +350,7 @@
                   :value="dataEgresso.localizacao.cidade"
                   label="Cidade"
                   :options="cities"
+                  :pre-filled="true"
                   required
                 />
               </div>
@@ -475,6 +479,8 @@
                   label="Tipo de Aluno"
                   placeholder="Selecione"
                   :options="selectOpts.tipoAluno"
+                  v-model:value="dataEgresso.academico.tipoAluno"
+                  :pre-filled="true"
                   required
                 />
 
@@ -535,11 +541,13 @@
                   class="mb-5"
                   name="academico.bolsista.tipo"
                   :value="dataEgresso.academico.bolsista.tipo"
+                  :value-id="dataEgresso.bolsaId"
                   label="Tipo de Bolsa"
                   placeholder="Selecione"
                   :options="egressoStore.tiposBolsa"
                   :required="dataEgresso.academico.bolsista.value"
                   :disabled="!dataEgresso.academico.bolsista.value"
+                  :pre-filled="true"
                 />
 
                 <CustomInput
@@ -585,7 +593,7 @@
                 <CustomCheckbox
                   name="academico.posGrad.desejaPos"
                   :value="dataEgresso.academico.posGrad.desejaPos"
-                  label="Deseja realizar pós graduação?"
+                  label="Deseja realizar pós graduação"
                   v-if="!dataEgresso.academico.posGrad.value"
                 />
               </div>
@@ -666,6 +674,7 @@
                   placeholder="Selecione"
                   v-model:value="dataEgresso.carreira.area"
                   :options="selectOpts.areaAtuacao"
+                  :pre-filled="true"
                 />
 
                 <CustomSelect
@@ -677,6 +686,7 @@
                   :options="selectOpts.setorAtuacao"
                   :required="dataEgresso.carreira.area !== 'Desempregado'"
                   :disabled="dataEgresso.carreira.area === 'Desempregado'"
+                  :pre-filled="true"
                 />
                 <CustomInput
                   class="mb-5"
@@ -686,14 +696,18 @@
                   placeholder="Ex: Google"
                   :required="dataEgresso.carreira.area !== 'Desempregado'"
                   :disabled="dataEgresso.carreira.area === 'Desempregado'"
+                  :pre-filled="true"
                 />
                 <CustomSelect
                   class="mb-5"
                   name="carreira.faixaSalarial"
+                  :value="dataEgresso.carreira.faixaSalarial"
+                  :value-id="dataEgresso.faixaSalarialId"
                   label="Faixa Salarial"
                   :options="egressoStore.faixasSalariais"
                   :required="dataEgresso.carreira.area !== 'Desempregado'"
                   :disabled="dataEgresso.carreira.area === 'Desempregado'"
+                  :pre-filled="true"
                 />
               </div>
             </template>
@@ -902,7 +916,8 @@ import {
   mdiMapMarkerRadius,
   mdiLinkVariant,
   mdiCheckCircle,
-  mdiAlertCircle
+  mdiAlertCircle,
+  mdiTwitter
 } from '@mdi/js'
 // mdiHome CEP,
 const dialogSucesso = ref(false)
@@ -920,8 +935,10 @@ function handleStatus (status : any) {
 
   if (status !== 201) {
     dialogFalha.value = true
+    return false
   } else {
     dialogSucesso.value = true
+    return true
   }
 }
 
@@ -934,9 +951,12 @@ async function handleSubmitHeader (values: any) {
   jsonResponse.lattes = values.geral.lattes
   console.log(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
-  handleStatus(status)
-  await useLoginStore().saveUser()
-  toggleIsInput('profileHead')
+  if (handleStatus(status)) {
+    await useLoginStore().saveUser()
+
+    toggleIsInput('profileHead')
+  }
+
   fetchUpdateEgresso()
 }
 
@@ -952,9 +972,12 @@ async function handleSubmitGeral (values: any) {
   jsonResponse.nascimento = values.geral.nascimento
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   console.log(jsonResponse)
-  handleStatus(status)
-  await useLoginStore().saveUser()
-  toggleIsInput('geral')
+
+  if (handleStatus(status)) {
+    await useLoginStore().saveUser()
+    toggleIsInput('geral')
+  }
+
   fetchUpdateEgresso()
 }
 
@@ -991,7 +1014,7 @@ async function handleSubmitAcademico (values: any) {
     jsonResponse.interesseEmPos = values.academico.posGrad.desejaPos
   } else {
     jsonResponse.titulacao.titulacao.nome = values.academico.posGrad.local
-    jsonResponse.titulacao.curso = values.academico.posGrad.curso
+    jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
   }
 
   jsonResponse.matricula = values.academico.matricula
@@ -1013,8 +1036,10 @@ async function handleSubmitAcademico (values: any) {
   const status = await egressoStore.atualizarEgresso(jsonResponse)
 
   console.log(jsonResponse)
-  handleStatus(status)
-  toggleIsInput('academico')
+  if (handleStatus(status)) {
+    toggleIsInput('academico')
+  }
+
   fetchUpdateEgresso()
 }
 async function handleSubmitLocalizacao (values: any) {
@@ -1028,8 +1053,10 @@ async function handleSubmitLocalizacao (values: any) {
   console.log('HandleSubmit Response: ')
   console.log(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
-  handleStatus(status)
-  toggleIsInput('localizacao')
+  if (handleStatus(status)) {
+    toggleIsInput('localizacao')
+  }
+
   fetchUpdateEgresso()
 }
 async function handleSubmitCarreira (values: any) {
@@ -1039,14 +1066,19 @@ async function handleSubmitCarreira (values: any) {
   console.log('HandleSubmit Response: ')
   jsonResponse.emprego.empresa.nome = values.carreira.empresa
   // jsonResponse.emprego.empresa.setorAtuacoes = values.carreira.setor
-  // jsonResponse.emprego.empresa.areaAtuacao = values.carreira.area
-
-  // jsonResponse.emprego.empresa.id = jsonResponse.emprego.id.empresaId
+  jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
+  for (let i = 0; i < selectOpts.value.areaAtuacao.length; i++) {
+    if (selectOpts.value.areaAtuacao[i] === values.carreira.area) {
+      // jsonResponse.emprego.areaAtuacao.id = i + 1
+    }
+  }
   console.log(jsonResponse.emprego.empresa)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   console.log(jsonResponse)
-  handleStatus(status)
-  toggleIsInput('carreira')
+  if (handleStatus(status)) {
+    toggleIsInput('carreira')
+  }
+
   fetchUpdateEgresso()
 }
 async function handleSubmitAdicionais (values: any) {
@@ -1063,8 +1095,9 @@ async function handleSubmitAdicionais (values: any) {
   egressoStore.atualizarEgresso(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   console.log(jsonResponse)
-  handleStatus(status)
-  toggleIsInput('adicionais')
+  if (handleStatus(status)) {
+    toggleIsInput('adicionais')
+  }
   fetchUpdateEgresso()
 }
 
@@ -1174,7 +1207,7 @@ const schemaLocalizacao = object().shape({
 
 const schemaAcademico = object().shape({
   academico: object({
-    matricula: string().required(),
+    matricula: string().required().min(12).max(12),
     tipoAluno: string().required(),
     cotista: object({
       value: boolean(),
@@ -1236,6 +1269,9 @@ const schemaAdicionais = object().shape({
 const dataEgresso = ref({
   egressoId: 0,
   generoId: 0,
+  bolsaId: 0,
+  areaAtuacaoId: 0,
+
   // cotasIds: [0, 0],
 
   // usuarioId: 0,
@@ -1251,7 +1287,6 @@ const dataEgresso = ref({
   // faixaSalarialId: 0,
   // areaAtuacaoId: 0,
   // depoimentoId: 0,
-  // bolsaId: 0,
 
   grupos: [''],
 
@@ -1461,6 +1496,9 @@ async function fetchUpdateEgresso () {
   dataEgresso.value = {
     egressoId: json.id,
     generoId: json.genero.id,
+    bolsaId: json.bolsa?.id,
+    areaAtuacaoId: json.emprego?.areaAtuacao?.id,
+
     geral:
       {
         email: userData.email,

@@ -47,7 +47,7 @@
           <p
             :class="inputValue === '' ? 'text-gray-500' : 'text-black'"
           >
-            {{ currentSelection.label === '' ? inputValue : '' }} {{ inputValue === '' ? placeholder : currentSelection.label }}
+            {{ currentSelection.label === '' ? inputValue : '' }} {{ inputValue === '0' ? placeholder : currentSelection.label }}
           </p>
         </div>
 
@@ -124,6 +124,7 @@ interface Props {
   disabled?: boolean
   errorMessage?: string
   successMessage?: string
+  preFilled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -133,7 +134,8 @@ const props = withDefaults(defineProps<Props>(), {
   value: '',
   valueId: 0,
   errorMessage: 'Campo inválido',
-  successMessage: 'Campo correto'
+  successMessage: 'Campo correto',
+  preFilled: false
 })
 
 const $emit = defineEmits(['update:value'])
@@ -168,19 +170,25 @@ function handleEmit (option: IOpts) {
 }
 
 function handleEmitValue (option: IOpts, id : number) {
-  if (typeof option === 'object') {
-    handleChange(option.value)
-    $emit('update:value', option.value)
-    currentSelection.value.value = id
+  if (id === 0) {
+    handleEmit(option)
+  } else {
+    if (typeof option === 'object') {
+      handleChange(option.value)
+      $emit('update:value', option.value)
+      currentSelection.value.value = id
 
-    return
+      return
+    }
+
+    handleChange(id)
+    $emit('update:value', id)
+    currentSelection.value.label = option
   }
-
-  handleChange(id)
-  $emit('update:value', id)
-  currentSelection.value.label = option
 }
 const open = ref(false)
+if (props.preFilled) {
+  handleEmitValue(props.value, props.valueId)
+}
 
-handleEmitValue(props.value, props.valueId)
 </script>
