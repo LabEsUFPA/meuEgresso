@@ -207,9 +207,9 @@ public class EgressoController {
                     .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
             SetorAtuacaoModel setorAtuacaoModel = egressoModel.getEmprego().getSetorAtuacao();
             AreaAtuacaoModel areaAtuacaoModel = egressoModel.getEmprego().getAreaAtuacao();
-            validaCurso(egressoModel.getTitulacao().getCurso().getNome(), egressoModel);
             if (egressoModel.getTitulacao() != null) {
-                validaInstituicao(egressoModel.getTitulacao().getEmpresa().getNome(), egressoModel);
+                validaCurso(egressoModel.getTitulacao().getCurso().getNome(), egressoModel);
+                validaInstituicao(egresso.getTitulacao().getEmpresa().getNome(), egressoModel);
             }
             validaAreaAtuacao(areaAtuacaoModel.getNome(), egressoModel);
             validaSetorAtuacao(setorAtuacaoModel.getNome(), egressoModel);
