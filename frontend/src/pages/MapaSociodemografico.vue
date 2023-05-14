@@ -47,7 +47,7 @@
             size="15"
           />
           {{ selectedMarker[0].empresa.endereco.cidade }},
-          {{ State.getStateByCode(selectedMarker[0].empresa.endereco.estado)?.name /* deprecado, atualizar para getStateByCodeAndCountry quando tiver back */ }},
+          {{ State.getStateByCodeAndCountry(selectedMarker[0].empresa.endereco.estado, selectedMarker[0].empresa.endereco.pais)?.name }},
           {{ Country.getCountryByCode(selectedMarker[0].empresa.endereco.pais)?.name }}
         </div>
 
@@ -73,7 +73,7 @@
               tag="router"
               variant="outlined"
               color="sky"
-              :link="`/egresso/${egresso.id}`"
+              :link="`/egresso/${egresso.id.egressoId}`"
             >
               Visitar
               <SvgIcon
@@ -96,12 +96,11 @@ import { computed, ref } from 'vue'
 import { type models } from 'src/@types'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronRight, mdiInformation, mdiMapMarker } from '@mdi/js'
-import { Country, State } from 'country-state-city'
+import { Country, State, City } from 'country-state-city'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomMapMarker from 'src/components/CustomMapMarker.vue'
 import { LatLng } from 'leaflet'
 import { useHomeStore } from 'src/store/HomeStore'
-import { faker } from '@faker-js/faker'
 interface EgressoMapa extends models.EgressoMapa {}
 
 const zoom = 2
@@ -119,8 +118,10 @@ const egressos = computed(() => {
   const filtered = new Map<string, EgressoMapa[]>()
 
   data.forEach(egresso => {
-    egresso.empresa.endereco.latitude = parseInt(faker.address.latitude()) // dados fake
-    egresso.empresa.endereco.longitude = parseInt(faker.address.latitude()) // dados fake
+    const cidade = City.getCitiesOfState(egresso.empresa.endereco.pais, egresso.empresa.endereco.estado).filter(elem => elem.name === egresso.empresa.endereco.cidade)[0]
+    egresso.empresa.endereco.latitude = parseInt(String(cidade.latitude))
+    egresso.empresa.endereco.longitude = parseInt(String(cidade.longitude))
+
     const mapKey = `${egresso.empresa.endereco.latitude}:${egresso.empresa.endereco.longitude}`
     const mapElement = filtered.get(mapKey)
 

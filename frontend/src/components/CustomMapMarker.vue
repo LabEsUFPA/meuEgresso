@@ -12,16 +12,16 @@
             class="inline text-gray-400"
             size="18"
           />
-          {{ egressos[0].localizacao.cidade }},
-          {{ State.getStateByCode(egressos[0].localizacao.estado).name /* deprecado, atualizar para getStateByCodeAndCountry quando tiver back */ }},
-          {{ Country.getCountryByCode(egressos[0].localizacao.pais).name }}
+          {{ egressos[0].empresa.endereco.cidade }},
+          {{ State.getStateByCodeAndCountry(egressos[0].empresa.endereco.estado, egressos[0].empresa.endereco.pais)?.name }},
+          {{ Country.getCountryByCode(egressos[0].empresa.endereco.pais)?.name }}
         </div>
 
         <div class="font-bold italic text-right text-[16px]">
           {{ egressos.length }} egresso{{ egressos.length === 1 ? '' : 's' }}
         </div>
 
-        <div class="text-gray-400 text-xs text-right mt-1">
+        <div class="text-gray-400 text-xs text-right mt-1 hidden md:block">
           Clique para ver detalhes
         </div>
       </div>
