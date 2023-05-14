@@ -1,33 +1,50 @@
 <template>
-  <div v-if="mode === 'link'">
-    <a
-      :href="'' + urlComp"
-      target="_blank"
-      @handleClick.prevent="handleClick"
+  <button
+    type="submit"
+    :class="sytleVersion2"
+    v-if="isInput"
+  >
+    <img
+      :class="classimg"
+      :src="iconPath2"
+      :width="30"
+      :height="30"
     >
-      <button
-        :class="styles"
-        :type="type"
-      >
-        <img
-          :class="classimg"
-          :src="iconPath"
-          :width="iconSize"
-          :height="iconSize"
-          alt="link"
-        >
-        <h1 class="text-sky-600 outline-sky-600 text-base font-bold ml-3 mr-2"><slot>{{ label }}</slot></h1>
-      </button>
-    </a>
-  </div>
+    <h1
+      class="ml-[7px] mr-3"
+    >
+      Salvar
+    </h1>
+  </button>
+
+  <button
+    v-else
+
+    :class="styles"
+    :type="type"
+    @click="$emit('toggle')"
+  >
+    <img
+      :class="classimg"
+      :src="iconPath"
+      :width="iconSize"
+      :height="iconSize"
+    >
+    <h1
+      class="ml-3 mr-2"
+    >
+      {{ label }}
+    </h1>
+  </button>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-
-defineEmits(['handleClick'])
+// import CustomButton from './CustomButton.vue'
+defineEmits(['toggle', 'localToggle', 'click'])
 
 interface Props {
+  isInput: boolean
   label?: string;
   variant?: 'standard' | 'outlined' | 'flat';
   hasShadow?: boolean;
@@ -39,36 +56,49 @@ interface Props {
     | 'emerald'
     | 'whitesky'
     | 'transparentsky'
+    | 'invisiblesky'
+    color2?:
+    | 'sky'
+    | 'blue'
+    | 'red'
+    | 'green'
+    | 'emerald'
+    | 'whitesky'
+    | 'transparentsky'
     | 'invisiblesky';
   url?: string;
   iconPath?: string;
+  iconPath2?: string;
   type?: 'reset' | 'button' | 'submit';
   iconType?: string;
   classimg?: string;
   placeholder?: string;
-  iconSize?: string;
-  mode?: 'link' | 'input'
+  iconSize?: string
+  textClass?: string;
+  textClassW?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  isInput: false,
   label: '',
   variant: 'standard',
   hasShadow: true,
-  textClass: 'text-white',
+  textClassW: 'text-white',
   color: 'sky',
+  color2: 'emerald',
   type: 'button',
   iconPath: '',
+  iconPath2: '',
   url: '',
   iconType: 'mdi',
   classimg: 'normal',
   placeholder: '',
   iconSize: '20',
-  mode: 'link'
-})
+  textClass: 'text-sky-600 outline-sky-600 text-base font-bold'
 
-const handleClick = (clickUrl : string) => {
-  window.open(clickUrl, '_blank')
-}
+})
+//  textClass: 'text-sky-600 outline-sky-600 text-base font-bold ml-3 mb mr-2'
+
 // objeto mapeia a props 'color' para as classes tailwind correspondentes
 // NOTA - NÃO CRIAR NOMES DE CLASSES PROGRAMATICAMENTE: https://tailwindcss.com/docs/content-configuration#dynamic-class-names
 const colorClassNames = {
@@ -112,7 +142,7 @@ const colorClassNames = {
     background: {
       standard: 'bg-emerald-600',
       hoverLight: 'hover:bg-emerald-600/20',
-      hover: 'hover:bg-emerald-600'
+      hover: 'hover:bg-emerald-800'
     },
     text: 'text-emerald-600',
     outline: 'outline-emerald-600'
@@ -155,22 +185,49 @@ const colorClassNames = {
   }
 }
 
-const urlComp = computed(() => {
-  let url = ''
+const sytleVersion2 = computed(() => {
+  // const classesV2 = [
+  //   'items-center rounded-md flex px-[7px] py-[7px] relative text-lg font-semibold hover:duration-200'
+  // ]
+  // const classesV2 = ['rounded-md px-4 py-1 text-base font-semibold hover:duration-200']
+  const classesV2 = [
+    'items-center rounded-md flex px-[2px] py-[4px] relative text-base font-semibold hover:duration-200'
+  ]
+  switch (props.variant) {
+    case 'standard':
+      classesV2.push(colorClassNames[props.color2].background.standard)
+      classesV2.push(colorClassNames[props.color2].background.hover)
+      if (props.hasShadow === true) {
+        classesV2.push('shadow-md')
+      }
 
-  if (props.url === '') {
-    url = props.url + props.placeholder
-  } else if (props.url.startsWith('http://') || props.url.startsWith('https://')) {
-    url = props.url
-  } else {
-    url = 'http://' + props.url
+      break
+    case 'outlined':
+      classesV2.push(
+        `outline-2 focus:outline-4 outline ${
+          colorClassNames[props.color2].outline
+        } ${
+          colorClassNames[props.color2].background.hoverLight
+        } focus:outline-slate-900`
+      )
+      break
+    case 'flat':
+      classesV2.push(colorClassNames[props.color2].background.hoverLight)
   }
-  return url
+
+  if (props.variant === 'standard') {
+    classesV2.push(props.textClassW)
+  } else {
+    classesV2.push(colorClassNames[props.color2].text)
+  }
+
+  return classesV2.join(' ')
 })
+
 const styles = computed(() => {
   // const classes = ['items-center rounded-lg flex ml- px-2.5 py-1 relative text-lg font-semibold hover:duration-200']
   const classes = [
-    'items-center rounded-md flex px-[7px] py-[7px] relative text-lg font-semibold hover:duration-200'
+    'items-center rounded-md flex px-[7px] py-[7px] relative text-base  font-semibold hover:duration-200'
   ]
 
   // const classes = ['items-rounded-md flex px-8 py-1.5 text-lg font-semibold hover:duration-200']
@@ -198,16 +255,11 @@ const styles = computed(() => {
   }
 
   if (props.variant === 'standard') {
-    classes.push(props.textClass)
-  } else {
     classes.push(colorClassNames[props.color].text)
+  } else {
+    classes.push(props.textClassW)
   }
 
   return classes.join(' ')
 })
-
 </script>
-
-<style>
-
-</style>

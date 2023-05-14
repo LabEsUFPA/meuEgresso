@@ -34,6 +34,9 @@ export const useLoginStore = defineStore('LoginStore', {
     userLogout () {
       this.userLogged = false
       storage.remove('loggedUser')
+      if (storage.has('loggedEgresso')) {
+        storage.remove('loggedEgresso')
+      }
       document.cookie = 'Token=; Max-Age=0'
     },
 

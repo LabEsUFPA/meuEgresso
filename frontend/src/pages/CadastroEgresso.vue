@@ -240,7 +240,7 @@
 
             <CustomCheckbox
               name="academico.posGrad.desejaPos"
-              label="Deseja realizar pós graduação?"
+              label="Desejo realizar pós graduação"
               v-if="!bools.posGrad"
             />
           </div>
@@ -543,6 +543,7 @@ async function handleSubmit (values: InferType<typeof schema>) {
   console.log(values.carreira.area !== 'Desempregado')
   const empresa = values.carreira.area !== 'Desempregado'
     ? {
+        areaAtuacao: values.carreira.area,
         faixaSalarialId: values.carreira.faixaSalarial ? parseInt(values.carreira.faixaSalarial) : null,
         setorAtuacao: values.carreira.setor,
         nome: values.carreira.empresa,
@@ -566,7 +567,7 @@ async function handleSubmit (values: InferType<typeof schema>) {
   const status = await $store.cadastrarEgresso({
     nascimento: values.geral.nascimento.toString(),
     generoId: parseInt(values.geral.genero),
-    matricula: values.academico.matricula,
+    matricula: values.academico.matricula || null,
     cotista: Boolean(values.academico.cotista.value),
     bolsista: Boolean(values.academico.bolsista.value),
     interesseEmPos: Boolean(values.academico.desejaPos),
@@ -586,6 +587,8 @@ async function handleSubmit (values: InferType<typeof schema>) {
     empresa,
     titulacao
   })
+  console.log('Staus: ')
+  console.log(status)
 
   if (status !== 201) {
     dialogFalha.value = true
@@ -614,7 +617,7 @@ const schema = object().shape({
     cidade: string().required()
   }),
   academico: object({
-    matricula: string().min(12).max(12).required(),
+    matricula: string().min(12).max(12),
     tipoAluno: string(),
     cotista: object({
       value: boolean(),
