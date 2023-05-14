@@ -367,7 +367,16 @@
         </CustomButton>
       </div>
     </Form>
-    <CustomDialog v-model="dialogSucesso">
+    <CustomDialog
+      v-model="dialogSucesso"
+      route-to-page="/egresso"
+    >
+      <template #routerLink>
+        <RouterLink
+          to="/egresso"
+        />
+      </template>
+
       <div class="h-full flex justify-center items-center">
         <div class="w-1/2">
           <div class="text-green-500 text-center mb-3">
@@ -396,7 +405,9 @@
       </div>
     </CustomDialog>
 
-    <CustomDialog v-model="dialogFalha">
+    <CustomDialog
+      v-model="dialogFalha"
+    >
       <div class="h-full flex justify-center items-center">
         <div class="w-1/2">
           <div class="text-red-600 text-center mb-3">
@@ -444,6 +455,9 @@ import {
 } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
@@ -689,4 +703,5 @@ onMounted(() => {
     }).join(' '))
   }
 })
+
 </script>

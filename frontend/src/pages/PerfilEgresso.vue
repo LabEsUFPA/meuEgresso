@@ -506,6 +506,8 @@
                     name="academico.cotista.tipos.renda"
                     label="Cota Renda"
                     :disabled="!dataEgresso.academico.cotista.value"
+                    :value="dataEgresso.academico.cotista.tipos.renda"
+                    v-model:value="dataEgresso.academico.cotista.tipos.renda"
                   />
 
                   <CustomCheckbox
@@ -513,6 +515,8 @@
                     name="academico.cotista.tipos.escola"
                     label="Cota Escola"
                     :disabled="!dataEgresso.academico.cotista.value"
+                    :value="dataEgresso.academico.cotista.tipos.escola"
+                    v-model:value="dataEgresso.academico.cotista.tipos.escola"
                   />
 
                   <CustomCheckbox
@@ -520,12 +524,16 @@
                     name="academico.cotista.tipos.raca"
                     label="Autodeclaração de Raça"
                     :disabled="!dataEgresso.academico.cotista.value"
+                    :value="dataEgresso.academico.cotista.tipos.raca"
+                    v-model:value="dataEgresso.academico.cotista.tipos.raca"
                   />
 
                   <CustomCheckbox
                     name="academico.cotista.tipos.quilombolaIndigena"
                     label="Quilombola/Indigena"
                     :disabled="!dataEgresso.academico.cotista.value"
+                    :value="dataEgresso.academico.cotista.tipos.quilombolaIndigena"
+                    v-model:value="dataEgresso.academico.cotista.tipos.quilombolaIndigena"
                   />
                 </div>
 
@@ -917,8 +925,7 @@ import {
   mdiMapMarkerRadius,
   mdiLinkVariant,
   mdiCheckCircle,
-  mdiAlertCircle,
-  mdiTwitter
+  mdiAlertCircle
 } from '@mdi/js'
 // mdiHome CEP,
 const dialogSucesso = ref(false)
@@ -1316,7 +1323,14 @@ const dataEgresso = ref({
     tipoAluno: '',
     cotista: {
       value: false,
-      tipo: ''
+      tipo: '',
+      tipos: {
+        escola: false,
+        renda: false,
+        raca: false,
+        quilombolaIndigena: false
+
+      }
     },
     bolsista: {
       value: false,
@@ -1355,93 +1369,6 @@ const dataEgresso = ref({
   }
 })
 
-const dataResquestFront: EgressoModelUpdate = {
-  id: dataEgresso.value.egressoId,
-  nascimento: '',
-  genero: {
-    id: 0,
-    nome: ''
-  },
-  matricula: '',
-  cotista: false,
-  bolsista: false,
-  interesseEmPos: false,
-  lattes: '',
-  linkedin: '',
-  posGraduacao: false,
-  cotas: [{
-    id: 0,
-    tipo: ''
-  }
-
-  ],
-  usuario: {
-    id: 0,
-    username: '',
-    email: '',
-    nome: '',
-    grupos: ['']
-  },
-  palestras: {
-    id: 0,
-    descricao: ''
-  },
-  contribuicao: {
-    id: 0,
-    descricao: ''
-  },
-  titulacao: {
-    id: {
-      egressoId: 0,
-      titulacaoId: 0
-    },
-    curso: {
-      id: 0,
-      nome: ''
-    },
-    titulacao: {
-      id: 0,
-      nome: ''
-    }
-  },
-  emprego: {
-    id: {
-      egressoId: 0,
-      empresaId: 0
-    },
-    empresa: {
-      id: 0,
-      nome: '',
-      endereco: {
-        id: 0,
-        cidade: '',
-        estado: '',
-        pais: ''
-      }
-    },
-    faixaSalarial: {
-      id: 0,
-      faixa: ''
-    },
-    setorAtuacao: {
-      id: 0,
-      nome: ''
-    },
-    areaAtuacao: {
-      id: 0,
-      nome: ''
-    }
-  },
-  depoimento: {
-    id: 0,
-    descricao: ''
-  },
-  bolsa: {
-    id: 0,
-    nome: ''
-  },
-  remuneracaoBolsa: 0
-}
 console.log(dataEgresso)
 
 let jsonResponse : any
@@ -1485,10 +1412,9 @@ async function fetchUpdateEgresso () {
 
   jsonResponse = json
 
-  dataResquestFront.values = jsonResponse
-  console.log(dataResquestFront.values)
+  console.log(jsonResponse)
 
-  console.log('grupo:')
+  console.log('grupoa:')
   console.log(json.usuario.grupos[0].nomeGrupo)
   console.log(json.id)
   // Cotas
@@ -1497,9 +1423,12 @@ async function fetchUpdateEgresso () {
   // Caso contrario: cotasEgresso += json.cotas[i].nome
 
   let cotasEgresso = ''
+  // let cotasEgressoArr = []
+
   for (let i = 0; i < json.cotas.length; i++) {
     cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
   }
+
   // Email e nome vem do usuario loggado
 
   dataEgresso.value = {
@@ -1530,12 +1459,19 @@ async function fetchUpdateEgresso () {
       tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
       cotista: {
         value: json.cotista,
-        tipo: cotasEgresso || ''
+        tipo: cotasEgresso || '',
+        tipos: {
+          escola: false,
+          renda: false,
+          raca: false,
+          quilombolaIndigena: false
+        }
+
       },
       bolsista: {
         value: json.bolsista,
         tipo: json.bolsa?.nome || '',
-        remuneracao: json.remuneracaoBolsa + '' || ''
+        remuneracao: json.remuneracaoBolsa || ''
       },
       posGrad: {
         value: json.posGraduacao,
@@ -1566,6 +1502,21 @@ async function fetchUpdateEgresso () {
       linkedin: json.linkedin || '',
       lattes: json.lattes || '',
       isInput: false
+    }
+  }
+
+  for (let i = 0; i < json.cotas.length; i++) {
+    if (json.cotas[i].id === 1) {
+      dataEgresso.value.academico.cotista.tipos.escola = true
+    }
+    if (json.cotas[i].id === 2) {
+      dataEgresso.value.academico.cotista.tipos.renda = true
+    }
+    if (json.cotas[i].id === 3) {
+      dataEgresso.value.academico.cotista.tipos.raca = true
+    }
+    if (json.cotas[i].id === 4) {
+      dataEgresso.value.academico.cotista.tipos.quilombolaIndigena = true
     }
   }
 

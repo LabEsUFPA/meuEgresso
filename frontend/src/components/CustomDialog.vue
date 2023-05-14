@@ -10,7 +10,7 @@
         <CustomButton
           class="absolute right-0"
           color="blue"
-          @click="$emit('update:modelValue', false)"
+          @click="onButtonClick"
           variant="flat"
         >
           <SvgIcon
@@ -29,9 +29,28 @@
 import CustomButton from './CustomButton.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiClose } from '@mdi/js'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const emit = defineEmits(['update:modelValue'])
 
-defineEmits(['update:modelValue'])
-defineProps<{
-  modelValue: boolean
-}>()
+// defineProps<{
+//   modelValue: boolean
+// }>()
+interface Props {
+  modelValue: boolean,
+  routeToPage?: string
+}
+const props = withDefaults(defineProps<Props>(), {
+  routeToPage: ''
+})
+function onButtonClick () {
+  emit('update:modelValue', false)
+  if (props.routeToPage !== '') {
+    goToPage(props.routeToPage)
+  }
+}
+
+function goToPage (page : string) {
+  router.push(page)
+}
 </script>
