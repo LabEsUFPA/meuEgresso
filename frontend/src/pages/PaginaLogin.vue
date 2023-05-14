@@ -85,7 +85,6 @@ const schema = object().shape({
 const handleSubmit = async (loginData: LoginModel) => {
   if (loginData.username || loginData.password) {
     const response = await useLoginStore().userLogin(loginData.username, loginData.password)
-    await useLoginStore().saveUser()
 
     if (response === 200) {
       error.value = false
