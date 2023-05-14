@@ -72,8 +72,7 @@ class CotaServiceTest {
         CotaModel response = cotaService.save(new CotaModel());
 
         assertNotNull(response);
-        assertEquals(ID, response.getId());
-        assertEquals(NOME, response.getNome());
+        assertEquals(getMockCota(), response);
 
     }
 
@@ -90,7 +89,9 @@ class CotaServiceTest {
                 .willReturn(getMockCotaLista());
 
         List<CotaModel> response = cotaService.findAll();
+
         assertNotNull(response);
+        assertEquals(getMockCotaLista(), response);
     }
 
     @Test
@@ -100,7 +101,7 @@ class CotaServiceTest {
                 .willReturn(Optional.of(getMockCota()));
 
         CotaModel response = cotaService.findById(ID);
-        assertNotNull(response);
+        assertEquals(getMockCota(), response);
     }
 
     /**
@@ -113,13 +114,17 @@ class CotaServiceTest {
     @Test
     @Order(4)
     void testUpdate() throws InvalidRequestException {
+
+        var cotaUpdate = getMockCota();
+        cotaUpdate.setNome("Teste");
+
         BDDMockito.given(repository.save(Mockito.any(CotaModel.class)))
-                .willReturn(getMockCota());
+                .willReturn(cotaUpdate);
 
-        CotaModel cotaUpdated = cotaService.update(getMockCota());
+        CotaModel response = cotaService.update(cotaUpdate);
 
-        assertNotNull(cotaUpdated);
-        assertEquals(getMockCota(), cotaUpdated);
+        assertNotNull(response);
+        assertEquals(cotaUpdate, response);
     }
 
     /**

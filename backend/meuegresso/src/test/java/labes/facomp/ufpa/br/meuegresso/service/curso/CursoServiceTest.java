@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +48,9 @@ class CursoServiceTest {
     private static final Integer ID = 1;
     private static final String NOME = "Ciência da Computação";
 
+    private static final Integer ID2 = 2;
+    private static final String NOME2 = "Sistema da Informação";
+
     @Autowired
     private CursoService cursoService;
 
@@ -71,8 +75,7 @@ class CursoServiceTest {
         CursoModel response = cursoService.save(new CursoModel());
 
         assertNotNull(response);
-        assertEquals(ID, response.getId());
-        assertEquals(NOME, response.getNome());
+        assertEquals(getMockCurso(), response);
     }
 
     /**
@@ -83,11 +86,11 @@ class CursoServiceTest {
      */
     @Test
     void testFindAll() {
-        BDDMockito.given(cursoService.findAll())
-                .willReturn(List.of(getMockCurso()));
+        BDDMockito.given(cursoRepository.findAll())
+                .willReturn(getMockCursoLista());
 
         List<CursoModel> response = cursoService.findAll();
-        assertNotNull(response);
+        assertEquals(getMockCursoLista(), response);
     }
 
     /**
@@ -102,7 +105,7 @@ class CursoServiceTest {
                 .willReturn(Optional.of(getMockCurso()));
 
         CursoModel response = cursoService.findById(ID);
-        assertNotNull(response);
+        assertEquals(getMockCurso(), response);
     }
 
     /**
@@ -114,13 +117,17 @@ class CursoServiceTest {
      */
     @Test
     void testUpdate() throws InvalidRequestException {
+
+        var cursoUpdate = getMockCurso();
+        cursoUpdate.setNome("Teste");
+
         BDDMockito.given(cursoRepository.save(Mockito.any(CursoModel.class)))
-                .willReturn(getMockCurso());
+                .willReturn(cursoUpdate);
 
-        CursoModel cursoUpdated = cursoService.update(getMockCurso());
+        CursoModel response = cursoService.update(getMockCurso());
 
-        assertNotNull(cursoUpdated);
-        assertEquals(cursoUpdated, getMockCurso());
+        assertNotNull(response);
+        assertEquals(cursoUpdate, response);
     }
 
     /**
@@ -178,6 +185,26 @@ class CursoServiceTest {
                 .nome(NOME)
                 .build();
         return cursoTest;
+    }
+
+    private List<CursoModel> getMockCursoLista() {
+
+        List<CursoModel> cursoLista = new ArrayList<>();
+
+        CursoModel cursoTest = CursoModel.builder()
+                .id(ID)
+                .nome(NOME)
+                .build();
+
+        CursoModel cursoTest2 = CursoModel.builder()
+                .id(ID2)
+                .nome(NOME2)
+                .build();
+
+        cursoLista.add(cursoTest);
+        cursoLista.add(cursoTest2);
+
+        return cursoLista;
     }
 
     @AfterAll

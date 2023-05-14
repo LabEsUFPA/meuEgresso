@@ -82,7 +82,6 @@ class EgressoServiceTest {
         BDDMockito.given(egressoService.deleteById(Mockito.anyInt()))
                 .willReturn(true);
 
-
     }
 
     @Test
@@ -108,9 +107,13 @@ class EgressoServiceTest {
     @Test
     @Order(2)
     void testFindAll() {
+        BDDMockito.given(egressoRepository.findAll())
+                .willReturn(getMockEgressoLista());
 
         List<EgressoModel> response = egressoService.findAll();
+
         assertNotNull(response);
+        assertEquals(getMockEgressoLista(), response);
     }
 
     /**
@@ -123,8 +126,11 @@ class EgressoServiceTest {
     @Order(3)
     void testFindByUsuarioId() {
 
+        BDDMockito.given(egressoRepository.findById(Mockito.anyInt()))
+                .willReturn(Optional.ofNullable(getMockEgresso()));
+
         EgressoModel response = egressoService.findByUsuarioId(ID);
-        assertNotNull(response);
+        assertEquals(getMockEgresso(), response);
     }
 
     /**
@@ -136,8 +142,17 @@ class EgressoServiceTest {
     @Test
     @Order(4)
     void testUpdateEgresso() {
-        EgressoModel response = egressoService.updateEgresso(getMockEgresso());
-        assertNotNull(response);
+        try {
+            BDDMockito.given(egressoRepository.save(Mockito.any(
+                    EgressoModel.class)))
+                    .willReturn(getMockEgresso());
+
+            EgressoModel response = egressoService.updateEgresso(getMockEgresso());
+            assertNotNull(response);
+            assertEquals(getMockEgresso(), response);
+        } catch (Exception e) {
+            e.getMessage();
+        }
     }
 
     /**
@@ -149,6 +164,10 @@ class EgressoServiceTest {
     @Test
     @Order(5)
     void testExistsByIdAndCreatedById() {
+        BDDMockito.given(egressoRepository.existsByIdAndCreatedById(
+                Mockito.anyInt(), Mockito.anyInt()))
+                .willReturn(true);
+
         Boolean response = egressoService.existsByIdAndCreatedById(ID, ID);
         assertTrue(response);
     }
@@ -162,6 +181,11 @@ class EgressoServiceTest {
     @Test
     @Order(6)
     void testDeletarEgresso() {
+
+        Mockito.when(egressoRepository.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(getMockEgresso()));
+                
+        Mockito.when(egressoRepository.existsById(Mockito.anyInt())).thenReturn(true);
 
         Boolean response = egressoService.deleteById(ID);
         assertTrue(response);
