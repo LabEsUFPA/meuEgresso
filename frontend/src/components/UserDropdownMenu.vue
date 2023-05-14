@@ -1,6 +1,6 @@
 <template>
   <button 
-    class="relative hidden w-fit gap-x-2 md:flex rounded items-center justify-end"
+    class="relative w-fit gap-x-2 md:flex rounded items-center justify-end"
     @click="toggleUserMenu()"
     @blur="delayedToggleUserMenu()"
   >
@@ -17,7 +17,8 @@
       />
 
       <div 
-        :class="userMenuIsOpen ? 'inline-block' : 'hidden'"
+        v-show="userMenuIsOpen"
+        id="dropdown"
         class="absolute shadow-md bg-white min-w-32 z-50 cursor-pointer right-[1px] max-h-96 overflow-y-auto top-8 py-3 rounded-lg border border-t-0 text-sm justify-self-end"
       >
 
@@ -80,5 +81,7 @@ const userLogout = () => {
   toggleUserMenu();
 
 }
+
+defineExpose({ toggleUserMenu, userMenuIsOpen })
 
 </script>
