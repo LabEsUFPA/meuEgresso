@@ -81,49 +81,6 @@
               type="mdi"
               size="20"
               class="inline mr-2"
-              :path="mdiMapMarker"
-            />
-            Localização
-          </h1>
-        </template>
-
-        <template #default>
-          <div>
-            <CustomSelect
-              class="mb-5"
-              name="localizacao.pais"
-              label="País"
-              :options="countries"
-              v-model:value="pais"
-              required
-            />
-
-            <CustomSelect
-              class="mb-5"
-              name="localizacao.estado"
-              label="Estado"
-              :options="states"
-              v-model:value="estado"
-              required
-            />
-
-            <CustomSelect
-              name="localizacao.cidade"
-              label="Cidade"
-              :options="cities"
-              required
-            />
-          </div>
-        </template>
-      </FolderSection>
-
-      <FolderSection class="mt-6">
-        <template #title>
-          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-            <SvgIcon
-              type="mdi"
-              size="20"
-              class="inline mr-2"
               :path="mdiSchool"
             />
             Acadêmico
@@ -138,7 +95,6 @@
               label="Matrícula"
               mask="############"
               placeholder="205004940001"
-              required
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -206,7 +162,6 @@
               class="mb-5"
               name="academico.bolsista.remuneracao"
               label="Remuneração da bolsa"
-              placeholder="Selecione"
               type="number"
               step="0.01"
               :required="bools.bolsista"
@@ -224,7 +179,6 @@
               class="mb-5"
               name="academico.posGrad.local"
               label="Instituição da pós-graduação"
-              placeholder="Selecione"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
             />
@@ -233,7 +187,6 @@
               class="mb-5"
               name="academico.posGrad.curso"
               label="Curso de pós-graduação"
-              placeholder="Selecione"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
             />
@@ -309,6 +262,49 @@
               type="mdi"
               size="20"
               class="inline mr-2"
+              :path="mdiMapMarker"
+            />
+            Localização
+          </h1>
+        </template>
+
+        <template #default>
+          <div>
+            <CustomSelect
+              class="mb-5"
+              name="localizacao.pais"
+              label="País"
+              :options="countries"
+              v-model:value="pais"
+              required
+            />
+
+            <CustomSelect
+              class="mb-5"
+              name="localizacao.estado"
+              label="Estado"
+              :options="states"
+              v-model:value="estado"
+              required
+            />
+
+            <CustomSelect
+              name="localizacao.cidade"
+              label="Cidade"
+              :options="cities"
+              required
+            />
+          </div>
+        </template>
+      </FolderSection>
+
+      <FolderSection class="mt-6">
+        <template #title>
+          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
+            <SvgIcon
+              type="mdi"
+              size="20"
+              class="inline mr-2"
               :path="mdiMessage"
             />
             Adicionais
@@ -325,7 +321,10 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
+              Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras: <sup
+                v-if="bools.palestras"
+                class="text-red-500"
+              >*</sup>
             </div>
 
             <CustomTextarea
@@ -336,7 +335,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso:
+              Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso: <sup class="text-red-500">*</sup>
             </div>
 
             <CustomTextarea
@@ -345,7 +344,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto:
+              Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto: <sup class="text-red-500">*</sup>
             </div>
 
             <CustomTextarea name="adicionais.contribuicoes" />
@@ -574,6 +573,7 @@ async function handleSubmit (values: InferType<typeof schema>) {
     lattes: values.geral.lattes || null,
     linkedin: values.geral.linkedin || null,
     posGraduacao: Boolean(values.academico.posGrad.value),
+    remuneracaoBolsa: Number(values.academico.bolsista.remuneracao),
     cotas,
     nome: values.geral.nome,
     palestras,

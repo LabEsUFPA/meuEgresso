@@ -13,11 +13,19 @@
           :validation-schema="schemaHeader"
         >
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
-            <img
-              class="ml-[200px] mt-[37px] w-[120px] h-[120px] rounded-full"
-              src="/src/assets/profile-pic.png"
-              alt="Avatar"
+            <div
+              class="mt-[37px] flex flex-col items-center justify-center"
+              :class="{
+                ['ml-[200px]']: !isPublic,
+                ['ml-[110px]']: isPublic
+              }"
             >
+              <img
+                class="w-[120px] h-[120px] rounded-full"
+                src="/src/assets/profile-pic.png"
+                alt="Avatar"
+              >
+            </div>
             <h1 class="mt-[5px] ml-[100px] ">
               <ButtonEdit
                 label="Editar"
@@ -27,6 +35,7 @@
                 color2="emerald"
                 @toggle="toggleIsInput('profileHead')"
                 :is-input="dataEgresso.profileHead.isInput"
+                v-if="!isPublic"
               />
             </h1>
           </div>
@@ -159,6 +168,7 @@
                   icon-size="20"
                   @toggle="toggleIsInput('geral')"
                   :is-input="dataEgresso.geral.isInput"
+                  v-if="!isPublic"
                 />
               </h1>
             </template>
@@ -193,6 +203,7 @@
                   label="Email"
                   placeholder="marcele@email.com"
                   :icon-path="mdiEmail"
+                  v-if="!isPublic"
                 />
 
                 <CustomPerfilData
@@ -254,6 +265,7 @@
                   :has-shadow="false"
                   @toggle="toggleIsInput('localizacao')"
                   :is-input="dataEgresso.localizacao.isInput"
+                  v-if="!isPublic"
                 />
               </h1>
             </template>
@@ -285,7 +297,7 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  :vmodel="dataEgresso.localizacao.pais"
+                  :vmodel="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
                   name="localizacao.pais"
                   placeholder="Brasil"
                   label="País"
@@ -295,7 +307,7 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  :vmodel="dataEgresso.localizacao.estado"
+                  :vmodel="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
                   name="localizacao.estado"
                   label="Estado"
                   placeholder="Pará"
@@ -370,6 +382,7 @@
                   :has-shadow="false"
                   @toggle="toggleIsInput('academico')"
                   :is-input="dataEgresso.academico.isInput"
+                  v-if="!isPublic"
                 />
               </h1>
             </template>
@@ -587,6 +600,7 @@
                   :has-shadow="false"
                   @toggle="toggleIsInput('carreira')"
                   :is-input="dataEgresso.carreira.isInput"
+                  v-if="!isPublic"
                 />
               </h1>
             </template>
@@ -698,6 +712,7 @@
                   :has-shadow="false"
                   @toggle="toggleIsInput('adicionais')"
                   :is-input="dataEgresso.adicionais.isInput"
+                  v-if="!isPublic"
                 />
               </h1>
             </template>
@@ -821,7 +836,7 @@ import CustomTextarea from 'src/components/CustomTextarea.vue'
 import { Form } from 'vee-validate'
 import { object, string, date, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
-
+import { useRoute } from 'vue-router'
 import {
   mdiAccount,
   mdiBriefcase,
@@ -838,18 +853,22 @@ import {
 // mdiHome CEP,
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
+const $route = useRoute()
 // const camposFaltosos = ref(false)
 
 const egressoStore = usePerfilEgressoStore()
 const storage = new LocalStorage()
 
-egressoStore.fetchAll()
+const isPublic = computed(() => {
+  return Object.keys($route.params).length === 1
+})
 
+if (!isPublic.value) {
+  console.log('a')
+  egressoStore.fetchAll()
+}
 
 function handleStatus (status : any) {
-  console.log('Staus: ')
-  console.log(status)
-
   if (status !== 201) {
     dialogFalha.value = true
   } else {
@@ -858,9 +877,7 @@ function handleStatus (status : any) {
 }
 
 async function handleSubmitHeader (values: any) {
-  console.log('handleSubmitHeader')
   toggleIsInput('profileHead')
-  console.log(values)
   // const valuesJSON = JSON.stringify(values, null, 2)
   // dataEgresso.value.profileHead.nome = values.geral.nome
   // dataEgresso.value.profileHead.linkedin = values.geral.linkedin
@@ -872,16 +889,13 @@ async function handleSubmitHeader (values: any) {
   // egressoStore.fetchEgresso()
   // futuro add foto
   jsonResponse.usuario.nome = values.geral.nome
-  console.log(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   handleStatus(status)
   fetchEgresso()
 }
 
 async function handleSubmitGeral (values: any) {
-  console.log('handleSubmitGeral')
   toggleIsInput('geral')
-  console.log(JSON.stringify(values, null, 2))
   // dataEgresso.value.geral = values.geral
 
   jsonResponse.usuario.email = values.geral.email
@@ -890,15 +904,12 @@ async function handleSubmitGeral (values: any) {
   jsonResponse.genero.id = values.geral.genero
   jsonResponse.nascimento = values.geral.nascimento
   const status = await egressoStore.atualizarEgresso(jsonResponse)
-  console.log(jsonResponse)
   handleStatus(status)
   fetchUpdateEgresso()
 }
 
 async function handleSubmitAcademico (values: any) {
-  console.log('handleSubmitAcademico')
   toggleIsInput('academico')
-  console.log(JSON.stringify(values, null, 2))
   jsonResponse.matricula = values.academico.matricula
   jsonResponse.posGraduacao = values.academico.posGrad.value
   jsonResponse.cotista = values.academico.cotista.value
@@ -906,42 +917,30 @@ async function handleSubmitAcademico (values: any) {
   jsonResponse.bolsa = values.academico.bolsista.tipo
   jsonResponse.remuneracaoBolsa = values.academico.bolsista.remuneracao
   const status = await egressoStore.atualizarEgresso(jsonResponse)
-  console.log(jsonResponse)
   handleStatus(status)
 }
 async function handleSubmitLocalizacao (values: any) {
-  console.log('handleSubmitLocalizacao')
-
-  console.log(JSON.stringify(values, null, 2))
   jsonResponse.emprego.empresa.endereco.pais = values.localizacao.pais
   jsonResponse.emprego.empresa.endereco.estado = values.localizacao.estado
   jsonResponse.emprego.empresa.endereco.cidade = values.localizacao.cidade
-  console.log('HandleSubmit Response: ')
-  console.log(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   toggleIsInput('localizacao')
   handleStatus(status)
   fetchUpdateEgresso()
 }
 async function handleSubmitCarreira (values: any) {
-  console.log('handleSubmitCarreira')
   toggleIsInput('carreira')
-  console.log(JSON.stringify(values, null, 2))
   dataEgresso.value.carreira = values.carreira
   egressoStore.atualizarEgresso(values.carreira)
 }
 async function handleSubmitAdicionais (values: any) {
-  console.log('handleSubmitAdicionais')
   toggleIsInput('adicionais')
-  console.log(JSON.stringify(values, null, 2))
   dataEgresso.value.adicionais = values.adicionais
   egressoStore.atualizarEgresso(values.adicionais)
 }
 
 let isInputLocal = false
 function toggleIsInput (FolderLabel: string) {
-  console.log('EditMode: ' + FolderLabel)
-
   switch (FolderLabel) {
     case 'profileHead':
       dataEgresso.value.profileHead.isInput = !dataEgresso.value.profileHead.isInput
@@ -967,7 +966,6 @@ function toggleIsInput (FolderLabel: string) {
   }
 
   isInputLocal = !isInputLocal
-  console.log(isInputLocal)
 }
 
 //
@@ -1266,7 +1264,6 @@ const dataResquestFront: EgressoModelUpdate = {
   },
   remuneracaoBolsa: 0
 }
-console.log(dataEgresso)
 
 let jsonResponse : any
 let userData : any
@@ -1276,18 +1273,16 @@ fetchUpdateEgresso()
 async function fetchUpdateEgresso () {
   if (storage.has('loggedUser')) {
     userData = JSON.parse(storage.get('loggedUser'))
-    console.log('Logged in')
     // dataEgresso.value.profileHead.nome = userData.nome
     // dataEgresso.value.geral.email = userData.email
-    console.log('DATA')
-    console.log(userData)
 
     // getEgresso
-    egressoResponseBack = fetchEgresso()
+    if (isPublic.value) {
+      egressoResponseBack = fetchPublicEgresso($route.params?.id)
+    } else {
+      egressoResponseBack = fetchEgresso()
+    }
   }
-
-  console.log('MOUNTED async')
-  console.log('Back Response:')
 
   let json = JSON.parse(storage.get('loggedEgresso'))
   const ResponseBack = await egressoResponseBack
@@ -1297,11 +1292,7 @@ async function fetchUpdateEgresso () {
   jsonResponse = json
 
   dataResquestFront.values = jsonResponse
-  console.log(dataResquestFront.values)
 
-  console.log('grupo:')
-  console.log(json.usuario.grupos[0].nomeGrupo)
-  console.log(json.id)
   // Cotas
 
   // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
@@ -1317,7 +1308,7 @@ async function fetchUpdateEgresso () {
     egressoId: json.id,
     geral:
       {
-        email: userData.email,
+        email: isPublic.value ? json.usuario.email : userData.email,
         genero: json.genero.nome,
         confirmacaoEmail: '',
         nascimento: json.nascimento,
@@ -1368,7 +1359,7 @@ async function fetchUpdateEgresso () {
       isInput: false
     },
     profileHead: {
-      nome: userData.nome,
+      nome: isPublic.value ? json.usuario.nome : userData.nome,
       linkedin: json.linkedin || '',
       lattes: json.lattes || '',
       isInput: false
@@ -1380,5 +1371,9 @@ async function fetchUpdateEgresso () {
 
 function fetchEgresso () {
   return egressoStore.fetchEgresso()
+}
+
+function fetchPublicEgresso (id: number) {
+  return egressoStore.fetchPublicEgresso(id)
 }
 </script>

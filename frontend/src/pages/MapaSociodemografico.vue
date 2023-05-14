@@ -22,7 +22,7 @@
         <l-map />
       </lmap>
     </div>
-    <div class="mt-2 md:mt-0 md:ml-2 w-full h-40 md:w-52 md:h-[600px] bg-gray-300 rounded-xl p-1">
+    <div class="mt-2 md:mt-0 md:ml-2 w-full h-[355px] md:w-72 md:h-[600px] bg-gray-300 rounded-xl p-1">
       <div
         class="text-gray-700 h-full text-center mx-auto w-3/4 font-light flex flex-col justify-center items-center"
         v-if="!selectedMarker.length"
@@ -36,53 +36,93 @@
         <span>Clique em alguma localização destacada</span>
       </div>
       <div
-        class="flex flex-col"
+        class="flex flex-col items-stretch justify-between h-full"
         v-else
       >
-        <div class="text-sky-500 bg-white p-3 text-xs rounded-xl mb-1">
-          <SvgIcon
-            type="mdi"
-            :path="mdiMapMarker"
-            class="inline"
-            size="15"
-          />
-          {{ selectedMarker[0].empresa.endereco.cidade }},
-          {{ State.getStateByCodeAndCountry(selectedMarker[0].empresa.endereco.estado, selectedMarker[0].empresa.endereco.pais)?.name }},
-          {{ Country.getCountryByCode(selectedMarker[0].empresa.endereco.pais)?.name }}
+        <div>
+          <div class="text-sky-500 bg-white p-3 text-xs rounded-xl mb-1">
+            <SvgIcon
+              type="mdi"
+              :path="mdiMapMarker"
+              class="inline"
+              size="15"
+            />
+            {{ selectedMarker[0].empresa.endereco.cidade }},
+            {{ State.getStateByCodeAndCountry(selectedMarker[0].empresa.endereco.estado, selectedMarker[0].empresa.endereco.pais)?.name }},
+            {{ Country.getCountryByCode(selectedMarker[0].empresa.endereco.pais)?.name }}
+          </div>
+
+          <div class="grid grid-cols-2 gap-1 md:block">
+            <div
+              class="bg-white rounded-xl md:mb-1 p-3 shadow-sm"
+              v-for="(egresso, index) in egressosPaginados"
+              :key="index"
+            >
+              <div
+                :title="egresso.nomeEgresso"
+                class="font-semibold whitespace-nowrap overflow-hidden text-ellipsis"
+              >
+                {{ egresso.nomeEgresso }}
+              </div>
+              <div
+                :title="egresso.empresa.nome"
+                class="whitespace-nowrap overflow-hidden text-ellipsis"
+              >
+                {{ egresso.empresa.nome }}
+              </div>
+              <div class="mt-3 flex justify-end">
+                <CustomButton
+                  tag="router"
+                  variant="outlined"
+                  color="sky"
+                  :link="`/egresso/${egresso.id.egressoId}`"
+                >
+                  Visitar
+                  <SvgIcon
+                    type="mdi"
+                    class="inline"
+                    :path="mdiChevronRight"
+                  />
+                </CustomButton>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div
-          class="bg-white rounded-xl mb-1 p-3"
-          v-for="(egresso, index) in selectedMarker"
-          :key="index"
+          v-if="maxPages > 0"
+          class="flex flex-row"
         >
-          <div
-            :title="egresso.nomeEgresso"
-            class="font-semibold whitespace-nowrap overflow-hidden text-ellipsis"
+          <CustomButton
+            color="white"
+            text-class="text-gray-600"
+            class="mr-2"
+            @click="() => currentPage > 0 && currentPage--"
+            v-if="currentPage !== 0"
           >
-            {{ egresso.nomeEgresso }}
-          </div>
-          <div
-            :title="egresso.empresa.nome"
-            class="whitespace-nowrap overflow-hidden text-ellipsis"
+            <SvgIcon
+              type="mdi"
+              class="inline"
+              :path="mdiChevronLeft"
+            />
+            Anterior
+          </CustomButton>
+
+          <div class="flex-1" />
+
+          <CustomButton
+            color="white"
+            text-class="text-gray-600"
+            @click="() => currentPage < maxPages && currentPage++"
+            v-if="currentPage !== maxPages"
           >
-            {{ egresso.empresa.nome }}
-          </div>
-          <div class="mt-3 flex justify-end">
-            <CustomButton
-              tag="router"
-              variant="outlined"
-              color="sky"
-              :link="`/egresso/${egresso.id.egressoId}`"
-            >
-              Visitar
-              <SvgIcon
-                type="mdi"
-                class="inline"
-                :path="mdiChevronRight"
-              />
-            </CustomButton>
-          </div>
+            Próximo
+            <SvgIcon
+              type="mdi"
+              class="inline"
+              :path="mdiChevronRight"
+            />
+          </CustomButton>
         </div>
       </div>
     </div>
@@ -95,7 +135,7 @@ import { LMap, LTileLayer } from '@vue-leaflet/vue-leaflet'
 import { computed, ref } from 'vue'
 import { type models } from 'src/@types'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiChevronRight, mdiInformation, mdiMapMarker } from '@mdi/js'
+import { mdiChevronLeft, mdiChevronRight, mdiInformation, mdiMapMarker } from '@mdi/js'
 import { Country, State, City } from 'country-state-city'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomMapMarker from 'src/components/CustomMapMarker.vue'
@@ -133,5 +173,18 @@ const egressos = computed(() => {
   })
 
   return filtered
+})
+
+const currentPage = ref(0)
+const maxEntries = 4
+
+const egressosPaginados = computed<EgressoMapa[]>(() => {
+  const start = currentPage.value * maxEntries
+  return selectedMarker.value.slice(start, start + maxEntries)
+})
+
+const maxPages = computed(() => {
+  console.log(selectedMarker.value.length, maxEntries, Math.ceil(selectedMarker.value.length / maxEntries) - 1)
+  return Math.ceil(selectedMarker.value.length / maxEntries) - 1
 })
 </script>

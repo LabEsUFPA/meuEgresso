@@ -143,18 +143,17 @@ export namespace models {
   }
 
   export interface ContaUsuarioModel {
-      id: Number,
-      username: string,
-      email: string,
-      nome: string,
-      senha: string,
-      grupos?: [
-        {
-          id: number
-          nomeGrupo?: string
-        }
-      ]
-    }
+    id: number
+    username: string
+    email: string
+    nome: string
+    senha: string
+    grupos?: [
+      {
+        id: number
+        nomeGrupo?: string
+      }
+    ]
   }
 
   export interface EgressoModelUpdate {
@@ -247,45 +246,45 @@ export namespace models {
     }
     remuneracaoBolsa?: number
   }
-  // export interface EgressoModelUpdate {
-  //   nascimento: string
-  //   generoId: id
-  //   matricula: string | null
-  //   cotista: boolean
-  //   bolsista: boolean
-  //   interesseEmPos: boolean
-  //   lattes?: string | null
-  //   linkedin?: string | null
-  //   posGraduacao: boolean
-  //   cotas: Array<{
-  //     id: id
-  //   }> | null
-  //   nome: string
-  //   palestras?: {
-  //     descricao?: string
-  //   } | null
-  //   contribuicao: {
-  //     descricao: string
-  //   }
-  //   depoimento: {
-  //     descricao: string
-  //   }
-  //   bolsaId?: id | null
-  //   remuneracaoBolsa?: number
-  //   empresa: {
-  //     faixaSalarialId?: id | null
-  //     setorAtuacao?: string
-  //     nome?: string
-  //     endereco?: {
-  //       pais: string
-  //       estado: string
-  //       cidade: string
-  //     }
-  //   } | null
-  //   titulacao?: {
-  //     instituicao?: string
-  //     curso?: string
-  //   } | null
-  // }
 }
 
+// export interface EgressoModelUpdate {
+//   nascimento: string
+//   generoId: id
+//   matricula: string | null
+//   cotista: boolean
+//   bolsista: boolean
+//   interesseEmPos: boolean
+//   lattes?: string | null
+//   linkedin?: string | null
+//   posGraduacao: boolean
+//   cotas: Array<{
+//     id: id
+//   }> | null
+//   nome: string
+//   palestras?: {
+//     descricao?: string
+//   } | null
+//   contribuicao: {
+//     descricao: string
+//   }
+//   depoimento: {
+//     descricao: string
+//   }
+//   bolsaId?: id | null
+//   remuneracaoBolsa?: number
+//   empresa: {
+//     faixaSalarialId?: id | null
+//     setorAtuacao?: string
+//     nome?: string
+//     endereco?: {
+//       pais: string
+//       estado: string
+//       cidade: string
+//     }
+//   } | null
+//   titulacao?: {
+//     instituicao?: string
+//     curso?: string
+//   } | null
+// }

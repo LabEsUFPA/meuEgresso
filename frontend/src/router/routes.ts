@@ -26,13 +26,17 @@ export default [
         component: async () => await import('src/pages/PerfilEgresso.vue')
       },
       {
+        path: '/egresso/:id',
+        component: async () => await import('src/pages/PerfilEgresso.vue')
+      },
+      {
         path: '/conta-egresso',
         component: async () => await import('src/pages/EdicaoContaEgresso.vue')
       },
       {
         path: '/conta-admin',
         component: async () => await import('src/pages/EdicaoContaAdmin.vue')
-      },
+      }
     ]
   }
 ]
