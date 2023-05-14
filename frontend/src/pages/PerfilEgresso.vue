@@ -239,125 +239,6 @@
           </FolderSection>
         </Form>
         <Form
-          @submit="handleSubmitLocalizacao"
-          @invalid-submit="onInvalid"
-          :validation-schema="schemaLocalizacao"
-        >
-          <FolderSection class="mt-6">
-            <template #EditButton>
-              <h1 class="relative">
-                <ButtonEdit
-                  label="Editar"
-                  icon-path="/src/assets/edit.svg"
-                  icon-path2="/src/assets/wcheck.svg"
-                  color="invisiblesky"
-                  color2="emerald"
-                  classimg="sky-600"
-                  :has-shadow="false"
-                  @toggle="toggleIsInput('localizacao')"
-                  :is-input="dataEgresso.localizacao.isInput"
-                />
-              </h1>
-            </template>
-            <template #title>
-              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-                <SvgIcon
-                  type="mdi"
-                  size="20"
-                  class="inline mr-2"
-                  :path="mdiMapMarker"
-                />
-                Localização
-              </h1>
-            </template>
-
-            <template #default>
-              <div v-if="!dataEgresso.localizacao.isInput">
-                <!-- <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.localizacao.cep"
-                  name="localizacao.cep"
-                  label="CEP"
-                  placeholder="00000-000"
-                  mask="#####-###"
-                  :icon-path="mdiHome"
-                /> -->
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.localizacao.pais"
-                  name="localizacao.pais"
-                  placeholder="Brasil"
-                  label="País"
-                  :icon-path="mdiWeb"
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.localizacao.estado"
-                  name="localizacao.estado"
-                  label="Estado"
-                  placeholder="Pará"
-                  :icon-path="mdiMapOutline"
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-1"
-                  :vmodel="dataEgresso.localizacao.cidade"
-                  name="localizacao.cidade"
-                  label="Cidade"
-                  placeholder="Belém"
-                  :icon-path="mdiMapMarkerRadius"
-                />
-              </div>
-              <div v-else>
-                <!-- <CustomInput
-                  class="mb-5"
-                  name="localizacao.cep"
-                  label="CEP"
-                  placeholder="00000-000"
-                  mask="#####-###"
-                /> -->
-
-                <CustomSelect
-                  class="mb-5"
-                  name="localizacao.pais"
-                  :value="dataEgresso.localizacao.pais"
-                  label="País"
-                  :options="countries"
-                  v-model:value="dataEgresso.localizacao.pais"
-                  :pre-filled="true"
-                  required
-                />
-
-                <CustomSelect
-                  class="mb-5"
-                  name="localizacao.estado"
-                  :value="dataEgresso.localizacao.estado"
-                  label="Estado"
-                  :options="states"
-                  v-model:value="dataEgresso.localizacao.estado"
-                  :pre-filled="true"
-                  required
-                />
-
-                <CustomSelect
-                  name="localizacao.cidade"
-                  :value="dataEgresso.localizacao.cidade"
-                  label="Cidade"
-                  :options="cities"
-                  :pre-filled="true"
-                  required
-                />
-              </div>
-            </template>
-          </FolderSection>
-        </Form>
-        <Form
           @submit="handleSubmitAcademico"
           @invalid-submit="onInvalid"
           :validation-schema="schemaAcademico"
@@ -715,6 +596,125 @@
                   :required="dataEgresso.carreira.area !== 'Desempregado'"
                   :disabled="dataEgresso.carreira.area === 'Desempregado'"
                   :pre-filled="true"
+                />
+              </div>
+            </template>
+          </FolderSection>
+        </Form>
+        <Form
+          @submit="handleSubmitLocalizacao"
+          @invalid-submit="onInvalid"
+          :validation-schema="schemaLocalizacao"
+        >
+          <FolderSection class="mt-6">
+            <template #EditButton>
+              <h1 class="relative">
+                <ButtonEdit
+                  label="Editar"
+                  icon-path="/src/assets/edit.svg"
+                  icon-path2="/src/assets/wcheck.svg"
+                  color="invisiblesky"
+                  color2="emerald"
+                  classimg="sky-600"
+                  :has-shadow="false"
+                  @toggle="toggleIsInput('localizacao')"
+                  :is-input="dataEgresso.localizacao.isInput"
+                />
+              </h1>
+            </template>
+            <template #title>
+              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
+                <SvgIcon
+                  type="mdi"
+                  size="20"
+                  class="inline mr-2"
+                  :path="mdiMapMarker"
+                />
+                Localização
+              </h1>
+            </template>
+
+            <template #default>
+              <div v-if="!dataEgresso.localizacao.isInput">
+                <!-- <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.localizacao.cep"
+                  name="localizacao.cep"
+                  label="CEP"
+                  placeholder="00000-000"
+                  mask="#####-###"
+                  :icon-path="mdiHome"
+                /> -->
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.localizacao.pais"
+                  name="localizacao.pais"
+                  placeholder="Brasil"
+                  label="País"
+                  :icon-path="mdiWeb"
+                />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.localizacao.estado"
+                  name="localizacao.estado"
+                  label="Estado"
+                  placeholder="Pará"
+                  :icon-path="mdiMapOutline"
+                />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-1"
+                  :vmodel="dataEgresso.localizacao.cidade"
+                  name="localizacao.cidade"
+                  label="Cidade"
+                  placeholder="Belém"
+                  :icon-path="mdiMapMarkerRadius"
+                />
+              </div>
+              <div v-else>
+                <!-- <CustomInput
+                  class="mb-5"
+                  name="localizacao.cep"
+                  label="CEP"
+                  placeholder="00000-000"
+                  mask="#####-###"
+                /> -->
+
+                <CustomSelect
+                  class="mb-5"
+                  name="localizacao.pais"
+                  :value="dataEgresso.localizacao.pais"
+                  label="País"
+                  :options="countries"
+                  v-model:value="dataEgresso.localizacao.pais"
+                  :pre-filled="true"
+                  required
+                />
+
+                <CustomSelect
+                  class="mb-5"
+                  name="localizacao.estado"
+                  :value="dataEgresso.localizacao.estado"
+                  label="Estado"
+                  :options="states"
+                  v-model:value="dataEgresso.localizacao.estado"
+                  :pre-filled="true"
+                  required
+                />
+
+                <CustomSelect
+                  name="localizacao.cidade"
+                  :value="dataEgresso.localizacao.cidade"
+                  label="Cidade"
+                  :options="cities"
+                  :pre-filled="true"
+                  required
                 />
               </div>
             </template>
