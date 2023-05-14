@@ -83,29 +83,26 @@ public class EgressoController {
 
         // em cima ok
         EgressoModel egresso = mapper.map(egressoCadastroDTO, EgressoModel.class);
-        TitulacaoModel titulacao = titulacaoService
-                .findById(egressoCadastroDTO.getPosGraduacao().booleanValue() ? 2 : 1);
 
-        TitulacaoEgressoDTO titulacaoEgressoDTO;
-        EmpresaModel instituicao;
-        CursoModel curso;
-        EgressoTitulacaoModel egressoTitulacao;
+
         // Cadastro da titulacao POS-Graduação ou n
         if (egressoCadastroDTO.getTitulacao() != null) {
-            titulacaoEgressoDTO = egressoCadastroDTO.getTitulacao();
+            TitulacaoEgressoDTO titulacaoEgressoDTO = egressoCadastroDTO.getTitulacao();
             // Cadastro do curso
-            curso = cursoService.findByNome(titulacaoEgressoDTO.getCurso());
+            CursoModel curso = cursoService.findByNome(titulacaoEgressoDTO.getCurso());
             if (curso == null) {
                 curso = CursoModel.builder().nome(titulacaoEgressoDTO.getCurso()).build();
                 curso = cursoService.save(curso);
             }
             // Cadastro do Instituição ex: UFPA
-            instituicao = empresaService.findByNome(titulacaoEgressoDTO.getInstituicao());
+            EmpresaModel instituicao = empresaService.findByNome(titulacaoEgressoDTO.getInstituicao());
             if (instituicao == null) {
                 instituicao = EmpresaModel.builder().nome(titulacaoEgressoDTO.getInstituicao()).build();
                 instituicao = empresaService.save(instituicao);
             }
-            egressoTitulacao = EgressoTitulacaoModel.builder().empresa(instituicao)
+            TitulacaoModel titulacao = titulacaoService
+                    .findById(egressoCadastroDTO.getPosGraduacao().booleanValue() ? 2 : 1);
+            EgressoTitulacaoModel egressoTitulacao = EgressoTitulacaoModel.builder().empresa(instituicao)
                     .titulacao(titulacao).egresso(egresso)
                     .curso(curso).build();
             egresso.setTitulacao(egressoTitulacao);
@@ -210,9 +207,14 @@ public class EgressoController {
                     .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
             SetorAtuacaoModel setorAtuacaoModel = egressoModel.getEmprego().getSetorAtuacao();
             AreaAtuacaoModel areaAtuacaoModel = egressoModel.getEmprego().getAreaAtuacao();
+            validaCurso(egressoModel.getTitulacao().getCurso().getNome(), egressoModel);
+            if (egressoModel.getTitulacao() != null) {
+                validaInstituicao(egressoModel.getTitulacao().getEmpresa().getNome(), egressoModel);
+            }
             validaAreaAtuacao(areaAtuacaoModel.getNome(), egressoModel);
-            egressoModel = egressoService.updateEgresso(egressoModel);
             validaSetorAtuacao(setorAtuacaoModel.getNome(), egressoModel);
+
+            egressoService.updateEgresso(egressoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
@@ -254,6 +256,22 @@ public class EgressoController {
             areaAtuacaoModelNoBanco = AreaAtuacaoModel.builder().nome(areaAtuacaoNome).build();
         }
         egressoModel.getEmprego().setAreaAtuacao(areaAtuacaoModelNoBanco);
+    }
+
+    private void validaCurso(String cursoNome, EgressoModel egressoModel) {
+        CursoModel cursoModel = cursoService.findByNome(cursoNome);
+        if (cursoModel == null) {
+            cursoModel = CursoModel.builder().nome(cursoNome).build();
+        }
+        egressoModel.getTitulacao().setCurso(cursoModel);
+    }
+
+    private void validaInstituicao(String cursoInstituicao, EgressoModel egressoModel) {
+        EmpresaModel empresaModel = empresaService.findByNome(cursoInstituicao);
+        if (empresaModel == null) {
+            empresaModel = EmpresaModel.builder().nome(cursoInstituicao).build();
+        }
+        egressoModel.getTitulacao().setEmpresa(empresaModel);
     }
 
 }
