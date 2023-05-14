@@ -24,12 +24,12 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 
 public class EgressoDTO {
-        private Integer id; //ok
+        private Integer id;
 
-        private GeneroDTO genero; //ok
+        private GeneroDTO genero;
 
-        private LocalDate nascimento; 
-        
+        private LocalDate nascimento;
+
         private EgressoEmpresaBasicDTO emprego;
 
         private EgressoTitulacaoDTO titulacao;
@@ -43,6 +43,10 @@ public class EgressoDTO {
         private DepoimentoDTO depoimento;
 
         private ContribuicaoDTO contribuicao;
+
+        private String lattes;
+
+        private String linkedin;
 
         private UsuarioDTO usuario;
 }
