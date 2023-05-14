@@ -35,7 +35,7 @@ defineEmits(['click'])
 interface Props {
   variant?: 'standard' | 'outlined' | 'flat'
   textClass?: string
-  color?: 'sky' | 'blue' | 'red' | 'green' | 'emerald' | 'white' | 'black'
+  color?: 'sky' | 'blue' | 'red' | 'green' | 'emerald' | 'white' | 'black' | 'gray'
   type?: 'reset' | 'button' | 'submit'
   tag?: 'a' | 'button' | 'router'
   link?: string
@@ -119,7 +119,16 @@ const colorClassNames = {
     },
     text: 'text-black',
     outline: 'outline-black'
-  }
+  },
+  gray: {
+    background: {
+      standard: 'bg-gray-400',
+      hoverLight: 'hover:bg-gray-500/20',
+      hover: 'hover:bg-gray-500'
+    },
+    text: 'text-white',
+    outline: 'outline-gray-400'
+  },
 }
 
 const styles = computed(() => {

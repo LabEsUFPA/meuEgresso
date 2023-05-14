@@ -2,7 +2,7 @@
   <div class="flex flex-col min-h-screen justify-between">
     <header class="text-white">
       <div class="bg-gradient-to-br from-pacific-cyan to-bondi-blue">
-        <div class="py-4 pl-8 md:pl-14 flex flex-row items-center bg-[url('src/assets/textura.svg')] h-full w-full bg-right bg-no-repeat">
+        <div class="py-4 px-8 md:pl-14 flex flex-row items-center bg-[url('src/assets/textura.svg')] h-full w-full bg-right bg-no-repeat">
           <div class="flex flex-row items-center">
             <img
               class="w-12"
@@ -21,20 +21,8 @@
           <!-- Div que preenche o espaco vazio no container flexbox -->
           <div class="flex-1" />
 
-          <div
-            v-if="userLogged"
-            class="px-8 hidden gap-x-2 md:flex"
-          >
-            <CustomButton
-              class="ml-4"
-              color="white"
-              variant="flat"
-              tag="button"
-              @click="userLogout()"
-            >
-              Sair
-            </CustomButton>
-          </div>
+          <UserDropdownMenu v-if="userLogged" :user-logged="userLogged" />
+
           <div
             v-else
             class="px-8 hidden gap-x-2 md:flex"
@@ -157,8 +145,10 @@
         </nav>
       </div>
     </header>
-    <main>
-      <RouterView />
+    <main class="flex-1">
+      <div class="h-fit">
+        <RouterView />
+      </div>
     </main>
     <footer>
       <div class="bg-gradient-to-br h-24 from-pacific-cyan to-bondi-blue flex flex-row items-center justify-start pl-20">
@@ -186,21 +176,19 @@
 </template>
 
 <script lang="ts" setup>
+
 import CustomButton from 'src/components/CustomButton.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { watch, ref } from 'vue'
 import { mdiMenu } from '@mdi/js'
 import { useLoginStore } from 'src/store/LoginStore'
-import router from 'src/router'
+import UserDropdownMenu from './UserDropdownMenu.vue'
 
 const store = useLoginStore()
 const userLogged = ref(store.userLogged)
+
 watch(() => store.userLogged, () => {
   userLogged.value = store.userLogged
 })
 
-const userLogout = () => {
-  store.userLogout()
-  router.push({ path: '/entrar' })
-}
 </script>
