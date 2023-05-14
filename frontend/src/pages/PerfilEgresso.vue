@@ -509,6 +509,14 @@
                     :value="dataEgresso.academico.cotista.tipos.renda"
                     v-model:value="dataEgresso.academico.cotista.tipos.renda"
                   />
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.raca"
+                    label="Autodeclaração de Raça"
+                    :disabled="!dataEgresso.academico.cotista.value"
+                    :value="dataEgresso.academico.cotista.tipos.raca"
+                    v-model:value="dataEgresso.academico.cotista.tipos.raca"
+                  />
 
                   <CustomCheckbox
                     class="mb-5"
@@ -517,15 +525,6 @@
                     :disabled="!dataEgresso.academico.cotista.value"
                     :value="dataEgresso.academico.cotista.tipos.escola"
                     v-model:value="dataEgresso.academico.cotista.tipos.escola"
-                  />
-
-                  <CustomCheckbox
-                    class="mb-5"
-                    name="academico.cotista.tipos.raca"
-                    label="Autodeclaração de Raça"
-                    :disabled="!dataEgresso.academico.cotista.value"
-                    :value="dataEgresso.academico.cotista.tipos.raca"
-                    v-model:value="dataEgresso.academico.cotista.tipos.raca"
                   />
 
                   <CustomCheckbox
@@ -957,7 +956,19 @@ async function handleSubmitHeader (values: any) {
   jsonResponse.usuario.nome = values.geral.nome
   jsonResponse.linkedin = values.geral.linkedin
   jsonResponse.lattes = values.geral.lattes
+  // jsonResponse.emprego = null
   console.log(jsonResponse)
+  // const emprego = {
+  //   id: {
+  //     egressoId: jsonResponse.id,
+  //     empresaId: 1
+  //   }
+  // }
+
+  // jsonResponse.emprego.value = {
+  //   emprego
+
+  // }
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     await useLoginStore().saveUser()
@@ -993,53 +1004,85 @@ async function handleSubmitAcademico (values: any) {
   console.log('handleSubmitAcademico')
   console.log(JSON.stringify(values, null, 2))
   const cotas: Array<{ id: number }> | null = []
-
-  if (values.academico.cotista.tipos.escola) {
-    cotas.push({
-      id: 1
-    })
+  if (values.academico.cotista.value) {
+    if (values.academico.cotista.tipos.escola) {
+      cotas.push({
+        id: 1
+      })
+    }
+    if (values.academico.cotista.tipos.renda) {
+      cotas.push({
+        id: 2
+      })
+    }
+    if (values.academico.cotista.tipos.raca) {
+      cotas.push({
+        id: 3
+      })
+    }
+    if (values.academico.cotista.tipos.quilombolaIndigena) {
+      cotas.push({
+        id: 4
+      })
+    }
   }
 
-  if (values.academico.cotista.tipos.renda) {
-    cotas.push({
-      id: 2
-    })
-  }
-
-  if (values.academico.cotista.tipos.raca) {
-    cotas.push({
-      id: 3
-    })
-  }
-
-  if (values.academico.cotista.tipos.quilombolaIndigena) {
-    cotas.push({
-      id: 4
-    })
-  }
   jsonResponse.posGraduacao = values.academico.posGrad.value
   if (!values.academico.posGrad.value) {
     jsonResponse.interesseEmPos = values.academico.posGrad.desejaPos
+    // jsonResponse.titulacao.empresa = null
+    // jsonResponse.titulacao.curso = null
   } else {
-    jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
-    jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
+    if (jsonResponse.titulacao === undefined) {
+      const titulacao = {
+        id: {
+          egressoId: jsonResponse.id,
+          titulacaoId: 2
+        },
+        curso: {
+          id: 1,
+          nome: values.academico.posGrad.curso
+        },
+        empresa: {
+          id: 1,
+          nome: values.academico.posGrad.local
+
+        },
+        titulacao: {
+          id: 2
+        }
+      }
+      jsonResponse.titulacao = titulacao
+      // jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
+      // jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
+    } else {
+      console.log('titulacao not null')
+      console.log(jsonResponse.titulacao)
+      jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
+      jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
+    }
   }
 
   jsonResponse.matricula = values.academico.matricula
 
   jsonResponse.cotista = values.academico.cotista.value
-  console.log('cota')
-  console.log(jsonResponse.cotista)
+
   jsonResponse.bolsista = values.academico.bolsista.value
 
   jsonResponse.cotas = cotas
-  jsonResponse.bolsa.id = values.academico.bolsista.tipo
-  jsonResponse.remuneracaoBolsa = values.academico.bolsista.remuneracao
-  // back fix titulacao / instituicao
-  // jsonResponse.titulacao.titulacao.nome = values.academico.posGrad.local
 
-  // jsonResponse.titulacao.curso = values.academico.posGrad.curso
-  // delete jsonResponse.titulacao.id.titulacaoId
+  const bolsa = {
+    id: values.academico.bolsista.tipo
+  }
+  if (values.academico.bolsista.value) {
+    jsonResponse.bolsa = bolsa
+    console.log()
+    // jsonResponse.bolsa.id = values.academico.bolsista.tipo
+    jsonResponse.remuneracaoBolsa = values.academico.bolsista.remuneracao
+  } else {
+    jsonResponse.bolsa = null
+    jsonResponse.remuneracaoBolsa = 0
+  }
 
   const status = await egressoStore.atualizarEgresso(jsonResponse)
 

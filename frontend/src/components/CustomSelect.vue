@@ -47,13 +47,13 @@
           <p
             :class="inputValue === '' ? 'text-gray-500' : 'text-black'"
           >
-            <t1 v-if="props.preFilled">
+            <a v-if="props.preFilled">
               {{ currentSelection.label === '' ? inputValue : '' }}
               {{ inputValue === '0' ? placeholder : currentSelection.label }}
-            </t1>
-            <t2 v-else>
+            </a>
+            <a v-else>
               {{ inputValue === '' ? placeholder : currentSelection.label }}
-            </t2>
+            </a>
           </p>
         </div>
 
