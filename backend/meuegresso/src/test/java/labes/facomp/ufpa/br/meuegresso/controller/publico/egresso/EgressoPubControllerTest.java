@@ -46,7 +46,7 @@ import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
-public class EgressoPubControllerTest {
+class EgressoPubControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
