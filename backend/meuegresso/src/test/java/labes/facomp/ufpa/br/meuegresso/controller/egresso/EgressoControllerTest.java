@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
@@ -40,7 +41,9 @@ import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
@@ -50,6 +53,7 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 
 @SpringBootTest
 @DirtiesContext
@@ -57,7 +61,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class EgressoControllerTest {
+class EgressoControllerTest {
 
     @Autowired
     private TitulacaoRepository titulacaoRepository;
@@ -73,6 +77,10 @@ public class EgressoControllerTest {
 
     @Autowired
     ModelMapper modelMapper;
+
+    EgressoService egressoService;
+
+    EgressoDTO egressoDTO;
 
     String token;
 
@@ -93,7 +101,7 @@ public class EgressoControllerTest {
 
     @BeforeAll
     void setUp() throws Exception {
-        
+
         titulacaoRepository.save(TitulacaoModel.builder().nome("abc").build());
         titulacaoRepository.save(TitulacaoModel.builder().nome("123").build());
 
@@ -108,18 +116,18 @@ public class EgressoControllerTest {
         Set<GrupoModel> grupos = new HashSet<>();
         grupos.add(grupoModel);
 
-        UsuarioModel usuarioModel = new UsuarioModel();
+        usuarioModel = new UsuarioModel();
         usuarioModel.setUsername("username");
         usuarioModel.setNome("nome_test");
         usuarioModel.setEmail("teste@gmail.com");
         usuarioModel.setPassword("teste123");
         usuarioModel.setGrupos(grupos);
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(usuarioModel)))
-                        .andDo(MockMvcResultHandlers.print())
-                        .andExpect(status().isCreated())
-                        .andReturn();
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(usuarioModel)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andReturn();
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
         authenticationRequest.setUsername(usuarioModel.getUsername());
@@ -127,14 +135,27 @@ public class EgressoControllerTest {
         String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
         MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectJson))
-                        .andDo(MockMvcResultHandlers.print())
-                        .andExpect(status().isOk())
-                        .andReturn();
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectJson))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andReturn();
+
         AuthenticationResponse authenticationResponse = objectMapper.readValue(
-                        resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
+                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
         this.token = authenticationResponse.getToken();
+
+        MvcResult resposta = mockMvc.perform(
+                MockMvcRequestBuilders.get("/usuario")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk()).andReturn();
+
+        UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                UsuarioAuthDTO.class);
+
+        usuarioModel.setId(usuarioAuthDTO.getId());
 
         egressoCadastro.setNascimento(LocalDate.now());
         egressoCadastro.setGeneroId(EGRESSO_ID);
@@ -149,49 +170,83 @@ public class EgressoControllerTest {
     @Order(1)
     void testCadastrarEgressoPrimeiroCadastro() throws Exception {
 
+        MvcResult resposta = mockMvc.perform(
+                MockMvcRequestBuilders.post("/egresso")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(egressoCadastro))
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated()).andReturn();
 
-            MvcResult resposta = mockMvc.perform(
-                            MockMvcRequestBuilders.post("/egresso")
-                                            .contentType(MediaType.APPLICATION_JSON)
-                                            .content(objectMapper.writeValueAsString(egressoCadastro))
-                                            .header("Authorization", "Bearer " + this.token))
-                            .andDo(MockMvcResultHandlers.print())
-                            .andExpect(status().isCreated()).andReturn();
-
-            String resp = resposta.getResponse().getContentAsString();
-            assertEquals(ResponseType.SUCESS_SAVE.getMessage(), resp);
+        String resp = resposta.getResponse().getContentAsString();
+        assertEquals(ResponseType.SUCESS_SAVE.getMessage(), resp);
     }
 
     @Test
     @Order(2)
+    void testGetEgresso() throws Exception {
+
+        MvcResult resposta = mockMvc.perform(
+                MockMvcRequestBuilders.get("/egresso")
+                        .contentType(MediaType.APPLICATION_JSON)                        
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk()).andReturn();
+
+        String resp = resposta.getResponse().getContentAsString();
+        egressoDTO = objectMapper.readValue(resp, EgressoDTO.class);
+        assertNotNull(egressoDTO);
+    }
+
+
+    @Test
+    @Order(2)
     void testSaveFotoEgresso() throws IOException, Exception {
-        
+
         Path path = ResourceUtils.getFile("classpath:image/imagem.jpeg").toPath();
 
-        MockMultipartFile file = new MockMultipartFile("arquivo", "imagem.jpeg", "image/jpeg",Files.readAllBytes(path));
-        
+        MockMultipartFile file = new MockMultipartFile("arquivo", "imagem.jpeg", "image/jpeg",
+                Files.readAllBytes(path));
+
         MvcResult resposta = mockMvc.perform(
                 MockMvcRequestBuilders.multipart("/egresso/foto")
                         .file(file)
-            .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-            .header("Authorization", "Bearer " + this.token))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(status().isCreated()).andReturn();
-        
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated()).andReturn();
+
         String resultado = resposta.getResponse().getContentAsString();
 
-        assertEquals(resultado,ResponseType.SUCESS_IMAGE_SAVE.getMessage());
+        assertEquals(resultado, ResponseType.SUCESS_IMAGE_SAVE.getMessage());
 
     }
 
     @Test
     @Order(3)
-    void testGetFotoEgresso() {
-        
+    void testGetFotoEgresso() throws Exception {
+
+        MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/egresso/foto/" + egressoDTO.getId())
+                .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk()).andReturn();
+
+        String resultado = resposta.getResponse().getContentAsString();
+        assertNotNull(resultado);        
     }
 
     @Test
     @Order(4)
-    void testDeleteFotoEgresso() {
+    void testDeleteFotoEgresso() throws Exception {
+        MvcResult resposta = mockMvc.perform(
+                MockMvcRequestBuilders.delete("/egresso/foto")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk()).andReturn();
+
+        String resultado = resposta.getResponse().getContentAsString();
+
+        assertEquals(resultado, ResponseType.SUCESS_IMAGE_DELETE.getMessage());
     }
 }
