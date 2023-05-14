@@ -43,4 +43,8 @@ public class EgressoEmpresaModel extends Auditable {
     @JoinColumn(name = "area_atuacao_id", unique = false, nullable = false)
     private AreaAtuacaoModel areaAtuacao;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinColumn(name = "setor_atuacao_id", unique = false, nullable = false)
+    private SetorAtuacaoModel setorAtuacao;
+
 }

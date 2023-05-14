@@ -1,8 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.HttpStatus;
@@ -116,25 +113,13 @@ public class EgressoController {
 
         // Cadastro EMPRESA - EMPREGO
         EmpresaDTO empresaDTO;
-        SetorAtuacaoModel setorAtuacao;
         EmpresaModel empresa;
-        AreaAtuacaoModel areaAtuacaoModel;
         if (egressoCadastroDTO.getEmpresa() != null) {
             empresaDTO = egressoCadastroDTO.getEmpresa();
-            setorAtuacao = setorAtuacaoService.findByNome(empresaDTO.getSetorAtuacao()); // TODO no primeiro cadastro a
-                                                                                         // empresa buga, verificar
-            if (setorAtuacao == null) {
-                setorAtuacao = setorAtuacaoService
-                        .save(SetorAtuacaoModel.builder().nome(empresaDTO.getSetorAtuacao()).build());
-            }
-            areaAtuacaoModel = areaAtuacaoService.findByNome(empresaDTO.getAreaAtuacao());
-            if (areaAtuacaoModel == null) {
-                areaAtuacaoModel = areaAtuacaoService
-                        .save(AreaAtuacaoModel.builder().nome(empresaDTO.getAreaAtuacao()).build());
-            }
             EnderecoModel enderecoEmpresa = enderecoService.findByCidadeAndEstadoAndPais(
                     empresaDTO.getEndereco().getCidade(),
-                    empresaDTO.getEndereco().getEstado(), empresaDTO.getEndereco().getPais());
+                    empresaDTO.getEndereco().getEstado(),
+                    empresaDTO.getEndereco().getPais());
             if (enderecoEmpresa == null) {
                 enderecoEmpresa = mapper.map(empresaDTO.getEndereco(), EnderecoModel.class);
                 enderecoEmpresa = enderecoService.save(enderecoEmpresa);
@@ -143,23 +128,15 @@ public class EgressoController {
             if (empresa == null) {
                 empresa = mapper.map(empresaDTO, EmpresaModel.class);
                 empresa.setEndereco(enderecoEmpresa);
-                if (setorAtuacao.getEmpresas() == null)
-                    setorAtuacao.setEmpresas(new HashSet<>());
-                setorAtuacao.getEmpresas().add(empresa);
-                if (empresa.getSetorAtuacoes() == null) {
-                    empresa.setSetorAtuacoes(new HashSet<>(Set.of(setorAtuacao)));
-                } else {
-                    empresa.getSetorAtuacoes().add(setorAtuacao);
-                }
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
-                    .areaAtuacao(areaAtuacaoModel)
                     .faixaSalarial(FaixaSalarialModel.builder().id(empresaDTO.getFaixaSalarialId()).build()).build());
+            validaSetorAtuacao(empresaDTO.getSetorAtuacao(), egresso);
+            validaAreaAtuacao(empresaDTO.getAreaAtuacao(), egresso);
         }
 
         egresso.setUsuario(usuarioService.findById(jwtService.getIdUsuario(token)));
-        // TODO fazer update de email futuramente.
         egresso.getUsuario().setNome(egressoCadastroDTO.getNome());
         PalestraModel palestra;
         if (egresso.getPalestras() != null) {
@@ -231,11 +208,11 @@ public class EgressoController {
             }
             egressoModel.getUsuario()
                     .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
-            Set<SetorAtuacaoModel> setorAtuacaoModels = egressoModel.getEmprego().getEmpresa().getSetorAtuacoes();
+            SetorAtuacaoModel setorAtuacaoModel = egressoModel.getEmprego().getSetorAtuacao();
             AreaAtuacaoModel areaAtuacaoModel = egressoModel.getEmprego().getAreaAtuacao();
             validaAreaAtuacao(areaAtuacaoModel.getNome(), egressoModel);
             egressoModel = egressoService.updateEgresso(egressoModel);
-            validaSetorAtuacao(setorAtuacaoModels, egressoModel);
+            validaSetorAtuacao(setorAtuacaoModel.getNome(), egressoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
@@ -263,25 +240,12 @@ public class EgressoController {
         }
     }
 
-    private void validaSetorAtuacao(Set<SetorAtuacaoModel> setorAtuacaoModels, EgressoModel egressoModel) {
-        for (SetorAtuacaoModel sa : setorAtuacaoModels) {
-            SetorAtuacaoModel setorAtuacaoModelNoBanco = setorAtuacaoService.findByNome(sa.getNome());
-            if (setorAtuacaoModelNoBanco == null) {
-                setorAtuacaoModelNoBanco = SetorAtuacaoModel.builder().nome(sa.getNome())
-                        .empresas(new HashSet<>(Set.of(egressoModel.getEmprego().getEmpresa()))).build();
-            } else if (setorAtuacaoModelNoBanco != sa) {
-                if (sa.getEmpresas() == null) {
-                    sa.setEmpresas(new HashSet<>());
-                }
-                sa.getEmpresas().add(egressoModel.getEmprego().getEmpresa());
-            } else {
-                if (setorAtuacaoModelNoBanco.getEmpresas() == null) {
-                    setorAtuacaoModelNoBanco.setEmpresas(new HashSet<>());
-                }
-                setorAtuacaoModelNoBanco.getEmpresas().add(egressoModel.getEmprego().getEmpresa());
-            }
-            setorAtuacaoService.save(setorAtuacaoModelNoBanco);
+    private void validaSetorAtuacao(String setorAtuacaoNome, EgressoModel egressoModel) {
+        SetorAtuacaoModel setorAtuacaoModelNoBanco = setorAtuacaoService.findByNome(setorAtuacaoNome);
+        if (setorAtuacaoModelNoBanco == null) {
+            setorAtuacaoModelNoBanco = SetorAtuacaoModel.builder().nome(setorAtuacaoNome).build();
         }
+        egressoModel.getEmprego().setSetorAtuacao(setorAtuacaoModelNoBanco);
     }
 
     private void validaAreaAtuacao(String areaAtuacaoNome, EgressoModel egressoModel) {
