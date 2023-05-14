@@ -472,7 +472,7 @@
                   required
                 /> -->
 
-                <CustomSelect
+                <!-- <CustomSelect
                   class="mb-5"
                   name="academico.tipoAluno"
                   :value="dataEgresso.academico.tipoAluno"
@@ -482,7 +482,7 @@
                   v-model:value="dataEgresso.academico.tipoAluno"
                   :pre-filled="true"
                   required
-                />
+                /> -->
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
                   Marque todos as opções que sejam verdadeiras abaixo:
@@ -802,6 +802,7 @@
                   name="adicionais.palestras"
                   label="Gostaria de apresentar palestras"
                   class="mb-5"
+                  :value="dataEgresso.adicionais.palestras"
                   v-model:value="dataEgresso.adicionais.palestras"
                 />
 
@@ -1013,7 +1014,7 @@ async function handleSubmitAcademico (values: any) {
   if (!values.academico.posGrad.value) {
     jsonResponse.interesseEmPos = values.academico.posGrad.desejaPos
   } else {
-    jsonResponse.titulacao.titulacao.nome = values.academico.posGrad.local
+    jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
     jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
   }
 
@@ -1064,15 +1065,21 @@ async function handleSubmitCarreira (values: any) {
   console.log(JSON.stringify(values, null, 2))
 
   console.log('HandleSubmit Response: ')
-  jsonResponse.emprego.empresa.nome = values.carreira.empresa
-  // jsonResponse.emprego.empresa.setorAtuacoes = values.carreira.setor
-  jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
-  for (let i = 0; i < selectOpts.value.areaAtuacao.length; i++) {
-    if (selectOpts.value.areaAtuacao[i] === values.carreira.area) {
+  if (values.carreira.area !== 'Desempregado') {
+    jsonResponse.emprego.empresa.nome = values.carreira.empresa
+    // setor.push(values.carreira.setor)
+    jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
+    jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
+    // jsonResponse.emprego.faixaSalarial.faixa = values.carreira.faixaSalarial
+    jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
+    for (let i = 0; i < selectOpts.value.areaAtuacao.length; i++) {
+      if (selectOpts.value.areaAtuacao[i] === values.carreira.area) {
       // jsonResponse.emprego.areaAtuacao.id = i + 1
+      }
     }
+    console.log(jsonResponse.emprego.empresa)
   }
-  console.log(jsonResponse.emprego.empresa)
+
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   console.log(jsonResponse)
   if (handleStatus(status)) {
@@ -1208,7 +1215,6 @@ const schemaLocalizacao = object().shape({
 const schemaAcademico = object().shape({
   academico: object({
     matricula: string().required().min(12).max(12),
-    tipoAluno: string().required(),
     cotista: object({
       value: boolean(),
       tipos: object({
@@ -1271,7 +1277,7 @@ const dataEgresso = ref({
   generoId: 0,
   bolsaId: 0,
   areaAtuacaoId: 0,
-
+  faixaSalarialId: 0,
   // cotasIds: [0, 0],
 
   // usuarioId: 0,
@@ -1284,7 +1290,7 @@ const dataEgresso = ref({
   // empresaId: 0,
   // setorAtuacaoId: 0,
   // endereçoId: 0,
-  // faixaSalarialId: 0,
+
   // areaAtuacaoId: 0,
   // depoimentoId: 0,
 
@@ -1406,7 +1412,6 @@ const dataResquestFront: EgressoModelUpdate = {
     empresa: {
       id: 0,
       nome: '',
-      setorAtuacoes: [''],
       endereco: {
         id: 0,
         cidade: '',
@@ -1417,6 +1422,10 @@ const dataResquestFront: EgressoModelUpdate = {
     faixaSalarial: {
       id: 0,
       faixa: ''
+    },
+    setorAtuacao: {
+      id: 0,
+      nome: ''
     },
     areaAtuacao: {
       id: 0,
@@ -1498,6 +1507,7 @@ async function fetchUpdateEgresso () {
     generoId: json.genero.id,
     bolsaId: json.bolsa?.id,
     areaAtuacaoId: json.emprego?.areaAtuacao?.id,
+    faixaSalarialId: json.emprego?.faixaSalarial?.id,
 
     geral:
       {
@@ -1530,7 +1540,7 @@ async function fetchUpdateEgresso () {
       posGrad: {
         value: json.posGraduacao,
         tipo: json.posGraducao || '',
-        local: json.titulacao?.titulacao?.nome || '',
+        local: json.titulacao?.empresa?.nome || '',
         curso: json.titulacao?.curso?.nome || '',
         desejaPos: json.interesseEmPos
       },
@@ -1538,7 +1548,7 @@ async function fetchUpdateEgresso () {
     },
     carreira: {
       area: json.emprego?.areaAtuacao?.nome || '',
-      setor: json.emprego?.empresa?.setorAtuacoes[0]?.nome || '',
+      setor: json.emprego?.setorAtuacao?.nome || '',
       empresa: json.emprego?.empresa?.nome || '',
       faixaSalarial: json.emprego?.faixaSalarial?.faixa || '',
       remuneracao: '',
