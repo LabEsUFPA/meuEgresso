@@ -232,25 +232,10 @@ public class EgressoController {
             egressoModel.getUsuario()
                     .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
             Set<SetorAtuacaoModel> setorAtuacaoModels = egressoModel.getEmprego().getEmpresa().getSetorAtuacoes();
+            AreaAtuacaoModel areaAtuacaoModel = egressoModel.getEmprego().getAreaAtuacao();
+            validaAreaAtuacao(areaAtuacaoModel.getNome(), egressoModel);
             egressoModel = egressoService.updateEgresso(egressoModel);
-            for (SetorAtuacaoModel sa : setorAtuacaoModels) {
-                SetorAtuacaoModel setorAtuacaoModelNoBanco = setorAtuacaoService.findByNome(sa.getNome());
-                if (setorAtuacaoModelNoBanco == null) {
-                    setorAtuacaoModelNoBanco = SetorAtuacaoModel.builder().nome(sa.getNome())
-                            .empresas(new HashSet<>(Set.of(egressoModel.getEmprego().getEmpresa()))).build();
-                } else if (setorAtuacaoModelNoBanco != sa) {
-                    if (sa.getEmpresas() == null) {
-                        sa.setEmpresas(new HashSet<>());
-                    }
-                    sa.getEmpresas().add(egressoModel.getEmprego().getEmpresa());
-                } else {
-                    if (setorAtuacaoModelNoBanco.getEmpresas() == null) {
-                        setorAtuacaoModelNoBanco.setEmpresas(new HashSet<>());
-                    }
-                    setorAtuacaoModelNoBanco.getEmpresas().add(egressoModel.getEmprego().getEmpresa());
-                }
-                setorAtuacaoService.save(setorAtuacaoModelNoBanco);
-            }
+            validaSetorAtuacao(setorAtuacaoModels, egressoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
@@ -276,6 +261,35 @@ public class EgressoController {
         } else {
             return ResponseType.FAIL_DELETE.getMessage();
         }
+    }
+
+    private void validaSetorAtuacao(Set<SetorAtuacaoModel> setorAtuacaoModels, EgressoModel egressoModel) {
+        for (SetorAtuacaoModel sa : setorAtuacaoModels) {
+            SetorAtuacaoModel setorAtuacaoModelNoBanco = setorAtuacaoService.findByNome(sa.getNome());
+            if (setorAtuacaoModelNoBanco == null) {
+                setorAtuacaoModelNoBanco = SetorAtuacaoModel.builder().nome(sa.getNome())
+                        .empresas(new HashSet<>(Set.of(egressoModel.getEmprego().getEmpresa()))).build();
+            } else if (setorAtuacaoModelNoBanco != sa) {
+                if (sa.getEmpresas() == null) {
+                    sa.setEmpresas(new HashSet<>());
+                }
+                sa.getEmpresas().add(egressoModel.getEmprego().getEmpresa());
+            } else {
+                if (setorAtuacaoModelNoBanco.getEmpresas() == null) {
+                    setorAtuacaoModelNoBanco.setEmpresas(new HashSet<>());
+                }
+                setorAtuacaoModelNoBanco.getEmpresas().add(egressoModel.getEmprego().getEmpresa());
+            }
+            setorAtuacaoService.save(setorAtuacaoModelNoBanco);
+        }
+    }
+
+    private void validaAreaAtuacao(String areaAtuacaoNome, EgressoModel egressoModel) {
+        AreaAtuacaoModel areaAtuacaoModelNoBanco = areaAtuacaoService.findByNome(areaAtuacaoNome);
+        if (areaAtuacaoModelNoBanco == null) {
+            areaAtuacaoModelNoBanco = AreaAtuacaoModel.builder().nome(areaAtuacaoNome).build();
+        }
+        egressoModel.getEmprego().setAreaAtuacao(areaAtuacaoModelNoBanco);
     }
 
 }

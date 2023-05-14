@@ -39,7 +39,7 @@ public class EgressoEmpresaModel extends Auditable {
     @JoinColumn(name = "faixa_salarial_id", unique = false, nullable = false)
     private FaixaSalarialModel faixaSalarial;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST })
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "area_atuacao_id", unique = false, nullable = false)
     private AreaAtuacaoModel areaAtuacao;
 
