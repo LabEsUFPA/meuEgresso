@@ -17,7 +17,7 @@
 
           <div class="mb-8">
             <p class="text-sky-600 text-base text-center font-normal mb-5">
-              Se necessário, altere os campos abaixo:
+              Se necessário, altere os campos abaixo. Para a senha, repita a senha atual ou insira uma nova:
             </p>
             <div class="flex flex-col gap-y-5 mb-4 items-center">
               <CustomInput name="name" label="Nome Completo" :required="true" :icon-path="mdiAccount" />

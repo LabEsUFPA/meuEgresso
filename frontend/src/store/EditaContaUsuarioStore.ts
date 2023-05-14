@@ -56,7 +56,7 @@ export const useEditaContaUsuarioStore = defineStore('EditaContaUsuario', {
         password,
         grupos:[{
           id:idGrupo,
-          nome:nomeGrupo
+          nomeGrupo:nomeGrupo
         }]
       }
       console.log("API UPDATE USUARIO DADOS:",dataUsuario);

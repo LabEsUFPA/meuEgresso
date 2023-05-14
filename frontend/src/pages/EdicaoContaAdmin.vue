@@ -25,7 +25,7 @@
 
         <div class="mb-8 mx-4 sm:mx-0">
           <p class="text-sky-600 text-base text-start font-normal mb-5">
-            Se necessário, altere os campos abaixo:
+            Se necessário, altere os campos abaixo. Para a senha, repita a senha atual ou insira uma nova:
           </p>
           <div class="flex flex-col gap-y-4 sm:gap-y-6">
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
