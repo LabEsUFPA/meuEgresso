@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
 import lombok.Data;
@@ -16,7 +17,10 @@ import lombok.Data;
 public class EgressoTitulacaoDTO {
 
     private EgressoTitulacaoModelId id;
+
     private CursoDTO curso;
+
+    private EmpresaDTO empresa;
 
     private TitulacaoDTO titulacao;
 }
