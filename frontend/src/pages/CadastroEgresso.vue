@@ -42,7 +42,7 @@
             <CustomSelect
               class="mb-5"
               name="geral.genero"
-              label="Genero"
+              label="Gênero"
               :options="$store.generos"
               required
             />
@@ -265,7 +265,7 @@
             <CustomSelect
               class="mb-5"
               name="carreira.area"
-              label="Area de Atuação"
+              label="Área de Atuação"
               placeholder="Selecione"
               v-model:value="area"
               :options="selectOpts.areaAtuacao"

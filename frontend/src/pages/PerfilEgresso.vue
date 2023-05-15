@@ -190,7 +190,7 @@
                   class="mb-6"
                   name="geral.email"
                   :vmodel="dataEgresso.geral.email"
-                  label="Email"
+                  label="E-mail"
                   placeholder="marcele@email.com"
                   :icon-path="mdiEmail"
                 />
@@ -199,7 +199,7 @@
                   type="date"
                   class="mb-1"
                   name="geral.nascimento"
-                  :vmodel="dataEgresso.geral.nascimento"
+                  :vmodel="dataEgresso.geral.nascimento.split('-').reverse().join('/')"
                   label="Data de Nascimento"
                   placeholder="01/01/2001"
                   :icon-path="mdiCake"
@@ -212,7 +212,7 @@
                   name="geral.genero"
                   :value="dataEgresso.geral.genero"
                   :value-id="dataEgresso.generoId"
-                  label="Genero"
+                  label="Gênero"
                   :options="egressoStore.generos"
                   :pre-filled="true"
                   required
@@ -528,7 +528,7 @@
                   class="mb-10"
                   :vmodel="dataEgresso.carreira.area"
                   name="carreira.area"
-                  label="Area de Atuação"
+                  label="Área de Atuação"
                   placeholder="Área"
                   icon-path=""
                 />
@@ -558,7 +558,7 @@
                   class="mb-5"
                   name="carreira.area"
                   :value="dataEgresso.carreira.area"
-                  label="Area de Atuação"
+                  label="Área de Atuação"
                   placeholder="Selecione"
                   v-model:value="dataEgresso.carreira.area"
                   :options="selectOpts.areaAtuacao"
@@ -1197,7 +1197,7 @@ const selectOpts = ref({
   tipoAluno: ['Graduação', 'Pós-graduação'],
   tipoCota: ['Escola', 'Renda', 'Autodeclaração de Raça', 'Quilombola/Indígena'],
   tipoBolsa: ['PIBIC', 'PROAD', 'PROEX', 'Permanência', 'Outros'],
-  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Outros'],
+  areaAtuacao: ['Computação', 'Pesquisa', 'Outros'],
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
 })
 const countries = computed(() => {
@@ -1209,6 +1209,7 @@ const countries = computed(() => {
       value: country.isoCode
     })
   }
+  console.log('filteredCountries:',filteredCountries)
   return filteredCountries
 })
 
@@ -1221,6 +1222,7 @@ const states = computed(() => {
       value: state.isoCode
     })
   }
+  console.log('filteredStates:',filteredStates)
   return filteredStates
 })
 const cities = computed(() => {
@@ -1569,6 +1571,10 @@ async function fetchUpdateEgresso () {
 function fetchEgresso () {
   return egressoStore.fetchEgresso()
 }
+
+console.log("Generos:",egressoStore.generos)
+console.log("Bolsas:",egressoStore.tiposBolsa)
+console.log("Cotas",egressoStore.tiposCota)
 
 // watch(pais, () => {
 //   form.value?.setFieldValue('localizacao.cidade', '')
