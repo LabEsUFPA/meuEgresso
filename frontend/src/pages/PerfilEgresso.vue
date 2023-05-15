@@ -972,6 +972,17 @@ async function handleSubmitHeader (values: any) {
   jsonResponse.lattes = values.geral.lattes
   // jsonResponse.emprego = null
   console.log(jsonResponse)
+  // const emprego = {
+  //   id: {
+  //     egressoId: jsonResponse.id,
+  //     empresaId: 1
+  //   }
+  // }
+
+  // jsonResponse.emprego.value = {
+  //   emprego
+
+  // }
   
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
@@ -1476,42 +1487,7 @@ async function fetchUpdateEgresso () {
     cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
   }
 
-  if (jsonResponse.emprego === undefined) {
-    jsonResponse.emprego = {
-      id: {
-        egressoId: jsonResponse.id,
-        empresaId: 1
-      },
-      setorAtuacao: {
-        id: 1,
-        nome: ''
-      },
-      areaAtuacao: {
-        id: 1,
-        nome: ''
-      },
-      faixaSalarial: {
-        id: 2
-
-      },
-      empresa: {
-        id: 1,
-        nome: '',
-        endereco: {
-          id: 6,
-          cidade: '',
-          estado: '',
-          pais: ''
-        },
-        faixaSalarial: {
-          id: 2
-        }
-
-      }
-
-    }
-  }
-
+  // Email e nome vem do usuario loggado
 
   dataEgresso.value = {
     egressoId: json.id,
