@@ -20,6 +20,23 @@
       </button>
     </a>
   </div>
+  <div v-if="mode === 'input'">
+    <button
+      class="fakebutton hover:bg-white/90"
+      :class="styles"
+      :type="type"
+    >
+      <img
+        :class="classimg"
+        :src="iconPath"
+        :width="iconSize"
+        :height="iconSize"
+      >
+      <h1 class="text-sky-600 outline-sky-600 text-base font-bold ml-3 mr-2">
+        <slot name="input" />
+      </h1>
+    </button>
+  </div>
 </template>
 
 <script lang="ts" setup>

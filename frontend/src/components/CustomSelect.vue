@@ -47,7 +47,13 @@
           <p
             :class="inputValue === '' ? 'text-gray-500' : 'text-black'"
           >
-            {{ inputValue === '' ? placeholder : currentSelection.label }}
+            <a v-if="props.preFilled">
+              {{ currentSelection.label === '' ? inputValue : '' }}
+              {{ inputValue === '0' ? placeholder : currentSelection.label }}
+            </a>
+            <a v-else>
+              {{ inputValue === '' ? placeholder : currentSelection.label }}
+            </a>
           </p>
         </div>
 
@@ -68,7 +74,7 @@
             class="p-2 hover:bg-gray-200 text-left"
             @click="handleEmit('')"
           >
-            ...
+            ..
           </div>
           <div
             class="p-2 hover:bg-gray-200 text-left border-t"
@@ -99,19 +105,20 @@
     </div>
   </div>
 </template>
-
 <script lang="ts" setup>
 import { ref, toRef } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronDown } from '@mdi/js'
 import { useField } from 'vee-validate'
 import { type models } from 'src/@types'
+
 interface ComplexOpts extends models.ComplexOpts {}
 
 type IOpts = string | ComplexOpts
 
 interface Props {
   value?: string
+  valueId?: number
   label: string
   name: string
   helperText?: string
@@ -123,6 +130,7 @@ interface Props {
   disabled?: boolean
   errorMessage?: string
   successMessage?: string
+  preFilled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -130,8 +138,10 @@ const props = withDefaults(defineProps<Props>(), {
   helperText: '',
   placeholder: '',
   value: '',
+  valueId: 0,
   errorMessage: 'Campo inválido',
-  successMessage: 'Campo correto'
+  successMessage: 'Campo correto',
+  preFilled: false
 })
 
 const $emit = defineEmits(['update:value'])
@@ -156,6 +166,7 @@ function handleEmit (option: IOpts) {
     handleChange(option.value)
     $emit('update:value', option.value)
     currentSelection.value = option
+
     return
   }
 
@@ -164,5 +175,26 @@ function handleEmit (option: IOpts) {
   currentSelection.value.label = option
 }
 
+function handleEmitValue (option: IOpts, id : number) {
+  if (id === 0) {
+    handleEmit(option)
+  } else {
+    if (typeof option === 'object') {
+      handleChange(option.value)
+      $emit('update:value', option.value)
+      currentSelection.value.value = id
+
+      return
+    }
+
+    handleChange(id)
+    $emit('update:value', id)
+    currentSelection.value.label = option
+  }
+}
 const open = ref(false)
+if (props.preFilled) {
+  handleEmitValue(props.value, props.valueId)
+}
+
 </script>

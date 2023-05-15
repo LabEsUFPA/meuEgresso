@@ -42,7 +42,7 @@
             <CustomSelect
               class="mb-5"
               name="geral.genero"
-              label="Genero"
+              label="Gênero"
               :options="$store.generos"
               required
             />
@@ -218,7 +218,7 @@
             <CustomSelect
               class="mb-5"
               name="carreira.area"
-              label="Area de Atuação"
+              label="Área de Atuação"
               placeholder="Selecione"
               v-model:value="area"
               :options="selectOpts.areaAtuacao"
@@ -398,7 +398,9 @@
       </div>
     </CustomDialog>
 
-    <CustomDialog v-model="dialogFalha">
+    <CustomDialog
+      v-model="dialogFalha"
+    >
       <div class="h-full flex justify-center items-center">
         <div class="w-1/2">
           <div class="text-red-600 text-center mb-3">
@@ -446,6 +448,9 @@ import {
 } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
@@ -692,4 +697,5 @@ onMounted(() => {
     }).join(' '))
   }
 })
+
 </script>

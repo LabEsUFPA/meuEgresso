@@ -3,6 +3,7 @@ package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 import labes.facomp.ufpa.br.meuegresso.dto.areaatuacao.AreaAtuacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaBasicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.setoratuacao.SetorAtuacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 import lombok.Data;
 
@@ -23,4 +24,6 @@ public class EgressoEmpresaBasicDTO {
     private FaixaSalarialDTO faixaSalarial;
 
     private AreaAtuacaoDTO areaAtuacao;
+
+    private SetorAtuacaoDTO setorAtuacao;
 }
