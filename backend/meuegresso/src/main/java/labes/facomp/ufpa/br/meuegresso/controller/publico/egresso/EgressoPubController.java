@@ -29,12 +29,13 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping(value = "/publico/egresso")
 public class EgressoPubController {
 
-    private final EgressoService egressoService;
+	private final EgressoService egressoService;
 
-    private final ModelMapper mapper;
+	private final ModelMapper mapper;
 
 	/**
-	 * Endpoint responsável por retornar a lista de egressos cadastrados no banco de dados.
+	 * Endpoint responsável por retornar a lista de egressos cadastrados no banco de
+	 * dados.
 	 *
 	 * @return {@link UsuarioAuthDTO} Lista de egressos cadastrados
 	 * @author Marcus Maciel Oliveira
@@ -48,18 +49,17 @@ public class EgressoPubController {
 		}.getType());
 	}
 
-
 	/**
 	 * Endpoint responsável por coletar dados do egressos por sua ID
 	 *
 	 * @param id Integer
-	 * @return 
+	 * @return
 	 * @author Marcus Maciel Oliveira
 	 * @since 13/05/2023
 	 */
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
-	
+
 	public EgressoDTO findById(@PathVariable Integer id) {
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
 		return mapper.map(egressoService.findById(id), EgressoDTO.class);

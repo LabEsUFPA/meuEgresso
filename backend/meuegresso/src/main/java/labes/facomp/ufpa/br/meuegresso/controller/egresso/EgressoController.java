@@ -84,7 +84,6 @@ public class EgressoController {
         // em cima ok
         EgressoModel egresso = mapper.map(egressoCadastroDTO, EgressoModel.class);
 
-
         // Cadastro da titulacao POS-Graduação ou n
         if (egressoCadastroDTO.getTitulacao() != null) {
             TitulacaoEgressoDTO titulacaoEgressoDTO = egressoCadastroDTO.getTitulacao();
