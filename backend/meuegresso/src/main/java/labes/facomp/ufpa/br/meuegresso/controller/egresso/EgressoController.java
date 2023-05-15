@@ -297,7 +297,7 @@ public class EgressoController {
      * @throws IOException
      */
     @GetMapping(value = "/foto/{id}", produces = "image/png")
-    @ResponseStatus(code = HttpStatus.OK)   
+    @ResponseStatus(code = HttpStatus.OK)
     public Resource getFotoEgresso(@PathVariable Integer id) throws MalformedURLException, FileNotFoundException {
         EgressoModel egressoModel = egressoService.findById(id);
         return egressoService.getFileAsResource(egressoModel.getFotoNome());

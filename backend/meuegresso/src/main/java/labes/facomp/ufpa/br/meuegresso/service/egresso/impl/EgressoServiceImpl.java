@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -47,6 +48,16 @@ public class EgressoServiceImpl implements EgressoService {
     @Transactional
     public EgressoModel findByUsuarioId(Integer idUsuario) {
         return egressoRepository.findByUsuarioId(idUsuario).orElseThrow();
+    }
+
+    @Override
+    public EgressoModel findById(Integer idEgresso) {
+        return egressoRepository.findById(idEgresso).orElseThrow();
+    }
+
+    @Override
+    public List<EgressoModel> findAll() {
+        return egressoRepository.findAll();
     }
 
     /**
@@ -124,11 +135,6 @@ public class EgressoServiceImpl implements EgressoService {
         } catch (IOException ioe) {
             throw new IOException("Could not save file: " + arquivo.getOriginalFilename(), ioe);
         }
-    }
-
-    @Override
-    public EgressoModel findById(Integer id) {        
-        return egressoRepository.findById(id).orElseThrow();
     }
 
 }
