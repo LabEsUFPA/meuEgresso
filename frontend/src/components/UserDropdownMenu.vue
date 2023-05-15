@@ -21,6 +21,16 @@
         id="dropdown"
         class="absolute shadow-md bg-white min-w-32 z-50 cursor-pointer right-[1px] max-h-96 overflow-y-auto top-8 py-3 rounded-lg border border-t-0 text-sm justify-self-end"
       >
+
+        <RouterLink to="/egresso" v-show="userLoggedGroupID === 3">
+          <div
+            class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900"
+            @click="toggleUserMenu()"
+          >
+            Perfil
+          </div>
+        </RouterLink>
+
         <RouterLink :to="userLoggedGroupID === 3 ? '/conta-egresso' : '/conta-admin'">
           <div
             class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900"
@@ -63,6 +73,7 @@ const { userLogged } = props
 const store = useLoginStore()
 const userLoggedName = ref(userLogged ? store.getLoggedUser()?.username : '')
 const userLoggedGroupID = ref(userLogged ? store.getLoggedUser()?.grupos[0].id : '')
+console.log(userLoggedGroupID)
 
 const userMenuIsOpen = ref(false)
 const toggleUserMenu = () => {
