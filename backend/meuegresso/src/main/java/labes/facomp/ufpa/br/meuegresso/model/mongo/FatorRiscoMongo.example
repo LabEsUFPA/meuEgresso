@@ -11,10 +11,10 @@ import jakarta.persistence.Id;
 public class FatorRiscoMongo {
 
     @Id
-    @Column(name = "id_fator_risco", nullable = false, unique = true)
+    @Column(name = "id_fator_risco", unique = true, nullable = false)
     private Integer idFatorRisco;
 
-    @Column(name = "nome_fator_risco", nullable = false, unique = true)
+    @Column(name = "nome_fator_risco", unique = true, nullable = false)
     private String nomeFatorRisco;
 
     @Column(name = "possiveis_respostas_fator_risco", nullable = false, unique = false)

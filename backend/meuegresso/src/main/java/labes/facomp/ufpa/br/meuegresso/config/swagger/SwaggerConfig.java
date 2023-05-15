@@ -33,7 +33,7 @@ public class SwaggerConfig {
 						.license(new License().name("GNU GENERAL PUBLIC LICENSE V3")
 								.url("https://github.com/LabEsUFPA/meuEgresso/blob/main/LICENSE")))
 				.externalDocs(new ExternalDocumentation()
-						.description("Wiki do Projeto no Gitlab")
+						.description("Wiki do Projeto no Github")
 						.url("https://github.com/LabEsUFPA/meuEgresso/wiki"));
 	}
 }
