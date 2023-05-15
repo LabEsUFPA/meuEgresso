@@ -715,7 +715,7 @@
 
             <template #default>
               <div v-if="!dataEgresso.adicionais.isInput">
-                <CustomPerfilData
+                <!-- <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"
                   :vmodel="dataEgresso.adicionais.assuntosPalestras"
@@ -726,7 +726,7 @@
               t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
               ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                   icon-path=""
-                />
+                /> -->
                 <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"
@@ -845,7 +845,6 @@ const storage = new LocalStorage()
 
 egressoStore.fetchAll()
 
-// const form = ref<typeof Form | null>(null)
 
 function handleStatus (status : any) {
   console.log('Staus: ')
@@ -1269,27 +1268,6 @@ const dataResquestFront: EgressoModelUpdate = {
 }
 console.log(dataEgresso)
 
-// const stateFolders = ref({
-//   geral: {
-//     isInput: false
-//   },
-//   localizacao: {
-//     isInput: false
-//   },
-//   academico: {
-//     isInput: false
-//   },
-//   carreira: {
-//     isInput: false
-//   },
-//   adicionais: {
-//     isInput: false
-//   },
-//   profileHead: {
-//     isInput: false
-//   }
-// })
-
 let jsonResponse : any
 let userData : any
 let egressoResponseBack: any
@@ -1404,4 +1382,3 @@ function fetchEgresso () {
   return egressoStore.fetchEgresso()
 }
 </script>
-<style></style>

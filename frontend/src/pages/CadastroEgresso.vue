@@ -240,7 +240,7 @@
 
             <CustomCheckbox
               name="academico.posGrad.desejaPos"
-              label="Deseja realizar pós graduação?"
+              label="Desejo realizar pós graduação"
               v-if="!bools.posGrad"
             />
           </div>

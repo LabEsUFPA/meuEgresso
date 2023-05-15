@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
+import java.util.List;
+
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 
 /**
@@ -12,6 +14,12 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 public interface EgressoService {
 
 	public EgressoModel findByUsuarioId(Integer idUsuario);
+
+	public EgressoModel findById(Integer idEgresso);
+
+
+	public List<EgressoModel> findAll();
+
 
 	public EgressoModel adicionarEgresso(EgressoModel egresso);
 

@@ -52,6 +52,7 @@ public class SecurityConfig {
 								"/swagger-ui.html",
 								"/egressoValido",
 								"/mapa",
+								"/publico/egresso**/**",
 								"/")
 						.permitAll()
 						.anyRequest().authenticated())

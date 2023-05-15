@@ -121,9 +121,36 @@ export namespace models {
       curso?: string
     } | null
   }
-  //
 
-  //
+
+  export interface EgressoMapa {
+    id: number
+    nome: string
+    localizacao: {
+      cidade: string
+      estado: string
+      pais: string
+      latitude: number
+      longitude: number
+    }
+    empresa?: string
+  }
+
+  export interface ContaUsuarioModel {
+      id: Number,
+      username: string,
+      email: string,
+      nome: string,
+      senha: string,
+      grupos?: [
+        {
+          id: number
+          nomeGrupo?: string
+        }
+      ]
+    }
+  }
+
   export interface EgressoModelUpdate {
     id: number
     nascimento: string
@@ -255,3 +282,4 @@ export namespace models {
   //   } | null
   // }
 }
+
