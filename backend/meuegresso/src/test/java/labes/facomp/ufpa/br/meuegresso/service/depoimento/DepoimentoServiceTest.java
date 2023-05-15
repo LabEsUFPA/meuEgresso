@@ -136,9 +136,10 @@ class DepoimentoServiceTest {
     @Test
     void testDeleteById() {
 
-        BDDMockito.given(depoimentoService.deleteById(ID))
-                .willReturn(true);
-
+        Mockito.when(depoimentoRepository.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(getMockDepoimento()));
+        Mockito.when(depoimentoRepository.existsById(Mockito.anyInt()))
+                .thenReturn(true);
         Boolean response = depoimentoService.deleteById(ID);
         assertTrue(response);
     }

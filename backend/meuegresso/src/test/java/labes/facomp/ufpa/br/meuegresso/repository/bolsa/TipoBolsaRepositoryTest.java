@@ -27,9 +27,7 @@ class TipoBolsaRepositoryTest {
     TipoBolsaRepository tipoBolsaRepository;
 
     private final static String NOME = "PIBIC";
-    //private final static String NOME2 = "PIBIX";
-
-
+    // private final static String NOME2 = "PIBIX";
 
     @Test
     @Order(1)
@@ -42,7 +40,6 @@ class TipoBolsaRepositoryTest {
     @Test
     @Order(2)
     void testFindAll() {
-
 
         List<TipoBolsaModel> testBolsas = tipoBolsaRepository.findAll();
 

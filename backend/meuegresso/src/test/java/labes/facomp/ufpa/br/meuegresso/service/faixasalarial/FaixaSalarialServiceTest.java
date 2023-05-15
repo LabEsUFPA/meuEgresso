@@ -42,13 +42,12 @@ class FaixaSalarialServiceTest {
     private static final Integer ID = 1;
     private static final String FAIXA = "15000-20000";
 
-
     @Autowired
     private FaixaSalarialService faixaSalarialService;
 
     @MockBean
     private FaixaSalarialRepository repository;
-    
+
     /**
      * metodo para criar um faixasalarial para uso nos testes.
      * 
@@ -78,7 +77,7 @@ class FaixaSalarialServiceTest {
         BDDMockito.given(repository.findById(ID)).willReturn(Optional.of(getMockFaixaSalarialModel()));
 
         FaixaSalarialModel response = faixaSalarialService.findById(ID);
-        assertNotNull(response);
+        assertEquals(getMockFaixaSalarialModel(), response);
     }
 
     /**
@@ -87,7 +86,7 @@ class FaixaSalarialServiceTest {
      * @author Lucas Cantao
      * @since 29/04/2023
      */
-    
+
     @Test
     void testUpdate() throws InvalidRequestException {
 
@@ -96,11 +95,11 @@ class FaixaSalarialServiceTest {
 
         BDDMockito.given(repository.save(Mockito.any(FaixaSalarialModel.class)))
                 .willReturn(testeFaixaSalariaL);
-        
+
         testeFaixaSalariaL.setFaixa(FAIXA_ATUALIZADO);
-        
+
         FaixaSalarialModel response = faixaSalarialService.update(testeFaixaSalariaL);
-        
+
         assertNotNull(response);
         assertEquals(FAIXA_ATUALIZADO, response.getFaixa());
     }
@@ -114,8 +113,10 @@ class FaixaSalarialServiceTest {
     @Test
     void testDeleteById() {
 
-        BDDMockito.given(faixaSalarialService.deleteById(Mockito.anyInt()))
-                .willReturn(true);
+        Mockito.when(repository.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(getMockFaixaSalarialModel()));
+        Mockito.when(repository.existsById(Mockito.anyInt()))
+                .thenReturn(true);
 
         Boolean response = faixaSalarialService.deleteById(ID);
         assertTrue(response);
@@ -131,14 +132,13 @@ class FaixaSalarialServiceTest {
     // @Test
     // void testExistsByIdAndCreatedById() {
 
-    //     BDDMockito.given(faixaSalarialService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
-    //             .willReturn(true);
+    // BDDMockito.given(faixaSalarialService.existsByIdAndCreatedById(Mockito.anyInt(),
+    // Mockito.anyInt()))
+    // .willReturn(true);
 
-    //     Boolean response = faixaSalarialService.existsByIdAndCreatedById(ID, ID);
-    //     assertTrue(response);
+    // Boolean response = faixaSalarialService.existsByIdAndCreatedById(ID, ID);
+    // assertTrue(response);
     // }
-
-
 
     /**
      * metodo que preenche um mock de um faixasalarial para usar como return nos

@@ -87,10 +87,9 @@ class EmpresaServiceTest {
 
         BDDMockito.given(empresaService.findAll())
                 .willReturn(getMockEmpresaLista());
-        // .willReturn(List.of(getMockEmpresa()));
 
         List<EmpresaModel> response = empresaService.findAll();
-        assertNotNull(response);
+        assertEquals(getMockEmpresaLista(), response);
     }
 
     /**
@@ -105,7 +104,8 @@ class EmpresaServiceTest {
         BDDMockito.given(repository.findById(ID)).willReturn(Optional.of(getMockEmpresa()));
 
         EmpresaModel response = empresaService.findById(ID);
-        assertNotNull(response);
+        assertEquals(getMockEmpresa(), response);
+
     }
 
     /**
@@ -140,8 +140,10 @@ class EmpresaServiceTest {
     @Test
     void testDeleteById() {
 
-        BDDMockito.given(empresaService.deleteById(Mockito.anyInt()))
-                .willReturn(true);
+        Mockito.when(repository.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(getMockEmpresa()));
+        Mockito.when(repository.existsById(Mockito.anyInt()))
+                .thenReturn(true);
 
         Boolean response = empresaService.deleteById(ID);
         assertTrue(response);

@@ -156,9 +156,10 @@ class AnuncioServiceTest {
     @Order(5)
     void testDeleteById() {
 
-        BDDMockito.given(anuncioService.deleteById(Mockito.anyInt()))
-                .willReturn(true);
-
+        Mockito.when(anuncioRepository.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(getMockAnuncio()));
+        Mockito.when(anuncioRepository.existsById(Mockito.anyInt()))
+                .thenReturn(true);
         Boolean response = anuncioService.deleteById(ID);
         assertTrue(response);
     }

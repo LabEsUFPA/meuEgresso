@@ -75,11 +75,11 @@ class TipoBolsaServiceTest {
     @Test
     @Order(2)
     void testFindAll() {
-        BDDMockito.given(service.findAll())
+        BDDMockito.given(repository.findAll())
                 .willReturn(getMockTipoBolsaLista());
 
         List<TipoBolsaModel> response = service.findAll();
-        assertNotNull(response);
+        assertEquals(getMockTipoBolsaLista(), response);
     }
 
     @Test
@@ -89,7 +89,7 @@ class TipoBolsaServiceTest {
                 .willReturn(Optional.of(getMockTipoBolsaModel()));
 
         TipoBolsaModel response = service.findById(ID);
-        assertNotNull(response);
+        assertEquals(getMockTipoBolsaModel(), response);
     }
 
     @Test
@@ -108,9 +108,11 @@ class TipoBolsaServiceTest {
     @Order(5)
     void testDeleteById() {
 
-        BDDMockito.given(service.deleteById(ID))
-                .willReturn(true);
-
+        Mockito.when(repository.findById(Mockito.anyInt()))
+            .thenReturn(Optional.of(getMockTipoBolsaModel()));
+        Mockito.when(repository.existsById(Mockito.anyInt()))
+            .thenReturn(true);
+                
         Boolean response = service.deleteById(ID);
         assertTrue(response);
     }

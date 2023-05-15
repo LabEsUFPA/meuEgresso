@@ -94,7 +94,7 @@ class EgressoTitulacaoServiceTest {
                 .willReturn(getMockEgressoTitulacaoLista());
 
         List<EgressoTitulacaoModel> response = EgressoTitulacaoService.findAll();
-        assertNotNull(response);
+        assertEquals(getMockEgressoTitulacaoLista(), response);
     }
 
     /**
@@ -109,7 +109,7 @@ class EgressoTitulacaoServiceTest {
                 .willReturn(Optional.ofNullable(getMockEgressoTitulacao()));
 
         EgressoTitulacaoModel response = EgressoTitulacaoService.findById(ID);
-        assertNotNull(response);
+        assertEquals(getMockEgressoTitulacao(), response);
     }
 
     /**
@@ -125,6 +125,8 @@ class EgressoTitulacaoServiceTest {
                     .willReturn(getMockEgressoTitulacao());
             EgressoTitulacaoModel response = EgressoTitulacaoService.update(getMockEgressoTitulacao());
             assertNotNull(response);
+            assertEquals(getMockEgressoTitulacao(), response);
+
         } catch (Exception e) {
             e.getMessage();
         }
@@ -156,9 +158,14 @@ class EgressoTitulacaoServiceTest {
     @Test
     void testDeletarEgresso() {
 
-        BDDMockito.given(EgressoTitulacaoService.deleteById(Mockito.any(
+        Mockito.when(repository.findById(Mockito.any(
                 EgressoTitulacaoModelId.class)))
-                .willReturn(true);
+                .thenReturn(Optional.of(getMockEgressoTitulacao()));
+
+        Mockito.when(repository.existsById(Mockito.any(
+                EgressoTitulacaoModelId.class)))
+                .thenReturn(true);
+        ;
 
         Boolean response = EgressoTitulacaoService.deleteById(ID);
         assertTrue(response);

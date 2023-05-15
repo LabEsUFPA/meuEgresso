@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.ArrayList;
@@ -75,7 +76,8 @@ class EgressoValidoServiceTest {
                 .willReturn(Optional.ofNullable(getMockEgresso()));
 
         Optional<EgressoValidoModel> response = egressoValidoService.findByEmail(EMAIL);
-        assertNotNull(response);
+
+        assertEquals(getMockEgresso(), response);
     }
 
     /**
@@ -92,9 +94,11 @@ class EgressoValidoServiceTest {
 
             Optional<EgressoValidoModel> response = egressoValidoService.findByMatricula(MATRICULA);
             assertNotNull(response);
+            assertEquals(getMockEgresso(), response);
         } catch (Exception e) {
             e.getMessage();
         }
+
     }
 
     /**
@@ -110,7 +114,7 @@ class EgressoValidoServiceTest {
                 .willReturn(getMockEgressoLista());
 
         List<EgressoValidoModel> response = egressoValidoService.findByNomeIgnoreCase(NOME);
-        assertNotNull(response);
+        assertEquals(getMockEgressoLista(), response);
     }
 
     /**

@@ -146,9 +146,10 @@ class ContribuicaoServiceTest {
     @Order(5)
     void testDeleteById() {
 
-        BDDMockito.given(contribuicaoService.deleteById(ID))
-                .willReturn(true);
-
+        Mockito.when(contribuicaoRepository.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(getMockContribuicao()));
+        Mockito.when(contribuicaoRepository.existsById(Mockito.anyInt()))
+                .thenReturn(true);
         Boolean response = contribuicaoService.deleteById(ID);
         assertTrue(response);
     }

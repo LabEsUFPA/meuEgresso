@@ -89,12 +89,13 @@ class EnderecoServiceTest {
      */
     @Test
     void testFindAll() {
-        BDDMockito.given(enderecoService.findAll())
+        BDDMockito.given(repository.findAll())
                 .willReturn(getMockEnderecoLista());
         // .willReturn(List.of(getMockEndereco()));
 
         List<EnderecoModel> response = enderecoService.findAll();
-        assertNotNull(response);
+
+        assertEquals(getMockEnderecoLista(), response);
     }
 
     /**
@@ -108,7 +109,7 @@ class EnderecoServiceTest {
         BDDMockito.given(repository.findById(ID)).willReturn(Optional.of(getMockEndereco()));
 
         EnderecoModel response = enderecoService.findById(ID);
-        assertNotNull(response);
+        assertEquals(getMockEndereco(), response);
     }
 
     /**
@@ -143,8 +144,10 @@ class EnderecoServiceTest {
     @Test
     void testDeleteById() {
 
-        BDDMockito.given(enderecoService.deleteById(Mockito.anyInt()))
-                .willReturn(true);
+        Mockito.when(repository.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(getMockEndereco()));
+        Mockito.when(repository.existsById(Mockito.anyInt()))
+                .thenReturn(true);
 
         Boolean response = enderecoService.deleteById(ID);
         assertTrue(response);
