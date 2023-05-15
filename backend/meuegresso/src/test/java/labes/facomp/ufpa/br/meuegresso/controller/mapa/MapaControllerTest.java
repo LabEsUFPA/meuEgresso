@@ -49,6 +49,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
+import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.areaatuacao.AreaAtuacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoEmpresaRepository;
@@ -199,9 +200,7 @@ class MapaControllerTest {
         egressoRepository.save(this.egressoModel);
 
         /* Empresa */
-        empresaDTO = EmpresaDTO.builder().id(EGRESSO_ID).nome(NOME).setorAtuacao(SETORATUACAO)
-                .faixaSalarialId(FAIXASALARIAL_ID).build();
-        empresaModel = modelMapper.map(empresaDTO, EmpresaModel.class);
+        empresaModel = EmpresaModel.builder().id(EGRESSO_ID).nome(NOME).build();
         empresaRepository.save(empresaModel);
 
         /* ModelId */
@@ -212,17 +211,20 @@ class MapaControllerTest {
         FaixaSalarialModel faixaSalarialModel = modelMapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
         faixaSalarialRepository.save(faixaSalarialModel);
 
+        AreaAtuacaoModel area = new AreaAtuacaoModel();
+        area.setId(1);
+		area.setNome("area x");
+		SetorAtuacaoModel setorAtuacaoModel = SetorAtuacaoModel.builder().nome("SETOR X").build();
         egressoEmpresaModel = new EgressoEmpresaModel();
         egressoEmpresaModel.setId(egressoEmpresaModelId);
         egressoEmpresaModel.setEgresso(egressoModel);
-        egressoEmpresaModel.setEmpresa(empresaModel);
+		egressoEmpresaModel.setEmpresa(empresaModel);
+		egressoEmpresaModel.setAreaAtuacao(area);
+		egressoEmpresaModel.setSetorAtuacao(setorAtuacaoModel);
         egressoEmpresaModel.setFaixaSalarial(faixaSalarialModel);
-        AreaAtuacaoModel area = new AreaAtuacaoModel();
-        area.setId(1);
-        area.setNome("area x");
         Set<EgressoModel> egressos = new HashSet<>();
-        egressos.add(egressoModel);
-        area.setEgressos(egressos);
+		egressos.add(egressoModel);
+
         areaAtuacaoRepository.save(area);
 
         egressoEmpresaModel.setAreaAtuacao(area);
