@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
+import java.util.List;
+
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 
 /**
@@ -12,6 +14,12 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 public interface EgressoService {
 
 	public EgressoModel findByUsuarioId(Integer idUsuario);
+
+	public EgressoModel findById(Integer idEgresso);
+
+
+	public List<EgressoModel> findAll();
+
 
 	public EgressoModel adicionarEgresso(EgressoModel egresso);
 
@@ -51,7 +59,7 @@ public interface EgressoService {
 	 * partir do id.
 	 *
 	 * @param id Id do egresso
-	 * @return Vazio.
+	 * @return
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
@@ -62,7 +70,8 @@ public interface EgressoService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return boolean
 	 */
 	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
 }

@@ -5,8 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import labes.facomp.ufpa.br.meuegresso.dto.areaatuacao.AreaAtuacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.setoratuacao.SetorAtuacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Dados que representam o relacionamento do egresso com a empresa (reduzido).
@@ -16,6 +19,8 @@ import lombok.Data;
  * @version 1.1
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EgressoEmpresaBasicDTO {
 
     @Valid
@@ -31,4 +36,6 @@ public class EgressoEmpresaBasicDTO {
 
     @NotBlank(message = "Insira a área de atuação do egresso.")
     private AreaAtuacaoDTO areaAtuacao;
+
+    private SetorAtuacaoDTO setorAtuacao;
 }

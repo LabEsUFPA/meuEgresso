@@ -42,7 +42,7 @@
             <CustomSelect
               class="mb-5"
               name="geral.genero"
-              label="Genero"
+              label="Gênero"
               :options="$store.generos"
               required
             />
@@ -81,49 +81,6 @@
               type="mdi"
               size="20"
               class="inline mr-2"
-              :path="mdiMapMarker"
-            />
-            Localização
-          </h1>
-        </template>
-
-        <template #default>
-          <div>
-            <CustomSelect
-              class="mb-5"
-              name="localizacao.pais"
-              label="País"
-              :options="countries"
-              v-model:value="pais"
-              required
-            />
-
-            <CustomSelect
-              class="mb-5"
-              name="localizacao.estado"
-              label="Estado"
-              :options="states"
-              v-model:value="estado"
-              required
-            />
-
-            <CustomSelect
-              name="localizacao.cidade"
-              label="Cidade"
-              :options="cities"
-              required
-            />
-          </div>
-        </template>
-      </FolderSection>
-
-      <FolderSection class="mt-6">
-        <template #title>
-          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-            <SvgIcon
-              type="mdi"
-              size="20"
-              class="inline mr-2"
               :path="mdiSchool"
             />
             Acadêmico
@@ -138,7 +95,6 @@
               label="Matrícula"
               mask="############"
               placeholder="205004940001"
-              required
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -206,7 +162,6 @@
               class="mb-5"
               name="academico.bolsista.remuneracao"
               label="Remuneração da bolsa"
-              placeholder="Selecione"
               type="number"
               step="0.01"
               :required="bools.bolsista"
@@ -224,7 +179,6 @@
               class="mb-5"
               name="academico.posGrad.local"
               label="Instituição da pós-graduação"
-              placeholder="Selecione"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
             />
@@ -233,7 +187,6 @@
               class="mb-5"
               name="academico.posGrad.curso"
               label="Curso de pós-graduação"
-              placeholder="Selecione"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
             />
@@ -265,7 +218,7 @@
             <CustomSelect
               class="mb-5"
               name="carreira.area"
-              label="Area de Atuação"
+              label="Área de Atuação"
               placeholder="Selecione"
               v-model:value="area"
               :options="selectOpts.areaAtuacao"
@@ -309,6 +262,49 @@
               type="mdi"
               size="20"
               class="inline mr-2"
+              :path="mdiMapMarker"
+            />
+            Localização
+          </h1>
+        </template>
+
+        <template #default>
+          <div>
+            <CustomSelect
+              class="mb-5"
+              name="localizacao.pais"
+              label="País"
+              :options="countries"
+              v-model:value="pais"
+              required
+            />
+
+            <CustomSelect
+              class="mb-5"
+              name="localizacao.estado"
+              label="Estado"
+              :options="states"
+              v-model:value="estado"
+              required
+            />
+
+            <CustomSelect
+              name="localizacao.cidade"
+              label="Cidade"
+              :options="cities"
+              required
+            />
+          </div>
+        </template>
+      </FolderSection>
+
+      <FolderSection class="mt-6">
+        <template #title>
+          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
+            <SvgIcon
+              type="mdi"
+              size="20"
+              class="inline mr-2"
               :path="mdiMessage"
             />
             Adicionais
@@ -325,7 +321,10 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
+              Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras: <sup
+                v-if="bools.palestras"
+                class="text-red-500"
+              >*</sup>
             </div>
 
             <CustomTextarea
@@ -336,7 +335,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso:
+              Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso: <sup class="text-red-500">*</sup>
             </div>
 
             <CustomTextarea
@@ -345,7 +344,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto:
+              Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto: <sup class="text-red-500">*</sup>
             </div>
 
             <CustomTextarea name="adicionais.contribuicoes" />
@@ -367,7 +366,10 @@
         </CustomButton>
       </div>
     </Form>
-    <CustomDialog v-model="dialogSucesso">
+    <CustomDialog
+      v-model="dialogSucesso"
+      @close="$router.push('/egresso')"
+    >
       <div class="h-full flex justify-center items-center">
         <div class="w-1/2">
           <div class="text-green-500 text-center mb-3">
@@ -381,7 +383,7 @@
           <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
             Dados cadastrados com sucesso!
           </h1>
-          <div class="text-center">
+          <div class="flex flex-row justify-center">
             <CustomButton variant="outlined">
               <SvgIcon
                 type="mdi"
@@ -396,7 +398,9 @@
       </div>
     </CustomDialog>
 
-    <CustomDialog v-model="dialogFalha">
+    <CustomDialog
+      v-model="dialogFalha"
+    >
       <div class="h-full flex justify-center items-center">
         <div class="w-1/2">
           <div class="text-red-600 text-center mb-3">
@@ -444,6 +448,9 @@ import {
 } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
@@ -574,6 +581,7 @@ async function handleSubmit (values: InferType<typeof schema>) {
     lattes: values.geral.lattes || null,
     linkedin: values.geral.linkedin || null,
     posGraduacao: Boolean(values.academico.posGrad.value),
+    remuneracaoBolsa: Number(values.academico.bolsista.remuneracao),
     cotas,
     nome: values.geral.nome,
     palestras,
@@ -617,7 +625,7 @@ const schema = object().shape({
     cidade: string().required()
   }),
   academico: object({
-    matricula: string().min(12).max(12),
+    matricula: string().max(12),
     tipoAluno: string(),
     cotista: object({
       value: boolean(),
@@ -689,4 +697,5 @@ onMounted(() => {
     }).join(' '))
   }
 })
+
 </script>

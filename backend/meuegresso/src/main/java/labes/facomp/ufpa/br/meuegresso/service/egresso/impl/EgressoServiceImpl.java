@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.egresso.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -33,6 +35,16 @@ public class EgressoServiceImpl implements EgressoService {
         return egressoRepository.findByUsuarioId(idUsuario).orElseThrow();
     }
 
+    @Override
+    public EgressoModel findById(Integer idEgresso) {
+        return egressoRepository.findById(idEgresso).orElseThrow();
+    }
+
+    @Override
+    public List<EgressoModel> findAll() {
+        return egressoRepository.findAll();
+    }
+
     /**
      *
      *
@@ -42,9 +54,10 @@ public class EgressoServiceImpl implements EgressoService {
      * @since 16/04/2023
      */
     @Override
+    @Transactional
     public EgressoModel updateEgresso(EgressoModel egresso) {
         if (egresso.getId() != null) {
-            egressoRepository.save(egresso);
+            return egressoRepository.save(egresso);
         }
         return null;
     }

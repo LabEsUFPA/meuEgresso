@@ -67,7 +67,10 @@ INSERT INTO public.genero (nome_genero, created_by) VALUES ('OUTROS', 1) ON CONF
 --- Tipo de Bolsa
 
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PIBIC', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PIBIX', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PROAD', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PROEX', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PERMANENCIA', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('OUTROS', 1) ON CONFLICT DO NOTHING;
 
 --- Titulação
 

@@ -3,9 +3,12 @@ package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Dados que representam o relacionamento do egresso com a titulação.
@@ -15,6 +18,8 @@ import lombok.Data;
  * @version 1.1
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EgressoTitulacaoDTO {
 
     @Valid
@@ -27,4 +32,9 @@ public class EgressoTitulacaoDTO {
     @Valid
     @NotNull(message = "Informe a titulação.")
     private TitulacaoDTO titulacao;
+
+    @Valid
+    @NotNull(message = "informe a instituição.")
+    private EmpresaDTO empresa;
+
 }

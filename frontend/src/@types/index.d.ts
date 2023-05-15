@@ -121,9 +121,41 @@ export namespace models {
       curso?: string
     } | null
   }
-  //
 
-  //
+  export interface EgressoMapa {
+    id: {
+      egressoId: number
+      empresaId: number
+    }
+    nomeEgresso: string
+    empresa: {
+      id: number
+      nome: string
+      endereco: {
+        id: number
+        cidade: string
+        estado: string
+        pais: string
+        latitude: number
+        longitude: number
+      }
+    }
+  }
+
+  export interface ContaUsuarioModel {
+    id: number
+    username: string
+    email: string
+    nome: string
+    senha: string
+    grupos?: [
+      {
+        id: number
+        nomeGrupo?: string
+      }
+    ]
+  }
+
   export interface EgressoModelUpdate {
     id: number
     nascimento: string
@@ -214,44 +246,45 @@ export namespace models {
     }
     remuneracaoBolsa?: number
   }
-  // export interface EgressoModelUpdate {
-  //   nascimento: string
-  //   generoId: id
-  //   matricula: string | null
-  //   cotista: boolean
-  //   bolsista: boolean
-  //   interesseEmPos: boolean
-  //   lattes?: string | null
-  //   linkedin?: string | null
-  //   posGraduacao: boolean
-  //   cotas: Array<{
-  //     id: id
-  //   }> | null
-  //   nome: string
-  //   palestras?: {
-  //     descricao?: string
-  //   } | null
-  //   contribuicao: {
-  //     descricao: string
-  //   }
-  //   depoimento: {
-  //     descricao: string
-  //   }
-  //   bolsaId?: id | null
-  //   remuneracaoBolsa?: number
-  //   empresa: {
-  //     faixaSalarialId?: id | null
-  //     setorAtuacao?: string
-  //     nome?: string
-  //     endereco?: {
-  //       pais: string
-  //       estado: string
-  //       cidade: string
-  //     }
-  //   } | null
-  //   titulacao?: {
-  //     instituicao?: string
-  //     curso?: string
-  //   } | null
-  // }
 }
+
+// export interface EgressoModelUpdate {
+//   nascimento: string
+//   generoId: id
+//   matricula: string | null
+//   cotista: boolean
+//   bolsista: boolean
+//   interesseEmPos: boolean
+//   lattes?: string | null
+//   linkedin?: string | null
+//   posGraduacao: boolean
+//   cotas: Array<{
+//     id: id
+//   }> | null
+//   nome: string
+//   palestras?: {
+//     descricao?: string
+//   } | null
+//   contribuicao: {
+//     descricao: string
+//   }
+//   depoimento: {
+//     descricao: string
+//   }
+//   bolsaId?: id | null
+//   remuneracaoBolsa?: number
+//   empresa: {
+//     faixaSalarialId?: id | null
+//     setorAtuacao?: string
+//     nome?: string
+//     endereco?: {
+//       pais: string
+//       estado: string
+//       cidade: string
+//     }
+//   } | null
+//   titulacao?: {
+//     instituicao?: string
+//     curso?: string
+//   } | null
+// }

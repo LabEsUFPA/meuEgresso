@@ -10,7 +10,7 @@
         <CustomButton
           class="absolute right-0"
           color="blue"
-          @click="$emit('update:modelValue', false)"
+          @click="$emit('update:modelValue', false); $emit('close')"
           variant="flat"
         >
           <SvgIcon
@@ -30,7 +30,7 @@ import CustomButton from './CustomButton.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiClose } from '@mdi/js'
 
-defineEmits(['update:modelValue'])
+defineEmits(['update:modelValue', 'close'])
 defineProps<{
   modelValue: boolean
 }>()
