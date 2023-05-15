@@ -632,6 +632,7 @@
                   :has-shadow="false"
                   @toggle="toggleIsInput('localizacao')"
                   :is-input="dataEgresso.localizacao.isInput"
+                  v-if="!isPublic"
                 />
               </h1>
             </template>
@@ -663,7 +664,7 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  :vmodel="dataEgresso.localizacao.pais"
+                  :vmodel="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
                   name="localizacao.pais"
                   placeholder="Brasil"
                   label="País"
@@ -673,7 +674,7 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  :vmodel="dataEgresso.localizacao.estado"
+                  :vmodel="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
                   name="localizacao.estado"
                   label="Estado"
                   placeholder="Pará"
@@ -964,15 +965,12 @@ function handleStatus (status : any) {
 }
 
 async function handleSubmitHeader (values: any) {
-  console.log('handleSubmitHeader')
-  console.log(values)
   // futuro add foto
   jsonResponse.usuario.nome = values.geral.nome
   jsonResponse.linkedin = values.geral.linkedin
   jsonResponse.lattes = values.geral.lattes
   // jsonResponse.emprego = null
-  console.log(jsonResponse)
-  
+
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     await useLoginStore().saveUser()
@@ -984,8 +982,6 @@ async function handleSubmitHeader (values: any) {
 }
 
 async function handleSubmitGeral (values: any) {
-  console.log('handleSubmitGeral')
-  console.log(JSON.stringify(values, null, 2))
   // dataEgresso.value.geral = values.geral
 
   jsonResponse.usuario.email = values.geral.email
@@ -994,8 +990,6 @@ async function handleSubmitGeral (values: any) {
   jsonResponse.genero.id = values.geral.genero
   jsonResponse.nascimento = values.geral.nascimento
   const status = await egressoStore.atualizarEgresso(jsonResponse)
-  console.log(jsonResponse)
-
   if (handleStatus(status)) {
     await useLoginStore().saveUser()
     toggleIsInput('geral')
@@ -1005,8 +999,6 @@ async function handleSubmitGeral (values: any) {
 }
 
 async function handleSubmitAcademico (values: any) {
-  console.log('handleSubmitAcademico')
-  console.log(JSON.stringify(values, null, 2))
   const cotas: Array<{ id: number }> | null = []
   if (values.academico.cotista.value) {
     if (values.academico.cotista.tipos.escola) {
@@ -1060,8 +1052,6 @@ async function handleSubmitAcademico (values: any) {
       // jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
       // jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
     } else {
-      console.log('titulacao not null')
-      console.log(jsonResponse.titulacao)
       jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
       jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
     }
@@ -1080,7 +1070,6 @@ async function handleSubmitAcademico (values: any) {
   }
   if (values.academico.bolsista.value) {
     jsonResponse.bolsa = bolsa
-    console.log()
     // jsonResponse.bolsa.id = values.academico.bolsista.tipo
     jsonResponse.remuneracaoBolsa = values.academico.bolsista.remuneracao
   } else {
@@ -1090,7 +1079,6 @@ async function handleSubmitAcademico (values: any) {
 
   const status = await egressoStore.atualizarEgresso(jsonResponse)
 
-  console.log(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('academico')
   }
@@ -1102,8 +1090,6 @@ async function handleSubmitLocalizacao (values: any) {
   jsonResponse.emprego.empresa.endereco.estado = values.localizacao.estado
   jsonResponse.emprego.empresa.endereco.cidade = values.localizacao.cidade
   // delete jsonResponse.emprego.empresa.endereco.id
-  console.log('HandleSubmit Response: ')
-  console.log(jsonResponse)
 
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
@@ -1113,10 +1099,6 @@ async function handleSubmitLocalizacao (values: any) {
   fetchUpdateEgresso()
 }
 async function handleSubmitCarreira (values: any) {
-  console.log('handleSubmitCarreira')
-  console.log(JSON.stringify(values, null, 2))
-
-  console.log('HandleSubmit Response: ')
   if (values.carreira.area !== 'Desempregado') {
     jsonResponse.emprego.empresa.nome = values.carreira.empresa
     // setor.push(values.carreira.setor)
@@ -1129,11 +1111,9 @@ async function handleSubmitCarreira (values: any) {
       // jsonResponse.emprego.areaAtuacao.id = i + 1
       }
     }
-    console.log(jsonResponse.emprego.empresa)
   }
 
   const status = await egressoStore.atualizarEgresso(jsonResponse)
-  console.log(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('carreira')
   }
@@ -1141,9 +1121,6 @@ async function handleSubmitCarreira (values: any) {
   fetchUpdateEgresso()
 }
 async function handleSubmitAdicionais (values: any) {
-  console.log('handleSubmitAdicionais')
-
-  console.log(JSON.stringify(values, null, 2))
   // dataEgresso.value.adicionais = values.adicionais
   jsonResponse.depoimento.descricao = values.adicionais.experiencias
   jsonResponse.contribuicao.descricao = values.adicionais.contribuicoes
@@ -1153,7 +1130,6 @@ async function handleSubmitAdicionais (values: any) {
   // jsonResponse.depoimento.descricao = values.adicionais.descricao
   egressoStore.atualizarEgresso(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
-  console.log(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('adicionais')
   }
@@ -1208,7 +1184,6 @@ const countries = computed(() => {
       value: country.isoCode
     })
   }
-  console.log('filteredCountries:',filteredCountries)
   return filteredCountries
 })
 
@@ -1221,7 +1196,6 @@ const states = computed(() => {
       value: state.isoCode
     })
   }
-  console.log('filteredStates:',filteredStates)
   return filteredStates
 })
 const cities = computed(() => {
@@ -1413,8 +1387,6 @@ const dataEgresso = ref({
   }
 })
 
-console.log(dataEgresso)
-
 let jsonResponse : any
 let userData : any
 let egressoResponseBack: any
@@ -1425,27 +1397,16 @@ async function fetchUpdateEgresso () {
     userData = JSON.parse(storage.get('loggedUser'))
     // dataEgresso.value.profileHead.nome = userData.nome
     // dataEgresso.value.geral.email = userData.email
-    console.log('DATAa')
-    console.log(userData)
 
     // getEgresso
     if (isPublic.value) {
-      egressoResponseBack = fetchPublicEgresso($route.params?.id)
+      egressoResponseBack = fetchPublicEgresso(Number($route.params?.id))
     } else {
       egressoResponseBack = fetchEgresso()
     }
   }
 
-  console.log('MOUNTED async')
-  console.log('Back Response:a')
-
   // console.log(egressoStore.generos)
-  let generos : any
-  generos = egressoStore.generos
-  for (const option in egressoStore.generos) {
-    console.log('option')
-    console.log(option)
-  }
   // const generosArray = []
 
   // generos.forEach(option => generosArray.push(option))
@@ -1459,11 +1420,6 @@ async function fetchUpdateEgresso () {
 
   jsonResponse = json
 
-  console.log(jsonResponse)
-
-  console.log('grupoa:')
-  console.log(json.usuario.grupos[0].nomeGrupo)
-  console.log(json.id)
   // Cotas
 
   // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
@@ -1511,7 +1467,6 @@ async function fetchUpdateEgresso () {
 
     }
   }
-
 
   dataEgresso.value = {
     egressoId: json.id,
@@ -1609,9 +1564,9 @@ function fetchEgresso () {
   return egressoStore.fetchEgresso()
 }
 
-console.log("Generos:",egressoStore.generos)
-console.log("Bolsas:",egressoStore.tiposBolsa)
-console.log("Cotas",egressoStore.tiposCota)
+function fetchPublicEgresso (id: number) {
+  return egressoStore.fetchPublicEgresso(id)
+}
 
 // watch(pais, () => {
 //   form.value?.setFieldValue('localizacao.cidade', '')
