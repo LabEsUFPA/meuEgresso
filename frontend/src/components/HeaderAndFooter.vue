@@ -3,7 +3,10 @@
     <header class="text-white">
       <div class="bg-gradient-to-br from-pacific-cyan to-bondi-blue">
         <div class="py-4 px-8 md:pl-14 flex flex-row items-center bg-[url('src/assets/textura.svg')] h-full w-full bg-right bg-no-repeat">
-          <div class="flex flex-row items-center">
+          <RouterLink
+            to="/"
+            class="flex flex-row items-center"
+          >
             <img
               class="w-12"
               src="src/assets/logo.svg"
@@ -17,11 +20,14 @@
                 Sistema de Egressos
               </div>
             </div>
-          </div>
+          </RouterLink>
           <!-- Div que preenche o espaco vazio no container flexbox -->
           <div class="flex-1" />
 
-          <UserDropdownMenu v-if="userLogged" :user-logged="userLogged" />
+          <UserDropdownMenu
+            v-if="userLogged"
+            :user-logged="userLogged"
+          />
 
           <div
             v-else

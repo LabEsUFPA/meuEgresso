@@ -111,6 +111,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
     returnEgresso (response: any) {
       return response
     },
+
     async fetchEgresso () {
       const response = await Api.request({
         method: 'get',
@@ -120,6 +121,18 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       if (response?.status === 200) {
         storage.remove('loggedEgresso')
         storage.set('loggedEgresso', JSON.stringify(response.data))
+        const returnValue = JSON.stringify(response.data)
+        return this.returnEgresso(returnValue)
+      }
+    },
+
+    async fetchPublicEgresso (id: number) {
+      const response = await Api.request({
+        method: 'get',
+        route: `/publico/egresso/${id}`
+      })
+
+      if (response?.status === 200) {
         const returnValue = JSON.stringify(response.data)
         return this.returnEgresso(returnValue)
       }

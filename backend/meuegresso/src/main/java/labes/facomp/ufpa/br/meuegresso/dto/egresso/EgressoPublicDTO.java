@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -14,11 +15,12 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
+@Builder
 public class EgressoPublicDTO {
 
     private Integer id;
 
-    private Integer matricula;
+    private String matricula;
 
     @Email
     @NotBlank(message = "Infome um email.")
@@ -26,8 +28,10 @@ public class EgressoPublicDTO {
 
     private GeneroDTO genero;
 
-    private Boolean cotista;
+    @Builder.Default
+    private Boolean cotista = false;
 
+    @Builder.Default
     private Boolean interesseEmPos = false;
 
     private String lattes;

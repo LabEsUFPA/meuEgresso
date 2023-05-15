@@ -28,6 +28,14 @@
               :icon-path="mdiAccount"
             />
             <CustomInput
+              name="username"
+              label="Usuário"
+              helper-text="Letras minúsculas e números com no mínimo seis caracteres"
+              class-helper-text="text-gray-600"
+              :required="true"
+              :icon-path="mdiAccount"
+            />
+            <CustomInput
               name="registration"
               type="number"
               label="Matrícula"
@@ -127,8 +135,9 @@ const storeLogin = useLoginStore()
 
 const schema = object().shape({
   name: string().required().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
+  username: string().required().matches(/^[a-z0-9_.-]{6,}$/),
   registration: string().optional().matches(/^(\d{1,12})?$/),
-  email: string().optional().matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+  email: string().optional().matches(/^[a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/),
   password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/),
   confirmationPassword: string().required().oneOf([refYup('password')])
 })
@@ -143,7 +152,7 @@ const handleSubmit = async (profileData: ProfileRegisterModel) => {
   if (responseValidation === 200) {
     error.value = false
     const responseRegister = await useCadastroPerfilStore().userProfileRegister(
-      profileData.email,
+      profileData.username,
       profileData.password,
       profileData.email,
       profileData.name,
@@ -154,7 +163,7 @@ const handleSubmit = async (profileData: ProfileRegisterModel) => {
 
     if (responseRegister.status === 201) {
       submitSuccess.value = true
-      await storeLogin.userLogin(profileData.email, profileData.password)
+      await storeLogin.userLogin(profileData.username, profileData.password)
       await storeLogin.saveUser()
       router.push({ path: '/cadastro' })
     } else if (responseRegister.status === 400) {

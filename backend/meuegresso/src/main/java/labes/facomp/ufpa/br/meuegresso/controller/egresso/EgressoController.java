@@ -213,6 +213,7 @@ public class EgressoController {
             validaAreaAtuacao(areaAtuacaoModel.getNome(), egressoModel);
             validaSetorAtuacao(setorAtuacaoModel.getNome(), egressoModel);
 
+
             egressoService.updateEgresso(egressoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();
         }
