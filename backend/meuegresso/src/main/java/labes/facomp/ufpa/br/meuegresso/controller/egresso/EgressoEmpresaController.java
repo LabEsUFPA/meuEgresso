@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoMapaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
@@ -57,11 +58,11 @@ public class EgressoEmpresaController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<EgressoEmpresaDTO> consultarEgressoEmpresas() {
-		return mapper.map(egressoEmpresaService.findAll(), new TypeToken<List<EgressoEmpresaDTO>>() {
-		}.getType());
-	}
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public List<EgressoMapaDTO> consultarEgressoEmpresas() {
+        return mapper.map(egressoEmpresaService.findAll(), new TypeToken<List<EgressoEmpresaDTO>>() {
+        }.getType());
+    }
 
 	/**
 	 * Endpoint responsável por retornar um egressoEmpresa por sua ID.

@@ -27,8 +27,8 @@ public interface EgressoTitulacaoService {
 	/**
 	 * Método responsável por encontrar um determinado egressoTitulacao por sua ID.
 	 *
-	 * @param id ID de um egressoTitulacao
-	 * @return
+	 * @param id ID de um EgressoTitulacaoModelId
+	 * @return EgressoTitulacaoModel
 	 */
 	public EgressoTitulacaoModel findById(EgressoTitulacaoModelId id);
 
@@ -43,23 +43,24 @@ public interface EgressoTitulacaoService {
 	 * Método responsável por atualizar dados de um egressoTitulacao cadastrado.
 	 *
 	 * @param egressoTitulacao objeto egressoTitulacao
-	 * @return
+	 * @return EgressoTitulacaoModel
 	 */
 	public EgressoTitulacaoModel update(EgressoTitulacaoModel egressoTitulacao) throws InvalidRequestException;
 
 	/**
 	 * Método responsável por deletar um egressoTitulacao cadastrado por sua ID.
 	 *
-	 * @param id ID de um egressoTitulacao
+	 * @param id de EgressoTitulacaoModelId
+	 * @return boolean
 	 */
 	public boolean deleteById(EgressoTitulacaoModelId id);
 
 	/**
 	 * Método responsável por verificar se existe um determinado elemento.
 	 *
-	 * @param id
+	 * @param id de EgressoTitulacaoModelId
 	 * @param createdBy
-	 * @return
+	 * @return boolean
 	 */
 	boolean existsByIdAndCreatedById(EgressoTitulacaoModelId id, Integer createdBy);
 }

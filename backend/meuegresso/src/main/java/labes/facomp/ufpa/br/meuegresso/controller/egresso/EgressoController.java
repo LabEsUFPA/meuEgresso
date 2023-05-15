@@ -209,7 +209,8 @@ public class EgressoController {
             if (egressoModel.getPalestras() != null) {
                 egressoModel.getPalestras().setEgresso(egressoModel);
             }
-            egressoModel.getUsuario().setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
+            egressoModel.getUsuario()
+                    .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
             egressoService.updateEgresso(egressoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();
         }

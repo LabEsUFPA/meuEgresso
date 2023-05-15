@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -14,6 +15,7 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
+@Builder
 public class EgressoEmpresaDTO {
 
     private EgressoEmpresaModelId id;

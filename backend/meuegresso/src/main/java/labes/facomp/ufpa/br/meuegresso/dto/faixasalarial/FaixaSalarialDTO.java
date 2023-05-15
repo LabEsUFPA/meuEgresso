@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.faixasalarial;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
  * @version 1.0
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class FaixaSalarialDTO {
