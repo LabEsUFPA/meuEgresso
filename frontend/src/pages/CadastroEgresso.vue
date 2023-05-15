@@ -366,7 +366,10 @@
         </CustomButton>
       </div>
     </Form>
-    <CustomDialog v-model="dialogSucesso">
+    <CustomDialog
+      v-model="dialogSucesso"
+      @close="$router.push('/egresso')"
+    >
       <div class="h-full flex justify-center items-center">
         <div class="w-1/2">
           <div class="text-green-500 text-center mb-3">
@@ -380,7 +383,7 @@
           <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
             Dados cadastrados com sucesso!
           </h1>
-          <div class="text-center">
+          <div class="flex flex-row justify-center">
             <CustomButton variant="outlined">
               <SvgIcon
                 type="mdi"
@@ -617,7 +620,7 @@ const schema = object().shape({
     cidade: string().required()
   }),
   academico: object({
-    matricula: string().min(12).max(12),
+    matricula: string().max(12),
     tipoAluno: string(),
     cotista: object({
       value: boolean(),

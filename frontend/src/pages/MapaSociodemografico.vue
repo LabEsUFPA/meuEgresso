@@ -52,9 +52,9 @@
             {{ Country.getCountryByCode(selectedMarker[0].empresa.endereco.pais)?.name }}
           </div>
 
-          <div class="grid grid-cols-2 gap-1 md:block">
+          <div class="grid grid-cols-2 gap-1 md:grid-cols-1">
             <div
-              class="bg-white rounded-xl md:mb-1 p-3 shadow-sm"
+              class="bg-white rounded-xl p-3 shadow-sm"
               v-for="(egresso, index) in egressosPaginados"
               :key="index"
             >
