@@ -71,8 +71,8 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class MapaControllerTest {
-    
+class MapaControllerTest {
+
     static final Integer EMRPESA_ID = 1;
     static final String NOME = "EmpresaTeste";
     static final String SETORATUACAO = "SetorTeste";
@@ -247,5 +247,5 @@ public class MapaControllerTest {
         assertEquals(1, egressoEmpresasDTO.size());
         assertEquals(usuarioModel.getNome(), egressoEmpresasDTO.get(0).getNomeEgresso());
     }
-    
+
 }
