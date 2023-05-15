@@ -204,16 +204,16 @@ public class EgressoController {
             }
             egressoModel.getUsuario()
                     .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
-            SetorAtuacaoModel setorAtuacaoModel = egressoModel.getEmprego().getSetorAtuacao();
-            AreaAtuacaoModel areaAtuacaoModel = egressoModel.getEmprego().getAreaAtuacao();
+            if (egressoModel.getEmprego() != null) {
+                SetorAtuacaoModel setorAtuacaoModel = egressoModel.getEmprego().getSetorAtuacao();
+                AreaAtuacaoModel areaAtuacaoModel = egressoModel.getEmprego().getAreaAtuacao();
+                validaAreaAtuacao(areaAtuacaoModel.getNome(), egressoModel);
+                validaSetorAtuacao(setorAtuacaoModel.getNome(), egressoModel);
+            }
             if (egressoModel.getTitulacao() != null) {
                 validaCurso(egressoModel.getTitulacao().getCurso().getNome(), egressoModel);
                 validaInstituicao(egresso.getTitulacao().getEmpresa().getNome(), egressoModel);
             }
-            validaAreaAtuacao(areaAtuacaoModel.getNome(), egressoModel);
-            validaSetorAtuacao(setorAtuacaoModel.getNome(), egressoModel);
-
-
             egressoService.updateEgresso(egressoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();
         }

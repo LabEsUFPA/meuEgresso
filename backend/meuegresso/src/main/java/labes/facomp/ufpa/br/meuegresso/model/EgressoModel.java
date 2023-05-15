@@ -94,8 +94,7 @@ public class EgressoModel extends Auditable {
 			CascadeType.REMOVE }, orphanRemoval = true)
 	private EgressoTitulacaoModel titulacao;
 
-	@OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
-			CascadeType.REMOVE }, orphanRemoval = true)
+	@OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, orphanRemoval = true)
 	private EgressoEmpresaModel emprego;
 
 	@OneToOne(mappedBy = "egresso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
