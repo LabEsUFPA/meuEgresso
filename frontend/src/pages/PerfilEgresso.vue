@@ -5,13 +5,64 @@
     >
       <!-- <ProfileHead /> -->
       <!-- Head Start-->
+      <section>
+        <o-field>
+          <o-upload
+            v-model="dropFiles"
+            multiple
+            drag-drop
+          >
+            <section class="ex-center">
+              <p>
+                <o-icon
+                  icon="upload"
+                  size="is-large"
+                />
+              </p>
+              <p>Drop your files here or click to upload</p>
+            </section>
+          </o-upload>
+        </o-field>
 
+        <div class="tags">
+          <span
+            v-for="(file, index) in dropFiles"
+            :key="index"
+          >
+            {{ file.name }}
+            <o-button
+              icon-left="times"
+              size="small"
+              native-type="button"
+              @click="deleteDropFile(index)"
+            />
+
+            <img
+              class="ml-[200px] mt-[37px] w-[120px] h-[120px] rounded-full"
+
+              :src="getObjectURL(file)"
+              alt="Uploaded image"
+            >
+          </span>
+        </div>
+      </section>
       <div class="items-center flex relative w-[7000px] flex-col">
         <Form
+
           @submit="handleSubmitHeader"
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
         >
+          <!-- <div>
+            <input
+              type="file"
+              @change="egressoStore.uploadImageEgresso"
+            >
+            <button @click="uploadImage">
+              Upload Image
+            </button>
+          </div> -->
+
           <ButtonActionIcon
             icon-path="/src/assets/trashCan.svg"
             icon-size="20"
@@ -22,7 +73,7 @@
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
             <img
               class="ml-[200px] mt-[37px] w-[120px] h-[120px] rounded-full"
-              src="/src/assets/profile-pic.png"
+              src="src/assets/profile-pic.png"
               alt="Avatar"
             >
 
@@ -848,6 +899,7 @@ import { object, string, date, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
 import { useLoginStore } from 'src/store/LoginStore'
 import ButtonActionIcon from 'src/components/ButtonActionIcon.vue'
+import { OUpload, OSidebar, section, OField } from '@oruga-ui/oruga-next'
 
 import {
   mdiAccount,
@@ -863,6 +915,36 @@ import {
   mdiLinkVariant
 } from '@mdi/js'
 // mdiHome CEP,
+
+// const dropFiles = ref([])
+// const deleteDropFile = (index) => {
+//   dropFiles.value.splice(index, 1)
+// }
+let fileGloabal: any
+
+function getObjectURL (file: File) {
+  console.log(URL.createObjectURL(file))
+  return URL.createObjectURL(file)
+}
+
+const dropFiles = ref([])
+const useDropFiles = () => {
+  const dropFiles = ref([])
+  const deleteDropFile = (index) => {
+    dropFiles.value.splice(index, 1)
+  }
+
+  return { dropFiles, deleteDropFile }
+}
+const deleteDropFile = (index) => {
+  dropFiles.value.splice(index, 1)
+}
+// const dropFiles = ref([])
+// function deleteDropFile (index : any) {
+//   dropFiles.value.splice(index, 1)
+//   return { dropFiles, deleteDropFile }
+// }
+
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const camposFaltosos = ref(false)

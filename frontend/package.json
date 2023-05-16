@@ -17,6 +17,7 @@
   "dependencies": {
     "@jamescoyle/vue-icon": "^0.1.2",
     "@mdi/js": "^7.2.96",
+    "@oruga-ui/oruga-next": "^0.6.0",
     "@vee-validate/yup": "^4.8.6",
     "axios": "^1.4.0",
     "country-state-city": "^3.1.2",

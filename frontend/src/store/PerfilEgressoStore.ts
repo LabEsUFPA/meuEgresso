@@ -3,6 +3,7 @@ import { type models } from 'src/@types'
 import Api from 'src/services/api'
 // interface UserModel extends models.UserModel {}
 import LocalStorage from 'src/services/localStorage'
+import { ref } from 'vue'
 interface ComplexOpts extends models.ComplexOpts {}
 interface EgressoModel extends models.EgressoModel {}
 interface EgressoModelUpdate extends models.EgressoModelUpdate {}
@@ -231,6 +232,47 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         body: dataEgresso
       })
       return (response?.status) !== undefined ? response.status : 500
+    },
+
+    async uploadImageEgresso (event: Event) {
+      const target = event.target as HTMLInputElement
+      if (target.files != null) {
+        file.value = target.files[0]
+      }
+      if (!file.value) return
+
+      const formData = new FormData()
+      formData.append('image', file.value)
+      console.log(formData)
+      // const response = await Api.request({
+      //   method: 'put',
+      //   route: '/egresso',
+      //   body: formData
+      // })
+      // return (response?.status) !== undefined ? response.status : 500
+
+      // try {
+      //   const response: AxiosResponse = await axios.post('https://example.com/upload', formData, {
+      //     headers: {
+      //       'Content-Type': 'multipart/form-data'
+      //     },
+      //     maxContentLength: 5 * 1024 * 1024 // 5 MB
+      //   })
+      //   console.log(response.data)
+      // } catch (error) {
+      //   console.error(error)
+      // }
+      // try {
+      //   const response: AxiosResponse = await axios.post('https://example.com/upload', formData, {
+      //     headers: {
+      //       'Content-Type': 'multipart/form-data'
+      //     },
+      //     maxContentLength: 5 * 1024 * 1024 // 5 MB
+      //   })
+      //   console.log(response.data)
+      // } catch (error) {
+      //   console.error(error)
+      // }
     }
   }
 })
