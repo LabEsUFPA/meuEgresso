@@ -8,12 +8,13 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
-* Encapsulamento da tabela Comentario a fim de representar os dados de auditoria.
-*
-* @author Alfredo Gabriel
-* @since 22/04/2023
-* @version 1.0
-*/
+ * Encapsulamento da tabela Comentario a fim de representar os dados de
+ * auditoria.
+ *
+ * @author Alfredo Gabriel
+ * @since 22/04/2023
+ * @version 1.0
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,7 +23,7 @@ public class ComentarioDTO extends AuditableDTO {
 
     private Integer id;
 
-    @NotBlank(message = "Insira um comentario não vazio.")
+    @NotBlank(message = "Insira um comentário não vazio.")
     private String descricao;
 
 }

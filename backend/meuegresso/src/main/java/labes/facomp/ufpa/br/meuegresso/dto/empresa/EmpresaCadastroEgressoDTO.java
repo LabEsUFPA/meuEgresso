@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmpresaCastroEgressoDTO {
+public class EmpresaCadastroEgressoDTO {
 
     private Integer id;
 

@@ -20,7 +20,7 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCastroEgressoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
@@ -108,7 +108,7 @@ public class EgressoController {
         }
 
         // Cadastro EMPRESA - EMPREGO
-        EmpresaCastroEgressoDTO empresaDTO;
+        EmpresaCadastroEgressoDTO empresaDTO;
         EmpresaModel empresa;
         if (egressoCadastroDTO.getEmpresa() != null) {
             empresaDTO = egressoCadastroDTO.getEmpresa();

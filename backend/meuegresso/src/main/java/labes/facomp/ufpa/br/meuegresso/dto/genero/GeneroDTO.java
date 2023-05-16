@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * Encapsulamento da tabela Sexo a fim de representar somente os dados não
+ * Encapsulamento da tabela Gênero a fim de representar somente os dados não
  * sensiveis.
  *
  * @author Pedro Inácio, Alfredo Gabriel
@@ -22,7 +22,7 @@ public class GeneroDTO {
 
     private Integer id;
 
-    @NotBlank(message = "Insira o nome do genero.")
+    @NotBlank(message = "Insira o nome do gênero.")
     private String nome;
 
 }

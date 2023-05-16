@@ -7,6 +7,7 @@ import java.util.List;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.PositiveOrZero;
 import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
@@ -37,10 +38,10 @@ public class EgressoDTO {
     private LocalDate nascimento;
 
     @Valid
-    @NotNull(message = "Informe o genêro do usuário.")
+    @NotNull(message = "Informe o gênero do usuário.")
     private GeneroDTO genero;
 
-    @Pattern(regexp = "[0-9]{12}|$", message = "Informe uma matricula valida.")
+    @Pattern(regexp = "[0-9]{12}|$", message = "Informe uma matrícula válida.")
     private String matricula;
 
     @Builder.Default
@@ -52,10 +53,10 @@ public class EgressoDTO {
     @Builder.Default
     private Boolean interesseEmPos = false;
 
-    @Pattern(regexp = "^(https?:\\/\\/)?(www\\.)?lattes\\.cnpq\\.br\\/(\\d+)$", message = "Informe um lattes valido. Ex: http://lattes.cnpq.br/0893154395471579")
+    @Pattern(regexp = "^(https?:\\/\\/)?(www\\.)?lattes\\.cnpq\\.br\\/(\\d+)$", message = "Informe um lattes válido. Ex: http://lattes.cnpq.br/0893154395471579")
     private String lattes;
 
-    @Pattern(regexp = "^https?://(www\\.)?linkedin\\.com/in/([a-zA-Z0-9_-]+)$", message = "Informe um linkedin valido. Ex: https://www.linkedin.com/in/alfredo-gabriel-de-sousa-oliveia/")
+    @Pattern(regexp = "^https?://(www\\.)?linkedin\\.com/in/([a-zA-Z0-9_-]+)$", message = "Informe um linkedin válido. Ex: https://www.linkedin.com/in/alfredo-gabriel-de-sousa-oliveia/")
     private String linkedin;
 
     @Builder.Default
@@ -89,6 +90,6 @@ public class EgressoDTO {
     @Valid
     private TipoBolsaDTO bolsa;
 
+    @PositiveOrZero(message = "Informe a remuneração da bolsa.")
     private Double remuneracaoBolsa;
-
 }

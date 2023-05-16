@@ -23,6 +23,6 @@ public class FaixaSalarialDTO extends Auditable {
 
     private Integer id;
 
-    @NotBlank(message = "Informe a faixa salarial.")
+    @NotBlank(message = "Insira o intervalo da faixa salarial.")
     private String faixa;
 }

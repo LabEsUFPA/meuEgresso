@@ -14,8 +14,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Encapsulamento da tabela Grupo a fim de representar somente os dados não
- * sensiveis.
  * Nota: Use este DTO somente para persistir o usuário, não retorne o mesmo.
  *
  * @author Alfredo Gabriel, Camilo Santos

@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Pattern;
 import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCastroEgressoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.palestra.PalestraDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
@@ -83,7 +83,7 @@ public class EgressoCadastroDTO {
     private Double remuneracaoBolsa;
 
     @Valid
-    private EmpresaCastroEgressoDTO empresa;
+    private EmpresaCadastroEgressoDTO empresa;
 
     @Valid
     private TitulacaoEgressoDTO titulacao;
