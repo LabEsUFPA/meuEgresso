@@ -4,6 +4,7 @@ import Api from 'src/services/api'
 // interface UserModel extends models.UserModel {}
 import LocalStorage from 'src/services/localStorage'
 import { ref } from 'vue'
+
 interface ComplexOpts extends models.ComplexOpts {}
 interface EgressoModel extends models.EgressoModel {}
 interface EgressoModelUpdate extends models.EgressoModelUpdate {}
@@ -14,6 +15,7 @@ interface State {
   faixasSalariais: ComplexOpts[]
   tiposBolsa: ComplexOpts[]
   tiposCota: ComplexOpts[]
+
 }
 
 export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
@@ -234,45 +236,53 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       return (response?.status) !== undefined ? response.status : 500
     },
 
-    async uploadImageEgresso (event: Event) {
+    async uploadImageEgresso (file: File) {
+      console.log(file)
+      const formData = new FormData()
+      formData.append('arquivo', file)
+
+      const response = await Api.request({
+        method: 'post',
+        route: '/egresso/foto',
+        body: formData
+      })
+      // maxContentLength: 5 * 1024 * 1024 // 5 MB
+      console.log(response.data)
+    },
+
+    async handleFileUpload (event: Event) {
+      const file = ref<File | null>(null)
       const target = event.target as HTMLInputElement
       if (target.files != null) {
         file.value = target.files[0]
       }
-      if (!file.value) return
 
-      const formData = new FormData()
-      formData.append('image', file.value)
-      console.log(formData)
-      // const response = await Api.request({
-      //   method: 'put',
-      //   route: '/egresso',
-      //   body: formData
-      // })
-      // return (response?.status) !== undefined ? response.status : 500
+      if (file.value == null) {
+        const formData = new FormData()
+        formData.append('arquivo', file.value)
 
-      // try {
-      //   const response: AxiosResponse = await axios.post('https://example.com/upload', formData, {
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data'
-      //     },
-      //     maxContentLength: 5 * 1024 * 1024 // 5 MB
-      //   })
-      //   console.log(response.data)
-      // } catch (error) {
-      //   console.error(error)
-      // }
-      // try {
-      //   const response: AxiosResponse = await axios.post('https://example.com/upload', formData, {
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data'
-      //     },
-      //     maxContentLength: 5 * 1024 * 1024 // 5 MB
-      //   })
-      //   console.log(response.data)
-      // } catch (error) {
-      //   console.error(error)
-      // }
+        const response = await Api.request({
+          method: 'post',
+          route: '/egresso/foto',
+          body: formData
+        })
+
+        console.log(response.data)
+      }
+    },
+
+    async fetchImageEgresso (egressoId: string) {
+      const route = '/egresso/foto/' + egressoId
+      const response = await Api.request({
+        method: 'get',
+        route
+      })
+      if (response?.status === 200) {
+        storage.remove('loggedEgresso')
+        storage.set('loggedEgresso', JSON.stringify(response.data))
+        const returnValue = JSON.stringify(response.data)
+        return this.returnEgresso(returnValue)
+      }
     }
   }
 })

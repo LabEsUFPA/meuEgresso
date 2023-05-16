@@ -924,6 +924,9 @@ let fileGloabal: any
 
 function getObjectURL (file: File) {
   console.log(URL.createObjectURL(file))
+  egressoStore.uploadImageEgresso(file)
+  /// egressoStore.uploadImageEgresso(URL.createObjectURL(file), jsonResponse.id)
+  // egressoStore.uploadImageEgresso(file, jsonResponse.id)
   return URL.createObjectURL(file)
 }
 
@@ -1513,7 +1516,8 @@ async function fetchUpdateEgresso () {
     cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
   }
   // Email e nome vem do usuario loggado
-
+  const imageResponse = egressoStore.fetchImageEgresso('1')
+  console.log(imageResponse)
   dataEgresso.value = {
     egressoId: json.id,
     geral:
