@@ -40,7 +40,7 @@
             <img
               class="ml-[200px] mt-[37px] w-[120px] h-[120px] rounded-full"
 
-              :src="getObjectURL(file)"
+              :src="handleEgressoImage()"
               alt="Uploaded image"
             >
           </span>
@@ -48,7 +48,6 @@
       </section>
       <div class="items-center flex relative w-[7000px] flex-col">
         <Form
-
           @submit="handleSubmitHeader"
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
@@ -70,10 +69,12 @@
             color="whiteDanger"
             @click="removeImage()"
           />
+
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
             <img
               class="ml-[200px] mt-[37px] w-[120px] h-[120px] rounded-full"
-              src="src/assets/profile-pic.png"
+              :src="imageEgresso"
+
               alt="Avatar"
             >
 
@@ -1458,10 +1459,28 @@ const stateFolders = ref({
     isInput: false
   }
 })
+let egressoImageResponse : any
+let imageEgresso : any
+handleEgressoImage()
+async function handleEgressoImage () {
+  egressoImageResponse = await egressoStore.fetchImageEgresso('1')
+  const blob = new Blob([egressoImageResponse.data], { type: 'image/png' })
 
+  const url = URL.createObjectURL(blob)
+  // const link = document.createElement('a')
+  console.log('url')
+  console.log(url)
+  imageEgresso = url
+  if (egressoImageResponse === undefined) {
+    return '/src/assets/profile-pic.png'
+  } else {
+    return url
+  }
+}
 let jsonResponse : any
 let userData : any
 let egressoResponseBack: any
+
 // fetchEgressoIfLoggedUser()
 fetchUpdateEgresso()
 async function fetchUpdateEgresso () {
@@ -1516,8 +1535,15 @@ async function fetchUpdateEgresso () {
     cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
   }
   // Email e nome vem do usuario loggado
-  const imageResponse = egressoStore.fetchImageEgresso('1')
-  console.log(imageResponse)
+  // const imageResponse = await egressoStore.fetchImageEgresso('1')
+  handleEgressoImage()
+
+  // egressoImageResponse = imageResponse
+  // handleEgressoImage()
+  // imageEgressoName = URL.createObjectURL(imageResponse.value)
+  console.log('NAME:')
+  // console.log(imageEgressoName)
+
   dataEgresso.value = {
     egressoId: json.id,
     geral:

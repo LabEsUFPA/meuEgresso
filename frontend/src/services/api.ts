@@ -6,9 +6,6 @@ const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
 const Axios = axios.create({
   baseURL,
-  headers: {
-    'Content-Type': 'multipart/form-data'
-  },
   withCredentials: true
 })
 

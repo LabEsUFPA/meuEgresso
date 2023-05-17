@@ -4,7 +4,7 @@ import Api from 'src/services/api'
 // interface UserModel extends models.UserModel {}
 import LocalStorage from 'src/services/localStorage'
 import { ref } from 'vue'
-
+import axios from 'axios'
 interface ComplexOpts extends models.ComplexOpts {}
 interface EgressoModel extends models.EgressoModel {}
 interface EgressoModelUpdate extends models.EgressoModelUpdate {}
@@ -17,6 +17,11 @@ interface State {
   tiposCota: ComplexOpts[]
 
 }
+axios.interceptors.request.use((config) => {
+  const Token = new LocalStorage().getToken()
+  if (Token !== undefined) config.headers.Authorization = `Bearer ${Token}`
+  return config
+})
 
 export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
   state: (): State => ({
@@ -270,19 +275,23 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         console.log(response.data)
       }
     },
-
     async fetchImageEgresso (egressoId: string) {
       const route = '/egresso/foto/' + egressoId
-      const response = await Api.request({
-        method: 'get',
-        route
+      const url = ''
+      let response: any
+      await axios.get('http://localhost:15000/egresso/foto/1', {
+        responseType: 'blob'
+      }).then(res => {
+        // const blob = new Blob([res.data])
+
+        // url = URL.createObjectURL(blob)
+        response = res
+        // if (res?.status === 200) {
+        //   return res
+        // }
+        // return JSON.stringify(url)
       })
-      if (response?.status === 200) {
-        storage.remove('loggedEgresso')
-        storage.set('loggedEgresso', JSON.stringify(response.data))
-        const returnValue = JSON.stringify(response.data)
-        return this.returnEgresso(returnValue)
-      }
+      return response
     }
   }
 })
