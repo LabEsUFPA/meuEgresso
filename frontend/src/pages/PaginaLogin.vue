@@ -76,15 +76,18 @@ import { models } from 'src/@types'
 interface LoginModel extends models.LoginModel {}
 
 const error = ref(false)
+const storeLogin = useLoginStore()
 
 const schema = object().shape({
   username: string().required(),
   password: string().required()
 })
 
-const handleSubmit = async (loginData: LoginModel) => {
+const handleSubmit = async (submitData: any) => {
+  const loginData: LoginModel = submitData
+
   if (loginData.username || loginData.password) {
-    const response = await useLoginStore().userLogin(loginData.username, loginData.password)
+    const response = await storeLogin.userLogin(loginData.username, loginData.password)
 
     if (response === 200) {
       error.value = false

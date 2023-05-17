@@ -126,8 +126,8 @@ import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
-import { models } from 'src/@types'
 import CustomDialog from 'src/components/CustomDialog.vue'
+import { models } from 'src/@types'
 interface ProfileRegisterModel extends models.ProfileRegisterModel {}
 
 const error = ref(false)
@@ -137,6 +137,7 @@ const errorMessages = ref({
 const errorText = ref('')
 const submitSuccess = ref(false)
 const username = ref('')
+const storeCadastro = useCadastroPerfilStore()
 
 const setIdAccessLevel = (accessLevel: string) => {
   if (accessLevel === 'Administrador') {
@@ -159,9 +160,11 @@ const schema = object().shape({
   idAccessLevel: number()
 })
 
-const handleSubmit = async (profileData: ProfileRegisterModel) => {
-  profileData.idAccessLevel = setIdAccessLevel(profileData.accessLevel)
-  const response = await useCadastroPerfilStore().userProfileRegister(
+const handleSubmit = async (submitData: any) => {
+  const profileData: ProfileRegisterModel = submitData
+
+  profileData.idAccessLevel = setIdAccessLevel(profileData.accessLevel ? profileData.accessLevel : 'Egresso')
+  const response = await storeCadastro.userProfileRegister(
     profileData.username,
     profileData.password,
     profileData.email,
