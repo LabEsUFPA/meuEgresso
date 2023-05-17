@@ -1,5 +1,19 @@
 <template>
-  <div class="flex-1 min-h-screen items-center justify-center bg-neutral-100">
+  <div
+    v-if="loading"
+    class="flex items-center justify-center text-center"
+  >
+    <img
+      class="animate-spin mr-3 max-w-[100px]"
+      src="../assets/loading.svg"
+      alt="Loading"
+    >
+  </div>
+
+  <div
+    v-else
+    class="flex-1 min-h-screen items-center justify-center bg-neutral-100"
+  >
     <div
       class="flex place-items-center justify-between flex-wrap relative w-full h-[335px] pin-t bg-gradient-to-b from-sky-200 to-indigo-200 "
     >
@@ -917,7 +931,7 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import CustomTextarea from 'src/components/CustomTextarea.vue'
 import { Form } from 'vee-validate'
@@ -1384,6 +1398,13 @@ const dataEgresso = ref({
     linkedin: '',
     lattes: '',
     isInput: false
+  }
+})
+
+const loading = ref(true)
+watch(() => dataEgresso.value.egressoId, () => {
+  if (dataEgresso.value.egressoId !== 0) {
+    loading.value = false
   }
 })
 
