@@ -1,123 +1,127 @@
 <template>
-  <div
-    :class="{
-      'opacity-80': disabled
-    }"
-  >
-    <div class="w-fit">
-      <div
-        class="text-sm ml-1"
-        v-if="label"
-      >
-        {{ label }} <sup
-          v-if="required"
+  <div class="select">
+    <OField
+      override
+      message-class="text-xs mt-1 max-w-[250px]"
+      :label-class="classNames({
+        ['text-sm ml-1']: true,
+        ['opacity-80']: disabled
+      })"
+    >
+      <template #label>
+        {{ label }}
+        <sup
           class="text-red-500"
-        >*</sup>
-      </div>
-      <button
-        type="button"
-        class="w-64 py-1 px-3 grid grid-cols-8 relative border"
-        :class="{
-          ['bg-gray-100 cursor-not-allowed']: disabled,
-          ['outline-2 outline outline-red-500']: !meta.valid && meta.validated && meta.touched,
-          ['outline-2 outline outline-emerald-500']: meta.valid && meta.validated && meta.touched,
-          ['rounded-t-lg']: open,
-          ['rounded-lg']: !open
-        }"
-        @click="() => { !disabled ? open = !open : '' }"
-        @blur="open = false"
-      >
-        <img
-          class="w-[20px]"
-          :src="iconPath"
-          v-if="imgIcon"
+          v-if="required"
         >
-
-        <SvgIcon
-          type="mdi"
-          class="col-span-1"
-          size="20"
-          :path="iconPath"
-          v-else-if="iconPath"
-        />
+          *
+        </sup>
+      </template>
+      <template #default>
         <div
-          class="text-left"
-          :class="iconPath ? 'col-span-6' : 'col-span-7'"
-        >
-          <p
-            :class="inputValue === '' ? 'text-gray-500' : 'text-black'"
-          >
-            <a v-if="props.preFilled">
-              {{ currentSelection.label === '' ? inputValue : '' }}
-              {{ inputValue === '0' ? placeholder : currentSelection.label }}
-            </a>
-            <a v-else>
-              {{ inputValue === '' ? placeholder : currentSelection.label }}
-            </a>
-          </p>
-        </div>
-
-        <div
-          class="text-cyan-600 col-span-1 flex flex-row items-end justify-end"
-        >
-          <SvgIcon
-            type="mdi"
-            :path="mdiChevronDown"
-          />
-        </div>
-
-        <div
-          :class="open ? '' : 'hidden'"
-          class="absolute shadow-md bg-white w-64 z-50 cursor-pointer -left-[1px] max-h-96 overflow-y-auto top-8 rounded-b-lg border border-t-0"
+          class="grid grid-cols-8"
+          :class="classNames({
+            ['bg-gray-100 cursor-not-allowed']: disabled,
+            ['cursor-pointer']: !disabled,
+            ['outline-2 outline outline-red-500']: !meta.valid && meta.validated && meta.touched,
+            ['outline-2 outline outline-emerald-500']: meta.valid && meta.validated && meta.touched,
+            ['rounded-t-lg']: open,
+            ['rounded-lg']: !open,
+            ['w-64 py-1 px-3 relative border']: true,
+          })"
+          @click="!disabled ? focusInput = !focusInput : ''"
         >
           <div
-            class="p-2 hover:bg-gray-200 text-left"
-            @click="handleEmit('')"
+            :class="{
+              ['cursor-not-allowed']: disabled,
+              ['col-span-1 flex justify-start items-center text-gray-400']: true
+            }"
+            v-if="iconPath"
           >
-            ..
+            <img
+              class="w-[20px]"
+              :src="iconPath"
+              v-if="imgIcon"
+            >
+
+            <SvgIcon
+              type="mdi"
+              class="col-span-1"
+              size="20"
+              :path="iconPath"
+              v-else-if="iconPath"
+            />
           </div>
-          <div
-            class="p-2 hover:bg-gray-200 text-left border-t"
-            :key="index"
-            v-for="(option, index) in options"
-            @click="handleEmit(option)"
+
+          <OAutocomplete
+            override
+            keep-first
+            open-on-focus
+            selectable-header
+            menu-class="absolute shadow-md bg-white w-64 z-50 cursor-pointer -left-[1px] overflow-y-auto top-8 rounded-b-lg border border-t-0"
+            item-class="p-2 text-left border-t hover:bg-gray-200"
+            item-hover-class="bg-gray-200"
+            ref="input"
+            max-height="24rem"
+            v-model="model"
+            :data="filteredDataArray"
+            :placeholder="placeholder"
+            :field="typeof options[0] === 'object' ? 'label' : 'value'"
+            :required="required"
+            :disabled="disabled"
+            :input-class="classNames({
+              ['cursor-not-allowed']: disabled,
+              ['bg-transparent focus:outline-none']: true
+            })"
+            :root-class="classNames({
+              ['col-span-6']: iconPath,
+              ['col-span-7']: !iconPath
+            })"
+            @select="(option: IOpts) => (handleEmit(option))"
+            @click="() => { !disabled ? open = !open : '' }"
+            @blur="open = false"
+            @keydown="open = true"
+            @keydown.esc.enter="open = false"
           >
-            {{ typeof option === 'object' ? option.label : option }}
+            <template #empty>
+              Dados não encontrados
+            </template>
+            <template #default="data">
+              {{ data.option?.label ? data.option.label : data.option }}
+            </template>
+          </OAutocomplete>
+
+          <div class="text-cyan-600 col-span-1 flex flex-row items-end justify-end">
+            <SvgIcon
+              type="mdi"
+              :path="mdiChevronDown"
+            />
           </div>
         </div>
-      </button>
-      <div
-        class="text-xs mt-1"
-        :class="{
-          ['text-red-500']: !meta.valid,
-          ['text-emerald-500']: meta.valid,
-        }"
-        v-show="meta.validated"
-      >
-        {{ meta.valid ? successMessage : errorMessage }}
-      </div>
-      <div
-        v-if="helperText"
-        class="text-xs mt-1 ml-1 max-w-[250px] sm:max-w-fit"
-      >
-        {{ helperText }}
-      </div>
-    </div>
+      </template>
+      <template #message>
+        <div class="text-red-500">
+          {{ errorMessage }}
+        </div>
+        <div>
+          {{ helperText }}
+        </div>
+      </template>
+    </OField>
   </div>
 </template>
-<script lang="ts" setup>
-import { ref, toRef } from 'vue'
+<script setup lang="ts">
+import { ref, computed, toRef, onMounted, watch } from 'vue'
+import { OField, OAutocomplete } from '@oruga-ui/oruga-next'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronDown } from '@mdi/js'
 import { useField } from 'vee-validate'
 import { type models } from 'src/@types'
-
+import classNames from 'classnames'
 interface ComplexOpts extends models.ComplexOpts {}
 
 type IOpts = string | ComplexOpts
-
 interface Props {
-  value?: string
   valueId?: number
   label: string
   name: string
@@ -128,9 +132,7 @@ interface Props {
   placeholder?: string
   imgIcon?: boolean
   disabled?: boolean
-  errorMessage?: string
-  successMessage?: string
-  preFilled?: boolean
+  preFilled?: boolean // tirar duvidas
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -144,57 +146,48 @@ const props = withDefaults(defineProps<Props>(), {
   preFilled: false
 })
 
-const $emit = defineEmits(['update:value'])
+const model = ref<any>('')
+const selected = ref<IOpts>('')
+const open = ref(false)
+const input = ref<HTMLElement | null>(null)
+const focusInput = ref(false)
 
-const currentSelection = ref<ComplexOpts>({
-  label: '',
-  value: ''
+const filteredDataArray = computed(() => {
+  return props.options.filter((option) => {
+    if (typeof option === 'string') {
+      return option.toString().toLowerCase().indexOf(model.value.toLowerCase()) >= 0
+    }
+
+    return option.label.toString().toLowerCase().indexOf(model.value.toLowerCase()) >= 0
+  })
 })
 
 const name = toRef(props, 'name')
-
 const {
-  value: inputValue,
   handleChange,
-  meta
-} = useField(name, undefined, {
-  initialValue: props.value
-})
+  meta,
+  errorMessage
+} = useField(name, undefined)
 
 function handleEmit (option: IOpts) {
-  if (typeof option === 'object') {
-    handleChange(option.value)
-    $emit('update:value', option.value)
-    currentSelection.value = option
+  selected.value = option
+  console.log(selected.value)
 
-    return
-  }
-
-  handleChange(option)
-  $emit('update:value', option)
-  currentSelection.value.label = option
-}
-
-function handleEmitValue (option: IOpts, id : number) {
-  if (id === 0) {
-    handleEmit(option)
-  } else {
-    if (typeof option === 'object') {
-      handleChange(option.value)
-      $emit('update:value', option.value)
-      currentSelection.value.value = id
-
+  if (option !== null) {
+    if (typeof selected.value === 'object') {
+      handleChange(selected.value.value)
       return
     }
 
-    handleChange(id)
-    $emit('update:value', id)
-    currentSelection.value.label = option
+    handleChange(selected.value)
   }
 }
-const open = ref(false)
-if (props.preFilled) {
-  handleEmitValue(props.value, props.valueId)
-}
 
+onMounted(() => {
+  watch(focusInput, () => {
+    if (input.value) {
+      input.value.focus()
+    }
+  })
+})
 </script>

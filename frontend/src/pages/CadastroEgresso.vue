@@ -448,9 +448,6 @@ import {
 } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
 
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
@@ -612,20 +609,32 @@ function handleFail (e: any) {
 
 const schema = object().shape({
   geral: object({
-    nome: string().required(),
-    nascimento: date().required(),
-    email: string().email().required(),
-    genero: string().required(),
-    linkedin: string(),
-    lattes: string()
+    nome: string().required('Campo obrigatório'),
+    nascimento: string().required('Campo obrigatório'),
+    email: string().email('Email inválido').required('Campo obrigatório'),
+    genero: string().required('Campo obrigatório'),
+    linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
+      if (value) {
+        return value?.match(/https?:\/\/(?:www\.)?br\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/*/)
+      }
+
+      return (typeof value).constructor(true)
+    }),
+    lattes: string().notRequired().test('lattes', 'Link inválido', (value) => {
+      if (value) {
+        return value?.match(/(https?:\/\/)?(www\.)?lattes\.cnpq\.br\/(\d+)/)
+      }
+
+      return (typeof value).constructor(true)
+    })
   }),
   localizacao: object({
-    pais: string().required(),
-    estado: string().required(),
-    cidade: string().required()
+    pais: string().required('Campo obrigatório'),
+    estado: string().required('Campo obrigatório'),
+    cidade: string().required('Campo obrigatório')
   }),
   academico: object({
-    matricula: string().max(12),
+    matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres'),
     tipoAluno: string(),
     cotista: object({
       value: boolean(),
@@ -639,39 +648,39 @@ const schema = object().shape({
     bolsista: object({
       value: boolean(),
       tipo: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+        return value ? schema.required('Campo obrigatório') : schema.notRequired()
       }),
       remuneracao: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+        return value ? schema.required('Campo obrigatório') : schema.notRequired()
       })
     }),
     posGrad: object({
       value: boolean(),
       local: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+        return value ? schema.required('Campo obrigatório') : schema.notRequired()
       }),
       curso: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+        return value ? schema.required('Campo obrigatório') : schema.notRequired()
       })
     }),
     desejaPos: boolean()
   }),
   carreira: object({
-    area: string().required(),
+    area: string().required('Campo obrigatório'),
     setor: string().when('area', ([area], schema) => {
-      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     }),
     empresa: string().when('area', ([area], schema) => {
-      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     }),
     faixaSalarial: string().when('area', ([area], schema) => {
-      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     })
   }),
   adicionais: object({
     palestras: boolean(),
     assuntosPalestras: string().when('palestras', ([palestras], schema) => {
-      return palestras ? schema.required() : schema.notRequired()
+      return palestras ? schema.required('Campo obrigatório') : schema.notRequired()
     }),
     experiencias: string().required(),
     contribuicoes: string().required()
