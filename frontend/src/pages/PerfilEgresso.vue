@@ -386,7 +386,7 @@
                   name="academico.cotista.value"
                   :value="dataEgresso.academico.cotista.value"
                   label="Cotista"
-                  v-model:value="dataEgresso.academico.cotista.value"
+                  v-model:value?="dataEgresso.academico.cotista.value"
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -400,7 +400,7 @@
                     label="Cota Renda"
                     :disabled="!dataEgresso.academico.cotista.value"
                     :value="dataEgresso.academico.cotista.tipos.renda"
-                    v-model:value="dataEgresso.academico.cotista.tipos.renda"
+                    v-model:value?="dataEgresso.academico.cotista.tipos.renda"
                   />
                   <CustomCheckbox
                     class="mb-5"
@@ -408,7 +408,7 @@
                     label="Autodeclaração de Raça"
                     :disabled="!dataEgresso.academico.cotista.value"
                     :value="dataEgresso.academico.cotista.tipos.raca"
-                    v-model:value="dataEgresso.academico.cotista.tipos.raca"
+                    v-model:value?="dataEgresso.academico.cotista.tipos.raca"
                   />
 
                   <CustomCheckbox
@@ -417,7 +417,7 @@
                     label="Cota Escola"
                     :disabled="!dataEgresso.academico.cotista.value"
                     :value="dataEgresso.academico.cotista.tipos.escola"
-                    v-model:value="dataEgresso.academico.cotista.tipos.escola"
+                    v-model:value?="dataEgresso.academico.cotista.tipos.escola"
                   />
 
                   <CustomCheckbox
@@ -425,7 +425,7 @@
                     label="Quilombola/Indigena"
                     :disabled="!dataEgresso.academico.cotista.value"
                     :value="dataEgresso.academico.cotista.tipos.quilombolaIndigena"
-                    v-model:value="dataEgresso.academico.cotista.tipos.quilombolaIndigena"
+                    v-model:value?="dataEgresso.academico.cotista.tipos.quilombolaIndigena"
                   />
                 </div>
 
@@ -434,7 +434,7 @@
                   name="academico.bolsista.value"
                   :value="dataEgresso.academico.bolsista.value"
                   label="Bolsista"
-                  v-model:value="dataEgresso.academico.bolsista.value"
+                  v-model:value?="dataEgresso.academico.bolsista.value"
                 />
 
                 <CustomSelect
@@ -466,7 +466,7 @@
                   class="mb-5"
                   name="academico.posGrad.value"
                   :value="dataEgresso.academico.posGrad.value"
-                  v-model:value="dataEgresso.academico.posGrad.value"
+                  v-model:value?="dataEgresso.academico.posGrad.value"
                   label="Pós-graduação"
                 />
 
@@ -573,7 +573,7 @@
                   :value="dataEgresso.carreira.area"
                   label="Área de Atuação"
                   placeholder="Selecione"
-                  v-model:value="dataEgresso.carreira.area"
+                  v-model:value?="dataEgresso.carreira.area"
                   :options="selectOpts.areaAtuacao"
                   :pre-filled="true"
                 />
@@ -706,7 +706,7 @@
                   :value="dataEgresso.localizacao.pais"
                   label="País"
                   :options="countries"
-                  v-model:value="dataEgresso.localizacao.pais"
+                  v-model:value?="dataEgresso.localizacao.pais"
                   :pre-filled="true"
                   required
                 />
@@ -717,7 +717,7 @@
                   :value="dataEgresso.localizacao.estado"
                   label="Estado"
                   :options="states"
-                  v-model:value="dataEgresso.localizacao.estado"
+                  v-model:value?="dataEgresso.localizacao.estado"
                   :pre-filled="true"
                   required
                 />
@@ -825,7 +825,7 @@
                   label="Gostaria de apresentar palestras"
                   class="mb-5"
                   :value="dataEgresso.adicionais.palestras"
-                  v-model:value="dataEgresso.adicionais.palestras"
+                  v-model:value?="dataEgresso.adicionais.palestras"
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -1474,6 +1474,7 @@ async function fetchUpdateEgresso () {
     bolsaId: json.bolsa?.id,
     areaAtuacaoId: json.emprego?.areaAtuacao?.id,
     faixaSalarialId: json.emprego?.faixaSalarial?.id,
+    grupos: [''],
 
     geral:
       {

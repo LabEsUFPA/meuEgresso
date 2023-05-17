@@ -1,6 +1,11 @@
 <template>
   <div>
-    <Form ref="form" @submit="handleSubmit" @invalid-submit="onInvalid" :validation-schema="schema">
+    <Form 
+      ref="form"
+      @submit="handleSubmit" 
+      @invalid-submit="onInvalid" 
+      :validation-schema="schema"
+    >
       <div class="flex w-full justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
         <div
           class="flex w-[960px] justify-center border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl py-8 mt-10 mx-6 shadow-md">
@@ -122,14 +127,14 @@ $store.fetchUsuario().then(usuario => {
 
 
 //Update Usuario
-const handleSubmit = async (profileData: ProfileRegisterModel) => {
+const handleSubmit = async (submitData: any) => {
   const usuario = await $store.fetchUsuario()
   dataUserUpdate = {
     id: usuario?.id,
     username: usuario?.username,
-    email: profileData?.email,
-    nome: profileData?.name,
-    password: profileData?.password,
+    email: submitData?.email,
+    nome: submitData?.name,
+    password: submitData?.password,
     idGrupo: usuario?.grupos[0].id,
     nomeGrupo: usuario?.grupos[0].nomeGrupo
   }

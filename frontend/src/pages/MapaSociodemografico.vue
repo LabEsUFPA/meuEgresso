@@ -143,7 +143,7 @@ import { LatLng } from 'leaflet'
 import { useHomeStore } from 'src/store/HomeStore'
 interface EgressoMapa extends models.EgressoMapa {}
 
-const zoom = 2
+const zoom = ref(2)
 const selectedMarker = ref<EgressoMapa[]>([])
 function selectMarker ($event: LatLng) {
   const clickedMarkerKey = `${$event.lat}:${$event.lng}`
