@@ -176,7 +176,7 @@ const handleSubmit = async (profileData: ProfileRegisterModel) => {
     error.value = false
     submitSuccess.value = true
   } else {
-    errorText.value = errorMessages.value.errorRequest
+    errorText.value = response.data?.message ? response.data.message : errorMessages.value.errorRequest
     error.value = true
   }
 }
