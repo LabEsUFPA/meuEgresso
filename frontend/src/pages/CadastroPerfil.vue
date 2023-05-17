@@ -42,6 +42,7 @@
               :icon-path="mdiSchool"
               :max-length="12"
               :min-length="12"
+              :min="0"
             />
             <CustomInput
               name="email"
@@ -136,8 +137,8 @@ const storeLogin = useLoginStore()
 const schema = object().shape({
   name: string().required().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
   username: string().required().matches(/^[a-z0-9_.-]{6,}$/),
-  registration: string().optional().matches(/^(\d{1,12})?$/),
-  email: string().optional().matches(/^[a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/),
+  registration: string().matches(/^(\d{12})?$/),
+  email: string().optional().matches(/^[a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org))$/),
   password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/),
   confirmationPassword: string().required().oneOf([refYup('password')])
 })

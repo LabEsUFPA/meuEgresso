@@ -47,6 +47,7 @@
         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)"
         :maxlength="maxLength"
         :minlength="minLength"
+        :min="min"
         :class="{
           ['cursor-not-allowed']: disabled,
           ['col-span-7']: iconPath,
@@ -76,7 +77,7 @@
       }"
       v-show="meta.validated"
     >
-      {{ meta.valid ? successMessage : errorMessage }}
+      {{ meta.valid? null : errorMessage }}
     </div>
 
     <div
@@ -113,6 +114,7 @@ interface Props {
   mask?: string
   maxLength?: number
   minLength?: number
+  min?: number
   imgIcon?: boolean
   step?: number | string
   disabled?: boolean,
@@ -131,6 +133,7 @@ const props = withDefaults(defineProps<Props>(), {
   successMessage: 'Campo correto',
   maxLength: 300,
   minLength: 1,
+  min: 0,
   step: 1,
   classHelperText: ''
 })
