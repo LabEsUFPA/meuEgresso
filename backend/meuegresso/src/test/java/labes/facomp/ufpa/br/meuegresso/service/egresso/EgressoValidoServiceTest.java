@@ -77,7 +77,7 @@ class EgressoValidoServiceTest {
 
         Optional<EgressoValidoModel> response = egressoValidoService.findByEmail(EMAIL);
 
-        assertEquals(getMockEgresso(), response);
+        assertEquals(getMockEgresso().getEmail(), response.get().getEmail());
     }
 
     /**
@@ -94,7 +94,7 @@ class EgressoValidoServiceTest {
 
             Optional<EgressoValidoModel> response = egressoValidoService.findByMatricula(MATRICULA);
             assertNotNull(response);
-            assertEquals(getMockEgresso(), response);
+            assertEquals(getMockEgresso().getMatricula(), response.get().getMatricula());
         } catch (Exception e) {
             e.getMessage();
         }

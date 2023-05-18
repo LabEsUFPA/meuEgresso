@@ -3,7 +3,6 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,6 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
-import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoEmpresaRepository;
 
 /**
