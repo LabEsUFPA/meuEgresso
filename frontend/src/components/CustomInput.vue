@@ -148,6 +148,7 @@ const successMessages = {
   'academico.posGrad.local': '',
   'academico.posGrad.curso': '',
   "carreira.empresa": '',
+  'geral.nascimento': ''
 }
 
 const successMessage = computed(() => {
@@ -157,7 +158,7 @@ const successMessage = computed(() => {
 })
 
 const errorMessages = {
-  email: 'Email inválido',
+  email: 'Email inválido.',
   registration: '',
   username: 'Nome de usuário inválido.',
   name: 'Nome inválido.',
@@ -168,6 +169,7 @@ const errorMessages = {
   'academico.posGrad.local': 'Por favor preencha o nome da instituição.',
   'academico.posGrad.curso': 'Por favor preencha o nome do curso.',
   'carreira.empresa': 'Por favor preencha o nome da empresa.',
+  'geral.nascimento': 'Por favor preencha uma data de nascimento válida.',
 }
 
 const errorMessage = computed(() => {
