@@ -134,7 +134,7 @@ const submitSuccess = ref(false)
 const storeLogin = useLoginStore()
 
 const schema = object().shape({
-  name: string().required().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
+  name: string().required().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/),
   username: string().required().matches(/^[a-z0-9_.-]{6,}$/),
   registration: string().optional().matches(/^(\d{1,12})?$/),
   email: string().optional().matches(/^[a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/),
