@@ -6,52 +6,7 @@
       <!-- <ProfileHead /> -->
       <!-- Head Start-->
       <!--:native="true"-->
-      <o-field class="file bg-black items-center rounded-md flex px-[7px] py-[7px] relative text-lg font-semibold hover:duration-200">
-        <o-upload
-          v-model="file"
-          drag-drop
-        >
-          <o-button
-            tag="a"
-            variant="primary"
-            class="items-center rounded-md flex px-[7px] py-[7px] relative text-lg font-semibold hover:duration-200"
-          >
-            <o-icon icon="upload" />
-            <span>Click to upload</span>
-          </o-button>
-        </o-upload>
-        <span
-          class="file-name"
-          v-if="file"
-        >
-          {{ file.name }}
-          <!-- <o-button
-            icon-left="times"
-            size="small"
-            native-type="button"
-            @click="deleteDropFile(index)"
-          />
-          <ButtonActionIcon
-            icon-path="/src/assets/trashCan.svg"
-            icon-size="20"
-            custom-style="px-2 py-2"
-            color="whiteDanger"
-            @click="deleteDropFile(index)"
-          /> -->
-
-          <img
-            class="
-              ml-[200px]
-              mt-[37px]
-              w-[120px]
-              h-[120px]
-              rounded-full"
-            :src="getObjectURL(file)"
-            alt="Uploaded image"
-          >
-        </span>
-      </o-field>
-
+      <ProfileImage img-url="src/assets/profile-pic.png" />
       <div class="items-center flex relative w-[7000px] flex-col">
         <Form
           @submit="handleSubmitHeader"
@@ -907,7 +862,7 @@ import LocalStorage from 'src/services/localStorage'
 import { useLoginStore } from 'src/store/LoginStore'
 import ButtonActionIcon from 'src/components/ButtonActionIcon.vue'
 import { OUpload, OSidebar, section, OField, OIcon, OButton } from '@oruga-ui/oruga-next'
-
+import ProfileImage from 'src/components/ProfileImage.vue'
 import {
   mdiAccount,
   mdiBriefcase,
@@ -921,6 +876,7 @@ import {
   mdiMapMarkerRadius,
   mdiLinkVariant
 } from '@mdi/js'
+
 // mdiHome CEP,
 
 // const dropFiles = ref([])
