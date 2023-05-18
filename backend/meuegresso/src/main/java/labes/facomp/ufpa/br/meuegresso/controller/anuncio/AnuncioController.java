@@ -1,6 +1,11 @@
 package labes.facomp.ufpa.br.meuegresso.controller.anuncio;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -58,8 +63,10 @@ public class AnuncioController {
 	@GetMapping
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<AnuncioDTO> consultarAnuncios() {
-		return mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {
-		}.getType());
+		List<AnuncioDTO> Anuncios = mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {}.getType());
+		return Anuncios.stream()
+			.filter(anuncio -> LocalDate.now().isBefore(anuncio.getDataExpiracao()))
+			.collect(Collectors.toList());
 	}
 
 	/**
