@@ -246,6 +246,15 @@ export namespace models {
     }
     remuneracaoBolsa?: number
   }
+
+  export interface AnuncioModel{
+    titulo: string
+    area: string
+    dataExpiracao: string
+    salario: string
+    contato: string
+    descricao:string
+  }
 }
 
 // export interface EgressoModelUpdate {
