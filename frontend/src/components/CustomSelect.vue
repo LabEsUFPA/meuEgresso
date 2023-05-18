@@ -111,6 +111,7 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronDown } from '@mdi/js'
 import { useField } from 'vee-validate'
 import { type models } from 'src/@types'
+import { computed } from '@vue/reactivity'
 
 interface ComplexOpts extends models.ComplexOpts {}
 
@@ -139,8 +140,8 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   value: '',
   valueId: 0,
-  errorMessage: 'Campo inválido',
-  successMessage: 'Campo correto',
+  errorMessage: '',
+  successMessage: '',
   preFilled: false
 })
 
@@ -196,5 +197,29 @@ const open = ref(false)
 if (props.preFilled) {
   handleEmitValue(props.value, props.valueId)
 }
+
+const successMessages = {
+  'localizacao.pais': '',
+  'localizacao.estado': '',
+  'localizacao.cidade': '',
+}
+
+const successMessage = computed(() => {
+  const inputName = name.value
+  // @ts-ignore
+  return successMessages[inputName] || props.successMessage
+})
+
+const errorMessages = {
+  'localizacao.pais': 'Por favor escolher um país.',
+  'localizacao.estado': 'Por favor escolher um estado.',
+  'localizacao.cidade': 'Por favor escolher uma cidade.',
+}
+
+const errorMessage = computed(() => {
+  const inputName = name.value
+  // @ts-ignore
+  return errorMessages[inputName] || props.errorMessage
+})
 
 </script>
