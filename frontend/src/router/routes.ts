@@ -36,6 +36,10 @@ export default [
       {
         path: '/conta-admin',
         component: async () => await import('src/pages/EdicaoContaAdmin.vue')
+      },
+      {
+        path: '/feed',
+        component: async () => await import('src/pages/Feed.vue')
       }
     ]
   }
