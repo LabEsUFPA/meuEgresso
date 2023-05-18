@@ -21,6 +21,7 @@
     "axios": "^1.4.0",
     "country-state-city": "^3.1.2",
     "husky": "^4.3.8",
+    "leaflet": "^1.9.4",
     "lint-staged": "^13.2.1",
     "maska": "^2.1.8",
     "pinia": "^2.0.35",
@@ -28,8 +29,7 @@
     "vee-validate": "^4.8.6",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
-    "yup": "^1.1.1",
-    "leaflet": "^1.9.3"
+    "yup": "^1.1.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.21.3",
