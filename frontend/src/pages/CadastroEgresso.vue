@@ -2,7 +2,7 @@
   <div class="container mx-auto p-3 pb-0 mt-10">
     <Form
       ref="form"
-      @submit="handleSubmit"
+      @submit="scrollToTop,handleSubmit"
       @invalid-submit="handleFail"
       :validation-schema="schema"
     >
@@ -112,13 +112,19 @@
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
               Tipos de cota:
+              <sup
+                v-if="bools.cotista"
+                class="text-red-500"
+              >*</sup>
             </div>
+            
 
             <div class="w-fit p-3 pr-5 rounded-xl bg-gray-100 mb-5">
               <CustomCheckbox
                 class="mb-5"
                 name="academico.cotista.tipos.renda"
                 label="Cota Renda"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -127,6 +133,7 @@
                 name="academico.cotista.tipos.escola"
                 label="Cota Escola"
                 :disabled="!bools.cotista"
+                :required="bools.cotista"
               />
 
               <CustomCheckbox
@@ -134,12 +141,14 @@
                 name="academico.cotista.tipos.raca"
                 label="Autodeclaração de Raça"
                 :disabled="!bools.cotista"
+                :required="bools.cotista"
               />
 
               <CustomCheckbox
                 name="academico.cotista.tipos.quilombolaIndigena"
                 label="Quilombola/Indigena"
                 :disabled="!bools.cotista"
+                :required="bools.cotista"
               />
             </div>
 
@@ -323,7 +332,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras: <sup
+              Liste abaixo os assuntos nos quais você se sente mais preparado para apresentar palestras: <sup
                 v-if="bools.palestras"
                 class="text-red-500"
               >*</sup>
@@ -337,7 +346,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso: <sup class="text-red-500">*</sup>
+              Compartilhe de forma simples e resumida suas experiências positivas ao realizar o curso no campo abaixo. <sup class="text-red-500">*</sup>
             </div>
 
             <CustomTextarea
@@ -346,7 +355,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto: <sup class="text-red-500">*</sup>
+              Demonstre suas contribuições para a sociedade, sejam elas pequenas ou grandes, no campo abaixo. Lembre-se de que tudo tem seu impacto e é importante que todos saibam. <sup class="text-red-500">*</sup>
             </div>
 
             <CustomTextarea name="adicionais.contribuicoes" />
@@ -699,5 +708,10 @@ onMounted(() => {
     }).join(' '))
   }
 })
+
+const scrollToTop = () => {
+  console.log('scroll top')
+  window.scrollTo(0, 0);
+}
 
 </script>
