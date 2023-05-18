@@ -829,7 +829,7 @@
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
+                  Liste abaixo os assuntos nos quais você se sente mais preparado para apresentar palestras:
                 </div>
 
                 <CustomTextarea
@@ -852,8 +852,7 @@
                 />
 
                 <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja
-                  pequena ou grande, pois tudo tem seu impacto:
+                  Demonstre suas contribuições para a sociedade, sejam elas pequenas ou grandes, no campo abaixo. Lembre-se de que tudo tem seu impacto e é importante que todos saibam.
                 </div>
 
                 <CustomTextarea
