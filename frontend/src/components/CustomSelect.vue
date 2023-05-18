@@ -146,6 +146,8 @@ const props = withDefaults(defineProps<Props>(), {
   preFilled: false
 })
 
+const $emit = defineEmits(['change'])
+
 const model = ref<any>('')
 const selected = ref<IOpts>('')
 const open = ref(false)
@@ -176,10 +178,12 @@ function handleEmit (option: IOpts) {
   if (option !== null) {
     if (typeof selected.value === 'object') {
       handleChange(selected.value.value)
+      $emit('change', selected.value.value)
       return
     }
 
     handleChange(selected.value)
+    $emit('change', selected.value)
   }
 }
 

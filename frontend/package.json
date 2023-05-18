@@ -9,8 +9,8 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test:unit": "vitest --environment jsdom",
-    "test:unit:ui": "vitest --ui --environment jsdom",
+    "test:unit": "vitest --environment happy-dom",
+    "test:unit:ui": "vitest --ui --environment happy-dom",
     "lint": "eslint src --ext .ts",
     "lint:fix": "npm run lint -- --fix"
   },
@@ -58,6 +58,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-storybook": "^0.6.11",
     "eslint-plugin-vue": "^9.11.0",
+    "happy-dom": "^9.18.3",
     "jsdom": "^21.1.1",
     "postcss": "^8.4.21",
     "react": "^18.2.0",

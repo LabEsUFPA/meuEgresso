@@ -220,8 +220,9 @@
               name="carreira.area"
               label="Área de Atuação"
               placeholder="Selecione"
-              v-model:value="area"
+              @change="area = $event"
               :options="selectOpts.areaAtuacao"
+              required
             />
 
             <CustomSelect
@@ -327,7 +328,8 @@
               >*</sup>
             </div>
 
-            <CustomTextarea
+            <CustomInput
+              type="textarea"
               class="mb-5"
               name="adicionais.assuntosPalestras"
               :required="bools.palestras"
@@ -338,7 +340,8 @@
               Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso: <sup class="text-red-500">*</sup>
             </div>
 
-            <CustomTextarea
+            <CustomInput
+              type="textarea"
               class="mb-5"
               name="adicionais.experiencias"
             />
@@ -347,7 +350,10 @@
               Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto: <sup class="text-red-500">*</sup>
             </div>
 
-            <CustomTextarea name="adicionais.contribuicoes" />
+            <CustomInput
+              type="textarea"
+              name="adicionais.contribuicoes"
+            />
           </div>
         </template>
       </FolderSection>
@@ -423,7 +429,6 @@
 <script lang="ts" setup>
 import FolderSection from 'src/components/FolderSection.vue'
 import CustomInput from 'src/components/CustomInput.vue'
-import CustomTextarea from 'src/components/CustomTextarea.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
@@ -434,7 +439,7 @@ import { Form } from 'vee-validate'
 import { ref, computed, watch, onMounted } from 'vue'
 import { Country, State, City } from 'country-state-city'
 import svgPath from 'src/assets/svgPaths.json'
-import { object, string, date, boolean, InferType } from 'yup'
+import { object, string, boolean } from 'yup'
 import {
   mdiAccount,
   mdiBriefcase,
@@ -682,8 +687,8 @@ const schema = object().shape({
     assuntosPalestras: string().when('palestras', ([palestras], schema) => {
       return palestras ? schema.required('Campo obrigatório') : schema.notRequired()
     }),
-    experiencias: string().required(),
-    contribuicoes: string().required()
+    experiencias: string().required('Campo obrigatório'),
+    contribuicoes: string().required('Campo obrigatório')
   })
 })
 

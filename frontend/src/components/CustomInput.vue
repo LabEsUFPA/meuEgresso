@@ -8,7 +8,10 @@
         ['opacity-80']: disabled
       })"
     >
-      <template #label>
+      <template
+        v-if="label"
+        #label
+      >
         {{ label }}
         <sup
           class="text-red-500"
@@ -26,6 +29,7 @@
             ['outline-2 outline outline-emerald-500']: meta.valid && meta.validated && meta.dirty,
             [`${inputClass} rounded-lg w-64 py-1 px-3 border grid grid-cols-8`]: true
           })"
+          v-if="type !== 'textarea'"
         >
           <div
             :class="{ ['cursor-not-allowed']: disabled }"
@@ -69,6 +73,35 @@
             v-maska
           />
         </div>
+
+        <div v-else>
+          <OInput
+            type="textarea"
+            :root-class="classNames({
+              ['col-span-7']: iconPath,
+              ['col-span-8']: !iconPath,
+              ['w-full md:w-1/2 h-32']: true
+            })"
+            :input-class="classNames({
+              ['bg-gray-100 cursor-not-allowed']: disabled,
+              ['outline outline-red-500']: !meta.valid && meta.validated && meta.touched,
+              ['outline outline-emerald-500']: meta.valid && meta.validated && meta.touched,
+              ['px-2 py-0.5 border border-gray-400 h-full rounded-md block focus:outline-sky-400 focus:outline-2']: true
+            })"
+            :placeholder="placeholder"
+            :disabled="disabled"
+            :name="name"
+            :required="required"
+            :data-maska="mask"
+            :step="step"
+            :maxlength="maxLength"
+            v-model="inputValue"
+            @update:model-value="handleInput"
+            @focus="focused = true"
+            @blur="focused = false; handleBlur()"
+            v-maska
+          />
+        </div>
       </template>
       <template #message>
         <div class="text-red-500">
@@ -89,11 +122,11 @@ import classNames from 'classnames'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { OField, OInput } from '@oruga-ui/oruga-next'
 
-type inputs = 'date' | 'text' | 'email' | 'number' | 'password'
+type inputs = 'date' | 'text' | 'email' | 'number' | 'password' | 'textarea'
 
 interface Props {
   name: string
-  label: string
+  label?: string
   helperText?: string
   placeholder?: string
   type?: inputs
@@ -111,6 +144,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   type: 'text',
+  label: '',
   iconPath: '',
   inputClass: '',
   helperText: '',
