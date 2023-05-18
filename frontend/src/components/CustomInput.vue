@@ -145,6 +145,8 @@ const successMessages = {
   confirmationPassword: 'As senhas coincidem.',
   'geral.nome':'Nome válido.',
   'geral.linkedin': '',
+  'academico.posGrad.local': '',
+  'academico.posGrad.curso': '',
   "carreira.empresa": '',
 }
 
@@ -163,6 +165,8 @@ const errorMessages = {
   confirmationPassword: 'As senhas não coincidem.',
   'geral.nome':'Por favor preencher o nome completo.',
   'geral.linkedin': '',
+  'academico.posGrad.local': 'Por favor preencha o nome da instituição.',
+  'academico.posGrad.curso': 'Por favor preencha o nome do curso.',
   'carreira.empresa': 'Por favor preencha o nome da empresa.',
 }
 
