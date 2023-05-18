@@ -61,12 +61,14 @@
               class="mb-5"
               name="geral.linkedin"
               label="Linkedin"
-              :icon-path="svgPath.linkedin"
+              helper-text="e.g: https://www.linkedin.com/in/marcelle-mota-33636191/"
+              :icon-path="svgPath.linkedin" 
             />
 
             <CustomInput
               label="Curriculo Lattes"
               name="geral.lattes"
+              helper-text="e.g: http://lattes.cnpq.br/2130563131041136"
               icon-path="src/assets/lattesCinza.svg"
               img-icon
             />
