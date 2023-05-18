@@ -93,6 +93,7 @@
 import { ref, toRef } from 'vue'
 import { useField } from 'vee-validate'
 import SvgIcon from '@jamescoyle/vue-icon'
+import { computed } from '@vue/reactivity';
 
 type inputs = 'date' | 'text' | 'email' | 'number' | 'password'
 
@@ -127,13 +128,50 @@ const props = withDefaults(defineProps<Props>(), {
   inputClass: '',
   helperText: '',
   mask: '',
-  errorMessage: 'Campo inválido',
-  successMessage: 'Campo correto',
+  errorMessage: '',
+  successMessage: '',
   maxLength: 300,
   minLength: 1,
   step: 1,
   classHelperText: ''
 })
+
+const successMessages = {
+  email: 'Email válido',
+  registration: '',
+  username: 'Nome de usuário válido',
+  name: 'Nome válido.',
+  password: 'Senha válida.',
+  confirmationPassword: 'As senhas coincidem.',
+  "geral.nome":'Nome válido.',
+  "geral.linkedin": '',
+  "carreira.empresa": ''
+}
+
+const successMessage = computed(() => {
+  const inputName = name.value
+  // @ts-ignore
+  return successMessages[inputName] || props.successMessage
+})
+
+const errorMessages = {
+  email: 'Email inválido',
+  registration: '',
+  username: 'Nome de usuário inválido.',
+  name: 'Nome inválido.',
+  password: 'Senha inválida.',
+  confirmationPassword: 'As senhas não coincidem.',
+  "geral.nome":"Por favor preencher o nome completo.",
+  "geral.linkedin": "",
+  'carreira.empresa': 'Por favor preencha o nome da empresa.' 
+}
+
+const errorMessage = computed(() => {
+  const inputName = name.value
+  // @ts-ignore
+  return errorMessages[inputName] || props.errorMessage
+})
+
 
 const focused = ref(false)
 
