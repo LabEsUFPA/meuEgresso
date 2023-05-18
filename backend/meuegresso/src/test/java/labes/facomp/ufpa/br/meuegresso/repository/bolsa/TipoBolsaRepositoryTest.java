@@ -21,19 +21,17 @@ import labes.facomp.ufpa.br.meuegresso.repository.tipobolsa.TipoBolsaRepository;
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class })
-public class TipoBolsaRepositoryTest {
+class TipoBolsaRepositoryTest {
 
     @Autowired
     TipoBolsaRepository tipoBolsaRepository;
 
     private final static String NOME = "PIBIC";
-    //private final static String NOME2 = "PIBIX";
-
-
+    // private final static String NOME2 = "PIBIX";
 
     @Test
     @Order(1)
-    public void testSave() {
+    void testSave() {
 
         TipoBolsaModel response = tipoBolsaRepository.save(getMockTipoBolsaModel());
         assertNotNull(response);
@@ -41,8 +39,7 @@ public class TipoBolsaRepositoryTest {
 
     @Test
     @Order(2)
-    public void testFindAll() {
-
+    void testFindAll() {
 
         List<TipoBolsaModel> testBolsas = tipoBolsaRepository.findAll();
 

@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.repository.palestra;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
@@ -10,5 +11,9 @@ public interface PalestraRepository extends CrudRepository<PalestraModel, Intege
 
     List<PalestraModel> findAll();
 
-    boolean existsByIdAndEgressoId(Integer id, Integer egressoId);
+    boolean existsByIdAndCreatedById(Integer id, Integer usuarioId);
+
+    Optional<PalestraModel> findByEgressoId(Integer idEgresso);
+
+    Optional<PalestraModel> findByEgressoUsuarioId(Integer idUsuario);
 }

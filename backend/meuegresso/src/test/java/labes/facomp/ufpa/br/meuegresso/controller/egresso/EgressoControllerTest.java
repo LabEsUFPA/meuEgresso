@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
@@ -38,13 +37,11 @@ import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 
@@ -63,9 +60,6 @@ class EgressoControllerTest {
         private GeneroRepository generoRepository;
 
         @Autowired
-        private EgressoRepository egressoRepository;
-
-        @Autowired
         MockMvc mockMvc;
 
         @Autowired
@@ -77,7 +71,7 @@ class EgressoControllerTest {
         EgressoModel egressoModel;
 
         UsuarioModel usuarioModel;
-        
+
         GeneroModel genero;
 
 
@@ -88,29 +82,23 @@ class EgressoControllerTest {
         EgressoCadastroDTO egressoCadastro;
 
         static final Integer EGRESSO_ID = 1;
-        static final String EGRESSO_EMAIL = "algo@gmail.com";
+        static final String EGRESSO_EMAIL = "teste@gmail.com";
 
 
         @BeforeAll
         void setUp() throws Exception {
             /*Gênero */
-            genero = new GeneroModel(1, "genero X");
-            GeneroDTO generoDTO = modelMapper.map(genero, GeneroDTO.class);
+            genero = new GeneroModel(null, "genero X");
             genero = generoRepository.save(genero);
-
-            /*Egresso */
-            egressoPublicDTO = new EgressoPublicDTO(EGRESSO_ID, null, EGRESSO_EMAIL, generoDTO, true, true, null, null, null);
-            egressoModel = EgressoModel.builder().id(EGRESSO_ID).cotista(true).interesseEmPos(true).nascimento(LocalDate.parse("1999-10-20")).genero(genero).build();
-            egressoRepository.save(this.egressoModel);
 
             GrupoModel grupoModel = new GrupoModel();
             grupoModel.setNomeGrupo("ADMIN");
-    
+
             grupoModel = grupoRepository.save(grupoModel);
-    
+
             Set<GrupoModel> grupos = new HashSet<>();
             grupos.add(grupoModel);
-    
+
             UsuarioModel usuarioModel = new UsuarioModel();
             usuarioModel.setUsername("username");
             usuarioModel.setNome("nome_test");
@@ -123,12 +111,12 @@ class EgressoControllerTest {
                     .andDo(MockMvcResultHandlers.print())
                     .andExpect(status().isCreated())
                     .andReturn();
-    
+
             AuthenticationRequest authenticationRequest = new AuthenticationRequest();
             authenticationRequest.setUsername(usuarioModel.getUsername());
             authenticationRequest.setPassword(usuarioModel.getPassword());
             String objectJson = objectMapper.writeValueAsString(authenticationRequest);
-    
+
             MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectJson))
@@ -165,7 +153,7 @@ class EgressoControllerTest {
                             .header("Authorization", "Bearer " + this.token))
                     .andDo(MockMvcResultHandlers.print())
                     .andExpect(status().isCreated()).andReturn();
-    
+
             String resp = resposta.getResponse().getContentAsString();
             assertEquals(ResponseType.SUCESS_SAVE.getMessage(), resp);
         }
@@ -181,8 +169,10 @@ class EgressoControllerTest {
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isOk()).andReturn();
 
-            EgressoDTO egressos = modelMapper.map(resposta.getResponse().getContentAsString(),EgressoDTO.class);
-            assertNotNull(egressos);
+            EgressoDTO egresso = objectMapper.readValue(resposta.getResponse().getContentAsString(),EgressoDTO.class);
+            egressoPublicDTO = modelMapper.map(egresso, EgressoPublicDTO.class);
+
+            assertEquals(egressoCadastro.getMatricula(), egresso.getMatricula());
         }
 
         @Test
@@ -194,9 +184,9 @@ class EgressoControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(egressoPublicDTO))
                             .header("Authorization", "Bearer " + this.token))
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(status().isAccepted()).andReturn();
-    
+                            .andDo(MockMvcResultHandlers.print())
+                            .andExpect(status().isAccepted()).andReturn();
+
             String resp = resposta.getResponse().getContentAsString();
             assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), resp);
         }
@@ -207,7 +197,7 @@ class EgressoControllerTest {
             MvcResult resposta = mockMvc.perform(
 				MockMvcRequestBuilders.delete("/egresso")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(egressoPublicDTO))
+						.param("id", egressoPublicDTO.getId().toString())
 						.header("Authorization", "Bearer " + this.token))
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isOk()).andReturn();

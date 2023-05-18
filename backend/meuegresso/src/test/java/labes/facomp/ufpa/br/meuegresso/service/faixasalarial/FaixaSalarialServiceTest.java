@@ -37,18 +37,17 @@ import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRep
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class FaixaSalarialServiceTest {
+class FaixaSalarialServiceTest {
 
     private static final Integer ID = 1;
     private static final String FAIXA = "15000-20000";
-
 
     @Autowired
     private FaixaSalarialService faixaSalarialService;
 
     @MockBean
     private FaixaSalarialRepository repository;
-    
+
     /**
      * metodo para criar um faixasalarial para uso nos testes.
      * 
@@ -56,7 +55,7 @@ public class FaixaSalarialServiceTest {
      * @since 27/04/2023
      */
     @Test
-    public void testSave() {
+    void testSave() {
 
         BDDMockito.given(repository.save(Mockito.any(FaixaSalarialModel.class)))
                 .willReturn(getMockFaixaSalarialModel());
@@ -73,12 +72,12 @@ public class FaixaSalarialServiceTest {
      * @since 29/04/2023
      */
     @Test
-    public void testFindById() {
+    void testFindById() {
 
         BDDMockito.given(repository.findById(ID)).willReturn(Optional.of(getMockFaixaSalarialModel()));
 
         FaixaSalarialModel response = faixaSalarialService.findById(ID);
-        assertNotNull(response);
+        assertEquals(getMockFaixaSalarialModel(), response);
     }
 
     /**
@@ -87,20 +86,20 @@ public class FaixaSalarialServiceTest {
      * @author Lucas Cantao
      * @since 29/04/2023
      */
-    
+
     @Test
-    public void testUpdate() throws InvalidRequestException {
+    void testUpdate() throws InvalidRequestException {
 
         FaixaSalarialModel testeFaixaSalariaL = getMockFaixaSalarialModel();
         String FAIXA_ATUALIZADO = "R$100 - R$378,01";
 
         BDDMockito.given(repository.save(Mockito.any(FaixaSalarialModel.class)))
                 .willReturn(testeFaixaSalariaL);
-        
+
         testeFaixaSalariaL.setFaixa(FAIXA_ATUALIZADO);
-        
+
         FaixaSalarialModel response = faixaSalarialService.update(testeFaixaSalariaL);
-        
+
         assertNotNull(response);
         assertEquals(FAIXA_ATUALIZADO, response.getFaixa());
     }
@@ -112,10 +111,12 @@ public class FaixaSalarialServiceTest {
      * @since 29/04/2023
      */
     @Test
-    public void testDeleteById() {
+    void testDeleteById() {
 
-        BDDMockito.given(faixaSalarialService.deleteById(Mockito.anyInt()))
-                .willReturn(true);
+        Mockito.when(repository.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(getMockFaixaSalarialModel()));
+        Mockito.when(repository.existsById(Mockito.anyInt()))
+                .thenReturn(true);
 
         Boolean response = faixaSalarialService.deleteById(ID);
         assertTrue(response);
@@ -129,16 +130,15 @@ public class FaixaSalarialServiceTest {
      */
 
     // @Test
-    // public void testExistsByIdAndCreatedById() {
+    // void testExistsByIdAndCreatedById() {
 
-    //     BDDMockito.given(faixaSalarialService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
-    //             .willReturn(true);
+    // BDDMockito.given(faixaSalarialService.existsByIdAndCreatedById(Mockito.anyInt(),
+    // Mockito.anyInt()))
+    // .willReturn(true);
 
-    //     Boolean response = faixaSalarialService.existsByIdAndCreatedById(ID, ID);
-    //     assertTrue(response);
+    // Boolean response = faixaSalarialService.existsByIdAndCreatedById(ID, ID);
+    // assertTrue(response);
     // }
-
-
 
     /**
      * metodo que preenche um mock de um faixasalarial para usar como return nos

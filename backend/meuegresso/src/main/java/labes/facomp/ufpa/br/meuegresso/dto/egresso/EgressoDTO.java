@@ -1,9 +1,16 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.palestra.PalestraDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.tipobolsa.TipoBolsaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,11 +24,17 @@ public class EgressoDTO {
 
     private Integer id;
 
-    private String matricula;
+    private LocalDate nascimento;
 
     private GeneroDTO genero;
 
-    private CotaDTO cota;
+    private String matricula;
+
+    @Builder.Default
+    private Boolean cotista = false;
+
+    @Builder.Default
+    private Boolean bolsista = false;
 
     @Builder.Default
     private Boolean interesseEmPos = false;
@@ -30,10 +43,26 @@ public class EgressoDTO {
 
     private String linkedin;
 
-    private EnderecoDTO endereco;
+    @Builder.Default
+    private Boolean posGraduacao = false;
+
+    @Builder.Default
+    private List<CotaDTO> cotas = new ArrayList<>(0);
+
+    private UsuarioAuthDTO usuario;
+
+    private PalestraDTO palestras;
+
+    private ContribuicaoDTO contribuicao;
+
+    private EgressoTitulacaoDTO titulacao;
+
+    private EgressoEmpresaBasicDTO emprego;
 
     private DepoimentoDTO depoimento;
 
-    private Integer usuarioId;
+    private TipoBolsaDTO bolsa;
+
+    private Double remuneracaoBolsa;
 
 }

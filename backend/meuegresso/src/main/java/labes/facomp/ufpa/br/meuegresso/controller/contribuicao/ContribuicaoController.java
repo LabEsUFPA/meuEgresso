@@ -94,7 +94,7 @@ public class ContribuicaoController {
 	public String cadastrarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO,
 			JwtAuthenticationToken token) {
 		ContribuicaoModel contribuicaoModel = mapper.map(contribuicaoDTO, ContribuicaoModel.class);
-		contribuicaoModel.setEgresso(EgressoModel.builder().id(jwtService.getIdUsuario(token)).build());
+		contribuicaoModel.setEgresso(EgressoModel.builder().id(contribuicaoDTO.getEgressoId()).build());
 		contribuicaoService.save(contribuicaoModel);
 		return ResponseType.SUCESS_SAVE.getMessage();
 	}
@@ -116,8 +116,9 @@ public class ContribuicaoController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (jwtService.getIdUsuario(token).equals(contribuicaoDTO.getId())) {
-			ContribuicaoModel contribuicaoModel = mapper.map(contribuicaoDTO, ContribuicaoModel.class);
+		if (contribuicaoService.existsByIdAndCreatedById(contribuicaoDTO.getId(), jwtService.getIdUsuario(token))) {
+			ContribuicaoModel contribuicaoModel = contribuicaoService.findById(contribuicaoDTO.getId());
+			contribuicaoModel.setDescricao(contribuicaoDTO.getDescricao());
 			contribuicaoService.update(contribuicaoModel);
 			return ResponseType.SUCESS_UPDATE.getMessage();
 		}

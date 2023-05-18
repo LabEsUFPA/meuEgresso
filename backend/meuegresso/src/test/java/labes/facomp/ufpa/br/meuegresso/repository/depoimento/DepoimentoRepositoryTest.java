@@ -11,26 +11,23 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
 
 /**
  * Classe que testa as features do DepoimentoRepository
- * 
+ *
  * @author Bruno Eiki
  * @since 24/03/2023
  */
-@DirtiesContext
 @SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
-@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class })
 class DepoimentoRepositoryTest {
 
     @MockBean
@@ -43,7 +40,7 @@ class DepoimentoRepositoryTest {
 
     /**
      * Método que testa o repositório que salva Depoimento
-     * 
+     *
      * @author Bruno Eiki
      * @since 29/04/2023
      */
@@ -52,7 +49,7 @@ class DepoimentoRepositoryTest {
         BDDMockito.given(depoimentoRepository.save(Mockito.any(DepoimentoModel.class)))
                 .willReturn(getMockDepoimento());
 
-        DepoimentoModel response = depoimentoRepository.save(depoimentoModel);
+        DepoimentoModel response = depoimentoRepository.save(getMockDepoimento());
 
         assertNotNull(response);
         assertEquals(DESCRICAO, response.getDescricao());
@@ -60,14 +57,16 @@ class DepoimentoRepositoryTest {
 
     /**
      * Método que testa o repositório que retorna todos os Depoimentos
-     * 
+     *
      * @author Bruno Eiki
      * @since 29/04/2023
      */
     @Test
     void testFindAll() {
 
-        depoimentoRepository.save(getMockDepoimento());
+        BDDMockito.given(depoimentoRepository.findAll())
+                .willReturn(List.of(getMockDepoimento()));
+
         List<DepoimentoModel> response = depoimentoRepository.findAll();
 
         assertNotNull(response);
@@ -75,66 +74,6 @@ class DepoimentoRepositoryTest {
     }
 
     private DepoimentoModel getMockDepoimento() {
-        // GeneroModel genero = new GeneroModel(
-        // 1,
-        // "GeneroTeste");
-
-        // EnderecoModel endereco = new EnderecoModel(
-        // 1,
-        // "Ananindeua",
-        // "Pará",
-        // "Brazil",
-        // null);
-
-        // l cota = new CotaModel(
-        // 1,
-        // "CotaTeste",
-        // null);
-
-        // el grupo = new GrupoModel(
-        // 1,
-        // "ADMIN",
-        // null);
-
-        // oModel> grupos = new HashSet<GrupoModel>();
-        // dd(grupo);
-
-        // UsuarioModel usuario = new UsuarioModel(
-        // 1,
-        // "username",
-        // "password",
-        // "email@gmail.com",
-        // "nome",
-        // null,
-        // grupos);
-
-        // Set<UsuarioModel> usuarios = new HashSet<UsuarioModel>();
-        // .add(usuario);
-        // tUsuarios(usuarios);
-
-        // odel egresso = new EgressoModel(
-        // 1,
-        // LocalDate.parse("2000-05-05"),
-        // genero,
-        // "202004940020",
-        // false,
-        // false,
-        // "lattes",
-        // "linkedin",
-        // endereco,
-        // cota,
-        // usuario,
-        // null);
-
-        // toModel depoimentoTest = new DepoimentoModel(
-        // 1,
-        // DESCRICAO,
-        // egresso);
-
-        // imentoModel> depoimentos = new HashSet<DepoimentoModel>();
-        // tos.add(depoimentoTest);
-
-        // egresso.setDepoimentos(depoimentos);
         DepoimentoModel depoimentoTest = DepoimentoModel.builder()
                 .id(ID)
                 .descricao(DESCRICAO)
@@ -144,7 +83,7 @@ class DepoimentoRepositoryTest {
 
     /**
      * Metodo para remover todos os dados do repository.
-     * 
+     *
      * @author Bruno Eiki
      * @since 29/04/2023
      */

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
@@ -34,6 +35,7 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
+    @Transactional
     public EgressoModel findByUsuarioId(Integer idUsuario) {
         return egressoRepository.findByUsuarioId(idUsuario).orElseThrow();
     }

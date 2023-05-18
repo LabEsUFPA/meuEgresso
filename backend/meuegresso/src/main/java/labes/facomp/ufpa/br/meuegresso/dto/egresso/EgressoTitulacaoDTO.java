@@ -25,8 +25,8 @@ public class EgressoTitulacaoDTO {
     @Builder.Default
     private EgressoTitulacaoModelId id = new EgressoTitulacaoModelId();
 
-    private EgressoDTO egresso;
-    
+    private EgressoPublicDTO egresso;
+
     private TitulacaoDTO titulacao;
 
     private EmpresaDTO empresa;

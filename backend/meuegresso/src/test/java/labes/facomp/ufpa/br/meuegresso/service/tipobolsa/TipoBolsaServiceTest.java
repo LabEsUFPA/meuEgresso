@@ -40,7 +40,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.tipobolsa.TipoBolsaRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class TipoBolsaServiceTest {
+class TipoBolsaServiceTest {
     @Autowired
     private TipoBolsaService service;
 
@@ -61,7 +61,7 @@ public class TipoBolsaServiceTest {
      */
     @Test
     @Order(1)
-    public void testSave() {
+    void testSave() {
 
         BDDMockito.given(repository.save(Mockito.any(TipoBolsaModel.class)))
                 .willReturn(getMockTipoBolsaModel());
@@ -74,27 +74,27 @@ public class TipoBolsaServiceTest {
 
     @Test
     @Order(2)
-    public void testFindAll() {
-        BDDMockito.given(service.findAll())
+    void testFindAll() {
+        BDDMockito.given(repository.findAll())
                 .willReturn(getMockTipoBolsaLista());
 
         List<TipoBolsaModel> response = service.findAll();
-        assertNotNull(response);
+        assertEquals(getMockTipoBolsaLista(), response);
     }
 
     @Test
     @Order(3)
-    public void testFindById() {
+    void testFindById() {
         BDDMockito.given(repository.findById(ID))
                 .willReturn(Optional.of(getMockTipoBolsaModel()));
 
         TipoBolsaModel response = service.findById(ID);
-        assertNotNull(response);
+        assertEquals(getMockTipoBolsaModel(), response);
     }
 
     @Test
     @Order(4)
-    public void testUpdate() throws InvalidRequestException {
+    void testUpdate() throws InvalidRequestException {
         BDDMockito.given(repository.save(Mockito.any(TipoBolsaModel.class)))
                 .willReturn(getMockTipoBolsaModel());
 
@@ -106,11 +106,13 @@ public class TipoBolsaServiceTest {
 
     @Test
     @Order(5)
-    public void testDeleteById() {
+    void testDeleteById() {
 
-        BDDMockito.given(service.deleteById(ID))
-                .willReturn(true);
-
+        Mockito.when(repository.findById(Mockito.anyInt()))
+            .thenReturn(Optional.of(getMockTipoBolsaModel()));
+        Mockito.when(repository.existsById(Mockito.anyInt()))
+            .thenReturn(true);
+                
         Boolean response = service.deleteById(ID);
         assertTrue(response);
     }

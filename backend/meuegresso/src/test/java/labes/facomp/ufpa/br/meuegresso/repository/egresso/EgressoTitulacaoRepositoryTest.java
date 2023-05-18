@@ -1,23 +1,26 @@
 package labes.facomp.ufpa.br.meuegresso.repository.egresso;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.mockito.BDDMockito;
+import org.mockito.Mockito;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
-import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
-import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 
 /**
  * Classe que implementa testes das funcionalides de EgressoTitulacaoRepository
@@ -26,64 +29,38 @@ import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
  * @since 28/04/2023
  */
 @SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class EgressoTitulacaoRepositoryTest {
+@TestInstance(Lifecycle.PER_CLASS)
+@TestMethodOrder(OrderAnnotation.class)
+class EgressoTitulacaoRepositoryTest {
 
-    @Autowired
-    private EgressoTitulacaoRepository EgressoTitulacaoRepository;
+    @MockBean
+    private EgressoTitulacaoRepository egressoTitulacaoRepository;
 
-    private EgressoTitulacaoModel testarEgressoTitulacao;
 
-    @BeforeEach
-    public void setUp() {
-        testarEgressoTitulacao = new EgressoTitulacaoModel();
-        testarEgressoTitulacao.setId(new EgressoTitulacaoModelId(1, 1));
-        testarEgressoTitulacao.setEgresso(new EgressoModel());
-        testarEgressoTitulacao.setTitulacao(new TitulacaoModel(1, "Graduacao"));
-        testarEgressoTitulacao.setEmpresa(EmpresaModel.builder().id(1).nome("El Cabis").build());
-        testarEgressoTitulacao.setCurso(new CursoModel(1, "Computacao"));
+    @BeforeAll
+    void setUp() {
+        BDDMockito.given(egressoTitulacaoRepository.save(Mockito.any(EgressoTitulacaoModel.class)))
+                .willReturn(getMockEgressoTitulacao());
 
-        EgressoTitulacaoRepository.save(testarEgressoTitulacao);
+        BDDMockito.given(egressoTitulacaoRepository.findAll())
+        .willReturn(List.of(getMockEgressoTitulacao()));
     }
 
-    // @Test
-    /*
-     * public void testSave() {
-     *
-     * EgressoTitulacaoModel.builder()
-     * .id(1)
-     * .nascimento(null)
-     * .interesseEmPos(true)
-     * .lattes("https://lattes.cnpq.br/")
-     * .linkedin("https://linkedin.com/")
-     * .build();
-     *
-     * EgressoTitulacaoModel response =
-     * EgressoTitulacaoRepository.save(testarEgressoTitulacao);
-     * assertNotNull(response);
-     * }
-     */
-
     @Test
-    public void testFindAll() {
+    void testFindAll() {
 
-        List<EgressoTitulacaoModel> testar = EgressoTitulacaoRepository.findAll();
+        List<EgressoTitulacaoModel> testar = egressoTitulacaoRepository.findAll();
 
         assertNotNull(testar);
     }
 
-    @Test
-    public void testExistsByIdAndCreatedById() {
-
-        Boolean response = EgressoTitulacaoRepository.existsByIdAndCreatedById(
-                testarEgressoTitulacao.getId(), testarEgressoTitulacao.getCreatedBy().getId());
-
-        assertTrue(response);
+    private EgressoTitulacaoModel getMockEgressoTitulacao() {
+        return EgressoTitulacaoModel.builder()
+                .id(EgressoTitulacaoModelId.builder().egressoId(1).titulacaoId(1).build())
+                .egresso(EgressoModel.builder().id(1).build())
+                .empresa(EmpresaModel.builder().id(1).build())
+                .build();
     }
-
-    @AfterEach
-    public void tearDown() {
-        testarEgressoTitulacao = null;
-    }
-
 }

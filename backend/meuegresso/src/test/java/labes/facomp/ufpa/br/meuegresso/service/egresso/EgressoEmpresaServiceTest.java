@@ -43,7 +43,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoEmpresaReposito
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class EgressoEmpresaServiceTest {
+class EgressoEmpresaServiceTest {
 
     private static final EgressoEmpresaModelId ID = new EgressoEmpresaModelId();
     private static final EgressoModel EGRESSO = new EgressoModel();
@@ -65,7 +65,7 @@ public class EgressoEmpresaServiceTest {
 
     @Test
     @Order(1)
-    public void testSave() {
+    void testSave() {
 
         BDDMockito.given(repository.save(Mockito.any(EgressoEmpresaModel.class)))
                 .willReturn(getMockEgressoEmpresa());
@@ -87,12 +87,12 @@ public class EgressoEmpresaServiceTest {
      */
     @Test
     @Order(2)
-    public void testFindAll() {
-        BDDMockito.given(egressoEmpresaService.findAll())
+    void testFindAll() {
+        BDDMockito.given(repository.findAll())
                 .willReturn(getMockEgressoEmpresaLista());
 
         List<EgressoEmpresaModel> response = egressoEmpresaService.findAll();
-        assertNotNull(response);
+        assertEquals(getMockEgressoEmpresaLista(), response);
     }
 
     /**
@@ -102,12 +102,13 @@ public class EgressoEmpresaServiceTest {
      * @since 28/04/2023
      */
     @Test
-    public void testFindById() {
+    void testFindById() {
         BDDMockito.given(repository.findById(Mockito.any(EgressoEmpresaModelId.class)))
                 .willReturn(Optional.ofNullable(getMockEgressoEmpresa()));
 
         EgressoEmpresaModel response = egressoEmpresaService.findById(ID);
-        assertNotNull(response);
+
+        assertEquals(getMockEgressoEmpresa(), response);
     }
 
     /**
@@ -117,12 +118,12 @@ public class EgressoEmpresaServiceTest {
      * @since 28/04/2023
      */
     @Test
-    public void testUpdate() {
+    void testUpdate() {
         try {
             BDDMockito.given(repository.save(Mockito.any(EgressoEmpresaModel.class)))
                     .willReturn(getMockEgressoEmpresa());
             EgressoEmpresaModel response = egressoEmpresaService.update(getMockEgressoEmpresa());
-            assertNotNull(response);
+            assertEquals(getMockEgressoEmpresa(), response);
         } catch (Exception e) {
             e.getMessage();
         }
@@ -135,7 +136,7 @@ public class EgressoEmpresaServiceTest {
      * @since 28/04/2023
      */
     @Test
-    public void testExistsByIdAndCreatedById() {
+    void testExistsByIdAndCreatedById() {
 
         BDDMockito.given(repository.existsByIdAndCreatedById(Mockito.any(
                 EgressoEmpresaModelId.class), Mockito.anyInt()))
@@ -152,13 +153,15 @@ public class EgressoEmpresaServiceTest {
      * @since 28/04/2023
      */
     @Test
-    public void testdeleteById() {
+    void testdeleteById() {
 
-        BDDMockito.given(egressoEmpresaService.deleteById(Mockito.any(
-                EgressoEmpresaModelId.class)))
-                .willReturn(true);
+        Mockito.when(repository.findById(Mockito.any(
+                EgressoEmpresaModelId.class))).thenReturn(Optional.of(getMockEgressoEmpresa()));
+        Mockito.when(repository.existsById(Mockito.any(
+                EgressoEmpresaModelId.class))).thenReturn(true);
 
-        Boolean response = egressoEmpresaService.deleteById(ID);
+        var response = egressoEmpresaService.deleteById(ID);
+
         assertTrue(response);
     }
 

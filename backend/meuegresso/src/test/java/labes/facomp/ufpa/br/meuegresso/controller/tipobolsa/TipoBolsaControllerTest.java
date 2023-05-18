@@ -47,7 +47,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 
-public class TipoBolsaControllerTest {
+class TipoBolsaControllerTest {
 
         UsuarioModel usuarioModel;
 

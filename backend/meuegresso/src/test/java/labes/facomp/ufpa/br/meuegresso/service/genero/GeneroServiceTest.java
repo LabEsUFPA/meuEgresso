@@ -46,24 +46,23 @@ class GeneroServiceTest {
 
     private static final Integer ID = 1;
     private static final Integer ID2 = 2;
-    
+
     private static final String NOME = "Masculino";
     private static final String NOME2 = "Feminino";
-
 
     @Autowired
     private GeneroService service;
 
     @MockBean
     private GeneroRepository generoRepository;
-        
+
     /**
      * Método para criar um genero para uso nos testes.
      * 
      * @author Pedro Inácio
-     * @since 27/04/2023     
-    */    
-    @Test    
+     * @since 27/04/2023
+     */
+    @Test
     void testSave() {
 
         BDDMockito.given(service.save(Mockito.any(GeneroModel.class)))
@@ -79,35 +78,37 @@ class GeneroServiceTest {
      * um gênero cadastrado a partir de seu ID
      * 
      * @author Eude Monteiro
-     * @since 29/04/2023     
-    */ 
-    @Test    
-    void testDeleteById(){
-        BDDMockito.given(service.deleteById(Mockito.anyInt()))
-                .willReturn(true);
+     * @since 29/04/2023
+     */
+    @Test
+    void testDeleteById() {
+        Mockito.when(generoRepository.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(getMockGeneroModel()));
+        Mockito.when(generoRepository.existsById(Mockito.anyInt()))
+                .thenReturn(true);
 
         Boolean response = service.deleteById(ID);
-        assertTrue(response);        
+        assertTrue(response);
     }
 
     /**
-     * Teste da função findAll() do atributo de gênero, 
+     * Teste da função findAll() do atributo de gênero,
      * que encontra todos os gêneros cadastrados.
      * 
      * @author Eude Monteiro
-     * @since 29/04/2023     
-    */ 
+     * @since 29/04/2023
+     */
     @Test
-    void testFindAll(){
-        
+    void testFindAll() {
+
         List<GeneroModel> generoLista = new ArrayList<>();
         GeneroModel generoTest = GeneroModel.builder()
                 .id(ID)
-                .nome(NOME).build();                
+                .nome(NOME).build();
 
         GeneroModel generoTest2 = GeneroModel.builder()
                 .id(ID2)
-                .nome(NOME2).build();  
+                .nome(NOME2).build();
 
         generoLista.add(generoTest);
         generoLista.add(generoTest2);
@@ -116,21 +117,19 @@ class GeneroServiceTest {
 
         List<GeneroModel> response = service.findAll();
 
-        assertEquals(2, response.size());
-        assertEquals(generoTest, response.get(0));
-        assertEquals(generoTest2, response.get(1));
+        assertEquals(generoLista, response);
     }
-   
+
     /**
-     * Teste da função findById() do atributo de "gênero", 
+     * Teste da função findById() do atributo de "gênero",
      * que encontra um gênero pelo seu ID
      * 
      * @author Eude Monteiro
-     * @since 29/04/2023     
+     * @since 29/04/2023
      */
     @Test
     void testFindById() {
-        
+
         GeneroModel generoTest = GeneroModel.builder()
                 .id(ID)
                 .nome(NOME).build();
@@ -144,7 +143,6 @@ class GeneroServiceTest {
         assertEquals(NOME, response.getNome());
     }
 
-
     /**
      * Teste da função de update do atributo de "gênero",
      * que atualiza dados de um genero cadastrado.
@@ -154,33 +152,32 @@ class GeneroServiceTest {
      * @throws InvalidRequestException
      */
     @Test
-    void testUpdate() throws InvalidRequestException {        
+    void testUpdate() throws InvalidRequestException {
         GeneroModel generoTest = GeneroModel.builder()
-            .id(ID)
-            .nome(NOME).build();
+                .id(ID)
+                .nome(NOME).build();
 
         given(generoRepository.save(generoTest)).willReturn(generoTest);
-        
+
         GeneroModel updatedGenero = service.update(generoTest);
 
         assertEquals(generoTest, updatedGenero);
         verify(generoRepository, times(1)).save(generoTest);
     }
-    
-    
+
     /**
      * Método que preenche um mock de um GeneroModel para retorno dos testes
      * 
      * @author Eude Monteiro
      * @since 29/04/2023
-     * @return Um modelo de gênero 
+     * @return Um modelo de gênero
      */
     private GeneroModel getMockGeneroModel() {
 
         GeneroModel generoModel = new GeneroModel(1, "Homem Cis");
         return generoModel;
     }
-   
+
     /**
      * Método para remover todos os dados do teste de genero
      * 

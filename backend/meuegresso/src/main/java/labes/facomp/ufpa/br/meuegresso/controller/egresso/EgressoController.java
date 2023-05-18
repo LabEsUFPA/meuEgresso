@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -88,7 +89,7 @@ public class EgressoController {
         // Cadastro da titulacao POS-Graduação ou n
         if (egressoCadastroDTO.getTitulacao() != null) {
             TitulacaoModel titulacao = titulacaoService
-                .findById(egressoCadastroDTO.getPosGraduacao().booleanValue() ? 2 : 1);
+                    .findById(egressoCadastroDTO.getPosGraduacao().booleanValue() ? 2 : 1);
             titulacaoEgressoDTO = egressoCadastroDTO.getTitulacao();
             // Cadastro do curso
             curso = cursoService.findByNome(titulacaoEgressoDTO.getCurso());
@@ -139,6 +140,7 @@ public class EgressoController {
         }
 
         egresso.setUsuario(usuarioService.findById(jwtService.getIdUsuario(token)));
+        // TODO fazer update de email futuramente.
         egresso.getUsuario().setNome(egressoCadastroDTO.getNome());
         PalestraModel palestra;
         if (egresso.getPalestras() != null) {
@@ -196,13 +198,12 @@ public class EgressoController {
      * @author Bruno Eiki
      * @since 17/04/2023
      */
-    @DeleteMapping
+    @DeleteMapping(params = { "id" })
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public String deletarEgresso(@RequestBody @Valid EgressoPublicDTO egressoPublicDTO) {
-        EgressoModel egressoModel = mapper.map(egressoPublicDTO, EgressoModel.class);
-        if (egressoService.deleteEgresso(egressoModel)) {
+    public String deletarEgresso(@RequestParam(required = false) Integer id) {
+        if (egressoService.deleteById(id)) {
             return ResponseType.SUCESS_DELETE.getMessage();
         } else {
             return ResponseType.FAIL_DELETE.getMessage();

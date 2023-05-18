@@ -44,10 +44,10 @@ import labes.facomp.ufpa.br.meuegresso.repository.anuncio.AnuncioRepository;
 class AnuncioServiceTest {
 
     private static final Integer ID = 1;
-    private static final String DESCRICAO = "Escola Pública";
+    private static final String DESCRICAO = "Vagas de Emprego";
 
     private static final Integer ID2 = 2;
-    private static final String DESCRICAO2 = "Pardo";
+    private static final String DESCRICAO2 = "Vagas para Pós-Graduacao";
 
     @Autowired
     private AnuncioService anuncioService;
@@ -61,6 +61,7 @@ class AnuncioServiceTest {
     void setUp() {
         BDDMockito.given(anuncioRepository.save(Mockito.any(AnuncioModel.class)))
                 .willReturn(getMockAnuncio());
+
         BDDMockito.given(anuncioRepository.findById(Mockito.anyInt()))
                 .willReturn(Optional.of(getMockAnuncio()));
 
@@ -96,12 +97,16 @@ class AnuncioServiceTest {
     @Test
     @Order(2)
     void testFindAll() {
-        BDDMockito.given(anuncioService.findAll())
+        BDDMockito.given(anuncioRepository.findAll())
                 .willReturn(getMockAnuncioLista());
-        // .willReturn(List.of(getMockAnuncio()));
 
         List<AnuncioModel> response = anuncioService.findAll();
+
         assertNotNull(response);
+        assertEquals(2, response.size());
+        assertEquals(DESCRICAO, response.get(0).getDescricao());
+        assertEquals(DESCRICAO2, response.get(1).getDescricao());
+
     }
 
     /**
@@ -115,7 +120,8 @@ class AnuncioServiceTest {
     void testFindById() {
 
         AnuncioModel response = anuncioService.findById(ID);
-        assertNotNull(response);
+        assertEquals(ID, response.getId());
+        assertEquals(DESCRICAO, response.getDescricao());
     }
 
     /**
@@ -129,8 +135,15 @@ class AnuncioServiceTest {
     @Order(4)
     void testUpdate() throws InvalidRequestException {
 
-        AnuncioModel response = anuncioService.update(getMockAnuncio());
-        assertNotNull(response);
+        var anuncioUpdate = getMockAnuncio();
+        anuncioUpdate.setDescricao("Teste");
+
+        BDDMockito.given(anuncioRepository.save(Mockito.any(AnuncioModel.class)))
+                .willReturn(anuncioUpdate);
+
+        AnuncioModel response = anuncioService.update(anuncioUpdate);
+        assertEquals(ID, response.getId());
+        assertEquals("Teste", response.getDescricao());
     }
 
     /**
@@ -140,12 +153,13 @@ class AnuncioServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(4)
+    @Order(5)
     void testDeleteById() {
 
-        BDDMockito.given(anuncioService.deleteById(Mockito.anyInt()))
-                .willReturn(true);
-
+        Mockito.when(anuncioRepository.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(getMockAnuncio()));
+        Mockito.when(anuncioRepository.existsById(Mockito.anyInt()))
+                .thenReturn(true);
         Boolean response = anuncioService.deleteById(ID);
         assertTrue(response);
     }
@@ -157,7 +171,7 @@ class AnuncioServiceTest {
      * @since 27/04/2023
      */
     @Test
-    @Order(5)
+    @Order(6)
     void testExistsByIdAndCreatedById() {
 
         BDDMockito.given(anuncioService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))

@@ -45,7 +45,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
 
 class TitulacaoServiceTest {
-    
+
     private static final String TITULACAO = "Doutorado";
     private static final Integer ID = 1;
 
@@ -54,7 +54,7 @@ class TitulacaoServiceTest {
 
     @MockBean
     private TitulacaoRepository titulacaoRepository;
-    
+
     /**
      * Teste da função de save do atributo de "titulação",
      * que armazena os dados de uma titulação
@@ -62,7 +62,7 @@ class TitulacaoServiceTest {
      * @author Pedro Inácio
      * @since 27/04/2023
      */
-    @Test    
+    @Test
     void testSave() {
 
         BDDMockito.given(titulacaoRepository.save(Mockito.any(TitulacaoModel.class)))
@@ -72,38 +72,39 @@ class TitulacaoServiceTest {
         assertNotNull(response);
         assertEquals("Graduacao", response.getNome());
     }
-    
+
     /**
-     * Teste da função deleteById() do atributo de "titulação", 
+     * Teste da função deleteById() do atributo de "titulação",
      * que deleta uma titulação cadastrada a partir de seu ID
      * 
      * @author Eude Monteiro
-     * @since 30/04/2023     
-     */    
+     * @since 30/04/2023
+     */
     @Test
     void testDeleteById() {
-        BDDMockito.given(titulacaoService.deleteById(Mockito.anyInt()))
-                .willReturn(true);
+        Mockito.when(titulacaoRepository.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(getMockTitulacaoModel()));
+
+        Mockito.when(titulacaoRepository.existsById(Mockito.anyInt()))
+                .thenReturn(true);
 
         Boolean response = titulacaoService.deleteById(ID);
-        assertTrue(response);  
+        assertTrue(response);
     }
 
-    
-    
     /**
-     * Teste da função findAll() do atributo de "titulação", 
+     * Teste da função findAll() do atributo de "titulação",
      * que encontra todas as titulações cadastradas.
      * 
      * @author Eude Monteiro
-     * @since 30/04/2023     
-    */ 
+     * @since 30/04/2023
+     */
     @Test
     void testfindAll() {
         TitulacaoModel titulacao1 = TitulacaoModel.builder()
-            .nome("Mestrado")
-            .id(1)
-            .build();
+                .nome("Mestrado")
+                .id(1)
+                .build();
 
         TitulacaoModel titulacao2 = TitulacaoModel.builder()
                 .nome("Doutorado")
@@ -121,27 +122,26 @@ class TitulacaoServiceTest {
         assertEquals(titulacoes, titulacoesEncontradas);
         verify(titulacaoRepository, times(1)).findAll();
     }
-    
-    
+
     /**
-     * Teste da função findById() do atributo de "titulação", 
+     * Teste da função findById() do atributo de "titulação",
      * que encontra uma titulação pelo seu ID
      * 
      * @author Eude Monteiro
-     * @since 30/04/2023     
+     * @since 30/04/2023
      */
     @Test
-    void testFindById() {        
+    void testFindById() {
         TitulacaoModel titulacao = new TitulacaoModel(1, "Mestrado");
 
         when(titulacaoRepository.findById(1)).thenReturn(Optional.of(titulacao));
-        
+
         TitulacaoModel result = titulacaoService.findById(1);
-        
+
         assertEquals(titulacao.getId(), result.getId());
         assertEquals(titulacao.getNome(), result.getNome());
     }
-    
+
     /**
      * Teste da função de update do atributo de "titulação",
      * que atualiza dados de uma titulação cadastrada
@@ -149,15 +149,15 @@ class TitulacaoServiceTest {
      * @author Pedro Inácio, Eude Monteiro
      * @since 27/04/2023
      * @throws InvalidRequestException
-     */    
-    @Test            
-    void testUpdate() throws InvalidRequestException {   
-            
+     */
+    @Test
+    void testUpdate() throws InvalidRequestException {
+
         TitulacaoModel titulacao = TitulacaoModel.builder()
-                    .nome(TITULACAO)
-                    .id(ID)
-                    .build();
-        
+                .nome(TITULACAO)
+                .id(ID)
+                .build();
+
         given(titulacaoRepository.save(titulacao)).willReturn(titulacao);
 
         TitulacaoModel updatedGenero = titulacaoService.update(titulacao);
@@ -165,7 +165,7 @@ class TitulacaoServiceTest {
         assertEquals(titulacao, updatedGenero);
         verify(titulacaoRepository, times(1)).save(titulacao);
     }
-       
+
     /**
      * Método que preenche um mock de uma titulacao para usar como return nos
      * testes.
@@ -181,7 +181,6 @@ class TitulacaoServiceTest {
         return titulacaoModel;
     }
 
-    
     /**
      * Método para remover todos os dados do teste de titulação
      * 
