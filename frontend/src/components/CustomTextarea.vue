@@ -31,6 +31,7 @@
 <script lang="ts" setup>
 import { toRef } from 'vue'
 import { useField } from 'vee-validate'
+import { computed } from '@vue/reactivity';
 
 const $emit = defineEmits(['update:value'])
 
@@ -44,8 +45,8 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   value: '',
-  errorMessage: 'Campo inválido',
-  successMessage: 'Campo correto'
+  errorMessage: '',
+  successMessage: ''
 })
 
 const name = toRef(props, 'name')
@@ -65,4 +66,29 @@ function handleInput (e: Event) {
   handleChange(e)
   $emit('update:value', (e.target as HTMLInputElement).value)
 }
+
+const successMessages = {
+  'adicionais.assuntosPalestras': '',
+  'adicionais.experiencias': '',
+  'adicionais.contribuicoes': ''
+}
+
+
+const successMessage = computed(() => {
+  const inputName = name.value
+  // @ts-ignore
+  return successMessages[inputName] || props.successMessage
+})
+
+const errorMessages = {
+  'adicionais.assuntosPalestras': 'Por favor informar os assuntos das palestras.',
+  'adicionais.experiencias': 'Por favor informar suas experiências.',
+  'adicionais.contribuicoes': 'Por favor informar suas contribuições.'
+}
+
+const errorMessage = computed(() => {
+  const inputName = name.value
+  // @ts-ignore
+  return errorMessages[inputName] || props.errorMessage
+})
 </script>
