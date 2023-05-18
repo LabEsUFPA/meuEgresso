@@ -615,7 +615,7 @@ function handleFail (e: any) {
 const schema = object().shape({
   geral: object({
     nome: string().required().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/),
-    nascimento: date().required(),
+    nascimento: date().required().min(new Date("1900-01-01")).max(new Date()),
     email: string().email().required(),
     genero: string().required(),
     linkedin: string(),
