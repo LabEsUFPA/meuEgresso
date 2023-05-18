@@ -6,8 +6,14 @@
     :validation-schema="schema"
   >
     <div class="flex w-full justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
-      <div class="flex w-[960px] justify-center border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl py-8 mt-10 mx-6 shadow-md">
-        <h1 class="text-blue-900 text-3xl font-bold">
+      <div class="flex w-[960px] border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl py-8 mt-10 mx-6 shadow-md">
+        <h1 class="text-cyan-800 text-3xl font-bold">
+          <SvgIcon
+            type="mdi"
+            size="50"
+            class="ml-10 mr-5 inline"
+            :path="mdiBullhorn"
+          />
           Anunciar vaga de emprego
         </h1>
       </div>
@@ -35,11 +41,12 @@
                 :required="true"
               />
               <CustomInput
-                name="cargo"
-                label="Cargo"
-                placeholder="Ex: Analista de dados"
+                name="salario"
+                label="Salário"
+                placeholder="Ex: 1500"
                 :required="true"
               />
+          
             </div>
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
@@ -55,32 +62,25 @@
                 :required="true"
             />
             </div>
+            <div class="flex mt-5 mb-5 text-sm font-semibold text-cyan-600">
+              Insira a descrição da vaga <sup class="text-red-500">*</sup>
+            </div>
+            <div>
+            <CustomTextarea 
+              class="mb-5"
+              name="descricao"/>
+            </div>
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
-              <CustomInput
-                name="salario"
-                label="Salário"
-                placeholder="Ex: 1500"
-                :required="true"
-              />
               <CustomInput
                 name="contato"
                 label="Contato"
                 placeholder="Link referente a vaga"
                 :required="true"
+                :iconPath="mdiLink"
               />
             </div>
           </div>
-          <div class="w-full flex-col">
-          <div class="mt-5 mb-5 text-sm font-semibold text-cyan-600">
-              Insira a descrição da vaga no campo abaixo:<sup class="text-red-500">*</sup>
-          </div>
-          <div>
-            <CustomTextarea 
-              class="mb-5"
-              name="descricao"/>
-          </div>
-          </div>
-          
+
           <div class="flex w-full justify-center gap-16 border-t-[1px] pt-8 mt-8 border-gray-200">
             <RouterLink to="/">
               <CustomButton type="button" color="gray">
@@ -131,8 +131,9 @@ import CustomTextarea from 'src/components/CustomTextarea.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import { Form } from 'vee-validate'
 import { object, string, date, ref as refYup } from 'yup'
-import { mdiCheckCircle } from '@mdi/js'
+import { mdiCheckCircle, mdiBullhorn, mdiLink } from '@mdi/js'
 import {useAnuncioVagaStore} from 'src/store/AnuncioVagaStore'
+
 
 
 
