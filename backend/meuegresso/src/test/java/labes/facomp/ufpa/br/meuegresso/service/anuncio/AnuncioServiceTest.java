@@ -161,6 +161,8 @@ class AnuncioServiceTest {
         Mockito.when(anuncioRepository.existsById(Mockito.anyInt()))
                 .thenReturn(true);
         Boolean response = anuncioService.deleteById(ID);
+
+        Mockito.verify(anuncioRepository).deleteById(ID);
         assertTrue(response);
     }
 
