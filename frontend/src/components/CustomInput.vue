@@ -143,9 +143,9 @@ const successMessages = {
   name: 'Nome válido.',
   password: 'Senha válida.',
   confirmationPassword: 'As senhas coincidem.',
-  "geral.nome":'Nome válido.',
-  "geral.linkedin": '',
-  "carreira.empresa": ''
+  'geral.nome':'Nome válido.',
+  'geral.linkedin': '',
+  "carreira.empresa": '',
 }
 
 const successMessage = computed(() => {
@@ -161,9 +161,9 @@ const errorMessages = {
   name: 'Nome inválido.',
   password: 'Senha inválida.',
   confirmationPassword: 'As senhas não coincidem.',
-  "geral.nome":"Por favor preencher o nome completo.",
-  "geral.linkedin": "",
-  'carreira.empresa': 'Por favor preencha o nome da empresa.' 
+  'geral.nome':'Por favor preencher o nome completo.',
+  'geral.linkedin': '',
+  'carreira.empresa': 'Por favor preencha o nome da empresa.',
 }
 
 const errorMessage = computed(() => {
