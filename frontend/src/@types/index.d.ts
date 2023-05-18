@@ -249,7 +249,6 @@ export namespace models {
 
   export interface AnuncioModel{
     titulo: string
-    cargo: string
     area: string
     dataExpiracao: string
     salario: string

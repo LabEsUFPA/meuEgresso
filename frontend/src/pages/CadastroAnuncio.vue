@@ -151,7 +151,6 @@ const descricao = ref('')
 let dataAnuncioPost = {
     id: 0,
     titulo: "",
-    cargo: "",
     area: "",
     dataExpiracao: "",
     salario: "",
@@ -170,7 +169,6 @@ const submitSuccess = ref(false)
 
 const schema = object().shape({
   titulo: string().required(),
-  cargo: string().required(),
   area: string().required(),
   dataExpiracao: date().required(),
   salario: string().required(),
@@ -185,8 +183,7 @@ const $store = useAnuncioVagaStore()
 const handleSubmit = async (submitData: any) => {
   const responseValidation = await $store.cadastraAnuncio({
     titulo:dataAnuncioPost.titulo,
-    cargo:dataAnuncioPost.cargo,
-    area:dataAnuncioPost.cargo,
+    area:dataAnuncioPost.area,
     dataExpiracao:dataAnuncioPost.dataExpiracao.toString(),
     salario:dataAnuncioPost.salario,
     contato:dataAnuncioPost.contato,
@@ -210,10 +207,6 @@ onMounted(() => {
   watch(titulo, () => {
     console.log("watch front titulo:", titulo.value)
     form.value?.setFieldValue('titulo', titulo.value)
-  })
-  watch(cargo, () => {
-    console.log("watch front cargo:", cargo.value)
-    form.value?.setFieldValue('cargo', cargo.value)
   })
   watch(area, () => {
     console.log("watch front area:", area.value)

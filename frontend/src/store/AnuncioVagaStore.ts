@@ -11,7 +11,6 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
     anuncio:{
       id: 0,
       titulo: "",
-      cargo: "",
       area: "",
       dataExpiracao: "",
       salario: "",
@@ -30,7 +29,6 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       if (response?.status === 200) {
         this.anuncio.id = response.data?.id
         this.anuncio.titulo = response.data?.titulo
-        this.anuncio.cargo = response.data?.cargo
         this.anuncio.area = response.data?.area
         this.anuncio.dataExpiracao = response.data?.dataExpiracao
         this.anuncio.salario = response.data?.salario
