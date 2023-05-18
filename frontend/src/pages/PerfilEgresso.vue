@@ -5,47 +5,53 @@
     >
       <!-- <ProfileHead /> -->
       <!-- Head Start-->
-      <section>
-        <o-field>
-          <o-upload
-            v-model="dropFiles"
-            multiple
-            drag-drop
+      <!--:native="true"-->
+      <o-field class="file bg-black items-center rounded-md flex px-[7px] py-[7px] relative text-lg font-semibold hover:duration-200">
+        <o-upload
+          v-model="file"
+          drag-drop
+        >
+          <o-button
+            tag="a"
+            variant="primary"
+            class="items-center rounded-md flex px-[7px] py-[7px] relative text-lg font-semibold hover:duration-200"
           >
-            <section class="ex-center">
-              <p>
-                <o-icon
-                  icon="upload"
-                  size="is-large"
-                />
-              </p>
-              <p>Drop your files here or click to upload</p>
-            </section>
-          </o-upload>
-        </o-field>
+            <o-icon icon="upload" />
+            <span>Click to upload</span>
+          </o-button>
+        </o-upload>
+        <span
+          class="file-name"
+          v-if="file"
+        >
+          {{ file.name }}
+          <!-- <o-button
+            icon-left="times"
+            size="small"
+            native-type="button"
+            @click="deleteDropFile(index)"
+          />
+          <ButtonActionIcon
+            icon-path="/src/assets/trashCan.svg"
+            icon-size="20"
+            custom-style="px-2 py-2"
+            color="whiteDanger"
+            @click="deleteDropFile(index)"
+          /> -->
 
-        <div class="tags">
-          <span
-            v-for="(file, index) in dropFiles"
-            :key="index"
+          <img
+            class="
+              ml-[200px]
+              mt-[37px]
+              w-[120px]
+              h-[120px]
+              rounded-full"
+            :src="getObjectURL(file)"
+            alt="Uploaded image"
           >
-            {{ file.name }}
-            <o-button
-              icon-left="times"
-              size="small"
-              native-type="button"
-              @click="deleteDropFile(index)"
-            />
+        </span>
+      </o-field>
 
-            <img
-              class="ml-[200px] mt-[37px] w-[120px] h-[120px] rounded-full"
-
-              :src="handleEgressoImage()"
-              alt="Uploaded image"
-            >
-          </span>
-        </div>
-      </section>
       <div class="items-center flex relative w-[7000px] flex-col">
         <Form
           @submit="handleSubmitHeader"
@@ -900,7 +906,7 @@ import { object, string, date, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
 import { useLoginStore } from 'src/store/LoginStore'
 import ButtonActionIcon from 'src/components/ButtonActionIcon.vue'
-import { OUpload, OSidebar, section, OField } from '@oruga-ui/oruga-next'
+import { OUpload, OSidebar, section, OField, OIcon, OButton } from '@oruga-ui/oruga-next'
 
 import {
   mdiAccount,
@@ -924,13 +930,16 @@ import {
 let fileGloabal: any
 
 function getObjectURL (file: File) {
-  console.log(URL.createObjectURL(file))
-  egressoStore.uploadImageEgresso(file)
-  /// egressoStore.uploadImageEgresso(URL.createObjectURL(file), jsonResponse.id)
-  // egressoStore.uploadImageEgresso(file, jsonResponse.id)
-  return URL.createObjectURL(file)
+  console.log('123')
+  if (file === undefined) {
+    return 'src/assets/profile-pic.png'
+  } else {
+    console.log(URL.createObjectURL(file))
+    egressoStore.uploadImageEgresso(file)
+    return URL.createObjectURL(file)
+  }
 }
-
+const file = ref(null)
 const dropFiles = ref([])
 const useDropFiles = () => {
   const dropFiles = ref([])
