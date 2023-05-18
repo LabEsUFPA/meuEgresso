@@ -1,5 +1,12 @@
 package labes.facomp.ufpa.br.meuegresso.dto.anuncio;
 
+import java.time.LocalDate;
+
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import labes.facomp.ufpa.br.meuegresso.dto.areaemprego.AreaEmpregoDTO;
 import lombok.Data;
 
 /**
@@ -12,8 +19,27 @@ import lombok.Data;
  */
 @Data
 public class AnuncioDTO {
-    
+
     private Integer id;
 
+    @NotBlank
+    @NotNull
+    private String titulo;
+
+    @NotNull
+    private AreaEmpregoDTO areaEmprego;
+
+    @NotBlank
+    @NotNull
     private String descricao;
+
+    private LocalDate dataExpiracao;
+
+    @NotBlank
+    @NotNull
+    private String link;
+
+    @Min(0)
+    @Max(100000)
+    private double salario;
 }
