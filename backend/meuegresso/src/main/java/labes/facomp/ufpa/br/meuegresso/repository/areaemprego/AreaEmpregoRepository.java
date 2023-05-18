@@ -13,4 +13,6 @@ public interface AreaEmpregoRepository extends CrudRepository<AreaEmpregoModel, 
 
     Optional<AreaEmpregoModel> findByNomeIgnoreCase(String nome);
 
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
 }

@@ -61,4 +61,9 @@ public class AreaEmpregoImpl implements AreaEmpregoService {
         return areaEmpregoRepository.findByNomeIgnoreCase(nome).orElse(null);
     }
 
+    @Override
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return areaEmpregoRepository.existsByIdAndCreatedById(id, createdBy);
+    }
+
 }

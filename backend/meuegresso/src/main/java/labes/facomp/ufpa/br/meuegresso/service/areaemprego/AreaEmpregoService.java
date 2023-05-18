@@ -54,4 +54,13 @@ public interface AreaEmpregoService {
 
 	public AreaEmpregoModel findByNome(String nome);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return
+	 */
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
 }
