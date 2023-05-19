@@ -28,7 +28,7 @@ public interface AnuncioService {
 	 * @param id ID de um anuncio
 	 * @return
 	 */
-	public AnuncioModel findById(Integer id);
+	public AnuncioModel findBy();
 
 	/**
 	 * Método responsável por encontrar todos os anuncios cadastrados.

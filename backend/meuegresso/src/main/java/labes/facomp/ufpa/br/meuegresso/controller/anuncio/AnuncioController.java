@@ -1,9 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.anuncio;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
-import java.time.chrono.ChronoLocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +23,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.anuncio.AnuncioDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.anuncio.BuscaAnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
@@ -77,11 +75,19 @@ public class AnuncioController {
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
-	@GetMapping(value = "/{id}")
+	@PostMapping(value = "/busca")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public AnuncioDTO findById(@PathVariable Integer id) {
-		return mapper.map(anuncioService.findById(id), AnuncioDTO.class);
+	public List<AnuncioDTO> findBy(@RequestBody BuscaAnuncioDTO buscaAnuncioDTO ) {
+		
+		List<AnuncioDTO> Anuncios = mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {}.getType());
+		
+		return Anuncios.stream()
+			.filter(anuncio -> LocalDate.now().isBefore(anuncio.getDataExpiracao()))
+			.filter(anuncio -> anuncio.getTitulo().contains(buscaAnuncioDTO.getTitulo()))
+			.filter(anuncio -> anuncio.getSalario() >= buscaAnuncioDTO.getMinValorSalario() && anuncio.getSalario() <= buscaAnuncioDTO.getMaxValorSalario())
+			.filter(anuncio -> buscaAnuncioDTO.getAreaEmprego().stream().anyMatch(area -> area == anuncio.getAreaEmprego().getId()))
+			.collect(Collectors.toList());
 	}
 
 	/**
@@ -102,6 +108,8 @@ public class AnuncioController {
 		anuncioService.save(anuncioModel);
 		return ResponseType.SUCESS_SAVE.getMessage();
 	}
+
+
 
 	/**
 	 * Endpoint responsavel por atualizar o anuncio.
