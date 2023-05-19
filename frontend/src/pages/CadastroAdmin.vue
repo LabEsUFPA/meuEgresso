@@ -25,14 +25,16 @@
               <CustomInput
                 name="name"
                 label="Nome Completo"
+                error-message="Informe nome e sobrenome"
                 :required="true"
                 :icon-path="mdiAccount"
               />
               <CustomInput
                 name="username"
                 label="Usuário"
-                helper-text="Letras minúsculas e números com no mínimo seis caracteres"
+                helper-text="Use no mínimo quatro caracteres"
                 class-helper-text="text-gray-600"
+                error-message="Use apenas letras, números e os seguintes caracteres . _ -"
                 :required="true"
                 :icon-path="mdiAccount"
               />
@@ -42,6 +44,7 @@
                 name="email"
                 label="Email"
                 type="email"
+                error-message="Email inválido"
                 :required="true"
                 :icon-path="mdiEmail"
               />
@@ -59,8 +62,9 @@
                 name="password"
                 label="Senha"
                 type="password"
-                helper-text="Letras e números com no mínimo oito caracteres"
+                helper-text="Use oito ou mais caracteres com uma combinação de letras, números e símbolos"
                 class-helper-text="text-gray-600"
+                error-message="Senha inválida"
                 :required="true"
                 :icon-path="mdiLock"
               />
@@ -151,8 +155,8 @@ const setIdAccessLevel = (accessLevel: string) => {
 
 const schema = object().shape({
   name: string().required().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
-  username: string().required().matches(/^[a-z0-9_.-]{6,}$/),
-  email: string().email().required().matches(/^[a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/),
+  username: string().required().matches(/^[a-z0-9_.-]{4,}$/),
+  email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/),
   confirmationEmail: string().email().required().oneOf([refYup('email')]),
   password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/),
   confirmationPassword: string().required().oneOf([refYup('password')]),

@@ -70,7 +70,7 @@
     </div>
 
     <div
-      class="text-xs mt-1"
+      class="text-xs mt-1 max-w-[250px]"
       :class="{
         ['text-red-500']: !meta.valid,
         ['text-emerald-500']: meta.valid,
