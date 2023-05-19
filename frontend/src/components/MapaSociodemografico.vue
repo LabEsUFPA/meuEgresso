@@ -111,7 +111,7 @@
 <script lang="ts" setup>
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { Country, State } from 'country-state-city'
 import CustomButton from 'src/components/CustomButton.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
@@ -126,6 +126,10 @@ const props = defineProps<{
 defineEmits(['select'])
 
 const selectedMarker = ref<EgressoMapa[]>([])
+watch(selectedMarker, () => {
+  currentPage.value = 0
+})
+
 function selectMarker ($event: L.LeafletEvent) {
   const latLng = $event.target._latlng
   const clickedMarkerKey = `${latLng.lat}:${latLng.lng}`
