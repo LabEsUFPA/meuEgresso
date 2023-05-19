@@ -78,9 +78,9 @@ public class AnuncioController {
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<AnuncioDTO> findBy(@RequestBody BuscaAnuncioDTO buscaAnuncioDTO ) {
-		
+
 		List<AnuncioDTO> anuncios = mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {}.getType());
-		
+
 		return anuncios.stream()
 			.filter(anuncio -> LocalDate.now().isBefore(anuncio.getDataExpiracao()))
 			.filter(anuncio -> anuncio.getTitulo().contains(buscaAnuncioDTO.getTitulo()))
