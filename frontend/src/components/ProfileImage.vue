@@ -155,4 +155,8 @@ const styleImageInput = computed(() => {
 defineExpose({
   imageUploadBack
 })
+
+function removeImage () {
+  egressoStore.removeImageEgresso()
+}
 </script>

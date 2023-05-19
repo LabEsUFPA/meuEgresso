@@ -1572,10 +1572,6 @@ async function fetchUpdateEgresso () {
   return egressoStore.fetchEgresso()
 }
 
-function removeImage () {
-  return ''
-}
-
 function fetchEgresso () {
   return egressoStore.fetchEgresso()
 }

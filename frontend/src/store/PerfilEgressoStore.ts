@@ -307,9 +307,17 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
           url = URL.createObjectURL(blob)
         }
       })
-      console.log('request')
       response = url
       return response
+    },
+    // futuro remover por id: async removeImageEgresso (egressoId: string) {
+    async removeImageEgresso () {
+      const response = await Api.request({
+        method: 'delete',
+        route: '/egresso/foto'
+      })
+      return (response?.status) !== undefined ? response.status : 500
     }
   }
+
 })
