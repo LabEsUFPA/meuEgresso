@@ -10,6 +10,12 @@ interface EgressoModel extends models.EgressoModel {}
 interface EgressoModelUpdate extends models.EgressoModelUpdate {}
 const storage = new LocalStorage()
 
+const baseURL = import.meta.env.VITE_API_URL_LOCAL
+
+const Axios = axios.create({
+  baseURL,
+  withCredentials: true
+})
 interface State {
   generos: ComplexOpts[]
   faixasSalariais: ComplexOpts[]
@@ -17,7 +23,7 @@ interface State {
   tiposCota: ComplexOpts[]
 
 }
-axios.interceptors.request.use((config) => {
+Axios.interceptors.request.use((config) => {
   const Token = new LocalStorage().getToken()
   if (Token !== undefined) config.headers.Authorization = `Bearer ${Token}`
   return config
@@ -240,7 +246,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       })
       return (response?.status) !== undefined ? response.status : 500
     },
-    
+
     async uploadImageEgresso (file: File) {
       console.log(file)
       const formData = new FormData()
@@ -280,7 +286,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       const route = '/egresso/foto/' + egressoId
       const url = ''
       let response: any
-      await axios.get('http://localhost:15000/egresso/foto/1', {
+      await Axios.get(route, {
         responseType: 'blob'
       }).then(res => {
         // const blob = new Blob([res.data])

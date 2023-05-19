@@ -1443,12 +1443,19 @@ const stateFolders = ref({
     isInput: false
   }
 })
-let egressoImageResponse : any
-let imageEgressoUrl = ''
-imageEgressoUrl = handleEgressoImage()
 
-async function handleEgressoImage () {
-  egressoImageResponse = await egressoStore.fetchImageEgresso('1')
+// watch(imageEgressoUrl, () => {
+//   ProfileImage.value?.setFieldValue('img-url', '123')
+// })
+let jsonResponse : any
+let userData : any
+let egressoResponseBack: any
+
+let egressoImageResponse : any
+let imageEgressoUrl: string
+imageEgressoUrl = ''
+async function handleEgressoImage (id : string) {
+  egressoImageResponse = await egressoStore.fetchImageEgresso(id)
   if (egressoImageResponse === undefined) {
     return ''
   } else {
@@ -1461,12 +1468,6 @@ async function handleEgressoImage () {
     return url
   }
 }
-watch(imageEgressoUrl, () => {
-  ProfileImage.value?.setFieldValue('img-url', '123')
-})
-let jsonResponse : any
-let userData : any
-let egressoResponseBack: any
 
 // fetchEgressoIfLoggedUser()
 fetchUpdateEgresso()
@@ -1523,7 +1524,8 @@ async function fetchUpdateEgresso () {
   }
   // Email e nome vem do usuario loggado
   // const imageResponse = await egressoStore.fetchImageEgresso('1')
-  handleEgressoImage()
+  // handleEgressoImage(json.id)
+  imageEgressoUrl = await handleEgressoImage(json.id)
 
   // egressoImageResponse = imageResponse
   // handleEgressoImage()
@@ -1605,6 +1607,9 @@ function fetchEgresso () {
   return egressoStore.fetchEgresso()
 }
 
+watch(imageEgressoUrl, () => {
+
+})
 // watch(pais, () => {
 //   form.value?.setFieldValue('localizacao.cidade', '')
 //   form.value?.setFieldValue('localizacao.estado', '')

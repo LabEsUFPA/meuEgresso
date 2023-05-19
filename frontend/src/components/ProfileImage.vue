@@ -51,7 +51,7 @@
                      h-[120px]
                     rounded-full"
         :src="imgDefault"
-        alt="Uploaded image"
+        alt=""
       >
       <img
         v-else
@@ -62,7 +62,7 @@
                      h-[120px]
                     rounded-full"
         :src="imgUrl"
-        alt="Uploaded image"
+        alt=""
       >
       <span
         class="file-name"
@@ -92,7 +92,7 @@
             h-[120px]
             rounded-full"
             :src="getObjectURL(file)"
-            alt="Uploaded image"
+            alt=""
           >
         </div>
 
@@ -140,11 +140,7 @@ function getObjectURL (file: File) {
 function imageUploadBack () {
   egressoStore.uploadImageEgresso(imageEgressoFile)
 }
-// if (props.triggerBackUpload) {
-//   if (imageEgressoFile !== undefined) {
-//     egressoStore.uploadImageEgresso(imageEgressoUrl)
-//   }
-// }
+
 const styleImageInput = computed(() => {
   const imageStyle = [' hover:duration-200 w-[120px] h-[120px] absolute z-10 rounded-full']
   if (props.isInput) {
