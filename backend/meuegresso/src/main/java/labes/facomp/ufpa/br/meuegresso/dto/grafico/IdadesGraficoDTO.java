@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class IdadesDTO {
+public class IdadesGraficoDTO {
     
     private List<Integer> idades;
 
