@@ -77,6 +77,17 @@ INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('OUTROS', 1)
 INSERT INTO public.titulacao (nome_titulacao, created_by) VALUES ('GRADUAÇÃO', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.titulacao (nome_titulacao, created_by) VALUES ('PÓS-GRADUAÇÃO', 1) ON CONFLICT DO NOTHING;
 
+--- Area de Emprego
+
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('ENGENHARIA DE SOFTWARE', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('PROGRAMAÇÃO', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('INFORMÁTICA', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('SUPORTE A TI', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('ANALISTA DE SISTEMA', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('ANALISTA DE QA', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('OUTROS', 1) ON CONFLICT DO NOTHING;
+
+
 --- Egressos Validos (Dados pela Marcele)
 
 insert into egresso_valido (nome_egresso_valido , matricula_egresso_valido , email_egresso_valido) values
