@@ -47,12 +47,12 @@
                 label="Matrícula"
                 helper-text="Informe a sua matrícula da faculdade"
                 class-helper-text="text-gray-600"
-                :error-message="`Matrícula inválida, faltam ${12 - registrationLength} dígitos`"
+                :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
                 :icon-path="mdiSchool"
                 :max-length="12"
                 :min-length="12"
                 :min="0"
-                @update:value="setRegistrationLength"
+                @update:value="checkRegistrationLength"
               />
               <CustomInput
                 name="email"
@@ -67,23 +67,28 @@
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 name="password"
-                type="password"
                 label="Senha"
                 helper-text="Use oito ou mais caracteres com uma combinação de letras, números e símbolos"
                 class-helper-text="text-gray-600"
                 error-message="Senha inválida"
+                :type="showPassword? 'text' : 'password'"
                 :required="true"
                 :icon-path="mdiLock"
               />
               <CustomInput
                 name="confirmationPassword"
-                type="password"
                 label="Confirme Senha"
+                :type="showPassword? 'text' : 'password'"
                 :required="true"
                 :icon-path="mdiLock"
                 :custom-error-message="true"
               />
             </div>
+            <CustomCheckbox
+              label="Visualizar senhas"
+              name="showPassword"
+              @update:value="toggleShowPassword"
+            />
           </div>
         </div>
         <CustomButton type="submit">
@@ -132,6 +137,7 @@ import { Form } from 'vee-validate'
 import { object, string, ref as refYup } from 'yup'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 import router from 'src/router'
 import { models } from 'src/@types'
@@ -156,9 +162,14 @@ const schema = object().shape({
   confirmationPassword: string().required('Senha inválida').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida')
 })
 
-const registrationLength = ref(0)
-const setRegistrationLength = ($event: Event) => {
-  registrationLength.value = String($event).length
+const missingDigits = ref(0)
+const checkRegistrationLength = ($event: Event) => {
+  missingDigits.value = 12 - String($event).length
+}
+
+const showPassword = ref(false)
+const toggleShowPassword = () => {
+  showPassword.value = !showPassword.value
 }
 
 const handleSubmit = async (submitData: any) => {
@@ -217,5 +228,10 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
   /* Firefox */
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
 }
 </style>

@@ -29,10 +29,15 @@
           <CustomInput
             name="password"
             label="Senha"
-            type="password"
+            :type="showPassword? 'text' : 'password'"
             :icon-path="mdiLock"
             error-message="Informe a sua senha"
             required
+          />
+          <CustomCheckbox
+            label="Visualizar senha"
+            name="showPassword"
+            @update:value="toggleShowPassword"
           />
         </div>
         <p class="mb-14">
@@ -70,6 +75,7 @@ import { Form } from 'vee-validate'
 import { object, string } from 'yup'
 import { mdiAccount, mdiLock } from '@mdi/js'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useLoginStore } from 'src/store/LoginStore'
 import router from 'src/router'
 import { models } from 'src/@types'
@@ -82,6 +88,11 @@ const schema = object().shape({
   username: string().required(),
   password: string().required()
 })
+
+const showPassword = ref(false)
+const toggleShowPassword = () => {
+  showPassword.value = !showPassword.value
+}
 
 const handleSubmit = async (submitData: any) => {
   const loginData: LoginModel = submitData
@@ -104,3 +115,10 @@ const onInvalid = (e: any) => {
   console.log(e)
 }
 </script>
+
+<style>
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+</style>

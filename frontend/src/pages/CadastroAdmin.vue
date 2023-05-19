@@ -61,7 +61,7 @@
               <CustomInput
                 name="password"
                 label="Senha"
-                type="password"
+                :type="showPassword? 'text' : 'password'"
                 helper-text="Use oito ou mais caracteres com uma combinação de letras, números e símbolos"
                 class-helper-text="text-gray-600"
                 error-message="Senha inválida"
@@ -71,12 +71,17 @@
               <CustomInput
                 name="confirmationPassword"
                 label="Confirmar senha"
-                type="password"
+                :type="showPassword? 'text' : 'password'"
                 :required="true"
                 :icon-path="mdiLock"
                 :custom-error-message="true"
               />
             </div>
+            <CustomCheckbox
+              label="Visualizar senhas"
+              name="showPassword"
+              @update:value="toggleShowPassword"
+            />
           </div>
           <p class="text-blue-400 text-base font-bold mb-5 mt-7">
             Selecione o nível de acesso:
@@ -129,6 +134,7 @@ import { object, string, ref as refYup, number } from 'yup'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import { models } from 'src/@types'
@@ -164,6 +170,11 @@ const schema = object().shape({
   idAccessLevel: number()
 })
 
+const showPassword = ref(false)
+const toggleShowPassword = () => {
+  showPassword.value = !showPassword.value
+}
+
 const handleSubmit = async (submitData: any) => {
   const profileData: ProfileRegisterModel = submitData
 
@@ -192,3 +203,10 @@ const onInvalid = (e: any) => {
   console.log(e)
 }
 </script>
+
+<style>
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+</style>
