@@ -77,7 +77,7 @@
       }"
       v-show="meta.validated"
     >
-      {{ meta.valid? null : errorMessage }}
+      {{ meta.valid ? null : customErrorMessage? errorMessage : props.errorMessage }}
     </div>
 
     <div
@@ -118,7 +118,8 @@ interface Props {
   imgIcon?: boolean
   step?: number | string
   disabled?: boolean,
-  classHelperText?: string
+  classHelperText?: string,
+  customErrorMessage?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -135,7 +136,8 @@ const props = withDefaults(defineProps<Props>(), {
   minLength: 1,
   min: 0,
   step: 1,
-  classHelperText: ''
+  classHelperText: '',
+  customErrorMessage: false
 })
 
 const focused = ref(false)
@@ -148,7 +150,8 @@ const {
   value: inputValue,
   handleBlur,
   handleChange,
-  meta
+  meta,
+  errorMessage
 } = useField(name, undefined, {
   initialValue: props.value
 })

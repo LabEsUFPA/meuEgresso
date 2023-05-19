@@ -32,7 +32,7 @@
               <CustomInput
                 name="username"
                 label="Usuário"
-                helper-text="Use no mínimo quatro caracteres"
+                helper-text="Use no mínimo quatro caracteres sem espaços"
                 class-helper-text="text-gray-600"
                 error-message="Use apenas letras, números e os seguintes caracteres . _ -"
                 :required="true"
@@ -72,9 +72,9 @@
                 name="confirmationPassword"
                 label="Confirmar senha"
                 type="password"
-                error-message="As senhas informadas são diferentes"
                 :required="true"
                 :icon-path="mdiLock"
+                :custom-error-message="true"
               />
             </div>
           </div>
@@ -154,12 +154,12 @@ const setIdAccessLevel = (accessLevel: string) => {
 }
 
 const schema = object().shape({
-  name: string().required().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
-  username: string().required().matches(/^[a-z0-9_.-]{4,}$/),
+  name: string().required().trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
+  username: string().required().trim().matches(/^[a-z0-9_.-]{4,}$/),
   email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/),
   confirmationEmail: string().email().required().oneOf([refYup('email')]),
   password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/),
-  confirmationPassword: string().required().oneOf([refYup('password')]),
+  confirmationPassword: string().required('Senha inválida').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
   accessLevel: string().required(),
   idAccessLevel: number()
 })
