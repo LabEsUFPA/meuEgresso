@@ -68,6 +68,13 @@ public class AnuncioController {
 			.collect(Collectors.toList());
 	}
 
+	/**
+	 * Endpoint responsável por retornar a lista de anuncios filtrados
+	 *
+	 * @return {@link List<AnuncioDTO>} Lista de anuncio cadastrados
+	 * @author João Paulo, Lucas Cantão
+	 * @since 19/05/2023
+	 */
 	@GetMapping("/busca")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<AnuncioDTO> filtrarAnuncios(
@@ -76,33 +83,12 @@ public class AnuncioController {
 		@RequestParam(name = "maxValorSalario", defaultValue = "100000") Double maxValorSalario,
 		@RequestParam(name = "areaEmprego", defaultValue = "") Integer[] areaEmprego) {
 
-		List<AnuncioModel> filtro = anuncioService.findByDataExpiracaoBeforeAndTituloContainsIgnoreCaseAndSalarioBetweenAndAreaEmpregoIn(LocalDate.now(), titulo, minValorSalario, maxValorSalario, Arrays.asList(areaEmprego));
+		List<AnuncioModel> filtro = anuncioService.findBySearch(
+			BuscaAnuncioDTO.builder().titulo(titulo).minValorSalario(minValorSalario).maxValorSalario(maxValorSalario).areaEmprego(Arrays.asList(areaEmprego)).build());
 
 		return mapper.map(filtro, new TypeToken<List<AnuncioDTO>>() {}.getType());
 	}
 
-	/**
-	 * Endpoint responsável por retornar uma lista filtrada de anúncios.
-	 *
-	 * @param BuscaAnuncioDTO
-	 * @return {@link List<AnuncioDTO>} Lista de anúncios filtrada.
-	 * @author João Paulo, Lucas Cantão
-	 * @since 18/05/2023
-	 */
-	@PostMapping(value = "/busca")
-	@ResponseStatus(code = HttpStatus.OK)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<AnuncioDTO> findBy(@RequestBody BuscaAnuncioDTO buscaAnuncioDTO ) {
-
-		List<AnuncioDTO> anuncios = mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {}.getType());
-
-		return anuncios.stream()
-			.filter(anuncio -> LocalDate.now().isBefore(anuncio.getDataExpiracao()))
-			.filter(anuncio -> anuncio.getTitulo().contains(buscaAnuncioDTO.getTitulo()))
-			.filter(anuncio -> anuncio.getSalario() >= buscaAnuncioDTO.getMinValorSalario() && anuncio.getSalario() <= buscaAnuncioDTO.getMaxValorSalario())
-			.filter(anuncio -> buscaAnuncioDTO.getAreaEmprego().stream().anyMatch(area -> area.equals(anuncio.getAreaEmprego().getId())))
-			.collect(Collectors.toList());
-	}
 
 	/**
 	 * Endpoint responsavel por cadastrar o anuncio.

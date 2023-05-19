@@ -45,18 +45,14 @@ public class AnuncioServiceImpl implements AnuncioService {
     }
 
     public List<AnuncioModel> findBySearch(BuscaAnuncioDTO busca) {
-
         List<AnuncioModel> anuncios = anuncioRepository.findAll();
-
-        if (busca.getAreaEmprego().size() == 0) {
+        if (busca.getAreaEmprego().isEmpty()) {
             List<AreaEmpregoModel> areaEmprego = areaEmpregoRepository.findAll();
-            List<Integer> IdAreaEmprego = new ArrayList<>();
-
+            List<Integer> idAreaEmprego = new ArrayList<>();
             for (AreaEmpregoModel area : areaEmprego) {
-                IdAreaEmprego.add(area.getId());
+                idAreaEmprego.add(area.getId());
             }
-
-            busca.setAreaEmprego(IdAreaEmprego);
+            busca.setAreaEmprego(idAreaEmprego);
         }
 
         return anuncios.stream()
