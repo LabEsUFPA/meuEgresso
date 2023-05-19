@@ -300,7 +300,10 @@ public class EgressoController {
     @ResponseStatus(code = HttpStatus.OK)
     public Resource getFotoEgresso(@PathVariable Integer id) throws MalformedURLException, FileNotFoundException {
         EgressoModel egressoModel = egressoService.findById(id);
-        return egressoService.getFileAsResource(egressoModel.getFotoNome());
+        if (egressoModel.getFotoNome() != null) {
+            return egressoService.getFileAsResource(egressoModel.getFotoNome());
+        }
+        return null;
     }
 
     @ResponseStatus(code = HttpStatus.OK)
