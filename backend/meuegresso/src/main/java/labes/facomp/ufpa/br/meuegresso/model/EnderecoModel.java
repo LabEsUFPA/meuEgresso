@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
 @Entity(name = "endereco")
 @Table(uniqueConstraints = @UniqueConstraint(name = "enderecosunicos", columnNames ={ "cidade_endereco", "estado_endereco", "pais_endereco" }))
 @EqualsAndHashCode(callSuper = false)
-@Builder
 public class EnderecoModel extends Auditable {
 
     @Id

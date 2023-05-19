@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
+import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;

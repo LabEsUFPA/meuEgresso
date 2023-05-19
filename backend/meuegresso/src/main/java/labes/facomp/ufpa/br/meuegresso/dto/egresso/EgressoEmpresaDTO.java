@@ -1,8 +1,10 @@
 package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import jakarta.validation.Valid;
+import labes.facomp.ufpa.br.meuegresso.dto.areaatuacao.AreaAtuacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.setoratuacao.SetorAtuacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,8 +30,11 @@ public class EgressoEmpresaDTO {
     private EgressoPublicDTO egresso;
 
     private EmpresaDTO empresa;
-
-    private String areaAtuacao;
-
+    
     private FaixaSalarialDTO faixaSalarial;
+    
+    private AreaAtuacaoDTO areaAtuacao;
+
+    private SetorAtuacaoDTO setorAtuacao;
+
 }

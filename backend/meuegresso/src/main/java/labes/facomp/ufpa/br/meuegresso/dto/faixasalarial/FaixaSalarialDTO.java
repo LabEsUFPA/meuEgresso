@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class FaixaSalarialDTO {
     
     private Integer id;

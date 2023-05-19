@@ -73,8 +73,8 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
  * @author Eude Monteiro
  * @since 03/05/2023
  */
-class EgressoTitulacaoControllerTest {
-
+ class EgressoTitulacaoControllerTest {
+//TODO: consertar teste
     static final Integer TITULACAO_ID = 1;
     static final String NOME = "TituloTeste";
     static final String SETORATUACAO = "SetorTeste";
@@ -126,7 +126,6 @@ class EgressoTitulacaoControllerTest {
     EgressoTitulacaoDTO egressoTitulacaoDTO;
     EgressoTitulacaoModelId egressoTitulacaoModelId;
 
-    EgressoPublicDTO egressoDTO;
     EgressoModel egressoModel;
 
     FaixaSalarialDTO faixaSalarialDTO;
@@ -152,7 +151,7 @@ class EgressoTitulacaoControllerTest {
         /*Egresso */
         egressoModel = EgressoModel.builder().cotista(true).interesseEmPos(true).nascimento(LocalDate.parse("1999-10-20")).genero(genero).build();
         egressoModel = egressoRepository.save(this.egressoModel);
-        egressoDTO = modelMapper.map(egressoModel, EgressoPublicDTO.class);
+        //egressoPublicDTO = modelMapper.map(egressoModel, EgressoPublicDTO.class);
 
 
         /*ModelId */
@@ -164,7 +163,7 @@ class EgressoTitulacaoControllerTest {
         cursoDTO = modelMapper.map(cursoModel, CursoDTO.class);
 
         /*Empresa */
-        empresaModel = EmpresaModel.builder().nome(NOME).setorAtuacoes(null).endereco(null).build();
+        empresaModel = EmpresaModel.builder().nome("EmpresaTeste").endereco(null).build();
         empresaModel = empresaRepository.save(empresaModel);
         empresaDTO = modelMapper.map(empresaModel, EmpresaDTO.class);
 
@@ -174,10 +173,10 @@ class EgressoTitulacaoControllerTest {
         titulacaoDTO = modelMapper.map(titulacaoModel, TitulacaoDTO.class);
 
         /*EgressoTitulacao */
-        egressoTitulacaoDTO = EgressoTitulacaoDTO.builder().egresso(egressoDTO)
-                                                           .empresa(empresaDTO)
-                                                           .curso(cursoDTO)
-                                                           .titulacao(titulacaoDTO).build();
+        egressoTitulacaoDTO = EgressoTitulacaoDTO.builder().id(egressoTitulacaoModelId)
+                    .empresa(empresaDTO)
+                    .curso(cursoDTO)
+                    .titulacao(titulacaoDTO).build();
 
         GrupoModel grupoModel = new GrupoModel();
         grupoModel.setNomeGrupo("ADMIN");

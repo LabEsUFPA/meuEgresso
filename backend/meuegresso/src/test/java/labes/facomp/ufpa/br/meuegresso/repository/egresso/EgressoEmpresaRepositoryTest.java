@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
@@ -22,11 +23,14 @@ import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
+import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.areaatuacao.AreaAtuacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.setoratuacao.SetorAtuacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 /**
@@ -61,6 +65,12 @@ class EgressoEmpresaRepositoryTest {
     @Autowired
     private GrupoRepository grupoRepository;
 
+    @Autowired
+    private AreaAtuacaoRepository areaAtuacaoRepository;
+
+    @Autowired
+    private SetorAtuacaoRepository setorAtuacaoRepository;
+
     private GrupoModel grupoModel;
 
     private GeneroModel generoModel;
@@ -74,6 +84,10 @@ class EgressoEmpresaRepositoryTest {
     private EmpresaModel empresaModel;
 
     private FaixaSalarialModel faixaSalarialModel;
+
+    private AreaAtuacaoModel areaAtuacaoModel;
+
+    private SetorAtuacaoModel setorAtuacaoModel;
 
     @BeforeEach
     void setUp() {
@@ -124,14 +138,28 @@ class EgressoEmpresaRepositoryTest {
         faixaSalarialModel = new FaixaSalarialModel();
         faixaSalarialModel.setId(1);
         faixaSalarialModel.setFaixa("1000-2000");
-
+        
         faixaSalarialModel = faixaSalarialRepository.save(faixaSalarialModel);
+
+        areaAtuacaoModel = new AreaAtuacaoModel();
+        areaAtuacaoModel.setId(1);
+        areaAtuacaoModel.setNome("areaTeste");
+
+        areaAtuacaoModel = areaAtuacaoRepository.save(areaAtuacaoModel);
+
+        setorAtuacaoModel = new SetorAtuacaoModel();
+        setorAtuacaoModel.setId(1);
+        setorAtuacaoModel.setNome("setorTeste");
+
+        setorAtuacaoModel = setorAtuacaoRepository.save(setorAtuacaoModel);
 
         egressoEmpresaModel = new EgressoEmpresaModel();
         egressoEmpresaModel.setId(egressoEmpresaModelId);
         egressoEmpresaModel.setEgresso(egressoModel);
         egressoEmpresaModel.setEmpresa(empresaModel);
         egressoEmpresaModel.setFaixaSalarial(faixaSalarialModel);
+        egressoEmpresaModel.setAreaAtuacao(areaAtuacaoModel);
+        egressoEmpresaModel.setSetorAtuacao(setorAtuacaoModel);
         egressoEmpresaModel.setCreatedBy(usuarioModel);
 
         egressoEmpresaModel = egressoEmpresaRepository.save(egressoEmpresaModel);

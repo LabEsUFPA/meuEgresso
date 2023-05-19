@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import labes.facomp.ufpa.br.meuegresso.dto.areaatuacao.AreaAtuacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
@@ -41,20 +42,25 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.setoratuacao.SetorAtuacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
+import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.areaatuacao.AreaAtuacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.setoratuacao.SetorAtuacaoRepository;
 
 @SpringBootTest
 @DirtiesContext
@@ -64,7 +70,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @TestMethodOrder(OrderAnnotation.class)
 class EgressoEmpresaControllerTest {
 
-    static final Integer EMRPESA_ID = 1;
+    static final Integer EMPRESA_ID = 1;
     static final String NOME = "EmpresaTeste";
     static final String SETORATUACAO = "SetorTeste";
 
@@ -91,6 +97,12 @@ class EgressoEmpresaControllerTest {
 
     @Autowired
     private FaixaSalarialRepository faixaSalarialRepository;
+
+    @Autowired
+    private AreaAtuacaoRepository areaAtuacaoRepository;
+
+    @Autowired
+    private SetorAtuacaoRepository setorAtuacaoRepository;
 
     @Autowired
     MockMvc mockMvc;
@@ -130,22 +142,32 @@ class EgressoEmpresaControllerTest {
         egressoRepository.save(this.egressoModel);
 
         /* Empresa */
-        empresaDTO = EmpresaDTO.builder().id(EGRESSO_ID).nome(NOME).setorAtuacao(SETORATUACAO)
+        empresaDTO = EmpresaDTO.builder().id(EMPRESA_ID).nome(NOME).setorAtuacao(SETORATUACAO)
                 .faixaSalarialId(FAIXASALARIAL_ID).build();
         empresaModel = modelMapper.map(empresaDTO, EmpresaModel.class);
         empresaRepository.save(empresaModel);
 
         /* ModelId */
-        egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(EGRESSO_ID).empresaId(EMRPESA_ID).build();
+        egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(EGRESSO_ID).empresaId(EMPRESA_ID).build();
 
         /* FaixaSalarial */
         faixaSalarialDTO = FaixaSalarialDTO.builder().id(FAIXASALARIAL_ID).faixa(FAIXASALARIAL).build();
         FaixaSalarialModel faixaSalarialModel = modelMapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
         faixaSalarialRepository.save(faixaSalarialModel);
 
+        /* AreaAtuacao */
+        AreaAtuacaoDTO areaAtuacaoDTO= AreaAtuacaoDTO.builder().id(1).nome("areaTeste").build();
+        AreaAtuacaoModel areaAtuacaoModel = modelMapper.map(areaAtuacaoDTO, AreaAtuacaoModel.class);
+        areaAtuacaoRepository.save(areaAtuacaoModel);
+
+        /* SetorAtuacao */
+        SetorAtuacaoDTO setorAtuacaoDTO= SetorAtuacaoDTO.builder().id(1).nome("setorTeste").build();
+        SetorAtuacaoModel setorAtuacaoModel = modelMapper.map(setorAtuacaoDTO, SetorAtuacaoModel.class);
+        setorAtuacaoRepository.save(setorAtuacaoModel);
+
         /* EgressoEmpresa */
         egressoEmpresaDTO = EgressoEmpresaDTO.builder().id(egressoEmpresaModelId).egresso(egressoPublicDTO)
-                .empresa(empresaDTO).areaAtuacao(SETORATUACAO).faixaSalarial(faixaSalarialDTO).build();
+                .empresa(empresaDTO).areaAtuacao(areaAtuacaoDTO).setorAtuacao(setorAtuacaoDTO).faixaSalarial(faixaSalarialDTO).build();
 
         GrupoModel grupoModel = new GrupoModel();
         grupoModel.setNomeGrupo("ADMIN");
@@ -218,6 +240,7 @@ class EgressoEmpresaControllerTest {
     @Test
     @Order(2)
     void testFindById() throws Exception {
+        //TODO: fazer setorAtuacaoController e areaAtuacaoController pra funcionar
 
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 

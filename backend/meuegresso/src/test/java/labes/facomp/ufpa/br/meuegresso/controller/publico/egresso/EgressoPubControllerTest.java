@@ -74,27 +74,33 @@ class EgressoPubControllerTest {
 		Set<GrupoDTO> grupos = new HashSet<>();
 		grupos.add(grupo);
 		DepoimentoDTO depoimento = new DepoimentoDTO(1, "TextoDepoimento");
-		ContribuicaoDTO contribuicao = new ContribuicaoDTO(1, "TextoContribuicao");
-
+		ContribuicaoDTO contribuicao = new ContribuicaoDTO();
+		
 		UsuarioDTO usuario = UsuarioDTO.builder()
-				.username("username")
-				.nome("nome_test")
-				.email("teste@gmail.com")
-				.password("teste123")
-				.grupos(grupos)
-				.build();
-
+		.username("username")
+		.nome("nome_test")
+		.email("teste@gmail.com")
+		.password("teste123")
+		.grupos(grupos)
+		.build();
+		
 		egressoModel.setId(1);
 		egressoModel.setUsuario(mapper.map(usuario, UsuarioModel.class));
 		egressoModel.setMatricula("202003940011");
 		egressoModel.setNascimento(LocalDate.parse("1999-10-20"));
 		egressoModel.setGenero(mapper.map(genero, GeneroModel.class));
 		egressoModel.setDepoimento(mapper.map(depoimento, DepoimentoModel.class));
+		
+		contribuicao.setId(1);
+		contribuicao.setDescricao("TextoContribuicao");
+		contribuicao.setEgressoId(egressoModel.getId());
+		
 		egressoModel.setContribuicao(mapper.map(contribuicao, ContribuicaoModel.class));
-
+		
 		// No banco vai ter conflito de valores unicos, mas pro teste basta
 		egressosModel.add(egressoModel);
 		egressosModel.add(egressoModel);
+		
 	}
 
 	@Test

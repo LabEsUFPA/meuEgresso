@@ -36,7 +36,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
@@ -77,7 +76,7 @@ class EgressoControllerTest {
 
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-        EgressoPublicDTO egressoPublicDTO;
+        EgressoDTO egressoDTO;
 
         EgressoCadastroDTO egressoCadastro;
 
@@ -170,7 +169,7 @@ class EgressoControllerTest {
 				.andExpect(status().isOk()).andReturn();
 
             EgressoDTO egresso = objectMapper.readValue(resposta.getResponse().getContentAsString(),EgressoDTO.class);
-            egressoPublicDTO = modelMapper.map(egresso, EgressoPublicDTO.class);
+            egressoDTO = modelMapper.map(egresso, EgressoDTO.class);
 
             assertEquals(egressoCadastro.getMatricula(), egresso.getMatricula());
         }
@@ -182,7 +181,7 @@ class EgressoControllerTest {
             MvcResult resposta = mockMvc.perform(
                     MockMvcRequestBuilders.put("/egresso")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(egressoPublicDTO))
+                            .content(objectMapper.writeValueAsString(egressoDTO))
                             .header("Authorization", "Bearer " + this.token))
                             .andDo(MockMvcResultHandlers.print())
                             .andExpect(status().isAccepted()).andReturn();
@@ -197,7 +196,7 @@ class EgressoControllerTest {
             MvcResult resposta = mockMvc.perform(
 				MockMvcRequestBuilders.delete("/egresso")
 						.contentType(MediaType.APPLICATION_JSON)
-						.param("id", egressoPublicDTO.getId().toString())
+						.param("id", egressoDTO.getId().toString())
 						.header("Authorization", "Bearer " + this.token))
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isOk()).andReturn();
