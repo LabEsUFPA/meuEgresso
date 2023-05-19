@@ -6,7 +6,8 @@
       <!-- <ProfileHead /> -->
       <!-- Head Start-->
       <!--:native="true"-->
-      <ProfileImage img-url="src/assets/profile-pic.png" />
+      <div class="ml-[20px] mt-[20px]" />
+
       <div class="items-center flex relative w-[7000px] flex-col">
         <Form
           @submit="handleSubmitHeader"
@@ -32,13 +33,20 @@
           />
 
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
-            <img
+            <!-- <img
               class="ml-[200px] mt-[37px] w-[120px] h-[120px] rounded-full"
               :src="imageEgresso"
 
               alt="Avatar"
-            >
+            > -->
 
+            <ProfileImage
+              ref="ProfileImageRef"
+              img-url=""
+              img-default="src/assets/profile-pic.png"
+              :is-input="dataEgresso.profileHead.isInput"
+              :trigger-back-upload="dataEgresso.profileHead.isInput"
+            />
             <h1 class="mt-[5px] ml-[100px] ">
               <ButtonEdit
                 label="Editar"
@@ -939,6 +947,8 @@ function handleStatus (status : any) {
 async function handleSubmitHeader (values: any) {
   console.log('handleSubmitHeader')
   toggleIsInput('profileHead')
+  ProfileImage.$refs.ProfileImageRef.triggerProfilePic()
+  dataEgresso.value.profileHead.isInput = true
   console.log(values)
   // futuro add foto
   jsonResponse.usuario.nome = values.geral.nome
@@ -946,6 +956,7 @@ async function handleSubmitHeader (values: any) {
   jsonResponse.lattes = values.geral.lattes
   console.log(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const statusImage = await egressoStore.uploadImageEgresso()
   handleStatus(status)
   await useLoginStore().saveUser()
   fetchUpdateEgresso()
@@ -1079,6 +1090,7 @@ function toggleIsInput (FolderLabel: string) {
   switch (FolderLabel) {
     case 'profileHead':
       dataEgresso.value.profileHead.isInput = !dataEgresso.value.profileHead.isInput
+
       break
     case 'geral':
       dataEgresso.value.geral.isInput = !dataEgresso.value.geral.isInput
@@ -1314,7 +1326,8 @@ const dataEgresso = ref({
     nome: '',
     linkedin: '',
     lattes: '',
-    isInput: false
+    isInput: false,
+    triggerBackUpload: false
   }
 })
 
@@ -1567,7 +1580,8 @@ async function fetchUpdateEgresso () {
       nome: userData.nome,
       linkedin: json.linkedin || '',
       lattes: json.lattes || '',
-      isInput: false
+      isInput: false,
+      triggerBackUpload: false
     }
   }
 

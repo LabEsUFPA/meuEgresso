@@ -240,7 +240,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       })
       return (response?.status) !== undefined ? response.status : 500
     },
-
+    
     async uploadImageEgresso (file: File) {
       console.log(file)
       const formData = new FormData()
@@ -253,6 +253,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       })
       // maxContentLength: 5 * 1024 * 1024 // 5 MB
       console.log(response.data)
+      return (response?.status) !== undefined ? response.status : 500
     },
 
     async handleFileUpload (event: Event) {
