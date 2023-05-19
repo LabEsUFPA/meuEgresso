@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col md:flex-row md:justify-center items-center p-2 relative h-full">
-    <div class="rounded-xl border border-gray-400 overflow-hidden h-96 w-96 md:h-[600px] md:w-full md:max-w-3xl">
+    <div class="rounded-xl border border-gray-400 overflow-hidden h-96 w-96 md:h-[600px] md:w-full md:max-w-screen">
       <div
         class="w-full h-full"
         id="mapContainer"
@@ -112,9 +112,10 @@
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import { ref, onMounted, computed } from 'vue'
+import { Country, State } from 'country-state-city'
+import CustomButton from 'src/components/CustomButton.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronLeft, mdiChevronRight, mdiInformation, mdiMapMarker } from '@mdi/js'
-import { Country, State } from 'country-state-city'
 import { type models } from 'src/@types'
 interface EgressoMapa extends models.EgressoMapa {}
 
@@ -127,7 +128,6 @@ defineEmits(['select'])
 const selectedMarker = ref<EgressoMapa[]>([])
 function selectMarker ($event: L.LeafletEvent) {
   const latLng = $event.target._latlng
-  console.log(latLng)
   const clickedMarkerKey = `${latLng.lat}:${latLng.lng}`
   selectedMarker.value = props.egressList.get(clickedMarkerKey) || []
 }
@@ -147,15 +147,15 @@ onMounted(() => {
 })
 
 const createMapLayer = () => {
-  map = L.map('mapContainer').setView([51.5085300, -0.1257400], 2)
+  map = L.map('mapContainer').setView([-15.7801, -47.9292], 4)
   L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    noWrap: true
   }).addTo(map)
 
   const setMarkers = () => {
-    console.log(props.egressList.get('-1:-48'))
     props.egressList.forEach((mapElement, index) => {
-      return L.circleMarker(getLatLng(index)).addTo(map).on('click', selectMarker)
+      L.circleMarker(getLatLng(index)).addTo(map).on('click', selectMarker)
     })
   }
   setMarkers()
@@ -170,7 +170,6 @@ const egressosPaginados = computed<EgressoMapa[]>(() => {
 })
 
 const maxPages = computed(() => {
-  console.log(selectedMarker.value.length, maxEntries, Math.ceil(selectedMarker.value.length / maxEntries) - 1)
   return Math.ceil(selectedMarker.value.length / maxEntries) - 1
 })
 </script>
