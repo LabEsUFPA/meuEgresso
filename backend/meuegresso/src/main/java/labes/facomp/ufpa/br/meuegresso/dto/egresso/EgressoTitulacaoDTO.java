@@ -22,15 +22,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EgressoTitulacaoDTO {
 
-    @Builder.Default
-    private EgressoTitulacaoModelId id = new EgressoTitulacaoModelId();
+    private EgressoTitulacaoModelId id;
 
-    private EgressoPublicDTO egresso;
-
-    private TitulacaoDTO titulacao;
+    private CursoDTO curso;
 
     private EmpresaDTO empresa;
 
-    private CursoDTO curso;
+    private TitulacaoDTO titulacao;
 
 }

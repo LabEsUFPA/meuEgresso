@@ -1,5 +1,11 @@
 <template>
+  <!-- Ftre selecionar visivel ou desabilitado pela prop por nivel de acesso -->
+
   <div
+    v-if="vmodel || visible"
+    :class="{
+      'opacity-50': !enabled || !vmodel
+    }"
     class="flex-auto relative"
     alt="one"
   >
@@ -28,17 +34,22 @@
 
           <CustomInput
             v-if="isinput"
+            :name="name"
             :type="type"
             icon-path=""
-            :model-value="modelValue"
+            :model-value="name"
             :v-model="vmodel"
             label=""
             helper-text=""
             :placeholder="placeholder"
           />
+          <!-- <slot name="title" />
+          <slot -->
           <div v-else>
-            <div v-if="modelValue">
-              {{ modelValue }}
+            <div v-if="vmodel">
+              <div class="whitespace-pre-wrap">
+                {{ vmodel }}
+              </div>
             </div>
 
             <div v-else>
@@ -55,12 +66,12 @@
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomInput from 'src/components/CustomInput.vue'
 
-defineEmits(['update:modelValue'])
+defineEmits(['update:name'])
 
 type inputs = 'date' | 'text' | 'email' | 'number' | 'password';
 
 interface Props {
-  modelValue?: string;
+  name?: string;
   label?: string;
   helperText?: string;
   placeholder?: string;
@@ -72,24 +83,11 @@ interface Props {
   isinput?: boolean;
   vmodel?: string;
   iconSize?: string;
+  visible?: boolean;
+  enabled?: boolean;
 }
-
-// interface Props {
-//   modelValue: string;
-//   label: string;
-//   helperText?: string;
-//   placeholder?: string;
-//   type: inputs;
-//   iconPath?: string;
-//   inputClass?: string;
-//   required?: boolean;
-//   mask?: string;
-//   isinput?: boolean;
-//   vmodel: string;
-// }
-
 withDefaults(defineProps<Props>(), {
-  modelValue: '',
+  name: '',
   label: '',
   type: 'text',
   iconPath: '',
@@ -99,6 +97,8 @@ withDefaults(defineProps<Props>(), {
   placeholder: 'placeholder',
   isinput: false,
   vmodel: '',
-  iconSize: '20'
+  iconSize: '20',
+  visible: false,
+  enabled: true
 })
 </script>

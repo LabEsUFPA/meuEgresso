@@ -1,60 +1,48 @@
 <template>
-  <a
-    v-if="url === '' "
-    :href="'' + placeholder"
-    target="_blank"
-  >
+  <div v-if="mode === 'link'">
+    <a
+      :href="'' + urlComp"
+      target="_blank"
+      @handleClick.prevent="handleClick"
+    >
+      <button
+        :class="styles"
+        :type="type"
+      >
+        <img
+          :class="classimg"
+          :src="iconPath"
+          :width="iconSize"
+          :height="iconSize"
+          alt="link"
+        >
+        <h1 class="text-sky-600 outline-sky-600 text-base font-bold ml-3 mr-2"><slot>{{ label }}</slot></h1>
+      </button>
+    </a>
+  </div>
+  <div v-if="mode === 'input'">
     <button
-
+      class="fakebutton hover:bg-white/90"
       :class="styles"
       :type="type"
-      @click="$emit('click')"
     >
       <img
         :class="classimg"
         :src="iconPath"
         :width="iconSize"
         :height="iconSize"
-        alt="link"
       >
-      <h1
-        class="text-sky-600 outline-sky-600 text-base font-bold mt- ml-3 mb mr-2"
-      >
-        <slot>{{ label }}</slot>
+      <h1 class="text-sky-600 outline-sky-600 text-base font-bold ml-3 mr-2">
+        <slot name="input" />
       </h1>
     </button>
-  </a>
-  <a
-    v-else
-    :href="'' + url"
-    target="_blank"
-  >
-    <button
-
-      :class="styles"
-      :type="type"
-      @click="$emit('click')"
-    >
-      <img
-        :class="classimg"
-        :src="iconPath"
-        :width="iconSize"
-        :height="iconSize"
-        alt="link"
-      >
-      <h1
-        class="text-sky-600 outline-sky-600 text-base font-bold mt- ml-3 mr-2"
-      >
-        <slot>{{ label }}</slot>
-      </h1>
-    </button>
-  </a>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
 
-defineEmits(['click'])
+defineEmits(['handleClick'])
 
 interface Props {
   label?: string;
@@ -76,6 +64,7 @@ interface Props {
   classimg?: string;
   placeholder?: string;
   iconSize?: string;
+  mode?: 'link' | 'input'
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -90,9 +79,13 @@ const props = withDefaults(defineProps<Props>(), {
   iconType: 'mdi',
   classimg: 'normal',
   placeholder: '',
-  iconSize: '20'
+  iconSize: '20',
+  mode: 'link'
 })
 
+const handleClick = (clickUrl : string) => {
+  window.open(clickUrl, '_blank')
+}
 // objeto mapeia a props 'color' para as classes tailwind correspondentes
 // NOTA - NÃO CRIAR NOMES DE CLASSES PROGRAMATICAMENTE: https://tailwindcss.com/docs/content-configuration#dynamic-class-names
 const colorClassNames = {
@@ -179,6 +172,18 @@ const colorClassNames = {
   }
 }
 
+const urlComp = computed(() => {
+  let url = ''
+
+  if (props.url === '') {
+    url = props.url + props.placeholder
+  } else if (props.url.startsWith('http://') || props.url.startsWith('https://')) {
+    url = props.url
+  } else {
+    url = 'http://' + props.url
+  }
+  return url
+})
 const styles = computed(() => {
   // const classes = ['items-center rounded-lg flex ml- px-2.5 py-1 relative text-lg font-semibold hover:duration-200']
   const classes = [
@@ -217,6 +222,7 @@ const styles = computed(() => {
 
   return classes.join(' ')
 })
+
 </script>
 
 <style>

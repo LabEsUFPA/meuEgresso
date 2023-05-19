@@ -12,4 +12,6 @@ public interface SetorAtuacaoRepository extends CrudRepository<SetorAtuacaoModel
     List<SetorAtuacaoModel> findAll();
 
     Optional<SetorAtuacaoModel> findByNomeIgnoreCase(String nome);
+
+    boolean existsByNomeIgnoreCase(String nome);
 }

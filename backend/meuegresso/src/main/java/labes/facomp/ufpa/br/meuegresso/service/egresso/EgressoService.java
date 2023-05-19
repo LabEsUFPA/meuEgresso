@@ -13,15 +13,18 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
  */
 public interface EgressoService {
 
+	
+	public EgressoModel findByUsuarioId(Integer idUsuario);
+	
+	public EgressoModel findById(Integer idEgresso);
+	
 	/**
 	 * Método responsável por encontrar todos os egressoEmpresas cadastrados.
 	 *
 	 * @return Lista de objetos da classe EgressoModel.
 	 */
 	public List<EgressoModel> findAll();
-
-	public EgressoModel findByUsuarioId(Integer idUsuario);
-
+	
 	public EgressoModel save(EgressoModel egresso);
 
 	/**
@@ -60,7 +63,7 @@ public interface EgressoService {
 	 * partir do id.
 	 *
 	 * @param id Id do egresso
-	 * @return Vazio.
+	 * @return
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
@@ -71,7 +74,8 @@ public interface EgressoService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return boolean
 	 */
 	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
 }

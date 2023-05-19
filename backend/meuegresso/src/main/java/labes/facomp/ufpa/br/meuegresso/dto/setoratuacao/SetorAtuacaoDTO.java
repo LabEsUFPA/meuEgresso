@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SetorAtuacaoDTO {
 
-        private Integer id;
+	private Integer id;
 
-        private String nome;
+	private String nome;
 
 }

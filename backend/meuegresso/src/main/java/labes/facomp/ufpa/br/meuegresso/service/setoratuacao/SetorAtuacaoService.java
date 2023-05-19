@@ -54,4 +54,6 @@ public interface SetorAtuacaoService {
 
 	public SetorAtuacaoModel findByNome(String nome);
 
+	public boolean existByNome(String nome);
+
 }

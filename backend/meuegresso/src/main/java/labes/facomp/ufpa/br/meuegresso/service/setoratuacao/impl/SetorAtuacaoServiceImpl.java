@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
-public class SetorAtuacaoImpl implements SetorAtuacaoService {
+public class SetorAtuacaoServiceImpl implements SetorAtuacaoService {
 
     private final SetorAtuacaoRepository setorAtuacaoRepository;
 
@@ -59,6 +59,11 @@ public class SetorAtuacaoImpl implements SetorAtuacaoService {
     @Override
     public SetorAtuacaoModel findByNome(String nome) {
         return setorAtuacaoRepository.findByNomeIgnoreCase(nome).orElse(null);
+    }
+
+    @Override
+    public boolean existByNome(String nome) {
+        return setorAtuacaoRepository.existsByNomeIgnoreCase(nome);
     }
 
 }

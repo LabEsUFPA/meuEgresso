@@ -30,14 +30,19 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
-    public List<EgressoModel> findAll() {
-        return egressoRepository.findAll();
-    }
-
-    @Override
     @Transactional
     public EgressoModel findByUsuarioId(Integer idUsuario) {
         return egressoRepository.findByUsuarioId(idUsuario).orElseThrow();
+    }
+
+    @Override
+    public EgressoModel findById(Integer idEgresso) {
+        return egressoRepository.findById(idEgresso).orElseThrow();
+    }
+
+    @Override
+    public List<EgressoModel> findAll() {
+        return egressoRepository.findAll();
     }
 
     /**
@@ -49,6 +54,7 @@ public class EgressoServiceImpl implements EgressoService {
      * @since 16/04/2023
      */
     @Override
+    @Transactional
     public EgressoModel update(EgressoModel egresso) {
         if (egresso.getId() != null) {
             return egressoRepository.save(egresso);
