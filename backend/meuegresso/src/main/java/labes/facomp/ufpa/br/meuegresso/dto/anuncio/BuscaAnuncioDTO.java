@@ -5,6 +5,13 @@ import java.util.List;
 
 import lombok.Data;
 
+/**
+ * Objeto para receber os filtros da busca de anúncio
+ *
+ * @author João Paulo, Lucas Cantão
+ * @since 18/05/2023
+ * @version 1.0
+ */
 @Data
 public class BuscaAnuncioDTO {
 

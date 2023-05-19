@@ -11,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,32 +60,32 @@ public class AnuncioController {
 	@GetMapping
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<AnuncioDTO> consultarAnuncios() {
-		List<AnuncioDTO> Anuncios = mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {}.getType());
-		return Anuncios.stream()
+		List<AnuncioDTO> anuncios = mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {}.getType());
+		return anuncios.stream()
 			.filter(anuncio -> LocalDate.now().isBefore(anuncio.getDataExpiracao()))
 			.collect(Collectors.toList());
 	}
 
 	/**
-	 * Endpoint responsável por retornar um anuncio por sua ID.
+	 * Endpoint responsável por retornar uma lista filtrada de anúncios.
 	 *
-	 * @param id Integer
-	 * @return {@link AnuncioDTO} Dados gravados no banco.
-	 * @author Alfredo Gabriel, Camilo Santos
-	 * @since 21/04/2023
+	 * @param BuscaAnuncioDTO
+	 * @return {@link List<AnuncioDTO>} Lista de anúncios filtrada.
+	 * @author João Paulo, Lucas Cantão
+	 * @since 18/05/2023
 	 */
 	@PostMapping(value = "/busca")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<AnuncioDTO> findBy(@RequestBody BuscaAnuncioDTO buscaAnuncioDTO ) {
 		
-		List<AnuncioDTO> Anuncios = mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {}.getType());
+		List<AnuncioDTO> anuncios = mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {}.getType());
 		
-		return Anuncios.stream()
+		return anuncios.stream()
 			.filter(anuncio -> LocalDate.now().isBefore(anuncio.getDataExpiracao()))
 			.filter(anuncio -> anuncio.getTitulo().contains(buscaAnuncioDTO.getTitulo()))
 			.filter(anuncio -> anuncio.getSalario() >= buscaAnuncioDTO.getMinValorSalario() && anuncio.getSalario() <= buscaAnuncioDTO.getMaxValorSalario())
-			.filter(anuncio -> buscaAnuncioDTO.getAreaEmprego().stream().anyMatch(area -> area == anuncio.getAreaEmprego().getId()))
+			.filter(anuncio -> buscaAnuncioDTO.getAreaEmprego().stream().anyMatch(area -> area.equals(anuncio.getAreaEmprego().getId())))
 			.collect(Collectors.toList());
 	}
 
