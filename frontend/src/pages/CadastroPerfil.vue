@@ -33,7 +33,7 @@
               <CustomInput
                 name="username"
                 label="Usuário"
-                helper-text="Use mínimo quatro caracteres"
+                helper-text="Use no mínimo quatro caracteres"
                 class-helper-text="text-gray-600"
                 error-message="Use apenas letras, números e os seguintes caracteres . _ -"
                 :required="true"
