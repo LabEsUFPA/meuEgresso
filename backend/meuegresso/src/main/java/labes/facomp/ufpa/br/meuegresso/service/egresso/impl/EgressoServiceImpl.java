@@ -1,5 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.service.egresso.impl;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -43,6 +46,24 @@ public class EgressoServiceImpl implements EgressoService {
     @Override
     public List<EgressoModel> findAll() {
         return egressoRepository.findAll();
+    }
+
+    /**
+     *
+     *
+     * 
+     * @return idades após serem calculadas com base nas datas de nascimento.
+     * @author Pedro Inácio
+     * @since 19/05/2023
+     */
+    @Override
+    public List<Integer> findAllIdades() {
+        List<EgressoModel> lista = egressoRepository.findAll();
+        List<Integer> idades = new ArrayList<Integer>();
+        for(int i=0; i< lista.size(); i++){
+            idades.add(Period.between(lista.get(i).getNascimento(), LocalDate.now()).getYears());
+        }
+        return idades;
     }
 
     /**
