@@ -7,7 +7,6 @@
       <!-- Head Start-->
       <!--:native="true"-->
       <div class="ml-[20px] mt-[20px]" />
-
       <div class="items-center flex relative w-[7000px] flex-col">
         <Form
           @submit="handleSubmitHeader"
@@ -41,8 +40,9 @@
             > -->
 
             <ProfileImage
-              ref="ProfileImageRef"
-              img-url=""
+              ref="profileImageRef"
+              @imageUploadBack="profileImageSave"
+              :img-url="imageEgressoUrl"
               img-default="src/assets/profile-pic.png"
               :is-input="dataEgresso.profileHead.isInput"
               :trigger-back-upload="dataEgresso.profileHead.isInput"
@@ -943,11 +943,17 @@ function handleStatus (status : any) {
     dialogSucesso.value = true
   }
 }
-
+const profileImageRef = ref(null)
+const profileImageSave = () => {
+  profileImageRef.value.imageUploadBack()
+}
 async function handleSubmitHeader (values: any) {
   console.log('handleSubmitHeader')
   toggleIsInput('profileHead')
-  ProfileImage.$refs.ProfileImageRef.triggerProfilePic()
+
+  // profileImageRef.value.triggerProfilePic()
+  profileImageSave()
+  // ProfileImage.$refs.ProfileImageRef.triggerProfilePic()
   dataEgresso.value.profileHead.isInput = true
   console.log(values)
   // futuro add foto
@@ -956,7 +962,7 @@ async function handleSubmitHeader (values: any) {
   jsonResponse.lattes = values.geral.lattes
   console.log(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
-  const statusImage = await egressoStore.uploadImageEgresso()
+  // const statusImage = await egressoStore.uploadImageEgresso()
   handleStatus(status)
   await useLoginStore().saveUser()
   fetchUpdateEgresso()
@@ -1438,23 +1444,26 @@ const stateFolders = ref({
   }
 })
 let egressoImageResponse : any
-let imageEgresso : any
-handleEgressoImage()
+let imageEgressoUrl = ''
+imageEgressoUrl = handleEgressoImage()
+
 async function handleEgressoImage () {
   egressoImageResponse = await egressoStore.fetchImageEgresso('1')
-  const blob = new Blob([egressoImageResponse.data], { type: 'image/png' })
-
-  const url = URL.createObjectURL(blob)
-  // const link = document.createElement('a')
-  console.log('url')
-  console.log(url)
-  imageEgresso = url
   if (egressoImageResponse === undefined) {
-    return '/src/assets/profile-pic.png'
+    return ''
   } else {
+    const blob = new Blob([egressoImageResponse.data], { type: 'image/png' })
+    const url = URL.createObjectURL(blob)
+    // const link = document.createElement('a')
+    console.log('url')
+    console.log(url)
+    imageEgressoUrl = url
     return url
   }
 }
+watch(imageEgressoUrl, () => {
+  ProfileImage.value?.setFieldValue('img-url', '123')
+})
 let jsonResponse : any
 let userData : any
 let egressoResponseBack: any

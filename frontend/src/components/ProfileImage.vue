@@ -61,7 +61,7 @@
                      w-[120px]
                      h-[120px]
                     rounded-full"
-        :src="imgDefault"
+        :src="imgUrl"
         alt="Uploaded image"
       >
       <span
@@ -137,24 +137,23 @@ function getObjectURL (file: File) {
   return URL.createObjectURL(file)
 }
 
-// watch(imageEgressoUrl, () => {
-//   if(){
-
+function imageUploadBack () {
+  egressoStore.uploadImageEgresso(imageEgressoFile)
+}
+// if (props.triggerBackUpload) {
+//   if (imageEgressoFile !== undefined) {
+//     egressoStore.uploadImageEgresso(imageEgressoUrl)
 //   }
-// })
-function triggerProfilePic () {
-  console.log('trigger 231231231231231')
-}
-if (props.triggerBackUpload) {
-  if (imageEgressoFile !== undefined) {
-    egressoStore.uploadImageEgresso(imageEgressoUrl)
-  }
-}
+// }
 const styleImageInput = computed(() => {
   const imageStyle = [' hover:duration-200 w-[120px] h-[120px] absolute z-10 rounded-full']
   if (props.isInput) {
     imageStyle.push('bg-gray-700/70 hover:bg-gray-700/50')
   }
   return imageStyle
+})
+
+defineExpose({
+  imageUploadBack
 })
 </script>
