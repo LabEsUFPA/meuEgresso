@@ -1,8 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.service.anuncio;
 
-import java.time.LocalDate;
 import java.util.List;
 
+import labes.facomp.ufpa.br.meuegresso.dto.anuncio.BuscaAnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 
@@ -32,10 +32,20 @@ public interface AnuncioService {
 	public AnuncioModel findById(Integer id);
 
 	/**
+	 * Método responsável por encontrar todos os anuncios cadastrados validos pelo
+	 * filtro passado.
+	 *
+	 * @return Lista de objetos da classe AnuncioModel.
+	 */
+
+	public List<AnuncioModel> findBySearch(BuscaAnuncioDTO busca);
+
+	/**
 	 * Método responsável por encontrar todos os anuncios cadastrados.
 	 *
 	 * @return Lista de objetos da classe AnuncioModel.
 	 */
+
 	public List<AnuncioModel> findAll();
 
 	/**
@@ -60,8 +70,5 @@ public interface AnuncioService {
 	 * @param createdBy
 	 * @return
 	 */
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
-
-	List<AnuncioModel> findByDataExpiracaoBeforeAndTituloContainsIgnoreCaseAndSalarioBetweenAndAreaEmpregoIn(LocalDate date, String titulo, Double salarioBase, Double salarioFinal, List<Integer> areaEmprego);
-
+	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }
