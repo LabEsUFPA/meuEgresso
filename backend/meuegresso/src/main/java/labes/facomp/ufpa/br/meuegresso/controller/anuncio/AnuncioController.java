@@ -72,6 +72,10 @@ public class AnuncioController {
 	 * Endpoint responsável por retornar a lista de anuncios filtrados
 	 *
 	 * @return {@link List<AnuncioDTO>} Lista de anuncio cadastrados
+	 * @param titulo título do anúncio deve conter
+	 * @param minValorSalario valor mínimo do salário do anúncio
+	 * @param maxValorSalario valor máximo do salário do anúncio
+	 * @param areaEmprego id da area de emprego o qual anúncio se refere
 	 * @author João Paulo, Lucas Cantão
 	 * @since 19/05/2023
 	 */
