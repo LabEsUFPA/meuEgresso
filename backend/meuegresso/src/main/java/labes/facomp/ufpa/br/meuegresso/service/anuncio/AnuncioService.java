@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.service.anuncio;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
@@ -60,5 +61,7 @@ public interface AnuncioService {
 	 * @return
 	 */
     boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
+	List<AnuncioModel> findByDataExpiracaoBeforeAndTituloContainsIgnoreCaseAndSalarioBetweenAndAreaEmpregoIn(LocalDate date, String titulo, Double salarioBase, Double salarioFinal, List<Integer> areaEmprego);
 
 }

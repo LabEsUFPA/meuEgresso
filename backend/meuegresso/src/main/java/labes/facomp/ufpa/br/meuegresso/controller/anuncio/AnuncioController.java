@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.controller.anuncio;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -64,6 +66,19 @@ public class AnuncioController {
 		return anuncios.stream()
 			.filter(anuncio -> LocalDate.now().isBefore(anuncio.getDataExpiracao()))
 			.collect(Collectors.toList());
+	}
+
+	@GetMapping("/busca")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public List<AnuncioDTO> filtrarAnuncios(
+		@RequestParam(name = "titulo", defaultValue = "") String titulo,
+		@RequestParam(name = "minValorSalario", defaultValue = "0") Double minValorSalario,
+		@RequestParam(name = "maxValorSalario", defaultValue = "100000") Double maxValorSalario,
+		@RequestParam(name = "areaEmprego", defaultValue = "") Integer[] areaEmprego) {
+
+		List<AnuncioModel> filtro = anuncioService.findByDataExpiracaoBeforeAndTituloContainsIgnoreCaseAndSalarioBetweenAndAreaEmpregoIn(LocalDate.now(), titulo, minValorSalario, maxValorSalario, Arrays.asList(areaEmprego));
+
+		return mapper.map(filtro, new TypeToken<List<AnuncioDTO>>() {}.getType());
 	}
 
 	/**

@@ -43,8 +43,8 @@ public class AreaEmpregoImpl implements AreaEmpregoService {
     }
 
     @Override
-    public AreaEmpregoModel save(AreaEmpregoModel AreaEmpregoModel) {
-        return areaEmpregoRepository.save(AreaEmpregoModel);
+    public AreaEmpregoModel save(AreaEmpregoModel areaEmpregoModel) {
+        return areaEmpregoRepository.save(areaEmpregoModel);
     }
 
     @Override

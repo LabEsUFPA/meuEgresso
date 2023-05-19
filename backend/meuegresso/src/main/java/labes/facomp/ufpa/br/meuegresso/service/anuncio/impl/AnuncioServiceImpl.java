@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.service.anuncio.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -59,6 +60,13 @@ public class AnuncioServiceImpl implements AnuncioService {
     @Override
     public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
         return anuncioRepository.existsByIdAndCreatedById(id, createdBy);
+    }
+
+    @Override
+    public List<AnuncioModel> findByDataExpiracaoBeforeAndTituloContainsIgnoreCaseAndSalarioBetweenAndAreaEmpregoIn(
+            LocalDate date, String titulo, Double salarioBase, Double salarioFinal, List<Integer> areaEmprego) {
+
+        return anuncioRepository.findByDataExpiracaoBeforeAndTituloContainsIgnoreCaseAndSalarioBetweenAndAreaEmpregoIn(date, titulo, salarioBase, salarioFinal, areaEmprego);
     }
 
 }
