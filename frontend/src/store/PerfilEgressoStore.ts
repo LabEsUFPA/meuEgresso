@@ -282,6 +282,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         console.log(response.data)
       }
     },
+
     async fetchImageEgresso (egressoId: string) {
       const route = '/egresso/foto/' + egressoId
       const url = ''
@@ -289,15 +290,25 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       await Axios.get(route, {
         responseType: 'blob'
       }).then(res => {
-        // const blob = new Blob([res.data])
-
-        // url = URL.createObjectURL(blob)
         response = res
-        // if (res?.status === 200) {
-        //   return res
-        // }
-        // return JSON.stringify(url)
       })
+      return response
+    },
+
+    async fetchImageEgressoUrl (egressoId: string) {
+      const route = '/egresso/foto/' + egressoId
+      let url = ''
+      let response: string
+      await Axios.get(route, {
+        responseType: 'blob'
+      }).then(res => {
+        if (res?.status === 200) {
+          const blob = new Blob([res.data], { type: 'image/png' })
+          url = URL.createObjectURL(blob)
+        }
+      })
+      console.log('request')
+      response = url
       return response
     }
   }

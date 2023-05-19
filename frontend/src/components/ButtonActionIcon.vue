@@ -9,7 +9,6 @@
       :src="iconPath"
       :width="iconSize"
       :height="iconSize"
-      alt="link"
     >
   </button>
 </template>
@@ -30,7 +29,8 @@ interface Props {
     | 'emerald'
     | 'whitesky'
     | 'transparentsky'
-    | 'invisiblesky';
+    | 'invisiblesky'
+    | 'whiteDanger';
   iconPath?: string;
   type?: 'reset' | 'button' | 'submit';
   iconType?: string;

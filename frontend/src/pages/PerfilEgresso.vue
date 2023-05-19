@@ -13,32 +13,7 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
         >
-          <!-- <div>
-            <input
-              type="file"
-              @change="egressoStore.uploadImageEgresso"
-            >
-            <button @click="uploadImage">
-              Upload Image
-            </button>
-          </div> -->
-
-          <ButtonActionIcon
-            icon-path="/src/assets/trashCan.svg"
-            icon-size="20"
-            custom-style="px-2 py-2"
-            color="whiteDanger"
-            @click="removeImage()"
-          />
-
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
-            <!-- <img
-              class="ml-[200px] mt-[37px] w-[120px] h-[120px] rounded-full"
-              :src="imageEgresso"
-
-              alt="Avatar"
-            > -->
-
             <ProfileImage
               ref="profileImageRef"
               @imageUploadBack="profileImageSave"
@@ -1455,17 +1430,15 @@ let egressoImageResponse : any
 let imageEgressoUrl: string
 imageEgressoUrl = ''
 async function handleEgressoImage (id : string) {
-  egressoImageResponse = await egressoStore.fetchImageEgresso(id)
-  if (egressoImageResponse === undefined) {
+  // egressoImageResponse = await egressoStore.fetchImageEgresso(id)
+  egressoImageResponse = await egressoStore.fetchImageEgressoUrl(id)
+  imageEgressoUrl = egressoImageResponse
+  console.log('URL:')
+  console.log(imageEgressoUrl)
+  if (imageEgressoUrl === '') {
     return ''
   } else {
-    const blob = new Blob([egressoImageResponse.data], { type: 'image/png' })
-    const url = URL.createObjectURL(blob)
-    // const link = document.createElement('a')
-    console.log('url')
-    console.log(url)
-    imageEgressoUrl = url
-    return url
+    return imageEgressoUrl
   }
 }
 

@@ -1,15 +1,14 @@
 <template>
   <section>
+    <!-- class="file" -->
     <o-field
-
-      class="file
-      "
+      class="file"
     >
       <o-upload
-
+        :disabled="!isInput"
         v-model="file"
         drag-drop
-        class=" hidden"
+        class="hidden"
       >
         <section
           :class="styleImageInput"
@@ -31,17 +30,22 @@
             rounded
           />
         </section>
-
-      <!-- <ButtonActionIcon
-        icon-path="/src/assets/trashCan.svg"
-        icon-size="20"
-        custom-style="px-2 py-2"
-        color="whiteDanger"
-      >
+      <!--
         <o-icon icon="upload" />
         <span>Click to upload</span>
       </ButtonActionIcon> -->
       </o-upload>
+
+      <ButtonActionIcon
+        v-if="isInput"
+        class="absolute z-20 ml-[90px] mt-[90px]"
+        icon-path="/src/assets/trashCan.svg"
+        icon-size="20"
+        custom-style="px-2 py-2"
+        color="whiteDanger"
+        @click="removeImage()"
+      />
+
       <img
         v-if="imgUrl===''"
         class="
@@ -132,7 +136,6 @@ const file = ref(null)
 let imageEgressoFile: File
 
 function getObjectURL (file: File) {
-  console.log(URL.createObjectURL(file))
   imageEgressoFile = file
   return URL.createObjectURL(file)
 }
