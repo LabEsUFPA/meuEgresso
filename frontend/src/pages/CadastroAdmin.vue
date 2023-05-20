@@ -185,12 +185,12 @@ const handleSubmit = async (submitData: any) => {
     profileData.email,
     profileData.name,
     [{
-      id: profileData.idAccessLevel
+      id: submitData.idAccessLevel
     }]
   )
 
   if (response.status === 201) {
-    username.value = profileData.username
+    username.value = submitData.username
     error.value = false
     submitSuccess.value = true
   } else {

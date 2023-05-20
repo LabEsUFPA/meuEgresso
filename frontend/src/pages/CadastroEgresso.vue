@@ -516,7 +516,7 @@ const cities = computed(() => {
   return filteredCities
 })
 
-async function handleSubmit (values: InferType<typeof schema>) {
+async function handleSubmit (values: any) {
   camposFaltosos.value = false
   let cotas: Array<{ id: number }> | null = []
 
