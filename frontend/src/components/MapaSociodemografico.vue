@@ -111,9 +111,11 @@
 <script lang="ts" setup>
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch, createSSRApp } from 'vue'
+import { renderToString } from '@vue/server-renderer'
 import { Country, State } from 'country-state-city'
 import CustomButton from 'src/components/CustomButton.vue'
+import CustomTooltipMarker from 'src/components/CustomTooltipMarker.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronLeft, mdiChevronRight, mdiInformation, mdiMapMarker } from '@mdi/js'
 import { type models } from 'src/@types'
@@ -144,6 +146,15 @@ const getLatLng = (key: string) => {
   return L.latLng(lat, lng)
 }
 
+async function componentToHtml (props: EgressoMapa[]) {
+  const app = createSSRApp(CustomTooltipMarker, {
+    egressos: props
+  })
+  let html: string = ''
+  await renderToString(app).then(response => { html = response })
+  return html
+}
+
 let map: L.Map | L.LayerGroup<any>
 
 onMounted(() => {
@@ -158,8 +169,8 @@ const createMapLayer = () => {
   }).addTo(map)
 
   const setMarkers = () => {
-    props.egressList.forEach((mapElement, index) => {
-      L.circleMarker(getLatLng(index)).addTo(map).on('click', selectMarker)
+    props.egressList.forEach(async (mapElement, index) => {
+      L.circleMarker(getLatLng(index)).addTo(map).on('click', selectMarker).bindTooltip(await componentToHtml(mapElement))
     })
   }
   setMarkers()
