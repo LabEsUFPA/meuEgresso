@@ -1,60 +1,62 @@
 <template>
-    <Form
-      ref="form"
-      @submit="handleSubmit"
-      @invalid-submit="onInvalid"
-      :validation-schema="schema"
-    >
-      <div class="flex w-full justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
-        <div class="flex justify-strech w-[960px] border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl py-8 mt-10 mx-6 shadow-md">
-          <h1 class="text-cyan-800 text-3xl font-bold">
-            <SvgIcon
-              type="mdi"
-              size="50"
-              class="ml-10 mr-5 inline"
-              :path="mdiBullhorn"
-            />
-            Feed de anúncios
-          </h1>
-          <CustomButton type="submit" color="emerald">
-                Anuncie uma vaga
-                <SvgIcon
-              type="mdi"
-              size="24"
-              class="ml-5 inline"
-              :path="mdiArrowRight"
-            />
-            </CustomButton>
+    <div class="flex flex-col">
+
+      <div class="flex justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
+        <div class="flex w-[960px] border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl p-8 mt-10 mx-6 items-center justify-between">
+          
+          <div class="flex text-cyan-800 items-center">
+            <Icon icon="majesticons:megaphone" width="32" height="32" class="mr-5 inline" />
+            <h1 class="text-3xl font-bold">
+              Vagas de emprego
+            </h1>
+          </div>
+          
+          <CustomButton type="submit" color="emerald" text-class="text-white font-medium">
+            Anuncie uma vaga
+            <Icon icon="mingcute:right-line" width="32" height="32" />
+          </CustomButton>
+
         </div>
       </div>
-      <div class="w-full flex items-center justify-center bg-neutral-100 mb-10 ">
-        <div
-          v-if="!submitSuccess"
-          class="flex flex-col items-center bg-white w-[960px] py-10 mx-6 rounded-bl-2xl rounded-br-2xl shadow-md"
-        >
-          <InvalidInsert
-            :text="errorText"
-            :show-alert="error"
-          />
-  
-          <div class="mb-8 mx-4 sm:mx-0">
-            <div class="flex flex-col gap-y-4 sm:gap-y-6">
-                <CustomInput
-                  class="w-full"
-                  name="pesquisar"
-                  label=""
-                  placeholder="Pesquisar"
-                  :icon-path="mdiSearchWeb"
-                  :required="true"
-                />
-                <CustomButton type="submit" color="blue">
-                    Buscar
-                </CustomButton>
+
+      <div class="flex flex-col gap-8 mb-10" >
+
+        <div class="flex justify-center">
+          <div class="flex w-[960px] bg-white rounded-bl-2xl rounded-br-2xl p-8 mx-6 items-center justify-between">
+            
+            <div class="mb-8 mx-4 sm:mx-0">
+              <div class="flex flex-col gap-y-4 sm:gap-y-6">
+                  <CustomInput
+                    class="w-full"
+                    name="pesquisar"
+                    label=""
+                    placeholder="Pesquisar"
+                    :icon-path="mdiSearchWeb"
+                    :required="true"
+                  />
+                  <CustomButton type="submit" color="blue">
+                      Buscar
+                  </CustomButton>
+              </div>
+            </div>
+
           </div>
         </div>
-       </div>
+
+          <div v-for="anuncio in anuncios" class="flex justify-center">
+            <ShortPost
+              :id="anuncio.id"
+              :nome="anuncio.nome"
+              :titulo="anuncio.titulo"
+              :area="anuncio.area"
+              :descricao="anuncio.titulo"
+              :salario="anuncio.salario"
+            />
+          </div>
+        
       </div>
-    </Form>
+
+    </div>
   
     <CustomDialog v-model="submitSuccess">
       <div class="h-full flex justify-center items-center">
@@ -78,18 +80,39 @@
   
   <script setup lang="ts">
   
+  import { Icon } from '@iconify/vue';
   import { ref, watch, onMounted } from 'vue'
   import SvgIcon from '@jamescoyle/vue-icon'
   import CustomInput from 'src/components/CustomInput.vue'
   import CustomButton from 'src/components/CustomButton.vue'
   import CustomDialog from 'src/components/CustomDialog.vue'
+  import ShortPost from 'src/components/ShortPost.vue'
+
   import InvalidInsert from 'src/components/InvalidInsert.vue'
   import { Form } from 'vee-validate'
   import { object, string, date, ref as refYup } from 'yup'
   import { mdiCheckCircle, mdiBullhorn, mdiLink, mdiArrowRight, mdiSearchWeb } from '@mdi/js'
 
   
-  
+  const anuncios = [
+    { 
+      id: 1,
+      nome: 'Victor Silva',
+      titulo: 'Vaga Front-end',
+      area: 'Programador',
+      descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      salario: 1000.0,
+    },
+    { 
+      id: 2,
+      nome: 'Marcus Loureiro',
+      titulo: 'Vaga Back-end',
+      area: 'Programador',
+      descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      salario: 1200.0,
+    }
+  ]
+
   
   const form = ref<typeof Form | null>(null)
   const titulo = ref('')

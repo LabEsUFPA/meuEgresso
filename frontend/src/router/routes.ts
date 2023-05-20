@@ -38,8 +38,12 @@ export default [
         component: async () => await import('src/pages/EdicaoContaAdmin.vue')
       },
       {
-        path: '/feed',
-        component: async () => await import('src/pages/Feed.vue')
+        path: '/vagas',
+        component: async () => await import('src/pages/FeedVagas.vue')
+      },
+      {
+        path: '/vagas/:id',
+        component: async () => await import('src/pages/AnuncioVaga.vue')
       }
     ]
   }
