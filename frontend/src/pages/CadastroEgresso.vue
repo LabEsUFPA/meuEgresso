@@ -27,6 +27,7 @@
               class="mb-5"
               name="geral.nome"
               label="Nome"
+              error-message="Informe nome e sobrenome"
               :icon-path="mdiAccount"
               required
             />
@@ -612,7 +613,7 @@ function handleFail (e: any) {
 
 const schema = object().shape({
   geral: object({
-    nome: string().required(),
+    nome: string().required().trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
     nascimento: date().required(),
     email: string().email().required(),
     genero: string().required(),
