@@ -106,15 +106,15 @@
 
       <CustomDialog v-model="submitSuccess">
         <div
-          class="flex flex-col bg-whit mx-6 rounded-2xl"
+          class="flex h-full bg-whit mx-6 rounded-2xl"
         >
-          <div class="flex flex-col items-center text-center pt-16 pb-28 gap-y-12">
+          <div class="flex flex-col w-full items-center justify-center text-center gap-y-4 sm:gap-y-6">
             <img
-              class="max-w-max"
+              class="w-16 sm:w-24"
               src="../assets/check.svg"
               alt="Loading"
             >
-            <h1 class="text-blue-900 text-4xl font-bold">
+            <h1 class="text-blue-900 font-bold text-2xl sm:text-4xl">
               Perfil {{ username }} <br>
               criado com sucesso!
             </h1>

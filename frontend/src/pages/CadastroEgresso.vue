@@ -372,16 +372,15 @@
       @close="$router.push('/egresso')"
     >
       <div class="h-full flex justify-center items-center">
-        <div class="w-1/2">
-          <div class="text-green-500 text-center mb-3">
-            <SvgIcon
-              type="mdi"
-              size="100"
-              class="inline"
-              :path="mdiCheckCircle"
-            />
+        <div class="flex flex-col full items-center justify-center gap-y-3 sm:gap-y-7">
+          <div class="text-green-500 text-center">
+            <img
+              class="w-16 sm:w-24"
+              src="../assets/check.svg"
+              alt="Loading"
+            >
           </div>
-          <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+          <h1 class="text-blue-900 w-3/4 text-center font-semibold text-2xl sm:text-3xl">
             Dados cadastrados com sucesso!
           </h1>
           <div class="flex flex-row justify-center">
@@ -435,7 +434,7 @@ import { Form } from 'vee-validate'
 import { ref, computed, watch, onMounted } from 'vue'
 import { Country, State, City } from 'country-state-city'
 import svgPath from 'src/assets/svgPaths.json'
-import { object, string, date, boolean, InferType } from 'yup'
+import { object, string, date, boolean } from 'yup'
 import {
   mdiAccount,
   mdiBriefcase,
@@ -443,7 +442,6 @@ import {
   mdiMapMarker,
   mdiMessage,
   mdiSchool,
-  mdiCheckCircle,
   mdiShareVariant,
   mdiAlertCircle
 } from '@mdi/js'
