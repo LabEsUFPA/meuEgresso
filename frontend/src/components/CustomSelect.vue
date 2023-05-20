@@ -27,7 +27,7 @@
             ['outline-2 outline outline-emerald-500']: meta.valid && meta.validated && meta.touched,
             ['rounded-t-lg']: open,
             ['rounded-lg']: !open,
-            ['w-64 py-1 px-3 relative border']: true,
+            ['w-64 py-1 px-3 relative border bg-white']: true,
           })"
           @click="!disabled ? focusInput = !focusInput : ''"
         >
@@ -69,6 +69,8 @@
             :field="typeof options[0] === 'object' ? 'label' : 'value'"
             :required="required"
             :disabled="disabled"
+            check-infinite-scroll
+            :loading="isFetching"
             :input-class="classNames({
               ['cursor-not-allowed']: disabled,
               ['bg-transparent focus:outline-none']: true
@@ -77,11 +79,14 @@
               ['col-span-6']: iconPath,
               ['col-span-7']: !iconPath
             })"
+            :debounce-typing="infinite ? 500 : 0"
             @select="(option: IOpts) => (handleEmit(option))"
-            @click="() => { !disabled ? open = !open : '' }"
+            @focus="() => { !disabled ? open = !open : '' }"
             @blur="open = false"
             @keydown="open = true"
             @keydown.esc.enter="open = false"
+            @typing="$emit('typing', $event)"
+            @infinite-scroll="$emit('infiniteScroll', $event)"
           >
             <template #empty>
               Dados não encontrados
@@ -133,6 +138,8 @@ interface Props {
   imgIcon?: boolean
   disabled?: boolean
   preFilled?: boolean // tirar duvidas
+  isFetching?: boolean,
+  infinite?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -146,7 +153,7 @@ const props = withDefaults(defineProps<Props>(), {
   preFilled: false
 })
 
-const $emit = defineEmits(['change'])
+const $emit = defineEmits(['change', 'infiniteScroll', 'typing'])
 
 const model = ref<any>('')
 const selected = ref<IOpts>('')
