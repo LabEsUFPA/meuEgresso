@@ -90,39 +90,59 @@ public class GraficoController {
                 (int) lista.stream().filter(a -> a.getNome().equalsIgnoreCase("outros")).count());
     }
     
+    /**
+     * Endpoint responsavel por contar todos os egressos cotistas e não cotistas.
+     *
+     * @return {@link CotaGraficoDTO} Retorna a contagem de cotistas e não cotistas, usernames separados por grupo.
+     * @author Camilo Santos
+     * @since 20/05/2023
+     */
     @GetMapping(value = "/cotas")
     @ResponseStatus(code = HttpStatus.OK)
     public CotaGraficoDTO getCotas() {
-        List<EgressoModel> lista  = egressoService.findAll();
+        List<EgressoModel> lista = egressoService.findAll();
 
-        Stream<EgressoModel> trueEgressoList =  lista.stream().filter(a -> a.getBolsista().equals(true));
-        Stream<EgressoModel> falseEgressoList =  lista.stream().filter(a -> a.getBolsista().equals(false));
+        Stream<EgressoModel> trueEgressoList = lista.stream().filter(a -> a.getBolsista().equals(true));
+        Stream<EgressoModel> falseEgressoList = lista.stream().filter(a -> a.getBolsista().equals(false));
 
         return new CotaGraficoDTO(
-            (int) trueEgressoList.count(),
-            trueEgressoList.map(egresso -> egresso.getUsuario().getUsername()).collect(Collectors.toList()),
-            (int) falseEgressoList.count(),
-            falseEgressoList.map(egresso -> egresso.getUsuario().getUsername()).collect(Collectors.toList())
-        );
+                (int) trueEgressoList.count(),
+                trueEgressoList.map(egresso -> egresso.getUsuario().getUsername()).collect(Collectors.toList()),
+                (int) falseEgressoList.count(),
+                falseEgressoList.map(egresso -> egresso.getUsuario().getUsername()).collect(Collectors.toList()));
 
     }
 
+    /**
+     * Endpoint responsavel por retornar a contagem de egresso por área de atuação.
+     *
+     * @return {@link AreaAtuacaoGraficoDTO} Retorna a contagem de egresso por área
+     *         de atuação.
+     * @author Camilo Santos
+     * @since 20/05/2023
+     */
     @GetMapping(value = "/atuacao")
     @ResponseStatus(code = HttpStatus.OK)
     public AreaAtuacaoGraficoDTO getAtuacao() {
         List<EgressoModel> lista = egressoService.findAll();
 
         return new AreaAtuacaoGraficoDTO(
-            (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Computação")).count(),
-            (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Pesquisa")).count(),
-            (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Desempregado")).count(),
-            (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Programador")).count(),
-            (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Analista")).count(),
-            (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Outros")).count()
-        );
+                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Computação")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Pesquisa")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Desempregado")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Programador")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Analista")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Outros")).count());
 
     }
 
+    /**
+     * Endpoint responsavel por retornar a contagem de egressos por setor de atuação.
+     *
+     * @return {@link SetorAtuacaoGraficoDTO} Retorna a contagem de egresso por setor de atuação.
+     * @author Camilo Santos
+     * @since 20/05/2023
+     */
     @GetMapping(value = "/setor")
     @ResponseStatus(code = HttpStatus.OK)
     public SetorAtuacaoGraficoDTO getSetor() {
@@ -135,6 +155,5 @@ public class GraficoController {
             (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equals("Magistério/Docência")).count(),
             (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equals("Outros")).count()
         );
-
     }
 }
