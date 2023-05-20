@@ -27,6 +27,7 @@
             ['bg-gray-100 cursor-not-allowed']: disabled,
             ['outline-2 outline outline-red-500']: !meta.valid && meta.validated && meta.touched,
             ['outline-2 outline outline-emerald-500']: meta.valid && meta.validated && meta.dirty,
+            ['']: withoutValidation,
             [`${inputClass} rounded-lg w-64 py-1 px-3 border grid grid-cols-8`]: true
           })"
           v-if="type !== 'textarea'"
@@ -146,7 +147,8 @@ interface Props {
   disabled?: boolean,
   classHelperText?: string,
   errorMessage?: string,
-  customErrorMessage?: boolean
+  customErrorMessage?: boolean,
+  withoutValidation?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -163,7 +165,8 @@ const props = withDefaults(defineProps<Props>(), {
   step: 1,
   classHelperText: '',
   errorMessage: '',
-  customErrorMessage: false
+  customErrorMessage: false,
+  withoutValidation: false
 })
 
 const focused = ref(false)

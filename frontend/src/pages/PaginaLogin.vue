@@ -23,6 +23,7 @@
             name="username"
             label="Usuário"
             :icon-path="mdiAccount"
+            without-validation
             required
           />
           <CustomInput
@@ -30,6 +31,7 @@
             label="Senha"
             :type="showPassword? 'text' : 'password'"
             :icon-path="mdiLock"
+            without-validation
             required
           />
           <CustomCheckbox
