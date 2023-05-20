@@ -11,6 +11,7 @@
     @click="!disabled && handleChange(!inputValue); $emit('update:value', inputValue)"
     @keydown.enter.space="!disabled && handleChange(!inputValue); $emit('update:value', inputValue)"
     :id="`checkbox-${name}`"
+    type="button"
   >
     <div class="text-teal-600">
       <SvgIcon
