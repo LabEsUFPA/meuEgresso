@@ -621,7 +621,21 @@ const schema = object().shape({
 
       return (typeof value).constructor(true)
     }),
-    nascimento: string().required('Campo obrigatório'),
+    nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
+      if (value) {
+        const date = value.split('/').reverse().join('-'); // Convert date to ISO format (YYYY-MM-DD)
+        const minDate = new Date('1940-01-01');
+        const maxDate = new Date('2023-12-31');
+        const inputDate = new Date(date);
+
+        // Check if the person is at least 18 years old
+        const eighteenYearsAgo = new Date();
+        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+
+        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo;
+      }
+      return true;
+    }),
     email: string().email('Email inválido').required('Campo obrigatório'),
     genero: string().required('Campo obrigatório'),
     linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
