@@ -33,6 +33,7 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.model.AreaEmpregoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.anuncio.AnuncioRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.areaemprego.AreaEmpregoRepository;
 
 /**
  * Class que implementa testes para o AnuncioService.
@@ -48,28 +49,33 @@ import labes.facomp.ufpa.br.meuegresso.repository.anuncio.AnuncioRepository;
 class AnuncioServiceTest {
 
         private AreaEmpregoModel engenharia = AreaEmpregoModel.builder()
-                .id(1)
-                .nome("Engenharia de Software")
-                .build();
+                        .id(1)
+                        .nome("Engenharia de Software")
+                        .build();
 
         private AreaEmpregoModel programacao = AreaEmpregoModel.builder()
-                .id(2)
-                .nome("Programacao")
-                .build();
+                        .id(2)
+                        .nome("Programacao")
+                        .build();
 
         @MockBean
         private AnuncioRepository anuncioRepository;
+
+        @MockBean
+        private AreaEmpregoRepository areaEmpregoRepository;
 
         @Autowired
         private AnuncioService anuncioService;
 
         AnuncioModel testAnuncio;
 
-
         @BeforeAll
         void setUp() {
                 BDDMockito.given(anuncioRepository.save(Mockito.any(AnuncioModel.class)))
                                 .willReturn(getMockAnuncio());
+
+                BDDMockito.given(areaEmpregoRepository.findAll())
+                                .willReturn(getMockAreaEmprego());
 
                 BDDMockito.given(anuncioRepository.findById(Mockito.anyInt()))
                                 .willReturn(Optional.of(getMockAnuncio()));
@@ -161,48 +167,45 @@ class AnuncioServiceTest {
                 BDDMockito.given(anuncioService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                                 .willReturn(true);
 
-                                Boolean response = anuncioService.existsByIdAndCreatedById(1, 1);
+                Boolean response = anuncioService.existsByIdAndCreatedById(1, 1);
                 assertTrue(response);
         }
-        
-        /*
-         * @Test
-         * 
-         * @Order(6)
-         * void TestFindBySearchSalary() {
-         * BuscaAnuncioDTO filtro = BuscaAnuncioDTO.builder()
-         * .minValorSalario(2000.0)
-         * .maxValorSalario(6000.0)
-         * .build();
-         * 
-         * BDDMockito.given(anuncioRepository.findAll())
-         * .willReturn(getMockAnuncioLista());
-         * 
-         * List<AnuncioModel> response = anuncioService.findBySearch(filtro);
-         * assertEquals(1, response.size());
-         * }
-         * 
-         * @Test
-         * 
-         * @Order(7)
-         * void TestFindBySearchTitulo() {
-         * BuscaAnuncioDTO filtro = BuscaAnuncioDTO.builder()
-         * .titulo("Google")
-         * .build();
-         * 
-         * BDDMockito.given(anuncioRepository.findAll())
-         * .willReturn(getMockAnuncioLista());
-         * 
-         * List<AnuncioModel> response = anuncioService.findBySearch(filtro);
-         * assertEquals(1, response.size());
-         * }
-         */
+
+        @Test
+        @Order(6)
+        void TestFindBySearchSalary() {
+                BuscaAnuncioDTO filtro = BuscaAnuncioDTO.builder()
+                                .minValorSalario(2000.0)
+                                .maxValorSalario(6000.0)
+                                .build();
+
+                BDDMockito.given(anuncioRepository.findAll())
+                                .willReturn(getMockAnuncioLista());
+
+                List<AnuncioModel> response = anuncioService.findBySearch(filtro);
+                assertEquals(1, response.size());
+        }
+
+        @Test
+        @Order(7)
+        void TestFindBySearchTitulo() {
+                BuscaAnuncioDTO filtro = BuscaAnuncioDTO.builder()
+                                .titulo("Google")
+                                .build();
+
+                BDDMockito.given(anuncioRepository.findAll())
+                                .willReturn(getMockAnuncioLista());
+
+                List<AnuncioModel> response = anuncioService.findBySearch(filtro);
+                assertEquals(1, response.size());
+        }
+
         @Test
         @Order(8)
         void TestFindBySearchArea() {
                 BuscaAnuncioDTO filtro = BuscaAnuncioDTO.builder()
-                .areaEmprego(Arrays.asList(1, 2))
-                .build();
+                                .areaEmprego(Arrays.asList(1, 2))
+                                .build();
 
                 BDDMockito.given(anuncioRepository.findAll())
                                 .willReturn(getMockAnuncioLista());
@@ -224,14 +227,14 @@ class AnuncioServiceTest {
                 List<AnuncioModel> response = anuncioService.findBySearch(filtro);
                 assertEquals(1, response.size());
         }
-        
+
         /**
          * Metodo para testar o deleteById.
          *
          * @author Bruno Eiki
          * @since 27/04/2023
          */
-        
+
         @Test
         @Order(10)
         void testDeleteById() {
@@ -254,11 +257,19 @@ class AnuncioServiceTest {
          *
          * @return <code>anuncioTeste</code> object
          */
-        
+        private List<AreaEmpregoModel> getMockAreaEmprego() {
+                List<AreaEmpregoModel> areaEmprego = new ArrayList<>();
+
+                areaEmprego.add(engenharia);
+                areaEmprego.add(programacao);
+
+                return areaEmprego;
+        }
+
         private AnuncioModel getMockAnuncio() {
                 AnuncioModel anuncioTest = AnuncioModel.builder()
-                .id(1)
-                .titulo("Vaga de Emprego no Google")
+                                .id(1)
+                                .titulo("Vaga de Emprego no Google")
                                 .descricao("Entre agora para a maior empresa de tecnologia do mundo")
                                 .areaEmprego(engenharia)
                                 .salario(5000)
