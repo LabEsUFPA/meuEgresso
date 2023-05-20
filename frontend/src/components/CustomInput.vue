@@ -39,6 +39,7 @@
               class="w-[20px]"
               :src="iconPath"
               v-if="imgIcon"
+              alt="Icon"
             >
 
             <SvgIcon
@@ -104,8 +105,11 @@
         </div>
       </template>
       <template #message>
-        <div class="text-red-500">
-          {{ errorMessage }}
+        <div
+          v-if="meta.validated"
+          class="text-red-500"
+        >
+          {{ meta.valid ? null : customErrorMessage? props.errorMessage : errorMessage }}
         </div>
         <div :class="classHelperText">
           {{ helperText }}
@@ -124,6 +128,8 @@ import { OField, OInput } from '@oruga-ui/oruga-next'
 
 type inputs = 'date' | 'text' | 'email' | 'number' | 'password' | 'textarea'
 
+const $emit = defineEmits(['update:value'])
+
 interface Props {
   name: string
   label?: string
@@ -139,6 +145,7 @@ interface Props {
   step?: number | string
   disabled?: boolean,
   classHelperText?: string,
+  errorMessage?: string,
   customErrorMessage?: boolean
 }
 
@@ -155,6 +162,7 @@ const props = withDefaults(defineProps<Props>(), {
   min: 0,
   step: 1,
   classHelperText: '',
+  errorMessage: '',
   customErrorMessage: false
 })
 
@@ -170,6 +178,7 @@ const {
 } = useField(name, undefined)
 
 function handleInput (e: Event) {
+  $emit('update:value', e)
   handleChange(e)
 }
 </script>
