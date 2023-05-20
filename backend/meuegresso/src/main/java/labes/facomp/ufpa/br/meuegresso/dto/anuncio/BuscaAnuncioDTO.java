@@ -3,6 +3,7 @@ package labes.facomp.ufpa.br.meuegresso.dto.anuncio;
 import java.util.Arrays;
 import java.util.List;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -13,13 +14,18 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
+@Builder
 public class BuscaAnuncioDTO {
 
+    @Builder.Default
     private String titulo = "";
 
-    private List<Integer> areaEmprego = Arrays.asList(1,2,3,4,5,6);
+    @Builder.Default
+    private List<Integer> areaEmprego = Arrays.asList();
 
+    @Builder.Default
     private double minValorSalario = 0;
+    @Builder.Default
     private double maxValorSalario = 100000;
     
 }

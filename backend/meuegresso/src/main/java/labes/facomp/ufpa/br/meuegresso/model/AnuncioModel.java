@@ -13,6 +13,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "anuncio")
 @EqualsAndHashCode(callSuper = false)
+
+@Builder
 public class AnuncioModel extends Auditable {
 
     @Id
