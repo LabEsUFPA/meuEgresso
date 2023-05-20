@@ -57,7 +57,7 @@ public class AnuncioServiceImpl implements AnuncioService {
 
         return anuncios.stream()
                 .filter(anuncio -> LocalDate.now().isBefore(anuncio.getDataExpiracao()))
-                .filter(anuncio -> anuncio.getTitulo().contains(busca.getTitulo()))
+                .filter(anuncio -> anuncio.getTitulo().toLowerCase().contains(busca.getTitulo().toLowerCase()))
                 .filter(anuncio -> anuncio.getSalario() >= busca.getMinValorSalario()
                         && anuncio.getSalario() <= busca.getMaxValorSalario())
                 .filter(anuncio -> busca.getAreaEmprego().stream()
