@@ -1,0 +1,117 @@
+<template>
+  <FolderSection>
+    <template #title>
+      <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
+        <SvgIcon
+          type="mdi"
+          size="20"
+          class="inline mr-2"
+          :path="mdiAccount"
+        />
+        Geral
+      </h1>
+    </template>
+    <template #default>
+      <div>
+        <CustomInput
+          class="mb-5"
+          name="geral.nome"
+          label="Nome"
+          :icon-path="mdiAccount"
+          required
+        />
+
+        <CustomInput
+          class="mb-5"
+          name="geral.nascimento"
+          type="date"
+          label="Data de Nascimento"
+          required
+        />
+
+        <CustomSelect
+          class="mb-5"
+          name="geral.genero"
+          label="Gênero"
+          :options="$store.generos"
+          required
+        />
+
+        <CustomInput
+          class="mb-5"
+          name="geral.email"
+          label="E-mail"
+          placeholder="Ex: example@gov.br"
+          helper-text="Use um email válido: hotmail, outlook, gmail, etc."
+          :icon-path="mdiEmail"
+          required
+        />
+
+        <CustomInput
+          class="mb-5"
+          name="geral.linkedin"
+          label="Linkedin"
+          :icon-path="svgPath.linkedin"
+        />
+
+        <CustomInput
+          label="Curriculo Lattes"
+          name="geral.lattes"
+          icon-path="src/assets/lattesCinza.svg"
+          img-icon
+        />
+      </div>
+    </template>
+  </FolderSection>
+</template>
+
+<script lang="ts" setup>
+import FolderSection from 'src/components/FolderSection.vue'
+import CustomInput from 'src/components/CustomInput.vue'
+import CustomSelect from 'src/components/CustomSelect.vue'
+import SvgIcon from '@jamescoyle/vue-icon'
+import { Form } from 'vee-validate'
+import { ref, computed, watch, onMounted } from 'vue'
+import { Country, State, City } from 'country-state-city'
+import svgPath from 'src/assets/svgPaths.json'
+import { object, string, boolean } from 'yup'
+import {
+  mdiAccount,
+  mdiEmail
+} from '@mdi/js'
+import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
+import LocalStorage from 'src/services/localStorage'
+
+const $store = useCadastroEgressoStore()
+const storage = new LocalStorage()
+
+$store.fetchAll()
+
+const dialogSucesso = ref(false)
+const dialogFalha = ref(false)
+const camposFaltosos = ref(false)
+
+const pais = ref('')
+const estado = ref('')
+const form = ref<typeof Form | null>(null)
+
+onMounted(() => {
+  watch(pais, () => {
+    form.value?.setFieldValue('localizacao.cidade', '')
+    form.value?.setFieldValue('localizacao.estado', '')
+  })
+
+  watch(estado, () => {
+    form.value?.setFieldValue('localizacao.cidade', '')
+  })
+
+  if (storage.has('loggedUser')) {
+    const userData = JSON.parse(storage.get('loggedUser'))
+
+    form.value?.setFieldValue('geral.email', userData.email)
+    form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
+      return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
+    }).join(' '))
+  }
+})
+</script>

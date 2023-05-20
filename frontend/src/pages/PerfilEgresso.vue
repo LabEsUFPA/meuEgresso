@@ -218,7 +218,7 @@
               </div>
 
               <div v-else>
-                <CustomSelect
+                <!-- <CustomSelect
                   class="mb-5"
                   name="geral.genero"
                   :value="dataEgresso.geral.genero"
@@ -227,7 +227,15 @@
                   :options="egressoStore.generos"
                   :pre-filled="true"
                   required
+                /> -->
+                <CustomSelect
+                  class="mb-5"
+                  name="geral.genero"
+                  label="Gênero"
+                  :options="$store.generos"
+                  required
                 />
+
                 <CustomInput
                   class="mb-5"
                   name="geral.email"
@@ -926,6 +934,7 @@ import { object, string, date, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
 import { useLoginStore } from 'src/store/LoginStore'
 import CustomDialog from 'src/components/CustomDialog.vue'
+import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import {
   mdiAccount,
   mdiBriefcase,
@@ -947,8 +956,10 @@ const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const $route = useRoute()
 // const camposFaltosos = ref(false)
-
+const $store = useCadastroEgressoStore()
 const egressoStore = usePerfilEgressoStore()
+
+$store.fetchAll()
 const storage = new LocalStorage()
 
 const isPublic = computed(() => {
