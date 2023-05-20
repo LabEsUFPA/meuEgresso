@@ -614,7 +614,13 @@ function handleFail (e: any) {
 
 const schema = object().shape({
   geral: object({
-    nome: string().required('Campo obrigatório'),
+    nome: string().required('Campo obrigatório').matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/).test('Nome inválido', (value) => {
+      if (value) {
+        return value?.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/)
+      }
+
+      return (typeof value).constructor(true)
+    }),
     nascimento: string().required('Campo obrigatório'),
     email: string().email('Email inválido').required('Campo obrigatório'),
     genero: string().required('Campo obrigatório'),
