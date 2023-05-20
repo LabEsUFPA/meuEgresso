@@ -1405,9 +1405,16 @@ INSERT INTO public.curso VALUES (1, true, '2023-05-15 12:38:02.822434', NULL, 'C
 --
 -- TOC entry 3777 (class 0 OID 35503)
 -- Dependencies: 251
--- Data for Name: egresso_titulacao; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: area_emprego; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('ENGENHARIA DE SOFTWARE', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('PROGRAMAÇÃO', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('INFORMÁTICA', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('SUPORTE A TI', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('ANALISTA DE SISTEMA', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('ANALISTA DE QA', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('OUTROS', 1) ON CONFLICT DO NOTHING;
 
 
 --

@@ -29,9 +29,15 @@
         />
 
         <div class="mb-8 mx-4 sm:mx-0">
-          <p class="text-sky-600 text-base text-start font-normal mb-5">
-            Preencha os campos abaixo:
-          </p>
+          <h1 class="text-cyan-600 text-3xl font-bold">
+          Título da vaga
+          <SvgIcon
+            type="mdi"
+            size="20"
+            class="inline"
+            :path="mdiPencil"
+          />
+        </h1>
           <div class="flex flex-col gap-y-4 sm:gap-y-6">
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
@@ -131,10 +137,8 @@ import CustomTextarea from 'src/components/CustomTextarea.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import { Form } from 'vee-validate'
 import { object, string, date, ref as refYup } from 'yup'
-import { mdiCheckCircle, mdiBullhorn, mdiLink } from '@mdi/js'
+import { mdiCheckCircle, mdiBullhorn, mdiLink, mdiPencil } from '@mdi/js'
 import {useAnuncioVagaStore} from 'src/store/AnuncioVagaStore'
-
-
 
 
 const form = ref<typeof Form | null>(null)
