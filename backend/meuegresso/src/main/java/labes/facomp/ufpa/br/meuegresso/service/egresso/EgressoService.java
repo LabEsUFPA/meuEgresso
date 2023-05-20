@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 
 /**
@@ -88,7 +89,7 @@ public interface EgressoService {
 	 * @author Camilo Santos
 	 * @since 07/05/2023
 	 */
-	public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException;
+	public Resource getFileAsResource(String fotoNomeString) throws NotFoundFotoEgressoException;
 
 	/**
 	 * Método responsável por deletar foto pelo nome

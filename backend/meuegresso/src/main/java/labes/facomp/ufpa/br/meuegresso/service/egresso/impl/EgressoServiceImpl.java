@@ -1,6 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.service.egresso.impl;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
@@ -104,14 +104,14 @@ public class EgressoServiceImpl implements EgressoService {
     }
 
     @Override
-    public Resource getFileAsResource(String fotoNomeString) throws MalformedURLException, FileNotFoundException {
+    public Resource getFileAsResource(String fotoNomeString) throws NotFoundFotoEgressoException  {
 
         Path file = Paths.get(String.format("%s%s", uploadDirectory + "/", fotoNomeString));
-        if (file != null) {
-            return new UrlResource(file.toUri());
-        } else {
-            throw new FileNotFoundException(fotoNomeString);
-        }
+            try {
+                return new UrlResource(file.toUri());
+            } catch (MalformedURLException e) {
+                throw new NotFoundFotoEgressoException();
+            }
 
     }
 

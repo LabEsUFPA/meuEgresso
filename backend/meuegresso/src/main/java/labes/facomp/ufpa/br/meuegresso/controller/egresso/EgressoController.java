@@ -1,8 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,6 +34,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
@@ -294,30 +295,32 @@ public class EgressoController {
      * @param token
      * @return Um arquivo do tipo resource correspondente ao caminho da foto do
      *         egresso
+     * @throws NotFoundFotoEgressoException
      * @throws IOException
      */
     @GetMapping(value = "/foto/{id}", produces = "image/png")
     @ResponseStatus(code = HttpStatus.OK)
-    public Resource getFotoEgresso(@PathVariable Integer id) throws MalformedURLException, FileNotFoundException {
+    public Resource getFotoEgresso(@PathVariable Integer id) throws NotFoundFotoEgressoException {
         EgressoModel egressoModel = egressoService.findById(id);
         if (egressoModel.getFotoNome() != null) {
             return egressoService.getFileAsResource(egressoModel.getFotoNome());
+        } else {
+            throw new NotFoundFotoEgressoException();
         }
-        return null;
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @DeleteMapping(value = "/foto")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public String deleteFotoEgresso(JwtAuthenticationToken token) throws IOException {
+    public ResponseEntity<String> deleteFotoEgresso(JwtAuthenticationToken token) throws IOException {
         EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
         if (egressoModel.getFotoNome() != null) {
             egressoService.deleteFile(egressoModel.getFotoNome());
             egressoModel.setFotoNome(null);
             egressoService.updateEgresso(egressoModel);
-            return ResponseType.SUCESS_IMAGE_DELETE.getMessage();
+            return ResponseEntity.ok(ResponseType.SUCESS_IMAGE_DELETE.getMessage());
         }
-        return ResponseType.FAIL_IMAGE_DELETE.getMessage();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseType.FAIL_IMAGE_DELETE.getMessage());
 
     }
 
