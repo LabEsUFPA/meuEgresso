@@ -846,7 +846,8 @@
                   Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
                 </div>
 
-                <CustomTextarea
+                <CustomInput
+                  type="textarea"
                   class="mb-5"
                   name="adicionais.assuntosPalestras"
                   :value="dataEgresso.adicionais.assuntosPalestras"
@@ -859,7 +860,8 @@
                   positivas ao realizar o curso:
                 </div>
 
-                <CustomTextarea
+                <CustomInput
+                  type="textarea"
                   class="mb-5"
                   name="adicionais.experiencias"
                   :value="dataEgresso.adicionais.experiencias"
@@ -870,7 +872,8 @@
                   pequena ou grande, pois tudo tem seu impacto:
                 </div>
 
-                <CustomTextarea
+                <CustomInput
+                  type="textarea"
                   name="adicionais.contribuicoes"
                   :value="dataEgresso.adicionais.contribuicoes"
                 />
@@ -921,7 +924,6 @@
 </template>
 
 <script setup lang="ts">
-
 import CustomButtonLink from 'src/components/CustomButtonLink.vue'
 import ButtonEdit from 'src/components/ButtonEdit.vue'
 import FolderSection from 'src/components/FolderSection.vue'
@@ -933,7 +935,6 @@ import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
 import { computed, ref, watch } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
-import CustomTextarea from 'src/components/CustomTextarea.vue'
 import { Form } from 'vee-validate'
 import { object, string, date, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'

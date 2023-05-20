@@ -2,7 +2,7 @@ export default class LocalStorage {
   has (key: string): boolean {
     const value = window.localStorage.getItem(key)
 
-    return value !== undefined
+    return value !== null
   }
 
   get (key: string): any {
