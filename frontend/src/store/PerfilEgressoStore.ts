@@ -312,6 +312,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
     },
     // futuro remover por id: async removeImageEgresso (egressoId: string) {
     async removeImageEgresso () {
+      console.log('delete')
       const response = await Api.request({
         method: 'delete',
         route: '/egresso/foto'

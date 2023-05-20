@@ -17,7 +17,8 @@
             <ProfileImage
               ref="profileImageRef"
               @imageUploadBack="profileImageSave"
-              :img-url="imageEgressoUrl"
+              @remove="removeImageEgresso"
+              :img-url="dataEgresso.profileHead.image"
               img-default="src/assets/profile-pic.png"
               :is-input="dataEgresso.profileHead.isInput"
               :trigger-back-upload="dataEgresso.profileHead.isInput"
@@ -1308,7 +1309,8 @@ const dataEgresso = ref({
     linkedin: '',
     lattes: '',
     isInput: false,
-    triggerBackUpload: false
+    triggerBackUpload: false,
+    image: ''
   }
 })
 
@@ -1565,7 +1567,8 @@ async function fetchUpdateEgresso () {
       linkedin: json.linkedin || '',
       lattes: json.lattes || '',
       isInput: false,
-      triggerBackUpload: false
+      triggerBackUpload: false,
+      image: imageEgressoUrl
     }
   }
 
@@ -1577,7 +1580,7 @@ function fetchEgresso () {
 }
 
 watch(imageEgressoUrl, () => {
-
+  console.log('changeURLperfil')
 })
 // watch(pais, () => {
 //   form.value?.setFieldValue('localizacao.cidade', '')
@@ -1587,6 +1590,14 @@ watch(imageEgressoUrl, () => {
 // watch(estado, () => {
 //   form.value?.setFieldValue('localizacao.cidade', '')
 // })
-
+async function removeImageEgresso () {
+  egressoStore.removeImageEgresso()
+  const imageUrl = await handleEgressoImage(jsonResponse.id)
+  // const imageUrl = 'https://www.hashtagtreinamentos.com/wp-content/uploads/2021/05/Dashboard-no-Excel.jpg'
+  // dataEgresso.value.profileHead.image = imageUrl
+  fetchUpdateEgresso()
+  console.log('removeimageresso')
+  // forceRender()
+}
 </script>
 <style></style>

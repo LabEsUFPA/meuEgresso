@@ -43,7 +43,7 @@
         icon-size="20"
         custom-style="px-2 py-2"
         color="whiteDanger"
-        @click="removeImage()"
+        @click="$emit('remove')"
       />
 
       <img
@@ -106,13 +106,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, nextTick, getCurrentInstance } from 'vue'
 import { OUpload, OSidebar, section, OField, OIcon, OButton } from '@oruga-ui/oruga-next'
 import ButtonActionIcon from 'src/components/ButtonActionIcon.vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
+defineEmits(['remove', 'imgUrl'])
 
 const egressoStore = usePerfilEgressoStore()
-
+const renderComponent = ref(true)
 interface Props {
   imgUrl?: string
   imgDefault: string
@@ -155,8 +156,40 @@ const styleImageInput = computed(() => {
 defineExpose({
   imageUploadBack
 })
-
-function removeImage () {
+async function removeImage () {
   egressoStore.removeImageEgresso()
+  // props.imgUrl = await egressoStore.fetchImageEgressoUrl('1')
+  $emit('imgUrl', 'https://www.hashtagtreinamentos.com/wp-content/uploads/2021/05/Dashboard-no-Excel.jpg')
+
+  forceRender()
 }
+
+const forceRender = async () => {
+  console.log('force')
+  // Here, we'll remove MyComponent
+  renderComponent.value = false
+
+  // Then, wait for the change to get flushed to the DOM
+  await nextTick()
+
+  // Add MyComponent back in
+  renderComponent.value = true
+}
+forceRender()
+watch(props.imgUrl, () => {
+  console.log('changeURL')
+  forceRender()
+})
+
+// const methodThatForcesUpdate = () => {
+//   // our code
+//   const instance = getCurrentInstance()
+//   instance.proxy.forceUpdate()
+//   // our code
+// }
+
+// const imageUrl = computed(() => {
+//   const imageUrl = props.imgUrl
+//   return imageUrl
+// })
 </script>
