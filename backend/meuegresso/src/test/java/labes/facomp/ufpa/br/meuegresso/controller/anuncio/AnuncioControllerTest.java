@@ -256,7 +256,7 @@ public class AnuncioControllerTest {
 
     @Order(5)
     @Test
-    void Should_ReturnAnuncio_When_ParamTituloEqualsAnyCase() throws Exception {
+    void findByTitulo() throws Exception {
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
         
         MvcResult resposta = mockMvc.perform(
@@ -273,6 +273,49 @@ public class AnuncioControllerTest {
 		assertNotNull(anuncios);
         assertEquals(1, anuncios.size());
         assertEquals(ANUNCIO_TITULO, anuncios.get(0).getTitulo());
+    }
+
+    @Order(6)
+    @Test
+    void findBySalario() throws Exception {
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+        
+        MvcResult resposta = mockMvc.perform(
+				MockMvcRequestBuilders.get("/anuncio/busca")
+						.contentType(MediaType.APPLICATION_JSON)
+                        .param("minValorSalario", "0")
+                        .param("maxValorSalario", "10000")
+						.header("Authorization", "Bearer " + this.token))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk()).andReturn();
+
+		List<AnuncioDTO> anuncios = objectMapper.readValue(
+            resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {});
+
+		assertNotNull(anuncios);
+        assertEquals(1, anuncios.size());
+        assertTrue(anuncios.get(0).getSalario() > 0 && anuncios.get(0).getSalario() < 10000);
+    }
+
+    @Order(7)
+    @Test
+    void findByAreaEMprego() throws Exception {
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+        
+        MvcResult resposta = mockMvc.perform(
+				MockMvcRequestBuilders.get("/anuncio/busca")
+						.contentType(MediaType.APPLICATION_JSON)
+                        .param("areaEmprego", "1")
+						.header("Authorization", "Bearer " + this.token))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk()).andReturn();
+
+		List<AnuncioDTO> anuncios = objectMapper.readValue(
+            resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {});
+
+		assertNotNull(anuncios);
+        assertEquals(2, anuncios.size());
+        assertEquals(1, anuncios.get(0).getAreaEmprego().getId());
     }
 
 }
