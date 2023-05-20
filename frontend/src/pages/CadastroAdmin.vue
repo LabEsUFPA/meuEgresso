@@ -25,7 +25,6 @@
               <CustomInput
                 name="name"
                 label="Nome Completo"
-                error-message="Informe nome e sobrenome"
                 :required="true"
                 :icon-path="mdiAccount"
               />
@@ -34,7 +33,6 @@
                 label="Usuário"
                 helper-text="Use no mínimo quatro caracteres sem espaços"
                 class-helper-text="text-gray-600"
-                error-message="Use apenas letras, números e os seguintes caracteres . _ -"
                 :required="true"
                 :icon-path="mdiAccount"
               />
@@ -44,7 +42,6 @@
                 name="email"
                 label="Email"
                 type="email"
-                error-message="Email inválido"
                 :required="true"
                 :icon-path="mdiEmail"
               />
@@ -52,7 +49,6 @@
                 name="confirmationEmail"
                 label="Confirmar email"
                 type="email"
-                error-message="Os e-mails informados são diferentes"
                 :required="true"
                 :icon-path="mdiEmail"
               />
@@ -64,7 +60,6 @@
                 :type="showPassword? 'text' : 'password'"
                 helper-text="Use oito ou mais caracteres com uma combinação de letras, números e símbolos"
                 class-helper-text="text-gray-600"
-                error-message="Senha inválida"
                 :required="true"
                 :icon-path="mdiLock"
               />
@@ -74,7 +69,6 @@
                 :type="showPassword? 'text' : 'password'"
                 :required="true"
                 :icon-path="mdiLock"
-                :custom-error-message="true"
               />
             </div>
             <CustomCheckbox
@@ -88,11 +82,10 @@
           </p>
           <div class="flex flex-col gap-y-2">
             <CustomSelect
-              name="accessLevel"
               label="Nível de Acesso"
+              name="accessLevel"
               placeholder="Selecionar"
               :options="['Egresso', 'Secretário', 'Administrador']"
-              error-message="Selecione o nível de acesso"
               :required="true"
             />
           </div>
@@ -147,6 +140,7 @@ const errorMessages = ref({
 const errorText = ref('')
 const submitSuccess = ref(false)
 const username = ref('')
+const showPassword = ref(false)
 const storeCadastro = useCadastroPerfilStore()
 
 const setIdAccessLevel = (accessLevel: string) => {
@@ -160,17 +154,16 @@ const setIdAccessLevel = (accessLevel: string) => {
 }
 
 const schema = object().shape({
-  name: string().required().trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
-  username: string().required().trim().matches(/^[a-z0-9_.-]{4,}$/),
-  email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/),
-  confirmationEmail: string().email().required().oneOf([refYup('email')]),
-  password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/),
-  confirmationPassword: string().required('Senha inválida').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
-  accessLevel: string().required(),
+  name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/, 'Informe nome e sobrenome'),
+  username: string().required('Informe um nome de usuário').trim().matches(/^[a-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
+  email: string().required('Informe um email').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))/, 'Email inválido'),
+  confirmationEmail: string().email().required('Confirme o email').oneOf([refYup('email')], 'Os e-mails informados são diferentes'),
+  password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
+  confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
+  accessLevel: string().required('Selecione o nível de acesso'),
   idAccessLevel: number()
 })
 
-const showPassword = ref(false)
 const toggleShowPassword = () => {
   showPassword.value = !showPassword.value
 }

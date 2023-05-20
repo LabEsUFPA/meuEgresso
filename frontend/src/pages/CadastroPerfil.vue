@@ -26,7 +26,6 @@
                 name="name"
                 label="Nome Completo"
                 class-helper-text="text-gray-600"
-                error-message="Informe nome e sobrenome"
                 :required="true"
                 :icon-path="mdiAccount"
               />
@@ -35,7 +34,6 @@
                 label="Usuário"
                 helper-text="Use no mínimo quatro caracteres sem espaços"
                 class-helper-text="text-gray-600"
-                error-message="Use apenas letras, números e os seguintes caracteres . _ -"
                 :required="true"
                 :icon-path="mdiAccount"
               />
@@ -43,11 +41,12 @@
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 name="registration"
-                type="number"
+                type="text"
                 label="Matrícula"
                 helper-text="Informe a sua matrícula da faculdade"
                 class-helper-text="text-gray-600"
                 :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
+                custom-error-message
                 :icon-path="mdiSchool"
                 :max-length="12"
                 :min-length="12"
@@ -59,7 +58,6 @@
                 type="email"
                 label="Email"
                 helper-text="Informe o mesmo e-mail que está cadastrado no SIGAA"
-                error-message="Email inválido"
                 class-helper-text="text-gray-600"
                 :icon-path="mdiEmail"
               />
@@ -70,7 +68,6 @@
                 label="Senha"
                 helper-text="Use oito ou mais caracteres com uma combinação de letras, números e símbolos"
                 class-helper-text="text-gray-600"
-                error-message="Senha inválida"
                 :type="showPassword? 'text' : 'password'"
                 :required="true"
                 :icon-path="mdiLock"
@@ -81,7 +78,6 @@
                 :type="showPassword? 'text' : 'password'"
                 :required="true"
                 :icon-path="mdiLock"
-                :custom-error-message="true"
               />
             </div>
             <CustomCheckbox
@@ -152,22 +148,22 @@ const errorMessages = ref({
 const errorText = ref('')
 const submitSuccess = ref(false)
 const storeLogin = useLoginStore()
+const missingDigits = ref(0)
+const showPassword = ref(false)
 
 const schema = object().shape({
-  name: string().required().trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
-  username: string().required().trim().matches(/^[a-z0-9_.-]{4,}$/),
-  registration: string().matches(/^(\d{12})?$/),
-  email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))?$/),
-  password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/),
-  confirmationPassword: string().required('Senha inválida').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida')
+  name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/, 'Informe nome e sobrenome'),
+  username: string().required('Informe um nome de usuário').trim().matches(/^[a-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
+  registration: string().max(12).matches(/^(\d{12})?$/),
+  email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))?$/, 'Email inválido'),
+  password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
+  confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida')
 })
 
-const missingDigits = ref(0)
 const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
 }
 
-const showPassword = ref(false)
 const toggleShowPassword = () => {
   showPassword.value = !showPassword.value
 }

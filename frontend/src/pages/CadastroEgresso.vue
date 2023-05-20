@@ -27,7 +27,6 @@
               class="mb-5"
               name="geral.nome"
               label="Nome"
-              error-message="Informe nome e sobrenome"
               :icon-path="mdiAccount"
               required
             />
@@ -96,6 +95,9 @@
               label="Matrícula"
               mask="############"
               placeholder="205004940001"
+              :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
+              custom-error-message
+              @update:value="checkRegistrationLength"
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -461,6 +463,7 @@ $store.fetchAll()
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const camposFaltosos = ref(false)
+const missingDigits = ref(0)
 
 const pais = ref('')
 const estado = ref('')
@@ -613,9 +616,9 @@ function handleFail (e: any) {
 
 const schema = object().shape({
   geral: object({
-    nome: string().required('Campo obrigatório').trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
+    nome: string().required('Campo obrigatório').trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/, 'Informe nome e sobrenome'),
     nascimento: string().required('Campo obrigatório'),
-    email: string().email('Email inválido').required('Campo obrigatório'),
+    email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/, 'Email inválido'),
     genero: string().required('Campo obrigatório'),
     linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
       if (value) {
@@ -638,7 +641,7 @@ const schema = object().shape({
     cidade: string().required('Campo obrigatório')
   }),
   academico: object({
-    matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres'),
+    matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres').matches(/^(\d{12})?$/),
     tipoAluno: string(),
     cotista: object({
       value: boolean(),
@@ -710,5 +713,9 @@ onMounted(() => {
     }).join(' '))
   }
 })
+
+const checkRegistrationLength = ($event: Event) => {
+  missingDigits.value = 12 - String($event).length
+}
 
 </script>

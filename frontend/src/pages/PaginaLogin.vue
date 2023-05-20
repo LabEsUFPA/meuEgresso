@@ -23,7 +23,6 @@
             name="username"
             label="Usuário"
             :icon-path="mdiAccount"
-            error-message="Informe o seu usuário"
             required
           />
           <CustomInput
@@ -31,7 +30,6 @@
             label="Senha"
             :type="showPassword? 'text' : 'password'"
             :icon-path="mdiLock"
-            error-message="Informe a sua senha"
             required
           />
           <CustomCheckbox
@@ -85,8 +83,8 @@ const error = ref(false)
 const storeLogin = useLoginStore()
 
 const schema = object().shape({
-  username: string().required(),
-  password: string().required()
+  username: string().required('Informe o seu usuário'),
+  password: string().required('Informe a sua senha')
 })
 
 const showPassword = ref(false)
