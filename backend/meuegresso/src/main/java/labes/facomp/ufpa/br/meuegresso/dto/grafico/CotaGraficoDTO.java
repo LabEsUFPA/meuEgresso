@@ -1,7 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +17,5 @@ import lombok.NoArgsConstructor;
 public class CotaGraficoDTO {
     private Integer cotaTrue;
 
-    private List<String> usernameCotaTrue;
-
     private Integer cotaFalse;
-
-    private List<String> usernameCotaFalse;
 }

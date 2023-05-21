@@ -100,9 +100,7 @@ public class GraficoController {
 
         return new CotaGraficoDTO(
                 (int) trueEgressoList.count(),
-                trueEgressoList.map(egresso -> egresso.getUsuario().getUsername()).collect(Collectors.toList()),
-                (int) falseEgressoList.count(),
-                falseEgressoList.map(egresso -> egresso.getUsuario().getUsername()).collect(Collectors.toList()));
+                (int) falseEgressoList.count());
 
     }
 
