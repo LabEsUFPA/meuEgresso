@@ -21,6 +21,13 @@ export default [
         }
       },
       {
+        path: '/cadastro-anuncio',
+        component: async () => await import('src/pages/CadastroAnuncio.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
         path: '/egresso',
         component: async () => await import('src/pages/PerfilEgresso.vue')
       },
@@ -35,6 +42,14 @@ export default [
       {
         path: '/conta-admin',
         component: async () => await import('src/pages/EdicaoContaAdmin.vue')
+      },
+      {
+        path: '/vagas',
+        component: async () => await import('src/pages/FeedVagas.vue')
+      },
+      {
+        path: '/vagas/:id',
+        component: async () => await import('src/pages/AnuncioVaga.vue')
       }
     ]
   }
