@@ -14,7 +14,7 @@
     </template>
 
     <template #default>
-      <div>
+      <div v-if="isInput">
         <CustomSelect
           class="mb-5"
           name="carreira.area"
@@ -52,6 +52,9 @@
           :required="area !== 'Desempregado'"
           :disabled="area === 'Desempregado'"
         />
+      </div>
+      <div v-else>
+        <slot name="NonInputData" />
       </div>
     </template>
     <template

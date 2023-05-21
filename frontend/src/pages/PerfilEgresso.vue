@@ -1,5 +1,5 @@
 <template>
-  <div
+  <!-- <div
     v-if="loading"
     class="flex items-center justify-center text-center"
   >
@@ -13,471 +13,434 @@
   <div
     v-else
     class="flex-1 min-h-screen items-center justify-center bg-neutral-100"
+  > -->
+  <div
+    class="flex place-items-center justify-between flex-wrap relative w-full h-[335px] pin-t bg-gradient-to-b from-sky-200 to-indigo-200 "
   >
-    <div
-      class="flex place-items-center justify-between flex-wrap relative w-full h-[335px] pin-t bg-gradient-to-b from-sky-200 to-indigo-200 "
-    >
-      <!-- <ProfileHead /> -->
-      <!-- Head Start-->
+    <!-- <ProfileHead /> -->
+    <!-- Head Start-->
 
-      <div class="items-center flex relative w-[7000px] flex-col">
-        <Form
-          @submit="handleSubmitHeader"
-          @invalid-submit="onInvalid"
-          :validation-schema="schemaHeader"
-        >
-          <div class="flex flex-auto justify-center mt-[-0.25rem] ">
-            <div
-              class="mt-[37px] flex flex-col items-center justify-center"
-              :class="{
-                ['ml-[200px]']: !isPublic,
-                ['ml-[110px]']: isPublic
-              }"
+    <div class="items-center flex relative w-[7000px] flex-col">
+      <Form
+        ref="formHeader"
+        @submit="handleSubmitHeader"
+        @invalid-submit="onInvalid"
+        :validation-schema="schemaHeader"
+      >
+        <div class="flex flex-auto justify-center mt-[-0.25rem] ">
+          <div
+            class="mt-[37px] flex flex-col items-center justify-center"
+            :class="{
+              ['ml-[200px]']: !isPublic,
+              ['ml-[110px]']: isPublic
+            }"
+          >
+            <img
+              class="w-[120px] h-[120px] rounded-full"
+              src="/src/assets/profile-pic.png"
+              alt="Avatar"
             >
-              <img
-                class="w-[120px] h-[120px] rounded-full"
-                src="/src/assets/profile-pic.png"
-                alt="Avatar"
-              >
+          </div>
+          <h1 class="mt-[5px] ml-[100px] ">
+            <ButtonEdit
+              label="Editar"
+              icon-path="/src/assets/edit.svg"
+              icon-path2="/src/assets/wcheck.svg"
+              color="whitesky"
+              color2="emerald"
+              @toggle="toggleIsInput('profileHead')"
+              :is-input="dataEgresso.profileHead.isInput"
+              v-if="!isPublic"
+            />
+          </h1>
+        </div>
+        <div class="head">
+          <h1 class="grid place-items-center text-cyan-800 text-xl font-bold mt-5 ">
+            <!-- name="geral.nome" -->
+            <div v-if="!dataEgresso.profileHead.isInput">
+              <slot v-if="dataEgresso.profileHead.nome">
+                {{ dataEgresso.profileHead.nome }}
+              </slot>
+
+              <slot v-else>
+                Nome Completo
+              </slot>
             </div>
-            <h1 class="mt-[5px] ml-[100px] ">
+
+            <div
+              v-else
+              class="mb-[-35px]  ml-7"
+            >
+              {{ dataEgresso.profileHead.nome }}
+
+              <CustomInput
+                class="mb-5"
+                name="geral.nome"
+                :value="dataEgresso.profileHead.nome"
+                label=""
+                placeholder="Ex: Marcelle Mota"
+                :icon-path="mdiAccount"
+              />
+            </div>
+          </h1>
+          <!-- helper-text="Números e caracteres especiais não são permitidos" -->
+
+          <div
+            v-if="!dataEgresso.profileHead.isInput"
+            class="items-start flex justify-center mt-8 relative gap-[10px]"
+          >
+            <CustomButtonLink
+              label="Linkedin"
+              icon-path="/src/assets/linkedin-icon.svg"
+              :url="dataEgresso.profileHead.linkedin"
+              placeholder="https://br.linkedin.com/"
+              color="whitesky"
+              variant="standard"
+              icon-size="25"
+            />
+
+            <CustomButtonLink
+              label="Lattes"
+              icon-path="/src/assets/lattesP.svg"
+              :url="dataEgresso.profileHead.lattes"
+              placeholder="https://lattes.cnpq.br/"
+              color="whitesky"
+              variant="standard"
+              icon-size="22"
+            />
+          </div>
+          <div
+            v-else
+            class="items-start flex justify-center mt-8 relative gap-[10px]"
+          >
+            <CustomButtonLink
+              label="Linkedin"
+              icon-path="/src/assets/linkedin-icon.svg"
+              :url="dataEgresso.profileHead.linkedin"
+              placeholder="https://br.linkedin.com/"
+              color="whitesky"
+              variant="standard"
+              icon-size="25"
+              mode="input"
+            >
+              <template #input>
+                <CustomInput
+                  class="mr-[-5px]"
+                  label=""
+                  input-class="w-[150px] h-[31px] "
+                  :icon-path="mdiLinkVariant"
+                  name="geral.linkedin"
+                  :value="dataEgresso.profileHead.linkedin"
+                />
+              </template>
+            </CustomButtonLink>
+
+            <CustomButtonLink
+              label="Lattes"
+              icon-path="/src/assets/lattesP.svg"
+              :url="dataEgresso.profileHead.lattes"
+              placeholder="https://lattes.cnpq.br/"
+              color="whitesky"
+              variant="standard"
+              icon-size="22"
+              mode="input"
+            >
+              <template #input>
+                <CustomInput
+                  class="mr-[-5px]"
+                  input-class="w-[150px] h-[31px]"
+                  label=""
+                  :icon-path="mdiLinkVariant"
+                  name="geral.lattes"
+                  :value="dataEgresso.profileHead.lattes"
+                />
+              </template>
+            </Custombuttonlink>
+          </div>
+        </div>
+      </Form>
+    </div>
+  </div>
+  <!-- Head End-->
+  <div class="w-full mt-[12px]">
+    <!-- <ProfileBodyView /> -->
+    <!-- Body Start -->
+    <div class="container mx-auto p-3 pb-0">
+      <Form
+        ref="formGeral"
+        @submit="handleSubmitGeral"
+        @invalid-submit="onInvalid"
+        :validation-schema="schemaGeral"
+      >
+        <FolderSection>
+          <template #EditButton>
+            <h1 class="relative">
               <ButtonEdit
                 label="Editar"
                 icon-path="/src/assets/edit.svg"
                 icon-path2="/src/assets/wcheck.svg"
-                color="whitesky"
+                color="invisiblesky"
                 color2="emerald"
-                @toggle="toggleIsInput('profileHead')"
-                :is-input="dataEgresso.profileHead.isInput"
+                classimg="sky-600"
+                :has-shadow="false"
+                icon-size="20"
+                @toggle="toggleIsInput('geral')"
+                :is-input="dataEgresso.geral.isInput"
                 v-if="!isPublic"
               />
             </h1>
-          </div>
-          <div class="head">
-            <h1 class="grid place-items-center text-cyan-800 text-xl font-bold mt-5 ">
-              <!-- name="geral.nome" -->
-              <div v-if="!dataEgresso.profileHead.isInput">
-                <slot v-if="dataEgresso.profileHead.nome">
-                  {{ dataEgresso.profileHead.nome }}
-                </slot>
-
-                <slot v-else>
-                  Nome Completo
-                </slot>
-              </div>
-
-              <div
-                v-else
-                class="mb-[-35px]  ml-7"
-              >
-                <CustomInput
-                  class="mb-5"
-                  name="geral.nome"
-                  :value="dataEgresso.profileHead.nome"
-                  label=""
-                  placeholder="Ex: Marcelle Mota"
-                  :icon-path="mdiAccount"
-                />
-              </div>
+          </template>
+          <template #title>
+            <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
+              <SvgIcon
+                type="mdi"
+                size="20"
+                class="inline mr-2"
+                :path="mdiAccount"
+              />
+              Geral
             </h1>
-            <!-- helper-text="Números e caracteres especiais não são permitidos" -->
-
-            <div
-              v-if="!dataEgresso.profileHead.isInput"
-              class="items-start flex justify-center mt-8 relative gap-[10px]"
-            >
-              <CustomButtonLink
-                label="Linkedin"
-                icon-path="/src/assets/linkedin-icon.svg"
-                :url="dataEgresso.profileHead.linkedin"
-                placeholder="https://br.linkedin.com/"
-                color="whitesky"
-                variant="standard"
-                icon-size="25"
-              />
-
-              <CustomButtonLink
-                label="Lattes"
-                icon-path="/src/assets/lattesP.svg"
-                :url="dataEgresso.profileHead.lattes"
-                placeholder="https://lattes.cnpq.br/"
-                color="whitesky"
-                variant="standard"
-                icon-size="22"
-              />
-            </div>
-            <div
-              v-else
-              class="items-start flex justify-center mt-8 relative gap-[10px]"
-            >
-              <CustomButtonLink
-                label="Linkedin"
-                icon-path="/src/assets/linkedin-icon.svg"
-                :url="dataEgresso.profileHead.linkedin"
-                placeholder="https://br.linkedin.com/"
-                color="whitesky"
-                variant="standard"
-                icon-size="25"
-                mode="input"
-              >
-                <template #input>
-                  <CustomInput
-                    class="mr-[-5px]"
-                    label=""
-                    input-class="w-[150px] h-[31px] "
-                    :icon-path="mdiLinkVariant"
-                    name="geral.linkedin"
-                    :value="dataEgresso.profileHead.linkedin"
-                  />
-                </template>
-              </CustomButtonLink>
-
-              <CustomButtonLink
-                label="Lattes"
-                icon-path="/src/assets/lattesP.svg"
-                :url="dataEgresso.profileHead.lattes"
-                placeholder="https://lattes.cnpq.br/"
-                color="whitesky"
-                variant="standard"
-                icon-size="22"
-                mode="input"
-              >
-                <template #input>
-                  <CustomInput
-                    class="mr-[-5px]"
-                    input-class="w-[150px] h-[31px]"
-                    label=""
-                    :icon-path="mdiLinkVariant"
-                    name="geral.lattes"
-                    :value="dataEgresso.profileHead.lattes"
-                  />
-                </template>
-              </Custombuttonlink>
-            </div>
-          </div>
-        </Form>
-      </div>
-    </div>
-    <!-- Head End-->
-    <div class="w-full mt-[12px]">
-      <!-- <ProfileBodyView /> -->
-      <!-- Body Start -->
-      <div class="container mx-auto p-3 pb-0">
-        <Form
-          @submit="handleSubmitGeral"
-          @invalid-submit="onInvalid"
-          :validation-schema="schemaGeral"
-        >
-          <FolderSection>
-            <template #EditButton>
-              <h1 class="relative">
-                <ButtonEdit
-                  label="Editar"
-                  icon-path="/src/assets/edit.svg"
-                  icon-path2="/src/assets/wcheck.svg"
-                  color="invisiblesky"
-                  color2="emerald"
-                  classimg="sky-600"
-                  :has-shadow="false"
-                  icon-size="20"
-                  @toggle="toggleIsInput('geral')"
-                  :is-input="dataEgresso.geral.isInput"
-                  v-if="!isPublic"
-                />
-              </h1>
-            </template>
-            <template #title>
-              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-                <SvgIcon
-                  type="mdi"
-                  size="20"
-                  class="inline mr-2"
-                  :path="mdiAccount"
-                />
-                Geral
-              </h1>
-            </template>
-            <template #default>
-              <div v-if="!dataEgresso.geral.isInput">
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  name="dataEgresso.geral.genero"
-                  :vmodel="dataEgresso.geral.genero"
-                  placeholder="Masculino"
-                  label="Gênero"
-                  :icon-path="mdiAccount"
-                />
-
-                <CustomPerfilData
-                  type="email"
-                  class="mb-6"
-                  name="geral.email"
-                  :vmodel="dataEgresso.geral.email"
-                  label="E-mail"
-                  placeholder="marcele@email.com"
-                  :icon-path="mdiEmail"
-                  v-if="!isPublic"
-                />
-
-                <CustomPerfilData
-                  type="date"
-                  class="mb-1"
-                  name="geral.nascimento"
-                  :vmodel="dataEgresso.geral.nascimento.split('-').reverse().join('/')"
-                  label="Data de Nascimento"
-                  placeholder="01/01/2001"
-                  :icon-path="mdiCake"
-                />
-              </div>
-
-              <div v-else>
-                <!-- <CustomSelect
-                  class="mb-5"
-                  name="geral.genero"
-                  :value="dataEgresso.geral.genero"
-                  :value-id="dataEgresso.generoId"
-                  label="Gênero"
-                  :options="egressoStore.generos"
-                  :pre-filled="true"
-                  required
-                /> -->
-                <CustomSelect
-                  class="mb-5"
-                  name="geral.genero"
-                  label="Gênero"
-                  :options="$store.generos"
-                  required
-                />
-
-                <CustomInput
-                  class="mb-5"
-                  name="geral.email"
-                  :value="dataEgresso.geral.email"
-                  label="E-mail"
-                  placeholder="Ex: marcelle.mota.@gov.br"
-                  helper-text="Use um email válido: hotmail, outlook, gmail, etc."
-                  :icon-path="mdiEmail"
-                />
-
-                <CustomInput
-                  class="mb-5"
-                  name="geral.nascimento"
-                  :value="dataEgresso.geral.nascimento"
-                  label="Data de Nascimento"
-                  type="date"
-                />
-              </div>
-            </template>
-          </FolderSection>
-        </Form>
-        <Form
-          @submit="handleSubmitAcademico"
-          @invalid-submit="onInvalid"
-          :validation-schema="schemaAcademico"
-        >
-          <FolderAcademico
-            :is-input="dataEgresso.academico.isInput"
-          >
-            <template #EditButton>
-              <h1 class="relative">
-                <ButtonEdit
-                  label="Editar"
-                  icon-path="/src/assets/edit.svg"
-                  icon-path2="/src/assets/wcheck.svg"
-                  color="invisiblesky"
-                  color2="emerald"
-                  classimg="sky-600"
-                  :has-shadow="false"
-                  @toggle="toggleIsInput('academico')"
-                  :is-input="dataEgresso.academico.isInput"
-                  v-if="!isPublic"
-                />
-              </h1>
-            </template>
-            <template #NonInputData>
-              <CustomPerfilData
-                type="number"
-                class="mb-5"
-                :vmodel="dataEgresso.academico.matricula"
-                name="academico.matricula"
-                label="Matrícula"
-                placeholder="205004940001"
-                icon-path=""
-              />
-
+          </template>
+          <template #default>
+            <div v-if="!dataEgresso.geral.isInput">
               <CustomPerfilData
                 type="text"
                 class="mb-5"
-                :vmodel="dataEgresso.academico.cotista.tipo"
-                name="academico.cotista.tipo"
-                label="Cotas"
-                placeholder="Tipo de cota"
-                icon-path=""
+                name="dataEgresso.geral.genero"
+                :vmodel="dataEgresso.geral.genero"
+                placeholder="Masculino"
+                label="Gênero"
+                :icon-path="mdiAccount"
               />
-
+              <!--                   :vmodel="dataEgresso.geral.email"
+   -->
               <CustomPerfilData
-                type="text"
+                type="email"
+                class="mb-6"
+                name="geral.email"
+                :vmodel="dataEgresso.geral.email"
+                label="E-mail"
+                placeholder="marcele@email.com"
+                :icon-path="mdiEmail"
+                v-if="!isPublic"
+              />
+              <CustomInput
                 class="mb-5"
-                :vmodel="dataEgresso.academico.tipoAluno"
-                name="academico.tipoAluno"
-                label="Formação"
-                placeholder="Selecione"
-                icon-path=""
+                name="geral.email"
+                label="E-mail1"
+                placeholder="Ex: marcelle.mota.@gov.br"
+                helper-text="Use um email válido: hotmail, outlook, gmail, etc."
+                :icon-path="mdiEmail"
+                required
               />
-
+              <!-- <CustomInput2
+                    class="mb-5"
+                    name="geral.email"
+                    label="E-mail2"
+                    placeholder="Ex: marcelle.mota.@gov.br"
+                    helper-text="Use um email válido: hotmail, outlook, gmail, etc."
+                    :icon-path="mdiEmail"
+                    required
+                  /> -->
               <CustomPerfilData
-                type="text"
-                class="mb-5"
-                :vmodel="dataEgresso.academico.posGrad.curso"
-                name="academico.posGrad.curso"
-                label="Curso"
-                placeholder="Curso de pós-graduação"
-                icon-path=""
-              />
-
-              <CustomPerfilData
-                type="text"
-                class="mb-5"
-                :vmodel="dataEgresso.academico.posGrad.local"
-                name="academico.posGrad.local"
-                label="Local da pós-graduação"
-                placeholder="Local da pós-graduação"
-                icon-path=""
-              />
-
-              <CustomPerfilData
-                type="text"
+                type="date"
                 class="mb-1"
-                :vmodel="dataEgresso.academico.bolsista.tipo"
-                name="academico.bolsista.tipo"
-                label="Bolsa"
-                placeholder="Bolsa"
-                icon-path=""
+                name="geral.nascimento"
+                :vmodel="dataEgresso.geral.nascimento.split('-').reverse().join('/')"
+                label="Data de Nascimento"
+                placeholder="01/01/2001"
+                :icon-path="mdiCake"
               />
-            </template>
-          </FolderAcademico>
-        </Form>
+            </div>
+
+            <div v-else>
+              <!-- <CustomSelect
+                    class="mb-5"
+                    name="geral.genero"
+                    :value="dataEgresso.geral.genero"
+                    :value-id="dataEgresso.generoId"
+                    label="Gênero"
+                    :options="egressoStore.generos"
+                    :pre-filled="true"
+                    required
+                  /> -->
+              <CustomSelect
+                class="mb-5"
+                name="geral.genero"
+                label="Gênero"
+                :options="$store.generos"
+                required
+              />
+
+              <CustomInput
+                class="mb-5"
+                name="geral.email"
+                label="E-mail1"
+                placeholder="Ex: marcelle.mota.@gov.br"
+                helper-text="Use um email válido: hotmail, outlook, gmail, etc."
+                :icon-path="mdiEmail"
+                required
+              />
+              <CustomInput
+                class="mb-5"
+                name="geral.nascimento"
+                :value="dataEgresso.geral.nascimento"
+                label="Data de Nascimento"
+                type="date"
+              />
+            </div>
+          </template>
+        </FolderSection>
+      </Form>
+      <Form
+        ref="formAcademico"
+        @submit="handleSubmitAcademico"
+        @invalid-submit="onInvalid"
+        :validation-schema="schemaAcademico"
+      >
+        <FolderAcademico :is-input="dataEgresso.academico.isInput">
+          <template #EditButton>
+            <h1 class="relative">
+              <ButtonEdit
+                label="Editar"
+                icon-path="/src/assets/edit.svg"
+                icon-path2="/src/assets/wcheck.svg"
+                color="invisiblesky"
+                color2="emerald"
+                classimg="sky-600"
+                :has-shadow="false"
+                @toggle="toggleIsInput('academico')"
+                :is-input="dataEgresso.academico.isInput"
+                v-if="!isPublic"
+              />
+            </h1>
+          </template>
+          <template #NonInputData>
+            <CustomPerfilData
+              type="number"
+              class="mb-5"
+              :vmodel="dataEgresso.academico.matricula"
+              name="academico.matricula"
+              label="Matrícula"
+              placeholder="205004940001"
+              icon-path=""
+            />
+
+            <CustomPerfilData
+              type="text"
+              class="mb-5"
+              :vmodel="dataEgresso.academico.cotista.tipo"
+              name="academico.cotista.tipo"
+              label="Cotas"
+              placeholder="Tipo de cota"
+              icon-path=""
+            />
+
+            <CustomPerfilData
+              type="text"
+              class="mb-5"
+              :vmodel="dataEgresso.academico.tipoAluno"
+              name="academico.tipoAluno"
+              label="Formação"
+              placeholder="Selecione"
+              icon-path=""
+            />
+
+            <CustomPerfilData
+              type="text"
+              class="mb-5"
+              :vmodel="dataEgresso.academico.posGrad.curso"
+              name="academico.posGrad.curso"
+              label="Curso"
+              placeholder="Curso de pós-graduação"
+              icon-path=""
+            />
+
+            <CustomPerfilData
+              type="text"
+              class="mb-5"
+              :vmodel="dataEgresso.academico.posGrad.local"
+              name="academico.posGrad.local"
+              label="Local da pós-graduação"
+              placeholder="Local da pós-graduação"
+              icon-path=""
+            />
+
+            <CustomPerfilData
+              type="text"
+              class="mb-1"
+              :vmodel="dataEgresso.academico.bolsista.tipo"
+              name="academico.bolsista.tipo"
+              label="Bolsa"
+              placeholder="Bolsa"
+              icon-path=""
+            />
+          </template>
+        </FolderAcademico>
+      </Form>
+      <Form
+        ref="formCarreira"
+        @submit="handleSubmitCarreira"
+        @invalid-submit="onInvalid"
+        :validation-schema="schemaCarreira"
+      >
+        <FolderCarreira :is-input="dataEgresso.carreira.isInput">
+          <template #EditButton>
+            <h1 class="relative">
+              <ButtonEdit
+                label="Editar"
+                icon-path="/src/assets/edit.svg"
+                icon-path2="/src/assets/wcheck.svg"
+                color="invisiblesky"
+                color2="emerald"
+                classimg="sky-600"
+                :has-shadow="false"
+                @toggle="toggleIsInput('carreira')"
+                :is-input="dataEgresso.carreira.isInput"
+                v-if="!isPublic"
+              />
+            </h1>
+          </template>
+          <template #NonInputData>
+            <CustomPerfilData
+              type="text"
+              class="mb-10"
+              :vmodel="dataEgresso.carreira.area"
+              name="carreira.area"
+              label="Área de Atuação"
+              placeholder="Área"
+              icon-path=""
+            />
+
+            <CustomPerfilData
+              type="text"
+              class="mb-10"
+              :vmodel="dataEgresso.carreira.setor"
+              name="carreira.setor"
+              label="Setor de Atuação"
+              placeholder="Setor"
+              icon-path=""
+            />
+
+            <CustomPerfilData
+              type="text"
+              class="mb-5"
+              :vmodel="dataEgresso.carreira.empresa"
+              name="carreira.empresa"
+              label="Empresa Atual"
+              placeholder="Empresa"
+              icon-path=""
+            />
+          </template>
+        </FolderCarreira>
+
         <Form
-          @submit="handleSubmitCarreira"
-          @invalid-submit="onInvalid"
-          :validation-schema="schemaCarreira"
-        >
-          <FolderSection class="mt-6">
-            <template #EditButton>
-              <h1 class="relative">
-                <ButtonEdit
-                  label="Editar"
-                  icon-path="/src/assets/edit.svg"
-                  icon-path2="/src/assets/wcheck.svg"
-                  color="invisiblesky"
-                  color2="emerald"
-                  classimg="sky-600"
-                  :has-shadow="false"
-                  @toggle="toggleIsInput('carreira')"
-                  :is-input="dataEgresso.carreira.isInput"
-                  v-if="!isPublic"
-                />
-              </h1>
-            </template>
-            <template #title>
-              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-                <SvgIcon
-                  type="mdi"
-                  size="20"
-                  class="inline mr-2"
-                  :path="mdiBriefcase"
-                />
-                Carreira
-              </h1>
-            </template>
-
-            <template #default>
-              <div v-if="!dataEgresso.carreira.isInput">
-                <CustomPerfilData
-                  type="text"
-                  class="mb-10"
-                  :vmodel="dataEgresso.carreira.area"
-                  name="carreira.area"
-                  label="Área de Atuação"
-                  placeholder="Área"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-10"
-                  :vmodel="dataEgresso.carreira.setor"
-                  name="carreira.setor"
-                  label="Setor de Atuação"
-                  placeholder="Setor"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.carreira.empresa"
-                  name="carreira.empresa"
-                  label="Empresa Atual"
-                  placeholder="Empresa"
-                  icon-path=""
-                />
-              </div>
-              <div v-else>
-                <CustomSelect
-                  class="mb-5"
-                  name="carreira.area"
-                  :value="dataEgresso.carreira.area"
-                  label="Área de Atuação"
-                  placeholder="Selecione"
-                  v-model:value?="dataEgresso.carreira.area"
-                  :options="selectOpts.areaAtuacao"
-                  :pre-filled="true"
-                />
-
-                <CustomSelect
-                  class="mb-5"
-                  name="carreira.setor"
-                  :value="dataEgresso.carreira.setor"
-                  label="Setor de Atuação"
-                  placeholder="Selecione"
-                  :options="selectOpts.setorAtuacao"
-                  :required="dataEgresso.carreira.area !== 'Desempregado'"
-                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
-                  :pre-filled="true"
-                />
-                <CustomInput
-                  class="mb-5"
-                  name="carreira.empresa"
-                  :value="dataEgresso.carreira.empresa"
-                  label="Empresa"
-                  placeholder="Ex: Google"
-                  :required="dataEgresso.carreira.area !== 'Desempregado'"
-                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
-                  :pre-filled="true"
-                />
-                <CustomSelect
-                  class="mb-5"
-                  name="carreira.faixaSalarial"
-                  :value="dataEgresso.carreira.faixaSalarial"
-                  :value-id="dataEgresso.faixaSalarialId"
-                  label="Faixa Salarial"
-                  :options="egressoStore.faixasSalariais"
-                  :required="dataEgresso.carreira.area !== 'Desempregado'"
-                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
-                  :pre-filled="true"
-                />
-              </div>
-            </template>
-          </FolderSection>
-        </Form>
-        <Form
+          ref="formLocalizacao"
           @submit="handleSubmitLocalizacao"
           @invalid-submit="onInvalid"
           :validation-schema="schemaLocalizacao"
         >
-          <FolderSection class="mt-6">
+          <FolderLocalizacao :is-input="dataEgresso.localizacao.isInput">
             <template #EditButton>
               <h1 class="relative">
                 <ButtonEdit
@@ -494,112 +457,57 @@
                 />
               </h1>
             </template>
-            <template #title>
-              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-                <SvgIcon
-                  type="mdi"
-                  size="20"
-                  class="inline mr-2"
-                  :path="mdiMapMarker"
-                />
-                Localização
-              </h1>
+            <template #NonInputData>
+              <!-- <CustomPerfilData
+                    type="text"
+                    class="mb-5"
+                    :vmodel="dataEgresso.localizacao.cep"
+                    name="localizacao.cep"
+                    label="CEP"
+                    placeholder="00000-000"
+                    mask="#####-###"
+                    :icon-path="mdiHome"
+                  /> -->
+
+              <CustomPerfilData
+                type="text"
+                class="mb-5"
+                :vmodel="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
+                name="localizacao.pais"
+                placeholder="Brasil"
+                label="País"
+                :icon-path="mdiWeb"
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-5"
+                :vmodel="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
+                name="localizacao.estado"
+                label="Estado"
+                placeholder="Pará"
+                :icon-path="mdiMapOutline"
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-1"
+                :vmodel="dataEgresso.localizacao.cidade"
+                name="localizacao.cidade"
+                label="Cidade"
+                placeholder="Belém"
+                :icon-path="mdiMapMarkerRadius"
+              />
             </template>
-
-            <template #default>
-              <div v-if="!dataEgresso.localizacao.isInput">
-                <!-- <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.localizacao.cep"
-                  name="localizacao.cep"
-                  label="CEP"
-                  placeholder="00000-000"
-                  mask="#####-###"
-                  :icon-path="mdiHome"
-                /> -->
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
-                  name="localizacao.pais"
-                  placeholder="Brasil"
-                  label="País"
-                  :icon-path="mdiWeb"
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
-                  name="localizacao.estado"
-                  label="Estado"
-                  placeholder="Pará"
-                  :icon-path="mdiMapOutline"
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-1"
-                  :vmodel="dataEgresso.localizacao.cidade"
-                  name="localizacao.cidade"
-                  label="Cidade"
-                  placeholder="Belém"
-                  :icon-path="mdiMapMarkerRadius"
-                />
-              </div>
-              <div v-else>
-                <!-- <CustomInput
-                  class="mb-5"
-                  name="localizacao.cep"
-                  label="CEP"
-                  placeholder="00000-000"
-                  mask="#####-###"
-                /> -->
-
-                <CustomSelect
-                  class="mb-5"
-                  name="localizacao.pais"
-                  :value="dataEgresso.localizacao.pais"
-                  label="País"
-                  :options="countries"
-                  v-model:value?="dataEgresso.localizacao.pais"
-                  :pre-filled="true"
-                  required
-                />
-
-                <CustomSelect
-                  class="mb-5"
-                  name="localizacao.estado"
-                  :value="dataEgresso.localizacao.estado"
-                  label="Estado"
-                  :options="states"
-                  v-model:value?="dataEgresso.localizacao.estado"
-                  :pre-filled="true"
-                  required
-                />
-
-                <CustomSelect
-                  name="localizacao.cidade"
-                  :value="dataEgresso.localizacao.cidade"
-                  label="Cidade"
-                  :options="cities"
-                  :pre-filled="true"
-                  required
-                />
-              </div>
-            </template>
-          </FolderSection>
+          </FolderLocalizacao>
         </Form>
         <Form
+          ref="formAdicionais"
           @submit="handleSubmitAdicionais"
           @invalid-submit="onInvalid"
           :validation-schema="schemaAdicionais"
         >
-          <FolderAdicionais
-            :is-input="dataEgresso.adicionais.isInput"
-          >
+          <FolderAdicionais :is-input="dataEgresso.adicionais.isInput">
             <template #EditButton>
               <h1 class="relative">
                 <ButtonEdit
@@ -618,29 +526,29 @@
             </template>
             <template #NonInputData>
               <!-- <CustomPerfilData
-                    type="text"
-                    class="flex-auto mb-5"
-                    :vmodel="dataEgresso.adicionais.assuntosPalestras"
-                    name="adicionais.assuntosPalestras"
-                    label="Palestras"
-                    placeholder="Lorem ipsum dolor sit amet, consect
-                etur adipiscing elit, sed do eiusmod tempor incididun
-                t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-                ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                    icon-path=""
-                  /> -->
+                      type="text"
+                      class="flex-auto mb-5"
+                      :vmodel="dataEgresso.adicionais.assuntosPalestras"
+                      name="adicionais.assuntosPalestras"
+                      label="Palestras"
+                      placeholder="Lorem ipsum dolor sit amet, consect
+                  etur adipiscing elit, sed do eiusmod tempor incididun
+                  t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                  ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                      icon-path=""
+                    /> -->
               <!-- <CustomPerfilData
-                    type="text"
-                    class="flex-auto mb-5"
-                    :vmodel="dataEgresso.adicionais.assuntosPalestras"
-                    name="adicionais.assuntosPalestras"
-                    label="Palestras"
-                    placeholder="Lorem ipsum dolor sit amet, consect
-                etur adipiscing elit, sed do eiusmod tempor incididun
-                t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-                ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                    icon-path=""
-                  /> -->
+                      type="text"
+                      class="flex-auto mb-5"
+                      :vmodel="dataEgresso.adicionais.assuntosPalestras"
+                      name="adicionais.assuntosPalestras"
+                      label="Palestras"
+                      placeholder="Lorem ipsum dolor sit amet, consect
+                  etur adipiscing elit, sed do eiusmod tempor incididun
+                  t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                  ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                      icon-path=""
+                    /> -->
               <CustomPerfilData
                 type="text"
                 class="flex-auto mb-5"
@@ -648,9 +556,9 @@
                 name="adicionais.experiencias"
                 label="Depoimento"
                 placeholder="Lorem ipsum dolor sit amet, consect
-                etur adipiscing elit, sed do eiusmod tempor incididun
-                t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-                ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                  etur adipiscing elit, sed do eiusmod tempor incididun
+                  t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                  ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                 icon-path=""
               />
               <CustomPerfilData
@@ -660,9 +568,9 @@
                 name="adicionais.contribuicoes"
                 label="Contribuições"
                 placeholder="Lorem ipsum dolor sit amet, consect
-                etur adipiscing elit, sed do eiusmod tempor incididun
-                t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-                ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                  etur adipiscing elit, sed do eiusmod tempor incididun
+                  t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                  ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                 icon-path=""
               />
             </template>
@@ -670,10 +578,11 @@
 
           <div class="py-10 flex flex-row justify-center items-center" />
         </Form>
-      </div>
-      <!-- Body End-->
+      </form>
     </div>
+    <!-- Body End-->
   </div>
+  <!-- </div> -->
   <CustomDialog v-model="dialogSucesso">
     <div class="h-full flex justify-center items-center">
       <div class="w-1/2">
@@ -721,7 +630,7 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import { Form } from 'vee-validate'
 import { object, string, date, boolean } from 'yup'
@@ -734,6 +643,7 @@ import FolderAcademico from 'src/components/FolderAcademico.vue'
 import FolderCarreira from 'src/components/FolderCarreira.vue'
 import FolderLocalizacao from 'src/components/FolderLocalizacao.vue'
 import FolderAdicionais from 'src/components/FolderAdicionais.vue'
+import CustomInput2 from 'src/components/CustomInput2.vue'
 import {
   mdiAccount,
   mdiBriefcase,
@@ -760,13 +670,20 @@ const egressoStore = usePerfilEgressoStore()
 
 $store.fetchAll()
 const storage = new LocalStorage()
+const form = ref<typeof Form | null>(null)
+const formHeader = ref<typeof Form | null>(null)
+const formGeral = ref<typeof Form | null>(null)
+const formAcademico = ref<typeof Form | null>(null)
+const formCarreira = ref<typeof Form | null>(null)
+const formLocalizacao = ref<typeof Form | null>(null)
+const formAdicionais = ref<typeof Form | null>(null)
 
 const isPublic = computed(() => {
   // Object.keys($route.params).length === 1
   return false
 })
 
-function handleStatus (status : any) {
+function handleStatus (status: any) {
   if (status !== 201) {
     dialogFalha.value = true
     return false
@@ -920,7 +837,7 @@ async function handleSubmitCarreira (values: any) {
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
     for (let i = 0; i < selectOpts.value.areaAtuacao.length; i++) {
       if (selectOpts.value.areaAtuacao[i] === values.carreira.area) {
-      // jsonResponse.emprego.areaAtuacao.id = i + 1
+        // jsonResponse.emprego.areaAtuacao.id = i + 1
       }
     }
   }
@@ -1108,7 +1025,9 @@ const schemaAdicionais = object().shape({
     contribuicoes: string().required()
   })
 })
-
+const geral = ref({
+  nome: 'john'
+})
 const dataEgresso = ref({
   egressoId: 0,
   generoId: 0,
@@ -1206,10 +1125,11 @@ watch(() => dataEgresso.value.egressoId, () => {
   }
 })
 
-let jsonResponse : any
-let userData : any
+let jsonResponse: any
+let userData: any
 let egressoResponseBack: any
 // fetchEgressoIfLoggedUser()
+
 fetchUpdateEgresso()
 async function fetchUpdateEgresso () {
   if (storage.has('loggedUser')) {
@@ -1255,7 +1175,8 @@ async function fetchUpdateEgresso () {
   for (let i = 0; i < json.cotas.length; i++) {
     cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
   }
-
+  // formGeral.value?.setFieldValue('geral.email', userData.email)
+  // formGeral.value?.setFieldValue('geral.email', 'omegalul@gmail.com')
   if (jsonResponse.emprego === undefined) {
     jsonResponse.emprego = {
       id: {
@@ -1301,13 +1222,13 @@ async function fetchUpdateEgresso () {
     grupos: [''],
 
     geral:
-      {
-        email: isPublic.value ? json.usuario.email : userData.email,
-        genero: json.genero.nome,
-        confirmacaoEmail: '',
-        nascimento: json.nascimento,
-        isInput: false
-      },
+    {
+      email: isPublic.value ? json.usuario.email : userData.email,
+      genero: json.genero.nome,
+      confirmacaoEmail: '',
+      nascimento: json.nascimento,
+      isInput: false
+    },
     localizacao: {
       cep: '',
       pais: json.emprego?.empresa.endereco.pais || '',
@@ -1366,7 +1287,54 @@ async function fetchUpdateEgresso () {
       lattes: json.lattes || '',
       isInput: false
     }
+
   }
+  // formGeral.value?.setFieldValue('geral.email', userData.email)
+  // formGeral.value?.setFieldValue('geral.email', dataEgresso.value.geral.email)
+  formHeader.value?.setFieldValue('geral.nome', dataEgresso.value.profileHead.nome)
+  formHeader.value?.setValues({
+    'geral.nome': dataEgresso.value.profileHead.nome,
+    'geral.linkedin': dataEgresso.value.profileHead.linkedin,
+    'geral.lattes': dataEgresso.value.profileHead.lattes
+  })
+  formGeral.value?.setValues({
+    'geral.nascimento': dataEgresso.value.geral.nascimento,
+    'geral.email': dataEgresso.value.geral.email,
+    'geral.genero': dataEgresso.value.geral.genero
+  })
+  formLocalizacao.value?.setValues({
+    'localizacao.pais': dataEgresso.value.localizacao.pais,
+    'localizacao.estado': dataEgresso.value.localizacao.estado,
+    'localizacao.cidade': dataEgresso.value.localizacao.cidade
+  })
+  formAcademico.value?.setValues({
+    'academico.matricula': dataEgresso.value.academico.matricula,
+    'academico.cotista.value': dataEgresso.value.academico.cotista.value,
+    'academico.cotista.tipos.renda': dataEgresso.value.academico.cotista.tipos.renda,
+    'academico.cotista.tipos.escola': dataEgresso.value.academico.cotista.tipos.escola,
+    'academico.cotista.tipos.raca': dataEgresso.value.academico.cotista.tipos.raca,
+    'academico.cotista.tipos.quilombolaIndigena': dataEgresso.value.academico.cotista.tipos.quilombolaIndigena,
+    'academico.bolsista.value': dataEgresso.value.academico.bolsista.value,
+    'academico.bolsista.tipo': dataEgresso.value.academico.bolsista.tipo,
+    'academico.bolsista.remuneracao': dataEgresso.value.academico.bolsista.remuneracao,
+    'academico.posGrad.value': dataEgresso.value.academico.posGrad.value,
+    'academico.posGrad.local': dataEgresso.value.academico.posGrad.local,
+    'academico.posGrad.curso': dataEgresso.value.academico.posGrad.curso,
+    'academico.desejaPos': dataEgresso.value.academico.posGrad.desejaPos
+  })
+  formCarreira.value?.setValues({
+    'carreira.area': dataEgresso.value.carreira.area,
+    'carreira.setor': dataEgresso.value.carreira.setor,
+    'carreira.empresa': dataEgresso.value.carreira.empresa,
+    'carreira.faixaSalarial': dataEgresso.value.carreira.faixaSalarial
+  })
+  formAdicionais.value?.setValues({
+    'adicionais.palestras': dataEgresso.value.adicionais.palestras,
+    'adicionais.assuntosPalestras': dataEgresso.value.adicionais.assuntosPalestras,
+    'adicionais.experiencias': dataEgresso.value.adicionais.experiencias,
+    'adicionais.contribuicoes': dataEgresso.value.adicionais.contribuicoes
+  })
+
   console.log('isPublic: ')
   console.log(isPublic.value)
   for (let i = 0; i < json.cotas.length; i++) {

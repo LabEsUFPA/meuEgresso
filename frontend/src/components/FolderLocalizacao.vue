@@ -13,7 +13,7 @@
     </template>
 
     <template #default>
-      <div>
+      <div v-if="isInput">
         <CustomSelect
           class="mb-5"
           name="localizacao.pais"
@@ -38,6 +38,9 @@
           :options="cities"
           required
         />
+      </div>
+      <div v-else>
+        <slot name="NonInputData" />
       </div>
     </template>
     <template
