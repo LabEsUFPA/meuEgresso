@@ -23,9 +23,4 @@ public class BuscaAnuncioDTO {
     @Builder.Default
     private List<Integer> areaEmprego = Arrays.asList();
 
-    @Builder.Default
-    private double minValorSalario = 0;
-    @Builder.Default
-    private double maxValorSalario = 100000;
-    
 }

@@ -176,11 +176,10 @@ class AnuncioServiceTest {
         @Order(6)
         void TestFindBySearchSalary() {
 
-                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(), Mockito.anyDouble(),
-                                Mockito.anyDouble(), Mockito.any()))
+                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(), Mockito.any()))
                                 .willReturn(List.of(getMockAnuncioIdOne()));
 
-                List<AnuncioModel> response = anuncioService.findBySearch("", 2000.0, 6000.0, null);
+                List<AnuncioModel> response = anuncioService.findBySearch("", null);
                 assertEquals(1, response.size());
         }
 
@@ -188,13 +187,12 @@ class AnuncioServiceTest {
         @Order(7)
         void TestFindBySearchTitulo() {
 
-                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(), Mockito.anyDouble(),
-                                Mockito.anyDouble(), Mockito.any()))
+                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(), Mockito.any()))
                                 .willReturn(List.of(getMockAnuncioIdOne()));
 
                 Integer[] areas = { 0 };
 
-                List<AnuncioModel> response = anuncioService.findBySearch("Google", 0.0, 100000.0, areas);
+                List<AnuncioModel> response = anuncioService.findBySearch("Google", areas);
                 assertEquals(1, response.size());
         }
 
@@ -202,13 +200,12 @@ class AnuncioServiceTest {
         @Order(8)
         void TestFindBySearchArea() {
 
-                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(), Mockito.anyDouble(),
-                                Mockito.anyDouble(), Mockito.any()))
+                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(), Mockito.any()))
                                 .willReturn(List.of(getMockAnuncioIdOne(), getMockAnuncioIdTwo()));
 
                 Integer[] areas = { 1, 2 };
 
-                List<AnuncioModel> response = anuncioService.findBySearch("null", 0.0, 30000.0, areas);
+                List<AnuncioModel> response = anuncioService.findBySearch("null", areas);
                 assertEquals(2, response.size());
         }
 
@@ -216,12 +213,11 @@ class AnuncioServiceTest {
         @Order(9)
         void TestFindBySearchArea2() {
 
-                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(), Mockito.anyDouble(),
-                                Mockito.anyDouble(), Mockito.any()))
+                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(), Mockito.any()))
                                 .willReturn(List.of(getMockAnuncioIdTwo()));
 
                 Integer[] areas = { 2 };
-                List<AnuncioModel> response = anuncioService.findBySearch("null", 0.0, 30000.0, areas);
+                List<AnuncioModel> response = anuncioService.findBySearch("null", areas);
                 assertEquals(1, response.size());
         }
 
@@ -269,7 +265,7 @@ class AnuncioServiceTest {
                                 .titulo("Vaga de Emprego no Google")
                                 .descricao("Entre agora para a maior empresa de tecnologia do mundo")
                                 .areaEmprego(engenharia)
-                                .salario(5000)
+                                .salario("5000")
                                 .dataExpiracao(LocalDate.parse("2023-06-20"))
                                 .build();
         }
@@ -280,7 +276,7 @@ class AnuncioServiceTest {
                                 .titulo("Vaga de Emprego na Amazon")
                                 .descricao("Entre agora para a maior empresa de vendas do mundo")
                                 .areaEmprego(engenharia)
-                                .salario(7000)
+                                .salario("7000")
                                 .dataExpiracao(LocalDate.parse("2023-05-05"))
                                 .build();
         }
@@ -292,7 +288,7 @@ class AnuncioServiceTest {
                                 .descricao("Entre agora para a maior ORG do VCT America")
                                 .areaEmprego(programacao)
                                 .dataExpiracao(LocalDate.parse("2023-06-08"))
-                                .salario(10000)
+                                .salario("10000")
                                 .build();
         }
 

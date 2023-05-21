@@ -56,7 +56,7 @@ public class AnuncioControllerTest {
         final String USERNAME = "username_test";
 
         final String ANUNCIO_TITULO = "Vagas pra burros";
-        final Double ANUNCIO_SAL = 3000.0;
+        final String ANUNCIO_SAL = "3000.0";
         final LocalDate ANUNCIO_EXPIRACAO = LocalDate.parse("2023-12-12");
         final String ANUNCIO_DESC = "descrição test";
         final String ANUNCIO_LINK = "http://test.com/test";
@@ -134,7 +134,7 @@ public class AnuncioControllerTest {
                 anuncioModel2.setTitulo("anuncio_test2");
                 anuncioModel2.setAreaEmprego(areaEmprego);
                 anuncioModel2.setDataExpiracao(ANUNCIO_EXPIRACAO);
-                anuncioModel2.setSalario(55000);
+                anuncioModel2.setSalario("55000");
                 anuncioModel2.setDescricao(ANUNCIO_DESC);
                 anuncioModel2.setLink(ANUNCIO_LINK);
 
@@ -250,7 +250,6 @@ public class AnuncioControllerTest {
                 assertNotNull(anuncios);
                 assertEquals(2, anuncios.size());
                 assertEquals(ANUNCIO_TITULO, anuncios.get(0).getTitulo());
-                assertTrue(anuncios.get(0).getSalario() > 0 && anuncios.get(0).getSalario() < 10000);
                 assertEquals(1, anuncios.get(0).getAreaEmprego().getId());
         }
 
@@ -296,7 +295,6 @@ public class AnuncioControllerTest {
 
                 assertNotNull(anuncios);
                 assertEquals(2, anuncios.size());
-                assertTrue(anuncios.get(0).getSalario() > 0 && anuncios.get(0).getSalario() < 10000);
         }
 
         @Order(7)

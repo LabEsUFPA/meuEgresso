@@ -20,10 +20,8 @@ public interface AnuncioRepository extends CrudRepository<AnuncioModel, Integer>
             where
                 a.dataExpiracao >= now()
                 and a.titulo ilike :tituloAnuncio
-                and a.salario between :salarioMin and :salarioMax
-                and (a.areaEmprego in (:areaEmpregoIds) or 0 in (:areaEmpregoIds))
+                and (a.areaEmprego.id in (:areaEmpregoIds) or 0 in (:areaEmpregoIds))
                 """)
-    List<AnuncioModel> findBySearch(String tituloAnuncio, Double salarioMin, Double salarioMax,
-            Integer[] areaEmpregoIds);
+    List<AnuncioModel> findBySearch(String tituloAnuncio, Integer[] areaEmpregoIds);
 
 }

@@ -37,8 +37,7 @@ public interface AnuncioService {
 	 * @return Lista de objetos da classe AnuncioModel.
 	 */
 
-	List<AnuncioModel> findBySearch(String tituloAnuncio, Double salarioMin, Double salarioMax,
-			Integer[] areaEmpregoIds);
+	List<AnuncioModel> findBySearch(String tituloAnuncio, Integer[] areaEmpregoIds);
 
 	/**
 	 * Método responsável por encontrar todos os anuncios cadastrados.
