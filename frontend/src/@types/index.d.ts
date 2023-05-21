@@ -28,8 +28,8 @@ export namespace models {
     email: string
     confirmationEmail?: string
     password: string
-    confirmationPassword: string
-    accessLevel: string
+    confirmationPassword?: string
+    accessLevel?: string
     idAccessLevel?: number
   }
 

@@ -3,8 +3,7 @@ export default [
     path: '/',
     component: async () => await import('src/components/HeaderAndFooter.vue'),
     children: [
-      { path: '/', component: async () => await import('src/pages/MapaSociodemografico.vue') },
-      { path: '/test', component: async () => await import('src/pages/RouterTest.vue') },
+      { path: '/', component: async () => await import('src/pages/HomePage.vue') },
       { path: '/entrar', component: async () => await import('src/pages/PaginaLogin.vue') },
       {
         path: '/cadastro',
