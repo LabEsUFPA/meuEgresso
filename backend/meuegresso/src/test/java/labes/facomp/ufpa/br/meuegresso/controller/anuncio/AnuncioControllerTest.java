@@ -53,269 +53,272 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @TestMethodOrder(OrderAnnotation.class)
 public class AnuncioControllerTest {
 
-    final String USERNAME = "username_test";
+        final String USERNAME = "username_test";
 
-    final String ANUNCIO_TITULO = "Vagas pra burros";
-    final Double ANUNCIO_SAL = 3000.0;
-    final LocalDate ANUNCIO_EXPIRACAO = LocalDate.parse("2023-12-12");
-    final String ANUNCIO_DESC = "descrição test";
-    final String ANUNCIO_LINK = "http://test.com/test";
-    
-    final Integer AREA_EMPREGO_ID = 1;
-    final String AREA_EMPREGO_NOME = "Engenharia de Software";
+        final String ANUNCIO_TITULO = "Vagas pra burros";
+        final Double ANUNCIO_SAL = 3000.0;
+        final LocalDate ANUNCIO_EXPIRACAO = LocalDate.parse("2023-12-12");
+        final String ANUNCIO_DESC = "descrição test";
+        final String ANUNCIO_LINK = "http://test.com/test";
 
-    @Autowired
-    private GrupoRepository grupoRepository;
+        final Integer AREA_EMPREGO_ID = 1;
+        final String AREA_EMPREGO_NOME = "Engenharia de Software";
 
-    @Autowired
-    private AreaEmpregoRepository areaEmpregoRepository;
+        @Autowired
+        private GrupoRepository grupoRepository;
 
-    @Autowired
-    MockMvc mockMvc;
+        @Autowired
+        private AreaEmpregoRepository areaEmpregoRepository;
 
-    String token;
+        @Autowired
+        MockMvc mockMvc;
 
-    UsuarioModel usuarioModel;
+        String token;
 
-    @Autowired
-    ModelMapper modelMapper;
+        UsuarioModel usuarioModel;
 
-    AnuncioModel anuncioModel;
-    AnuncioModel anuncioModel2;
+        @Autowired
+        ModelMapper modelMapper;
 
-    AreaEmpregoModel areaEmprego;
+        AnuncioModel anuncioModel;
+        AnuncioModel anuncioModel2;
 
-    @BeforeAll
-    void setUp() throws Exception {
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+        AreaEmpregoModel areaEmprego;
 
-        /*Grupo */
-        GrupoModel grupoModel = new GrupoModel();
-        grupoModel.setNomeGrupo("ADMIN");
+        @BeforeAll
+        void setUp() throws Exception {
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-        grupoModel = grupoRepository.save(grupoModel);
+                /* Grupo */
+                GrupoModel grupoModel = new GrupoModel();
+                grupoModel.setNomeGrupo("EGRESSO");
 
-        Set<GrupoModel> grupos = new HashSet<>();
-        grupos.add(grupoModel);
+                grupoModel = grupoRepository.save(grupoModel);
 
-        /*Usuario */
-        usuarioModel = new UsuarioModel();
-        usuarioModel.setUsername(USERNAME);
-        usuarioModel.setNome("nome_test");
-        usuarioModel.setEmail("teste@gmail.com");
-        usuarioModel.setPassword("teste123");
-        usuarioModel.setGrupos(grupos);
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(usuarioModel)))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isCreated())
-                .andReturn();
+                Set<GrupoModel> grupos = new HashSet<>();
+                grupos.add(grupoModel);
 
-        /*Area Emprego */
-        areaEmprego = new AreaEmpregoModel();
-        areaEmprego.setId(AREA_EMPREGO_ID);
-        areaEmprego.setNome(AREA_EMPREGO_NOME);
-        areaEmpregoRepository.save(areaEmprego);
+                /* Usuario */
+                usuarioModel = new UsuarioModel();
+                usuarioModel.setUsername(USERNAME);
+                usuarioModel.setNome("nome_test");
+                usuarioModel.setEmail("teste@gmail.com");
+                usuarioModel.setPassword("teste123");
+                usuarioModel.setGrupos(grupos);
+                mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(usuarioModel)))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isCreated())
+                                .andReturn();
 
-        /*Anuncio 1 */
-        anuncioModel = new AnuncioModel();
-        anuncioModel.setId(1);
-        anuncioModel.setTitulo(ANUNCIO_TITULO);
-        anuncioModel.setAreaEmprego(areaEmprego);
-        anuncioModel.setDataExpiracao(ANUNCIO_EXPIRACAO);
-        anuncioModel.setSalario(ANUNCIO_SAL);
-        anuncioModel.setDescricao(ANUNCIO_DESC);
-        anuncioModel.setLink(ANUNCIO_LINK);
+                /* Area Emprego */
+                areaEmprego = new AreaEmpregoModel();
+                areaEmprego.setId(AREA_EMPREGO_ID);
+                areaEmprego.setNome(AREA_EMPREGO_NOME);
+                areaEmpregoRepository.save(areaEmprego);
 
-        /*Anuncio 2 */
-        anuncioModel2 = new AnuncioModel();
-        anuncioModel.setId(2);
-        anuncioModel2.setTitulo("anuncio_test2");
-        anuncioModel2.setAreaEmprego(areaEmprego);
-        anuncioModel2.setDataExpiracao(ANUNCIO_EXPIRACAO);
-        anuncioModel2.setSalario(55000);
-        anuncioModel2.setDescricao(ANUNCIO_DESC);
-        anuncioModel2.setLink(ANUNCIO_LINK);
+                /* Anuncio 1 */
+                anuncioModel = new AnuncioModel();
+                anuncioModel.setId(1);
+                anuncioModel.setTitulo(ANUNCIO_TITULO);
+                anuncioModel.setAreaEmprego(areaEmprego);
+                anuncioModel.setDataExpiracao(ANUNCIO_EXPIRACAO);
+                anuncioModel.setSalario(ANUNCIO_SAL);
+                anuncioModel.setDescricao(ANUNCIO_DESC);
+                anuncioModel.setLink(ANUNCIO_LINK);
 
-        /*Authentication */
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-        authenticationRequest.setUsername(usuarioModel.getUsername());
-        authenticationRequest.setPassword(usuarioModel.getPassword());
-        String objectJson = objectMapper.writeValueAsString(authenticationRequest);
+                /* Anuncio 2 */
+                anuncioModel2 = new AnuncioModel();
+                anuncioModel.setId(2);
+                anuncioModel2.setTitulo("anuncio_test2");
+                anuncioModel2.setAreaEmprego(areaEmprego);
+                anuncioModel2.setDataExpiracao(ANUNCIO_EXPIRACAO);
+                anuncioModel2.setSalario(55000);
+                anuncioModel2.setDescricao(ANUNCIO_DESC);
+                anuncioModel2.setLink(ANUNCIO_LINK);
 
-        MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectJson))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk())
-                .andReturn();
-        AuthenticationResponse authenticationResponse = objectMapper.readValue(
-                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
-        this.token = authenticationResponse.getToken();
+                /* Authentication */
+                AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+                authenticationRequest.setUsername(usuarioModel.getUsername());
+                authenticationRequest.setPassword(usuarioModel.getPassword());
+                String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
-    }
+                MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectJson))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk())
+                                .andReturn();
+                AuthenticationResponse authenticationResponse = objectMapper.readValue(
+                                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
+                this.token = authenticationResponse.getToken();
 
-    @Order(1)
-    @Test
-    void testCadastrarAnuncio() throws Exception{
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+        }
 
-        AnuncioDTO anuncioDTO = modelMapper.map(anuncioModel, AnuncioDTO.class);
-        AnuncioDTO anuncioDTO2 = modelMapper.map(anuncioModel2, AnuncioDTO.class);
+        @Order(1)
+        @Test
+        void testCadastrarAnuncio() throws Exception {
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-        /*Cadastro 1 */
-        MvcResult resposta = mockMvc.perform(
-                        MockMvcRequestBuilders.post("/anuncio")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(anuncioDTO))
-                                        .header("Authorization", "Bearer " + this.token))
-                        .andDo(MockMvcResultHandlers.print())
-                        .andExpect(status().isCreated()).andReturn();
-        String retornoString = resposta.getResponse().getContentAsString();
+                AnuncioDTO anuncioDTO = modelMapper.map(anuncioModel, AnuncioDTO.class);
+                AnuncioDTO anuncioDTO2 = modelMapper.map(anuncioModel2, AnuncioDTO.class);
 
-        /*Cadastro 2 */
-        MvcResult resposta2 = mockMvc.perform(
-                        MockMvcRequestBuilders.post("/anuncio")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(anuncioDTO2))
-                                        .header("Authorization", "Bearer " + this.token))
-                        .andDo(MockMvcResultHandlers.print())
-                        .andExpect(status().isCreated()).andReturn();
-        String retornoString2 = resposta2.getResponse().getContentAsString();
+                /* Cadastro 1 */
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.post("/anuncio")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(objectMapper.writeValueAsString(anuncioDTO))
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isCreated()).andReturn();
+                String retornoString = resposta.getResponse().getContentAsString();
 
-        assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString);
-        assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString2);
-    }
+                /* Cadastro 2 */
+                MvcResult resposta2 = mockMvc.perform(
+                                MockMvcRequestBuilders.post("/anuncio")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(objectMapper.writeValueAsString(anuncioDTO2))
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isCreated()).andReturn();
+                String retornoString2 = resposta2.getResponse().getContentAsString();
 
-    @Order(2)
-    @Test
-    void testConsultarAnuncios() throws Exception {
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-        
-        MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.get("/anuncio")
-						.contentType(MediaType.APPLICATION_JSON)
-						.header("Authorization", "Bearer " + this.token))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isOk()).andReturn();
+                assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString);
+                assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString2);
+        }
 
-		List<AnuncioDTO> anuncios = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-				new TypeReference<List<AnuncioDTO>>() {
-				});
+        @Order(2)
+        @Test
+        void testConsultarAnuncios() throws Exception {
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-		assertNotNull(anuncios);
-        assertEquals(2, anuncios.size());
-    }
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.get("/anuncio")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
 
-    @Order(3)
-    @Test
-    void testAtualizarAnuncio() throws Exception{
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+                List<AnuncioDTO> anuncios = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                                new TypeReference<List<AnuncioDTO>>() {
+                                });
 
-        AnuncioDTO anuncioDTO = modelMapper.map(anuncioModel, AnuncioDTO.class);
-        anuncioDTO.setId(1);
+                assertNotNull(anuncios);
+                assertEquals(2, anuncios.size());
+        }
 
-        MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.put("/anuncio")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + this.token)
-                .content(objectMapper.writeValueAsString(anuncioDTO)))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isCreated())
-                .andReturn();
-        String retornoString = resposta.getResponse().getContentAsString();
-        assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
+        @Order(3)
+        @Test
+        void testAtualizarAnuncio() throws Exception {
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-    }
-    
-    @Order(4)
-    @Test
-    void testFiltrarAnuncios() throws Exception {
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-        
-        MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.get("/anuncio/busca")
-						.contentType(MediaType.APPLICATION_JSON)
-                        .param("titulo", ANUNCIO_TITULO)
-                        .param("minValorSalario", "0")
-                        .param("maxValorSalario", "10000")
-                        .param("areaEmprego", "1")
-						.header("Authorization", "Bearer " + this.token))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isOk()).andReturn();
+                AnuncioDTO anuncioDTO = modelMapper.map(anuncioModel, AnuncioDTO.class);
 
-		List<AnuncioDTO> anuncios = objectMapper.readValue(
-            resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {});
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.put("/anuncio")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer " + this.token)
+                                .content(objectMapper.writeValueAsString(anuncioDTO)))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isCreated())
+                                .andReturn();
+                String retornoString = resposta.getResponse().getContentAsString();
+                assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
 
-		assertNotNull(anuncios);
-        assertEquals(1, anuncios.size());
-        assertEquals(ANUNCIO_TITULO, anuncios.get(0).getTitulo());
-        assertTrue(anuncios.get(0).getSalario() > 0 && anuncios.get(0).getSalario() < 10000);
-        assertEquals(1, anuncios.get(0).getAreaEmprego().getId());
-    }
+        }
 
-    @Order(5)
-    @Test
-    void findByTitulo() throws Exception {
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-        
-        MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.get("/anuncio/busca")
-						.contentType(MediaType.APPLICATION_JSON)
-                        .param("titulo", ANUNCIO_TITULO.toUpperCase())
-						.header("Authorization", "Bearer " + this.token))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isOk()).andReturn();
+        @Order(4)
+        @Test
+        void testFiltrarAnuncios() throws Exception {
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-		List<AnuncioDTO> anuncios = objectMapper.readValue(
-            resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {});
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.get("/anuncio/busca")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .param("titulo", ANUNCIO_TITULO)
+                                                .param("minValorSalario", "0")
+                                                .param("maxValorSalario", "10000")
+                                                .param("areaEmprego", "1")
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
 
-		assertNotNull(anuncios);
-        assertEquals(1, anuncios.size());
-        assertEquals(ANUNCIO_TITULO, anuncios.get(0).getTitulo());
-    }
+                List<AnuncioDTO> anuncios = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {
+                                });
 
-    @Order(6)
-    @Test
-    void findBySalario() throws Exception {
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-        
-        MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.get("/anuncio/busca")
-						.contentType(MediaType.APPLICATION_JSON)
-                        .param("minValorSalario", "0")
-                        .param("maxValorSalario", "10000")
-						.header("Authorization", "Bearer " + this.token))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isOk()).andReturn();
+                assertNotNull(anuncios);
+                assertEquals(2, anuncios.size());
+                assertEquals(ANUNCIO_TITULO, anuncios.get(0).getTitulo());
+                assertTrue(anuncios.get(0).getSalario() > 0 && anuncios.get(0).getSalario() < 10000);
+                assertEquals(1, anuncios.get(0).getAreaEmprego().getId());
+        }
 
-		List<AnuncioDTO> anuncios = objectMapper.readValue(
-            resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {});
+        @Order(5)
+        @Test
+        void findByTitulo() throws Exception {
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-		assertNotNull(anuncios);
-        assertEquals(1, anuncios.size());
-        assertTrue(anuncios.get(0).getSalario() > 0 && anuncios.get(0).getSalario() < 10000);
-    }
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.get("/anuncio/busca")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .param("titulo", ANUNCIO_TITULO.toUpperCase())
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
 
-    @Order(7)
-    @Test
-    void findByAreaEMprego() throws Exception {
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-        
-        MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.get("/anuncio/busca")
-						.contentType(MediaType.APPLICATION_JSON)
-                        .param("areaEmprego", "1")
-						.header("Authorization", "Bearer " + this.token))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isOk()).andReturn();
+                List<AnuncioDTO> anuncios = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {
+                                });
 
-		List<AnuncioDTO> anuncios = objectMapper.readValue(
-            resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {});
+                assertNotNull(anuncios);
+                assertEquals(2, anuncios.size());
+                assertEquals(ANUNCIO_TITULO, anuncios.get(0).getTitulo());
+        }
 
-		assertNotNull(anuncios);
-        assertEquals(2, anuncios.size());
-        assertEquals(1, anuncios.get(0).getAreaEmprego().getId());
-    }
+        @Order(6)
+        @Test
+        void findBySalario() throws Exception {
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.get("/anuncio/busca")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .param("minValorSalario", "0")
+                                                .param("maxValorSalario", "10000")
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                List<AnuncioDTO> anuncios = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {
+                                });
+
+                assertNotNull(anuncios);
+                assertEquals(2, anuncios.size());
+                assertTrue(anuncios.get(0).getSalario() > 0 && anuncios.get(0).getSalario() < 10000);
+        }
+
+        @Order(7)
+        @Test
+        void findByAreaEMprego() throws Exception {
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.get("/anuncio/busca")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .param("areaEmprego", "1")
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                List<AnuncioDTO> anuncios = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {
+                                });
+
+                assertNotNull(anuncios);
+                assertEquals(2, anuncios.size());
+                assertEquals(1, anuncios.get(0).getAreaEmprego().getId());
+        }
 
 }

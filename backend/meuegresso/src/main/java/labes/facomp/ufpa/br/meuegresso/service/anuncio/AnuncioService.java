@@ -2,7 +2,6 @@ package labes.facomp.ufpa.br.meuegresso.service.anuncio;
 
 import java.util.List;
 
-import labes.facomp.ufpa.br.meuegresso.dto.anuncio.BuscaAnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 
@@ -38,7 +37,8 @@ public interface AnuncioService {
 	 * @return Lista de objetos da classe AnuncioModel.
 	 */
 
-	public List<AnuncioModel> findBySearch(BuscaAnuncioDTO busca);
+	List<AnuncioModel> findBySearch(String tituloAnuncio, Double salarioMin, Double salarioMax,
+			Integer[] areaEmpregoIds);
 
 	/**
 	 * Método responsável por encontrar todos os anuncios cadastrados.

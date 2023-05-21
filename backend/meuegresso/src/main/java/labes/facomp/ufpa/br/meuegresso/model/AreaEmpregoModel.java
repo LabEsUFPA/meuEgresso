@@ -13,18 +13,16 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "area_emprego")
 @EqualsAndHashCode(callSuper = false)
-
-@Builder
-
 public class AreaEmpregoModel extends Auditable {
 
     @Id
-    @Column(name = "id_area_emprego")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_area_emprego", unique = true, nullable = false)
     private Integer id;
 
     @Column(name = "nome_area_emprego", unique = true, nullable = false, length = 60)

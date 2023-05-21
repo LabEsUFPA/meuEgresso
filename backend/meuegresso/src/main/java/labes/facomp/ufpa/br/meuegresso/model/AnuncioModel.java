@@ -35,7 +35,7 @@ public class AnuncioModel extends Auditable {
     @Column(name = "titulo_anuncio", unique = false, nullable = false)
     private String titulo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "area_emprego_anuncio_id", unique = false, nullable = false)
     private AreaEmpregoModel areaEmprego;
 

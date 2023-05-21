@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.anuncio;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +23,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.anuncio.AnuncioDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.anuncio.BuscaAnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
@@ -59,40 +57,40 @@ public class AnuncioController {
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
 	 */
-	@GetMapping
+	@GetMapping()
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<AnuncioDTO> consultarAnuncios() {
-		List<AnuncioDTO> anuncios = mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {}.getType());
+		List<AnuncioDTO> anuncios = mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {
+		}.getType());
 		return anuncios.stream()
-			.filter(anuncio -> LocalDate.now().isBefore(anuncio.getDataExpiracao()))
-			.collect(Collectors.toList());
+				.filter(anuncio -> LocalDate.now().isBefore(anuncio.getDataExpiracao()))
+				.collect(Collectors.toList());
 	}
 
 	/**
 	 * Endpoint responsável por retornar a lista de anuncios filtrados
 	 *
 	 * @return {@link List<AnuncioDTO>} Lista de anuncio cadastrados
-	 * @param titulo título do anúncio deve conter
+	 * @param titulo          título do anúncio deve conter
 	 * @param minValorSalario valor mínimo do salário do anúncio
 	 * @param maxValorSalario valor máximo do salário do anúncio
-	 * @param areaEmprego id da area de emprego o qual anúncio se refere
+	 * @param areaEmprego     id da area de emprego o qual anúncio se refere
 	 * @author João Paulo, Lucas Cantão
 	 * @since 19/05/2023
 	 */
-	@GetMapping("/busca")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	@GetMapping(value = "/busca")
 	public List<AnuncioDTO> filtrarAnuncios(
-		@RequestParam(name = "titulo", defaultValue = "") String titulo,
-		@RequestParam(name = "minValorSalario", defaultValue = "0") Double minValorSalario,
-		@RequestParam(name = "maxValorSalario", defaultValue = "100000") Double maxValorSalario,
-		@RequestParam(name = "areaEmprego", defaultValue = "") Integer[] areaEmprego) {
+			@RequestParam(name = "titulo", defaultValue = "") String titulo,
+			@RequestParam(name = "minValorSalario", defaultValue = "0") Double minValorSalario,
+			@RequestParam(name = "maxValorSalario", defaultValue = "100000") Double maxValorSalario,
+			@RequestParam(name = "areaEmprego", defaultValue = "0") Integer[] areaEmprego) {
 
-		List<AnuncioModel> filtro = anuncioService.findBySearch(
-			BuscaAnuncioDTO.builder().titulo(titulo).minValorSalario(minValorSalario).maxValorSalario(maxValorSalario).areaEmprego(Arrays.asList(areaEmprego)).build());
+		List<AnuncioModel> filtro = anuncioService.findBySearch(titulo, minValorSalario, Double.MAX_VALUE, areaEmprego);
 
-		return mapper.map(filtro, new TypeToken<List<AnuncioDTO>>() {}.getType());
+		return mapper.map(filtro, new TypeToken<List<AnuncioDTO>>() {
+		}.getType());
 	}
-
 
 	/**
 	 * Endpoint responsavel por cadastrar o anuncio.
@@ -113,8 +111,6 @@ public class AnuncioController {
 		return ResponseType.SUCESS_SAVE.getMessage();
 	}
 
-
-
 	/**
 	 * Endpoint responsavel por atualizar o anuncio.
 	 *
@@ -129,7 +125,8 @@ public class AnuncioController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String atualizarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO, JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
+	public String atualizarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO, JwtAuthenticationToken token)
+			throws UnauthorizedRequestException, InvalidRequestException {
 		if (anuncioService.existsByIdAndCreatedById(anuncioDTO.getId(), jwtService.getIdUsuario(token))) {
 			AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
 			anuncioService.update(anuncioModel);

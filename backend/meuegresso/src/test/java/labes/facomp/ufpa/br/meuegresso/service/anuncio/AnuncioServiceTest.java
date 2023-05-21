@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,11 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import labes.facomp.ufpa.br.meuegresso.dto.anuncio.BuscaAnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.model.AreaEmpregoModel;
@@ -42,6 +41,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.areaemprego.AreaEmpregoReposit
  * @since
  */
 @SpringBootTest
+@DirtiesContext
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
@@ -72,13 +72,13 @@ class AnuncioServiceTest {
         @BeforeAll
         void setUp() {
                 BDDMockito.given(anuncioRepository.save(Mockito.any(AnuncioModel.class)))
-                                .willReturn(getMockAnuncio());
+                                .willReturn(getMockAnuncioIdOne());
 
                 BDDMockito.given(areaEmpregoRepository.findAll())
                                 .willReturn(getMockAreaEmprego());
 
                 BDDMockito.given(anuncioRepository.findById(Mockito.anyInt()))
-                                .willReturn(Optional.of(getMockAnuncio()));
+                                .willReturn(Optional.of(getMockAnuncioIdOne()));
         }
 
         /**
@@ -92,12 +92,12 @@ class AnuncioServiceTest {
         void testSave() {
 
                 BDDMockito.given(anuncioRepository.save(Mockito.any(AnuncioModel.class)))
-                                .willReturn(getMockAnuncio());
+                                .willReturn(getMockAnuncioIdOne());
 
                 AnuncioModel response = anuncioService.save(new AnuncioModel());
 
                 assertNotNull(response);
-                assertEquals(getMockAnuncio(), response);
+                assertEquals(getMockAnuncioIdOne(), response);
         }
 
         /**
@@ -110,7 +110,8 @@ class AnuncioServiceTest {
         @Order(2)
         void testFindAll() {
                 BDDMockito.given(anuncioRepository.findAll())
-                                .willReturn(getMockAnuncioLista());
+                                .willReturn(List.of(getMockAnuncioIdOne(), getMockAnuncioIdTwo(),
+                                                getMockAnuncioIdThree()));
 
                 List<AnuncioModel> response = anuncioService.findAll();
 
@@ -128,7 +129,7 @@ class AnuncioServiceTest {
         void testFindById() {
 
                 AnuncioModel response = anuncioService.findById(1);
-                assertEquals(getMockAnuncio(), response);
+                assertEquals(getMockAnuncioIdOne(), response);
 
         }
 
@@ -143,7 +144,7 @@ class AnuncioServiceTest {
         @Order(4)
         void testUpdate() throws InvalidRequestException {
 
-                var anuncioUpdate = getMockAnuncio();
+                var anuncioUpdate = getMockAnuncioIdOne();
                 anuncioUpdate.setDescricao("Teste");
 
                 BDDMockito.given(anuncioRepository.save(Mockito.any(AnuncioModel.class)))
@@ -174,57 +175,53 @@ class AnuncioServiceTest {
         @Test
         @Order(6)
         void TestFindBySearchSalary() {
-                BuscaAnuncioDTO filtro = BuscaAnuncioDTO.builder()
-                                .minValorSalario(2000.0)
-                                .maxValorSalario(6000.0)
-                                .build();
 
-                BDDMockito.given(anuncioRepository.findAll())
-                                .willReturn(getMockAnuncioLista());
+                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(), Mockito.anyDouble(),
+                                Mockito.anyDouble(), Mockito.any()))
+                                .willReturn(List.of(getMockAnuncioIdOne()));
 
-                List<AnuncioModel> response = anuncioService.findBySearch(filtro);
+                List<AnuncioModel> response = anuncioService.findBySearch("", 2000.0, 6000.0, null);
                 assertEquals(1, response.size());
         }
 
         @Test
         @Order(7)
         void TestFindBySearchTitulo() {
-                BuscaAnuncioDTO filtro = BuscaAnuncioDTO.builder()
-                                .titulo("Google")
-                                .build();
 
-                BDDMockito.given(anuncioRepository.findAll())
-                                .willReturn(getMockAnuncioLista());
+                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(), Mockito.anyDouble(),
+                                Mockito.anyDouble(), Mockito.any()))
+                                .willReturn(List.of(getMockAnuncioIdOne()));
 
-                List<AnuncioModel> response = anuncioService.findBySearch(filtro);
+                Integer[] areas = { 0 };
+
+                List<AnuncioModel> response = anuncioService.findBySearch("Google", 0.0, 100000.0, areas);
                 assertEquals(1, response.size());
         }
 
         @Test
         @Order(8)
         void TestFindBySearchArea() {
-                BuscaAnuncioDTO filtro = BuscaAnuncioDTO.builder()
-                                .areaEmprego(Arrays.asList(1, 2))
-                                .build();
 
-                BDDMockito.given(anuncioRepository.findAll())
-                                .willReturn(getMockAnuncioLista());
+                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(), Mockito.anyDouble(),
+                                Mockito.anyDouble(), Mockito.any()))
+                                .willReturn(List.of(getMockAnuncioIdOne(), getMockAnuncioIdTwo()));
 
-                List<AnuncioModel> response = anuncioService.findBySearch(filtro);
+                Integer[] areas = { 1, 2 };
+
+                List<AnuncioModel> response = anuncioService.findBySearch("null", 0.0, 30000.0, areas);
                 assertEquals(2, response.size());
         }
 
         @Test
         @Order(9)
         void TestFindBySearchArea2() {
-                BuscaAnuncioDTO filtro = BuscaAnuncioDTO.builder()
-                                .areaEmprego(Arrays.asList(2))
-                                .build();
 
-                BDDMockito.given(anuncioRepository.findAll())
-                                .willReturn(getMockAnuncioLista());
+                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(), Mockito.anyDouble(),
+                                Mockito.anyDouble(), Mockito.any()))
+                                .willReturn(List.of(getMockAnuncioIdTwo()));
 
-                List<AnuncioModel> response = anuncioService.findBySearch(filtro);
+                Integer[] areas = { 2 };
+                List<AnuncioModel> response = anuncioService.findBySearch("null", 0.0, 30000.0, areas);
                 assertEquals(1, response.size());
         }
 
@@ -240,7 +237,7 @@ class AnuncioServiceTest {
         void testDeleteById() {
 
                 Mockito.when(anuncioRepository.findById(Mockito.anyInt()))
-                                .thenReturn(Optional.of(getMockAnuncio()));
+                                .thenReturn(Optional.of(getMockAnuncioIdOne()));
                 Mockito.when(anuncioRepository.existsById(Mockito.anyInt()))
                                 .thenReturn(true);
                 Boolean response = anuncioService.deleteById(1);
@@ -266,8 +263,8 @@ class AnuncioServiceTest {
                 return areaEmprego;
         }
 
-        private AnuncioModel getMockAnuncio() {
-                AnuncioModel anuncioTest = AnuncioModel.builder()
+        private AnuncioModel getMockAnuncioIdOne() {
+                return AnuncioModel.builder()
                                 .id(1)
                                 .titulo("Vaga de Emprego no Google")
                                 .descricao("Entre agora para a maior empresa de tecnologia do mundo")
@@ -275,13 +272,10 @@ class AnuncioServiceTest {
                                 .salario(5000)
                                 .dataExpiracao(LocalDate.parse("2023-06-20"))
                                 .build();
-                return anuncioTest;
         }
 
-        private List<AnuncioModel> getMockAnuncioLista() {
-                List<AnuncioModel> anuncioLista = new ArrayList<>();
-
-                AnuncioModel anuncioTest = AnuncioModel.builder()
+        private AnuncioModel getMockAnuncioIdTwo() {
+                return AnuncioModel.builder()
                                 .id(2)
                                 .titulo("Vaga de Emprego na Amazon")
                                 .descricao("Entre agora para a maior empresa de vendas do mundo")
@@ -289,8 +283,10 @@ class AnuncioServiceTest {
                                 .salario(7000)
                                 .dataExpiracao(LocalDate.parse("2023-05-05"))
                                 .build();
+        }
 
-                AnuncioModel anuncioTest2 = AnuncioModel.builder()
+        private AnuncioModel getMockAnuncioIdThree() {
+                return AnuncioModel.builder()
                                 .id(3)
                                 .titulo("Vaga de Emprego na Loud")
                                 .descricao("Entre agora para a maior ORG do VCT America")
@@ -298,12 +294,6 @@ class AnuncioServiceTest {
                                 .dataExpiracao(LocalDate.parse("2023-06-08"))
                                 .salario(10000)
                                 .build();
-
-                anuncioLista.add(getMockAnuncio());
-                anuncioLista.add(anuncioTest);
-                anuncioLista.add(anuncioTest2);
-
-                return anuncioLista;
         }
 
         @AfterAll
