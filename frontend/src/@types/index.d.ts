@@ -28,8 +28,8 @@ export namespace models {
     email: string
     confirmationEmail?: string
     password: string
-    confirmationPassword: string
-    accessLevel: string
+    confirmationPassword?: string
+    accessLevel?: string
     idAccessLevel?: number
   }
 
@@ -245,6 +245,18 @@ export namespace models {
       nome: string
     }
     remuneracaoBolsa?: number
+  }
+
+  export interface AnuncioModel{
+    titulo: string,
+    areaEmprego:{
+      id:number,
+      nome:string
+    },
+    descricao:string,
+    dataExpiracao: string,
+    link: string,
+    salario:number,
   }
 }
 

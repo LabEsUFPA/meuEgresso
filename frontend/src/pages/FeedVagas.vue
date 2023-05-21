@@ -12,7 +12,12 @@
           </div>
           
           <CustomButton type="submit" color="emerald" text-class="text-white font-medium">
-            Anuncie uma vaga
+              <RouterLink
+                    to="/cadastro-anuncio"
+                    
+                  >
+                  Anuncie uma vaga
+              </RouterLink>
             <Icon icon="mingcute:right-line" width="32" height="32" />
           </CustomButton>
 
@@ -107,6 +112,7 @@
 
   import CustomButton from 'src/components/CustomButton.vue'
   import CustomDialog from 'src/components/CustomDialog.vue'
+  import router from 'src/router'
   import ShortPost from 'src/components/ShortPost.vue'
   import Searchbar from 'src/components/Searchbar.vue'
   import FilterChip from 'src/components/FilterChip.vue';

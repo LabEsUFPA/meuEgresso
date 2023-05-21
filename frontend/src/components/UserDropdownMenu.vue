@@ -58,7 +58,9 @@
 import { ref } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiMenuDown, mdiMenuUp } from '@mdi/js'
+import { createPinia } from 'pinia'
 import { useLoginStore } from 'src/store/LoginStore'
+import { createApp } from 'vue'
 
 interface Props {
   userLogged: boolean
@@ -67,9 +69,11 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   userLogged: false
 })
+const pinia = createPinia();
+const app = createApp({});
+app.use(pinia);
 
 const { userLogged } = props
-
 const store = useLoginStore()
 const userLoggedName = ref(userLogged ? store.getLoggedUser()?.username : '')
 const userLoggedGroupID = ref(userLogged ? store.getLoggedUser()?.grupos[0].id : '')

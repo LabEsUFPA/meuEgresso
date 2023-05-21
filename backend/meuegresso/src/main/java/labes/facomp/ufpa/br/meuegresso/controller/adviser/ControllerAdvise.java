@@ -25,6 +25,7 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.EmptyBodyRequestListException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 
@@ -279,6 +280,15 @@ public class ControllerAdvise {
 	@ExceptionHandler(DataNotSaveException.class)
 	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
 	public ErrorResponse handleDataNotSaveException(DataNotSaveException ex) {
+		return new ErrorResponse(
+				ex.getMessage(),
+				ex.getLocalizedMessage(),
+				ex.getInternalCode());
+	}
+
+	@ExceptionHandler(NotFoundFotoEgressoException.class)
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public ErrorResponse handleNotFoundFotoEgressoException(NotFoundFotoEgressoException ex) {
 		return new ErrorResponse(
 				ex.getMessage(),
 				ex.getLocalizedMessage(),

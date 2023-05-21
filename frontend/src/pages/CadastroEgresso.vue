@@ -95,6 +95,9 @@
               label="Matrícula"
               mask="############"
               placeholder="205004940001"
+              :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
+              custom-error-message
+              @update:value="checkRegistrationLength"
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -322,7 +325,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras: <sup
+              Descreva abaixo os assuntos nos quais você se sente mais confiante para apresentar palestras. <sup
                 v-if="bools.palestras"
                 class="text-red-500"
               >*</sup>
@@ -337,7 +340,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso: <sup class="text-red-500">*</sup>
+              Compartilhe abaixo, de forma simples e resumida, suas experiências positivas ao realizar o curso. <sup class="text-red-500">*</sup>
             </div>
 
             <CustomInput
@@ -347,7 +350,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto: <sup class="text-red-500">*</sup>
+              Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes, pois tudo tem impacto. <sup class="text-red-500">*</sup>
             </div>
 
             <CustomInput
@@ -377,16 +380,15 @@
       @close="$router.push('/egresso')"
     >
       <div class="h-full flex justify-center items-center">
-        <div class="w-1/2">
-          <div class="text-green-500 text-center mb-3">
-            <SvgIcon
-              type="mdi"
-              size="100"
-              class="inline"
-              :path="mdiCheckCircle"
-            />
+        <div class="flex flex-col full items-center justify-center gap-y-3 sm:gap-y-7">
+          <div class="text-green-500 text-center">
+            <img
+              class="w-16 sm:w-24"
+              src="../assets/check.svg"
+              alt="Loading"
+            >
           </div>
-          <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+          <h1 class="text-blue-900 w-3/4 text-center font-semibold text-2xl sm:text-3xl">
             Dados cadastrados com sucesso!
           </h1>
           <div class="flex flex-row justify-center">
@@ -447,7 +449,6 @@ import {
   mdiMapMarker,
   mdiMessage,
   mdiSchool,
-  mdiCheckCircle,
   mdiShareVariant,
   mdiAlertCircle
 } from '@mdi/js'
@@ -462,6 +463,7 @@ $store.fetchAll()
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const camposFaltosos = ref(false)
+const missingDigits = ref(0)
 
 const pais = ref('')
 const estado = ref('')
@@ -614,9 +616,29 @@ function handleFail (e: any) {
 
 const schema = object().shape({
   geral: object({
-    nome: string().required('Campo obrigatório'),
-    nascimento: string().required('Campo obrigatório'),
-    email: string().email('Email inválido').required('Campo obrigatório'),
+    nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
+      if (value) {
+        return value?.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/)
+      }
+
+      return (typeof value).constructor(true)
+    }),
+    nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
+      if (value) {
+        const date = value.split('/').reverse().join('-'); // Convert date to ISO format (YYYY-MM-DD)
+        const minDate = new Date('1940-01-01');
+        const maxDate = new Date('2023-12-31');
+        const inputDate = new Date(date);
+
+        // Check if the person is at least 18 years old
+        const eighteenYearsAgo = new Date();
+        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+
+        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo;
+      }
+      return true;
+    }),
+    email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/, 'Email inválido'),
     genero: string().required('Campo obrigatório'),
     linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
       if (value) {
@@ -639,7 +661,7 @@ const schema = object().shape({
     cidade: string().required('Campo obrigatório')
   }),
   academico: object({
-    matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres'),
+    matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres').matches(/^(\d{12})?$/),
     tipoAluno: string(),
     cotista: object({
       value: boolean(),
@@ -711,5 +733,9 @@ onMounted(() => {
     }).join(' '))
   }
 })
+
+const checkRegistrationLength = ($event: Event) => {
+  missingDigits.value = 12 - String($event).length
+}
 
 </script>
