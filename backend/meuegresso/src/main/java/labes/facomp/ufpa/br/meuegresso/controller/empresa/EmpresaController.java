@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaBasicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
@@ -53,23 +54,34 @@ public class EmpresaController {
 	 * Endpoint responsável por retornar a lista de empresa cadastrados no banco de
 	 * dados.
 	 *
-	 * @return {@link EmpresaDTO} Lista de empresa cadastrados
-	 * @author Alfredo Gabriel
+	 * @return {@link EmpresaBasicDTO} Lista de empresa cadastrados, ordenadas em
+	 *         ordem crescente
+	 * @author Alfredo Gabriel, Marcus Maciel
 	 * @since 21/04/2023
 	 */
 	@GetMapping
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<EmpresaDTO> consultarEmpresas() {
+	public List<EmpresaBasicDTO> consultarEmpresas() {
 		return mapper.map(empresaService.findAll(Sort.by(Sort.Direction.ASC, "nome")),
-				new TypeToken<List<EmpresaDTO>>() {
+				new TypeToken<List<EmpresaBasicDTO>>() {
 				}.getType());
 	}
 
+	/**
+	 * Endpoint responsável por retornar a lista de empresa cadastrados no banco de
+	 * dados, baseadas se contém pedaço de String.
+	 *
+	 * @return {@link EmpresaBasicDTO} Lista de empresa cadastrados que contém
+	 *         trecho de String, ordenadas em ordem
+	 *         crescente
+	 * @author Marcus Maciel
+	 * @since 21/05/2023
+	 */
 	@GetMapping(params = { "nome" })
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<EmpresaDTO> consultarEmpresasContainsNome(@RequestParam("nome") String nome) {
+	public List<EmpresaBasicDTO> consultarEmpresasContainsNome(@RequestParam("nome") String nome) {
 		return mapper.map(empresaService.findByNomeContainsIgnoreCaseOrderByNomeAsc(nome),
-				new TypeToken<List<EmpresaDTO>>() {
+				new TypeToken<List<EmpresaBasicDTO>>() {
 				}.getType());
 	}
 
