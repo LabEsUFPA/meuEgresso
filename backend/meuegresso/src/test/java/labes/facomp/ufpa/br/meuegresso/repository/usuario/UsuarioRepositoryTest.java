@@ -125,16 +125,16 @@ class UsuarioRepositoryTest {
 
     @Test
     void test_Given_Correct_Username_Should_Return_True() {
-        Mockito.when(usuarioRepository.existsByUsername(anyString())).thenReturn(true);
+        Mockito.when(usuarioRepository.existsByUsernameIgnoreCase(anyString())).thenReturn(true);
 
-        assertTrue(usuarioRepository.existsByUsername("john123"));
+        assertTrue(usuarioRepository.existsByUsernameIgnoreCase("john123"));
     }
 
     @Test
     void test_Given_Incorrect_Username_Should_Return_False() {
-        Mockito.when(usuarioRepository.existsByUsername(anyString())).thenReturn(false);
+        Mockito.when(usuarioRepository.existsByUsernameIgnoreCase(anyString())).thenReturn(false);
 
-        assertFalse(usuarioRepository.existsByUsername("carla123"));
+        assertFalse(usuarioRepository.existsByUsernameIgnoreCase("carla123"));
     }
 
     @AfterEach

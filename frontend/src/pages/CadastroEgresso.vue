@@ -325,7 +325,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras: <sup
+              Descreva abaixo os assuntos nos quais você se sente mais confiante para apresentar palestras. <sup
                 v-if="bools.palestras"
                 class="text-red-500"
               >*</sup>
@@ -340,7 +340,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso: <sup class="text-red-500">*</sup>
+              Compartilhe abaixo, de forma simples e resumida, suas experiências positivas ao realizar o curso. <sup class="text-red-500">*</sup>
             </div>
 
             <CustomInput
@@ -350,7 +350,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto: <sup class="text-red-500">*</sup>
+              Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes, pois tudo tem impacto. <sup class="text-red-500">*</sup>
             </div>
 
             <CustomInput
@@ -616,8 +616,28 @@ function handleFail (e: any) {
 
 const schema = object().shape({
   geral: object({
-    nome: string().required('Campo obrigatório').trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/, 'Informe nome e sobrenome'),
-    nascimento: string().required('Campo obrigatório'),
+    nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
+      if (value) {
+        return value?.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/)
+      }
+
+      return (typeof value).constructor(true)
+    }),
+    nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
+      if (value) {
+        const date = value.split('/').reverse().join('-'); // Convert date to ISO format (YYYY-MM-DD)
+        const minDate = new Date('1940-01-01');
+        const maxDate = new Date('2023-12-31');
+        const inputDate = new Date(date);
+
+        // Check if the person is at least 18 years old
+        const eighteenYearsAgo = new Date();
+        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+
+        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo;
+      }
+      return true;
+    }),
     email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/, 'Email inválido'),
     genero: string().required('Campo obrigatório'),
     linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
