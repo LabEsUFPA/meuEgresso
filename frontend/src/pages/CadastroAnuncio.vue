@@ -53,13 +53,17 @@
                     :inputClass="classNames(['flex w-full'])"
                     :required="true"
                     :iconPath="mdiLink"
+
                     
                   />
                   <CustomInput
                     name="salario"
                     label="Salário"
-                    type="number"
+                    type="text"
                     placeholder="R$ 0,00"
+                    :max-length="12"
+                    :min-length="0"
+                    :min="0"
                   />
                   <CustomInput
                     name="link"
@@ -130,12 +134,6 @@ import {useAnuncioVagaStore} from 'src/store/AnuncioVagaStore'
 import classNames from 'classnames'
 
 const form = ref<typeof Form | null>(null)
-const titulo = ref('')
-const areasEmprego = ref('')
-const dataExpiracao = ref('')
-const salario = ref('')
-const link = ref('')
-const descricao = ref('')
 const $store = useAnuncioVagaStore()
 const error = ref(false)
 const errorText = ref('')
@@ -144,15 +142,13 @@ const submitSuccess = ref(false)
 $store.fetchAreasEmprego()
 
 const schema = object().shape({
-  titulo: string().required('O título é um campo obrigatório'),
-  areasEmprego: string().required('A área da emprego é um campo obrigatório'),
-  dataExpiracao: date().required('A data de expiração é um campo obrigatório'),
-  salario: number(),
-  link: string().required('O link para contato é um campo obrigatório'),
-  descricao: string().required('A descrição é um campo obrigatório'),
+  titulo: string().required('O título é um campo obrigatório').trim().matches(/^[a-zA-Z0-9 ]+$/, 'Somente letras e números.'),
+  areasEmprego: string().required('A área da emprego é um campo obrigatório.'),
+  dataExpiracao: date().required('A data de expiração é um campo obrigatório.'),
+  salario: string().max(12),
+  link: string().required('O link para contato é um campo obrigatório.').trim().matches(/^(http|https):\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(\/\S*)?$/, 'Deve ser um formato de link válido em http ou https.'),
+  descricao: string().required('A descrição é um campo obrigatório.'),
 })
-
-
 
 
 //Post Anuncio
@@ -173,7 +169,7 @@ const handleSubmit = async (submitData: any) => {
 
   if (responseValidation===201) {
     error.value = false
-    console.log("Usuário atualizado: " + responseValidation)
+    console.log("Anúncio criado: " + responseValidation)
     submitSuccess.value = true
   }
  
@@ -183,32 +179,5 @@ const onInvalid = (e: any) => {
 }
 
 
-onMounted(() => {
-  console.log("onMounted front iniciado...")
-  watch(titulo, () => {
-    console.log("watch front titulo:", titulo.value)
-    form.value?.setFieldValue('titulo', titulo.value)
-  })
-  watch(areasEmprego, () => {
-    console.log("watch front areasEmprego:", areasEmprego.value)
-    form.value?.setFieldValue('areasEmprego', areasEmprego.value)
-  })
-  watch(dataExpiracao, () => {
-    console.log("watch front dataExpiracao:", dataExpiracao.value)
-    form.value?.setFieldValue('dataExpiracao', dataExpiracao.value)
-  })
-  watch(salario, () => {
-    console.log("watch front salario:", salario.value)
-    form.value?.setFieldValue('salario', salario.value)
-  })
-  watch(link, () => {
-    console.log("watch front link:", link.value)
-    form.value?.setFieldValue('link', link.value)
-  })
-  watch(descricao, () => {
-    console.log("watch front descricao:", descricao.value)
-    form.value?.setFieldValue('descricao', descricao.value)
-  })
 
-})
 </script>
