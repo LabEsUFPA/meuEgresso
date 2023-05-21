@@ -26,6 +26,7 @@
     <CustomButton
       type="submit"
       color="blue"
+      text-class="text-sm sm:text-lg text-white"
     >
       Buscar
     </CustomButton>

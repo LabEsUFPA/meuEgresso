@@ -1,14 +1,14 @@
 <template>
   <div class="flex flex-col">
     <div class="flex justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
-      <div class="flex w-[960px] border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl p-8 mt-10 mx-6 items-center justify-between">
+      <div class="flex flex-col gap-4 sm:flex-row w-[960px] border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl p-6 sm:p-8 mt-10 mx-4 sm:mx-6 items-start sm:items-center justify-between">
         <div class="flex gap-6 text-cyan-800 items-center">
           <SvgIcon
             type="mdi"
             size="32"
             :path="mdiBullhorn"
           />
-          <h1 class="text-3xl font-bold">
+          <h1 class="text-2xl sm:text-3xl font-bold">
             Vagas de emprego
           </h1>
         </div>
@@ -18,6 +18,7 @@
           link="/cadastro-anuncio"
           color="emerald"
           text-class="text-white font-medium"
+          class="w-full sm:w-fit sm:self-end"
         >
           <div>
             Anuncie uma vaga
@@ -31,14 +32,12 @@
       </div>
     </div>
 
-    <div class="flex flex-col gap-8 mb-10">
+    <div class="flex flex-col gap-4 sm:gap-8 mb-10">
       <div class="flex justify-center">
-        <div class="flex flex-col w-[960px] bg-white rounded-bl-2xl rounded-br-2xl p-2 mx-6 items-center">
-          <div class="flex w-full px-8 py-4">
-            <SearchBar :pesquisa-value="pesquisaValue" />
-          </div>
+        <div class="flex flex-col gap-4 sm:gap-6 w-[960px] bg-white rounded-bl-2xl rounded-br-2xl p-6 sm:p-8 mx-4 sm:mx-6 items-center">
+          <SearchBar :pesquisa-value="pesquisaValue" />
 
-          <div class="flex flex-col sm:flex-row w-full items-start gap-4 sm:gap-8 px-8 pt-4 pb-8">
+          <div class="flex flex-col sm:flex-row w-full items-start gap-4 sm:gap-8">
             <div class="flex gap-4 text-cyan-800 items-center">
               <SvgIcon
                 type="mdi"
@@ -128,8 +127,8 @@ const filtrosAreaEmprego = ref([
 const anuncios = [
   {
     id: 1,
-    nome: 'Victor Silva',
-    titulo: 'Vaga Front-end',
+    nome: 'Victor Hugo Machado da Silva',
+    titulo: 'Vaga Front-end vaga vaga vaga',
     area: 'Programador',
     descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     salario: 1000.0,

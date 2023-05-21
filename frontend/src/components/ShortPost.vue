@@ -1,20 +1,20 @@
 <template>
-  <div class="flex flex-col w-[960px] bg-white rounded-2xl mx-6 p-2">
-    <div class="flex gap-4 px-8 pt-8 pb-4 items-center border-b-[1px] border-b-gray-200">
-      <div class="w-8 h-8 bg-cyan-800 rounded-3xl" />
+  <div class="flex flex-col w-[960px] bg-white rounded-2xl mx-4 sm:mx-6">
+    <div class="flex gap-4 px-6 sm:px-8 pt-6 sm:pt-8 pb-4 items-center border-b-[1px] border-b-gray-200">
+      <div class="shrink-0 w-8 h-8 bg-cyan-800 rounded-3xl" />
 
       <div class="flex flex-col text-cyan-800">
-        <p class="text-lg font-medium">
+        <p class="text-sm sm:text-lg font-medium leading-tight">
           {{ nome }}
         </p>
-        <p class="text-sm font-normal">
+        <p class="flex text-xs sm:text-sm font-normal">
           anunciou uma vaga
         </p>
       </div>
     </div>
 
-    <div class="flex flex-col gap-4 px-8 py-8 border-b-[1px] border-b-gray-200">
-      <h1 class="text-cyan-600 text-2xl font-bold">
+    <div class="flex flex-col gap-4 p-6 sm:p-8 border-b-[1px] border-b-gray-200">
+      <h1 class="text-cyan-600 text-xl sm:text-2xl font-bold">
         {{ titulo }}
       </h1>
 
@@ -41,7 +41,7 @@
       </p>
     </div>
 
-    <div class="flex justify-end px-8 pb-8 pt-4">
+    <div class="flex justify-end px-6 sm:px-8 pb-6 sm:pb-8 pt-4">
       <CustomButton
         tag="router"
         :link="`/vagas/${id}`"
