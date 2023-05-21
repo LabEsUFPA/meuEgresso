@@ -36,3 +36,5 @@ spring:
 
 server:
   port: 15000
+
+fotosDir: test/fotosTeste/
