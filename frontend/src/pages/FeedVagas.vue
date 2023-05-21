@@ -22,22 +22,32 @@
       <div class="flex flex-col gap-8 mb-10" >
 
         <div class="flex justify-center">
-          <div class="flex w-[960px] bg-white rounded-bl-2xl rounded-br-2xl p-8 mx-6 items-center justify-between">
+          <div class="flex flex-col w-[960px] bg-white rounded-bl-2xl rounded-br-2xl p-2 mx-6 items-center">
             
-            <div class="mb-8 mx-4 sm:mx-0">
-              <div class="flex flex-col gap-y-4 sm:gap-y-6">
-                  <CustomInput
-                    class="w-full"
-                    name="pesquisar"
-                    label=""
-                    placeholder="Pesquisar"
-                    :icon-path="mdiSearchWeb"
-                    :required="true"
-                  />
-                  <CustomButton type="submit" color="blue">
-                      Buscar
-                  </CustomButton>
+            <div class="flex w-full px-8 pt-2 pb-4 border-b-[1px] border-sky-200">
+              <Searchbar :pesquisaValue="pesquisaValue"/>
+            </div>
+
+            <div class="flex w-full items-start gap-8 px-8 pt-4 pb-8">
+              
+              <div class="flex gap-4 text-cyan-800 items-center">
+                <Icon icon="material-symbols:filter-list-rounded" width="24" height="24" />
+                <p class="font-medium text-lg">Filtros</p>
               </div>
+
+              <div class="flex flex-wrap gap-4">
+
+                <FilterChip title="Engenharia de software"/>
+                <button 
+                  class="flex gap-3 px-4 py-2 rounded-3xl items-center text-cyan-800 bg-gray-200 font-medium"
+                  @click="openModalFilters()"
+                >
+                  <Icon icon="ic:round-plus" width="16" height="16"/>
+                  <p class="text-sm">Adicionar filtro</p>
+                </button>
+
+              </div>
+
             </div>
 
           </div>
@@ -49,7 +59,7 @@
               :nome="anuncio.nome"
               :titulo="anuncio.titulo"
               :area="anuncio.area"
-              :descricao="anuncio.titulo"
+              :descricao="anuncio.descricao"
               :salario="anuncio.salario"
             />
           </div>
@@ -57,8 +67,16 @@
       </div>
 
     </div>
-  
-    <CustomDialog v-model="submitSuccess">
+
+    
+    <ModalFilters v-model="isModalFiltersOpen" />
+
+    
+    
+    
+    
+    <!--
+    <CustomDialog :v-model="true">
       <div class="h-full flex justify-center items-center">
         <div class="w-1/2">
           <div class="text-green-500 text-center mb-3">
@@ -75,25 +93,25 @@
         </div>
       </div>
     </CustomDialog>
+    -->
   
   </template>
   
   <script setup lang="ts">
   
   import { Icon } from '@iconify/vue';
-  import { ref, watch, onMounted } from 'vue'
+  import { ref, onMounted } from 'vue'
   import SvgIcon from '@jamescoyle/vue-icon'
-  import CustomInput from 'src/components/CustomInput.vue'
+  import { mdiCheckCircle } from '@mdi/js'
+  import { OModal } from '@oruga-ui/oruga-next'
+
   import CustomButton from 'src/components/CustomButton.vue'
   import CustomDialog from 'src/components/CustomDialog.vue'
   import ShortPost from 'src/components/ShortPost.vue'
+  import Searchbar from 'src/components/Searchbar.vue'
+  import FilterChip from 'src/components/FilterChip.vue';
+  import ModalFilters from 'src/components/ModalFilters.vue';
 
-  import InvalidInsert from 'src/components/InvalidInsert.vue'
-  import { Form } from 'vee-validate'
-  import { object, string, date, ref as refYup } from 'yup'
-  import { mdiCheckCircle, mdiBullhorn, mdiLink, mdiArrowRight, mdiSearchWeb } from '@mdi/js'
-
-  
   const anuncios = [
     { 
       id: 1,
@@ -102,6 +120,8 @@
       area: 'Programador',
       descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       salario: 1000.0,
+      linkContato: 'https://www.google.com.br',
+      dataExpiracao: '2023-08-01'
     },
     { 
       id: 2,
@@ -110,100 +130,22 @@
       area: 'Programador',
       descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       salario: 1200.0,
+      linkContato: 'https://www.google.com.br',
+      dataExpiracao: '2023-08-01'
     }
   ]
 
+  const pesquisaValue = ref('')
   
-  const form = ref<typeof Form | null>(null)
-  const titulo = ref('')
-  const area = ref('')
-  const dataExpiracao = ref('')
-  const salario = ref('')
-  const contato = ref('')
-  const descricao = ref('')
-  
-  
-  
-  let dataAnuncioPost = {
-      id: 0,
-      titulo: "",
-      area: "",
-      dataExpiracao: "",
-      salario: "",
-      contato: "",
-      descricao:"",
+  const isModalFiltersOpen = ref(false)
+
+  const openModalFilters = () => {
+    isModalFiltersOpen.value = true
+    console.log('abre modal')
   }
-  const error = ref(false)
-  
-  const errorMessages = ref({
-    errorRequest: 'Requisição não aceita',
-    userNotFound: 'Usuario não cadastrado pela faculdade'
-  })
-  
-  const errorText = ref('')
-  const submitSuccess = ref(false)
-  
-  const schema = object().shape({
-    titulo: string().required(),
-    area: string().required(),
-    dataExpiracao: date().required(),
-    salario: string().required(),
-    contato: string().required(),
-    descricao: string().required(),
-  })
-  
- // const $store = useAnuncioVagaStore()
-  
-  
-  //Post Usuario
-  const handleSubmit = async (submitData: any) => {
-    /*const responseValidation = await $store.cadastraAnuncio({
-      titulo:dataAnuncioPost.titulo,
-      area:dataAnuncioPost.area,
-      dataExpiracao:dataAnuncioPost.dataExpiracao.toString(),
-      salario:dataAnuncioPost.salario,
-      contato:dataAnuncioPost.contato,
-      descricao:dataAnuncioPost.descricao
-    })
-  
-    if (responseValidation===201) {
-      error.value = false
-      console.log("Usuário atualizado: " + responseValidation)
-      submitSuccess.value = true
-    }
-   */
-  }
-  const onInvalid = (e: any) => {
-    console.log(e)
+
+  const closeModalFilters = () => {
+    isModalFiltersOpen.value = false
   }
   
-  
-  onMounted(() => {
-    console.log("onMounted front iniciado...")
-    watch(titulo, () => {
-      console.log("watch front titulo:", titulo.value)
-      form.value?.setFieldValue('titulo', titulo.value)
-    })
-    watch(area, () => {
-      console.log("watch front area:", area.value)
-      form.value?.setFieldValue('area', area.value)
-    })
-    watch(dataExpiracao, () => {
-      console.log("watch front dataExpiracao:", dataExpiracao.value)
-      form.value?.setFieldValue('dataExpiracao', dataExpiracao.value)
-    })
-    watch(salario, () => {
-      console.log("watch front salario:", salario.value)
-      form.value?.setFieldValue('salario', salario.value)
-    })
-    watch(contato, () => {
-      console.log("watch front contato:", contato.value)
-      form.value?.setFieldValue('contato', contato.value)
-    })
-    watch(descricao, () => {
-      console.log("watch front descricao:", descricao.value)
-      form.value?.setFieldValue('descricao', descricao.value)
-    })
-  
-  })
   </script>
