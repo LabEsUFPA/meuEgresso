@@ -40,10 +40,9 @@ public class AnuncioServiceImpl implements AnuncioService {
 
     @Override
     @Transactional
-    public List<AnuncioModel> findBySearch(String tituloAnuncio, Double salarioMin, Double salarioMax,
-            Integer[] areaEmpregoIds) {
+    public List<AnuncioModel> findBySearch(String tituloAnuncio, Integer[] areaEmpregoIds) {
         return anuncioRepository.findBySearch("%" + tituloAnuncio + "%",
-                salarioMin, salarioMax, areaEmpregoIds);
+                areaEmpregoIds);
     }
 
     @Override
