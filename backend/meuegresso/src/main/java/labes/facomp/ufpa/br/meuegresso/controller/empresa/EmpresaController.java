@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -58,8 +60,17 @@ public class EmpresaController {
 	@GetMapping
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<EmpresaDTO> consultarEmpresas() {
-		return mapper.map(empresaService.findAll(), new TypeToken<List<EmpresaDTO>>() {
-		}.getType());
+		return mapper.map(empresaService.findAll(Sort.by(Sort.Direction.ASC, "nome")),
+				new TypeToken<List<EmpresaDTO>>() {
+				}.getType());
+	}
+
+	@GetMapping(params = { "nome" })
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public List<EmpresaDTO> consultarEmpresasContainsNome(@RequestParam("nome") String nome) {
+		return mapper.map(empresaService.findByNomeContainsIgnoreCaseOrderByNomeAsc(nome),
+				new TypeToken<List<EmpresaDTO>>() {
+				}.getType());
 	}
 
 	/**

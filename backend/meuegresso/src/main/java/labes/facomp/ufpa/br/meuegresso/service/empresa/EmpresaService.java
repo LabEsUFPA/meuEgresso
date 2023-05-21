@@ -2,6 +2,8 @@ package labes.facomp.ufpa.br.meuegresso.service.empresa;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
+
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 
@@ -35,7 +37,7 @@ public interface EmpresaService {
 	 *
 	 * @return Lista de objetos da classe EmpresaModel.
 	 */
-	public List<EmpresaModel> findAll();
+	public List<EmpresaModel> findAll(Sort sort);
 
 	/**
 	 * Método responsável por atualizar dados de um empresa cadastrado.
@@ -62,5 +64,7 @@ public interface EmpresaService {
 	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
 	public EmpresaModel findByNome(String nome);
+
+	public List<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(String nome);
 
 }

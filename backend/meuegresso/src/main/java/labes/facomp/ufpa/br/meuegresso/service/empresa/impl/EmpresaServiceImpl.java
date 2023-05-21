@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.service.empresa.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
@@ -33,8 +34,8 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
-    public List<EmpresaModel> findAll() {
-        return empresaRepository.findAll();
+    public List<EmpresaModel> findAll(Sort sort) {
+        return empresaRepository.findAll(sort);
     }
 
     @Override
@@ -63,7 +64,12 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     @Override
     public EmpresaModel findByNome(String nome) {
-        return empresaRepository.findByNomeIgnoreCase(nome).orElse(null);
+        return empresaRepository.findByNome(nome).orElse(null);
+    }
+
+    @Override
+    public List<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(String nome) {
+        return empresaRepository.findByNomeContainsIgnoreCaseOrderByNomeAsc(nome);
     }
 
 }
