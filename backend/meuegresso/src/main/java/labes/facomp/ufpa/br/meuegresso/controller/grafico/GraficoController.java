@@ -14,6 +14,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.GenerosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.GraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.IdadesGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.PosGraduacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
@@ -79,6 +80,25 @@ public class GraficoController {
                 (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("não-binário")).count(),
                 (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("não quero declarar")).count(),
                 (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("outros")).count());
+    }
+
+    /**
+     * Endpoint responsavel por buscar todos os Locais da Pos dos egressos no banco.
+     *
+     * @return {@link LocalPosGraficoDTO} Retorna o endereco do local da pos.
+     * @author Pedro Inácio
+     * @since 21/05/2023
+     */
+    @GetMapping(value = "/LocalPos")
+    @ResponseStatus(code = HttpStatus.OK)
+    public LocalPosGraficoDTO getLocalPos() {
+        List<EgressoModel> lista = egressoService.findAll();
+
+        return new LocalPosGraficoDTO(
+            lista.stream().map(a -> a.getTitulacao().getCurso().getNome()).findFirst(),
+            lista.stream().map(a -> a.getTitulacao().getEmpresa().getEndereco().getCidade()).findFirst(),
+            lista.stream().map(a -> a.getTitulacao().getEmpresa().getEndereco().getEstado()).findFirst(),
+            lista.stream().map(a -> a.getTitulacao().getEmpresa().getEndereco().getPais()).findFirst());
     }
     
     /**
