@@ -248,12 +248,15 @@ export namespace models {
   }
 
   export interface AnuncioModel{
-    titulo: string
-    area: string
-    dataExpiracao: string
-    salario: string
-    contato: string
-    descricao:string
+    titulo: string,
+    areaEmprego:{
+      id:number,
+      nome:string
+    },
+    descricao:string,
+    dataExpiracao: string,
+    link: string,
+    salario:number,
   }
 }
 

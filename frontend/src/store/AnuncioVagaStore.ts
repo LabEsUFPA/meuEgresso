@@ -8,15 +8,19 @@ interface AnuncioVaga extends models.AnuncioModel {
 
 export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
   state: () => ({
+    areasEmprego:[],
     anuncio:{
       id: 0,
       titulo: "",
-      area: "",
-      dataExpiracao: "",
-      salario: "",
-      contato: "",
+      areaEmprego:{
+        id:0,
+        nome:""
+      },
       descricao:"",
-    }  
+      dataExpiracao: "",
+      link: "",
+      salario: 10000.0,
+    }
   }),
 
   actions: {
@@ -29,12 +33,26 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       if (response?.status === 200) {
         this.anuncio.id = response.data?.id
         this.anuncio.titulo = response.data?.titulo
-        this.anuncio.area = response.data?.area
+        this.anuncio.areaEmprego = response.data?.areaEmprego
         this.anuncio.dataExpiracao = response.data?.dataExpiracao
         this.anuncio.salario = response.data?.salario
-        this.anuncio.contato = response.data?.contato
+        this.anuncio.link = response.data?.link
         this.anuncio.descricao = response.data?.descricao
         return response.data
+      }
+    },
+
+    async fetchAreasEmprego () {
+      const response = await Api.request({
+        method: 'get',
+        route: '/areaemprego'
+      })
+
+      if (response?.status === 200) {
+        this.areasEmprego = response.data?.map((elem: any) => ({
+          label: elem.nome,
+          value: elem.id
+        }))
       }
     },
 
@@ -44,8 +62,10 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
         route: '/anuncio',
         body: dadosAnuncio
       })
+      console.log('enviando:', dadosAnuncio)
 
       return (response?.status) !== undefined ? response.status : 500
+      
     }
   }
 })
