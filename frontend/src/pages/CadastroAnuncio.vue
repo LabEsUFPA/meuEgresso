@@ -98,15 +98,16 @@
       </div>
   </Form>
 
-  <CustomDialog v-model="submitSuccess">
+  <CustomDialog v-model="submitSuccess" @close=retornaFeed>
     <div class="h-full flex justify-center items-center">
       <div class="w-1/2">
-        <div class="text-green-500 text-center mb-3">
+        <div class="text-green-500 text-center mb-3" >
           <SvgIcon
             type="mdi"
             size="100"
             class="inline"
             :path="mdiCheckCircle"
+          
           />
         </div>
         <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
@@ -120,15 +121,16 @@
 
 <script setup lang="ts">
 
-import { ref, watch, onMounted } from 'vue'
+import {ref} from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import router from 'src/router'
 import { Form } from 'vee-validate'
-import { object, string, date, ref as refYup, number } from 'yup'
+import { object, string, date} from 'yup'
 import { mdiCheckCircle, mdiBullhorn, mdiLink, mdiPencil } from '@mdi/js'
 import {useAnuncioVagaStore} from 'src/store/AnuncioVagaStore'
 import classNames from 'classnames'
@@ -138,6 +140,10 @@ const $store = useAnuncioVagaStore()
 const error = ref(false)
 const errorText = ref('')
 const submitSuccess = ref(false)
+
+const retornaFeed = ()=>{
+  router.push({ path: '/vagas' })
+}
 
 $store.fetchAreasEmprego()
 

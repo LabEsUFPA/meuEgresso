@@ -12,7 +12,12 @@
           </div>
           
           <CustomButton type="submit" color="emerald" text-class="text-white font-medium">
-            Anuncie uma vaga
+              <RouterLink
+                    to="/cadastro-anuncio"
+                    
+                  >
+                  Anuncie uma vaga
+              </RouterLink>
             <Icon icon="mingcute:right-line" width="32" height="32" />
           </CustomButton>
 
@@ -35,7 +40,9 @@
                     :required="true"
                   />
                   <CustomButton type="submit" color="blue">
+                    
                       Buscar
+                      
                   </CustomButton>
               </div>
             </div>
@@ -43,16 +50,7 @@
           </div>
         </div>
 
-          <div v-for="anuncio in anuncios" class="flex justify-center">
-            <ShortPost
-              :id="anuncio.id"
-              :nome="anuncio.nome"
-              :titulo="anuncio.titulo"
-              :area="anuncio.area"
-              :descricao="anuncio.titulo"
-              :salario="anuncio.salario"
-            />
-          </div>
+         
         
       </div>
 
@@ -86,6 +84,7 @@
   import CustomInput from 'src/components/CustomInput.vue'
   import CustomButton from 'src/components/CustomButton.vue'
   import CustomDialog from 'src/components/CustomDialog.vue'
+  import router from 'src/router'
   import ShortPost from 'src/components/ShortPost.vue'
 
   import InvalidInsert from 'src/components/InvalidInsert.vue'
