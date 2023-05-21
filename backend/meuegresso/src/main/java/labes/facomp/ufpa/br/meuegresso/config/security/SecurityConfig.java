@@ -53,6 +53,7 @@ public class SecurityConfig {
 								"/egressoValido",
 								"/mapa",
 								"/publico/egresso**/**",
+								"/grafico**/**",
 								"/")
 						.permitAll()
 						.anyRequest().authenticated())
