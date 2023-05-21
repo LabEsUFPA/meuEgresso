@@ -2745,7 +2745,7 @@ INSERT INTO public.empresa (nome_empresa, endereco_empresa, created_by) VALUES (
 INSERT INTO public.empresa (nome_empresa, endereco_empresa, created_by) VALUES ('FACULDADE METROPOLITANA DE ANÁPOLIS (FAMA)', 264, 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.empresa (nome_empresa, endereco_empresa, created_by) VALUES ('FACULDADE METROPOLITANA DE CIENCIAS E TECNOLOGIA (FAMEC)', 537, 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.empresa (nome_empresa, endereco_empresa, created_by) VALUES ('FACULDADE METROPOLITANA DE COARI (FAMETRO)', 635, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.empresa (nome_empresa, endereco_empresa, created_by) VALUES ('FACULDADE METROPOLITANA DE DIAS D'ÀVILA (FACD'ÀVILA)', 636, 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.empresa (nome_empresa, endereco_empresa, created_by) VALUES ('FACULDADE METROPOLITANA DE DIAS D''ÀVILA (FACD''ÀVILA)', 636, 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.empresa (nome_empresa, endereco_empresa, created_by) VALUES ('FACULDADE METROPOLITANA DE FLORIANÓPOLIS (FAMEFLORIPA)', 3, 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.empresa (nome_empresa, endereco_empresa, created_by) VALUES ('FACULDADE METROPOLITANA DE FRANCA (FAMEF)', 179, 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.empresa (nome_empresa, endereco_empresa, created_by) VALUES ('FACULDADE METROPOLITANA DE HORIZONTE (FMH)', 525, 1) ON CONFLICT DO NOTHING;
