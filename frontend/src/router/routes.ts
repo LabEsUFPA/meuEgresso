@@ -43,6 +43,14 @@ export default [
       {
         path: '/conta-admin',
         component: async () => await import('src/pages/EdicaoContaAdmin.vue')
+      },
+      {
+        path: '/vagas',
+        component: async () => await import('src/pages/FeedVagas.vue')
+      },
+      {
+        path: '/vagas/:id',
+        component: async () => await import('src/pages/AnuncioVaga.vue')
       }
     ]
   }
