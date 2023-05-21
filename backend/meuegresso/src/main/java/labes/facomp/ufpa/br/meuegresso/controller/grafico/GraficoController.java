@@ -18,14 +18,20 @@ import labes.facomp.ufpa.br.meuegresso.dto.grafico.IdadesGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.PosGraduacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoBolsaGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoGraduacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
 import labes.facomp.ufpa.br.meuegresso.service.setoratuacao.SetorAtuacaoService;
+import labes.facomp.ufpa.br.meuegresso.service.tipobolsa.TipoBolsaService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -47,6 +53,10 @@ public class GraficoController {
     private final AreaAtuacaoService areaAtuacaoService;
 
     private final SetorAtuacaoService setorAtuacaoService;
+
+    private final TipoBolsaService tipoBolsaService;
+
+    private final EgressoTitulacaoService egressoTitulacaoService;
 
     /**
      * Endpoint responsavel por buscar todas as informacoes de grafico.
@@ -103,13 +113,80 @@ public class GraficoController {
     }
 
     /**
+     * Endpoint responsavel por buscar todos os tipo de graduacao e de pos graduacao dos egressos no banco.
+     *
+     * @return {@link TipoGraduacaoGraficoDTO} Retorna a contagem de cada tipo de graduacao e pos graduacao.
+     * @author Pedro Inácio
+     * @since 21/05/2023
+     */
+    @GetMapping(value = "/nivel")
+    @ResponseStatus(code = HttpStatus.OK)
+    public TipoGraduacaoGraficoDTO getNivel() {
+        List<EgressoModel> lista = egressoService.findAll();
+
+        List<EgressoTitulacaoModel > egressoTitulacao = egressoTitulacaoService.findAll();
+
+        HashMap<String, Integer> graduacoes = new HashMap<>();
+        HashMap<String, Integer> posGraduacoes = new HashMap<>();
+
+        Stream<EgressoModel> trueEgressoList = lista.stream().filter(e -> e.getPosGraduacao().equals(true));
+        Stream<EgressoModel> falseEgressoList = lista.stream().filter(e -> e.getPosGraduacao().equals(false));
+        
+        int count = 0;
+        int countPos = 0;
+        for(int i =0; i< egressoTitulacao.size(); i++){
+            if(egressoTitulacao.get(i).getTitulacao().getNome().equalsIgnoreCase("graduação")){
+                final String nomeFinal = egressoTitulacao.get(i).getCurso().getNome();
+                count = (int) falseEgressoList.filter(a -> a.getTitulacao().getCurso().getNome().equalsIgnoreCase(nomeFinal)).count();
+                graduacoes.put(nomeFinal, count);
+            }
+            else{
+                final String nomeFinal = egressoTitulacao.get(i).getCurso().getNome();
+                countPos = (int) trueEgressoList.filter(a -> a.getTitulacao().getCurso().getNome().equalsIgnoreCase(nomeFinal)).count();
+                posGraduacoes.put(nomeFinal, countPos);
+            }
+            
+        }
+        
+        return new TipoGraduacaoGraficoDTO((int) falseEgressoList.count(), (int) trueEgressoList.count(),graduacoes, posGraduacoes);
+    }
+
+    /**
+     * Endpoint responsavel por buscar todos os Tipo de Bolsa dos egressos no banco.
+     *
+     * @return {@link TipoBolsaGraficoDTO} Retorna a contagem de cada tipo de Bolsa.
+     * @author Pedro Inácio
+     * @since 21/05/2023
+     */
+    @GetMapping(value = "/tipoBolsa")
+    @ResponseStatus(code = HttpStatus.OK)
+    public TipoBolsaGraficoDTO getTipoBolsa() {
+        List<EgressoModel> lista = egressoService.findAll();
+
+        List<TipoBolsaModel > tipoBolsa = tipoBolsaService.findAll();
+
+        HashMap<String, Integer> tipoBolsaContagens = new HashMap<>();
+
+        int count = 0;
+        for(int i =0; i< tipoBolsa.size(); i++){
+            final String nomeFinal = tipoBolsa.get(i).getNome();
+            count = (int) lista.stream().filter(a -> a.getBolsa().getNome().equalsIgnoreCase(nomeFinal)).count();
+
+            tipoBolsaContagens.put(nomeFinal, count);
+            
+        }
+        
+        return new TipoBolsaGraficoDTO((int) lista.stream().filter(a -> a.getBolsista().equals(true)).count(), tipoBolsaContagens);
+    }
+
+    /**
      * Endpoint responsavel por buscar todos os Locais da Pos dos egressos no banco.
      *
      * @return {@link LocalPosGraficoDTO} Retorna o endereco do local da pos.
      * @author Pedro Inácio
      * @since 21/05/2023
      */
-    @GetMapping(value = "/LocalPos")
+    @GetMapping(value = "/localPos")
     @ResponseStatus(code = HttpStatus.OK)
     public LocalPosGraficoDTO getLocalPos() {
         List<EgressoModel> lista = egressoService.findAll();
@@ -168,15 +245,6 @@ public class GraficoController {
         }
 
         return new AreaAtuacaoGraficoDTO(areaAtuacaoContagens);
-        
-        //return new AreaAtuacaoGraficoDTO(
-        //        (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Computação")).count(),
-        //        (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Pesquisa")).count(),
-        //        (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Desempregado")).count(),
-        //        (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Programador")).count(),
-        //        (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Analista")).count(),
-        //        (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Outros")).count())
-
     }
 
     /**
@@ -205,13 +273,6 @@ public class GraficoController {
         }
 
         return new SetorAtuacaoGraficoDTO(setorAtuacaoContagens);
-
-        //return new SetorAtuacaoGraficoDTO(
-        //        (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Empresarial")).count(),
-        //        (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Público")).count(),
-        //        (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Terceiro Setor")).count(),
-        //        (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Magistério/Docencia")).count(),
-        //        (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Outros")).count());
     }
     
     /**
