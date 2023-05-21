@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.grafico;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -18,7 +19,9 @@ import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.PosGraduacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
+import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -34,6 +37,8 @@ import lombok.RequiredArgsConstructor;
 public class GraficoController {
     
     private final EgressoService egressoService;
+
+    private final GeneroService generoService;
 
     /**
      * Endpoint responsavel por buscar todas as informacoes de grafico.
@@ -73,13 +78,20 @@ public class GraficoController {
     public GenerosGraficoDTO getGeneros() {
         List<EgressoModel> lista = egressoService.findAll();
 
-        return new GenerosGraficoDTO(
-                (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("masculino")).count(),
-                (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("feminino")).count(),
-                (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("transsexual")).count(),
-                (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("não-binário")).count(),
-                (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("não quero declarar")).count(),
-                (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("outros")).count());
+        List<GeneroModel> generos = generoService.findAll();
+
+        HashMap<String, Integer> generosContagens = new HashMap<>();
+
+        int count = 0;
+        for(int i =0; i< generos.size(); i++){
+            final String nomeFinal = generos.get(i).getNome();
+            count = (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase(nomeFinal)).count();
+
+            generosContagens.put(nomeFinal, count);
+            
+        }
+        
+        return new GenerosGraficoDTO(generosContagens);
     }
 
     /**
