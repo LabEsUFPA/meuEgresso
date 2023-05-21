@@ -49,8 +49,7 @@ public class AnuncioModel extends Auditable {
     @Column(name = "link_anuncio", unique = false, nullable = false)
     private String link;
 
-    @Builder.Default
     @Column(name = "salario_anuncio", unique = false, nullable = true)
-    private double salario = 0.0;
+    private String salario;
 
 }

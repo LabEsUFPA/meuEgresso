@@ -39,7 +39,7 @@ public class AnuncioDTO {
     @NotNull
     private String link;
 
-    @Min(0)
-    @Max(100000)
-    private double salario;
+    @NotBlank
+    @NotNull
+    private String salario;
 }
