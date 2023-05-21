@@ -78,15 +78,15 @@ public class AnuncioController {
 	 * @author João Paulo, Lucas Cantão
 	 * @since 19/05/2023
 	 */
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	@GetMapping(value = "/busca")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<AnuncioDTO> filtrarAnuncios(
 			@RequestParam(name = "titulo", defaultValue = "") String titulo,
 			@RequestParam(name = "minValorSalario", defaultValue = "0") Double minValorSalario,
 			@RequestParam(name = "maxValorSalario", defaultValue = "100000") Double maxValorSalario,
 			@RequestParam(name = "areaEmprego", defaultValue = "0") Integer[] areaEmprego) {
 
-		List<AnuncioModel> filtro = anuncioService.findBySearch(titulo, minValorSalario, Double.MAX_VALUE, areaEmprego);
+		List<AnuncioModel> filtro = anuncioService.findBySearch(titulo, minValorSalario, maxValorSalario, areaEmprego);
 
 		return mapper.map(filtro, new TypeToken<List<AnuncioDTO>>() {
 		}.getType());
