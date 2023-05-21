@@ -1,6 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.controller.anuncio;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -9,11 +11,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,26 +57,39 @@ public class AnuncioController {
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
 	 */
-	@GetMapping
+	@GetMapping()
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<AnuncioDTO> consultarAnuncios() {
-		return mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {
+		List<AnuncioDTO> anuncios = mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {
 		}.getType());
+		return anuncios.stream()
+				.filter(anuncio -> LocalDate.now().isBefore(anuncio.getDataExpiracao()))
+				.collect(Collectors.toList());
 	}
 
 	/**
-	 * Endpoint responsável por retornar um anuncio por sua ID.
+	 * Endpoint responsável por retornar a lista de anuncios filtrados
 	 *
-	 * @param id Integer
-	 * @return {@link AnuncioDTO} Dados gravados no banco.
-	 * @author Alfredo Gabriel, Camilo Santos
-	 * @since 21/04/2023
+	 * @return {@link List<AnuncioDTO>} Lista de anuncio cadastrados
+	 * @param titulo          título do anúncio deve conter
+	 * @param minValorSalario valor mínimo do salário do anúncio
+	 * @param maxValorSalario valor máximo do salário do anúncio
+	 * @param areaEmprego     id da area de emprego o qual anúncio se refere
+	 * @author João Paulo, Lucas Cantão
+	 * @since 19/05/2023
 	 */
-	@GetMapping(value = "/{id}")
-	@ResponseStatus(code = HttpStatus.OK)
+	@GetMapping(value = "/busca")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public AnuncioDTO findById(@PathVariable Integer id) {
-		return mapper.map(anuncioService.findById(id), AnuncioDTO.class);
+	public List<AnuncioDTO> filtrarAnuncios(
+			@RequestParam(name = "titulo", defaultValue = "") String titulo,
+			@RequestParam(name = "minValorSalario", defaultValue = "0") Double minValorSalario,
+			@RequestParam(name = "maxValorSalario", defaultValue = "100000") Double maxValorSalario,
+			@RequestParam(name = "areaEmprego", defaultValue = "0") Integer[] areaEmprego) {
+
+		List<AnuncioModel> filtro = anuncioService.findBySearch(titulo, minValorSalario, maxValorSalario, areaEmprego);
+
+		return mapper.map(filtro, new TypeToken<List<AnuncioDTO>>() {
+		}.getType());
 	}
 
 	/**
@@ -110,7 +125,8 @@ public class AnuncioController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String atualizarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO, JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
+	public String atualizarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO, JwtAuthenticationToken token)
+			throws UnauthorizedRequestException, InvalidRequestException {
 		if (anuncioService.existsByIdAndCreatedById(anuncioDTO.getId(), jwtService.getIdUsuario(token))) {
 			AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
 			anuncioService.update(anuncioModel);

@@ -74,180 +74,182 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @TestMethodOrder(OrderAnnotation.class)
 class MapaControllerTest {
 
-    static final Integer EMRPESA_ID = 1;
-    static final String NOME = "EmpresaTeste";
-    static final String SETORATUACAO = "SetorTeste";
+        static final Integer EMRPESA_ID = 1;
+        static final String NOME = "EmpresaTeste";
+        static final String SETORATUACAO = "SetorTeste";
 
-    final String USERNAME = "username_test";
+        final String USERNAME = "username_test";
 
-    static final Integer EGRESSO_ID = 1;
-    static final LocalDate EGRESSO_NASCIMENTO = LocalDate.parse("1999-10-20");
-    static final String EGRESSO_EMAIL = "cantao162@gmail.com";
+        static final Integer EGRESSO_ID = 1;
+        static final LocalDate EGRESSO_NASCIMENTO = LocalDate.parse("1999-10-20");
+        static final String EGRESSO_EMAIL = "cantao162@gmail.com";
 
-    static final Integer FAIXASALARIAL_ID = 1;
-    static final String FAIXASALARIAL = "5000 - 15000";
+        static final Integer FAIXASALARIAL_ID = 1;
+        static final String FAIXASALARIAL = "5000 - 15000";
 
-    @Autowired
-    private GrupoRepository grupoRepository;
+        @Autowired
+        private GrupoRepository grupoRepository;
 
-    @Autowired
-    private AreaAtuacaoRepository areaAtuacaoRepository;
+        @Autowired
+        private AreaAtuacaoRepository areaAtuacaoRepository;
 
-    @Autowired
-    private EgressoRepository egressoRepository;
+        @Autowired
+        private EgressoRepository egressoRepository;
 
-    @Autowired
-    private EgressoEmpresaRepository egressoEmpresaRepository;
+        @Autowired
+        private EgressoEmpresaRepository egressoEmpresaRepository;
 
-    @Autowired
-    private GeneroRepository generoRepository;
+        @Autowired
+        private GeneroRepository generoRepository;
 
-    @Autowired
-    private EmpresaRepository empresaRepository;
+        @Autowired
+        private EmpresaRepository empresaRepository;
 
-    @Autowired
-    private FaixaSalarialRepository faixaSalarialRepository;
+        @Autowired
+        private FaixaSalarialRepository faixaSalarialRepository;
 
-    @Autowired
-    MockMvc mockMvc;
+        @Autowired
+        MockMvc mockMvc;
 
-    String token;
+        String token;
 
-    UsuarioModel usuarioModel;
+        UsuarioModel usuarioModel;
 
-    EmpresaDTO empresaDTO;
-    EmpresaModel empresaModel;
+        EmpresaDTO empresaDTO;
+        EmpresaModel empresaModel;
 
-    EgressoEmpresaModel egressoEmpresaModel;
+        EgressoEmpresaModel egressoEmpresaModel;
 
-    EgressoEmpresaDTO egressoEmpresaDTO;
-    EgressoEmpresaModelId egressoEmpresaModelId;
+        EgressoEmpresaDTO egressoEmpresaDTO;
+        EgressoEmpresaModelId egressoEmpresaModelId;
 
-    EgressoPublicDTO egressoPublicDTO;
-    EgressoCadastroDTO egressoCadastroDTO;
-    EgressoModel egressoModel;
+        EgressoPublicDTO egressoPublicDTO;
+        EgressoCadastroDTO egressoCadastroDTO;
+        EgressoModel egressoModel;
 
-    FaixaSalarialDTO faixaSalarialDTO;
+        FaixaSalarialDTO faixaSalarialDTO;
 
-    @Autowired
-    ModelMapper modelMapper;
+        @Autowired
+        ModelMapper modelMapper;
 
-    ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-    @BeforeAll
-    void setUp() throws Exception {
+        @BeforeAll
+        void setUp() throws Exception {
 
-        GrupoModel grupoModel = new GrupoModel();
-        grupoModel.setNomeGrupo("ADMIN");
-        grupoModel = grupoRepository.save(grupoModel);
+                GrupoModel grupoModel = new GrupoModel();
+                grupoModel.setNomeGrupo("ADMIN");
+                grupoModel = grupoRepository.save(grupoModel);
 
-        Set<GrupoModel> grupos = new HashSet<>();
-        grupos.add(grupoModel);
+                Set<GrupoModel> grupos = new HashSet<>();
+                grupos.add(grupoModel);
 
-        usuarioModel = new UsuarioModel();
-        usuarioModel.setUsername(USERNAME);
-        usuarioModel.setNome("nome_test");
-        usuarioModel.setEmail("teste@gmail.com");
-        usuarioModel.setPassword("teste123");
-        usuarioModel.setGrupos(grupos);
+                usuarioModel = new UsuarioModel();
+                usuarioModel.setUsername(USERNAME);
+                usuarioModel.setNome("nome_test");
+                usuarioModel.setEmail("teste@gmail.com");
+                usuarioModel.setPassword("teste123");
+                usuarioModel.setGrupos(grupos);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(usuarioModel)))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isCreated())
-                .andReturn();
+                mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(usuarioModel)))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isCreated())
+                                .andReturn();
 
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-        authenticationRequest.setUsername(usuarioModel.getUsername());
-        authenticationRequest.setPassword(usuarioModel.getPassword());
-        String objectJson = objectMapper.writeValueAsString(authenticationRequest);
+                AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+                authenticationRequest.setUsername(usuarioModel.getUsername());
+                authenticationRequest.setPassword(usuarioModel.getPassword());
+                String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
-        MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectJson))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk())
-                .andReturn();
+                MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectJson))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk())
+                                .andReturn();
 
-        AuthenticationResponse authenticationResponse = objectMapper.readValue(
-                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
-        this.token = authenticationResponse.getToken();
+                AuthenticationResponse authenticationResponse = objectMapper.readValue(
+                                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
+                this.token = authenticationResponse.getToken();
 
-        MvcResult resposta = mockMvc.perform(
-                MockMvcRequestBuilders.get("/usuario")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + this.token))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk()).andReturn();
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.get("/usuario")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
 
-        UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-                UsuarioAuthDTO.class);
+                UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                                UsuarioAuthDTO.class);
 
-        usuarioModel.setId(usuarioAuthDTO.getId());
+                usuarioModel.setId(usuarioAuthDTO.getId());
 
-        /* Gênero */
-        GeneroModel genero = new GeneroModel(1, "genero X");
-        genero = generoRepository.save(genero);
+                /* Gênero */
+                GeneroModel genero = new GeneroModel(1, "genero X");
+                genero = generoRepository.save(genero);
 
-        /* Egresso */
-        egressoModel = new EgressoModel();
-        egressoModel.setId(EGRESSO_ID);
-        egressoModel.setNascimento(EGRESSO_NASCIMENTO);
-        egressoModel.setGenero(genero);
-        egressoModel.setUsuario(usuarioModel);
+                /* Egresso */
+                egressoModel = new EgressoModel();
+                egressoModel.setId(EGRESSO_ID);
+                egressoModel.setNascimento(EGRESSO_NASCIMENTO);
+                egressoModel.setGenero(genero);
+                egressoModel.setUsuario(usuarioModel);
 
-        egressoRepository.save(this.egressoModel);
+                egressoRepository.save(this.egressoModel);
 
-        /* Empresa */
-        empresaModel = EmpresaModel.builder().id(EGRESSO_ID).nome(NOME).build();
-        empresaRepository.save(empresaModel);
+                /* Empresa */
+                empresaModel = EmpresaModel.builder().id(EGRESSO_ID).nome(NOME).build();
+                empresaRepository.save(empresaModel);
 
-        /* ModelId */
-        egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(EGRESSO_ID).empresaId(EMRPESA_ID).build();
+                /* ModelId */
+                egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(EGRESSO_ID).empresaId(EMRPESA_ID)
+                                .build();
 
-        /* FaixaSalarial */
-        faixaSalarialDTO = FaixaSalarialDTO.builder().id(FAIXASALARIAL_ID).faixa(FAIXASALARIAL).build();
-        FaixaSalarialModel faixaSalarialModel = modelMapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
-        faixaSalarialRepository.save(faixaSalarialModel);
+                /* FaixaSalarial */
+                faixaSalarialDTO = FaixaSalarialDTO.builder().id(FAIXASALARIAL_ID).faixa(FAIXASALARIAL).build();
+                FaixaSalarialModel faixaSalarialModel = modelMapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
+                faixaSalarialRepository.save(faixaSalarialModel);
 
-        AreaAtuacaoModel area = new AreaAtuacaoModel();
-        area.setId(1);
-		area.setNome("area x");
-		SetorAtuacaoModel setorAtuacaoModel = SetorAtuacaoModel.builder().nome("SETOR X").build();
-        egressoEmpresaModel = new EgressoEmpresaModel();
-        egressoEmpresaModel.setId(egressoEmpresaModelId);
-        egressoEmpresaModel.setEgresso(egressoModel);
-		egressoEmpresaModel.setEmpresa(empresaModel);
-		egressoEmpresaModel.setAreaAtuacao(area);
-		egressoEmpresaModel.setSetorAtuacao(setorAtuacaoModel);
-        egressoEmpresaModel.setFaixaSalarial(faixaSalarialModel);
-        Set<EgressoModel> egressos = new HashSet<>();
-		egressos.add(egressoModel);
+                AreaAtuacaoModel area = new AreaAtuacaoModel();
+                area.setId(1);
+                area.setNome("area x");
+                SetorAtuacaoModel setorAtuacaoModel = SetorAtuacaoModel.builder().nome("SETOR X").build();
+                egressoEmpresaModel = new EgressoEmpresaModel();
+                egressoEmpresaModel.setId(egressoEmpresaModelId);
+                egressoEmpresaModel.setEgresso(egressoModel);
+                egressoEmpresaModel.setEmpresa(empresaModel);
+                egressoEmpresaModel.setAreaAtuacao(area);
+                egressoEmpresaModel.setSetorAtuacao(setorAtuacaoModel);
+                egressoEmpresaModel.setFaixaSalarial(faixaSalarialModel);
+                Set<EgressoModel> egressos = new HashSet<>();
+                egressos.add(egressoModel);
 
-        areaAtuacaoRepository.save(area);
+                areaAtuacaoRepository.save(area);
 
-        egressoEmpresaModel.setAreaAtuacao(area);
-        egressoEmpresaRepository.save(egressoEmpresaModel);
+                egressoEmpresaModel.setAreaAtuacao(area);
+                egressoEmpresaRepository.save(egressoEmpresaModel);
 
-    }
+        }
 
-    @Test
-    void testFindAllEgressoMapaDTO() throws Exception {
+        @Test
+        void testFindAllEgressoMapaDTO() throws Exception {
 
-        MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/mapa")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + this.token))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk()).andReturn();
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/mapa")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
 
-        List<EgressoMapaDTO> egressoEmpresasDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-                new TypeReference<List<EgressoMapaDTO>>() {
-                });
+                List<EgressoMapaDTO> egressoEmpresasDTO = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(),
+                                new TypeReference<List<EgressoMapaDTO>>() {
+                                });
 
-        assertNotNull(egressoEmpresasDTO);
-        assertEquals(1, egressoEmpresasDTO.size());
-        assertEquals(usuarioModel.getNome(), egressoEmpresasDTO.get(0).getNomeEgresso());
-    }
+                assertNotNull(egressoEmpresasDTO);
+                assertEquals(1, egressoEmpresasDTO.size());
+                assertEquals(usuarioModel.getNome(), egressoEmpresasDTO.get(0).getNomeEgresso());
+        }
 
 }

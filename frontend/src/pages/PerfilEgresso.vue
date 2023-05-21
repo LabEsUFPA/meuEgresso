@@ -1,5 +1,19 @@
 <template>
-  <div class="flex-1 min-h-screen items-center justify-center bg-neutral-100">
+  <div
+    v-if="loading"
+    class="flex items-center justify-center text-center"
+  >
+    <img
+      class="animate-spin mr-3 max-w-[100px]"
+      src="../assets/loading.svg"
+      alt="Loading"
+    >
+  </div>
+
+  <div
+    v-else
+    class="flex-1 min-h-screen items-center justify-center bg-neutral-100"
+  >
     <div
       class="flex place-items-center justify-between flex-wrap relative w-full h-[335px] pin-t bg-gradient-to-b from-sky-200 to-indigo-200 "
     >
@@ -832,7 +846,8 @@
                   Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
                 </div>
 
-                <CustomTextarea
+                <CustomInput
+                  type="textarea"
                   class="mb-5"
                   name="adicionais.assuntosPalestras"
                   :value="dataEgresso.adicionais.assuntosPalestras"
@@ -845,7 +860,8 @@
                   positivas ao realizar o curso:
                 </div>
 
-                <CustomTextarea
+                <CustomInput
+                  type="textarea"
                   class="mb-5"
                   name="adicionais.experiencias"
                   :value="dataEgresso.adicionais.experiencias"
@@ -856,7 +872,8 @@
                   pequena ou grande, pois tudo tem seu impacto:
                 </div>
 
-                <CustomTextarea
+                <CustomInput
+                  type="textarea"
                   name="adicionais.contribuicoes"
                   :value="dataEgresso.adicionais.contribuicoes"
                 />
@@ -907,7 +924,6 @@
 </template>
 
 <script setup lang="ts">
-
 import CustomButtonLink from 'src/components/CustomButtonLink.vue'
 import ButtonEdit from 'src/components/ButtonEdit.vue'
 import FolderSection from 'src/components/FolderSection.vue'
@@ -917,9 +933,8 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
-import CustomTextarea from 'src/components/CustomTextarea.vue'
 import { Form } from 'vee-validate'
 import { object, string, date, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
@@ -1384,6 +1399,13 @@ const dataEgresso = ref({
     linkedin: '',
     lattes: '',
     isInput: false
+  }
+})
+
+const loading = ref(true)
+watch(() => dataEgresso.value.egressoId, () => {
+  if (dataEgresso.value.egressoId !== 0) {
+    loading.value = false
   }
 })
 

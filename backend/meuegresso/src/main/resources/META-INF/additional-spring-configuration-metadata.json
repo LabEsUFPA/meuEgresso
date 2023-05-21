@@ -18,5 +18,10 @@
     "name": "cors.allowed-origin-patterns",
     "type": "java.lang.String[]",
     "description": "Lista com Ips permitido para definir cookie ex: 'http://0.0.0.0:*'"
+  },
+  {
+    "name": "fotosDir",
+    "type": "java.lang.String",
+    "description": "Caminho no qual as fotos vão ser armazenadas 'fotosDir'"
   }
 ]}
