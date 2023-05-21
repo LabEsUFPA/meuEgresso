@@ -28,6 +28,7 @@ jobs:
         distribution: 'zulu'
 
     - name: Build JAR
+      working-directory: ./backend/meuegresso/
       run: mvn install
 
     - name: Build the Docker image
