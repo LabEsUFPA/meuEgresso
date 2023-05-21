@@ -18,8 +18,9 @@
 
       <FolderLocalizacao />
 
-      <FolderAdicionais />
-
+      <FolderSection class="mt-6">
+        <FolderAdicionais />
+      </FolderSection>
       <div class="py-10 flex flex-col justify-center items-center">
         <InvalidInsert
           :show-alert="camposFaltosos"
@@ -290,18 +291,18 @@ const schema = object().shape({
     }),
     nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
       if (value) {
-        const date = value.split('/').reverse().join('-'); // Convert date to ISO format (YYYY-MM-DD)
-        const minDate = new Date('1940-01-01');
-        const maxDate = new Date('2023-12-31');
-        const inputDate = new Date(date);
+        const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
+        const minDate = new Date('1940-01-01')
+        const maxDate = new Date('2023-12-31')
+        const inputDate = new Date(date)
 
         // Check if the person is at least 18 years old
-        const eighteenYearsAgo = new Date();
-        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+        const eighteenYearsAgo = new Date()
+        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
 
-        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo;
+        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo
       }
-      return true;
+      return true
     }),
     email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/, 'Email inválido'),
     genero: string().required('Campo obrigatório'),

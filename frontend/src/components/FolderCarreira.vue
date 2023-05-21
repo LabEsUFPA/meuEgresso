@@ -54,6 +54,11 @@
         />
       </div>
     </template>
+    <template
+      #EditButton
+    >
+      <slot name="EditButton" />
+    </template>
   </FolderSection>
 </template>
 <script lang="ts" setup>
@@ -87,7 +92,15 @@ const selectOpts = ref({
   areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Outros'],
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
 })
+interface Props {
+  isInput?: boolean
 
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  isInput: true
+
+})
 onMounted(() => {
   watch(pais, () => {
     form.value?.setFieldValue('localizacao.cidade', '')

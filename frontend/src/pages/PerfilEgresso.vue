@@ -276,7 +276,9 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaAcademico"
         >
-          <FolderSection class="mt-6">
+          <FolderAcademico
+            :is-input="dataEgresso.academico.isInput"
+          >
             <template #EditButton>
               <h1 class="relative">
                 <ButtonEdit
@@ -293,234 +295,68 @@
                 />
               </h1>
             </template>
-            <template #title>
-              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-                <SvgIcon
-                  type="mdi"
-                  size="20"
-                  class="inline mr-2"
-                  :path="mdiSchool"
-                />
-                Acadêmico
-              </h1>
+            <template #NonInputData>
+              <CustomPerfilData
+                type="number"
+                class="mb-5"
+                :vmodel="dataEgresso.academico.matricula"
+                name="academico.matricula"
+                label="Matrícula"
+                placeholder="205004940001"
+                icon-path=""
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-5"
+                :vmodel="dataEgresso.academico.cotista.tipo"
+                name="academico.cotista.tipo"
+                label="Cotas"
+                placeholder="Tipo de cota"
+                icon-path=""
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-5"
+                :vmodel="dataEgresso.academico.tipoAluno"
+                name="academico.tipoAluno"
+                label="Formação"
+                placeholder="Selecione"
+                icon-path=""
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-5"
+                :vmodel="dataEgresso.academico.posGrad.curso"
+                name="academico.posGrad.curso"
+                label="Curso"
+                placeholder="Curso de pós-graduação"
+                icon-path=""
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-5"
+                :vmodel="dataEgresso.academico.posGrad.local"
+                name="academico.posGrad.local"
+                label="Local da pós-graduação"
+                placeholder="Local da pós-graduação"
+                icon-path=""
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-1"
+                :vmodel="dataEgresso.academico.bolsista.tipo"
+                name="academico.bolsista.tipo"
+                label="Bolsa"
+                placeholder="Bolsa"
+                icon-path=""
+              />
             </template>
-
-            <template #default>
-              <div v-if="!dataEgresso.academico.isInput">
-                <CustomPerfilData
-                  type="number"
-                  class="mb-5"
-                  :vmodel="dataEgresso.academico.matricula"
-                  name="academico.matricula"
-                  label="Matrícula"
-                  placeholder="205004940001"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.academico.cotista.tipo"
-                  name="academico.cotista.tipo"
-                  label="Cotas"
-                  placeholder="Tipo de cota"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.academico.tipoAluno"
-                  name="academico.tipoAluno"
-                  label="Formação"
-                  placeholder="Selecione"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.academico.posGrad.curso"
-                  name="academico.posGrad.curso"
-                  label="Curso"
-                  placeholder="Curso de pós-graduação"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.academico.posGrad.local"
-                  name="academico.posGrad.local"
-                  label="Local da pós-graduação"
-                  placeholder="Local da pós-graduação"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-1"
-                  :vmodel="dataEgresso.academico.bolsista.tipo"
-                  name="academico.bolsista.tipo"
-                  label="Bolsa"
-                  placeholder="Bolsa"
-                  icon-path=""
-                />
-              </div>
-              <div v-else>
-                <CustomInput
-                  class="mb-5"
-                  name="academico.matricula"
-                  :value="dataEgresso.academico.matricula"
-                  label="Matrícula"
-                  mask="############"
-                  placeholder="205004940001"
-                  required
-                />
-
-                <!-- <CustomInput
-                  class="mb-5"
-                  name="academico.email"
-                  :value="dataEgresso.academico.email"
-                  label="Email institucional"
-                  placeholder="Selecione"
-                  required
-                /> -->
-
-                <!-- <CustomSelect
-                  class="mb-5"
-                  name="academico.tipoAluno"
-                  :value="dataEgresso.academico.tipoAluno"
-                  label="Tipo de Aluno"
-                  placeholder="Selecione"
-                  :options="selectOpts.tipoAluno"
-                  v-model:value="dataEgresso.academico.tipoAluno"
-                  :pre-filled="true"
-                  required
-                /> -->
-
-                <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Marque todos as opções que sejam verdadeiras abaixo:
-                </div>
-
-                <CustomCheckbox
-                  class="mb-5"
-                  name="academico.cotista.value"
-                  :value="dataEgresso.academico.cotista.value"
-                  label="Cotista"
-                  v-model:value?="dataEgresso.academico.cotista.value"
-                />
-
-                <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Tipos de cota:
-                </div>
-
-                <div class="w-fit p-3 pr-5 rounded-xl bg-gray-100 mb-5">
-                  <CustomCheckbox
-                    class="mb-5"
-                    name="academico.cotista.tipos.renda"
-                    label="Cota Renda"
-                    :disabled="!dataEgresso.academico.cotista.value"
-                    :value="dataEgresso.academico.cotista.tipos.renda"
-                    v-model:value?="dataEgresso.academico.cotista.tipos.renda"
-                  />
-                  <CustomCheckbox
-                    class="mb-5"
-                    name="academico.cotista.tipos.raca"
-                    label="Autodeclaração de Raça"
-                    :disabled="!dataEgresso.academico.cotista.value"
-                    :value="dataEgresso.academico.cotista.tipos.raca"
-                    v-model:value?="dataEgresso.academico.cotista.tipos.raca"
-                  />
-
-                  <CustomCheckbox
-                    class="mb-5"
-                    name="academico.cotista.tipos.escola"
-                    label="Cota Escola"
-                    :disabled="!dataEgresso.academico.cotista.value"
-                    :value="dataEgresso.academico.cotista.tipos.escola"
-                    v-model:value?="dataEgresso.academico.cotista.tipos.escola"
-                  />
-
-                  <CustomCheckbox
-                    name="academico.cotista.tipos.quilombolaIndigena"
-                    label="Quilombola/Indigena"
-                    :disabled="!dataEgresso.academico.cotista.value"
-                    :value="dataEgresso.academico.cotista.tipos.quilombolaIndigena"
-                    v-model:value?="dataEgresso.academico.cotista.tipos.quilombolaIndigena"
-                  />
-                </div>
-
-                <CustomCheckbox
-                  class="mb-5"
-                  name="academico.bolsista.value"
-                  :value="dataEgresso.academico.bolsista.value"
-                  label="Bolsista"
-                  v-model:value?="dataEgresso.academico.bolsista.value"
-                />
-
-                <CustomSelect
-                  class="mb-5"
-                  name="academico.bolsista.tipo"
-                  :value="dataEgresso.academico.bolsista.tipo"
-                  :value-id="dataEgresso.bolsaId"
-                  label="Tipo de Bolsa"
-                  placeholder="Selecione"
-                  :options="egressoStore.tiposBolsa"
-                  :required="dataEgresso.academico.bolsista.value"
-                  :disabled="!dataEgresso.academico.bolsista.value"
-                  :pre-filled="true"
-                />
-
-                <CustomInput
-                  class="mb-5"
-                  name="academico.bolsista.remuneracao"
-                  :value="dataEgresso.academico.bolsista.remuneracao"
-                  label="Remuneração da bolsa"
-                  placeholder="Selecione"
-                  type="number"
-                  step="0.01"
-                  :required="dataEgresso.academico.bolsista.value"
-                  :disabled="!dataEgresso.academico.bolsista.value"
-                />
-
-                <CustomCheckbox
-                  class="mb-5"
-                  name="academico.posGrad.value"
-                  :value="dataEgresso.academico.posGrad.value"
-                  v-model:value?="dataEgresso.academico.posGrad.value"
-                  label="Pós-graduação"
-                />
-
-                <CustomInput
-                  class="mb-5"
-                  name="academico.posGrad.local"
-                  :value="dataEgresso.academico.posGrad.local"
-                  label="Local da pós-graduação"
-                  placeholder="Selecione"
-                  :required="dataEgresso.academico.posGrad.value"
-                  :disabled="!dataEgresso.academico.posGrad.value"
-                />
-
-                <CustomInput
-                  class="mb-5"
-                  name="academico.posGrad.curso"
-                  :value="dataEgresso.academico.posGrad.curso"
-                  label="Curso de pós-graduação"
-                  placeholder="Selecione"
-                  :required="dataEgresso.academico.posGrad.value"
-                  :disabled="!dataEgresso.academico.posGrad.value"
-                />
-
-                <CustomCheckbox
-                  name="academico.posGrad.desejaPos"
-                  :value="dataEgresso.academico.posGrad.desejaPos"
-                  label="Deseja realizar pós graduação"
-                  v-if="!dataEgresso.academico.posGrad.value"
-                />
-              </div>
-            </template>
-          </FolderSection>
+          </FolderAcademico>
         </Form>
         <Form
           @submit="handleSubmitCarreira"
@@ -761,7 +597,9 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaAdicionais"
         >
-          <FolderSection class="mt-6">
+          <FolderAdicionais
+            :is-input="dataEgresso.adicionais.isInput"
+          >
             <template #EditButton>
               <h1 class="relative">
                 <ButtonEdit
@@ -778,116 +616,58 @@
                 />
               </h1>
             </template>
-            <template #title>
-              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-                <SvgIcon
-                  type="mdi"
-                  size="20"
-                  class="inline mr-2"
-                  :path="mdiMessage"
-                />
-                Adicionais
-              </h1>
+            <template #NonInputData>
+              <!-- <CustomPerfilData
+                    type="text"
+                    class="flex-auto mb-5"
+                    :vmodel="dataEgresso.adicionais.assuntosPalestras"
+                    name="adicionais.assuntosPalestras"
+                    label="Palestras"
+                    placeholder="Lorem ipsum dolor sit amet, consect
+                etur adipiscing elit, sed do eiusmod tempor incididun
+                t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                    icon-path=""
+                  /> -->
+              <!-- <CustomPerfilData
+                    type="text"
+                    class="flex-auto mb-5"
+                    :vmodel="dataEgresso.adicionais.assuntosPalestras"
+                    name="adicionais.assuntosPalestras"
+                    label="Palestras"
+                    placeholder="Lorem ipsum dolor sit amet, consect
+                etur adipiscing elit, sed do eiusmod tempor incididun
+                t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                    icon-path=""
+                  /> -->
+              <CustomPerfilData
+                type="text"
+                class="flex-auto mb-5"
+                :vmodel="dataEgresso.adicionais.experiencias"
+                name="adicionais.experiencias"
+                label="Depoimento"
+                placeholder="Lorem ipsum dolor sit amet, consect
+                etur adipiscing elit, sed do eiusmod tempor incididun
+                t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                icon-path=""
+              />
+              <CustomPerfilData
+                type="text"
+                class="flex-auto mb-5"
+                :vmodel="dataEgresso.adicionais.contribuicoes"
+                name="adicionais.contribuicoes"
+                label="Contribuições"
+                placeholder="Lorem ipsum dolor sit amet, consect
+                etur adipiscing elit, sed do eiusmod tempor incididun
+                t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                icon-path=""
+              />
             </template>
+          </FolderAdicionais>
 
-            <template #default>
-              <div v-if="!dataEgresso.adicionais.isInput">
-                <!-- <CustomPerfilData
-                  type="text"
-                  class="flex-auto mb-5"
-                  :vmodel="dataEgresso.adicionais.assuntosPalestras"
-                  name="adicionais.assuntosPalestras"
-                  label="Palestras"
-                  placeholder="Lorem ipsum dolor sit amet, consect
-              etur adipiscing elit, sed do eiusmod tempor incididun
-              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                  icon-path=""
-                /> -->
-                <!-- <CustomPerfilData
-                  type="text"
-                  class="flex-auto mb-5"
-                  :vmodel="dataEgresso.adicionais.assuntosPalestras"
-                  name="adicionais.assuntosPalestras"
-                  label="Palestras"
-                  placeholder="Lorem ipsum dolor sit amet, consect
-              etur adipiscing elit, sed do eiusmod tempor incididun
-              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                  icon-path=""
-                /> -->
-                <CustomPerfilData
-                  type="text"
-                  class="flex-auto mb-5"
-                  :vmodel="dataEgresso.adicionais.experiencias"
-                  name="adicionais.experiencias"
-                  label="Depoimento"
-                  placeholder="Lorem ipsum dolor sit amet, consect
-              etur adipiscing elit, sed do eiusmod tempor incididun
-              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                  icon-path=""
-                />
-                <CustomPerfilData
-                  type="text"
-                  class="flex-auto mb-5"
-                  :vmodel="dataEgresso.adicionais.contribuicoes"
-                  name="adicionais.contribuicoes"
-                  label="Contribuições"
-                  placeholder="Lorem ipsum dolor sit amet, consect
-              etur adipiscing elit, sed do eiusmod tempor incididun
-              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                  icon-path=""
-                />
-              </div>
-              <div v-else>
-                <CustomCheckbox
-                  name="adicionais.palestras"
-                  label="Gostaria de apresentar palestras"
-                  class="mb-5"
-                  :value="dataEgresso.adicionais.palestras"
-                  v-model:value?="dataEgresso.adicionais.palestras"
-                />
-
-                <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
-                </div>
-
-                <CustomInput
-                  type="textarea"
-                  class="mb-5"
-                  name="adicionais.assuntosPalestras"
-                  :value="dataEgresso.adicionais.assuntosPalestras"
-                  :required="dataEgresso.adicionais.palestras"
-                  :disabled="!dataEgresso.adicionais.palestras"
-                />
-
-                <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Use o campo abaixo para de forma simples e resumida compartilhar com outras pessoas experiências
-                  positivas ao realizar o curso:
-                </div>
-
-                <CustomInput
-                  type="textarea"
-                  class="mb-5"
-                  name="adicionais.experiencias"
-                  :value="dataEgresso.adicionais.experiencias"
-                />
-
-                <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja
-                  pequena ou grande, pois tudo tem seu impacto:
-                </div>
-
-                <CustomInput
-                  type="textarea"
-                  name="adicionais.contribuicoes"
-                  :value="dataEgresso.adicionais.contribuicoes"
-                />
-              </div>
-            </template>
-          </FolderSection>
           <div class="py-10 flex flex-row justify-center items-center" />
         </Form>
       </div>
@@ -949,6 +729,11 @@ import LocalStorage from 'src/services/localStorage'
 import { useLoginStore } from 'src/store/LoginStore'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
+import FolderGeral from 'src/components/FolderGeral.vue'
+import FolderAcademico from 'src/components/FolderAcademico.vue'
+import FolderCarreira from 'src/components/FolderCarreira.vue'
+import FolderLocalizacao from 'src/components/FolderLocalizacao.vue'
+import FolderAdicionais from 'src/components/FolderAdicionais.vue'
 import {
   mdiAccount,
   mdiBriefcase,
@@ -977,7 +762,8 @@ $store.fetchAll()
 const storage = new LocalStorage()
 
 const isPublic = computed(() => {
-  return Object.keys($route.params).length === 1
+  // Object.keys($route.params).length === 1
+  return false
 })
 
 function handleStatus (status : any) {
@@ -1432,6 +1218,11 @@ async function fetchUpdateEgresso () {
     // dataEgresso.value.geral.email = userData.email
 
     // getEgresso
+    // if (isPublic.value) {
+    //   egressoResponseBack = fetchPublicEgresso(Number($route.params?.id))
+    // } else {
+    //   egressoResponseBack = fetchEgresso()
+    // }
     if (isPublic.value) {
       egressoResponseBack = fetchPublicEgresso(Number($route.params?.id))
     } else {
@@ -1442,7 +1233,7 @@ async function fetchUpdateEgresso () {
   // console.log(egressoStore.generos)
   // const generosArray = []
 
-  // generos.forEach(option => generosArray.push(option))
+  // generos.forEach(option => generosArferay.push(option))
 
   // console.log(generosArray[0].label)
 
@@ -1454,7 +1245,7 @@ async function fetchUpdateEgresso () {
   jsonResponse = json
 
   // Cotas
-
+  console.log(jsonResponse)
   // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
   // Caso contrario: cotasEgresso += json.cotas[i].nome
 
@@ -1568,14 +1359,16 @@ async function fetchUpdateEgresso () {
       contribuicoes: json.contribuicao?.descricao || '',
       isInput: false
     },
+    // nome: isPublic.value ? json.usuario.nome : userData.nome,
     profileHead: {
-      nome: isPublic.value ? json.usuario.nome : userData.nome,
+      nome: isPublic.value ? userData.nome : json.usuario.nome,
       linkedin: json.linkedin || '',
       lattes: json.lattes || '',
       isInput: false
     }
   }
-
+  console.log('isPublic: ')
+  console.log(isPublic.value)
   for (let i = 0; i < json.cotas.length; i++) {
     if (json.cotas[i].id === 1) {
       dataEgresso.value.academico.cotista.tipos.escola = true

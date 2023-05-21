@@ -8,7 +8,7 @@
           class="inline mr-2"
           :path="mdiAccount"
         />
-        Geral
+        Geral1
       </h1>
     </template>
     <template #default>
@@ -62,6 +62,11 @@
         />
       </div>
     </template>
+    <template
+      #EditButton
+    >
+      <slot name="EditButton" />
+    </template>
   </FolderSection>
 </template>
 
@@ -95,6 +100,15 @@ const pais = ref('')
 const estado = ref('')
 const form = ref<typeof Form | null>(null)
 
+  interface Props {
+  isInput?: boolean
+
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  isInput: true
+
+})
 onMounted(() => {
   watch(pais, () => {
     form.value?.setFieldValue('localizacao.cidade', '')

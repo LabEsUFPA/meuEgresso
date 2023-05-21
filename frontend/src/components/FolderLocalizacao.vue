@@ -40,6 +40,11 @@
         />
       </div>
     </template>
+    <template
+      #EditButton
+    >
+      <slot name="EditButton" />
+    </template>
   </FolderSection>
 </template>
 
@@ -67,6 +72,15 @@ const pais = ref('')
 const estado = ref('')
 const form = ref<typeof Form | null>(null)
 
+  interface Props {
+  isInput?: boolean
+
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  isInput: true
+
+})
 const countries = computed(() => {
   const countries = Country.getAllCountries()
   const filteredCountries = []

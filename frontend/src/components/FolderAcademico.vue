@@ -13,7 +13,7 @@
     </template>
 
     <template #default>
-      <div>
+      <div v-if="isInput">
         <CustomInput
           class="mb-5"
           name="academico.matricula"
@@ -122,6 +122,14 @@
           v-if="!bools.posGrad"
         />
       </div>
+      <div v-else>
+        <slot name="NonInputData" />
+      </div>
+    </template>
+    <template
+      #EditButton
+    >
+      <slot name="EditButton" />
     </template>
   </FolderSection>
 </template>
@@ -152,7 +160,15 @@ const bools = ref({
   posGrad: false,
   palestras: false
 })
+interface Props {
+  isInput?: boolean
 
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  isInput: true
+
+})
 onMounted(() => {
   watch(pais, () => {
     form.value?.setFieldValue('localizacao.cidade', '')
