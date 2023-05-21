@@ -14,8 +14,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Encapsulamento da tabela Grupo a fim de representar somente os dados não
- * sensiveis.
  * Nota: Use este DTO somente para persistir o usuário, não retorne o mesmo.
  *
  * @author Alfredo Gabriel, Camilo Santos
@@ -39,8 +37,6 @@ public class UsuarioDTO {
 	@Email(message = "Informe um e-mail valido.")
 	@NotBlank(message = "Infome um email.")
 	private String email;
-
-	private String matricula;
 
 	@NotBlank(message = "Infome um nome.")
 	private String nome;
