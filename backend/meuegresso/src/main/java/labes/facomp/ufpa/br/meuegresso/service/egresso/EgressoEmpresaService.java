@@ -16,7 +16,8 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 public interface EgressoEmpresaService {
 
 	/**
-	 * Método responsável por persistir determinado egressoEmpresa no banco de dados.
+	 * Método responsável por persistir determinado egressoEmpresa no banco de
+	 * dados.
 	 *
 	 * @param egressoEmpresaModel Dados do egressoEmpresa
 	 * @return Dados após serem gravados no banco de dados.
@@ -26,8 +27,8 @@ public interface EgressoEmpresaService {
 	/**
 	 * Método responsável por encontrar um determinado egressoEmpresa por sua ID.
 	 *
-	 * @param id ID de um egressoEmpresa
-	 * @return
+	 * @param id EgressoEmpresaModelId
+	 * @return EgressoEmpresaModel
 	 */
 	public EgressoEmpresaModel findById(EgressoEmpresaModelId id);
 
@@ -42,14 +43,14 @@ public interface EgressoEmpresaService {
 	 * Método responsável por atualizar dados de um egressoEmpresa cadastrado.
 	 *
 	 * @param egressoEmpresa objeto egressoEmpresa
-	 * @return
+	 * @return EgressoEmpresaModel
 	 */
 	public EgressoEmpresaModel update(EgressoEmpresaModel egressoEmpresa) throws InvalidRequestException;
 
 	/**
 	 * Método responsável por deletar um egressoEmpresa cadastrado por sua ID.
 	 *
-	 * @param id ID de um egressoEmpresa
+	 * @param id de EgressoEmpresaModelId
 	 */
 	public boolean deleteById(EgressoEmpresaModelId id);
 
@@ -58,7 +59,14 @@ public interface EgressoEmpresaService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return boolean
 	 */
-    boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy);
+	boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy);
+
+	/**
+	 * Método responsável por retornar os dados para o mapa sociodemográfico
+	 *
+	 * @return List<EgressoMapaDTO>
+	 */
+	public List<EgressoEmpresaModel> findAllEgressoMapa();
 }

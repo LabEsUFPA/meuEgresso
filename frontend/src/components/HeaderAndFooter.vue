@@ -3,7 +3,10 @@
     <header class="text-white">
       <div class="bg-gradient-to-br from-pacific-cyan to-bondi-blue">
         <div class="py-4 px-8 md:pl-14 flex flex-row items-center bg-[url('src/assets/textura.svg')] h-full w-full bg-right bg-no-repeat">
-          <div class="flex flex-row items-center">
+          <RouterLink
+            to="/"
+            class="flex flex-row items-center"
+          >
             <img
               class="w-12"
               src="src/assets/logo.svg"
@@ -17,11 +20,14 @@
                 Sistema de Egressos
               </div>
             </div>
-          </div>
+          </RouterLink>
           <!-- Div que preenche o espaco vazio no container flexbox -->
           <div class="flex-1" />
 
-          <UserDropdownMenu v-if="userLogged" :user-logged="userLogged" />
+          <UserDropdownMenu
+            v-if="userLogged"
+            :user-logged="userLogged"
+          />
 
           <div
             v-else
@@ -52,9 +58,12 @@
         <nav class="h-full pl-6">
           <ul class="text-cyan-800 w-96 h-full font-semibold hidden md:flex flex-row justify-around items-center">
             <li class="cursor-pointer relative group hover:text-white h-full">
-              <div class="h-full flex items-center">
-                Noticias
-              </div>
+              <RouterLink to="/">
+                <div class="h-full flex items-center">
+                  Mapa
+                </div>
+              </RouterLink>
+              <!--
               <div class="hidden absolute z-50 bg-cyan-900 cursor-default text-white py-3 overflow-hidden rounded-b-xl group-hover:block hover:block">
                 <ul class="text-sm font-normal">
                   <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
@@ -68,11 +77,15 @@
                   </li>
                 </ul>
               </div>
+              -->
             </li>
             <li class="cursor-pointer relative group hover:text-white h-full">
-              <div class="h-full flex items-center">
-                Estatísticas
-              </div>
+              <RouterLink to="/">
+                <div class="h-full flex items-center">
+                  Gráficos
+                </div>
+              </RouterLink>
+              <!--
               <div class="hidden absolute z-50 bg-cyan-900 cursor-default text-white py-3 overflow-hidden rounded-b-xl group-hover:block hover:block">
                 <ul class="text-sm font-normal">
                   <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
@@ -86,11 +99,15 @@
                   </li>
                 </ul>
               </div>
+              -->
             </li>
             <li class="cursor-pointer relative group hover:text-white h-full">
-              <div class="h-full flex items-center">
-                Busca
-              </div>
+              <RouterLink to="/vagas">
+                <div class="h-full flex items-center">
+                  Vagas
+                </div>
+              </RouterLink>
+              <!--
               <div class="hidden absolute z-50 bg-cyan-900 cursor-default text-white py-3 overflow-hidden rounded-b-xl group-hover:block hover:block">
                 <ul class="text-sm font-normal">
                   <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
@@ -104,6 +121,7 @@
                   </li>
                 </ul>
               </div>
+              -->
             </li>
           </ul>
 
@@ -145,10 +163,8 @@
         </nav>
       </div>
     </header>
-    <main class="flex-1">
-      <div class="h-fit">
-        <RouterView />
-      </div>
+    <main class="h-full">
+      <RouterView />
     </main>
     <footer>
       <div class="bg-gradient-to-br h-24 from-pacific-cyan to-bondi-blue flex flex-row items-center justify-start pl-20">
@@ -177,11 +193,13 @@
 
 <script lang="ts" setup>
 
-import CustomButton from 'src/components/CustomButton.vue'
+import { RouterLink } from 'vue-router'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { watch, ref } from 'vue'
 import { mdiMenu } from '@mdi/js'
+
 import { useLoginStore } from 'src/store/LoginStore'
+import CustomButton from 'src/components/CustomButton.vue'
 import UserDropdownMenu from './UserDropdownMenu.vue'
 
 const store = useLoginStore()

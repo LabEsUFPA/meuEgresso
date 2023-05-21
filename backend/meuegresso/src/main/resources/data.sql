@@ -67,12 +67,26 @@ INSERT INTO public.genero (nome_genero, created_by) VALUES ('OUTROS', 1) ON CONF
 --- Tipo de Bolsa
 
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PIBIC', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PIBIX', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PROAD', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PROEX', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PERMANENCIA', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('OUTROS', 1) ON CONFLICT DO NOTHING;
 
 --- Titulação
 
 INSERT INTO public.titulacao (nome_titulacao, created_by) VALUES ('GRADUAÇÃO', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.titulacao (nome_titulacao, created_by) VALUES ('PÓS-GRADUAÇÃO', 1) ON CONFLICT DO NOTHING;
+
+--- Area de Emprego
+
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Engenharia de Software', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Programacao', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Informatica', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Suporte a TI', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Analista de Sistema', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Analista de QA', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Outros', 1) ON CONFLICT DO NOTHING;
+
 
 --- Egressos Validos (Dados pela Marcele)
 

@@ -178,14 +178,14 @@ $store.fetchUsuario().then(usuario => {
 
 
 //Update Usuario
-const handleSubmit = async (profileData: ProfileRegisterModel) => {
+const handleSubmit = async (submitData: any) => {
   const usuario = await $store.fetchUsuario()
   dataUserUpdate = {
     id: usuario?.id,
     username: usuario?.username,
-    email: profileData?.email,
-    nome: profileData?.name,
-    password: profileData?.password,
+    email: submitData?.email,
+    nome: submitData?.name,
+    password: submitData?.password,
     idGrupo: usuario?.grupos[0].id,
     nomeGrupo: usuario?.grupos[0].nomeGrupo
   }

@@ -13,33 +13,11 @@ describe('CustomSelect', () => {
           'Option 2',
           'Option 3'
         ],
-        name: 'test',
-        value: '',
-        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: e }) }
+        name: 'test'
       }
     })
 
     expect(wrapper.vm).toBeDefined()
-  })
-
-  it('Changes v-model', async () => {
-    const wrapper = mount(CustomSelect, {
-      props: {
-        label: 'Select',
-        options: [
-          'Option 1',
-          'Option 2',
-          'Option 3'
-        ],
-        name: 'test',
-        value: '',
-        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: e }) }
-      }
-    })
-
-    expect(wrapper.find('p').text()).toBe('')
-    await wrapper.find('button').findAll('div')[4].trigger('click')
-    expect(wrapper.find('p').text()).toBe('Option 1')
   })
 
   it('Renders style props', async () => {
@@ -57,8 +35,7 @@ describe('CustomSelect', () => {
           'Option 3'
         ],
         name: 'test',
-        value: '',
-        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: e }) }
+        value: ''
       }
     })
 

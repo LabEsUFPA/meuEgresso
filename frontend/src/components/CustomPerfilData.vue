@@ -34,6 +34,7 @@
 
           <CustomInput
             v-if="isinput"
+            :name="name"
             :type="type"
             icon-path=""
             :model-value="name"

@@ -28,8 +28,8 @@ export namespace models {
     email: string
     confirmationEmail?: string
     password: string
-    confirmationPassword: string
-    accessLevel: string
+    confirmationPassword?: string
+    accessLevel?: string
     idAccessLevel?: number
   }
 
@@ -122,33 +122,38 @@ export namespace models {
     } | null
   }
 
-
   export interface EgressoMapa {
-    id: number
-    nome: string
-    localizacao: {
-      cidade: string
-      estado: string
-      pais: string
-      latitude: number
-      longitude: number
+    id: {
+      egressoId: number
+      empresaId: number
     }
-    empresa?: string
+    nomeEgresso: string
+    empresa: {
+      id: number
+      nome: string
+      endereco: {
+        id: number
+        cidade: string
+        estado: string
+        pais: string
+        latitude: number
+        longitude: number
+      }
+    }
   }
 
   export interface ContaUsuarioModel {
-      id: Number,
-      username: string,
-      email: string,
-      nome: string,
-      senha: string,
-      grupos?: [
-        {
-          id: number
-          nomeGrupo?: string
-        }
-      ]
-    }
+    id: number
+    username: string
+    email: string
+    nome: string
+    senha: string
+    grupos?: [
+      {
+        id: number
+        nomeGrupo?: string
+      }
+    ]
   }
 
   export interface EgressoModelUpdate {
@@ -241,45 +246,57 @@ export namespace models {
     }
     remuneracaoBolsa?: number
   }
-  // export interface EgressoModelUpdate {
-  //   nascimento: string
-  //   generoId: id
-  //   matricula: string | null
-  //   cotista: boolean
-  //   bolsista: boolean
-  //   interesseEmPos: boolean
-  //   lattes?: string | null
-  //   linkedin?: string | null
-  //   posGraduacao: boolean
-  //   cotas: Array<{
-  //     id: id
-  //   }> | null
-  //   nome: string
-  //   palestras?: {
-  //     descricao?: string
-  //   } | null
-  //   contribuicao: {
-  //     descricao: string
-  //   }
-  //   depoimento: {
-  //     descricao: string
-  //   }
-  //   bolsaId?: id | null
-  //   remuneracaoBolsa?: number
-  //   empresa: {
-  //     faixaSalarialId?: id | null
-  //     setorAtuacao?: string
-  //     nome?: string
-  //     endereco?: {
-  //       pais: string
-  //       estado: string
-  //       cidade: string
-  //     }
-  //   } | null
-  //   titulacao?: {
-  //     instituicao?: string
-  //     curso?: string
-  //   } | null
-  // }
+
+  export interface AnuncioModel{
+    titulo: string,
+    areaEmprego:{
+      id:number,
+      nome:string
+    },
+    descricao:string,
+    dataExpiracao: string,
+    link: string,
+    salario:number,
+  }
 }
 
+// export interface EgressoModelUpdate {
+//   nascimento: string
+//   generoId: id
+//   matricula: string | null
+//   cotista: boolean
+//   bolsista: boolean
+//   interesseEmPos: boolean
+//   lattes?: string | null
+//   linkedin?: string | null
+//   posGraduacao: boolean
+//   cotas: Array<{
+//     id: id
+//   }> | null
+//   nome: string
+//   palestras?: {
+//     descricao?: string
+//   } | null
+//   contribuicao: {
+//     descricao: string
+//   }
+//   depoimento: {
+//     descricao: string
+//   }
+//   bolsaId?: id | null
+//   remuneracaoBolsa?: number
+//   empresa: {
+//     faixaSalarialId?: id | null
+//     setorAtuacao?: string
+//     nome?: string
+//     endereco?: {
+//       pais: string
+//       estado: string
+//       cidade: string
+//     }
+//   } | null
+//   titulacao?: {
+//     instituicao?: string
+//     curso?: string
+//   } | null
+// }

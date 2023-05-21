@@ -12,15 +12,7 @@ spring:
     url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-  data:
-    mongodb:
-      host: ${MONGO_HOST}
-      database: ${MONGO_DB}
-      port: ${MONGO_PORT}
-      username: ${MONGO_INITDB_ROOT_USERNAME}
-      password: ${MONGO_INITDB_ROOT_PASSWORD}
-      authentication-database: admin # habilitar autenticação
-      auto-index-creation: true # Atualizar indices quando atualizar o model.
+
   # JPA properties
   jpa:
     defer-datasource-initialization: true
@@ -28,7 +20,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     generate-ddl: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
       naming:
         physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: false
