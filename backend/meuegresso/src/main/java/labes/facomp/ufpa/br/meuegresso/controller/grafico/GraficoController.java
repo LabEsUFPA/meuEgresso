@@ -116,12 +116,12 @@ public class GraficoController {
         List<EgressoModel> lista = egressoService.findAll();
 
         return new AreaAtuacaoGraficoDTO(
-                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Computação")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Pesquisa")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Desempregado")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Programador")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Analista")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equals("Outros")).count());
+                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Computação")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Pesquisa")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Desempregado")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Programador")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Analista")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Outros")).count());
 
     }
 
@@ -138,11 +138,11 @@ public class GraficoController {
         List<EgressoModel> lista = egressoService.findAll();
 
         return new SetorAtuacaoGraficoDTO(
-                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equals("Empresarial")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equals("Público")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equals("Terceiro setor")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equals("Magistério/Docência")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equals("Outros")).count());
+                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Empresarial")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Público")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Terceiro Setor")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Magistério/Docencia")).count(),
+                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Outros")).count());
     }
     
     /**
