@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
+import java.util.HashMap;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,13 +17,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SetorAtuacaoGraficoDTO {
-    private Integer quantidadeEmpresarial;
+    //private Integer quantidadeEmpresarial;
 
-    private Integer quantidadePublico;
+    //private Integer quantidadePublico;
 
-    private Integer quantidadeTerceiroSetor;
+    //private Integer quantidadeTerceiroSetor;
 
-    private Integer quantidadeDocencia;
+    //private Integer quantidadeDocencia;
 
-    private Integer quantidadeOutros;
+    //private Integer quantidadeOutros;
+
+    HashMap<String, Integer> setorAtuacao;
 }

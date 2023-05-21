@@ -18,10 +18,14 @@ import labes.facomp.ufpa.br.meuegresso.dto.grafico.IdadesGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.PosGraduacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
+import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
+import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
+import labes.facomp.ufpa.br.meuegresso.service.setoratuacao.SetorAtuacaoService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -39,6 +43,10 @@ public class GraficoController {
     private final EgressoService egressoService;
 
     private final GeneroService generoService;
+
+    private final AreaAtuacaoService areaAtuacaoService;
+
+    private final SetorAtuacaoService setorAtuacaoService;
 
     /**
      * Endpoint responsavel por buscar todas as informacoes de grafico.
@@ -147,13 +155,27 @@ public class GraficoController {
     public AreaAtuacaoGraficoDTO getAtuacao() {
         List<EgressoModel> lista = egressoService.findAll();
 
-        return new AreaAtuacaoGraficoDTO(
-                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Computação")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Pesquisa")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Desempregado")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Programador")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Analista")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Outros")).count());
+        List<AreaAtuacaoModel> areaAtuacao = areaAtuacaoService.findAll();
+
+        HashMap<String, Integer> areaAtuacaoContagens = new HashMap<>();
+
+        int count = 0;
+        for (int i = 0; i < areaAtuacao.size(); i++) {
+            final String nomeFinal = areaAtuacao.get(i).getNome();
+            count = (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
+
+            areaAtuacaoContagens.put(nomeFinal, count);
+        }
+
+        return new AreaAtuacaoGraficoDTO(areaAtuacaoContagens);
+        
+        //return new AreaAtuacaoGraficoDTO(
+        //        (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Computação")).count(),
+        //        (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Pesquisa")).count(),
+        //        (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Desempregado")).count(),
+        //        (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Programador")).count(),
+        //        (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Analista")).count(),
+        //        (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase("Outros")).count())
 
     }
 
@@ -169,12 +191,27 @@ public class GraficoController {
     public SetorAtuacaoGraficoDTO getSetor() {
         List<EgressoModel> lista = egressoService.findAll();
 
-        return new SetorAtuacaoGraficoDTO(
-                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Empresarial")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Público")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Terceiro Setor")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Magistério/Docencia")).count(),
-                (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Outros")).count());
+        List<SetorAtuacaoModel> setorAtuacao = setorAtuacaoService.findAll();
+
+        HashMap<String, Integer> setorAtuacaoContagens = new HashMap<>();
+
+        int count = 0;
+        for (int i = 0; i < setorAtuacao.size(); i++) {
+            final String nomeFinal = setorAtuacao.get(i).getNome();
+            count = (int) lista.stream()
+                    .filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
+
+            setorAtuacaoContagens.put(nomeFinal, count);
+        }
+
+        return new SetorAtuacaoGraficoDTO(setorAtuacaoContagens);
+
+        //return new SetorAtuacaoGraficoDTO(
+        //        (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Empresarial")).count(),
+        //        (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Público")).count(),
+        //        (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Terceiro Setor")).count(),
+        //        (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Magistério/Docencia")).count(),
+        //        (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase("Outros")).count());
     }
     
     /**
