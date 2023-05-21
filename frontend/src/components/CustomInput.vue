@@ -27,6 +27,7 @@
             ['bg-gray-100 cursor-not-allowed']: disabled,
             ['outline-2 outline outline-red-500']: !meta.valid && meta.validated && meta.touched,
             ['outline-2 outline outline-emerald-500']: meta.valid && meta.validated && meta.dirty,
+            ['']: withoutValidation,
             [`${inputClass} rounded-lg w-64 py-1 px-3 border grid grid-cols-8`]: true
           })"
           v-if="type !== 'textarea'"
@@ -39,6 +40,7 @@
               class="w-[20px]"
               :src="iconPath"
               v-if="imgIcon"
+              alt="Icon"
             >
 
             <SvgIcon
@@ -104,8 +106,11 @@
         </div>
       </template>
       <template #message>
-        <div class="text-red-500">
-          {{ errorMessage }}
+        <div
+          v-if="meta.validated"
+          class="text-red-500"
+        >
+          {{ meta.valid ? null : customErrorMessage? props.errorMessage : errorMessage }}
         </div>
         <div :class="classHelperText">
           {{ helperText }}
@@ -124,6 +129,8 @@ import { OField, OInput } from '@oruga-ui/oruga-next'
 
 type inputs = 'date' | 'text' | 'email' | 'number' | 'password' | 'textarea'
 
+const $emit = defineEmits(['update:value'])
+
 interface Props {
   name: string
   label?: string
@@ -138,7 +145,10 @@ interface Props {
   imgIcon?: boolean
   step?: number | string
   disabled?: boolean,
-  classHelperText?: string
+  classHelperText?: string,
+  errorMessage?: string,
+  customErrorMessage?: boolean,
+  withoutValidation?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -151,8 +161,12 @@ const props = withDefaults(defineProps<Props>(), {
   mask: '',
   maxLength: 300,
   minLength: 1,
+  min: 0,
   step: 1,
-  classHelperText: ''
+  classHelperText: '',
+  errorMessage: '',
+  customErrorMessage: false,
+  withoutValidation: false
 })
 
 const focused = ref(false)
@@ -167,6 +181,7 @@ const {
 } = useField(name, undefined)
 
 function handleInput (e: Event) {
+  $emit('update:value', e)
   handleChange(e)
 }
 </script>

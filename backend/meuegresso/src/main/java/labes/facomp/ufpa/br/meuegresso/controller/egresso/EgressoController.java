@@ -1,18 +1,26 @@
 package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 
+import java.io.IOException;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -20,9 +28,10 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
@@ -108,7 +117,7 @@ public class EgressoController {
         }
 
         // Cadastro EMPRESA - EMPREGO
-        EmpresaDTO empresaDTO;
+        EmpresaCadastroEgressoDTO empresaDTO;
         EmpresaModel empresa;
         if (egressoCadastroDTO.getEmpresa() != null) {
             empresaDTO = egressoCadastroDTO.getEmpresa();
@@ -170,11 +179,12 @@ public class EgressoController {
      * @throws UnauthorizedRequestException
      * @since 16/04/2023
      */
-    @PutMapping
+    @PutMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(
-            @RequestBody EgressoDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
+            @RequestBody EgressoDTO egresso, JwtAuthenticationToken token)
+            throws UnauthorizedRequestException {
         if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
@@ -240,6 +250,67 @@ public class EgressoController {
         } else {
             return ResponseType.FAIL_DELETE.getMessage();
         }
+    }
+
+    /**
+     * Endpoint responsável pelo retorno do caminho do arquivo da foto do egresso
+     *
+     * @author Camilo Santos, Eude Monteiro
+     * @since 11/05/2023
+     * @param token
+     * @return Um arquivo do tipo resource correspondente ao caminho da foto do
+     *         egresso
+     * @throws NotFoundFotoEgressoException
+     * @throws IOException
+     */
+    @GetMapping(value = "/foto/{id}", produces = "image/png")
+    @ResponseStatus(code = HttpStatus.OK)
+    public Resource getFotoEgresso(@PathVariable Integer id) throws NotFoundFotoEgressoException {
+        EgressoModel egressoModel = egressoService.findById(id);
+        if (egressoModel.getFotoNome() != null) {
+            return egressoService.getFileAsResource(egressoModel.getFotoNome());
+        } else {
+            throw new NotFoundFotoEgressoException();
+        }
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @DeleteMapping(value = "/foto")
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public ResponseEntity<String> deleteFotoEgresso(JwtAuthenticationToken token) throws IOException {
+        EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
+        if (egressoModel.getFotoNome() != null) {
+            egressoService.deleteFile(egressoModel.getFotoNome());
+            egressoModel.setFotoNome(null);
+            egressoService.updateEgresso(egressoModel);
+            return ResponseEntity.ok(ResponseType.SUCESS_IMAGE_DELETE.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseType.FAIL_IMAGE_DELETE.getMessage());
+
+    }
+
+    /**
+     * Endpoint responsável pelo salvamento local do arquivo da foto do egresso
+     *
+     * @author Camilo Santos, Eude Monteiro
+     * @since 11/05/2023
+     * @param egressoDTO
+     * @return Uma string representando uma mensagem de êxito indicando que a foto
+     *         foi salva.
+     * @throws IOException
+     */
+    @PostMapping(value = "/foto", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public String saveFotoEgresso(JwtAuthenticationToken token, @RequestPart MultipartFile arquivo) throws IOException {
+        EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
+        String fileCode = egressoModel.getId().toString() + ".png";
+        if (egressoModel.getFotoNome() != null) {
+            egressoService.deleteFile(egressoModel.getFotoNome());
+        }
+        egressoModel.setFotoNome(fileCode);
+        egressoService.updateEgresso(egressoModel);
+        egressoService.saveFoto(fileCode, arquivo);
+        return ResponseType.SUCESS_IMAGE_SAVE.getMessage();
     }
 
     private void validaSetorAtuacao(String setorAtuacaoNome, EgressoModel egressoModel) {

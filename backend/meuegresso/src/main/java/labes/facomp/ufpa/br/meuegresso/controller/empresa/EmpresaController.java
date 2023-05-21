@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaBasicDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
@@ -51,14 +51,14 @@ public class EmpresaController {
 	 * Endpoint responsável por retornar a lista de empresa cadastrados no banco de
 	 * dados.
 	 *
-	 * @return {@link EmpresaDTO} Lista de empresa cadastrados
+	 * @return {@link EmpresaBasicDTO} Lista de empresa cadastrados
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
 	 */
 	@GetMapping
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<EmpresaDTO> consultarEmpresas() {
-		return mapper.map(empresaService.findAll(), new TypeToken<List<EmpresaDTO>>() {
+	public List<EmpresaBasicDTO> consultarEmpresas() {
+		return mapper.map(empresaService.findAll(), new TypeToken<List<EmpresaBasicDTO>>() {
 		}.getType());
 	}
 
@@ -66,15 +66,15 @@ public class EmpresaController {
 	 * Endpoint responsável por retornar um empresa por sua ID.
 	 *
 	 * @param id Integer
-	 * @return {@link EmpresaDTO} Dados gravados no banco.
+	 * @return {@link EmpresaBasicDTO} Dados gravados no banco.
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public EmpresaDTO findById(@PathVariable Integer id) {
-		return mapper.map(empresaService.findById(id), EmpresaDTO.class);
+	public EmpresaBasicDTO findById(@PathVariable Integer id) {
+		return mapper.map(empresaService.findById(id), EmpresaBasicDTO.class);
 	}
 
 	/**
@@ -84,13 +84,13 @@ public class EmpresaController {
 	 *                   persistir o empresa.
 	 * @return String confirmando a transação.
 	 * @author Alfredo Gabriel
-	 * @see {@link EmpresaDTO}
+	 * @see {@link EmpresaBasicDTO}
 	 * @since 21/04/2023
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarEmpresa(@RequestBody @Valid EmpresaDTO empresaDTO) {
+	public String cadastrarEmpresa(@RequestBody @Valid EmpresaBasicDTO empresaDTO) {
 		EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);
 		empresaService.save(empresaModel);
 		return ResponseType.SUCESS_SAVE.getMessage();
@@ -101,7 +101,7 @@ public class EmpresaController {
 	 *
 	 * @param empresaDTO Estrutura de dados contendo as informações necessárias para
 	 *                   atualizar o empresa.
-	 * @return {@link EmpresaDTO} Dados gravados no banco com a Id atualizada.
+	 * @return {@link EmpresaBasicDTO} Dados gravados no banco com a Id atualizada.
 	 * @author Alfredo Gabriel
 	 * @throws InvalidRequestException
 	 * @throws UnauthorizedRequestException
@@ -110,7 +110,7 @@ public class EmpresaController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String atualizarEmpresa(@RequestBody @Valid EmpresaDTO empresaDTO,
+	public String atualizarEmpresa(@RequestBody @Valid EmpresaBasicDTO empresaDTO,
 			JwtAuthenticationToken token) throws InvalidRequestException, UnauthorizedRequestException {
 		if (empresaService.existsByIdAndCreatedById(empresaDTO.getId(), jwtService.getIdUsuario(token))) {
 			EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);

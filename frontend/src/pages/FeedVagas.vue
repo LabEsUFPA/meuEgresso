@@ -1,0 +1,208 @@
+<template>
+    <div class="flex flex-col">
+
+      <div class="flex justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
+        <div class="flex w-[960px] border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl p-8 mt-10 mx-6 items-center justify-between">
+          
+          <div class="flex text-cyan-800 items-center">
+            <Icon icon="majesticons:megaphone" width="32" height="32" class="mr-5 inline" />
+            <h1 class="text-3xl font-bold">
+              Vagas de emprego
+            </h1>
+          </div>
+          
+          <CustomButton type="submit" color="emerald" text-class="text-white font-medium">
+              <RouterLink
+                    to="/cadastro-anuncio"
+                    
+                  >
+                  Anuncie uma vaga
+              </RouterLink>
+            <Icon icon="mingcute:right-line" width="32" height="32" />
+          </CustomButton>
+
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-8 mb-10" >
+
+        <div class="flex justify-center">
+          <div class="flex w-[960px] bg-white rounded-bl-2xl rounded-br-2xl p-8 mx-6 items-center justify-between">
+            
+            <div class="mb-8 mx-4 sm:mx-0">
+              <div class="flex flex-col gap-y-4 sm:gap-y-6">
+                  <CustomInput
+                    class="w-full"
+                    name="pesquisar"
+                    label=""
+                    placeholder="Pesquisar"
+                    :icon-path="mdiSearchWeb"
+                    :required="true"
+                  />
+                  <CustomButton type="submit" color="blue">
+                    
+                      Buscar
+                      
+                  </CustomButton>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+         
+        
+      </div>
+
+    </div>
+  
+    <CustomDialog v-model="submitSuccess">
+      <div class="h-full flex justify-center items-center">
+        <div class="w-1/2">
+          <div class="text-green-500 text-center mb-3">
+            <SvgIcon
+              type="mdi"
+              size="100"
+              class="inline"
+              :path="mdiCheckCircle"
+            />
+          </div>
+          <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+            Dados atualizados com sucesso!
+          </h1>
+        </div>
+      </div>
+    </CustomDialog>
+  
+  </template>
+  
+  <script setup lang="ts">
+  
+  import { Icon } from '@iconify/vue';
+  import { ref, watch, onMounted } from 'vue'
+  import SvgIcon from '@jamescoyle/vue-icon'
+  import CustomInput from 'src/components/CustomInput.vue'
+  import CustomButton from 'src/components/CustomButton.vue'
+  import CustomDialog from 'src/components/CustomDialog.vue'
+  import router from 'src/router'
+  import ShortPost from 'src/components/ShortPost.vue'
+
+  import InvalidInsert from 'src/components/InvalidInsert.vue'
+  import { Form } from 'vee-validate'
+  import { object, string, date, ref as refYup } from 'yup'
+  import { mdiCheckCircle, mdiBullhorn, mdiLink, mdiArrowRight, mdiSearchWeb } from '@mdi/js'
+
+  
+  const anuncios = [
+    { 
+      id: 1,
+      nome: 'Victor Silva',
+      titulo: 'Vaga Front-end',
+      area: 'Programador',
+      descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      salario: 1000.0,
+    },
+    { 
+      id: 2,
+      nome: 'Marcus Loureiro',
+      titulo: 'Vaga Back-end',
+      area: 'Programador',
+      descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      salario: 1200.0,
+    }
+  ]
+
+  
+  const form = ref<typeof Form | null>(null)
+  const titulo = ref('')
+  const area = ref('')
+  const dataExpiracao = ref('')
+  const salario = ref('')
+  const contato = ref('')
+  const descricao = ref('')
+  
+  
+  
+  let dataAnuncioPost = {
+      id: 0,
+      titulo: "",
+      area: "",
+      dataExpiracao: "",
+      salario: "",
+      contato: "",
+      descricao:"",
+  }
+  const error = ref(false)
+  
+  const errorMessages = ref({
+    errorRequest: 'Requisição não aceita',
+    userNotFound: 'Usuario não cadastrado pela faculdade'
+  })
+  
+  const errorText = ref('')
+  const submitSuccess = ref(false)
+  
+  const schema = object().shape({
+    titulo: string().required(),
+    area: string().required(),
+    dataExpiracao: date().required(),
+    salario: string().required(),
+    contato: string().required(),
+    descricao: string().required(),
+  })
+  
+ // const $store = useAnuncioVagaStore()
+  
+  
+  //Post Usuario
+  const handleSubmit = async (submitData: any) => {
+    /*const responseValidation = await $store.cadastraAnuncio({
+      titulo:dataAnuncioPost.titulo,
+      area:dataAnuncioPost.area,
+      dataExpiracao:dataAnuncioPost.dataExpiracao.toString(),
+      salario:dataAnuncioPost.salario,
+      contato:dataAnuncioPost.contato,
+      descricao:dataAnuncioPost.descricao
+    })
+  
+    if (responseValidation===201) {
+      error.value = false
+      console.log("Usuário atualizado: " + responseValidation)
+      submitSuccess.value = true
+    }
+   */
+  }
+  const onInvalid = (e: any) => {
+    console.log(e)
+  }
+  
+  
+  onMounted(() => {
+    console.log("onMounted front iniciado...")
+    watch(titulo, () => {
+      console.log("watch front titulo:", titulo.value)
+      form.value?.setFieldValue('titulo', titulo.value)
+    })
+    watch(area, () => {
+      console.log("watch front area:", area.value)
+      form.value?.setFieldValue('area', area.value)
+    })
+    watch(dataExpiracao, () => {
+      console.log("watch front dataExpiracao:", dataExpiracao.value)
+      form.value?.setFieldValue('dataExpiracao', dataExpiracao.value)
+    })
+    watch(salario, () => {
+      console.log("watch front salario:", salario.value)
+      form.value?.setFieldValue('salario', salario.value)
+    })
+    watch(contato, () => {
+      console.log("watch front contato:", contato.value)
+      form.value?.setFieldValue('contato', contato.value)
+    })
+    watch(descricao, () => {
+      console.log("watch front descricao:", descricao.value)
+      form.value?.setFieldValue('descricao', descricao.value)
+    })
+  
+  })
+  </script>

@@ -23,7 +23,7 @@
     "classnames": "^2.3.2",
     "country-state-city": "^3.1.2",
     "husky": "^4.3.8",
-    "leaflet": "^1.9.3",
+    "leaflet": "^1.9.4",
     "lint-staged": "^13.2.1",
     "maska": "^2.1.8",
     "pinia": "^2.0.35",
@@ -36,6 +36,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.21.3",
     "@faker-js/faker": "^7.6.0",
+    "@iconify/vue": "^4.1.1",
     "@storybook/addon-essentials": "^7.0.2",
     "@storybook/addon-interactions": "^7.0.2",
     "@storybook/addon-links": "^7.0.2",
