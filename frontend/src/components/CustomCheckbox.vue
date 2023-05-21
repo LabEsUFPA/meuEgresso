@@ -1,12 +1,16 @@
 <template>
   <button
-    class="flex flex-row items-center w-fit"
+    class="flex flex-row pr-1 items-center w-fit focus-visible:rounded-sm"
+    role="checkbox"
     :class="{
       ['cursor-not-allowed opacity-80']: disabled,
       ['cursor-pointer']: !disabled
     }"
-    type="button"
+    :aria-labelledby="name"
+    :aria-checked="inputValue"
     @click="!disabled && handleChange(!inputValue); $emit('update:value', inputValue)"
+    @keydown.enter.space="!disabled && handleChange(!inputValue); $emit('update:value', inputValue)"
+    :id="`checkbox-${name}`"
   >
     <div class="text-teal-600">
       <SvgIcon
@@ -30,7 +34,7 @@
         ['cursor-not-allowed opacity-80']: disabled,
         ['cursor-pointer']: !disabled
       }"
-      :for="id"
+      :id="name"
     >
       {{ label }}
     </label>
@@ -59,6 +63,4 @@ const {
 } = useField(name, undefined, {
   initialValue: props.value
 })
-
-const id = `checkbox-input-${Math.floor(Math.random() * 1000000).toString()}`
 </script>

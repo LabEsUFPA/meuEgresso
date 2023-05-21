@@ -82,7 +82,11 @@ const schema = object().shape({
   password: string().required()
 })
 
-const handleSubmit = async (loginData: LoginModel) => {
+const handleSubmit = async (submitData: any) => {
+  const loginData: LoginModel ={
+    username: submitData.username,
+    password: submitData.password
+  }
   if (loginData.username || loginData.password) {
     const response = await useLoginStore().userLogin(loginData.username, loginData.password)
 

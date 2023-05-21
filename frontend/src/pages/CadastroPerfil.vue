@@ -142,7 +142,7 @@ const schema = object().shape({
   confirmationPassword: string().required().oneOf([refYup('password')])
 })
 
-const handleSubmit = async (profileData: ProfileRegisterModel) => {
+const handleSubmit = async (profileData: any) => {
   const responseValidation = await useCadastroPerfilStore().egressValidation(
     profileData.name,
     profileData.registration,

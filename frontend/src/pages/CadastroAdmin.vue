@@ -159,20 +159,20 @@ const schema = object().shape({
   idAccessLevel: number()
 })
 
-const handleSubmit = async (profileData: ProfileRegisterModel) => {
-  profileData.idAccessLevel = setIdAccessLevel(profileData.accessLevel)
+const handleSubmit = async (submitData: any) => {
+  submitData.idAccessLevel = setIdAccessLevel(submitData.accessLevel)
   const response = await useCadastroPerfilStore().userProfileRegister(
-    profileData.username,
-    profileData.password,
-    profileData.email,
-    profileData.name,
+    submitData.username,
+    submitData.password,
+    submitData.email,
+    submitData.name,
     [{
-      id: profileData.idAccessLevel
+      id: submitData.idAccessLevel
     }]
   )
 
   if (response.status === 201) {
-    username.value = profileData.username
+    username.value = submitData.username
     error.value = false
     submitSuccess.value = true
   } else {

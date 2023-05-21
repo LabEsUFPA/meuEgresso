@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest'
 import ButtonEdit from 'src/components/ButtonEdit.vue';
 
+
 describe('ButtonEdit Test', () => {
   it('ButtonEdit label render test', () => {
     const wrapper = mount(ButtonEdit, {
