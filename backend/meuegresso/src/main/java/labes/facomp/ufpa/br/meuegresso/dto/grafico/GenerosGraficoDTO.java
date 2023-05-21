@@ -21,5 +21,9 @@ public class GenerosGraficoDTO {
 
     private Integer quantidadeTranssexual;
 
+    private Integer quantidadeNaoBinario;
+
+    private Integer quantidadeNaoQueroDeclarar;
+
     private Integer quantidadeOutros;
 }

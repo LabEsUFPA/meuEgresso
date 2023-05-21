@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.grafico;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.http.HttpStatus;
@@ -18,9 +17,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.grafico.IdadesGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.PosGraduacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
-import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
-import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -36,8 +33,6 @@ import lombok.RequiredArgsConstructor;
 public class GraficoController {
     
     private final EgressoService egressoService;
-
-    private final GeneroService generoService;
 
     /**
      * Endpoint responsavel por buscar todas as informacoes de grafico.
@@ -75,12 +70,15 @@ public class GraficoController {
     @GetMapping(value = "/generos")
     @ResponseStatus(code = HttpStatus.OK)
     public GenerosGraficoDTO getGeneros() {
-        List<GeneroModel> lista = generoService.findAll();
+        List<EgressoModel> lista = egressoService.findAll();
+
         return new GenerosGraficoDTO(
-                (int) lista.stream().filter(a -> a.getNome().equalsIgnoreCase("masculino")).count(),
-                (int) lista.stream().filter(a -> a.getNome().equalsIgnoreCase("feminino")).count(),
-                (int) lista.stream().filter(a -> a.getNome().equalsIgnoreCase("transsexual")).count(),
-                (int) lista.stream().filter(a -> a.getNome().equalsIgnoreCase("outros")).count());
+                (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("masculino")).count(),
+                (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("feminino")).count(),
+                (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("transsexual")).count(),
+                (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("não-binário")).count(),
+                (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("não quero declarar")).count(),
+                (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase("outros")).count());
     }
     
     /**
