@@ -44,7 +44,7 @@ jobs:
 
       - name: Build the Docker image
         working-directory: ./backend/meuegresso/
-        run: docker build . --file docker/Dockerfile --tag alverad/meu-egresso-api:develop-$(date +%s)
+        run: docker build . --file docker/Dockerfile --tag alverad/meu-egresso-api:develop-latest
 
       - name: Docker Push
-        run: docker push -a alverad/meu-egresso-api
+        run: docker push -a alverad/meu-egresso-api:develop-latest
