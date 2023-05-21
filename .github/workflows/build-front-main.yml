@@ -24,4 +24,4 @@ jobs:
         run: docker build . --file docker/Dockerfile --tag alverad/meu-egresso-front:latest
 
       - name: Docker Push
-        run: docker push -a alverad/meu-egresso-front:latest
+        run: docker push alverad/meu-egresso-front:latest
