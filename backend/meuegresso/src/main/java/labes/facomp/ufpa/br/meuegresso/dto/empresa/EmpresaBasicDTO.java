@@ -1,8 +1,11 @@
 package labes.facomp.ufpa.br.meuegresso.dto.empresa;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.endereco.EnderecoDTO;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +18,7 @@ import lombok.NoArgsConstructor;
  * @version 1.1
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmpresaBasicDTO {
@@ -24,5 +28,7 @@ public class EmpresaBasicDTO {
     @NotBlank(message = "Insira o nome da empresa.")
     private String nome;
 
+    @Valid
+    @NotNull(message = "Informe o endereço.")
     private EnderecoDTO endereco;
 }
