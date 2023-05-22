@@ -192,6 +192,7 @@ public class EgressoController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(
             @RequestBody EgressoDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
+
         if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
@@ -201,33 +202,34 @@ public class EgressoController {
             if (egressoModel.getDepoimento() != null) {
                 egressoModel.getDepoimento().setEgresso(egressoModel);
             }
+
+            EmpresaModel empresa;
+            EnderecoModel enderecoEmpresa;
             if (egressoModel.getEmprego() != null) {
-                EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
-                egressoEmpresaModel.setEgresso(egressoModel);
-                EnderecoModel enderecoModel = egressoEmpresaModel.getEmpresa().getEndereco();
-                EnderecoModel enderecoModelNoBanco = enderecoService.findByCidadeAndEstadoAndPais(
-                        enderecoModel.getCidade(),
-                        enderecoModel.getEstado(),
-                        enderecoModel.getPais());
-                if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
-                    egressoEmpresaModel.getEmpresa().setEndereco(enderecoModelNoBanco);
-                } else if (enderecoModelNoBanco == null) {
-                    egressoEmpresaModel.getEmpresa()
-                            .setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
-                                    .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
+                empresa = empresaService.findById(egressoModel.getEmprego().getEmpresa().getId());
+                enderecoEmpresa = enderecoService.findById(empresa.getEndereco().getId());
+                if (enderecoEmpresa != null) {
+                    empresa.setEndereco(enderecoEmpresa);
+                } else {
+                    empresa.setEndereco(EnderecoModel.builder()
+                            .cidade(empresa.getEndereco().getCidade())
+                            .estado(empresa.getEndereco().getEstado())
+                            .pais(empresa.getEndereco().getPais())
+                            .build());
                 }
+                SetorAtuacaoModel setorAtuacaoModel = egressoModel.getEmprego().getSetorAtuacao();
+                AreaAtuacaoModel areaAtuacaoModel = egressoModel.getEmprego().getAreaAtuacao();
+                validaSetorAtuacao(setorAtuacaoModel.getNome(), egressoModel);
+                validaAreaAtuacao(areaAtuacaoModel.getNome(), egressoModel);
+            } else { // desempregado
+                egressoModel.setEmprego(null);
             }
             if (egressoModel.getPalestras() != null) {
                 egressoModel.getPalestras().setEgresso(egressoModel);
             }
             egressoModel.getUsuario()
                     .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
-            if (egressoModel.getEmprego() != null) {
-                SetorAtuacaoModel setorAtuacaoModel = egressoModel.getEmprego().getSetorAtuacao();
-                AreaAtuacaoModel areaAtuacaoModel = egressoModel.getEmprego().getAreaAtuacao();
-                validaAreaAtuacao(areaAtuacaoModel.getNome(), egressoModel);
-                validaSetorAtuacao(setorAtuacaoModel.getNome(), egressoModel);
-            }
+
             if (egressoModel.getTitulacao() != null) {
                 validaCurso(egressoModel.getTitulacao().getCurso().getNome(), egressoModel);
                 validaInstituicao(egresso.getTitulacao().getEmpresa().getNome(), egressoModel);
@@ -291,5 +293,4 @@ public class EgressoController {
         }
         egressoModel.getTitulacao().setEmpresa(empresaModel);
     }
-
 }
