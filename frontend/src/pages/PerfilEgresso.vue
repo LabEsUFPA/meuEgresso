@@ -918,33 +918,38 @@ function onInvalid (e: any) {
   console.log(e)
 }
 
-const schemaHeader = object().shape({
-  geral: object({
-    nome: string().required(),
-    linkedin: string(),
-    lattes: string()
-  })
-
-})
-
 const schemaGeral = object().shape({
   geral: object({
-    nascimento: date().required(),
-    email: string().email().required(),
-    genero: string().required()
+    nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
+      if (value) {
+        const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
+        const minDate = new Date('1940-01-01')
+        const maxDate = new Date('2023-12-31')
+        const inputDate = new Date(date)
+
+        // Check if the person is at least 18 years old
+        const eighteenYearsAgo = new Date()
+        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
+
+        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo
+      }
+      return true
+    }),
+    email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/, 'Email inválido'),
+    genero: string().required('Campo obrigatório')
   })
 })
 const schemaLocalizacao = object().shape({
   localizacao: object({
-    pais: string().required(),
-    estado: string().required(),
-    cidade: string().required()
+    pais: string().required('Campo obrigatório'),
+    estado: string().required('Campo obrigatório'),
+    cidade: string().required('Campo obrigatório')
   })
 })
 
 const schemaAcademico = object().shape({
   academico: object({
-    matricula: string().required().min(12).max(12),
+    matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres').matches(/^(\d{12})?$/),
     cotista: object({
       value: boolean(),
       tipos: object({
@@ -979,18 +984,32 @@ const schemaAcademico = object().shape({
 
 const schemaCarreira = object().shape({
   carreira: object({
-    area: string().required(),
+    area: string().required('Campo obrigatório'),
     setor: string().when('area', ([area], schemaCarreira) => {
-      return area !== 'Desempregado' ? schemaCarreira.required() : schemaCarreira.notRequired()
+      return area !== 'Desempregado' ? schemaCarreira.required('Campo obrigatório') : schemaCarreira.notRequired()
     }),
     empresa: string().when('area', ([area], schemaCarreira) => {
-      return area !== 'Desempregado' ? schemaCarreira.required() : schemaCarreira.notRequired()
+      return area !== 'Desempregado' ? schemaCarreira.required('Campo obrigatório') : schemaCarreira.notRequired()
     }),
     faixaSalarial: string().when('area', ([area], schemaCarreira) => {
-      return area !== 'Desempregado' ? schemaCarreira.required() : schemaCarreira.notRequired()
+      return area !== 'Desempregado' ? schemaCarreira.required('Campo obrigatório') : schemaCarreira.notRequired()
     })
   })
 })
+// const schemaCarreira = object().shape({
+//   carreira: object({
+//     area: string().required(),
+//     setor: string().when('area', ([area], schemaCarreira) => {
+//       return area !== 'Desempregado' ? schemaCarreira.required() : schemaCarreira.notRequired()
+//     }),
+//     empresa: string().when('area', ([area], schemaCarreira) => {
+//       return area !== 'Desempregado' ? schemaCarreira.required() : schemaCarreira.notRequired()
+//     }),
+//     faixaSalarial: string().when('area', ([area], schemaCarreira) => {
+//       return area !== 'Desempregado' ? schemaCarreira.required() : schemaCarreira.notRequired()
+//     })
+//   })
+// })
 const schemaAdicionais = object().shape({
   adicionais: object({
     palestras: boolean(),
@@ -1346,7 +1365,8 @@ async function fetchUpdateEgresso () {
     'carreira.area': dataEgresso.value.carreira.area,
     'carreira.setor': dataEgresso.value.carreira.setor,
     'carreira.empresa': dataEgresso.value.carreira.empresa,
-    'carreira.faixaSalarial': dataEgresso.value.carreira.faixaSalarial
+    // id
+    'carreira.faixaSalarial': dataEgresso.value.faixaSalarialId
   })
   formAdicionais.value?.setValues({
     'adicionais.palestras': dataEgresso.value.adicionais.palestras,
@@ -1373,4 +1393,131 @@ function fetchEgresso () {
 function fetchPublicEgresso (id: number) {
   return egressoStore.fetchPublicEgresso(id)
 }
+
+const schema = object().shape({
+  geral: object({
+    nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
+      if (value) {
+        return value?.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/)
+      }
+
+      return (typeof value).constructor(true)
+    }),
+    nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
+      if (value) {
+        const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
+        const minDate = new Date('1940-01-01')
+        const maxDate = new Date('2023-12-31')
+        const inputDate = new Date(date)
+
+        // Check if the person is at least 18 years old
+        const eighteenYearsAgo = new Date()
+        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
+
+        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo
+      }
+      return true
+    }),
+    email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/, 'Email inválido'),
+    genero: string().required('Campo obrigatório'),
+    linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
+      if (value) {
+        return value?.match(/https?:\/\/(?:www\.)?br\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/*/)
+      }
+
+      return (typeof value).constructor(true)
+    }),
+    lattes: string().notRequired().test('lattes', 'Link inválido', (value) => {
+      if (value) {
+        return value?.match(/(https?:\/\/)?(www\.)?lattes\.cnpq\.br\/(\d+)/)
+      }
+
+      return (typeof value).constructor(true)
+    })
+  }),
+  localizacao: object({
+    pais: string().required('Campo obrigatório'),
+    estado: string().required('Campo obrigatório'),
+    cidade: string().required('Campo obrigatório')
+  }),
+  academico: object({
+    matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres').matches(/^(\d{12})?$/),
+    tipoAluno: string(),
+    cotista: object({
+      value: boolean(),
+      tipos: object({
+        renda: boolean(),
+        escola: boolean(),
+        raca: boolean(),
+        quilombolaIndigena: boolean()
+      })
+    }),
+    bolsista: object({
+      value: boolean(),
+      tipo: string().when('value', ([value], schema) => {
+        return value ? schema.required('Campo obrigatório') : schema.notRequired()
+      }),
+      remuneracao: string().when('value', ([value], schema) => {
+        return value ? schema.required('Campo obrigatório') : schema.notRequired()
+      })
+    }),
+    posGrad: object({
+      value: boolean(),
+      local: string().when('value', ([value], schema) => {
+        return value ? schema.required('Campo obrigatório') : schema.notRequired()
+      }),
+      curso: string().when('value', ([value], schema) => {
+        return value ? schema.required('Campo obrigatório') : schema.notRequired()
+      })
+    }),
+    desejaPos: boolean()
+  }),
+  carreira: object({
+    area: string().required('Campo obrigatório'),
+    setor: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    empresa: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    faixaSalarial: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    })
+  }),
+  adicionais: object({
+    palestras: boolean(),
+    assuntosPalestras: string().when('palestras', ([palestras], schema) => {
+      return palestras ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    experiencias: string().required('Campo obrigatório'),
+    contribuicoes: string().required('Campo obrigatório')
+  })
+})
+
+const schemaHeader = object().shape({
+  geral: object({
+    nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
+      if (value) {
+        return value?.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/)
+      }
+
+      return (typeof value).constructor(true)
+    }),
+    linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
+      if (value) {
+        return value?.match(/https?:\/\/(?:www\.)?br\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/*/)
+      }
+
+      return (typeof value).constructor(true)
+    }),
+    lattes: string().notRequired().test('lattes', 'Link inválido', (value) => {
+      if (value) {
+        return value?.match(/(https?:\/\/)?(www\.)?lattes\.cnpq\.br\/(\d+)/)
+      }
+      return (typeof value).constructor(true)
+    })
+  })
+
+})
+
 </script>
