@@ -15,7 +15,6 @@ import java.util.Optional;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -104,23 +103,23 @@ class UsuarioServiceImplTest {
 
 	@Test
 	void test_Given_Valid_Username_Should_Return_True() {
-		Mockito.when(usuarioRepository.existsByUsername(anyString())).thenReturn(true);
+		Mockito.when(usuarioRepository.existsByUsernameIgnoreCase(anyString())).thenReturn(true);
 
 		boolean userindb = usuarioService.existsByUsername("john123");
 
 		assertTrue(userindb);
-		Mockito.verify(usuarioRepository).existsByUsername(anyString());
+		Mockito.verify(usuarioRepository).existsByUsernameIgnoreCase(anyString());
 
 	}
 
 	@Test
 	void test_Given_Invalid_Username_Should_False() {
-		Mockito.when(usuarioRepository.existsByUsername(anyString())).thenReturn(false);
+		Mockito.when(usuarioRepository.existsByUsernameIgnoreCase(anyString())).thenReturn(false);
 
 		boolean userindb = usuarioService.existsByUsername("carla123");
 
 		assertFalse(userindb);
-		Mockito.verify(usuarioRepository).existsByUsername(anyString());
+		Mockito.verify(usuarioRepository).existsByUsernameIgnoreCase(anyString());
 	}
 
 	@Test

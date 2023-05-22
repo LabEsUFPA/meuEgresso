@@ -1,10 +1,22 @@
 package labes.facomp.ufpa.br.meuegresso.service.egresso.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
@@ -24,9 +36,12 @@ public class EgressoServiceImpl implements EgressoService {
 
     private final EgressoRepository egressoRepository;
 
+    @Value("${fotosDir}")
+    private String uploadDirectory;
+
     @Override
-    public EgressoModel adicionarEgresso(EgressoModel egresso) {
-        return egressoRepository.save(egresso);
+    public EgressoModel adicionarEgresso(EgressoModel egressoModel) {
+        return egressoRepository.save(egressoModel);
     }
 
     @Override
@@ -86,6 +101,40 @@ public class EgressoServiceImpl implements EgressoService {
     @Override
     public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
         return egressoRepository.existsByIdAndCreatedById(id, createdBy);
+    }
+
+    @Override
+    public Resource getFileAsResource(String fotoNomeString) throws NotFoundFotoEgressoException  {
+
+        Path file = Paths.get(String.format("%s%s", uploadDirectory + "/", fotoNomeString));
+            try {
+                return new UrlResource(file.toUri());
+            } catch (MalformedURLException e) {
+                throw new NotFoundFotoEgressoException();
+            }
+
+    }
+
+    @Override
+    public void deleteFile(String fotoNomeString) throws IOException {
+        Path file = Paths.get(String.format("%s%s", uploadDirectory + "/", fotoNomeString));
+        Files.deleteIfExists(file);
+    }
+
+    @Override
+    public void saveFoto(String nomeFoto, MultipartFile arquivo) throws IOException {
+        Path uploadPath = Paths.get(uploadDirectory);
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = arquivo.getInputStream()) {
+            Path filePath = uploadPath.resolve(nomeFoto);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioe) {
+            throw new IOException("Could not save file: " + arquivo.getOriginalFilename(), ioe);
+        }
     }
 
 }

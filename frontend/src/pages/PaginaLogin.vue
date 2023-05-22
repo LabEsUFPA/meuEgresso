@@ -23,16 +23,21 @@
             name="username"
             label="Usuário"
             :icon-path="mdiAccount"
-            error-message="Informe o seu usuário"
+            without-validation
             required
           />
           <CustomInput
             name="password"
             label="Senha"
-            type="password"
+            :type="showPassword? 'text' : 'password'"
             :icon-path="mdiLock"
-            error-message="Informe a sua senha"
+            without-validation
             required
+          />
+          <CustomCheckbox
+            label="Visualizar senha"
+            name="showPassword"
+            @update:value="toggleShowPassword"
           />
         </div>
         <p class="mb-14">
@@ -70,25 +75,36 @@ import { Form } from 'vee-validate'
 import { object, string } from 'yup'
 import { mdiAccount, mdiLock } from '@mdi/js'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useLoginStore } from 'src/store/LoginStore'
 import router from 'src/router'
 import { models } from 'src/@types'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 interface LoginModel extends models.LoginModel {}
 
+const pinia = createPinia()
+const app = createApp({})
+app.use(pinia)
 const error = ref(false)
+const storeLogin = useLoginStore()
+
 
 const schema = object().shape({
-  username: string().required(),
-  password: string().required()
+  username: string().required('Informe o seu usuário'),
+  password: string().required('Informe a sua senha')
 })
 
+const showPassword = ref(false)
+const toggleShowPassword = () => {
+  showPassword.value = !showPassword.value
+}
+
 const handleSubmit = async (submitData: any) => {
-  const loginData: LoginModel ={
-    username: submitData.username,
-    password: submitData.password
-  }
+  const loginData: LoginModel = submitData
+
   if (loginData.username || loginData.password) {
-    const response = await useLoginStore().userLogin(loginData.username, loginData.password)
+    const response = await storeLogin.userLogin(loginData.username, loginData.password)
 
     if (response === 200) {
       error.value = false
@@ -105,3 +121,10 @@ const onInvalid = (e: any) => {
   console.log(e)
 }
 </script>
+
+<style>
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+</style>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.anuncio.AnuncioRepository;
@@ -35,6 +36,14 @@ public class AnuncioServiceImpl implements AnuncioService {
     @Override
     public List<AnuncioModel> findAll() {
         return anuncioRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public List<AnuncioModel> findBySearch(String tituloAnuncio, Double salarioMin, Double salarioMax,
+            Integer[] areaEmpregoIds) {
+        return anuncioRepository.findBySearch("%" + tituloAnuncio + "%",
+                salarioMin, salarioMax, areaEmpregoIds);
     }
 
     @Override

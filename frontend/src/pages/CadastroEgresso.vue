@@ -95,6 +95,9 @@
               label="Matrícula"
               mask="############"
               placeholder="205004940001"
+              :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
+              custom-error-message
+              @update:value="checkRegistrationLength"
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -220,8 +223,9 @@
               name="carreira.area"
               label="Área de Atuação"
               placeholder="Selecione"
-              v-model:value="area"
+              @change="area = $event"
               :options="selectOpts.areaAtuacao"
+              required
             />
 
             <CustomSelect
@@ -321,13 +325,14 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras: <sup
+              Descreva abaixo os assuntos nos quais você se sente mais confiante para apresentar palestras. <sup
                 v-if="bools.palestras"
                 class="text-red-500"
               >*</sup>
             </div>
 
-            <CustomTextarea
+            <CustomInput
+              type="textarea"
               class="mb-5"
               name="adicionais.assuntosPalestras"
               :required="bools.palestras"
@@ -335,19 +340,23 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para de forma simples e resumida  compartilhar com outras pessoas experiências positivas ao realizar o curso: <sup class="text-red-500">*</sup>
+              Compartilhe abaixo, de forma simples e resumida, suas experiências positivas ao realizar o curso. <sup class="text-red-500">*</sup>
             </div>
 
-            <CustomTextarea
+            <CustomInput
+              type="textarea"
               class="mb-5"
               name="adicionais.experiencias"
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja pequena ou grande, pois tudo tem seu impacto: <sup class="text-red-500">*</sup>
+              Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes, pois tudo tem impacto. <sup class="text-red-500">*</sup>
             </div>
 
-            <CustomTextarea name="adicionais.contribuicoes" />
+            <CustomInput
+              type="textarea"
+              name="adicionais.contribuicoes"
+            />
           </div>
         </template>
       </FolderSection>
@@ -371,16 +380,15 @@
       @close="$router.push('/egresso')"
     >
       <div class="h-full flex justify-center items-center">
-        <div class="w-1/2">
-          <div class="text-green-500 text-center mb-3">
-            <SvgIcon
-              type="mdi"
-              size="100"
-              class="inline"
-              :path="mdiCheckCircle"
-            />
+        <div class="flex flex-col full items-center justify-center gap-y-3 sm:gap-y-7">
+          <div class="text-green-500 text-center">
+            <img
+              class="w-16 sm:w-24"
+              src="../assets/check.svg"
+              alt="Loading"
+            >
           </div>
-          <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+          <h1 class="text-blue-900 w-3/4 text-center font-semibold text-2xl sm:text-3xl">
             Dados cadastrados com sucesso!
           </h1>
           <div class="flex flex-row justify-center">
@@ -423,7 +431,6 @@
 <script lang="ts" setup>
 import FolderSection from 'src/components/FolderSection.vue'
 import CustomInput from 'src/components/CustomInput.vue'
-import CustomTextarea from 'src/components/CustomTextarea.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
@@ -434,7 +441,7 @@ import { Form } from 'vee-validate'
 import { ref, computed, watch, onMounted } from 'vue'
 import { Country, State, City } from 'country-state-city'
 import svgPath from 'src/assets/svgPaths.json'
-import { object, string, date, boolean, InferType } from 'yup'
+import { object, string, boolean } from 'yup'
 import {
   mdiAccount,
   mdiBriefcase,
@@ -442,15 +449,11 @@ import {
   mdiMapMarker,
   mdiMessage,
   mdiSchool,
-  mdiCheckCircle,
   mdiShareVariant,
   mdiAlertCircle
 } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
 
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
@@ -460,6 +463,7 @@ $store.fetchAll()
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const camposFaltosos = ref(false)
+const missingDigits = ref(0)
 
 const pais = ref('')
 const estado = ref('')
@@ -612,20 +616,52 @@ function handleFail (e: any) {
 
 const schema = object().shape({
   geral: object({
-    nome: string().required(),
-    nascimento: date().required(),
-    email: string().email().required(),
-    genero: string().required(),
-    linkedin: string(),
-    lattes: string()
+    nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
+      if (value) {
+        return value?.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/)
+      }
+
+      return (typeof value).constructor(true)
+    }),
+    nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
+      if (value) {
+        const date = value.split('/').reverse().join('-'); // Convert date to ISO format (YYYY-MM-DD)
+        const minDate = new Date('1940-01-01');
+        const maxDate = new Date('2023-12-31');
+        const inputDate = new Date(date);
+
+        // Check if the person is at least 18 years old
+        const eighteenYearsAgo = new Date();
+        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+
+        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo;
+      }
+      return true;
+    }),
+    email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/, 'Email inválido'),
+    genero: string().required('Campo obrigatório'),
+    linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
+      if (value) {
+        return value?.match(/https?:\/\/(?:www\.)?br\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/*/)
+      }
+
+      return (typeof value).constructor(true)
+    }),
+    lattes: string().notRequired().test('lattes', 'Link inválido', (value) => {
+      if (value) {
+        return value?.match(/(https?:\/\/)?(www\.)?lattes\.cnpq\.br\/(\d+)/)
+      }
+
+      return (typeof value).constructor(true)
+    })
   }),
   localizacao: object({
-    pais: string().required(),
-    estado: string().required(),
-    cidade: string().required()
+    pais: string().required('Campo obrigatório'),
+    estado: string().required('Campo obrigatório'),
+    cidade: string().required('Campo obrigatório')
   }),
   academico: object({
-    matricula: string().max(12),
+    matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres').matches(/^(\d{12})?$/),
     tipoAluno: string(),
     cotista: object({
       value: boolean(),
@@ -639,42 +675,42 @@ const schema = object().shape({
     bolsista: object({
       value: boolean(),
       tipo: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+        return value ? schema.required('Campo obrigatório') : schema.notRequired()
       }),
       remuneracao: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+        return value ? schema.required('Campo obrigatório') : schema.notRequired()
       })
     }),
     posGrad: object({
       value: boolean(),
       local: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+        return value ? schema.required('Campo obrigatório') : schema.notRequired()
       }),
       curso: string().when('value', ([value], schema) => {
-        return value ? schema.required() : schema.notRequired()
+        return value ? schema.required('Campo obrigatório') : schema.notRequired()
       })
     }),
     desejaPos: boolean()
   }),
   carreira: object({
-    area: string().required(),
+    area: string().required('Campo obrigatório'),
     setor: string().when('area', ([area], schema) => {
-      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     }),
     empresa: string().when('area', ([area], schema) => {
-      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     }),
     faixaSalarial: string().when('area', ([area], schema) => {
-      return area !== 'Desempregado' ? schema.required() : schema.notRequired()
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     })
   }),
   adicionais: object({
     palestras: boolean(),
     assuntosPalestras: string().when('palestras', ([palestras], schema) => {
-      return palestras ? schema.required() : schema.notRequired()
+      return palestras ? schema.required('Campo obrigatório') : schema.notRequired()
     }),
-    experiencias: string().required(),
-    contribuicoes: string().required()
+    experiencias: string().required('Campo obrigatório'),
+    contribuicoes: string().required('Campo obrigatório')
   })
 })
 
@@ -697,5 +733,9 @@ onMounted(() => {
     }).join(' '))
   }
 })
+
+const checkRegistrationLength = ($event: Event) => {
+  missingDigits.value = 12 - String($event).length
+}
 
 </script>

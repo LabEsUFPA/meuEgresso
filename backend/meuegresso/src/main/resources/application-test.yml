@@ -16,17 +16,6 @@ spring:
   h2:
     console.enabled: true
     console.path: /h2
-
-
-  data:
-    mongodb:
-      host: localhost
-      database: db-mongo
-      port: 27017
-      username: mongo
-      password: mongo
-      authentication-database: admin # habilitar autenticação
-      auto-index-creation: true # Atualizar indices quando autlaizar o model.
   sql:
     init:
       mode: never
@@ -37,7 +26,7 @@ spring:
     show-sql: true
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
       naming:
         physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -51,3 +40,5 @@ server:
 token:
   domain: teste.com
   expiresHours: 3
+  
+fotosDir: test/fotosTeste/

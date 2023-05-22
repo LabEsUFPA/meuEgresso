@@ -1,7 +1,14 @@
 package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 
+import org.springframework.core.io.Resource;
+import org.springframework.web.multipart.MultipartFile;
+
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 
 /**
@@ -15,11 +22,9 @@ public interface EgressoService {
 
 	public EgressoModel findByUsuarioId(Integer idUsuario);
 
-	public EgressoModel findById(Integer idEgresso);
-
+	public EgressoModel findById(Integer id);
 
 	public List<EgressoModel> findAll();
-
 
 	public EgressoModel adicionarEgresso(EgressoModel egresso);
 
@@ -73,5 +78,38 @@ public interface EgressoService {
 	 * @return boolean
 	 */
 	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
+	/**
+	 * Método responsável pelo retorno do caminho da foto como um URI
+	 *
+	 * @param fotoNomeString
+	 * @return
+	 * @throws MalformedURLException
+	 * @throws FileNotFoundException
+	 * @author Camilo Santos
+	 * @since 07/05/2023
+	 */
+	public Resource getFileAsResource(String fotoNomeString) throws NotFoundFotoEgressoException;
+
+	/**
+	 * Método responsável por deletar foto pelo nome
+	 *
+	 * @param fotoNomeString
+	 * @throws IOException
+	 * @author Camilo Santos
+	 * @since 12/05/2023
+	 */
+	public void deleteFile(String fotoNomeString) throws IOException;
+
+	/**
+	 * Método responsável pelo salvamento da foto em um arquivo local
+	 *
+	 * @param nomeAnexo
+	 * @param arquivo
+	 * @throws IOException
+	 * @author Camilo Santos
+	 * @since 07/05/2023
+	 */
+	public void saveFoto(String nomeAnexo, MultipartFile arquivo) throws IOException;
 
 }

@@ -1,0 +1,27 @@
+name: "Build Meu Egresso Front Develop"
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  build:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: docker login
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+      - name: Build the Docker image
+        working-directory: ./frontend/
+        run: docker build . --file docker/Dockerfile --tag alverad/meu-egresso-front:develop-latest
+
+      - name: Docker Push
+        run: docker push alverad/meu-egresso-front:develop-latest
