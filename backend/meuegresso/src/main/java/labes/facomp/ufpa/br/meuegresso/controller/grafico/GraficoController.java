@@ -2,7 +2,9 @@ package labes.facomp.ufpa.br.meuegresso.controller.grafico;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.AreaAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.BolsistasGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotaGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotistaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.CursosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.GenerosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.GraficoDTO;
@@ -22,6 +25,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.grafico.IdadesGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.InteresseEmPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.PosGraduacaoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.RemuneracaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoAlunoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoBolsaGraficoDTO;
@@ -204,23 +208,77 @@ public class GraficoController {
     public TipoBolsaGraficoDTO getTipoBolsa() {
         List<EgressoModel> lista = egressoService.findAll();
 
-        List<TipoBolsaModel > tipoBolsa = tipoBolsaService.findAll();
+        List<TipoBolsaModel> tipoBolsa = tipoBolsaService.findAll();
 
         HashMap<String, Integer> tipoBolsaContagens = new HashMap<>();
 
         int count = 0;
-        for(int i =0; i< tipoBolsa.size(); i++){
+        for (int i = 0; i < tipoBolsa.size(); i++) {
             final String nomeFinal = tipoBolsa.get(i).getNome();
             count = (int) lista.stream().filter(a -> a.getBolsa().getNome().equalsIgnoreCase(nomeFinal)).count();
 
             tipoBolsaContagens.put(nomeFinal, count);
-            
+
         }
+
+        return new TipoBolsaGraficoDTO((int) lista.stream().filter(a -> a.getBolsista().equals(true)).count(),
+                tipoBolsaContagens);
+    }
+    
+
+    /**
+     * EndPoint responsável por enumerar a quantidade de egressos em cada remuneração.
+     * 
+     * @return {@link RemuneracaoGraficoDTO} retorna a quantidade de egressos por cada tipo de remuneração.
+     * @author Camilo Santos
+     * @since 22/05/2023
+     */
+    @GetMapping(value = "/remuneracao") // TODO verificar possibilidade de refatoração
+    @ResponseStatus(code = HttpStatus.OK)
+    public RemuneracaoGraficoDTO getRemuneracao() {
+        List<EgressoModel> lista = egressoService.findAll();
+
+        Set<Double> remuneracoes = new HashSet<>();
+
+        HashMap<Double, Integer> remuneracaoContagem = new HashMap<>();
+
+        for (EgressoModel egresso : lista) {
+            if (Boolean.TRUE.equals(egresso.getBolsista())) {
+                remuneracoes.add(egresso.getRemuneracaoBolsa());
+            }
+        }
+
+        List<Double> remuneracoesLista = new ArrayList<>(remuneracoes);
         
-        return new TipoBolsaGraficoDTO((int) lista.stream().filter(a -> a.getBolsista().equals(true)).count(), tipoBolsaContagens);
+        int count = 0;
+        for(int i =0; i< remuneracoesLista.size(); i++){
+            final Double remuneracaoFinal = remuneracoesLista.get(i);
+
+            count = (int) lista.stream().filter(e -> e.getRemuneracaoBolsa().equals(remuneracaoFinal)).count();
+            remuneracaoContagem.put(remuneracaoFinal, count);
+        }
+        return new RemuneracaoGraficoDTO(remuneracaoContagem);
     }
 
-    //TODO remuneracao grafico
+    /**
+     * EndPoint responsável por enumerar a quantidade de egressos cotistas e não-cotistas.
+     * 
+     * @return {@link CotistaGraficoDTO} retorna cotistas e não-cotistas enumerados.
+     * @author Camilo Santos
+     * @since 22/05/2023
+     */
+    @GetMapping(value = "/cotista")
+    @ResponseStatus(code = HttpStatus.OK)
+    public CotistaGraficoDTO getCotista() {
+        List<EgressoModel> lista = egressoService.findAll();
+
+        HashMap<String, Long> cotistaContagem = new HashMap<>();
+
+        cotistaContagem.put("Cotista", lista.stream().filter(e -> e.getCotista().equals(true)).count());
+        cotistaContagem.put("Não Cotista", lista.stream().filter(e -> e.getCotista().equals(false)).count());
+        
+        return new CotistaGraficoDTO(cotistaContagem);
+    }
 
     /**
      * Endpoint responsavel por buscar todos os Locais da Pos dos egressos no banco.
@@ -293,7 +351,7 @@ public class GraficoController {
      */
     @GetMapping(value = "/cotas")
     @ResponseStatus(code = HttpStatus.OK)
-    public CotaGraficoDTO getCotas() { // TODO verificar complexidade no tempo kkkk
+    public CotaGraficoDTO getCotas() { // TODO verificar possibilidade de refatoração
         List<EgressoModel> lista = egressoService.findAll();
 
         List<CotaModel> cotas = cotaService.findAll();
