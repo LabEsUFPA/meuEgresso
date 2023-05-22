@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TipoBolsaGraficoDTO {
 
-    private Integer QuantidadeBolsistas;
+    private Integer quantidadeBolsistas;
     
-    private HashMap<String, Integer> TipoBolsas;
+    private HashMap<String, Integer> tipoBolsas;
 }

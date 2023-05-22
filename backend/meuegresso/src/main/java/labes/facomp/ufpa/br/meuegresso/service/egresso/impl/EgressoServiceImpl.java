@@ -74,7 +74,7 @@ public class EgressoServiceImpl implements EgressoService {
 	@Override
 	public List<Integer> findAllIdades() {
 		List<EgressoModel> lista = egressoRepository.findAll();
-		List<Integer> idades = new ArrayList<Integer>();
+		List<Integer> idades = new ArrayList<>();
 		for (int i = 0; i < lista.size(); i++) {
 			idades.add(Period.between(lista.get(i).getNascimento(), LocalDate.now()).getYears());
 		}

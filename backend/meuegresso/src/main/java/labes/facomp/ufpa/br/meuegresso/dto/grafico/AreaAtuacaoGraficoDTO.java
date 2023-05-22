@@ -17,17 +17,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AreaAtuacaoGraficoDTO {
-    //private Integer quantidadeComputacao;
 
-    //private Integer quantidadePesquisa;
-
-    //private Integer quantidadeDesempregado;
-
-    //private Integer quantidadeProgramador;
-
-    //private Integer quantidadeAnalista;
-
-    //private Integer quantidadeOutros;
-
-    HashMap<String, Integer> areaAtuacao;
+    private HashMap<String, Integer> areaAtuacao;
 }

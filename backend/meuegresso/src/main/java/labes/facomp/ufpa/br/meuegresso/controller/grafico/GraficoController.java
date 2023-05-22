@@ -259,7 +259,7 @@ public class GraficoController {
 
             // TODO get de cotas
 
-            count = (int) cotas.stream().filter(c -> c.getE).count();
+            //count = (int) cotas.stream().filter(c -> c.getE).count();
 
             cotasContagens.put(nomeFinal, count);
         }
@@ -272,6 +272,7 @@ public class GraficoController {
         // return new CotaGraficoDTO(
         // (int) trueEgressoList.count(),
         // (int) falseEgressoList.count());
+        return null;
 
     }
 

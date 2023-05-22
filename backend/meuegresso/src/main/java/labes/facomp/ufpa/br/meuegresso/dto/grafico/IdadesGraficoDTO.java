@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.OptionalDouble;
 
 import lombok.AllArgsConstructor;
