@@ -128,7 +128,7 @@ const colorClassNames = {
     },
     text: 'text-white',
     outline: 'outline-gray-400'
-  },
+  }
 }
 
 const styles = computed(() => {
