@@ -45,4 +45,4 @@ jobs:
         run: docker build . --file docker/Dockerfile --tag alverad/meu-egresso-api:develop-latest
 
       - name: Docker Push
-        run: docker push -a alverad/meu-egresso-api:develop-latest
+        run: docker push alverad/meu-egresso-api:develop-latest

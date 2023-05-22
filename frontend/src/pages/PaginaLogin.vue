@@ -79,10 +79,16 @@ import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useLoginStore } from 'src/store/LoginStore'
 import router from 'src/router'
 import { models } from 'src/@types'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 interface LoginModel extends models.LoginModel {}
 
+const pinia = createPinia()
+const app = createApp({})
+app.use(pinia)
 const error = ref(false)
 const storeLogin = useLoginStore()
+
 
 const schema = object().shape({
   username: string().required('Informe o seu usuário'),

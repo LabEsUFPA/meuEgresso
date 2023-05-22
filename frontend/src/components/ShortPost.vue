@@ -56,17 +56,13 @@ interface Props {
     salario: number
 }
 
-const defaultProps = {
+const props = withDefaults(defineProps<Props>(), {
     id: 0,
     nome: 'Nome Completo',
     titulo: 'Título da vaga',
     area: 'Área de emprego',
     descricao: 'Descrição da vaga',
     salario: 0
-}
-
-const props = withDefaults(defineProps<Props>(), defaultProps)
-
-const { id, nome, titulo, area, descricao, salario } = props
+})
 
 </script>
