@@ -624,7 +624,6 @@ import {
   mdiAlertCircle
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
-import { json } from 'body-parser'
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const $route = useRoute()
@@ -641,8 +640,11 @@ const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 
 const isPublic = computed(() => {
-  // Object.keys($route.params).length === 1
-  return false
+  if (Object.keys($route.params).length === 1) {
+    return true
+  } else {
+    return false
+  }
 })
 
 function handleStatus (status: any) {
