@@ -77,7 +77,7 @@
           class="mb-5"
           name="academico.bolsista.tipo"
           label="Tipo de Bolsa"
-          placeholder="Selecione"
+          :placeholder="bolsaHolder.placeholder"
           :options="$store.tiposBolsa"
           :required="bools.bolsista"
           :disabled="!bools.bolsista"
@@ -145,6 +145,7 @@ import { ref, watch, onMounted } from 'vue'
 import { mdiSchool } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
+import { propsToAttrMap } from '@vue/shared'
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 
@@ -160,15 +161,41 @@ const bools = ref({
   posGrad: false,
   palestras: false
 })
+const bolsaHolder = ref({
+  placeholder: 'bolsa'
+})
 interface Props {
   isInput?: boolean
+  bools?: any
+  bolsaHolder?: string
 
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  isInput: true
+  isInput: true,
+  bools: {
+    cotista: false,
+    bolsista: false,
+    posGrad: false,
+    palestras: false
+  },
+  bolsaHolder: 'bolsa'
 
 })
+bools.value = {
+  cotista: props.bools?.cotista,
+  bolsista: props.bools?.bolsista,
+  posGrad: props.bools?.posGrad,
+  palestras: props.bools?.palestras
+}
+
+bolsaHolder.value = {
+  placeholder: props.bolsaHolder
+}
+
+console.log('bools')
+
+console.log(props.bolsaHolder)
 onMounted(() => {
   watch(pais, () => {
     form.value?.setFieldValue('localizacao.cidade', '')
@@ -187,6 +214,25 @@ onMounted(() => {
       return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
     }).join(' '))
   }
+})
+watch(() => props.bools.cotista, (newValue) => {
+  bools.value.cotista = newValue
+})
+
+watch(() => props.bools.bolsista, (newValue) => {
+  bools.value.bolsista = newValue
+})
+
+watch(() => props.bools.posGrad, (newValue) => {
+  bools.value.posGrad = newValue
+})
+
+watch(() => props.bools.palestras, (newValue) => {
+  bools.value.palestras = newValue
+})
+
+watch(() => props.bolsaHolder, (newValue) => {
+  bolsaHolder.value.placeholder = newValue
 })
 
 </script>

@@ -224,24 +224,6 @@
                 :icon-path="mdiEmail"
                 v-if="!isPublic"
               />
-              <CustomInput
-                class="mb-5"
-                name="geral.email"
-                label="E-mail1"
-                placeholder="Ex: marcelle.mota.@gov.br"
-                helper-text="Use um email válido: hotmail, outlook, gmail, etc."
-                :icon-path="mdiEmail"
-                required
-              />
-              <!-- <CustomInput2
-                    class="mb-5"
-                    name="geral.email"
-                    label="E-mail2"
-                    placeholder="Ex: marcelle.mota.@gov.br"
-                    helper-text="Use um email válido: hotmail, outlook, gmail, etc."
-                    :icon-path="mdiEmail"
-                    required
-                  /> -->
               <CustomPerfilData
                 type="date"
                 class="mb-1"
@@ -254,19 +236,10 @@
             </div>
 
             <div v-else>
-              <!-- <CustomSelect
-                    class="mb-5"
-                    name="geral.genero"
-                    :value="dataEgresso.geral.genero"
-                    :value-id="dataEgresso.generoId"
-                    label="Gênero"
-                    :options="egressoStore.generos"
-                    :pre-filled="true"
-                    required
-                  /> -->
               <CustomSelect
                 class="mb-5"
                 name="geral.genero"
+                :placeholder="dataEgresso.geral.genero"
                 label="Gênero"
                 :options="$store.generos"
                 required
@@ -275,7 +248,7 @@
               <CustomInput
                 class="mb-5"
                 name="geral.email"
-                label="E-mail1"
+                label="E-mail"
                 placeholder="Ex: marcelle.mota.@gov.br"
                 helper-text="Use um email válido: hotmail, outlook, gmail, etc."
                 :icon-path="mdiEmail"
@@ -298,7 +271,11 @@
         @invalid-submit="onInvalid"
         :validation-schema="schemaAcademico"
       >
-        <FolderAcademico :is-input="dataEgresso.academico.isInput">
+        <FolderAcademico
+          :is-input="dataEgresso.academico.isInput"
+          :bools="bools"
+          :bolsa-holder="placeHolders.bolsaNome"
+        >
           <template #EditButton>
             <h1 class="relative">
               <ButtonEdit
@@ -630,7 +607,7 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
-import { computed, ref, watch, onMounted } from 'vue'
+import { computed, ref, watch, onMounted, onBeforeMount, onBeforeUpdate } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import { Form } from 'vee-validate'
 import { object, string, date, boolean } from 'yup'
@@ -660,6 +637,7 @@ import {
   mdiAlertCircle
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
+import { json } from 'body-parser'
 // mdiHome CEP,
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
@@ -755,9 +733,12 @@ async function handleSubmitAcademico (values: any) {
   jsonResponse.posGraduacao = values.academico.posGrad.value
   if (!values.academico.posGrad.value) {
     jsonResponse.interesseEmPos = values.academico.posGrad.desejaPos
-    // jsonResponse.titulacao.empresa = null
-    // jsonResponse.titulacao.curso = null
+    jsonResponse.titulacao = null
+    // jsonResponse.titulacao.empresa = ''
+    // jsonResponse.titulacao.curso = ''
   } else {
+    jsonResponse.interesseEmPos = false
+
     if (jsonResponse.titulacao === undefined) {
       const titulacao = {
         id: {
@@ -1025,9 +1006,6 @@ const schemaAdicionais = object().shape({
     contribuicoes: string().required()
   })
 })
-const geral = ref({
-  nome: 'john'
-})
 const dataEgresso = ref({
   egressoId: 0,
   generoId: 0,
@@ -1117,6 +1095,15 @@ const dataEgresso = ref({
     isInput: false
   }
 })
+const bools = ref({
+  cotista: true,
+  bolsista: true,
+  posGrad: true,
+  palestras: true
+})
+const placeHolders = ref({
+  bolsaNome: dataEgresso.value.academico.bolsista.tipo
+})
 
 const loading = ref(true)
 watch(() => dataEgresso.value.egressoId, () => {
@@ -1170,48 +1157,45 @@ async function fetchUpdateEgresso () {
   // Caso contrario: cotasEgresso += json.cotas[i].nome
 
   let cotasEgresso = ''
-  // let cotasEgressoArr = []
 
   for (let i = 0; i < json.cotas.length; i++) {
     cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
   }
-  // formGeral.value?.setFieldValue('geral.email', userData.email)
-  // formGeral.value?.setFieldValue('geral.email', 'omegalul@gmail.com')
-  if (jsonResponse.emprego === undefined) {
-    jsonResponse.emprego = {
-      id: {
-        egressoId: jsonResponse.id,
-        empresaId: 1
-      },
-      setorAtuacao: {
-        id: 1,
-        nome: ''
-      },
-      areaAtuacao: {
-        id: 1,
-        nome: ''
-      },
-      faixaSalarial: {
-        id: 2
+  // if (jsonResponse.emprego === undefined) {
+  //   jsonResponse.emprego = {
+  //     id: {
+  //       egressoId: jsonResponse.id,
+  //       empresaId: 1
+  //     },
+  //     setorAtuacao: {
+  //       id: 1,
+  //       nome: ''
+  //     },
+  //     areaAtuacao: {
+  //       id: 1,
+  //       nome: ''
+  //     },
+  //     faixaSalarial: {
+  //       id: 2
 
-      },
-      empresa: {
-        id: 1,
-        nome: '',
-        endereco: {
-          id: 6,
-          cidade: '',
-          estado: '',
-          pais: ''
-        },
-        faixaSalarial: {
-          id: 2
-        }
+  //     },
+  //     empresa: {
+  //       id: 1,
+  //       nome: '',
+  //       endereco: {
+  //         id: 6,
+  //         cidade: '',
+  //         estado: '',
+  //         pais: ''
+  //       },
+  //       faixaSalarial: {
+  //         id: 2
+  //       }
 
-      }
+  //     }
 
-    }
-  }
+  //   }
+  // }
 
   dataEgresso.value = {
     egressoId: json.id,
@@ -1289,52 +1273,6 @@ async function fetchUpdateEgresso () {
     }
 
   }
-  // formGeral.value?.setFieldValue('geral.email', userData.email)
-  // formGeral.value?.setFieldValue('geral.email', dataEgresso.value.geral.email)
-  formHeader.value?.setFieldValue('geral.nome', dataEgresso.value.profileHead.nome)
-  formHeader.value?.setValues({
-    'geral.nome': dataEgresso.value.profileHead.nome,
-    'geral.linkedin': dataEgresso.value.profileHead.linkedin,
-    'geral.lattes': dataEgresso.value.profileHead.lattes
-  })
-  formGeral.value?.setValues({
-    'geral.nascimento': dataEgresso.value.geral.nascimento,
-    'geral.email': dataEgresso.value.geral.email,
-    'geral.genero': dataEgresso.value.geral.genero
-  })
-  formLocalizacao.value?.setValues({
-    'localizacao.pais': dataEgresso.value.localizacao.pais,
-    'localizacao.estado': dataEgresso.value.localizacao.estado,
-    'localizacao.cidade': dataEgresso.value.localizacao.cidade
-  })
-  formAcademico.value?.setValues({
-    'academico.matricula': dataEgresso.value.academico.matricula,
-    'academico.cotista.value': dataEgresso.value.academico.cotista.value,
-    'academico.cotista.tipos.renda': dataEgresso.value.academico.cotista.tipos.renda,
-    'academico.cotista.tipos.escola': dataEgresso.value.academico.cotista.tipos.escola,
-    'academico.cotista.tipos.raca': dataEgresso.value.academico.cotista.tipos.raca,
-    'academico.cotista.tipos.quilombolaIndigena': dataEgresso.value.academico.cotista.tipos.quilombolaIndigena,
-    'academico.bolsista.value': dataEgresso.value.academico.bolsista.value,
-    'academico.bolsista.tipo': dataEgresso.value.academico.bolsista.tipo,
-    'academico.bolsista.remuneracao': dataEgresso.value.academico.bolsista.remuneracao,
-    'academico.posGrad.value': dataEgresso.value.academico.posGrad.value,
-    'academico.posGrad.local': dataEgresso.value.academico.posGrad.local,
-    'academico.posGrad.curso': dataEgresso.value.academico.posGrad.curso,
-    'academico.desejaPos': dataEgresso.value.academico.posGrad.desejaPos
-  })
-  formCarreira.value?.setValues({
-    'carreira.area': dataEgresso.value.carreira.area,
-    'carreira.setor': dataEgresso.value.carreira.setor,
-    'carreira.empresa': dataEgresso.value.carreira.empresa,
-    'carreira.faixaSalarial': dataEgresso.value.carreira.faixaSalarial
-  })
-  formAdicionais.value?.setValues({
-    'adicionais.palestras': dataEgresso.value.adicionais.palestras,
-    'adicionais.assuntosPalestras': dataEgresso.value.adicionais.assuntosPalestras,
-    'adicionais.experiencias': dataEgresso.value.adicionais.experiencias,
-    'adicionais.contribuicoes': dataEgresso.value.adicionais.contribuicoes
-  })
-
   console.log('isPublic: ')
   console.log(isPublic.value)
   for (let i = 0; i < json.cotas.length; i++) {
@@ -1351,10 +1289,106 @@ async function fetchUpdateEgresso () {
       dataEgresso.value.academico.cotista.tipos.quilombolaIndigena = true
     }
   }
+  bools.value = {
+    cotista: dataEgresso.value.academico.cotista.value,
+    bolsista: dataEgresso.value.academico.bolsista.value,
+    posGrad: dataEgresso.value.academico.posGrad.value,
+    palestras: dataEgresso.value.adicionais.palestras
+  }
+  placeHolders.value.bolsaNome = dataEgresso.value.academico.bolsista.tipo
+
+  // formGeral.value?.setFieldValue('geral.email', userData.email)
+  // formGeral.value?.setFieldValue('geral.email', dataEgresso.value.geral.email)
+  formHeader.value?.setFieldValue('geral.nome', dataEgresso.value.profileHead.nome)
+  formHeader.value?.setValues({
+    'geral.nome': dataEgresso.value.profileHead.nome,
+    'geral.linkedin': dataEgresso.value.profileHead.linkedin,
+    'geral.lattes': dataEgresso.value.profileHead.lattes
+  })
+  formGeral.value?.setValues({
+    'geral.nascimento': dataEgresso.value.geral.nascimento,
+    'geral.email': dataEgresso.value.geral.email,
+    // passa Id para o select
+    'geral.genero': dataEgresso.value.generoId
+  })
+  // passa o nome para o placeholder
+  // dataEgresso.value.geral.genero
+  formLocalizacao.value?.setValues({
+    'localizacao.pais': dataEgresso.value.localizacao.pais,
+    'localizacao.estado': dataEgresso.value.localizacao.estado,
+    'localizacao.cidade': dataEgresso.value.localizacao.cidade
+  })
+  // dataEgresso.value.academico.cotista.value
+  console.log('cotarenda')
+  console.log(dataEgresso.value.academico.cotista.tipos.renda)
+  formAcademico.value?.setValues({
+    'academico.matricula': dataEgresso.value.academico.matricula,
+    'academico.cotista.value': dataEgresso.value.academico.cotista.value,
+    'academico.cotista.tipos.renda': dataEgresso.value.academico.cotista.tipos.renda,
+    'academico.cotista.tipos.escola': dataEgresso.value.academico.cotista.tipos.escola,
+    'academico.cotista.tipos.raca': dataEgresso.value.academico.cotista.tipos.raca,
+    'academico.cotista.tipos.quilombolaIndigena': dataEgresso.value.academico.cotista.tipos.quilombolaIndigena,
+    'academico.bolsista.value': dataEgresso.value.academico.bolsista.value,
+    // id
+    // nome dataEgresso.value.academico.bolsista.tipo,
+    'academico.bolsista.tipo': dataEgresso.value.bolsaId,
+
+    'academico.bolsista.remuneracao': dataEgresso.value.academico.bolsista.remuneracao,
+    'academico.posGrad.value': dataEgresso.value.academico.posGrad.value,
+    'academico.posGrad.local': dataEgresso.value.academico.posGrad.local,
+    'academico.posGrad.curso': dataEgresso.value.academico.posGrad.curso,
+    'academico.posGrad.desejaPos': dataEgresso.value.academico.posGrad.desejaPos
+  })
+  formCarreira.value?.setValues({
+    'carreira.area': dataEgresso.value.carreira.area,
+    'carreira.setor': dataEgresso.value.carreira.setor,
+    'carreira.empresa': dataEgresso.value.carreira.empresa,
+    'carreira.faixaSalarial': dataEgresso.value.carreira.faixaSalarial
+  })
+  formAdicionais.value?.setValues({
+    'adicionais.palestras': dataEgresso.value.adicionais.palestras,
+    'adicionais.assuntosPalestras': dataEgresso.value.adicionais.assuntosPalestras,
+    'adicionais.experiencias': dataEgresso.value.adicionais.experiencias,
+    'adicionais.contribuicoes': dataEgresso.value.adicionais.contribuicoes
+  })
 
   return egressoStore.fetchEgresso()
 }
+onMounted(() => {
+  bools.value = {
+    cotista: false,
+    bolsista: dataEgresso.value.academico.bolsista.value,
+    posGrad: dataEgresso.value.academico.posGrad.value,
+    palestras: dataEgresso.value.adicionais.palestras
+  }
+})
 
+async function getBools () {
+  const localBools = ref({
+    cotista: true,
+    bolsista: true,
+    posGrad: true,
+    palestras: true
+  })
+  egressoResponseBack = fetchEgresso()
+  const ResponseBack = await egressoResponseBack
+  const json = JSON.parse(storage.get('loggedEgresso'))
+
+  // json = JSON.parse(ResponseBack)
+
+  // jsonResponse = json
+
+  localBools.value = {
+    cotista: ResponseBack.cotista,
+    bolsista: dataEgresso.value.academico.bolsista.value,
+    posGrad: dataEgresso.value.academico.posGrad.value,
+    palestras: dataEgresso.value.adicionais.palestras
+  }
+  console.log('cloalbool')
+  console.log(localBools)
+
+  return localBools
+}
 function fetchEgresso () {
   return egressoStore.fetchEgresso()
 }
