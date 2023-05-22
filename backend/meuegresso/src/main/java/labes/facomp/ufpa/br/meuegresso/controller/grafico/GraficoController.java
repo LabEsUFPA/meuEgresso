@@ -238,9 +238,12 @@ public class GraficoController {
     public BolsistasGraficoDTO getBolsistas() {
         List<EgressoModel> lista = egressoService.findAll();
 
-        return new BolsistasGraficoDTO(
-                (int) lista.stream().filter(e -> e.getBolsista().equals(true)).count(),
-                (int) lista.stream().filter(e -> e.getBolsista().equals(false)).count());
+        HashMap<String, Long> bolsistasContagens = new HashMap<>();
+
+        bolsistasContagens.put("Bolsistas", lista.stream().filter(e -> e.getBolsista().equals(true)).count());
+        bolsistasContagens.put("Não Bolsistas", lista.stream().filter(e -> e.getBolsista().equals(false)).count());
+
+        return new BolsistasGraficoDTO(bolsistasContagens);
     }
 
     /**
