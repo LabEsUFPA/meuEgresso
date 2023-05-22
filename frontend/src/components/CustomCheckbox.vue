@@ -1,3 +1,4 @@
+
 <template>
   <button
     class="flex flex-row pr-1 items-center w-fit focus-visible:rounded-sm"
@@ -7,10 +8,12 @@
       ['cursor-pointer']: !disabled
     }"
     :aria-labelledby="name"
+
     :aria-checked="inputValue"
     @click="!disabled && handleChange(!inputValue); $emit('update:value', inputValue)"
     @keydown.enter.space="!disabled && handleChange(!inputValue); $emit('update:value', inputValue)"
     :id="`checkbox-${name}`"
+    type="button"
   >
     <div class="text-teal-600">
       <SvgIcon
@@ -46,7 +49,6 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiCheckboxBlankOutline, mdiCheckboxMarked } from '@mdi/js'
 import { useField } from 'vee-validate'
 import { toRef } from 'vue'
-
 const props = defineProps<{
   value?: boolean
   label: string
@@ -57,10 +59,16 @@ const props = defineProps<{
 const $emit = defineEmits(['update:value'])
 
 const name = toRef(props, 'name')
+// const {
+//   value: inputValue,
+//   handleChange
+// } = useField(name, undefined, {
+//   initialValue: props.value
+// })
+
 const {
   value: inputValue,
   handleChange
-} = useField(name, undefined, {
-  initialValue: props.value
-})
+} = useField(name, undefined)
+
 </script>

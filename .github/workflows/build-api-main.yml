@@ -1,11 +1,8 @@
-name: "Testes Automatizados"
+name: "Build Meu Egresso API Main"
 on:
   push:
-    branches:
-      - main
-      - develop
-  pull_request:
-    types: [opened, synchronize, reopened]
+    branches: [ main ]
+
 jobs:
   build:
     name: Build and analyze
@@ -31,6 +28,21 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Test
+
+      - name: Build JAR
         working-directory: ./backend/meuegresso/
-        run: mvn -B test -Dspring.profiles.active=test
+        run: mvn -B install -Dspring.profiles.active=test
+
+      - name: docker login
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+      - name: Build the Docker image
+        working-directory: ./backend/meuegresso/
+        run: docker build . --file docker/Dockerfile --tag alverad/meu-egresso-api:latest
+
+      - name: Docker Push
+        run: docker push alverad/meu-egresso-api
