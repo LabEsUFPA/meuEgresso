@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.springframework.http.HttpStatus;
@@ -246,34 +247,28 @@ public class GraficoController {
      */
     @GetMapping(value = "/cotas")
     @ResponseStatus(code = HttpStatus.OK)
-    public CotaGraficoDTO getCotas() {
+    public CotaGraficoDTO getCotas() { // TODO verificar complexidade no tempo kkkk
         List<EgressoModel> lista = egressoService.findAll();
 
         List<CotaModel> cotas = cotaService.findAll();
 
         HashMap<String, Integer> cotasContagens = new HashMap<>();
 
-        int count = 0;
-        for (int i = 0; i < cotas.size(); i++) {
-            final String nomeFinal = cotas.get(i).getNome();
+        
+        for (int i = 0; i < cotas.size(); i++) { 
+            final CotaModel cotaFinal = cotas.get(i);
 
-            // TODO get de cotas
+            int count = 0;
+            for (int j = 0; j < lista.size(); j++) {
+                EgressoModel egresso = lista.get(j);
 
-            //count = (int) cotas.stream().filter(c -> c.getE).count();
+                Set<CotaModel> cotaEgresso = egresso.getCotas();
 
-            cotasContagens.put(nomeFinal, count);
+                if (cotaEgresso.contains(cotaFinal)) {count += 1;}  
+            }
+            cotasContagens.put(cotaFinal.getNome(), count);
         }
-
-        // Stream<EgressoModel> trueEgressoList = lista.stream().filter(a ->
-        // a.getBolsista().equals(true));
-        // Stream<EgressoModel> falseEgressoList = lista.stream().filter(a ->
-        // a.getBolsista().equals(false));
-
-        // return new CotaGraficoDTO(
-        // (int) trueEgressoList.count(),
-        // (int) falseEgressoList.count());
-        return null;
-
+        return new CotaGraficoDTO(cotasContagens);
     }
 
     /**
