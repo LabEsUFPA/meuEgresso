@@ -246,6 +246,13 @@ export namespace models {
     }
     remuneracaoBolsa?: number
   }
+
+  export namespace Graphics {
+    export interface PieChartSeries {
+      value: number
+      name: string
+    }
+  }
 }
 
 // export interface EgressoModelUpdate {
