@@ -503,7 +503,7 @@ $store.fetchAll()
 const urlShare = 'https://meuegresso.alverad.com.br'
 const mensagemShare = '🎉%20Acabei%20de%20me%20cadastrar%20na%20plataforma%20Meu%20Egresso,%20se%20cadastre%20também:%0D%0A➡️ https://meuegresso.alverad.com.br'
 
-const dialogSucesso = ref(true)
+const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const camposFaltosos = ref(false)
 
