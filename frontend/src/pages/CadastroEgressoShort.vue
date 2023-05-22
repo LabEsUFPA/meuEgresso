@@ -9,356 +9,17 @@
       <h1 class="text-cyan-800 text-2xl font-semibold">
         Cadastro de egresso
       </h1>
-      <FolderSection>
-        <template #title>
-          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-            <SvgIcon
-              type="mdi"
-              size="20"
-              class="inline mr-2"
-              :path="mdiAccount"
-            />
-            Geral
-          </h1>
-        </template>
-        <template #default>
-          <div>
-            <CustomInput
-              class="mb-5"
-              name="geral.nome"
-              label="Nome"
-              :icon-path="mdiAccount"
-              required
-            />
 
-            <CustomInput
-              class="mb-5"
-              name="geral.nascimento"
-              type="date"
-              label="Data de Nascimento"
-              required
-            />
+      <FolderGeral />
 
-            <CustomSelect
-              class="mb-5"
-              name="geral.genero"
-              label="Gênero"
-              :options="$store.generos"
-              required
-            />
+      <FolderAcademico />
 
-            <CustomInput
-              class="mb-5"
-              name="geral.email"
-              label="E-mail"
-              placeholder="Ex: example@gov.br"
-              helper-text="Use um email válido: hotmail, outlook, gmail, etc."
-              :icon-path="mdiEmail"
-              required
-            />
+      <FolderCarreira />
 
-            <CustomInput
-              class="mb-5"
-              name="geral.linkedin"
-              label="Linkedin"
-              :icon-path="svgPath.linkedin"
-            />
-
-            <CustomInput
-              label="Curriculo Lattes"
-              name="geral.lattes"
-              icon-path="src/assets/lattesCinza.svg"
-              img-icon
-            />
-          </div>
-        </template>
-      </FolderSection>
+      <FolderLocalizacao />
 
       <FolderSection class="mt-6">
-        <template #title>
-          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-            <SvgIcon
-              type="mdi"
-              size="20"
-              class="inline mr-2"
-              :path="mdiSchool"
-            />
-            Acadêmico
-          </h1>
-        </template>
-
-        <template #default>
-          <div>
-            <CustomInput
-              class="mb-5"
-              name="academico.matricula"
-              label="Matrícula"
-              mask="############"
-              placeholder="205004940001"
-              :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
-              custom-error-message
-              @update:value="checkRegistrationLength"
-            />
-
-            <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Marque todos as opções que sejam verdadeiras abaixo:
-            </div>
-
-            <CustomCheckbox
-              class="mb-5"
-              name="academico.cotista.value"
-              label="Cotista"
-              v-model:value="bools.cotista"
-            />
-
-            <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Tipos de cota:
-            </div>
-
-            <div class="w-fit p-3 pr-5 rounded-xl bg-gray-100 mb-5">
-              <CustomCheckbox
-                class="mb-5"
-                name="academico.cotista.tipos.renda"
-                label="Cota Renda"
-                :disabled="!bools.cotista"
-              />
-
-              <CustomCheckbox
-                class="mb-5"
-                name="academico.cotista.tipos.escola"
-                label="Cota Escola"
-                :disabled="!bools.cotista"
-              />
-
-              <CustomCheckbox
-                class="mb-5"
-                name="academico.cotista.tipos.raca"
-                label="Autodeclaração de Raça"
-                :disabled="!bools.cotista"
-              />
-
-              <CustomCheckbox
-                name="academico.cotista.tipos.quilombolaIndigena"
-                label="Quilombola/Indigena"
-                :disabled="!bools.cotista"
-              />
-            </div>
-
-            <CustomCheckbox
-              class="mb-5"
-              name="academico.bolsista.value"
-              label="Bolsista"
-              v-model:value="bools.bolsista"
-            />
-
-            <CustomSelect
-              class="mb-5"
-              name="academico.bolsista.tipo"
-              label="Tipo de Bolsa"
-              placeholder="Selecione"
-              :options="$store.tiposBolsa"
-              :required="bools.bolsista"
-              :disabled="!bools.bolsista"
-            />
-
-            <CustomInput
-              class="mb-5"
-              name="academico.bolsista.remuneracao"
-              label="Remuneração da bolsa"
-              type="number"
-              step="0.01"
-              :required="bools.bolsista"
-              :disabled="!bools.bolsista"
-            />
-
-            <CustomCheckbox
-              class="mb-5"
-              name="academico.posGrad.value"
-              v-model:value="bools.posGrad"
-              label="Pós-graduação"
-            />
-
-            <CustomInput
-              class="mb-5"
-              name="academico.posGrad.local"
-              label="Instituição da pós-graduação"
-              :required="bools.posGrad"
-              :disabled="!bools.posGrad"
-            />
-
-            <CustomInput
-              class="mb-5"
-              name="academico.posGrad.curso"
-              label="Curso de pós-graduação"
-              :required="bools.posGrad"
-              :disabled="!bools.posGrad"
-            />
-
-            <CustomCheckbox
-              name="academico.posGrad.desejaPos"
-              label="Desejo realizar pós graduação"
-              v-if="!bools.posGrad"
-            />
-          </div>
-        </template>
-      </FolderSection>
-
-      <FolderSection class="mt-6">
-        <template #title>
-          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-            <SvgIcon
-              type="mdi"
-              size="20"
-              class="inline mr-2"
-              :path="mdiBriefcase"
-            />
-            Carreira
-          </h1>
-        </template>
-
-        <template #default>
-          <div>
-            <CustomSelect
-              class="mb-5"
-              name="carreira.area"
-              label="Área de Atuação"
-              placeholder="Selecione"
-              @change="area = $event"
-              :options="selectOpts.areaAtuacao"
-              required
-            />
-
-            <CustomSelect
-              class="mb-5"
-              name="carreira.setor"
-              label="Setor de Atuação"
-              placeholder="Selecione"
-              :options="selectOpts.setorAtuacao"
-              :required="area !== 'Desempregado'"
-              :disabled="area === 'Desempregado'"
-            />
-
-            <CustomInput
-              class="mb-5"
-              name="carreira.empresa"
-              label="Empresa"
-              placeholder="Ex: Google"
-              :required="area !== 'Desempregado'"
-              :disabled="area === 'Desempregado'"
-            />
-
-            <CustomSelect
-              class="mb-5"
-              name="carreira.faixaSalarial"
-              label="Faixa Salarial"
-              :options="$store.faixasSalariais"
-              :required="area !== 'Desempregado'"
-              :disabled="area === 'Desempregado'"
-            />
-          </div>
-        </template>
-      </FolderSection>
-
-      <FolderSection class="mt-6">
-        <template #title>
-          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-            <SvgIcon
-              type="mdi"
-              size="20"
-              class="inline mr-2"
-              :path="mdiMapMarker"
-            />
-            Localização
-          </h1>
-        </template>
-
-        <template #default>
-          <div>
-            <CustomSelect
-              class="mb-5"
-              name="localizacao.pais"
-              label="País"
-              :options="countries"
-              v-model:value="pais"
-              required
-            />
-
-            <CustomSelect
-              class="mb-5"
-              name="localizacao.estado"
-              label="Estado"
-              :options="states"
-              v-model:value="estado"
-              required
-            />
-
-            <CustomSelect
-              name="localizacao.cidade"
-              label="Cidade"
-              :options="cities"
-              required
-            />
-          </div>
-        </template>
-      </FolderSection>
-
-      <FolderSection class="mt-6">
-        <template #title>
-          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-            <SvgIcon
-              type="mdi"
-              size="20"
-              class="inline mr-2"
-              :path="mdiMessage"
-            />
-            Adicionais
-          </h1>
-        </template>
-
-        <template #default>
-          <div>
-            <CustomCheckbox
-              name="adicionais.palestras"
-              label="Gostaria de apresentar palestras"
-              class="mb-5"
-              v-model:value="bools.palestras"
-            />
-
-            <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Descreva abaixo os assuntos nos quais você se sente mais confiante para apresentar palestras. <sup
-                v-if="bools.palestras"
-                class="text-red-500"
-              >*</sup>
-            </div>
-
-            <CustomInput
-              type="textarea"
-              class="mb-5"
-              name="adicionais.assuntosPalestras"
-              :required="bools.palestras"
-              :disabled="!bools.palestras"
-            />
-
-            <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Compartilhe abaixo, de forma simples e resumida, suas experiências positivas ao realizar o curso. <sup class="text-red-500">*</sup>
-            </div>
-
-            <CustomInput
-              type="textarea"
-              class="mb-5"
-              name="adicionais.experiencias"
-            />
-
-            <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes, pois tudo tem impacto. <sup class="text-red-500">*</sup>
-            </div>
-
-            <CustomInput
-              type="textarea"
-              name="adicionais.contribuicoes"
-            />
-          </div>
-        </template>
+        <FolderAdicionais />
       </FolderSection>
       <div class="py-10 flex flex-col justify-center items-center">
         <InvalidInsert
@@ -454,6 +115,11 @@ import {
 } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
+import FolderGeral from 'src/components/FolderGeral.vue'
+import FolderAcademico from 'src/components/FolderAcademico.vue'
+import FolderCarreira from 'src/components/FolderCarreira.vue'
+import FolderLocalizacao from 'src/components/FolderLocalizacao.vue'
+import FolderAdicionais from 'src/components/FolderAdicionais.vue'
 
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
@@ -713,7 +379,9 @@ const schema = object().shape({
     contribuicoes: string().required('Campo obrigatório')
   })
 })
-
+// const geral = ref({
+//   email: ''
+// })
 onMounted(() => {
   watch(pais, () => {
     form.value?.setFieldValue('localizacao.cidade', '')
@@ -726,14 +394,12 @@ onMounted(() => {
 
   if (storage.has('loggedUser')) {
     const userData = JSON.parse(storage.get('loggedUser'))
-
     form.value?.setFieldValue('geral.email', userData.email)
     form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
       return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
     }).join(' '))
   }
 })
-
 const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
 }

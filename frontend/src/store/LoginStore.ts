@@ -50,7 +50,7 @@ export const useLoginStore = defineStore('LoginStore', {
       }
     },
 
-    getLoggedUser() {
+    getLoggedUser () {
       return JSON.parse(storage.get('loggedUser'))
     }
   }
