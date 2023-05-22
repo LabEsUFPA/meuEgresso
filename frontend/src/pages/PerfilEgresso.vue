@@ -17,9 +17,7 @@
   <div
     class="flex place-items-center justify-between flex-wrap relative w-full h-[335px] pin-t bg-gradient-to-b from-sky-200 to-indigo-200 "
   >
-    <!-- <ProfileHead /> -->
-    <!-- Head Start-->
-
+    <!-- Head Start -->
     <div class="items-center flex relative w-[7000px] flex-col">
       <Form
         ref="formHeader"
@@ -56,7 +54,6 @@
         </div>
         <div class="head">
           <h1 class="grid place-items-center text-cyan-800 text-xl font-bold mt-5 ">
-            <!-- name="geral.nome" -->
             <div v-if="!dataEgresso.profileHead.isInput">
               <slot v-if="dataEgresso.profileHead.nome">
                 {{ dataEgresso.profileHead.nome }}
@@ -71,8 +68,6 @@
               v-else
               class="mb-[-35px]  ml-7"
             >
-              {{ dataEgresso.profileHead.nome }}
-
               <CustomInput
                 class="mb-5"
                 name="geral.nome"
@@ -83,8 +78,6 @@
               />
             </div>
           </h1>
-          <!-- helper-text="Números e caracteres especiais não são permitidos" -->
-
           <div
             v-if="!dataEgresso.profileHead.isInput"
             class="items-start flex justify-center mt-8 relative gap-[10px]"
@@ -163,7 +156,6 @@
   </div>
   <!-- Head End-->
   <div class="w-full mt-[12px]">
-    <!-- <ProfileBodyView /> -->
     <!-- Body Start -->
     <div class="container mx-auto p-3 pb-0">
       <Form
@@ -212,8 +204,7 @@
                 label="Gênero"
                 :icon-path="mdiAccount"
               />
-              <!--                   :vmodel="dataEgresso.geral.email"
-   -->
+
               <CustomPerfilData
                 type="email"
                 class="mb-6"
@@ -361,7 +352,12 @@
         @invalid-submit="onInvalid"
         :validation-schema="schemaCarreira"
       >
-        <FolderCarreira :is-input="dataEgresso.carreira.isInput">
+        <FolderCarreira
+          :is-input="dataEgresso.carreira.isInput"
+          :area-atuacao-holder="placeHolders.areaAtuacao"
+          :setor-atuacao-holder="placeHolders.setorAtuacao"
+          :faixa-salarial-holder="placeHolders.faixaSalarial"
+        >
           <template #EditButton>
             <h1 class="relative">
               <ButtonEdit
@@ -417,7 +413,12 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaLocalizacao"
         >
-          <FolderLocalizacao :is-input="dataEgresso.localizacao.isInput">
+          <FolderLocalizacao
+            :is-input="dataEgresso.localizacao.isInput"
+            :pais-holder="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
+            :estado-holder="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
+            :cidade-holder="dataEgresso.localizacao.cidade"
+          >
             <template #EditButton>
               <h1 class="relative">
                 <ButtonEdit
@@ -435,17 +436,6 @@
               </h1>
             </template>
             <template #NonInputData>
-              <!-- <CustomPerfilData
-                    type="text"
-                    class="mb-5"
-                    :vmodel="dataEgresso.localizacao.cep"
-                    name="localizacao.cep"
-                    label="CEP"
-                    placeholder="00000-000"
-                    mask="#####-###"
-                    :icon-path="mdiHome"
-                  /> -->
-
               <CustomPerfilData
                 type="text"
                 class="mb-5"
@@ -484,7 +474,10 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaAdicionais"
         >
-          <FolderAdicionais :is-input="dataEgresso.adicionais.isInput">
+          <FolderAdicionais
+            :is-input="dataEgresso.adicionais.isInput"
+            :bools="bools"
+          >
             <template #EditButton>
               <h1 class="relative">
                 <ButtonEdit
@@ -836,6 +829,8 @@ async function handleSubmitAdicionais (values: any) {
   jsonResponse.contribuicao.descricao = values.adicionais.contribuicoes
   if (values.adicionais.palestras) {
     jsonResponse.palestras.descricao = values.adicionais.assuntosPalestras
+  } else {
+    jsonResponse.palestras.descricao = ''
   }
   // jsonResponse.depoimento.descricao = values.adicionais.descricao
   egressoStore.atualizarEgresso(jsonResponse)
@@ -1102,7 +1097,10 @@ const bools = ref({
   palestras: true
 })
 const placeHolders = ref({
-  bolsaNome: dataEgresso.value.academico.bolsista.tipo
+  bolsaNome: dataEgresso.value.academico.bolsista.tipo,
+  areaAtuacao: dataEgresso.value.carreira.area,
+  setorAtuacao: dataEgresso.value.carreira.setor,
+  faixaSalarial: dataEgresso.value.carreira.faixaSalarial
 })
 
 const loading = ref(true)
@@ -1275,17 +1273,17 @@ async function fetchUpdateEgresso () {
   }
   console.log('isPublic: ')
   console.log(isPublic.value)
-  for (let i = 0; i < json.cotas.length; i++) {
-    if (json.cotas[i].id === 1) {
+  for (const element of json.cotas) {
+    if (element.id === 1) {
       dataEgresso.value.academico.cotista.tipos.escola = true
     }
-    if (json.cotas[i].id === 2) {
+    if (element.id === 2) {
       dataEgresso.value.academico.cotista.tipos.renda = true
     }
-    if (json.cotas[i].id === 3) {
+    if (element.id === 3) {
       dataEgresso.value.academico.cotista.tipos.raca = true
     }
-    if (json.cotas[i].id === 4) {
+    if (element.id === 4) {
       dataEgresso.value.academico.cotista.tipos.quilombolaIndigena = true
     }
   }
@@ -1295,8 +1293,13 @@ async function fetchUpdateEgresso () {
     posGrad: dataEgresso.value.academico.posGrad.value,
     palestras: dataEgresso.value.adicionais.palestras
   }
-  placeHolders.value.bolsaNome = dataEgresso.value.academico.bolsista.tipo
 
+  placeHolders.value = {
+    bolsaNome: dataEgresso.value.academico.bolsista.tipo,
+    areaAtuacao: dataEgresso.value.carreira.area,
+    setorAtuacao: dataEgresso.value.carreira.setor,
+    faixaSalarial: dataEgresso.value.carreira.faixaSalarial
+  }
   // formGeral.value?.setFieldValue('geral.email', userData.email)
   // formGeral.value?.setFieldValue('geral.email', dataEgresso.value.geral.email)
   formHeader.value?.setFieldValue('geral.nome', dataEgresso.value.profileHead.nome)
@@ -1363,32 +1366,6 @@ onMounted(() => {
   }
 })
 
-async function getBools () {
-  const localBools = ref({
-    cotista: true,
-    bolsista: true,
-    posGrad: true,
-    palestras: true
-  })
-  egressoResponseBack = fetchEgresso()
-  const ResponseBack = await egressoResponseBack
-  const json = JSON.parse(storage.get('loggedEgresso'))
-
-  // json = JSON.parse(ResponseBack)
-
-  // jsonResponse = json
-
-  localBools.value = {
-    cotista: ResponseBack.cotista,
-    bolsista: dataEgresso.value.academico.bolsista.value,
-    posGrad: dataEgresso.value.academico.posGrad.value,
-    palestras: dataEgresso.value.adicionais.palestras
-  }
-  console.log('cloalbool')
-  console.log(localBools)
-
-  return localBools
-}
 function fetchEgresso () {
   return egressoStore.fetchEgresso()
 }
@@ -1396,14 +1373,4 @@ function fetchEgresso () {
 function fetchPublicEgresso (id: number) {
   return egressoStore.fetchPublicEgresso(id)
 }
-
-// watch(pais, () => {
-//   form.value?.setFieldValue('localizacao.cidade', '')
-//   form.value?.setFieldValue('localizacao.estado', '')
-// })
-
-// watch(estado, () => {
-//   form.value?.setFieldValue('localizacao.cidade', '')
-// })
-
 </script>

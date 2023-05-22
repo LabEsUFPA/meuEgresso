@@ -71,7 +71,6 @@
 </template>
 
 <script lang="ts" setup>
-
 import FolderSection from 'src/components/FolderSection.vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
@@ -90,29 +89,31 @@ const storage = new LocalStorage()
 
 $store.fetchAll()
 
-const dialogSucesso = ref(false)
-const dialogFalha = ref(false)
-const camposFaltosos = ref(false)
-
 const pais = ref('')
 const estado = ref('')
 const form = ref<typeof Form | null>(null)
 
-const bools = ref({
-  cotista: false,
-  bolsista: false,
-  posGrad: false,
-  palestras: false
-})
-
 interface Props {
   isInput?: boolean
+  bools?: any
 
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  isInput: true
+  isInput: true,
+  bools: {
+    cotista: false,
+    bolsista: false,
+    posGrad: false,
+    palestras: false
+  }
 
+})
+const bools = ref({
+  cotista: props.bools?.cotista,
+  bolsista: props.bools?.bolsista,
+  posGrad: props.bools?.posGrad,
+  palestras: props.bools?.palestras
 })
 
 onMounted(() => {
@@ -134,5 +135,19 @@ onMounted(() => {
     }).join(' '))
   }
 })
+watch(() => props.bools.cotista, (newValue) => {
+  bools.value.cotista = newValue
+})
 
+watch(() => props.bools.bolsista, (newValue) => {
+  bools.value.bolsista = newValue
+})
+
+watch(() => props.bools.posGrad, (newValue) => {
+  bools.value.posGrad = newValue
+})
+
+watch(() => props.bools.palestras, (newValue) => {
+  bools.value.palestras = newValue
+})
 </script>

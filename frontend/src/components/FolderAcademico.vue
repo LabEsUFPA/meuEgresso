@@ -155,15 +155,6 @@ const pais = ref('')
 const estado = ref('')
 const form = ref<typeof Form | null>(null)
 
-const bools = ref({
-  cotista: false,
-  bolsista: false,
-  posGrad: false,
-  palestras: false
-})
-const bolsaHolder = ref({
-  placeholder: 'bolsa'
-})
 interface Props {
   isInput?: boolean
   bools?: any
@@ -179,19 +170,18 @@ const props = withDefaults(defineProps<Props>(), {
     posGrad: false,
     palestras: false
   },
-  bolsaHolder: 'bolsa'
+  bolsaHolder: 'Selecione'
 
 })
-bools.value = {
+const bools = ref({
   cotista: props.bools?.cotista,
   bolsista: props.bools?.bolsista,
   posGrad: props.bools?.posGrad,
   palestras: props.bools?.palestras
-}
-
-bolsaHolder.value = {
+})
+const bolsaHolder = ref({
   placeholder: props.bolsaHolder
-}
+})
 
 console.log('bools')
 

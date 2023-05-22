@@ -19,7 +19,7 @@
           class="mb-5"
           name="carreira.area"
           label="Área de Atuação"
-          placeholder="Selecione"
+          :placeholder="placeHolders.areaAtuacaoHolder"
           @change="area = $event"
           :options="selectOpts.areaAtuacao"
           required
@@ -29,7 +29,7 @@
           class="mb-5"
           name="carreira.setor"
           label="Setor de Atuação"
-          placeholder="Selecione"
+          :placeholder="placeHolders.setorAtuacaoHolder"
           :options="selectOpts.setorAtuacao"
           :required="area !== 'Desempregado'"
           :disabled="area === 'Desempregado'"
@@ -48,6 +48,7 @@
           class="mb-5"
           name="carreira.faixaSalarial"
           label="Faixa Salarial"
+          :placeholder="placeHolders.faixaSalarialHolder"
           :options="$store.faixasSalariais"
           :required="area !== 'Desempregado'"
           :disabled="area === 'Desempregado'"
@@ -57,9 +58,7 @@
         <slot name="NonInputData" />
       </div>
     </template>
-    <template
-      #EditButton
-    >
+    <template #EditButton>
       <slot name="EditButton" />
     </template>
   </FolderSection>
@@ -81,10 +80,6 @@ const storage = new LocalStorage()
 
 $store.fetchAll()
 
-const dialogSucesso = ref(false)
-const dialogFalha = ref(false)
-const camposFaltosos = ref(false)
-
 const pais = ref('')
 const estado = ref('')
 const area = ref('')
@@ -97,13 +92,24 @@ const selectOpts = ref({
 })
 interface Props {
   isInput?: boolean
-
+  areaAtuacaoHolder: string
+  setorAtuacaoHolder: string
+  faixaSalarialHolder: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  isInput: true
-
+  isInput: true,
+  areaAtuacaoHolder: 'Selecione',
+  setorAtuacaoHolder: 'Selecione',
+  faixaSalarialHolder: 'Selecione'
 })
+
+const placeHolders = ref({
+  areaAtuacaoHolder: props.areaAtuacaoHolder,
+  setorAtuacaoHolder: props.setorAtuacaoHolder,
+  faixaSalarialHolder: props.faixaSalarialHolder
+})
+
 onMounted(() => {
   watch(pais, () => {
     form.value?.setFieldValue('localizacao.cidade', '')
@@ -122,6 +128,18 @@ onMounted(() => {
       return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
     }).join(' '))
   }
+})
+
+watch(() => props.areaAtuacaoHolder, (newValue) => {
+  placeHolders.value.areaAtuacaoHolder = newValue
+})
+
+watch(() => props.setorAtuacaoHolder, (newValue) => {
+  placeHolders.value.setorAtuacaoHolder = newValue
+})
+
+watch(() => props.faixaSalarialHolder, (newValue) => {
+  placeHolders.value.faixaSalarialHolder = newValue
 })
 
 </script>

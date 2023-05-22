@@ -17,6 +17,7 @@
         <CustomSelect
           class="mb-5"
           name="localizacao.pais"
+          :placeholder="placeHolder.paisHolder"
           label="País"
           :options="countries"
           v-model:value="pais"
@@ -26,6 +27,7 @@
         <CustomSelect
           class="mb-5"
           name="localizacao.estado"
+          :placeholder="placeHolder.estadoHolder"
           label="Estado"
           :options="states"
           v-model:value="estado"
@@ -34,6 +36,7 @@
 
         <CustomSelect
           name="localizacao.cidade"
+          :placeholder="placeHolder.cidadeHolder"
           label="Cidade"
           :options="cities"
           required
@@ -62,6 +65,7 @@ import { object, string, boolean } from 'yup'
 import { mdiMapMarker } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
+import { Placeholder } from '@faker-js/faker/modules/image/providers/placeholder'
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 
@@ -76,14 +80,25 @@ const estado = ref('')
 const form = ref<typeof Form | null>(null)
 
   interface Props {
-  isInput?: boolean
-
-}
+    isInput?: boolean
+    paisHolder?: string
+    estadoHolder?: string
+    cidadeHolder?: string
+  }
 
 const props = withDefaults(defineProps<Props>(), {
-  isInput: true
-
+  isInput: true,
+  paisHolder: '',
+  estadoHolder: '',
+  cidadeHolder: ''
 })
+
+const placeHolder = ref({
+  paisHolder: props.paisHolder,
+  estadoHolder: props.estadoHolder,
+  cidadeHolder: props.cidadeHolder
+})
+
 const countries = computed(() => {
   const countries = Country.getAllCountries()
   const filteredCountries = []
@@ -140,4 +155,13 @@ onMounted(() => {
   }
 })
 
+watch(() => props.paisHolder, (newValue) => {
+  placeHolder.value.paisHolder = newValue
+})
+watch(() => props.estadoHolder, (newValue) => {
+  placeHolder.value.estadoHolder = newValue
+})
+watch(() => props.cidadeHolder, (newValue) => {
+  placeHolder.value.cidadeHolder = newValue
+})
 </script>
