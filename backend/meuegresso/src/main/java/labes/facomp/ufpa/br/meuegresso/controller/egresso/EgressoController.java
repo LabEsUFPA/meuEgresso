@@ -179,7 +179,7 @@ public class EgressoController {
      * @throws UnauthorizedRequestException
      * @since 16/04/2023
      */
-    @PutMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PutMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(
@@ -223,6 +223,7 @@ public class EgressoController {
             if (egressoModel.getTitulacao() != null) {
                 validaCurso(egressoModel.getTitulacao().getCurso().getNome(), egressoModel);
                 validaInstituicao(egresso.getTitulacao().getEmpresa().getNome(), egressoModel);
+                egressoModel.getTitulacao().setEgresso(egressoModel);
             }
             egressoService.updateEgresso(egressoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();

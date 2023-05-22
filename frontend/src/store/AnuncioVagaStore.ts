@@ -8,18 +8,18 @@ interface AnuncioVaga extends models.AnuncioModel {
 
 export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
   state: () => ({
-    areasEmprego:[],
-    anuncio:{
+    areasEmprego: [],
+    anuncio: {
       id: 0,
-      titulo: "",
-      areaEmprego:{
-        id:0,
-        nome:""
+      titulo: '',
+      areaEmprego: {
+        id: 0,
+        nome: ''
       },
-      descricao:"",
-      dataExpiracao: "",
-      link: "",
-      salario: 10000.0,
+      descricao: '',
+      dataExpiracao: '',
+      link: '',
+      salario: 10000.0
     }
   }),
 
@@ -27,8 +27,8 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
     async fetchAnucio () {
       const response = await Api.request({
         method: 'get',
-        route: '/anuncio',
-   
+        route: '/anuncio'
+
       })
       if (response?.status === 200) {
         this.anuncio.id = response.data?.id
@@ -65,7 +65,6 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       console.log('enviando:', dadosAnuncio)
 
       return (response?.status) !== undefined ? response.status : 500
-      
     }
   }
 })

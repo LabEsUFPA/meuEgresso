@@ -3,7 +3,7 @@ package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import labes.facomp.ufpa.br.meuegresso.dto.areaatuacao.AreaAtuacaoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaBasicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.setoratuacao.SetorAtuacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
@@ -29,7 +29,7 @@ public class EgressoEmpresaBasicDTO {
 
     @Valid
     @NotBlank(message = "Insira os dados da empresa.")
-    private EmpresaCadastroEgressoDTO empresa;
+    private EmpresaBasicDTO empresa;
 
     @NotBlank(message = "Insira a faixa salarial.")
     private FaixaSalarialDTO faixaSalarial;
