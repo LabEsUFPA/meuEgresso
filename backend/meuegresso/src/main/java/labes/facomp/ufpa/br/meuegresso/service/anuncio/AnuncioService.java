@@ -31,10 +31,21 @@ public interface AnuncioService {
 	public AnuncioModel findById(Integer id);
 
 	/**
+	 * Método responsável por encontrar todos os anuncios cadastrados validos pelo
+	 * filtro passado.
+	 *
+	 * @return Lista de objetos da classe AnuncioModel.
+	 */
+
+	List<AnuncioModel> findBySearch(String tituloAnuncio, Double salarioMin, Double salarioMax,
+			Integer[] areaEmpregoIds);
+
+	/**
 	 * Método responsável por encontrar todos os anuncios cadastrados.
 	 *
 	 * @return Lista de objetos da classe AnuncioModel.
 	 */
+
 	public List<AnuncioModel> findAll();
 
 	/**
@@ -59,6 +70,5 @@ public interface AnuncioService {
 	 * @param createdBy
 	 * @return
 	 */
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
-
+	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
+import java.util.HashMap;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GenerosGraficoDTO {
-    private Integer quantidadeMasculino;
 
-    private Integer quantidadeFeminino;
-
-    private Integer quantidadeTranssexual;
-
-    private Integer quantidadeOutros;
+    private HashMap<String, Integer> generos; 
+    
 }
