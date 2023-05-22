@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
+import java.util.HashMap;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +17,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CotaGraficoDTO {
-    private Integer cotaTrue;
-
-    private Integer cotaFalse;
+    HashMap<String, Integer> cotaAtuacao;
 }

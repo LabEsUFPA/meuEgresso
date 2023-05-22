@@ -24,12 +24,14 @@ import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoBolsaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoGraduacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
+import labes.facomp.ufpa.br.meuegresso.service.cota.CotaService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
@@ -60,6 +62,8 @@ public class GraficoController {
     private final TipoBolsaService tipoBolsaService;
 
     private final EgressoTitulacaoService egressoTitulacaoService;
+
+    private final CotaService cotaService;
 
     /**
      * Endpoint responsavel por buscar todas as informacoes de grafico.
@@ -245,20 +249,36 @@ public class GraficoController {
     public CotaGraficoDTO getCotas() {
         List<EgressoModel> lista = egressoService.findAll();
 
-        Stream<EgressoModel> trueEgressoList = lista.stream().filter(a -> a.getBolsista().equals(true));
-        Stream<EgressoModel> falseEgressoList = lista.stream().filter(a -> a.getBolsista().equals(false));
+        List<CotaModel> cotas = cotaService.findAll();
 
-        return new CotaGraficoDTO(
-                (int) trueEgressoList.count(),
-                (int) falseEgressoList.count());
+        HashMap<String, Integer> cotasContagens = new HashMap<>();
+
+        int count = 0;
+        for (int i = 0; i < cotas.size(); i++) {
+            final String nomeFinal = cotas.get(i).getNome();
+
+            // TODO get de cotas
+
+            count = (int) cotas.stream().filter(c -> c.getE).count();
+
+            cotasContagens.put(nomeFinal, count);
+        }
+
+        // Stream<EgressoModel> trueEgressoList = lista.stream().filter(a ->
+        // a.getBolsista().equals(true));
+        // Stream<EgressoModel> falseEgressoList = lista.stream().filter(a ->
+        // a.getBolsista().equals(false));
+
+        // return new CotaGraficoDTO(
+        // (int) trueEgressoList.count(),
+        // (int) falseEgressoList.count());
 
     }
 
     /**
      * Endpoint responsavel por retornar a contagem de egresso por área de atuação.
      *
-     * @return {@link AreaAtuacaoGraficoDTO} Retorna a contagem de egresso por área
-     *         de atuação.
+     * @return {@link AreaAtuacaoGraficoDTO} Retorna a contagem de egresso por área de atuação.
      * @author Camilo Santos
      * @since 20/05/2023
      */
@@ -313,7 +333,8 @@ public class GraficoController {
     /**
      * Endpoint responsavel por contabilizar egressos com e sem pós graduação
      *
-     * @return {@link SetorAtuacaoGraficoDTO} Retorna a quantidade de egressos com e sem pós 
+     * @return {@link SetorAtuacaoGraficoDTO} Retorna a quantidade de egressos com e
+     *         sem pós
      * @author Camilo Santos
      * @since 20/05/2023
      */
@@ -325,9 +346,11 @@ public class GraficoController {
         Stream<EgressoModel> trueEgressoList = lista.stream().filter(e -> e.getPosGraduacao().equals(true));
         Stream<EgressoModel> falseEgressoList = lista.stream().filter(e -> e.getPosGraduacao().equals(false));
 
-        return new PosGraduacaoGraficoDTO(
+        HashMap<String, Long> posGradContagens = new HashMap<>();
 
-                (int) trueEgressoList.count(),
-                (int) falseEgressoList.count());
+        posGradContagens.put("Fez Pós-graduação", trueEgressoList.count());
+        posGradContagens.put("Não fez Pós-graduação", falseEgressoList.count());
+
+        return new PosGraduacaoGraficoDTO(posGradContagens);
     }
 }
