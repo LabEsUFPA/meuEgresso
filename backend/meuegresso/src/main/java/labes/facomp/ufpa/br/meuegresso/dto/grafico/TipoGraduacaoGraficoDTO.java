@@ -25,4 +25,5 @@ public class TipoGraduacaoGraficoDTO {
     private HashMap<String, Integer> graduacoes;
 
     private HashMap<String, Integer> posGraduacoes;
+    
 }

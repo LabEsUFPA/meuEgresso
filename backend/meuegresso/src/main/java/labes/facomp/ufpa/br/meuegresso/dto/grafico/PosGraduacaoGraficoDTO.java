@@ -17,5 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PosGraduacaoGraficoDTO {
+
     private HashMap<String, Long> posGraduacaoContagem;
+    
 }

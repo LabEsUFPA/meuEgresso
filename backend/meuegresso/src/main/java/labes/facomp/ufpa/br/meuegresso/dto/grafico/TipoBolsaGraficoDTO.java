@@ -21,4 +21,5 @@ public class TipoBolsaGraficoDTO {
     private Integer quantidadeBolsistas;
     
     private HashMap<String, Integer> tipoBolsas;
+    
 }

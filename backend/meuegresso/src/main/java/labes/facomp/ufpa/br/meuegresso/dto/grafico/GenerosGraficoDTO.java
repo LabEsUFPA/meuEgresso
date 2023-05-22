@@ -19,4 +19,5 @@ import lombok.NoArgsConstructor;
 public class GenerosGraficoDTO {
 
     private HashMap<String, Integer> generos; 
+    
 }

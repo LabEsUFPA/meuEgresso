@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LocalPosGraficoDTO {
+    
     private Optional<String> cursoNome;
 
     private Optional<String> cidade;

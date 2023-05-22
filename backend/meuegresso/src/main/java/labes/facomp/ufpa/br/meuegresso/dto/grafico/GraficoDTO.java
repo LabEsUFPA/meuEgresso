@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GraficoDTO {
+    
     private IdadesGraficoDTO idades;
     
     private GenerosGraficoDTO generos;

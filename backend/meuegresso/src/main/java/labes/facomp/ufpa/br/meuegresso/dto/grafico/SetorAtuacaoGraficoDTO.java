@@ -19,4 +19,5 @@ import lombok.NoArgsConstructor;
 public class SetorAtuacaoGraficoDTO {
 
     private HashMap<String, Integer> setorAtuacao;
+    
 }

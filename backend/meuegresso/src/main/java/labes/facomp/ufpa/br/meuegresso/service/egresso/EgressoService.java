@@ -42,7 +42,6 @@ public interface EgressoService {
 	 */
 	public Integer findIdade(EgressoModel egresso);
 
-
 	public EgressoModel findById(Integer id);
 
 	public List<EgressoModel> findAll();

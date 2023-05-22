@@ -19,4 +19,5 @@ import lombok.NoArgsConstructor;
 public class AreaAtuacaoGraficoDTO {
 
     private HashMap<String, Integer> areaAtuacao;
+    
 }
