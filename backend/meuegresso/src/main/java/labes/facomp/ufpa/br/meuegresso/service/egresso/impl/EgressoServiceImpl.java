@@ -80,19 +80,6 @@ public class EgressoServiceImpl implements EgressoService {
 		}
 		return idades;
 	}
-	
-	/**
-	 *
-	 *
-	 *
-	 * @return idades após serem calculadas com base nas datas de nascimento.
-	 * @author Pedro Inácio
-	 * @since 19/05/2023
-	 */
-	@Override
-	public Integer findIdade(EgressoModel egresso) {
-		return Period.between(egresso.getNascimento(), LocalDate.now()).getYears();
-	}
 
 	/**
 	 *

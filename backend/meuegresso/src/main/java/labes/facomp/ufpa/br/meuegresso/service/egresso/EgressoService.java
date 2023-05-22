@@ -32,16 +32,6 @@ public interface EgressoService {
 	 */
 	public List<Integer> findAllIdades();
 
-	/**
-	 * Metodo responsavel retornar a idade do egressos.
-	 *
-	 * @param nenhum
-	 * @return idade do egresso
-	 * @author Pedro Inácio
-	 * @since 19/05/2023
-	 */
-	public Integer findIdade(EgressoModel egresso);
-
 	public EgressoModel findById(Integer id);
 
 	public List<EgressoModel> findAll();

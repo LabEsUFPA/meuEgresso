@@ -20,8 +20,8 @@ import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotistaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.CursosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.EmpresaGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.EnderecoEmpresasGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.GenerosGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.GraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.IdadesGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.InteresseEmPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
@@ -86,16 +86,31 @@ public class GraficoController {
     private final FaixaSalarialService faixaSalarialService;
 
     /**
-     * Endpoint responsavel por buscar todas as informacoes de grafico.
+     * Endpoint responsavel por buscar as informacoes de endereco dos empregos dos egressos.
      *
-     * @return {@link GraficoDTO} retorna .
+     * @return {@link EnderecoEmpresasGraficoDTO} retorna endereco dos empregos.
      * @author Pedro Inácio
      * @since 19/05/2023
      */
-    @GetMapping
+    @GetMapping(value = "/enderecoEmpresas")
     @ResponseStatus(code = HttpStatus.OK)
-    public GraficoDTO getGrafico(){
-        return new GraficoDTO(getIdades(), getGeneros());
+    public EnderecoEmpresasGraficoDTO getEnderecoEmpresas(){
+        List<EgressoEmpresaModel> lista = egressoEmpresaService.findAll();
+
+        List<List<String>> enderecos = new ArrayList<>();
+
+        List<String> umEndereco;
+
+        for(int i =0; i< lista.size(); i++){
+            umEndereco = new ArrayList<>();
+            umEndereco.add(lista.get(i).getEmpresa().getNome());
+            umEndereco.add(lista.get(i).getEmpresa().getEndereco().getPais());
+            umEndereco.add(lista.get(i).getEmpresa().getEndereco().getEstado());
+            umEndereco.add(lista.get(i).getEmpresa().getEndereco().getCidade());
+            enderecos.add(umEndereco);
+        }
+
+        return new EnderecoEmpresasGraficoDTO(enderecos);
     }
     
     /**
@@ -344,9 +359,9 @@ public class GraficoController {
     }
 
     /**
-     * Endpoint responsavel por buscar todos os cursos dos egressos no banco.
+     * Endpoint responsavel por buscar todos os cursos de pós dos egressos no banco.
      *
-     * @return {@link CursosGraficoDTO} Retorna a contagem de cada tipo de curso.
+     * @return {@link CursosGraficoDTO} Retorna a lista de cursos de pós.
      * @author Pedro Inácio
      * @since 21/05/2023
      */
