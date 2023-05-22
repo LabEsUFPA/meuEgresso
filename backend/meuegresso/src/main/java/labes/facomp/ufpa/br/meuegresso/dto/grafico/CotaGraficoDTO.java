@@ -17,5 +17,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CotaGraficoDTO {
-    HashMap<String, Integer> cotaAtuacao;
+    private HashMap<String, Integer> cotaAtuacao;
 }

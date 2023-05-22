@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de informacoes de Tipos de Bolsa dos egressos para o grafico
+ * Dto para retorno de informacoes de Tipos de graduacao e pos graduacao dos egressos para o grafico
  *
  * @author Pedro Inácio
  * @since 21/05/2023

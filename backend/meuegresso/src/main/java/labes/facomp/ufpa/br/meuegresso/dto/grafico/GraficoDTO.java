@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de informacoes de idades dos egressos para o grafico
+ * Dto para retorno de todas as informacoes de graficos
  *
  * @author Pedro Inácio
  * @since 19/05/2023

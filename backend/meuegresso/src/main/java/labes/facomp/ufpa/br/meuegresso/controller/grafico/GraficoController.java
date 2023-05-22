@@ -40,7 +40,7 @@ import labes.facomp.ufpa.br.meuegresso.service.tipobolsa.TipoBolsaService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Responsável por fornecer end-points para genero.
+ * Responsável por fornecer end-points para os graficos.
  *
  * @author Pedro Inácio, Bruno Eiki, Camilo Santos
  * @since 19/05/2023
@@ -344,13 +344,10 @@ public class GraficoController {
     public PosGraduacaoGraficoDTO getPos() {
         List<EgressoModel> lista = egressoService.findAll();
 
-        Stream<EgressoModel> trueEgressoList = lista.stream().filter(e -> e.getPosGraduacao().equals(true));
-        Stream<EgressoModel> falseEgressoList = lista.stream().filter(e -> e.getPosGraduacao().equals(false));
-
         HashMap<String, Long> posGradContagens = new HashMap<>();
 
-        posGradContagens.put("Fez Pós-graduação", trueEgressoList.count());
-        posGradContagens.put("Não fez Pós-graduação", falseEgressoList.count());
+        posGradContagens.put("Fez Pós-graduação", lista.stream().filter(e -> e.getPosGraduacao().equals(true)).count());
+        posGradContagens.put("Não fez Pós-graduação", lista.stream().filter(e -> e.getPosGraduacao().equals(false)).count());
 
         return new PosGraduacaoGraficoDTO(posGradContagens);
     }
