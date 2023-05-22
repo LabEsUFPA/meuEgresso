@@ -82,6 +82,16 @@ public class EgressoController {
 
     private final JwtService jwtService;
 
+    /**
+     * Endpoint responsavel por cadastrar o egresso.
+     *
+     * @param egressoCadastroDTO,token Estruturas de dados contendo as informações necessárias para
+     *                salvar o egresso.
+     * @return {@link String} Uma string representando uma mensagem de êxito indicando que o egresso
+     *         foi salvo.
+     * @author João Paulo, Alfredo Gabriel
+     * @since 16/04/2023
+     */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
@@ -159,6 +169,15 @@ public class EgressoController {
         return ResponseType.SUCESS_SAVE.getMessage();
     }
 
+    /**
+     * Endpoint responsavel por buscar o egresso.
+     *
+     * @param token Estrutura de dados contendo as informações necessárias para
+     *                buscar o egresso.
+     * @return {@link EgressoDTO} Dados retornados do banco.
+     * @author Pedro Inácio, João Paulo, Alfredo Gabriel, Camilo Santos
+     * @since 11/05/2023
+     */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
@@ -274,6 +293,16 @@ public class EgressoController {
         }
     }
 
+    /**
+     * Endpoint responsável pela deleção local do arquivo da foto do egresso
+     *
+     * @author Camilo Santos, Eude Monteiro
+     * @since 11/05/2023
+     * @param token
+     * @return Uma string representando uma mensagem de êxito indicando que a foto
+     *         foi deletada.
+     * @throws IOException
+     */
     @ResponseStatus(code = HttpStatus.OK)
     @DeleteMapping(value = "/foto")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
@@ -294,7 +323,7 @@ public class EgressoController {
      *
      * @author Camilo Santos, Eude Monteiro
      * @since 11/05/2023
-     * @param egressoDTO
+     * @param MultipartFile arquivo
      * @return Uma string representando uma mensagem de êxito indicando que a foto
      *         foi salva.
      * @throws IOException

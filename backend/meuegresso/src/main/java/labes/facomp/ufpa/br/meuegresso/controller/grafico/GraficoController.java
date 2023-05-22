@@ -90,7 +90,7 @@ public class GraficoController {
      *
      * @return {@link EnderecoEmpresasGraficoDTO} retorna endereco dos empregos.
      * @author Pedro Inácio
-     * @since 19/05/2023
+     * @since 22/05/2023
      */
     @GetMapping(value = "/enderecoEmpresas")
     @ResponseStatus(code = HttpStatus.OK)
@@ -202,7 +202,7 @@ public class GraficoController {
      *
      * @return {@link TipoAlunoGraficoDTO} Retorna a contagem de cada tipo de aluno.
      * @author Pedro Inácio
-     * @since 21/05/2023
+     * @since 22/05/2023
      */
     @GetMapping(value = "/tipoAlunos")
     @ResponseStatus(code = HttpStatus.OK)
