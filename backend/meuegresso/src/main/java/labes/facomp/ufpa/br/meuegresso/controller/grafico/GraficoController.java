@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.controller.grafico;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
@@ -81,7 +83,22 @@ public class GraficoController {
     @GetMapping(value = "/idades")
     @ResponseStatus(code = HttpStatus.OK)
     public IdadesGraficoDTO getIdades(){
-        return new IdadesGraficoDTO(egressoService.findAllIdades(), egressoService.findAllIdades().stream().mapToDouble(a -> a).average());
+        List<EgressoModel> lista = egressoService.findAll();
+
+        List<Integer> idades = egressoService.findAllIdades();
+        
+        HashMap<Integer, Integer> idadesContagens = new HashMap<>();
+
+        int count = 0;
+        for(int i =0; i< idades.size(); i++){
+            final Integer idadeFinal = idades.get(i);
+            count = (int) lista.stream().filter(a -> Period.between(a.getNascimento(), LocalDate.now()).getYears() == idadeFinal).count();
+
+            idadesContagens.put(idadeFinal, count);
+            
+        }
+
+        return new IdadesGraficoDTO(egressoService.findAllIdades().stream().mapToDouble(a -> a).average(), idadesContagens);
     }
 
     /**
