@@ -10,6 +10,8 @@ services:
       - 9500:80
     networks:
       - traefik-public
+    #volumes:
+    #  - ./meuEgressoFotos:/fotos
     environment:
       - POSTGRES_HOST=10.16.1.28
       - POSTGRES_USER=meuegresso
