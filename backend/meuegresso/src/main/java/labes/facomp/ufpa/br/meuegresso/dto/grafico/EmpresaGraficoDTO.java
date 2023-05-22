@@ -7,17 +7,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de informacoes de idades dos egressos para o grafico
+ * Dto para retorno de informacoes de Empresas dos egressos para o grafico
  *
  * @author Pedro Inácio
- * @since 21/05/2023
+ * @since 22/05/2023
  * @version 1.0
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocalPosGraficoDTO {
+public class EmpresaGraficoDTO {
     
-    private List<List<String>> locaisPos;
+    private List<String> nomeEmpresas;
 
 }

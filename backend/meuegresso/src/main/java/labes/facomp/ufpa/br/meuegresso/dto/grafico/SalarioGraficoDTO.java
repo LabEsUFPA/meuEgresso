@@ -1,23 +1,23 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
-import java.util.List;
+import java.util.HashMap;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de informacoes de idades dos egressos para o grafico
+ * Dto para retorno de informacoes de salario dos egressos para o grafico
  *
  * @author Pedro Inácio
- * @since 21/05/2023
+ * @since 22/05/2023
  * @version 1.0
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocalPosGraficoDTO {
+public class SalarioGraficoDTO {
     
-    private List<List<String>> locaisPos;
+    private HashMap<String, Integer> salarios;
 
 }

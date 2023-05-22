@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
-import java.util.HashMap;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +18,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CursosGraficoDTO {
     
-    private HashMap<String, Integer> cursosContagens;
+    private List<String> nomeCursosPos;
 
 }
