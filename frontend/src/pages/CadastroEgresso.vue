@@ -23,6 +23,13 @@
         </template>
         <template #default>
           <div>
+            <FotoInput
+              @upload="temFoto = true"
+              @clean="temFoto = false"
+              name="geral.foto"
+              class="mb-5"
+            />
+
             <CustomInput
               class="mb-5"
               name="geral.nome"
@@ -280,6 +287,7 @@
               label="País"
               :options="countries"
               v-model:value="pais"
+              @change="pais = $event"
               required
             />
 
@@ -289,6 +297,7 @@
               label="Estado"
               :options="states"
               v-model:value="estado"
+              @change="estado = $event"
               required
             />
 
@@ -474,13 +483,14 @@ import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
+import FotoInput from 'src/components/FotoInput.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
 import { ref, computed, watch, onMounted } from 'vue'
 import { Country, State, City } from 'country-state-city'
 import svgPath from 'src/assets/svgPaths.json'
-import { object, string, boolean } from 'yup'
+import { object, string, boolean, mixed } from 'yup'
 import {
   mdiAccount,
   mdiBriefcase,
@@ -513,6 +523,7 @@ const missingDigits = ref(0)
 const pais = ref('')
 const estado = ref('')
 const area = ref('')
+const temFoto = ref(false)
 const form = ref<typeof Form | null>(null)
 
 const bools = ref({
@@ -620,7 +631,13 @@ async function handleSubmit (values: any) {
       }
     : null
 
+  const formData = new FormData()
+  formData.append('arquivo', values.geral.foto)
+
   const status = await $store.cadastrarEgresso({
+    temFoto: temFoto.value, // false por padrao
+    foto: formData
+  }, {
     nascimento: values.geral.nascimento.toString(),
     generoId: parseInt(values.geral.genero),
     matricula: values.academico.matricula || null,
@@ -661,6 +678,9 @@ function handleFail (e: any) {
 
 const schema = object().shape({
   geral: object({
+    foto: mixed().test('fileSize', 'Tamanho do arquivo deve ser menor que 5 MB', (value: any) => {
+      return value ? value.size <= 5000000 : true
+    }),
     nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
       if (value) {
         return value?.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/)
@@ -760,13 +780,22 @@ const schema = object().shape({
 })
 
 onMounted(() => {
+  const estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
+  const cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
   watch(pais, () => {
     form.value?.setFieldValue('localizacao.cidade', '')
     form.value?.setFieldValue('localizacao.estado', '')
+    setTimeout(() => {
+      estadoInput.value = ''
+      cidadeInput.value = ''
+    }, 10)
   })
 
   watch(estado, () => {
     form.value?.setFieldValue('localizacao.cidade', '')
+    setTimeout(() => {
+      cidadeInput.value = ''
+    }, 10)
   })
 
   if (storage.has('loggedUser')) {
