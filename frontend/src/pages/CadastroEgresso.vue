@@ -391,15 +391,54 @@
           <h1 class="text-blue-900 w-3/4 text-center font-semibold text-2xl sm:text-3xl">
             Dados cadastrados com sucesso!
           </h1>
-          <div class="flex flex-row justify-center">
-            <CustomButton variant="outlined">
+          <div class="flex flex-col items-center justify-center text-lg font-semibold text-blue-900">
+            Compartilhar:
+          </div>
+          <div class="flex flex-row justify-center gap-2">
+            <CustomButton
+              tag="a"
+              link="https://www.linkedin.com/sharing/share-offsite/?url=https://meuegresso.alverad.com.br"
+              target="_blank"
+            >
               <SvgIcon
                 type="mdi"
-                class="inline mr-3 mb-1"
-                size="20"
-                :path="mdiShareVariant"
+                :path="mdiLinkedin"
               />
-              Compartilhar
+            </CustomButton>
+
+            <CustomButton
+              tag="a"
+              :link="`https://web.whatsapp.com/send?text=${mensagemShare}`"
+              target="_blank"
+            >
+              <SvgIcon
+                type="mdi"
+                :path="mdiWhatsapp"
+              />
+            </CustomButton>
+
+            <CustomButton
+              tag="a"
+              :link="`https://twitter.com/intent/tweet?text=${mensagemShare}`"
+              target="_blank"
+            >
+              <SvgIcon
+                type="mdi"
+                :path="mdiTwitter"
+              />
+            </CustomButton>
+
+            <CustomButton
+              tag="a"
+              :link="`https://t.me/share/url?url=${mensagemShare}`"
+              target="_blank"
+            >
+              <div class="p-[2px]">
+                <img
+                  src="src/assets/telegram.svg"
+                  width="20"
+                >
+              </div>
             </CustomButton>
           </div>
         </div>
@@ -449,8 +488,11 @@ import {
   mdiMapMarker,
   mdiMessage,
   mdiSchool,
-  mdiShareVariant,
-  mdiAlertCircle
+  mdiCheckCircle,
+  mdiAlertCircle,
+  mdiLinkedin,
+  mdiWhatsapp,
+  mdiTwitter
 } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
@@ -459,6 +501,9 @@ const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 
 $store.fetchAll()
+
+const urlShare = 'https://meuegresso.alverad.com.br'
+const mensagemShare = '🎉%20Acabei%20de%20me%20cadastrar%20na%20plataforma%20Meu%20Egresso,%20se%20cadastre%20também:%0D%0A➡️ https://meuegresso.alverad.com.br'
 
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
