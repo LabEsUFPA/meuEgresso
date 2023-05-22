@@ -24,7 +24,10 @@ export const useLoginStore = defineStore('LoginStore', {
         body: data
       })
 
-      this.userLogged = true
+      if (response?.status === 200) {
+        await this.saveUser()
+        this.userLogged = true
+      }
       return (response?.status) !== undefined ? response.status : 500
     },
 
@@ -45,6 +48,10 @@ export const useLoginStore = defineStore('LoginStore', {
       if (response?.status === 200) {
         storage.set('loggedUser', JSON.stringify(response.data))
       }
+    },
+
+    getLoggedUser () {
+      return JSON.parse(storage.get('loggedUser'))
     }
   }
 })

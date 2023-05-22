@@ -6,8 +6,8 @@ import LocalStorage from 'src/services/localStorage'
 import { ref } from 'vue'
 import axios from 'axios'
 interface ComplexOpts extends models.ComplexOpts {}
-interface EgressoModel extends models.EgressoModel {}
-interface EgressoModelUpdate extends models.EgressoModelUpdate {}
+// interface EgressoModel extends models.EgressoModel {}
+// interface EgressoModelUpdate extends models.EgressoModelUpdate {}
 const storage = new LocalStorage()
 
 const baseURL = import.meta.env.VITE_API_URL_LOCAL
@@ -125,6 +125,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
     returnEgresso (response: any) {
       return response
     },
+
     async fetchEgresso () {
       const response = await Api.request({
         method: 'get',
@@ -134,6 +135,18 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       if (response?.status === 200) {
         storage.remove('loggedEgresso')
         storage.set('loggedEgresso', JSON.stringify(response.data))
+        const returnValue = JSON.stringify(response.data)
+        return this.returnEgresso(returnValue)
+      }
+    },
+
+    async fetchPublicEgresso (id: number) {
+      const response = await Api.request({
+        method: 'get',
+        route: `/publico/egresso/${id}`
+      })
+
+      if (response?.status === 200) {
         const returnValue = JSON.stringify(response.data)
         return this.returnEgresso(returnValue)
       }
@@ -285,7 +298,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
 
     async fetchImageEgresso (egressoId: string) {
       const route = '/egresso/foto/' + egressoId
-      const url = ''
+      // const url = ''
       let response: any
       await Axios.get(route, {
         responseType: 'blob'
@@ -298,7 +311,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
     async fetchImageEgressoUrl (egressoId: string) {
       const route = '/egresso/foto/' + egressoId
       let url = ''
-      let response: string
+      let response = ''
       await Axios.get(route, {
         responseType: 'blob'
       }).then(res => {

@@ -35,7 +35,7 @@ defineEmits(['click'])
 interface Props {
   variant?: 'standard' | 'outlined' | 'flat'
   textClass?: string
-  color?: 'sky' | 'blue' | 'red' | 'green' | 'emerald' | 'white' | 'black'
+  color?: 'sky' | 'blue' | 'red' | 'green' | 'emerald' | 'white' | 'black' | 'gray'
   type?: 'reset' | 'button' | 'submit'
   tag?: 'a' | 'button' | 'router'
   link?: string
@@ -119,11 +119,20 @@ const colorClassNames = {
     },
     text: 'text-black',
     outline: 'outline-black'
-  }
+  },
+  gray: {
+    background: {
+      standard: 'bg-gray-400',
+      hoverLight: 'hover:bg-gray-500/20',
+      hover: 'hover:bg-gray-500'
+    },
+    text: 'text-white',
+    outline: 'outline-gray-400'
+  },
 }
 
 const styles = computed(() => {
-  const classes = ['rounded-md px-4 py-1 text-lg font-semibold hover:duration-200']
+  const classes = ['rounded-md px-4 py-1 text-lg font-semibold hover:duration-200 inline-block flex flex-row items-center justify-center']
   switch (props.variant) {
     case 'standard':
       classes.push(colorClassNames[props.color].background.standard)

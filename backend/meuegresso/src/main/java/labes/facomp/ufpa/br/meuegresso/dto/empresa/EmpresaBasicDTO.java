@@ -1,26 +1,28 @@
 package labes.facomp.ufpa.br.meuegresso.dto.empresa;
 
-import java.util.Set;
-
-import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.setoratuacao.SetorAtuacaoDTO;
+import jakarta.validation.constraints.NotBlank;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.endereco.EnderecoDTO;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Encapsulamento da tabela Empresa a fim de representar somente os dados não
+ * sensiveis (reduzido).
+ *
+ * @author Pedro Inácio, Alfredo Gabriel
+ * @since 13/05/2023
+ * @version 1.1
+ */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmpresaBasicDTO {
 
     private Integer id;
 
+    @NotBlank(message = "Insira o nome da empresa.")
     private String nome;
 
-    private Set<SetorAtuacaoDTO> setorAtuacoes;
-
     private EnderecoDTO endereco;
-
 }

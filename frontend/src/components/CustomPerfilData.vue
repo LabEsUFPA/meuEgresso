@@ -1,12 +1,8 @@
 <template>
   <!-- Ftre selecionar visivel ou desabilitado pela prop por nivel de acesso -->
-  <!-- v-if="visible"
-    :class="{
-      'opacity-50': !enabled
-    }" -->
 
   <div
-    v-if="visible"
+    v-if="vmodel || visible"
     :class="{
       'opacity-50': !enabled || !vmodel
     }"
@@ -38,6 +34,7 @@
 
           <CustomInput
             v-if="isinput"
+            :name="name"
             :type="type"
             icon-path=""
             :model-value="name"
@@ -101,7 +98,7 @@ withDefaults(defineProps<Props>(), {
   isinput: false,
   vmodel: '',
   iconSize: '20',
-  visible: true,
+  visible: false,
   enabled: true
 })
 </script>

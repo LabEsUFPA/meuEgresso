@@ -1,6 +1,12 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.empresa;
 
+import java.util.Set;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.AuditableDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.setoratuacao.SetorAtuacaoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,7 +27,12 @@ public class EmpresaDTO extends AuditableDTO {
 
     private Integer id;
 
+    @NotBlank(message = "Informe a faixa salarial.")
     private String nome;
 
-    private String setorAtuacao;
+    @Valid
+    private Set<SetorAtuacaoDTO> setorAtuacoes;
+
+    @Valid
+    private EnderecoDTO endereco;
 }

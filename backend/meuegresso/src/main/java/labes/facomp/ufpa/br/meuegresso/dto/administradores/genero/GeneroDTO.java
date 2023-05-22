@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.genero;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,6 +22,8 @@ public class GeneroDTO {
 
     private Integer id;
 
+    @Valid
+    @NotNull(message = "Informe o gênero do usuário.")
     private String nome;
 
 }

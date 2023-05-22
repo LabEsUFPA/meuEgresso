@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.depoimento;
 
+import jakarta.validation.constraints.NotBlank;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.AuditableDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class DepoimentoDTO extends AuditableDTO {
 
     private Integer id;
 
+    @NotBlank(message = "Insira a descrição do depoimento.")
     private String descricao;
 
     private Integer egressoId;
