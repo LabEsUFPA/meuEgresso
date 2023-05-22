@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.AreaAtuacaoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.BolsistasGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.GenerosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.GraficoDTO;
@@ -166,6 +167,23 @@ public class GraficoController {
         }
         
         return new TipoGraduacaoGraficoDTO((int) falseEgressoList.count(), (int) trueEgressoList.count(),graduacoes, posGraduacoes);
+    }
+
+    /**
+     * Endpoint responsavel por contabilizar egressos com e sem bolsa
+     *
+     * @return {@link BolsistasGraficoDTO} Retorna a quantidade de egressos com e sem bolsa 
+     * @author Pedro Inácio
+     * @since 21/05/2023
+     */
+    @GetMapping(value = "/bolsistas")
+    @ResponseStatus(code = HttpStatus.OK)
+    public BolsistasGraficoDTO getBolsistas() {
+        List<EgressoModel> lista = egressoService.findAll();
+
+        return new BolsistasGraficoDTO(
+                (int) lista.stream().filter(e -> e.getBolsista().equals(true)).count(),
+                (int) lista.stream().filter(e -> e.getBolsista().equals(false)).count());
     }
 
     /**
