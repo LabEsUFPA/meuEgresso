@@ -5,7 +5,6 @@ import java.time.Period;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,28 +15,34 @@ import org.springframework.web.bind.annotation.RestController;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.AreaAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.BolsistasGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotaGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.CursosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.GenerosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.GraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.IdadesGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.InteresseEmPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.PosGraduacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoAlunoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoBolsaGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoGraduacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
+import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
+import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.cota.CotaService;
+import labes.facomp.ufpa.br.meuegresso.service.curso.CursoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
 import labes.facomp.ufpa.br.meuegresso.service.setoratuacao.SetorAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.tipobolsa.TipoBolsaService;
+import labes.facomp.ufpa.br.meuegresso.service.titulacao.TitulacaoService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -64,7 +69,11 @@ public class GraficoController {
 
     private final EgressoTitulacaoService egressoTitulacaoService;
 
+    private final TitulacaoService titulacaoService;
+
     private final CotaService cotaService;
+
+    private final CursoService cursoService;
 
     /**
      * Endpoint responsavel por buscar todas as informacoes de grafico.
@@ -135,43 +144,35 @@ public class GraficoController {
         return new GenerosGraficoDTO(generosContagens);
     }
 
+    //TODO grafico de salario
+
     /**
-     * Endpoint responsavel por buscar todos os tipo de graduacao e de pos graduacao dos egressos no banco.
+     * Endpoint responsavel por buscar todos os tipo de alunos dos egressos no banco.
      *
-     * @return {@link TipoGraduacaoGraficoDTO} Retorna a contagem de cada tipo de graduacao e pos graduacao.
+     * @return {@link TipoAlunoGraficoDTO} Retorna a contagem de cada tipo de aluno.
      * @author Pedro Inácio
      * @since 21/05/2023
      */
-    @GetMapping(value = "/nivel")
+    @GetMapping(value = "/tipoAlunos")
     @ResponseStatus(code = HttpStatus.OK)
-    public TipoGraduacaoGraficoDTO getNivel() {
-        List<EgressoModel> lista = egressoService.findAll();
+    public TipoAlunoGraficoDTO getTipoAlunos() {
 
         List<EgressoTitulacaoModel > egressoTitulacao = egressoTitulacaoService.findAll();
 
-        HashMap<String, Integer> graduacoes = new HashMap<>();
-        HashMap<String, Integer> posGraduacoes = new HashMap<>();
+        List<TitulacaoModel > titulacoes = titulacaoService.findAll();
 
-        Stream<EgressoModel> trueEgressoList = lista.stream().filter(e -> e.getPosGraduacao().equals(true));
-        Stream<EgressoModel> falseEgressoList = lista.stream().filter(e -> e.getPosGraduacao().equals(false));
+        HashMap<String, Integer> tipoAluno = new HashMap<>();
         
         int count = 0;
-        int countPos = 0;
-        for(int i =0; i< egressoTitulacao.size(); i++){
-            if(egressoTitulacao.get(i).getTitulacao().getNome().equalsIgnoreCase("graduação")){
-                final String nomeFinal = egressoTitulacao.get(i).getCurso().getNome();
-                count = (int) falseEgressoList.filter(a -> a.getTitulacao().getCurso().getNome().equalsIgnoreCase(nomeFinal)).count();
-                graduacoes.put(nomeFinal, count);
-            }
-            else{
-                final String nomeFinal = egressoTitulacao.get(i).getCurso().getNome();
-                countPos = (int) trueEgressoList.filter(a -> a.getTitulacao().getCurso().getNome().equalsIgnoreCase(nomeFinal)).count();
-                posGraduacoes.put(nomeFinal, countPos);
-            }
+        for(int i =0; i< titulacoes.size(); i++){
             
+            final String nomeFinal = titulacoes.get(i).getNome();
+            count = (int) egressoTitulacao.stream().filter(a -> a.getCurso().getNome().equalsIgnoreCase(nomeFinal)).count();
+            tipoAluno.put(nomeFinal, count);         
+
         }
         
-        return new TipoGraduacaoGraficoDTO((int) falseEgressoList.count(), (int) trueEgressoList.count(),graduacoes, posGraduacoes);
+        return new TipoAlunoGraficoDTO(tipoAluno);
     }
 
     /**
@@ -219,6 +220,8 @@ public class GraficoController {
         return new TipoBolsaGraficoDTO((int) lista.stream().filter(a -> a.getBolsista().equals(true)).count(), tipoBolsaContagens);
     }
 
+    //TODO remuneracao grafico
+
     /**
      * Endpoint responsavel por buscar todos os Locais da Pos dos egressos no banco.
      *
@@ -237,6 +240,49 @@ public class GraficoController {
             lista.stream().map(a -> a.getTitulacao().getEmpresa().getEndereco().getEstado()).findFirst(),
             lista.stream().map(a -> a.getTitulacao().getEmpresa().getEndereco().getPais()).findFirst());
     }
+
+    /**
+     * Endpoint responsavel por buscar todos os cursos dos egressos no banco.
+     *
+     * @return {@link CursosGraficoDTO} Retorna a contagem de cada tipo de curso.
+     * @author Pedro Inácio
+     * @since 21/05/2023
+     */
+    @GetMapping(value = "/cursos")
+    @ResponseStatus(code = HttpStatus.OK)
+    public CursosGraficoDTO getCursos() {
+        List<EgressoModel> lista = egressoService.findAll();
+
+        List<CursoModel> curso = cursoService.findAll();
+
+        HashMap<String, Integer> cursoContagens = new HashMap<>();
+
+        int count = 0;
+        for(int i =0; i< curso.size(); i++){
+            final String nomeFinal = curso.get(i).getNome();
+            count = (int) lista.stream().filter(a -> a.getPosGraduacao().equals(true) && a.getTitulacao().getCurso().getNome().equalsIgnoreCase(nomeFinal)).count();
+            cursoContagens.put(nomeFinal, count);         
+        }
+        
+        return new CursosGraficoDTO(cursoContagens);
+    }
+
+    /**
+     * Endpoint responsavel por contabilizar egressos com interesse em pós graduação
+     *
+     * @return {@link SetorAtuacaoGraficoDTO} Retorna a quantidade de egressos interesse em pós graduação
+     * @author Pedro Inácio
+     * @since 22/05/2023
+     */
+    @GetMapping(value = "/interesseEmPos")
+    @ResponseStatus(code = HttpStatus.OK)
+    public InteresseEmPosGraficoDTO getInteresseEmPos() {
+        List<EgressoModel> lista = egressoService.findAll();
+
+        return new InteresseEmPosGraficoDTO((int) lista.stream().filter(e -> e.getInteresseEmPos().equals(true)).count());
+    }
+
+    //TODO grafico com nome de empresas onde o egresso trabalha
     
     /**
      * Endpoint responsavel por contar todos os egressos cotistas e não cotistas.
