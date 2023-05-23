@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
+import java.util.HashMap;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class InteresseEmPosGraficoDTO {
     
-    private Integer quantidadeInteressados;
+    private HashMap<String, Long> InteresseContagem;
 
 }

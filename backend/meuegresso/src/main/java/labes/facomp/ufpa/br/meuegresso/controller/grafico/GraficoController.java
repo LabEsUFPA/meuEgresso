@@ -253,7 +253,7 @@ public class GraficoController {
      * @author Pedro Inácio
      * @since 21/05/2023
      */
-    @GetMapping(value = "/tipoBolsa")
+    @GetMapping(value = "/tipoBolsa") //TODO fix: 
     @ResponseStatus(code = HttpStatus.OK)
     public TipoBolsaGraficoDTO getTipoBolsa() {
         List<EgressoModel> lista = egressoService.findAll();
@@ -288,6 +288,8 @@ public class GraficoController {
     public RemuneracaoGraficoDTO getRemuneracao() {
         List<EgressoModel> lista = egressoService.findAll();
 
+        List<EgressoModel> listaBolsista = new ArrayList<>();
+
         Set<Double> remuneracoes = new HashSet<>();
 
         HashMap<Double, Integer> remuneracaoContagem = new HashMap<>();
@@ -295,6 +297,7 @@ public class GraficoController {
         for (EgressoModel egresso : lista) {
             if (Boolean.TRUE.equals(egresso.getBolsista())) {
                 remuneracoes.add(egresso.getRemuneracaoBolsa());
+                listaBolsista.add(egresso);
             }
         }
 
@@ -304,7 +307,7 @@ public class GraficoController {
         for(int i =0; i< remuneracoesLista.size(); i++){
             final Double remuneracaoFinal = remuneracoesLista.get(i);
 
-            count = (int) lista.stream().filter(e -> e.getRemuneracaoBolsa().equals(remuneracaoFinal)).count();
+            count = (int) listaBolsista.stream().filter(e -> e.getRemuneracaoBolsa().equals(remuneracaoFinal)).count();
             remuneracaoContagem.put(remuneracaoFinal, count);
         }
         return new RemuneracaoGraficoDTO(remuneracaoContagem);
@@ -337,7 +340,7 @@ public class GraficoController {
      * @author Pedro Inácio
      * @since 21/05/2023
      */
-    @GetMapping(value = "/localPos")
+    @GetMapping(value = "/localPos") // TODO fix: 
     @ResponseStatus(code = HttpStatus.OK)
     public LocalPosGraficoDTO getLocalPos() {
         List<EgressoTitulacaoModel> lista = egressoTitulacaoService.findAll();
@@ -368,7 +371,7 @@ public class GraficoController {
      * @author Pedro Inácio
      * @since 21/05/2023
      */
-    @GetMapping(value = "/cursos")
+    @GetMapping(value = "/cursos") // TODO fix: retornar nome do curso não duplicado e a quantidade de egressos por curso
     @ResponseStatus(code = HttpStatus.OK)
     public CursosGraficoDTO getCursos() {
         List<EgressoTitulacaoModel> lista = egressoTitulacaoService.findAll();
@@ -396,7 +399,12 @@ public class GraficoController {
     public InteresseEmPosGraficoDTO getInteresseEmPos() {
         List<EgressoModel> lista = egressoService.findAll();
 
-        return new InteresseEmPosGraficoDTO((int) lista.stream().filter(e -> e.getInteresseEmPos().equals(true)).count());
+        HashMap<String, Long> interesseContagens = new HashMap<>();
+
+        interesseContagens.put("Sim", lista.stream().filter(e -> e.getInteresseEmPos().equals(true)).count());
+        interesseContagens.put("Não", lista.stream().filter(e -> e.getInteresseEmPos().equals(false)).count());
+
+        return new InteresseEmPosGraficoDTO (interesseContagens);
     }
 
     /**
@@ -499,8 +507,7 @@ public class GraficoController {
         int count = 0;
         for (int i = 0; i < setorAtuacao.size(); i++) {
             final String nomeFinal = setorAtuacao.get(i).getNome();
-            count = (int) lista.stream()
-                    .filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
+            count = (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
 
             setorAtuacaoContagens.put(nomeFinal, count);
         }
@@ -523,8 +530,8 @@ public class GraficoController {
 
         HashMap<String, Long> posGradContagens = new HashMap<>();
 
-        posGradContagens.put("Fez Pós-graduação", lista.stream().filter(e -> e.getPosGraduacao().equals(true)).count());
-        posGradContagens.put("Não fez Pós-graduação", lista.stream().filter(e -> e.getPosGraduacao().equals(false)).count());
+        posGradContagens.put("Fez", lista.stream().filter(e -> e.getPosGraduacao().equals(true)).count());
+        posGradContagens.put("Não fez", lista.stream().filter(e -> e.getPosGraduacao().equals(false)).count());
 
         return new PosGraduacaoGraficoDTO(posGradContagens);
     }
