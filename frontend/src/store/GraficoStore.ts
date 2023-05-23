@@ -5,6 +5,51 @@ interface PieChartSeries extends models.Graphics.PieChartSeries {}
 
 export const useGraficoStore = defineStore('GraficoStore', {
   actions: {
+    async getRemunerationData () {
+      const remunerationDataX: number[] = []
+      const remunerationDataY: string[] = []
+
+      const response = await Api.request({
+        method: 'get',
+        route: '/grafico/remuneracao'
+      })
+
+      if ((response?.data?.remuneracaoContagem) != null) {
+        Object.keys(response?.data.remuneracaoContagem).forEach((item: string) => {
+          remunerationDataX.push(response?.data?.remuneracaoContagem[item])
+          remunerationDataY.push(item)
+        })
+      }
+
+      return {
+        remunerationDataX,
+        remunerationDataY,
+        status: (response?.status) !== undefined ? response.status : 500
+      }
+    },
+
+    async getInterestInPostData () {
+      const response = await Api.request({
+        method: 'get',
+        route: '/grafico/interesseEmPos'
+      })
+
+      if ((response?.data?.interesseContagem) != null) {
+        const interestInPostData: PieChartSeries[] = []
+        const interestInPostLegend: string[] = []
+        Object.keys(response?.data?.interesseContagem).forEach((item) => {
+          interestInPostData.push({ value: Math.floor(Math.random() * 100), name: item })
+          interestInPostLegend.push(item)
+        })
+
+        return {
+          interestInPostData,
+          interestInPostLegend,
+          status: (response?.status) !== undefined ? response.status : 500
+        }
+      }
+    },
+
     async getActingData () {
       const response = await Api.request({
         method: 'get',

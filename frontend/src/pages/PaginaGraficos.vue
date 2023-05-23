@@ -73,6 +73,8 @@
         :legend-data="activitySectorLegend"
       />
       <CustomBarGraph
+        legend="Idade"
+        info="Quantidade de egressos por idade"
         v-if="loading"
         v-show="filters.all || filters.general"
         :x="ageDataX"
@@ -134,6 +136,21 @@
         :data="actingData"
         :legend-data="actingLegend"
       />
+      <CustomPieGraph
+        v-if="loading"
+        v-show="filters.all || filters.career"
+        legend="Deseja realizar Pós-graduação"
+        info="Quantidade de egressos que desejam realizar pós-graduação"
+        :data="interestInPostData"
+        :legend-data="interestInPostLegend"
+      />
+      <CustomBarGraph
+        legend="Remuneração"
+        info="Remuneração mensal média da bolsa do egresso"
+        v-if="loading"
+        :x="remunerationDataX"
+        :y="remunerationDataY"
+      />
     </div>
   </div>
 </template>
@@ -171,6 +188,10 @@ const scholarData = ref<PieChartSeries[]>()
 const scholarLegend = ref<string[]>()
 const actingData = ref<PieChartSeries[]>()
 const actingLegend = ref<string[]>()
+const interestInPostData = ref<PieChartSeries[]>()
+const interestInPostLegend = ref<string[]>()
+const remunerationDataX = ref<number[]>([])
+const remunerationDataY = ref<string[]>([])
 
 const loading = ref(false)
 
@@ -219,6 +240,14 @@ const getGraphData = async () => {
   const actingGraph = await store.getActingData()
   actingData.value = actingGraph?.actingData
   actingLegend.value = actingGraph?.actingLegend
+
+  const interestInPostGraph = await store.getInterestInPostData()
+  interestInPostData.value = interestInPostGraph?.interestInPostData
+  interestInPostLegend.value = interestInPostGraph?.interestInPostLegend
+
+  const remunerationGraph = await store.getRemunerationData()
+  remunerationDataX.value = remunerationGraph?.remunerationDataX
+  remunerationDataY.value = remunerationGraph?.remunerationDataY
 }
 
 interface Filters {
