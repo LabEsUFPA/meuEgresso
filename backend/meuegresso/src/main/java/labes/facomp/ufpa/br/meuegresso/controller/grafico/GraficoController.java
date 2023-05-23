@@ -64,7 +64,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/grafico")
 public class GraficoController {
-    
+
     private final EgressoService egressoService;
 
     private final GeneroService generoService;
@@ -86,7 +86,8 @@ public class GraficoController {
     private final FaixaSalarialService faixaSalarialService;
 
     /**
-     * Endpoint responsavel por buscar as informacoes de endereco dos empregos dos egressos.
+     * Endpoint responsavel por buscar as informacoes de endereco dos empregos dos
+     * egressos.
      *
      * @return {@link EnderecoEmpresasGraficoDTO} retorna endereco dos empregos.
      * @author Pedro Inácio
@@ -94,14 +95,14 @@ public class GraficoController {
      */
     @GetMapping(value = "/enderecoEmpresas")
     @ResponseStatus(code = HttpStatus.OK)
-    public EnderecoEmpresasGraficoDTO getEnderecoEmpresas(){
+    public EnderecoEmpresasGraficoDTO getEnderecoEmpresas() {
         List<EgressoEmpresaModel> lista = egressoEmpresaService.findAll();
 
         List<List<String>> enderecos = new ArrayList<>();
 
         List<String> umEndereco;
 
-        for(int i =0; i< lista.size(); i++){
+        for (int i = 0; i < lista.size(); i++) {
             umEndereco = new ArrayList<>();
             umEndereco.add(lista.get(i).getEmpresa().getNome());
             umEndereco.add(lista.get(i).getEmpresa().getEndereco().getPais());
@@ -112,39 +113,43 @@ public class GraficoController {
 
         return new EnderecoEmpresasGraficoDTO(enderecos);
     }
-    
+
     /**
      * Endpoint responsavel por buscar todas as idades dos egressos no banco.
      *
-     * @return {@link IdadesGraficoDTO} Retorna uma lista com todas as idades e a media delas.
+     * @return {@link IdadesGraficoDTO} Retorna uma lista com todas as idades e a
+     *         media delas.
      * @author Pedro Inácio
      * @since 19/05/2023
      */
     @GetMapping(value = "/idades")
     @ResponseStatus(code = HttpStatus.OK)
-    public IdadesGraficoDTO getIdades(){
+    public IdadesGraficoDTO getIdades() {
         List<EgressoModel> lista = egressoService.findAll();
 
         List<Integer> idades = egressoService.findAllIdades();
-        
+
         HashMap<Integer, Integer> idadesContagens = new HashMap<>();
 
         int count = 0;
-        for(int i =0; i< idades.size(); i++){
+        for (int i = 0; i < idades.size(); i++) {
             final Integer idadeFinal = idades.get(i);
-            count = (int) lista.stream().filter(a -> Period.between(a.getNascimento(), LocalDate.now()).getYears() == idadeFinal).count();
+            count = (int) lista.stream()
+                    .filter(a -> Period.between(a.getNascimento(), LocalDate.now()).getYears() == idadeFinal).count();
 
             idadesContagens.put(idadeFinal, count);
-            
+
         }
 
-        return new IdadesGraficoDTO(egressoService.findAllIdades().stream().mapToDouble(a -> a).average(), idadesContagens);
+        return new IdadesGraficoDTO(egressoService.findAllIdades().stream().mapToDouble(a -> a).average(),
+                idadesContagens);
     }
 
     /**
      * Endpoint responsavel por buscar todos os generos dos egressos no banco.
      *
-     * @return {@link GenerosGraficoDTO} Retorna a contagem de cada genero (masc, fem, trans e outros).
+     * @return {@link GenerosGraficoDTO} Retorna a contagem de cada genero (masc,
+     *         fem, trans e outros).
      * @author Pedro Inácio
      * @since 19/05/2023
      */
@@ -158,21 +163,22 @@ public class GraficoController {
         HashMap<String, Integer> generosContagens = new HashMap<>();
 
         int count = 0;
-        for(int i =0; i< generos.size(); i++){
+        for (int i = 0; i < generos.size(); i++) {
             final String nomeFinal = generos.get(i).getNome();
             count = (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase(nomeFinal)).count();
 
             generosContagens.put(nomeFinal, count);
-            
+
         }
-        
+
         return new GenerosGraficoDTO(generosContagens);
     }
 
     /**
      * Endpoint responsavel por buscar todos os salarios dos egressos no banco.
      *
-     * @return {@link GenerosGraficoDTO} Retorna a contagem de cada egressos por faixa salarial.
+     * @return {@link GenerosGraficoDTO} Retorna a contagem de cada egressos por
+     *         faixa salarial.
      * @author Pedro Inácio
      * @since 22/05/2023
      */
@@ -186,19 +192,21 @@ public class GraficoController {
         HashMap<String, Integer> salariosContagens = new HashMap<>();
 
         int count = 0;
-        for(int i =0; i< faixasSalariais.size(); i++){
+        for (int i = 0; i < faixasSalariais.size(); i++) {
             final String nomeFinal = faixasSalariais.get(i).getFaixa();
-            count = (int) lista.stream().filter(a -> a.getFaixaSalarial().getFaixa().equalsIgnoreCase(nomeFinal)).count();
+            count = (int) lista.stream().filter(a -> a.getFaixaSalarial().getFaixa().equalsIgnoreCase(nomeFinal))
+                    .count();
 
             salariosContagens.put(nomeFinal, count);
-            
+
         }
-        
+
         return new SalarioGraficoDTO(salariosContagens);
     }
 
     /**
-     * Endpoint responsavel por buscar todos os tipo de alunos dos egressos no banco.
+     * Endpoint responsavel por buscar todos os tipo de alunos dos egressos no
+     * banco.
      *
      * @return {@link TipoAlunoGraficoDTO} Retorna a contagem de cada tipo de aluno.
      * @author Pedro Inácio
@@ -208,28 +216,30 @@ public class GraficoController {
     @ResponseStatus(code = HttpStatus.OK)
     public TipoAlunoGraficoDTO getTipoAlunos() {
 
-        List<EgressoTitulacaoModel > egressoTitulacao = egressoTitulacaoService.findAll();
+        List<EgressoTitulacaoModel> egressoTitulacao = egressoTitulacaoService.findAll();
 
-        List<TitulacaoModel > titulacoes = titulacaoService.findAll();
+        List<TitulacaoModel> titulacoes = titulacaoService.findAll();
 
         HashMap<String, Integer> tipoAluno = new HashMap<>();
-        
+
         int count = 0;
-        for(int i =0; i< titulacoes.size(); i++){
-            
+        for (int i = 0; i < titulacoes.size(); i++) {
+
             final String nomeFinal = titulacoes.get(i).getNome();
-            count = (int) egressoTitulacao.stream().filter(a -> a.getCurso().getNome().equalsIgnoreCase(nomeFinal)).count();
-            tipoAluno.put(nomeFinal, count);         
+            count = (int) egressoTitulacao.stream().filter(a -> a.getCurso().getNome().equalsIgnoreCase(nomeFinal))
+                    .count();
+            tipoAluno.put(nomeFinal, count);
 
         }
-        
+
         return new TipoAlunoGraficoDTO(tipoAluno);
     }
 
     /**
      * Endpoint responsavel por contabilizar egressos com e sem bolsa
      *
-     * @return {@link BolsistasGraficoDTO} Retorna a quantidade de egressos com e sem bolsa 
+     * @return {@link BolsistasGraficoDTO} Retorna a quantidade de egressos com e
+     *         sem bolsa
      * @author Pedro Inácio
      * @since 21/05/2023
      */
@@ -266,8 +276,9 @@ public class GraficoController {
         int count = 0;
         for (int i = 0; i < tipoBolsa.size(); i++) {
             String nomeFinal = tipoBolsa.get(i).getNome();
-            
-            count = (int) listaFiltrada.stream().filter(a -> a.getBolsa().getNome().equalsIgnoreCase("nomeFinal")).count();
+
+            count = (int) listaFiltrada.stream().filter(a -> a.getBolsa().getNome().equalsIgnoreCase(nomeFinal))
+                    .count();
 
             tipoBolsaContagens.put(nomeFinal, count);
 
@@ -275,12 +286,13 @@ public class GraficoController {
 
         return new TipoBolsaGraficoDTO(tipoBolsaContagens);
     }
-    
 
     /**
-     * EndPoint responsável por enumerar a quantidade de egressos em cada remuneração.
+     * EndPoint responsável por enumerar a quantidade de egressos em cada
+     * remuneração.
      * 
-     * @return {@link RemuneracaoGraficoDTO} retorna a quantidade de egressos por cada tipo de remuneração.
+     * @return {@link RemuneracaoGraficoDTO} retorna a quantidade de egressos por
+     *         cada tipo de remuneração.
      * @author Camilo Santos
      * @since 22/05/2023
      */
@@ -314,7 +326,8 @@ public class GraficoController {
     }
 
     /**
-     * EndPoint responsável por enumerar a quantidade de egressos cotistas e não-cotistas.
+     * EndPoint responsável por enumerar a quantidade de egressos cotistas e
+     * não-cotistas.
      * 
      * @return {@link CotistaGraficoDTO} retorna cotistas e não-cotistas enumerados.
      * @author Camilo Santos
@@ -329,7 +342,7 @@ public class GraficoController {
 
         cotistaContagem.put("Cotista", lista.stream().filter(e -> e.getCotista().equals(true)).count());
         cotistaContagem.put("Não Cotista", lista.stream().filter(e -> e.getCotista().equals(false)).count());
-        
+
         return new CotistaGraficoDTO(cotistaContagem);
     }
 
@@ -340,17 +353,18 @@ public class GraficoController {
      * @author Pedro Inácio
      * @since 21/05/2023
      */
-    @GetMapping(value = "/localPos") // TODO fix: 
+    @GetMapping(value = "/localPos") // TODO fix:
     @ResponseStatus(code = HttpStatus.OK)
     public LocalPosGraficoDTO getLocalPos() {
         List<EgressoModel> lista = egressoService.findAll();
-        List<EgressoModel> listaFiltrada = lista.stream().filter(a -> a.getTitulacao() != null && a.getPosGraduacao().equals(true)).toList();
+        List<EgressoModel> listaFiltrada = lista.stream()
+                .filter(a -> a.getTitulacao() != null && a.getPosGraduacao().equals(true)).toList();
 
         List<List<String>> enderecos = new ArrayList<>();
 
         List<String> umEndereco;
 
-        for(int i =0; i< lista.size(); i++){
+        for (int i = 0; i < lista.size(); i++) {
             umEndereco = new ArrayList<>();
             umEndereco.add(listaFiltrada.get(i).getTitulacao().getCurso().getNome());
             umEndereco.add(listaFiltrada.get(i).getTitulacao().getEmpresa().getNome());
@@ -374,21 +388,23 @@ public class GraficoController {
     @ResponseStatus(code = HttpStatus.OK)
     public CursosGraficoDTO getCursos() {
         List<EgressoModel> lista = egressoService.findAll();
-        List<EgressoModel> listaFiltrada = lista.stream().filter(a -> a.getTitulacao() != null && a.getPosGraduacao().equals(true)).toList();
+        List<EgressoModel> listaFiltrada = lista.stream()
+                .filter(a -> a.getTitulacao() != null && a.getPosGraduacao().equals(true)).toList();
 
         List<String> cursos = new ArrayList<>();
 
-        for(int i =0; i< lista.size(); i++){
+        for (int i = 0; i < lista.size(); i++) {
             cursos.add(listaFiltrada.get(i).getTitulacao().getCurso().getNome());
         }
-        
+
         return new CursosGraficoDTO(cursos);
     }
 
     /**
      * Endpoint responsavel por contabilizar egressos com interesse em pós graduação
      *
-     * @return {@link SetorAtuacaoGraficoDTO} Retorna a quantidade de egressos interesse em pós graduação
+     * @return {@link SetorAtuacaoGraficoDTO} Retorna a quantidade de egressos
+     *         interesse em pós graduação
      * @author Pedro Inácio
      * @since 22/05/2023
      */
@@ -402,17 +418,19 @@ public class GraficoController {
         interesseContagens.put("Sim", lista.stream().filter(e -> e.getInteresseEmPos().equals(true)).count());
         interesseContagens.put("Não", lista.stream().filter(e -> e.getInteresseEmPos().equals(false)).count());
 
-        return new InteresseEmPosGraficoDTO (interesseContagens);
+        return new InteresseEmPosGraficoDTO(interesseContagens);
     }
 
     /**
      * Endpoint responsavel por listar as empresas onde os egressos trabalham.
      *
-     * @return {@link SetorAtuacaoGraficoDTO} Retorna a lista de nome de empresas onde os egressos trabalham
+     * @return {@link SetorAtuacaoGraficoDTO} Retorna a lista de nome de empresas
+     *         onde os egressos trabalham
      * @author Pedro Inácio
      * @since 22/05/2023
      */
-    @GetMapping(value = "/empresas") // TODO fix: retornar nome da empresa não duplicado e a quantidade de egressos por empresa
+    @GetMapping(value = "/empresas") // TODO fix: retornar nome da empresa não duplicado e a quantidade de egressos
+                                     // por empresa
     @ResponseStatus(code = HttpStatus.OK)
     public EmpresaGraficoDTO getEmpresas() {
         List<EgressoEmpresaModel> lista = egressoEmpresaService.findAll();
@@ -425,11 +443,12 @@ public class GraficoController {
 
         return new EmpresaGraficoDTO(nomes);
     }
-    
+
     /**
      * Endpoint responsavel por contar todos os egressos cotistas e não cotistas.
      *
-     * @return {@link CotaGraficoDTO} Retorna a contagem de cotistas e não cotistas, usernames separados por grupo.
+     * @return {@link CotaGraficoDTO} Retorna a contagem de cotistas e não cotistas,
+     *         usernames separados por grupo.
      * @author Camilo Santos
      * @since 20/05/2023
      */
@@ -442,8 +461,7 @@ public class GraficoController {
 
         HashMap<String, Integer> cotasContagens = new HashMap<>();
 
-        
-        for (int i = 0; i < cotas.size(); i++) { 
+        for (int i = 0; i < cotas.size(); i++) {
             final CotaModel cotaFinal = cotas.get(i);
 
             int count = 0;
@@ -452,7 +470,9 @@ public class GraficoController {
 
                 Set<CotaModel> cotaEgresso = egresso.getCotas();
 
-                if (cotaEgresso.contains(cotaFinal)) {count += 1;}  
+                if (cotaEgresso.contains(cotaFinal)) {
+                    count += 1;
+                }
             }
             cotasContagens.put(cotaFinal.getNome(), count);
         }
@@ -462,7 +482,8 @@ public class GraficoController {
     /**
      * Endpoint responsavel por retornar a contagem de egresso por área de atuação.
      *
-     * @return {@link AreaAtuacaoGraficoDTO} Retorna a contagem de egresso por área de atuação.
+     * @return {@link AreaAtuacaoGraficoDTO} Retorna a contagem de egresso por área
+     *         de atuação.
      * @author Camilo Santos
      * @since 20/05/2023
      */
@@ -479,7 +500,8 @@ public class GraficoController {
         int count = 0;
         for (int i = 0; i < areaAtuacao.size(); i++) {
             final String nomeFinal = areaAtuacao.get(i).getNome();
-            count = (int) listaFiltrada.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
+            count = (int) listaFiltrada.stream()
+                    .filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
 
             areaAtuacaoContagens.put(nomeFinal, count);
         }
@@ -488,9 +510,11 @@ public class GraficoController {
     }
 
     /**
-     * Endpoint responsavel por retornar a contagem de egressos por setor de atuação.
+     * Endpoint responsavel por retornar a contagem de egressos por setor de
+     * atuação.
      *
-     * @return {@link SetorAtuacaoGraficoDTO} Retorna a contagem de egresso por setor de atuação.
+     * @return {@link SetorAtuacaoGraficoDTO} Retorna a contagem de egresso por
+     *         setor de atuação.
      * @author Camilo Santos
      * @since 20/05/2023
      */
@@ -507,14 +531,15 @@ public class GraficoController {
         int count = 0;
         for (int i = 0; i < setorAtuacao.size(); i++) {
             final String nomeFinal = setorAtuacao.get(i).getNome();
-            count = (int) listaFiltrada.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
+            count = (int) listaFiltrada.stream()
+                    .filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
 
             setorAtuacaoContagens.put(nomeFinal, count);
         }
 
         return new SetorAtuacaoGraficoDTO(setorAtuacaoContagens);
     }
-    
+
     /**
      * Endpoint responsavel por contabilizar egressos com e sem pós graduação
      *
