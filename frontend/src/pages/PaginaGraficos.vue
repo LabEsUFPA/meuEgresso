@@ -138,18 +138,43 @@
       />
       <CustomPieGraph
         v-if="loading"
-        v-show="filters.all || filters.career"
+        v-show="filters.all || filters.academic"
         legend="Deseja realizar Pós-graduação"
         info="Quantidade de egressos que desejam realizar pós-graduação"
         :data="interestInPostData"
         :legend-data="interestInPostLegend"
       />
       <CustomBarGraph
+        v-if="loading"
+        v-show="filters.all || filters.career"
         legend="Remuneração"
         info="Remuneração mensal média da bolsa do egresso"
-        v-if="loading"
         :x="remunerationDataX"
         :y="remunerationDataY"
+      />
+      <CustomPieGraph
+        v-if="loading"
+        v-show="filters.all || filters.academic"
+        legend="Tipo de bolsa"
+        info="Quantidade de egressos por cada tipo de bolsa"
+        :data="scholarshipTypeData"
+        :legend-data="scholarshipTypeLegend"
+      />
+      <CustomPieGraph
+        v-if="loading"
+        v-show="filters.all || filters.academic"
+        legend="Local de Pós-graduação"
+        info="Quantidade de egressos por instituição de pós-graduação"
+        :data="postGraduateData"
+        :legend-data="postGraduateLegend"
+      />
+      <CustomPieGraph
+        v-if="loading"
+        v-show="filters.all || filters.academic"
+        legend="Curso de Pós-graduação"
+        info="Quantidade de egressos por curso de pós graduação"
+        :data="postGraduateCourseData"
+        :legend-data="postGraduateCourseLegend"
       />
     </div>
   </div>
@@ -192,6 +217,12 @@ const interestInPostData = ref<PieChartSeries[]>()
 const interestInPostLegend = ref<string[]>()
 const remunerationDataX = ref<number[]>([])
 const remunerationDataY = ref<string[]>([])
+const scholarshipTypeData = ref<PieChartSeries[]>()
+const scholarshipTypeLegend = ref<string[]>()
+const postGraduateLocalData = ref<PieChartSeries[]>()
+const postGraduateLocalLegend = ref<string[]>()
+const postGraduateCourseData = ref<PieChartSeries[]>()
+const postGraduateCourseLegend = ref<string[]>()
 
 const loading = ref(false)
 
@@ -248,6 +279,18 @@ const getGraphData = async () => {
   const remunerationGraph = await store.getRemunerationData()
   remunerationDataX.value = remunerationGraph?.remunerationDataX
   remunerationDataY.value = remunerationGraph?.remunerationDataY
+
+  const scholarshipTypeGraph = await store.getScholarshipTypeData()
+  scholarshipTypeData.value = scholarshipTypeGraph?.scholarshipTypeData
+  scholarshipTypeLegend.value = scholarshipTypeGraph?.scholarshipTypeLegend
+
+  const postGraduateLocalGraph = await store.getPostGraduateLocalData()
+  postGraduateLocalData.value = postGraduateLocalGraph?.postGraduateLocalData
+  postGraduateLocalLegend.value = postGraduateLocalGraph?.postGraduateLocalLegend
+
+  const postGraduateCourseGraph = await store.getPostGraduateCourseData()
+  postGraduateCourseData.value = postGraduateCourseGraph?.postGraduateCourseData
+  postGraduateCourseLegend.value = postGraduateCourseGraph?.postGraduateCourseLegend
 }
 
 interface Filters {
