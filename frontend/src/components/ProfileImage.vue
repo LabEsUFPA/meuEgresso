@@ -30,22 +30,8 @@
             rounded
           />
         </section>
-      <!--
-        <o-icon icon="upload" />
-        <span>Click to upload</span>
-      </ButtonActionIcon> -->
       </o-upload>
-
-      <ButtonActionIcon
-        v-if="isInput"
-        class="absolute z-20 ml-[90px] mt-[90px]"
-        icon-path="/src/assets/trashCan.svg"
-        icon-size="20"
-        custom-style="px-2 py-2"
-        color="whiteDanger"
-        @click="$emit('remove')"
-      />
-
+      
       <img
         v-if="imgUrl===''"
         class="
@@ -73,19 +59,7 @@
         v-if="file"
       >
 
-        <!-- <o-button
-        icon-left="times"
-        size="small"
-        native-type="button"
-        @click="deleteDropFile(index)"
-      />
-      <ButtonActionIcon
-        icon-path="/src/assets/trashCan.svg"
-        icon-size="20"
-        custom-style="px-2 py-2"
-        color="whiteDanger"
-        @click="deleteDropFile(index)"
-      /> -->
+      
         <div>
           <img
             class="
@@ -103,6 +77,16 @@
       </span>
     </o-field>
   </section>
+  <ButtonActionIcon
+     v-if="isInput"
+
+        class="absolute z-20 ml-[90px] mt-[90px] rounded-full"
+        icon-path="/src/assets/trashCan.svg"
+        icon-size="20"
+        custom-style="px-2 py-2"
+        color="whiteDanger"
+        @click="$emit('remove')"
+      />
 </template>
 
 <script setup lang="ts">
@@ -181,15 +165,4 @@ watch(props.imgUrl, () => {
   forceRender()
 })
 
-// const methodThatForcesUpdate = () => {
-//   // our code
-//   const instance = getCurrentInstance()
-//   instance.proxy.forceUpdate()
-//   // our code
-// }
-
-// const imageUrl = computed(() => {
-//   const imageUrl = props.imgUrl
-//   return imageUrl
-// })
 </script>

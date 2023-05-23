@@ -33,11 +33,15 @@
                 ['ml-[110px]']: isPublic
               }"
             >
-              <img
-                class="w-[120px] h-[120px] rounded-full"
-                src="/src/assets/profile-pic.png"
-                alt="Avatar"
-              >
+            <ProfileImage
+              ref="profileImageRef"
+              @imageUploadBack="profileImageSave"
+              @remove="removeImageEgresso"
+              :img-url="dataEgresso.profileHead.image"
+              img-default="src/assets/profile-pic.png"
+              :is-input="dataEgresso.profileHead.isInput"
+              :trigger-back-upload="dataEgresso.profileHead.isInput"
+            />
             </div>
             <h1 class="mt-[5px] ml-[100px] ">
               <ButtonEdit
@@ -612,6 +616,7 @@ import FolderAcademico from 'src/components/FolderAcademico.vue'
 import FolderCarreira from 'src/components/FolderCarreira.vue'
 import FolderLocalizacao from 'src/components/FolderLocalizacao.vue'
 import FolderAdicionais from 'src/components/FolderAdicionais.vue'
+import ProfileImage from 'src/components/ProfileImage.vue'
 import {
   mdiAccount,
   mdiEmail,
@@ -1339,5 +1344,14 @@ const schemaAdicionais = object().shape({
     contribuicoes: string().required()
   })
 })
+async function removeImageEgresso () {
+  egressoStore.removeImageEgresso()
+  const imageUrl = await handleEgressoImage(jsonResponse.id)
+  // const imageUrl = 'https://www.hashtagtreinamentos.com/wp-content/uploads/2021/05/Dashboard-no-Excel.jpg'
+  // dataEgresso.value.profileHead.image = imageUrl
+  fetchUpdateEgresso()
+  console.log('removeimageresso')
+  // forceRender()
+}
 
 </script>
