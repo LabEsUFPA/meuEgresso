@@ -23,7 +23,6 @@
               src="src/assets/round-upload.svg"
             >
           </div>
-
           <o-button
             tag="a"
             variant="primary"
@@ -31,12 +30,10 @@
           />
         </section>
       </o-upload>
-      
       <img
-        v-if="imgUrl===''"
+        v-if="imgUrl.value==='' && !file"
         class="
-                     static
-                     z-0
+                     z-5
                      w-[120px]
                      h-[120px]
                     rounded-full"
@@ -44,28 +41,24 @@
         alt=""
       >
       <img
-        v-else
+        v-else-if="!file"
         class="
-                     static
-                     z-0
+                     z-10
                      w-[120px]
                      h-[120px]
                     rounded-full"
-        :src="imgUrl"
-        alt=""
+        :src="imgUrl.value"
+        alt="profileImage"
       >
       <span
         class="file-name"
         v-if="file"
       >
-
-      
         <div>
           <img
             class="
             static
             z-0
-            mt-[-120px]
             w-[120px]
             h-[120px]
             rounded-full"
@@ -78,15 +71,14 @@
     </o-field>
   </section>
   <ButtonActionIcon
-     v-if="isInput"
-
-        class="absolute z-20 ml-[90px] mt-[90px] rounded-full"
-        icon-path="/src/assets/trashCan.svg"
-        icon-size="20"
-        custom-style="px-2 py-2"
-        color="whiteDanger"
-        @click="$emit('remove')"
-      />
+    v-if="isInput"
+    class="absolute z-20 ml-[90px] mt-[90px] rounded-full"
+    icon-path="/src/assets/trashCan.svg"
+    icon-size="20"
+    custom-style="px-2 py-2"
+    color="whiteDanger"
+    @click="remove()"
+  />
 </template>
 
 <script setup lang="ts">
@@ -94,7 +86,7 @@ import { ref, computed, watch, nextTick, getCurrentInstance } from 'vue'
 import { OUpload, OSidebar, section, OField, OIcon, OButton } from '@oruga-ui/oruga-next'
 import ButtonActionIcon from 'src/components/ButtonActionIcon.vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
-defineEmits(['remove', 'imgUrl'])
+defineEmits(['remove', 'imgUrl', 'imageUploadBack'])
 
 const egressoStore = usePerfilEgressoStore()
 const renderComponent = ref(true)
@@ -116,9 +108,13 @@ const props = withDefaults(defineProps<Props>(), {
   triggerBackUpload: false,
   clearUpload: false
 })
-const file = ref(null)
 
-let imageEgressoFile: File
+const imgUrl = ref({
+  value: props.imgUrl
+})
+const file = ref<File | null>(null)
+
+let imageEgressoFile: any
 
 function getObjectURL (file: File) {
   imageEgressoFile = file
@@ -130,7 +126,7 @@ function imageUploadBack () {
 }
 
 const styleImageInput = computed(() => {
-  const imageStyle = [' hover:duration-200 w-[120px] h-[120px] absolute z-10 rounded-full']
+  const imageStyle = [' hover:duration-200 w-[120px] h-[120px] absolute z-20 rounded-full']
   if (props.isInput) {
     imageStyle.push('bg-gray-700/70 hover:bg-gray-700/50')
   }
@@ -140,12 +136,15 @@ const styleImageInput = computed(() => {
 defineExpose({
   imageUploadBack
 })
-async function removeImage () {
-  egressoStore.removeImageEgresso()
-  // props.imgUrl = await egressoStore.fetchImageEgressoUrl('1')
-  $emit('imgUrl', 'https://www.hashtagtreinamentos.com/wp-content/uploads/2021/05/Dashboard-no-Excel.jpg')
 
-  forceRender()
+async function remove () {
+  const removeResp = await egressoStore.removeImageEgresso()
+  // dataEgresso.value.profileHead.image= ''
+  imgUrl.value.value = ''
+  file.value = null
+  imageEgressoFile = ''
+  console.log('removeimageresso')
+  console.log(removeResp)
 }
 
 const forceRender = async () => {
@@ -160,9 +159,8 @@ const forceRender = async () => {
   renderComponent.value = true
 }
 forceRender()
-watch(props.imgUrl, () => {
-  console.log('changeURL')
-  forceRender()
+watch(() => props.imgUrl, (newValue) => {
+  imgUrl.value.value = newValue
 })
 
 </script>

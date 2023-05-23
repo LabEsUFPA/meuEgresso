@@ -319,6 +319,9 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
           const blob = new Blob([res.data], { type: 'image/png' })
           url = URL.createObjectURL(blob)
         }
+        if (res?.status === 204) {
+          url = ''
+        }
       })
       response = url
       return response

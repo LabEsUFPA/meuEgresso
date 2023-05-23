@@ -25,25 +25,7 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
         >
-          <div class="flex flex-auto justify-center mt-[-0.25rem] ">
-            <div
-              class="mt-[37px] flex flex-col items-center justify-center"
-              :class="{
-                ['ml-[200px]']: !isPublic,
-                ['ml-[110px]']: isPublic
-              }"
-            >
-            <ProfileImage
-              ref="profileImageRef"
-              @imageUploadBack="profileImageSave"
-              @remove="removeImageEgresso"
-              :img-url="dataEgresso.profileHead.image"
-              img-default="src/assets/profile-pic.png"
-              :is-input="dataEgresso.profileHead.isInput"
-              :trigger-back-upload="dataEgresso.profileHead.isInput"
-            />
-            </div>
-            <h1 class="mt-[5px] ml-[100px] ">
+        <h1 class="absolute ml-[220px] sm:ml-[270px] md:ml-[300px] mr-1 ">
               <ButtonEdit
                 label="Editar"
                 icon-path="/src/assets/edit.svg"
@@ -54,7 +36,26 @@
                 :is-input="dataEgresso.profileHead.isInput"
                 v-if="!isPublic"
               />
-            </h1>
+        </h1>
+          <div class="flex flex-auto justify-center mt-[-0.25rem] ">
+             <!-- :class="{
+                ['ml-[110px]']: !isPublic,
+                ['ml-[110px]']: isPublic
+              }" -->
+            <div
+              class="mt-[37px] flex flex-col items-center justify-center"
+             
+            >
+            <!-- @remove="removeImageEgresso" -->
+            <ProfileImage
+              ref="profileImageRef"
+              @imageUploadBack="profileImageSave"
+              :img-url="dataEgresso.profileHead.image"
+              img-default="src/assets/profile-pic.png"
+              :is-input="dataEgresso.profileHead.isInput"
+              :trigger-back-upload="dataEgresso.profileHead.isInput"
+            />
+            </div>
           </div>
           <div class="head">
             <h1 class="grid place-items-center text-cyan-800 text-xl font-bold mt-5 ">
@@ -661,7 +662,7 @@ function handleStatus (status: any) {
     return true
   }
 }
-const profileImageRef = ref(null)
+const profileImageRef = ref<typeof ProfileImage | null>(null)
 const profileImageSave = () => {
   profileImageRef.value.imageUploadBack()
 }
@@ -671,12 +672,16 @@ async function handleSubmitHeader (values: any) {
   jsonResponse.linkedin = values.geral.linkedin
   jsonResponse.lattes = values.geral.lattes
   const status = await egressoStore.atualizarEgresso(jsonResponse)
+
+  profileImageSave()
+
   if (handleStatus(status)) {
     await useLoginStore().saveUser()
 
     toggleIsInput('profileHead')
   }
 
+  fetchUpdateEgresso()
   fetchUpdateEgresso()
 }
 
@@ -1056,6 +1061,7 @@ async function fetchUpdateEgresso () {
 
   // Cotas
   let cotasEgresso = ''
+  imageEgressoUrl = await handleEgressoImage(json.id)
 
   for (let i = 0; i < json.cotas.length; i++) {
     cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
@@ -1344,14 +1350,11 @@ const schemaAdicionais = object().shape({
     contribuicoes: string().required()
   })
 })
-async function removeImageEgresso () {
-  egressoStore.removeImageEgresso()
-  const imageUrl = await handleEgressoImage(jsonResponse.id)
-  // const imageUrl = 'https://www.hashtagtreinamentos.com/wp-content/uploads/2021/05/Dashboard-no-Excel.jpg'
-  // dataEgresso.value.profileHead.image = imageUrl
-  fetchUpdateEgresso()
-  console.log('removeimageresso')
-  // forceRender()
-}
+// async function removeImageEgresso () {
+  
+// }
+watch(() => dataEgresso.value.profileHead.image, (newValue) => {
+  dataEgresso.value.profileHead.image = newValue
+})
 
 </script>
