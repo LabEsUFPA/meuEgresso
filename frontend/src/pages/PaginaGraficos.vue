@@ -1,6 +1,6 @@
 <template>
-  <div class="flex w-full justify-center bg-gradient-to-b from-sky-200 to-indigo-200 px-64">
-    <div class="flex w-full justify-start border-2 border-b-0 border-white rounded-t-2xl text-blue-900 py-8 pl-11 mt-10  shadow-md">
+  <div class="flex w-full px-3 justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
+    <div class="flex w-full min-w-[250px] max-w-[760px] justify-start border-2 border-b-0 border-white rounded-t-2xl text-blue-900 py-8 pl-6 md:pl-11 mt-10 shadow-md">
       <SvgIcon
         type="mdi"
         size="30"
@@ -13,49 +13,51 @@
       </h1>
     </div>
   </div>
-  <div class="px-64">
-    <div class="hidden xl:flex bg-white rounded-b-2xl py-8 pl-11 text-blue-900 gap-x-5">
-      <span class="font-semibold text-lg flex items-center">
+  <div class="flex px-3 justify-center">
+    <div class="w-full min-w-[250px] max-w-[760px] flex flex-col md:flex-row bg-white rounded-b-2xl py-8 pl-7 md:pl-11 text-blue-900 gap-x-5">
+      <span class="font-semibold md:text-lg flex items-center mb-3 md:mb-0">
         <SvgIcon
           type="mdi"
-          class="inline mr-4"
+          class="inline mr-2 md:mr-4"
           :path="mdiFilterVariant"
         />
 
         Filtros
       </span>
 
-      <FilterChip
-        title="Todos"
-        :selected="filters.all"
-        selectable
-        @click="handleFilters('all')"
-      />
-      <FilterChip
-        title="Geral"
-        icon="mdi:account"
-        :selected="filters.general"
-        selectable
-        @click="handleFilters('general')"
-      />
-      <FilterChip
-        title="Academico"
-        icon="maki:college"
-        :selected="filters.academic"
-        selectable
-        @click="handleFilters('academic')"
-      />
-      <FilterChip
-        title="Carreira"
-        icon="material-symbols:work"
-        :selected="filters.career"
-        selectable
-        @click="handleFilters('career')"
-      />
+      <div class="overflow-x-auto flex-1' flex flex-row gap-x-1 md:gap-x-3">
+        <FilterChip
+          title="Todos"
+          :selected="filters.all"
+          selectable
+          @click="handleFilters('all')"
+        />
+        <FilterChip
+          title="Geral"
+          icon="mdi:account"
+          :selected="filters.general"
+          selectable
+          @click="handleFilters('general')"
+        />
+        <FilterChip
+          title="Academico"
+          icon="maki:college"
+          :selected="filters.academic"
+          selectable
+          @click="handleFilters('academic')"
+        />
+        <FilterChip
+          title="Carreira"
+          icon="material-symbols:work"
+          :selected="filters.career"
+          selectable
+          @click="handleFilters('career')"
+        />
+      </div>
     </div>
   </div>
   <div class="flex justify-center gap-y-4 mb-14 py-10">
-    <div class="grid grid-cols-2 gap-y-10 gap-x-20 items-center">
+    <div class="grid grid-cols-1 md:grid-cols-2 md:px-10 px-1 gap-y-10 gap-x-20 justify-items-center items-center">
       <CustomPieGraph
         v-if="loading"
         v-show="filters.all || filters.general"
@@ -73,6 +75,8 @@
         :legend-data="activitySectorLegend"
       />
       <CustomBarGraph
+        legend="Idade"
+        info="Quantidade de egressos por idade"
         v-if="loading"
         v-show="filters.all || filters.general"
         :x="ageDataX"
@@ -134,6 +138,46 @@
         :data="actingData"
         :legend-data="actingLegend"
       />
+      <CustomPieGraph
+        v-if="loading"
+        v-show="filters.all || filters.academic"
+        legend="Deseja realizar Pós-graduação"
+        info="Quantidade de egressos que desejam realizar pós-graduação"
+        :data="interestInPostData"
+        :legend-data="interestInPostLegend"
+      />
+      <CustomBarGraph
+        v-if="loading"
+        v-show="filters.all || filters.career"
+        legend="Remuneração"
+        info="Remuneração mensal média da bolsa do egresso"
+        :x="remunerationDataX"
+        :y="remunerationDataY"
+      />
+      <CustomPieGraph
+        v-if="loading"
+        v-show="filters.all || filters.academic"
+        legend="Tipo de bolsa"
+        info="Quantidade de egressos por cada tipo de bolsa"
+        :data="scholarshipTypeData"
+        :legend-data="scholarshipTypeLegend"
+      />
+      <CustomPieGraph
+        v-if="loading"
+        v-show="filters.all || filters.academic"
+        legend="Local de Pós-graduação"
+        info="Quantidade de egressos por instituição de pós-graduação"
+        :data="postGraduateData"
+        :legend-data="postGraduateLegend"
+      />
+      <CustomPieGraph
+        v-if="loading"
+        v-show="filters.all || filters.academic"
+        legend="Curso de Pós-graduação"
+        info="Quantidade de egressos por curso de pós graduação"
+        :data="postGraduateCourseData"
+        :legend-data="postGraduateCourseLegend"
+      />
     </div>
   </div>
 </template>
@@ -171,6 +215,16 @@ const scholarData = ref<PieChartSeries[]>()
 const scholarLegend = ref<string[]>()
 const actingData = ref<PieChartSeries[]>()
 const actingLegend = ref<string[]>()
+const interestInPostData = ref<PieChartSeries[]>()
+const interestInPostLegend = ref<string[]>()
+const remunerationDataX = ref<number[]>([])
+const remunerationDataY = ref<string[]>([])
+const scholarshipTypeData = ref<PieChartSeries[]>()
+const scholarshipTypeLegend = ref<string[]>()
+const postGraduateLocalData = ref<PieChartSeries[]>()
+const postGraduateLocalLegend = ref<string[]>()
+const postGraduateCourseData = ref<PieChartSeries[]>()
+const postGraduateCourseLegend = ref<string[]>()
 
 const loading = ref(false)
 
@@ -219,6 +273,26 @@ const getGraphData = async () => {
   const actingGraph = await store.getActingData()
   actingData.value = actingGraph?.actingData
   actingLegend.value = actingGraph?.actingLegend
+
+  const interestInPostGraph = await store.getInterestInPostData()
+  interestInPostData.value = interestInPostGraph?.interestInPostData
+  interestInPostLegend.value = interestInPostGraph?.interestInPostLegend
+
+  const remunerationGraph = await store.getRemunerationData()
+  remunerationDataX.value = remunerationGraph?.remunerationDataX
+  remunerationDataY.value = remunerationGraph?.remunerationDataY
+
+  const scholarshipTypeGraph = await store.getScholarshipTypeData()
+  scholarshipTypeData.value = scholarshipTypeGraph?.scholarshipTypeData
+  scholarshipTypeLegend.value = scholarshipTypeGraph?.scholarshipTypeLegend
+
+  const postGraduateLocalGraph = await store.getPostGraduateLocalData()
+  postGraduateLocalData.value = postGraduateLocalGraph?.postGraduateLocalData
+  postGraduateLocalLegend.value = postGraduateLocalGraph?.postGraduateLocalLegend
+
+  const postGraduateCourseGraph = await store.getPostGraduateCourseData()
+  postGraduateCourseData.value = postGraduateCourseGraph?.postGraduateCourseData
+  postGraduateCourseLegend.value = postGraduateCourseGraph?.postGraduateCourseLegend
 }
 
 interface Filters {

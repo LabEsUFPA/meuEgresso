@@ -58,7 +58,7 @@ const option = ref({
   },
   tooltip: {
     trigger: 'item',
-    formatter: 'Gênero <br/>{b} : {c} ({d}%)'
+    formatter: `${props.legend} <br/>{b} : {c} ({d}%)`
   },
   legend: {
     orient: 'vertical',
