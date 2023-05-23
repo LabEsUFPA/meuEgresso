@@ -23,6 +23,13 @@
         </template>
         <template #default>
           <div>
+            <FotoInput
+              @upload="temFoto = true"
+              @clean="temFoto = false"
+              name="geral.foto"
+              class="mb-5"
+            />
+
             <CustomInput
               class="mb-5"
               name="geral.nome"
@@ -280,6 +287,7 @@
               label="País"
               :options="countries"
               v-model:value="pais"
+              @change="pais = $event"
               required
             />
 
@@ -289,6 +297,7 @@
               label="Estado"
               :options="states"
               v-model:value="estado"
+              @change="estado = $event"
               required
             />
 
@@ -391,15 +400,54 @@
           <h1 class="text-blue-900 w-3/4 text-center font-semibold text-2xl sm:text-3xl">
             Dados cadastrados com sucesso!
           </h1>
-          <div class="flex flex-row justify-center">
-            <CustomButton variant="outlined">
+          <div class="flex flex-col items-center justify-center text-lg font-semibold text-blue-900">
+            Compartilhar:
+          </div>
+          <div class="flex flex-row justify-center gap-2">
+            <CustomButton
+              tag="a"
+              link="https://www.linkedin.com/sharing/share-offsite/?url=https://meuegresso.alverad.com.br"
+              target="_blank"
+            >
               <SvgIcon
                 type="mdi"
-                class="inline mr-3 mb-1"
-                size="20"
-                :path="mdiShareVariant"
+                :path="mdiLinkedin"
               />
-              Compartilhar
+            </CustomButton>
+
+            <CustomButton
+              tag="a"
+              :link="`https://web.whatsapp.com/send?text=${mensagemShare}`"
+              target="_blank"
+            >
+              <SvgIcon
+                type="mdi"
+                :path="mdiWhatsapp"
+              />
+            </CustomButton>
+
+            <CustomButton
+              tag="a"
+              :link="`https://twitter.com/intent/tweet?text=${mensagemShare}`"
+              target="_blank"
+            >
+              <SvgIcon
+                type="mdi"
+                :path="mdiTwitter"
+              />
+            </CustomButton>
+
+            <CustomButton
+              tag="a"
+              :link="`https://t.me/share/url?url=${mensagemShare}`"
+              target="_blank"
+            >
+              <div class="p-[2px]">
+                <img
+                  src="src/assets/telegram.svg"
+                  width="20"
+                >
+              </div>
             </CustomButton>
           </div>
         </div>
@@ -435,13 +483,14 @@ import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
+import FotoInput from 'src/components/FotoInput.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
 import { ref, computed, watch, onMounted } from 'vue'
 import { Country, State, City } from 'country-state-city'
 import svgPath from 'src/assets/svgPaths.json'
-import { object, string, boolean } from 'yup'
+import { object, string, boolean, mixed } from 'yup'
 import {
   mdiAccount,
   mdiBriefcase,
@@ -449,8 +498,11 @@ import {
   mdiMapMarker,
   mdiMessage,
   mdiSchool,
-  mdiShareVariant,
-  mdiAlertCircle
+  mdiCheckCircle,
+  mdiAlertCircle,
+  mdiLinkedin,
+  mdiWhatsapp,
+  mdiTwitter
 } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
@@ -460,6 +512,9 @@ const storage = new LocalStorage()
 
 $store.fetchAll()
 
+const urlShare = 'https://meuegresso.alverad.com.br'
+const mensagemShare = '🎉%20Acabei%20de%20me%20cadastrar%20na%20plataforma%20Meu%20Egresso,%20se%20cadastre%20também:%0D%0A➡️ https://meuegresso.alverad.com.br'
+
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const camposFaltosos = ref(false)
@@ -468,6 +523,7 @@ const missingDigits = ref(0)
 const pais = ref('')
 const estado = ref('')
 const area = ref('')
+const temFoto = ref(false)
 const form = ref<typeof Form | null>(null)
 
 const bools = ref({
@@ -575,7 +631,13 @@ async function handleSubmit (values: any) {
       }
     : null
 
+  const formData = new FormData()
+  formData.append('arquivo', values.geral.foto)
+
   const status = await $store.cadastrarEgresso({
+    temFoto: temFoto.value, // false por padrao
+    foto: formData
+  }, {
     nascimento: values.geral.nascimento.toString(),
     generoId: parseInt(values.geral.genero),
     matricula: values.academico.matricula || null,
@@ -616,6 +678,9 @@ function handleFail (e: any) {
 
 const schema = object().shape({
   geral: object({
+    foto: mixed().test('fileSize', 'Tamanho do arquivo deve ser menor que 5 MB', (value: any) => {
+      return value ? value.size <= 5000000 : true
+    }),
     nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
       if (value) {
         return value?.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/)
@@ -625,18 +690,18 @@ const schema = object().shape({
     }),
     nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
       if (value) {
-        const date = value.split('/').reverse().join('-'); // Convert date to ISO format (YYYY-MM-DD)
-        const minDate = new Date('1940-01-01');
-        const maxDate = new Date('2023-12-31');
-        const inputDate = new Date(date);
+        const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
+        const minDate = new Date('1940-01-01')
+        const maxDate = new Date('2023-12-31')
+        const inputDate = new Date(date)
 
         // Check if the person is at least 18 years old
-        const eighteenYearsAgo = new Date();
-        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+        const eighteenYearsAgo = new Date()
+        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
 
-        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo;
+        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo
       }
-      return true;
+      return true
     }),
     email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/, 'Email inválido'),
     genero: string().required('Campo obrigatório'),
@@ -715,13 +780,22 @@ const schema = object().shape({
 })
 
 onMounted(() => {
+  const estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
+  const cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
   watch(pais, () => {
     form.value?.setFieldValue('localizacao.cidade', '')
     form.value?.setFieldValue('localizacao.estado', '')
+    setTimeout(() => {
+      estadoInput.value = ''
+      cidadeInput.value = ''
+    }, 10)
   })
 
   watch(estado, () => {
     form.value?.setFieldValue('localizacao.cidade', '')
+    setTimeout(() => {
+      cidadeInput.value = ''
+    }, 10)
   })
 
   if (storage.has('loggedUser')) {
