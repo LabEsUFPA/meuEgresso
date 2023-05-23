@@ -418,7 +418,7 @@ public class GraficoController {
     public EmpresaGraficoDTO getEmpresas() {
         List<EgressoEmpresaModel> lista = egressoEmpresaService.findAll();
 
-        List<String> nomes = new ArrayList<>();
+        Set<String> nomes = new HashSet<>();
 
         for (EgressoEmpresaModel emprego : lista) {
             nomes.add(emprego.getEmpresa().getNome());
