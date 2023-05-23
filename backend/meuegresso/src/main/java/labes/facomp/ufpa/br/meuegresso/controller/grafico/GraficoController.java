@@ -256,6 +256,8 @@ public class GraficoController {
     @GetMapping(value = "/tipoBolsa")
     @ResponseStatus(code = HttpStatus.OK)
     public TipoBolsaGraficoDTO getTipoBolsa() {
+        List<EgressoModel> lista = egressoService.findAll();
+        List<EgressoModel> listaFiltrada = lista.stream().filter(a -> a.getBolsa() != null).toList();
 
         List<TipoBolsaModel> tipoBolsa = tipoBolsaService.findAll();
 
@@ -265,7 +267,7 @@ public class GraficoController {
         for (int i = 0; i < tipoBolsa.size(); i++) {
             String nomeFinal = tipoBolsa.get(i).getNome();
             
-            count = tipoBolsa.get(i).getEgressos().size();
+            count = (int) listaFiltrada.stream().filter(a -> a.getBolsa().getNome().equalsIgnoreCase("nomeFinal")).count();
 
             tipoBolsaContagens.put(nomeFinal, count);
 
@@ -341,7 +343,8 @@ public class GraficoController {
     @GetMapping(value = "/localPos") // TODO fix: 
     @ResponseStatus(code = HttpStatus.OK)
     public LocalPosGraficoDTO getLocalPos() {
-        List<EgressoTitulacaoModel> lista = egressoTitulacaoService.findAll();
+        List<EgressoModel> lista = egressoService.findAll();
+        List<EgressoModel> listaFiltrada = lista.stream().filter(a -> a.getTitulacao() != null && a.getPosGraduacao().equals(true)).toList();
 
         List<List<String>> enderecos = new ArrayList<>();
 
@@ -349,14 +352,12 @@ public class GraficoController {
 
         for(int i =0; i< lista.size(); i++){
             umEndereco = new ArrayList<>();
-            if(Boolean.TRUE.equals(lista.get(i).getEgresso().getPosGraduacao())){
-                umEndereco.add(lista.get(i).getCurso().getNome());
-                umEndereco.add(lista.get(i).getEmpresa().getNome());
-                umEndereco.add(lista.get(i).getEmpresa().getEndereco().getCidade());
-                umEndereco.add(lista.get(i).getEmpresa().getEndereco().getEstado());
-                umEndereco.add(lista.get(i).getEmpresa().getEndereco().getPais());
-                enderecos.add(umEndereco);
-            }
+            umEndereco.add(listaFiltrada.get(i).getTitulacao().getCurso().getNome());
+            umEndereco.add(listaFiltrada.get(i).getTitulacao().getEmpresa().getNome());
+            umEndereco.add(listaFiltrada.get(i).getTitulacao().getEmpresa().getEndereco().getCidade());
+            umEndereco.add(listaFiltrada.get(i).getTitulacao().getEmpresa().getEndereco().getEstado());
+            umEndereco.add(listaFiltrada.get(i).getTitulacao().getEmpresa().getEndereco().getPais());
+            enderecos.add(umEndereco);
         }
 
         return new LocalPosGraficoDTO(enderecos);
@@ -372,14 +373,13 @@ public class GraficoController {
     @GetMapping(value = "/cursos") // TODO fix: 401
     @ResponseStatus(code = HttpStatus.OK)
     public CursosGraficoDTO getCursos() {
-        List<EgressoTitulacaoModel> lista = egressoTitulacaoService.findAll();
+        List<EgressoModel> lista = egressoService.findAll();
+        List<EgressoModel> listaFiltrada = lista.stream().filter(a -> a.getTitulacao() != null && a.getPosGraduacao().equals(true)).toList();
 
         List<String> cursos = new ArrayList<>();
 
         for(int i =0; i< lista.size(); i++){
-            if(Boolean.TRUE.equals(lista.get(i).getEgresso().getPosGraduacao())){
-               cursos.add(lista.get(i).getCurso().getNome());
-            }
+            cursos.add(listaFiltrada.get(i).getTitulacao().getCurso().getNome());
         }
         
         return new CursosGraficoDTO(cursos);
