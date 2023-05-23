@@ -24,7 +24,7 @@ CREATE SEQUENCE public.anuncio_id_anuncio_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
-    NO MAXVALUE1
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -3571,8 +3571,9 @@ ALTER TABLE ONLY public.area_emprego
     ADD CONSTRAINT fktujp3yxoocfmk1j3plgv3rqw FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 
 
--- Completed on 2023-05-22 20:52:55 -03
+-- Completed on 2023-05-22 21:37:41 -03
 
 --
 -- PostgreSQL database dump complete
 --
+
