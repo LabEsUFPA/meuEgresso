@@ -4,8 +4,8 @@ import Api from 'src/services/api'
 // interface UserModel extends models.UserModel {}
 import LocalStorage from 'src/services/localStorage'
 interface ComplexOpts extends models.ComplexOpts {}
-interface EgressoModel extends models.EgressoModel {}
-interface EgressoModelUpdate extends models.EgressoModelUpdate {}
+// interface EgressoModel extends models.EgressoModel {}
+// interface EgressoModelUpdate extends models.EgressoModelUpdate {}
 const storage = new LocalStorage()
 
 interface State {

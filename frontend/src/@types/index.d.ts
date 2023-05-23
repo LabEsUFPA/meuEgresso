@@ -247,16 +247,16 @@ export namespace models {
     remuneracaoBolsa?: number
   }
 
-  export interface AnuncioModel{
-    titulo: string,
-    areaEmprego:{
-      id:number,
-      nome:string
-    },
-    descricao:string,
-    dataExpiracao: string,
-    link: string,
-    salario:number,
+  export interface AnuncioModel {
+    titulo: string
+    areaEmprego: {
+      id: number
+      nome: string
+    }
+    descricao: string
+    dataExpiracao: string
+    link: string
+    salario: number
   }
 }
 
