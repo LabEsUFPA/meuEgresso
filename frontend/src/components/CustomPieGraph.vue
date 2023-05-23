@@ -71,8 +71,9 @@ const option = ref({
       radius: ['40%', '70%'],
       avoidLabelOverlap: false,
       itemStyle: {
-        borderRadius: 5,
-        borderWidth: 2
+        borderColor: '#fff',
+        borderWidth: 2,
+        borderRadius: 5
       },
       label: {
         show: false
