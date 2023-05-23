@@ -119,7 +119,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import { mdiAccount, mdiEmail, mdiLock } from '@mdi/js'
 import { Form } from 'vee-validate'
@@ -195,6 +195,11 @@ const handleSubmit = async (submitData: any) => {
 const onInvalid = (e: any) => {
   console.log(e)
 }
+
+onMounted(() => {
+  window.scrollTo(0, 0)
+})
+
 </script>
 
 <style>

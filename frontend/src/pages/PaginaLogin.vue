@@ -70,7 +70,7 @@
 <script setup lang="ts">
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomButton from 'src/components/CustomButton.vue'
-import { ref } from 'vue'
+import { ref, onMounted, createApp } from 'vue'
 import { Form } from 'vee-validate'
 import { object, string } from 'yup'
 import { mdiAccount, mdiLock } from '@mdi/js'
@@ -79,7 +79,6 @@ import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useLoginStore } from 'src/store/LoginStore'
 import router from 'src/router'
 import { models } from 'src/@types'
-import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 interface LoginModel extends models.LoginModel {}
 
@@ -120,6 +119,11 @@ const handleSubmit = async (submitData: any) => {
 const onInvalid = (e: any) => {
   console.log(e)
 }
+
+onMounted(() => {
+  window.scrollTo(0, 0)
+})
+
 </script>
 
 <style>

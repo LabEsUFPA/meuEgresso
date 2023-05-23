@@ -153,5 +153,10 @@
   const closeModalFilters = () => {
     isModalFiltersOpen.value = false
   }
+
+  onMounted(() => {
+  window.scrollTo(0, 0)
+})
+
   
   </script>

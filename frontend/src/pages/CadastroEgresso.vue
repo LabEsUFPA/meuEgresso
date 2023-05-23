@@ -812,4 +812,8 @@ const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
 }
 
+onMounted(() => {
+  window.scrollTo(0, 0)
+})
+
 </script>
