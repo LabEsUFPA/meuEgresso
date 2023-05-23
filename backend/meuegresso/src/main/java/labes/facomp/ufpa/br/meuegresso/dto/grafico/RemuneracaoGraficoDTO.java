@@ -18,6 +18,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RemuneracaoGraficoDTO {
 
-    private HashMap<Double, Integer> areaAtuacao;
+    private HashMap<Double, Integer> remuneracaoContagem;
     
 }

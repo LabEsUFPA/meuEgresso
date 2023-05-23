@@ -253,7 +253,7 @@ public class GraficoController {
      * @author Pedro Inácio
      * @since 21/05/2023
      */
-    @GetMapping(value = "/tipoBolsa") //TODO fix: 
+    @GetMapping(value = "/tipoBolsa")
     @ResponseStatus(code = HttpStatus.OK)
     public TipoBolsaGraficoDTO getTipoBolsa() {
 
@@ -292,18 +292,17 @@ public class GraficoController {
         Set<Double> remuneracoes = new HashSet<>();
 
         HashMap<Double, Integer> remuneracaoContagem = new HashMap<>();
-
         for (EgressoModel egresso : lista) {
-            if (Boolean.TRUE.equals(egresso.getBolsista())) {
+            if (egresso.getRemuneracaoBolsa() != null) {
                 remuneracoes.add(egresso.getRemuneracaoBolsa());
                 listaBolsista.add(egresso);
             }
         }
 
         List<Double> remuneracoesLista = new ArrayList<>(remuneracoes);
-        
+
         int count = 0;
-        for(int i =0; i< remuneracoesLista.size(); i++){
+        for (int i = 0; i < remuneracoesLista.size(); i++) {
             final Double remuneracaoFinal = remuneracoesLista.get(i);
 
             count = (int) listaBolsista.stream().filter(e -> e.getRemuneracaoBolsa().equals(remuneracaoFinal)).count();
@@ -370,7 +369,7 @@ public class GraficoController {
      * @author Pedro Inácio
      * @since 21/05/2023
      */
-    @GetMapping(value = "/cursos") // TODO fix: retornar nome do curso não duplicado e a quantidade de egressos por curso
+    @GetMapping(value = "/cursos") // TODO fix: 401
     @ResponseStatus(code = HttpStatus.OK)
     public CursosGraficoDTO getCursos() {
         List<EgressoTitulacaoModel> lista = egressoTitulacaoService.findAll();
@@ -413,7 +412,7 @@ public class GraficoController {
      * @author Pedro Inácio
      * @since 22/05/2023
      */
-    @GetMapping(value = "/empresas")
+    @GetMapping(value = "/empresas") // TODO fix: retornar nome da empresa não duplicado e a quantidade de egressos por empresa
     @ResponseStatus(code = HttpStatus.OK)
     public EmpresaGraficoDTO getEmpresas() {
         List<EgressoEmpresaModel> lista = egressoEmpresaService.findAll();
@@ -471,6 +470,7 @@ public class GraficoController {
     @ResponseStatus(code = HttpStatus.OK)
     public AreaAtuacaoGraficoDTO getAtuacao() {
         List<EgressoModel> lista = egressoService.findAll();
+        List<EgressoModel> listaFiltrada = lista.stream().filter(e -> e.getEmprego() != null).toList();
 
         List<AreaAtuacaoModel> areaAtuacao = areaAtuacaoService.findAll();
 
@@ -479,7 +479,7 @@ public class GraficoController {
         int count = 0;
         for (int i = 0; i < areaAtuacao.size(); i++) {
             final String nomeFinal = areaAtuacao.get(i).getNome();
-            count = (int) lista.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
+            count = (int) listaFiltrada.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
 
             areaAtuacaoContagens.put(nomeFinal, count);
         }
@@ -498,6 +498,7 @@ public class GraficoController {
     @ResponseStatus(code = HttpStatus.OK)
     public SetorAtuacaoGraficoDTO getSetor() {
         List<EgressoModel> lista = egressoService.findAll();
+        List<EgressoModel> listaFiltrada = lista.stream().filter(e -> e.getEmprego() != null).toList();
 
         List<SetorAtuacaoModel> setorAtuacao = setorAtuacaoService.findAll();
 
@@ -506,7 +507,7 @@ public class GraficoController {
         int count = 0;
         for (int i = 0; i < setorAtuacao.size(); i++) {
             final String nomeFinal = setorAtuacao.get(i).getNome();
-            count = (int) lista.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
+            count = (int) listaFiltrada.stream().filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
 
             setorAtuacaoContagens.put(nomeFinal, count);
         }
