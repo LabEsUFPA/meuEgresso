@@ -265,9 +265,9 @@ public class GraficoController {
 
         int count = 0;
         for (int i = 0; i < tipoBolsa.size(); i++) {
-            String nomeFinal = tipoBolsa.get(i).getNome();
+            final String nomeFinal = tipoBolsa.get(i).getNome();
             
-            count = (int) listaFiltrada.stream().filter(a -> a.getBolsa().getNome().equalsIgnoreCase("nomeFinal")).count();
+            count = (int) listaFiltrada.stream().filter(a -> a.getBolsa().getNome().equalsIgnoreCase(nomeFinal)).count();
 
             tipoBolsaContagens.put(nomeFinal, count);
 
