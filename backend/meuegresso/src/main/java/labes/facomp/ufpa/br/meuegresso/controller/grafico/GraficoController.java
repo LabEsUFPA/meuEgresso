@@ -226,7 +226,7 @@ public class GraficoController {
         for (int i = 0; i < titulacoes.size(); i++) {
 
             final String nomeFinal = titulacoes.get(i).getNome();
-            count = (int) egressoTitulacao.stream().filter(a -> a.getCurso().getNome().equalsIgnoreCase(nomeFinal))
+            count = (int) egressoTitulacao.stream().filter(a -> a.getTitulacao().getNome().equalsIgnoreCase(nomeFinal))
                     .count();
             tipoAluno.put(nomeFinal, count);
 

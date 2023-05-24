@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TipoAlunoGraficoDTO {
-    
+
     private HashMap<String, Integer> tipoAlunos;
     
 }
