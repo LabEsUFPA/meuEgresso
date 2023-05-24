@@ -167,8 +167,8 @@
         v-show="filters.all || filters.academic"
         legend="Local de Pós-graduação"
         info="Quantidade de egressos por instituição de pós-graduação"
-        :data="postGraduateData"
-        :legend-data="postGraduateLegend"
+        :data="postGraduateLocalData"
+        :legend-data="postGraduateLocalLegend"
       />
       <CustomPieGraph
         v-if="loading"
