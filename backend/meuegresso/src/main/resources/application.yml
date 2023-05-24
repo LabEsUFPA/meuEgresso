@@ -70,7 +70,6 @@ token:
   expiresHours: ${TOKEN_EXPIRES_HOURS}
 
 cors:
-  allowedOrigins:
-  - https://meuegresso.alverad.com.br/,http://localhost:5173/
+  allowedOrigins: ${ALLOWED_ORIGINS}
 
 fotosDir: ${PATHFOTOS}
