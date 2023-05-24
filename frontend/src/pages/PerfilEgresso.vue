@@ -50,6 +50,7 @@
             <ProfileImage
               ref="profileImageRef"
               @imageUploadBack="profileImageSave"
+              @remove="removeImageEgresso"
               :img-url="dataEgresso.profileHead.image"
               img-default="src/assets/profile-pic.png"
               :is-input="dataEgresso.profileHead.isInput"
@@ -608,7 +609,7 @@ import { Country, State, City } from 'country-state-city'
 import { computed, ref, watch, onMounted } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import { Form } from 'vee-validate'
-import { object, string, date, boolean } from 'yup'
+import { object, string, mixed, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
 import { useLoginStore } from 'src/store/LoginStore'
 import CustomDialog from 'src/components/CustomDialog.vue'
@@ -664,25 +665,30 @@ function handleStatus (status: any) {
 }
 const profileImageRef = ref<typeof ProfileImage | null>(null)
 const profileImageSave = () => {
-  profileImageRef.value.imageUploadBack()
+  return profileImageRef.value.imageUploadBack()
 }
 async function handleSubmitHeader (values: any) {
   // futuro add foto
   jsonResponse.usuario.nome = values.geral.nome
   jsonResponse.linkedin = values.geral.linkedin
   jsonResponse.lattes = values.geral.lattes
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  let status = await egressoStore.atualizarEgresso(jsonResponse)
+  const responseImage = await profileImageSave()
+  console.log(status)  
+  console.log(responseImage)
 
-  profileImageSave()
-
-  if (handleStatus(status)) {
+  if (status === 201 && responseImage === 201) {
+    dialogSucesso.value = true
     await useLoginStore().saveUser()
 
     toggleIsInput('profileHead')
+    fetchUpdateEgresso()
+    fetchUpdateEgresso()
   }
-
-  fetchUpdateEgresso()
-  fetchUpdateEgresso()
+  else{
+    dialogFalha.value = true
+  }
+  
 }
 
 async function handleSubmitGeral (values: any) {
@@ -1350,9 +1356,13 @@ const schemaAdicionais = object().shape({
     contribuicoes: string().required()
   })
 })
-// async function removeImageEgresso () {
-  
-// }
+async function removeImageEgresso () {
+  const removeResp = await egressoStore.removeImageEgresso()
+  dataEgresso.value.profileHead.image= ''
+  console.log('removeimageresso')
+  console.log(removeResp)
+}
+
 watch(() => dataEgresso.value.profileHead.image, (newValue) => {
   dataEgresso.value.profileHead.image = newValue
 })

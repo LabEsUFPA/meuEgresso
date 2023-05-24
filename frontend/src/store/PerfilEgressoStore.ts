@@ -271,7 +271,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         body: formData
       })
       // maxContentLength: 5 * 1024 * 1024 // 5 MB
-      console.log(response.data)
+      console.log(response?.data)
       return (response?.status) !== undefined ? response.status : 500
     },
 

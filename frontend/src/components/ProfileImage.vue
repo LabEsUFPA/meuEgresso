@@ -3,11 +3,15 @@
     <!-- class="file" -->
     <o-field
       class="file"
+      :root-class="classNames({
+        ['outline outline-red-500']: !isValid
+      })"
     >
       <o-upload
         :disabled="!isInput"
         v-model="file"
         drag-drop
+        accept="image/png, image/jpg, image/jpeg, image/gif"
         class="hidden"
       >
         <section
@@ -30,6 +34,15 @@
           />
         </section>
       </o-upload>
+      <template #message>
+        <div
+          v-if="!isValid.value"
+          class="text-red-500 absolute ml-[-60px] mt-[-5px]"
+        >
+        O arquivo deve ser menor que 5 MB
+          <!-- {{ meta.valid ? null : errorMessage }} -->
+        </div>
+      </template>
       <img
         v-if="imgUrl.value==='' && !file"
         class="
@@ -43,7 +56,7 @@
       <img
         v-else-if="!file"
         class="
-                     z-10
+                     z-5
                      w-[120px]
                      h-[120px]
                     rounded-full"
@@ -68,16 +81,18 @@
         </div>
 
       </span>
+      
     </o-field>
   </section>
+  
   <ButtonActionIcon
     v-if="isInput"
-    class="absolute z-20 ml-[90px] mt-[90px] rounded-full"
+    class="absolute z-5 ml-[90px] mt-[90px] rounded-full"
     icon-path="/src/assets/trashCan.svg"
     icon-size="20"
     custom-style="px-2 py-2"
     color="whiteDanger"
-    @click="remove()"
+    @click="$emit('remove')"
   />
 </template>
 
@@ -86,7 +101,10 @@ import { ref, computed, watch, nextTick, getCurrentInstance } from 'vue'
 import { OUpload, OSidebar, section, OField, OIcon, OButton } from '@oruga-ui/oruga-next'
 import ButtonActionIcon from 'src/components/ButtonActionIcon.vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
-defineEmits(['remove', 'imgUrl', 'imageUploadBack'])
+import classNames from 'classnames'
+import { useField } from 'vee-validate'
+
+const $emit = defineEmits(['remove', 'clean', 'imageUploadBack'])
 
 const egressoStore = usePerfilEgressoStore()
 const renderComponent = ref(true)
@@ -106,9 +124,13 @@ const props = withDefaults(defineProps<Props>(), {
   height: 'h-[120px]',
   isInput: false,
   triggerBackUpload: false,
-  clearUpload: false
+  clearUpload: false,
 })
 
+
+const isValid = ref({
+  value: true
+})
 const imgUrl = ref({
   value: props.imgUrl
 })
@@ -121,12 +143,23 @@ function getObjectURL (file: File) {
   return URL.createObjectURL(file)
 }
 
-function imageUploadBack () {
-  egressoStore.uploadImageEgresso(imageEgressoFile)
+async function imageUploadBack () {
+  const response = await egressoStore.uploadImageEgresso(imageEgressoFile)
+  if(response === 201){
+    isValid.value.value = true 
+  }
+  else{
+    isValid.value.value = false
+  }
+  return response
+  
+  
+  
 }
 
+
 const styleImageInput = computed(() => {
-  const imageStyle = [' hover:duration-200 w-[120px] h-[120px] absolute z-20 rounded-full']
+  const imageStyle = [' hover:duration-200 w-[120px] h-[120px] absolute z-5 rounded-full']
   if (props.isInput) {
     imageStyle.push('bg-gray-700/70 hover:bg-gray-700/50')
   }
@@ -137,30 +170,25 @@ defineExpose({
   imageUploadBack
 })
 
-async function remove () {
-  const removeResp = await egressoStore.removeImageEgresso()
-  // dataEgresso.value.profileHead.image= ''
-  imgUrl.value.value = ''
-  file.value = null
-  imageEgressoFile = ''
-  console.log('removeimageresso')
-  console.log(removeResp)
+
+function cleanImageState () {
+    imgUrl.value.value = ''
+    file.value = null
+    imageEgressoFile = ''
+    isValid.value.value = true
+    $emit('clean')
 }
 
-const forceRender = async () => {
-  console.log('force')
-  // Here, we'll remove MyComponent
-  renderComponent.value = false
-
-  // Then, wait for the change to get flushed to the DOM
-  await nextTick()
-
-  // Add MyComponent back in
-  renderComponent.value = true
-}
-forceRender()
 watch(() => props.imgUrl, (newValue) => {
+  if(newValue === ''){
+    cleanImageState()
+  }
   imgUrl.value.value = newValue
+  
 })
+// watch(() => props.imgUrl, (newValue) => {
+
+// }
+
 
 </script>
