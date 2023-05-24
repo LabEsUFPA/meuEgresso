@@ -1,11 +1,10 @@
 package labes.facomp.ufpa.br.meuegresso.controller.anuncio;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -59,12 +58,12 @@ public class AnuncioController {
 	 */
 	@GetMapping()
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<AnuncioDTO> consultarAnuncios() {
-		List<AnuncioDTO> anuncios = mapper.map(anuncioService.findAll(), new TypeToken<List<AnuncioDTO>>() {
-		}.getType());
-		return anuncios.stream()
-				.filter(anuncio -> LocalDate.now().isBefore(anuncio.getDataExpiracao()))
-				.collect(Collectors.toList());
+	public Page<AnuncioDTO> consultarAnuncios(
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "20", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
+		return anuncioService.findByDataExpiracaoAfter(LocalDate.now(), page, size, direction)
+				.map(e -> mapper.map(e, AnuncioDTO.class));
 	}
 
 	/**
@@ -80,14 +79,15 @@ public class AnuncioController {
 	 */
 	@GetMapping(value = "/busca")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<AnuncioDTO> filtrarAnuncios(
+	public Page<AnuncioDTO> filtrarAnuncios(
 			@RequestParam(name = "titulo", defaultValue = "") String titulo,
-			@RequestParam(name = "areaEmprego", defaultValue = "0") Integer[] areaEmprego) {
+			@RequestParam(name = "areaEmprego", defaultValue = "0") Integer[] areaEmprego,
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "20", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
 
-		List<AnuncioModel> filtro = anuncioService.findBySearch(titulo, areaEmprego);
-
-		return mapper.map(filtro, new TypeToken<List<AnuncioDTO>>() {
-		}.getType());
+		return anuncioService.findBySearch(titulo, areaEmprego, page, size, direction)
+				.map(e -> mapper.map(e, AnuncioDTO.class));
 	}
 
 	/**

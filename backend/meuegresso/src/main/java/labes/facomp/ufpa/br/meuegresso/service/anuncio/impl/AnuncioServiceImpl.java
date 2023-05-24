@@ -1,7 +1,11 @@
 package labes.facomp.ufpa.br.meuegresso.service.anuncio.impl;
 
-import java.util.List;
+import java.time.LocalDate;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -34,15 +38,16 @@ public class AnuncioServiceImpl implements AnuncioService {
     }
 
     @Override
-    public List<AnuncioModel> findAll() {
-        return anuncioRepository.findAll();
+    public Page<AnuncioModel> findAll(Integer page, Integer size, Direction direction) {
+        return anuncioRepository.findAll(PageRequest.of(page, size, Sort.by(direction, "titulo")));
     }
 
     @Override
     @Transactional
-    public List<AnuncioModel> findBySearch(String tituloAnuncio, Integer[] areaEmpregoIds) {
+    public Page<AnuncioModel> findBySearch(String tituloAnuncio, Integer[] areaEmpregoIds, Integer page, Integer size,
+            Direction direction) {
         return anuncioRepository.findBySearch("%" + tituloAnuncio + "%",
-                areaEmpregoIds);
+                areaEmpregoIds, PageRequest.of(page, size, Sort.by(direction, "titulo")));
     }
 
     @Override
@@ -67,6 +72,14 @@ public class AnuncioServiceImpl implements AnuncioService {
     @Override
     public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
         return anuncioRepository.existsByIdAndCreatedById(id, createdBy);
+    }
+
+    @Override
+    @Transactional
+    public Page<AnuncioModel> findByDataExpiracaoAfter(LocalDate dataExpiracao, Integer page, Integer size,
+            Direction direction) {
+        return anuncioRepository.findByDataExpiracaoAfter(dataExpiracao,
+                PageRequest.of(page, size, Sort.by(direction, "titulo")));
     }
 
 }
