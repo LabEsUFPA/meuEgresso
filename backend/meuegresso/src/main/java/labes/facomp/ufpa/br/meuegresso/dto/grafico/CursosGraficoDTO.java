@@ -1,7 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CursosGraficoDTO {
-    
-    private List<String> nomeCursosPos;
+
+    private String curso;
+
+    private long quantidade;
 
 }

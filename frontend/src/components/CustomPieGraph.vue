@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col w-[650px] h-96 bg-white rounded-xl p-4 text-gray-600 gap-y-10">
+  <div class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-[650px]">
     <div class="pl-1">
       <h1 class="font-bold text-2xl">
         {{ legend }}
@@ -9,7 +9,7 @@
       </p>
     </div>
     <v-chart
-      :option="option"
+      :option="windowWidth < 600 ? optionMobile : optionDesktop"
       autoresize
     />
   </div>
@@ -26,7 +26,7 @@ import {
   GridComponent
 } from 'echarts/components'
 import VChart from 'vue-echarts'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { models } from 'src/@types'
 interface PieChartSeries extends models.Graphics.PieChartSeries {}
 
@@ -52,7 +52,15 @@ const props = withDefaults(defineProps<Props>(), {
   info: 'Um belo gráfico'
 })
 
-const option = ref({
+const windowWidth = ref(window.innerWidth)
+function onResize () {
+  windowWidth.value = window.innerWidth
+}
+onMounted(() => {
+  window.addEventListener('resize', onResize)
+})
+
+const optionDesktop = ref({
   title: {
     left: 'center'
   },
@@ -78,7 +86,40 @@ const option = ref({
       label: {
         show: false
       },
-      center: ['60%', '50%'],
+      center: ['70%', '50%'],
+      data: props.data
+    }
+  ]
+})
+
+const optionMobile = ref({
+  title: {
+    left: 'center'
+  },
+  tooltip: {
+    trigger: 'item',
+    formatter: `${props.legend} <br/>{b} : {c} ({d}%)`,
+    position: ['0%', '50%']
+  },
+  legend: {
+    orient: 'horizontal',
+    left: 'left',
+    data: props.legendData
+  },
+  series: [
+    {
+      type: 'pie',
+      radius: ['40%', '70%'],
+      avoidLabelOverlap: false,
+      itemStyle: {
+        borderColor: '#fff',
+        borderWidth: 2,
+        borderRadius: 5
+      },
+      label: {
+        show: false
+      },
+      center: ['50%', '65%'],
       data: props.data
     }
   ]

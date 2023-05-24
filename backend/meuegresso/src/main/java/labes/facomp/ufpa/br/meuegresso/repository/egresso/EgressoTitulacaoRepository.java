@@ -12,4 +12,5 @@ public interface EgressoTitulacaoRepository extends CrudRepository<EgressoTitula
     List<EgressoTitulacaoModel> findAll();
 
     boolean existsByIdAndCreatedById(EgressoTitulacaoModelId id, Integer createdBy);
+
 }

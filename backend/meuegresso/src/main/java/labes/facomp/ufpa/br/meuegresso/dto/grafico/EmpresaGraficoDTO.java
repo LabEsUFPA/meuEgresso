@@ -1,7 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
-import java.util.Set;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +16,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EmpresaGraficoDTO {
     
-    private Set<String> nomeEmpresas;
+    private String empresa;
+
+    private Integer quantidade;
 
 }

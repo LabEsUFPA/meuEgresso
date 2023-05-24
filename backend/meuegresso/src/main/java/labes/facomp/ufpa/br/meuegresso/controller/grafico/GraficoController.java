@@ -43,9 +43,11 @@ import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.cota.CotaService;
+import labes.facomp.ufpa.br.meuegresso.service.curso.CursoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoEmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
+import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.faixasalarial.FaixaSalarialService;
 import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
 import labes.facomp.ufpa.br.meuegresso.service.setoratuacao.SetorAtuacaoService;
@@ -66,6 +68,10 @@ import lombok.RequiredArgsConstructor;
 public class GraficoController {
 
     private final EgressoService egressoService;
+
+    private final EmpresaService empresaService;
+
+    private final CursoService cursoService;
 
     private final GeneroService generoService;
 
@@ -290,7 +296,7 @@ public class GraficoController {
     /**
      * EndPoint responsável por enumerar a quantidade de egressos em cada
      * remuneração.
-     * 
+     *
      * @return {@link RemuneracaoGraficoDTO} retorna a quantidade de egressos por
      *         cada tipo de remuneração.
      * @author Camilo Santos
@@ -328,7 +334,7 @@ public class GraficoController {
     /**
      * EndPoint responsável por enumerar a quantidade de egressos cotistas e
      * não-cotistas.
-     * 
+     *
      * @return {@link CotistaGraficoDTO} retorna cotistas e não-cotistas enumerados.
      * @author Camilo Santos
      * @since 22/05/2023
@@ -353,28 +359,10 @@ public class GraficoController {
      * @author Pedro Inácio
      * @since 21/05/2023
      */
-    @GetMapping(value = "/localPos") // TODO fix:
+    @GetMapping(value = "/localPos")
     @ResponseStatus(code = HttpStatus.OK)
-    public LocalPosGraficoDTO getLocalPos() {
-        List<EgressoModel> lista = egressoService.findAll();
-        List<EgressoModel> listaFiltrada = lista.stream()
-                .filter(a -> a.getTitulacao() != null && a.getPosGraduacao().equals(true)).toList();
-
-        List<List<String>> enderecos = new ArrayList<>();
-
-        List<String> umEndereco;
-
-        for (int i = 0; i < lista.size(); i++) {
-            umEndereco = new ArrayList<>();
-            umEndereco.add(listaFiltrada.get(i).getTitulacao().getCurso().getNome());
-            umEndereco.add(listaFiltrada.get(i).getTitulacao().getEmpresa().getNome());
-            umEndereco.add(listaFiltrada.get(i).getTitulacao().getEmpresa().getEndereco().getCidade());
-            umEndereco.add(listaFiltrada.get(i).getTitulacao().getEmpresa().getEndereco().getEstado());
-            umEndereco.add(listaFiltrada.get(i).getTitulacao().getEmpresa().getEndereco().getPais());
-            enderecos.add(umEndereco);
-        }
-
-        return new LocalPosGraficoDTO(enderecos);
+    public List<LocalPosGraficoDTO> getLocalPos() {
+        return empresaService.countEgressoByPos();
     }
 
     /**
@@ -384,20 +372,10 @@ public class GraficoController {
      * @author Pedro Inácio
      * @since 21/05/2023
      */
-    @GetMapping(value = "/cursos") // TODO fix: 401
+    @GetMapping(value = "/cursos")
     @ResponseStatus(code = HttpStatus.OK)
-    public CursosGraficoDTO getCursos() {
-        List<EgressoModel> lista = egressoService.findAll();
-        List<EgressoModel> listaFiltrada = lista.stream()
-                .filter(a -> a.getTitulacao() != null && a.getPosGraduacao().equals(true)).toList();
-
-        List<String> cursos = new ArrayList<>();
-
-        for (int i = 0; i < lista.size(); i++) {
-            cursos.add(listaFiltrada.get(i).getTitulacao().getCurso().getNome());
-        }
-
-        return new CursosGraficoDTO(cursos);
+    public List<CursosGraficoDTO> getCursos() {
+        return cursoService.countEgressoByCurso();
     }
 
     /**
@@ -429,19 +407,10 @@ public class GraficoController {
      * @author Pedro Inácio
      * @since 22/05/2023
      */
-    @GetMapping(value = "/empresas") // TODO fix: retornar nome da empresa não duplicado e a quantidade de egressos
-                                     // por empresa
+    @GetMapping(value = "/empresas")
     @ResponseStatus(code = HttpStatus.OK)
-    public EmpresaGraficoDTO getEmpresas() {
-        List<EgressoEmpresaModel> lista = egressoEmpresaService.findAll();
-
-        Set<String> nomes = new HashSet<>();
-
-        for (EgressoEmpresaModel emprego : lista) {
-            nomes.add(emprego.getEmpresa().getNome());
-        }
-
-        return new EmpresaGraficoDTO(nomes);
+    public List<EmpresaGraficoDTO> getEmpresas() {
+        return egressoEmpresaService.countEgressoByEmpresas();
     }
 
     /**

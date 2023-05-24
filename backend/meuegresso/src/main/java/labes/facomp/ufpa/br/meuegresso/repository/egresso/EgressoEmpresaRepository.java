@@ -2,8 +2,10 @@ package labes.facomp.ufpa.br.meuegresso.repository.egresso;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.EmpresaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 
@@ -12,4 +14,7 @@ public interface EgressoEmpresaRepository extends CrudRepository<EgressoEmpresaM
     List<EgressoEmpresaModel> findAll();
 
     boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy);
+
+    @Query(value = "select new labes.facomp.ufpa.br.meuegresso.dto.grafico.EmpresaGraficoDTO(e.nome empresa, count(eg) quantidade) from empresa e inner join egresso_empresa ee on e.id = ee.id.egressoId inner join egresso eg on eg.id = ee.id.egressoId group by e.nome")
+    List<EmpresaGraficoDTO> countEgressoByEmpresas();
 }
