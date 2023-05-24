@@ -65,7 +65,6 @@ import { object, string, boolean } from 'yup'
 import { mdiMapMarker } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
-import { Placeholder } from '@faker-js/faker/modules/image/providers/placeholder'
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 

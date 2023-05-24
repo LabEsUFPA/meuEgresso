@@ -65,17 +65,20 @@
 
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiBullhorn, mdiChevronRight } from '@mdi/js'
+import { useRoute } from 'vue-router';
 
 import CustomButton from 'src/components/CustomButton.vue'
 
+const $route = useRoute()
+
 defineProps<
   {
-  id: 0,
-  nome: 'Nome Completo',
-  titulo: 'Título da vaga',
-  area: 'Área de emprego',
-  descricao: 'Descrição da vaga',
-  salario: 0
+  id: Number,
+  nome: String,
+  titulo: String,
+  area: String,
+  descricao: String,
+  salario: String,
 }>()
 
 </script>

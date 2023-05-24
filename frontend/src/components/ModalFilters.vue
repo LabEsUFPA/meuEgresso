@@ -47,7 +47,7 @@
           </CustomButton>
           <CustomButton
             color="emerald"
-            @click="$emit('applyFilters', filtrosAreaEmprego); $emit('update:modelValue', false)"
+            @click="$emit('applyFilters', filtrosAreaEmprego.filter(f => f.applied)); $emit('update:modelValue', false)"
           >
             Aplicar filtros
           </CustomButton>
@@ -59,7 +59,7 @@
 
 <script setup lang="ts">
 
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiClose, mdiPencil } from '@mdi/js'
 
@@ -70,16 +70,21 @@ defineEmits(['update:modelValue', 'close', 'applyFilters'])
 
 interface Props {
     modelValue: boolean
-    filters: [{
+    filters: {
         id: number
         name: string
         applied: boolean
-    }]
+    }[]
+
 }
 
 const props = defineProps<Props>()
 
 const filtrosAreaEmprego = ref(props.filters)
+
+onMounted(async () => {
+  filtrosAreaEmprego.value = props.filters
+})
 
 const toggleFilterApplied = (id:number) => {
   const filtro = filtrosAreaEmprego.value.find(f => f.id === id)
