@@ -18,14 +18,19 @@
           :class="styleImageInput"
         >
           <div
-            class="ml-[45px] mt-[45px]"
+            v-if="isInput"
+            class="mt-3 w-45 h-55 px-5 py-5"
           >
             <img
-              v-if="isInput"
+              class="ml-6"
               width="30"
               height="30"
               src="src/assets/round-upload.svg"
             >
+
+            <h1 class="mt-1 ml-1 text-white text-[10px] ">
+              Máximo de 5MB
+            </h1>
           </div>
           <o-button
             tag="a"
@@ -61,7 +66,7 @@
                      h-[120px]
                     rounded-full"
         :src="imgUrl.value"
-        alt="profileImage"
+        alt=""
       >
       <span
         class="file-name"
@@ -168,11 +173,12 @@ function cleanImageState () {
   file.value = null
   imageEgressoFile = null
   isValid.value.value = true
+  console.log('clean')
   $emit('clean')
 }
 
 watch(() => props.imgUrl, (newValue) => {
-  if (newValue === '') {
+  if (newValue === '' || newValue === '0') {
     cleanImageState()
   }
   imgUrl.value.value = newValue

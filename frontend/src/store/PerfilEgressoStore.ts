@@ -260,20 +260,22 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
     },
 
     async uploadImageEgresso (file: File) {
-      console.log(file)
-      const formData = new FormData()
-      formData.append('arquivo', file)
+      if (file === undefined || file === null || file.size === 0 || file.length === 0) {
+        return 201
+      } else {
+        const formData = new FormData()
+        formData.append('arquivo', file)
 
-      const response = await Api.request({
-        method: 'post',
-        route: '/egresso/foto',
-        body: formData
-      })
-      // maxContentLength: 5 * 1024 * 1024 // 5 MB
-      console.log(response?.data)
-      return (response?.status) !== undefined ? response.status : 500
+        const response = await Api.request({
+          method: 'post',
+          route: '/egresso/foto',
+          body: formData
+        })
+        // maxContentLength: 5 * 1024 * 1024 // 5 MB
+        // console.log(response?.data)
+        return (response?.status) !== undefined ? response.status : 500
+      }
     },
-
     async fetchImageEgresso (egressoId: string) {
       const route = '/egresso/foto/' + egressoId
       // const url = ''
@@ -306,7 +308,6 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
     },
     // futuro remover por id: async removeImageEgresso (egressoId: string) {
     async removeImageEgresso () {
-      console.log('delete')
       const response = await Api.request({
         method: 'delete',
         route: '/egresso/foto'

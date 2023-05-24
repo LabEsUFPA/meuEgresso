@@ -671,8 +671,8 @@ async function handleSubmitHeader (values: any) {
   jsonResponse.lattes = values.geral.lattes
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   const responseImage = await profileImageSave()
-  console.log(status)
-  console.log(responseImage)
+  // console.log(status)
+  // console.log(responseImage)
 
   if (status === 201 && responseImage === 201) {
     dialogSucesso.value = true
@@ -1024,8 +1024,8 @@ imageEgressoUrl = ''
 async function handleEgressoImage (id : string) {
   egressoImageResponse = await egressoStore.fetchImageEgressoUrl(id)
   imageEgressoUrl = egressoImageResponse
-  console.log('URL:')
-  console.log(imageEgressoUrl)
+  // console.log('URL:')
+  // console.log(imageEgressoUrl)
   if (imageEgressoUrl === '') {
     return ''
   } else {
@@ -1344,8 +1344,7 @@ const schemaAdicionais = object().shape({
 })
 async function removeImageEgresso () {
   const removeResp = await egressoStore.removeImageEgresso()
-  dataEgresso.value.profileHead.image = ''
-  console.log('removeimageresso')
+  dataEgresso.value.profileHead.image = '0'
   console.log(removeResp)
 }
 
