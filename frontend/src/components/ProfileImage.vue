@@ -45,7 +45,7 @@
       </template>
       <img
         v-if="imgUrl.value==='' && !file"
-        class="
+        class="     defaultImage
                      z-5
                      w-[120px]
                      h-[120px]
@@ -55,7 +55,7 @@
       >
       <img
         v-else-if="!file"
-        class="
+        class="     profileImage
                      z-5
                      w-[120px]
                      h-[120px]
@@ -70,6 +70,7 @@
         <div>
           <img
             class="
+            uploadedFile
             static
             z-0
             w-[120px]
@@ -87,7 +88,7 @@
   
   <ButtonActionIcon
     v-if="isInput"
-    class="absolute z-5 ml-[90px] mt-[90px] rounded-full"
+    class="buttonTrash absolute z-5 ml-[90px] mt-[90px] rounded-full"
     icon-path="/src/assets/trashCan.svg"
     icon-size="20"
     custom-style="px-2 py-2"
@@ -174,7 +175,7 @@ defineExpose({
 function cleanImageState () {
     imgUrl.value.value = ''
     file.value = null
-    imageEgressoFile = ''
+    imageEgressoFile = null
     isValid.value.value = true
     $emit('clean')
 }
