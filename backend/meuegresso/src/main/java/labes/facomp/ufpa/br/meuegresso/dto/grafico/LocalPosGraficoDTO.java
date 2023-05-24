@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LocalPosGraficoDTO {
-    
-    private String Pos;
+
+    private String instituicao;
 
     private long quantidade;
 

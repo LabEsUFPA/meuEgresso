@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
@@ -63,9 +62,5 @@ public class EgressoTitulacaoServiceImpl implements EgressoTitulacaoService {
         return egressoTitulacaoRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
-    @Override
-    public List<LocalPosGraficoDTO> countEgressoByPos() {
-        return egressoTitulacaoRepository.countEgressoByPos();
-    }
 
 }
