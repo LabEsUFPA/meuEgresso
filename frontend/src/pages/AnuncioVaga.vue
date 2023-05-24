@@ -117,6 +117,7 @@ import { useRoute } from 'vue-router'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronLeft, mdiBullhorn, mdiOpenInNew } from '@mdi/js'
 import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
+import { type models } from 'src/@types';
 
 import CustomButton from 'src/components/CustomButton.vue'
 

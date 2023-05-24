@@ -1,13 +1,12 @@
 import { defineStore } from 'pinia'
 import Api from 'src/services/api'
 import { type models } from 'src/@types'
-import axios from 'axios'
-
 interface AnuncioVaga extends models.AnuncioModel {}
 interface AnuncioVagaPost extends models.AnuncioModelPost {}
 interface AreaEmpregoFiltro extends models.areasEmpregoFiltro {}
 
 interface ComplexOpts extends models.ComplexOpts {}
+import axios from 'axios'
 
 interface State {
   anuncio: AnuncioVaga
