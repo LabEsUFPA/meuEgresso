@@ -359,48 +359,10 @@ public class GraficoController {
      * @author Pedro Inácio
      * @since 21/05/2023
      */
-    @GetMapping(value = "/localPos") // TODO fix:
+    @GetMapping(value = "/localPos")
     @ResponseStatus(code = HttpStatus.OK)
     public List<LocalPosGraficoDTO> getLocalPos() {
         return empresaService.countEgressoByPos();
-
-        /*
-         * List<EgressoTitulacaoModel> lista = egressoTitulacaoService.findAll();
-         * //List<EgressoTitulacaoModel> listaFiltrada = lista.stream().filter(a ->
-         * a.getEndereco() != null).toList();
-         * 
-         * List<List<String>> enderecos = new ArrayList<>();
-         * 
-         * List<String> umEndereco;
-         * 
-         * //for (int i = 0; i < listaFiltrada.size(); i++) {
-         * for(EmpresaModel egressoTitulacao : listaFiltrada) {
-         * umEndereco = new ArrayList<>();
-         * 
-         * umEndereco.add(egressoTitulacao.getNome());
-         * umEndereco.add(egressoTitulacao.getEndereco().getCidade());
-         * umEndereco.add(egressoTitulacao.getEndereco().getEstado());
-         * umEndereco.add(egressoTitulacao.getEndereco().getPais());
-         * 
-         * //umEndereco.add(egressoTitulacao.getCurso().getNome());
-         * //umEndereco.add(egressoTitulacao.getEmpresa().getNome());
-         * //umEndereco.add(egressoTitulacao.getEmpresa().getEndereco().getCidade());
-         * //umEndereco.add(egressoTitulacao.getEmpresa().getEndereco().getEstado());
-         * //umEndereco.add(egressoTitulacao.getEmpresa().getEndereco().getPais());
-         * 
-         * //umEndereco.add(egressoTitulacao.getTitulacao().getCurso().getNome());
-         * //umEndereco.add(egressoTitulacao.getTitulacao().getEmpresa().getNome());
-         * //umEndereco.add(egressoTitulacao.getTitulacao().getEmpresa().getEndereco().
-         * getCidade());
-         * //umEndereco.add(egressoTitulacao.getTitulacao().getEmpresa().getEndereco().
-         * getEstado());
-         * //umEndereco.add(egressoTitulacao.getTitulacao().getEmpresa().getEndereco().
-         * getPais());
-         * enderecos.add(umEndereco);
-         * }
-         * 
-         * return new LocalPosGraficoDTO(enderecos);
-         */
     }
 
     /**
@@ -445,19 +407,10 @@ public class GraficoController {
      * @author Pedro Inácio
      * @since 22/05/2023
      */
-    @GetMapping(value = "/empresas") // TODO fix: retornar nome da empresa não duplicado e a quantidade de egressos
-                                     // por empresa
+    @GetMapping(value = "/empresas")
     @ResponseStatus(code = HttpStatus.OK)
-    public EmpresaGraficoDTO getEmpresas() {
-        List<EgressoEmpresaModel> lista = egressoEmpresaService.findAll();
-
-        Set<String> nomes = new HashSet<>();
-
-        for (EgressoEmpresaModel emprego : lista) {
-            nomes.add(emprego.getEmpresa().getNome());
-        }
-
-        return new EmpresaGraficoDTO(nomes);
+    public List<EmpresaGraficoDTO> getEmpresas() {
+        return egressoEmpresaService.countEgressoByEmpresas();
     }
 
     /**
