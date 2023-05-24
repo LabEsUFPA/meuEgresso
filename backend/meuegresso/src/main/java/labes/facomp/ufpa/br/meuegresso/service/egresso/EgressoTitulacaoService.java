@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
 import java.util.List;
 
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
@@ -63,4 +64,14 @@ public interface EgressoTitulacaoService {
 	 * @return boolean
 	 */
 	boolean existsByIdAndCreatedById(EgressoTitulacaoModelId id, Integer createdBy);
+
+	/**
+	 * Método responsável por retornar as Pós graduações cadastradas e a quantidade
+	 * de
+	 * egressos por pós.
+	 * 
+	 * @return {@link List<LocalPosGraficoDTO>} lista de DTOs com as contagens de
+	 *         egresso por pós.
+	 */
+	public List<LocalPosGraficoDTO> countEgressoByPos();
 }

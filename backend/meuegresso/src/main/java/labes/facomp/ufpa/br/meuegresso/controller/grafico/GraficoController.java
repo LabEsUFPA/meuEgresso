@@ -36,6 +36,7 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
@@ -43,9 +44,11 @@ import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.cota.CotaService;
+import labes.facomp.ufpa.br.meuegresso.service.curso.CursoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoEmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
+import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.faixasalarial.FaixaSalarialService;
 import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
 import labes.facomp.ufpa.br.meuegresso.service.setoratuacao.SetorAtuacaoService;
@@ -66,6 +69,10 @@ import lombok.RequiredArgsConstructor;
 public class GraficoController {
 
     private final EgressoService egressoService;
+
+    private final EmpresaService empresaService;
+
+    private final CursoService cursoService;
 
     private final GeneroService generoService;
 
@@ -355,59 +362,66 @@ public class GraficoController {
      */
     @GetMapping(value = "/localPos") // TODO fix:
     @ResponseStatus(code = HttpStatus.OK)
-    public LocalPosGraficoDTO getLocalPos() {
-        List<EgressoModel> lista = egressoService.findAll();
-        List<EgressoModel> listaFiltrada = lista.stream()
-                .filter(a -> a.getTitulacao() != null && a.getPosGraduacao().equals(true)).toList();
+    public List<LocalPosGraficoDTO> getLocalPos() {
+        return egressoTitulacaoService.countEgressoByPos(); 
 
+
+        /*
+        List<EgressoTitulacaoModel> lista = egressoTitulacaoService.findAll();
+        //List<EgressoTitulacaoModel> listaFiltrada = lista.stream().filter(a -> a.getEndereco() != null).toList();
+        
         List<List<String>> enderecos = new ArrayList<>();
-
+        
         List<String> umEndereco;
-
-        for (int i = 0; i < lista.size(); i++) {
+        
+        //for (int i = 0; i < listaFiltrada.size(); i++) {
+        for(EmpresaModel egressoTitulacao : listaFiltrada) {
             umEndereco = new ArrayList<>();
-            umEndereco.add(listaFiltrada.get(i).getTitulacao().getCurso().getNome());
-            umEndereco.add(listaFiltrada.get(i).getTitulacao().getEmpresa().getNome());
-            umEndereco.add(listaFiltrada.get(i).getTitulacao().getEmpresa().getEndereco().getCidade());
-            umEndereco.add(listaFiltrada.get(i).getTitulacao().getEmpresa().getEndereco().getEstado());
-            umEndereco.add(listaFiltrada.get(i).getTitulacao().getEmpresa().getEndereco().getPais());
+        
+            umEndereco.add(egressoTitulacao.getNome());
+            umEndereco.add(egressoTitulacao.getEndereco().getCidade());
+            umEndereco.add(egressoTitulacao.getEndereco().getEstado());
+            umEndereco.add(egressoTitulacao.getEndereco().getPais());
+        
+            //umEndereco.add(egressoTitulacao.getCurso().getNome());
+            //umEndereco.add(egressoTitulacao.getEmpresa().getNome());
+            //umEndereco.add(egressoTitulacao.getEmpresa().getEndereco().getCidade());
+            //umEndereco.add(egressoTitulacao.getEmpresa().getEndereco().getEstado());
+            //umEndereco.add(egressoTitulacao.getEmpresa().getEndereco().getPais());
+        
+            //umEndereco.add(egressoTitulacao.getTitulacao().getCurso().getNome());
+            //umEndereco.add(egressoTitulacao.getTitulacao().getEmpresa().getNome());
+            //umEndereco.add(egressoTitulacao.getTitulacao().getEmpresa().getEndereco().getCidade());
+            //umEndereco.add(egressoTitulacao.getTitulacao().getEmpresa().getEndereco().getEstado());
+            //umEndereco.add(egressoTitulacao.getTitulacao().getEmpresa().getEndereco().getPais());
             enderecos.add(umEndereco);
         }
-
+        
         return new LocalPosGraficoDTO(enderecos);
+        */
     }
-
-    /**
-     * Endpoint responsavel por buscar todos os cursos de pós dos egressos no banco.
-     *
-     * @return {@link CursosGraficoDTO} Retorna a lista de cursos de pós.
-     * @author Pedro Inácio
-     * @since 21/05/2023
-     */
-    @GetMapping(value = "/cursos") // TODO fix: 401
+        
+        /**
+        * Endpoint responsavel por buscar todos os cursos de pós dos egressos no banco.
+        *
+        * @return {@link CursosGraficoDTO} Retorna a lista de cursos de pós.
+        * @author Pedro Inácio
+        * @since 21/05/2023
+        */
+    @GetMapping(value = "/cursos")
     @ResponseStatus(code = HttpStatus.OK)
-    public CursosGraficoDTO getCursos() {
-        List<EgressoModel> lista = egressoService.findAll();
-        List<EgressoModel> listaFiltrada = lista.stream()
-                .filter(a -> a.getTitulacao() != null && a.getPosGraduacao().equals(true)).toList();
-
-        List<String> cursos = new ArrayList<>();
-
-        for (int i = 0; i < lista.size(); i++) {
-            cursos.add(listaFiltrada.get(i).getTitulacao().getCurso().getNome());
-        }
-
-        return new CursosGraficoDTO(cursos);
+    public List<CursosGraficoDTO> getCursos() {
+        return cursoService.countEgressoByCurso();
     }
-
-    /**
-     * Endpoint responsavel por contabilizar egressos com interesse em pós graduação
-     *
-     * @return {@link SetorAtuacaoGraficoDTO} Retorna a quantidade de egressos
-     *         interesse em pós graduação
-     * @author Pedro Inácio
-     * @since 22/05/2023
-     */
+        
+        /**
+        * Endpoint responsavel por contabilizar egressos com interesse em pós graduação
+        *
+        * @return {@link SetorAtuacaoGraficoDTO} Retorna a quantidade de egressos
+        *         interesse em pós graduação
+        * @author Pedro Inácio
+        * @since 22/05/2023
+        */
     @GetMapping(value = "/interesseEmPos")
     @ResponseStatus(code = HttpStatus.OK)
     public InteresseEmPosGraficoDTO getInteresseEmPos() {
@@ -429,8 +443,7 @@ public class GraficoController {
      * @author Pedro Inácio
      * @since 22/05/2023
      */
-    @GetMapping(value = "/empresas") // TODO fix: retornar nome da empresa não duplicado e a quantidade de egressos
-                                     // por empresa
+    @GetMapping(value = "/empresas") // TODO fix: retornar nome da empresa não duplicado e a quantidade de egressos por empresa
     @ResponseStatus(code = HttpStatus.OK)
     public EmpresaGraficoDTO getEmpresas() {
         List<EgressoEmpresaModel> lista = egressoEmpresaService.findAll();
@@ -500,8 +513,7 @@ public class GraficoController {
         int count = 0;
         for (int i = 0; i < areaAtuacao.size(); i++) {
             final String nomeFinal = areaAtuacao.get(i).getNome();
-            count = (int) listaFiltrada.stream()
-                    .filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
+            count = (int) listaFiltrada.stream().filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
 
             areaAtuacaoContagens.put(nomeFinal, count);
         }

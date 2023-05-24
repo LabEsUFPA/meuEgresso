@@ -1,7 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +16,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LocalPosGraficoDTO {
     
-    private List<List<String>> locaisPos;
+    private String Pos;
+
+    private long quantidade;
 
 }
