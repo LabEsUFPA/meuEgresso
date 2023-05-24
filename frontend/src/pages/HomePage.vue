@@ -17,6 +17,7 @@ const loading = ref(true)
 const markers = ref<any>([])
 
 onMounted(() => {
+  window.scrollTo(0, 0)
   getEgresso()
 })
 
@@ -44,5 +45,6 @@ const getEgresso = async () => {
   markers.value = filtered
   loading.value = false
 }
+
 
 </script>

@@ -1192,6 +1192,7 @@ async function fetchUpdateEgresso () {
   return egressoStore.fetchEgresso()
 }
 onMounted(() => {
+  window.scrollTo(0, 0)
   fetchUpdateEgresso()
 })
 
