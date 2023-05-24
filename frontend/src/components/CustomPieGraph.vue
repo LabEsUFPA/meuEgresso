@@ -8,7 +8,19 @@
         {{ info }}
       </p>
     </div>
+    <div
+      v-if="loading"
+      class="w-full h-full flex items-center justify-center"
+    >
+      <SvgIcon
+        type="mdi"
+        size="80"
+        class="animate-spin text-gray-400"
+        :path="mdiLoading"
+      />
+    </div>
     <v-chart
+      v-else
       :option="windowWidth < 600 ? optionMobile : optionDesktop"
       autoresize
     />
@@ -16,6 +28,8 @@
 </template>
 
 <script lang="ts" setup>
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiLoading } from '@mdi/js'
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { PieChart, BarChart } from 'echarts/charts'
@@ -26,7 +40,7 @@ import {
   GridComponent
 } from 'echarts/components'
 import VChart from 'vue-echarts'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { models } from 'src/@types'
 interface PieChartSeries extends models.Graphics.PieChartSeries {}
 
@@ -40,9 +54,12 @@ use([
   GridComponent
 ])
 
+const windowWidth = ref(window.innerWidth)
+
 interface Props {
     legend?: string,
     info?: string
+    loading: boolean
     data: PieChartSeries[] | undefined
     legendData: string[] | undefined
 }
@@ -52,12 +69,15 @@ const props = withDefaults(defineProps<Props>(), {
   info: 'Um belo gráfico'
 })
 
-const windowWidth = ref(window.innerWidth)
 function onResize () {
   windowWidth.value = window.innerWidth
 }
 onMounted(() => {
   window.addEventListener('resize', onResize)
+})
+
+watch(() => props.data, () => {
+  setOptionData()
 })
 
 const optionDesktop = ref({
@@ -124,4 +144,9 @@ const optionMobile = ref({
     }
   ]
 })
+
+const setOptionData = () => {
+  optionDesktop.value.series[0].data = props.data
+  optionMobile.value.series[0].data = props.data
+}
 </script>

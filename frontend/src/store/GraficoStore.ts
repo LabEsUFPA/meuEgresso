@@ -72,8 +72,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
     },
 
     async getRemunerationData () {
-      const remunerationDataX: number[] = []
-      const remunerationDataY: string[] = []
+      const remunerationDataX: string[] = []
+      const remunerationDataY: number[] = []
 
       const response = await Api.request({
         method: 'get',
@@ -82,8 +82,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.data?.remuneracaoContagem) != null) {
         Object.keys(response?.data.remuneracaoContagem).forEach((item: string) => {
-          remunerationDataX.push(response?.data?.remuneracaoContagem[item])
-          remunerationDataY.push(item)
+          remunerationDataX.push(item)
+          remunerationDataY.push(response?.data?.remuneracaoContagem[item])
         })
       }
 
@@ -315,8 +315,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
     },
 
     async getAgeData () {
-      const ageDataX: number[] = []
-      const ageDataY: string[] = []
+      const ageDataX: string[] = []
+      const ageDataY: number[] = []
 
       const response = await Api.request({
         method: 'get',
@@ -325,8 +325,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.data?.idadesEgressos) != null) {
         Object.keys(response?.data.idadesEgressos).forEach((item: string) => {
-          ageDataX.push(response?.data?.idadesEgressos[item])
-          ageDataY.push(item)
+          ageDataX.push(item)
+          ageDataY.push(response?.data?.idadesEgressos[item])
         })
       }
 

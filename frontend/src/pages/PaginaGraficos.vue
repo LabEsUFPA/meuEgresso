@@ -59,122 +59,122 @@
   <div class="flex justify-center gap-y-4 mb-14 py-10">
     <div class="grid grid-cols-1 xl:grid-cols-2 md:px-10 px-4 gap-y-10 gap-x-20 justify-items-center items-center">
       <CustomPieGraph
-        v-if="loading"
         v-show="filters.all || filters.general"
         legend="Gênero"
         info="Quantidade de egressos por cada gênero"
+        :loading="genderData ? false : true"
         :data="genderData"
         :legend-data="genderDataLegend"
       />
       <CustomPieGraph
-        v-if="loading"
-        legend="Área de atuação"
         v-show="filters.all || filters.career"
+        legend="Área de atuação"
         info="Quantidade de egressos pro cada área de atuação"
+        :loading="activitySectorData ? false : true"
         :data="activitySectorData"
         :legend-data="activitySectorLegend"
       />
       <CustomBarGraph
+        v-show="filters.all || filters.general"
         legend="Idade"
         info="Quantidade de egressos por idade"
-        v-if="loading"
-        v-show="filters.all || filters.general"
+        :loading="ageDataX ? false : true"
         :x="ageDataX"
         :y="ageDataY"
       />
       <CustomPieGraph
-        v-if="loading"
         v-show="filters.all || filters.academic"
         legend="Nível de ensino"
         info="Quantidade de egressos por nível de ensino"
+        :loading="studentData ? false : true"
         :data="studentData"
         :legend-data="studentLegend"
       />
       <CustomPieGraph
-        v-if="loading"
         v-show="filters.all || filters.career"
         legend="Salário"
         info="Quantidade de egressos por faixa salárial"
+        :loading="wageData ? false : true"
         :data="wageData"
         :legend-data="wageLegend"
       />
       <CustomPieGraph
-        v-if="loading"
         v-show="filters.all || filters.academic"
         legend="Pos-graduação"
         info="Quantidade de egressos que fizeram pós-graduação"
+        :loading="postGraduateData ? false : true"
         :data="postGraduateData"
         :legend-data="postGraduateLegend"
       />
       <CustomPieGraph
-        v-if="loading"
         v-show="filters.all || filters.academic"
         legend="Cotistas"
         info="Quantidade de egressos que foram cotistas"
+        :loading="shareHolderData ? false : true"
         :data="shareHolderData"
         :legend-data="shareHolderLegend"
       />
       <CustomPieGraph
-        v-if="loading"
         v-show="filters.all || filters.academic"
         legend="Cotas"
         info="Quantidade de egressos por cada conta"
+        :loading="quotasData ? false : true"
         :data="quotasData"
         :legend-data="quotasLegend"
       />
       <CustomPieGraph
-        v-if="loading"
         v-show="filters.all || filters.academic"
         legend="Bolsista"
         info="Quantidade de egressos que foram bolsistas"
+        :loading="scholarData ? false : true"
         :data="scholarData"
         :legend-data="scholarLegend"
       />
       <CustomPieGraph
-        v-if="loading"
         v-show="filters.all || filters.career"
         legend="Área de atuação"
         info="Quantidade de egressos por cada área de atuação"
+        :loading="actingData ? false : true"
         :data="actingData"
         :legend-data="actingLegend"
       />
       <CustomPieGraph
-        v-if="loading"
         v-show="filters.all || filters.academic"
         legend="Deseja realizar Pós-graduação"
         info="Quantidade de egressos que desejam realizar pós-graduação"
+        :loading="interestInPostData ? false : true"
         :data="interestInPostData"
         :legend-data="interestInPostLegend"
       />
       <CustomBarGraph
-        v-if="loading"
         v-show="filters.all || filters.career"
         legend="Remuneração"
         info="Remuneração mensal média da bolsa do egresso"
+        :loading="remunerationDataX ? false : true"
         :x="remunerationDataX"
         :y="remunerationDataY"
       />
       <CustomPieGraph
-        v-if="loading"
         v-show="filters.all || filters.academic"
         legend="Tipo de bolsa"
         info="Quantidade de egressos por cada tipo de bolsa"
+        :loading="scholarshipTypeData ? false : true"
         :data="scholarshipTypeData"
         :legend-data="scholarshipTypeLegend"
       />
       <CustomPieGraph
-        v-if="loading"
         v-show="filters.all || filters.academic"
         legend="Local de Pós-graduação"
         info="Quantidade de egressos por instituição de pós-graduação"
+        :loading="postGraduateLocalData ? false : true"
         :data="postGraduateLocalData"
         :legend-data="postGraduateLocalLegend"
       />
       <CustomPieGraph
-        v-if="loading"
         v-show="filters.all || filters.academic"
         legend="Curso de Pós-graduação"
         info="Quantidade de egressos por curso de pós graduação"
+        :loading="postGraduateCourseData ? false : true"
         :data="postGraduateCourseData"
         :legend-data="postGraduateCourseLegend"
       />
@@ -199,8 +199,8 @@ const genderData = ref<PieChartSeries[]>()
 const genderDataLegend = ref<string[]>()
 const activitySectorData = ref<PieChartSeries[]>()
 const activitySectorLegend = ref<string[]>()
-const ageDataX = ref<number[]>([])
-const ageDataY = ref<string[]>([])
+const ageDataX = ref<string[]>([])
+const ageDataY = ref<number[]>([])
 const studentData = ref<PieChartSeries[]>()
 const studentLegend = ref<string[]>()
 const wageData = ref<PieChartSeries[]>()
@@ -217,8 +217,8 @@ const actingData = ref<PieChartSeries[]>()
 const actingLegend = ref<string[]>()
 const interestInPostData = ref<PieChartSeries[]>()
 const interestInPostLegend = ref<string[]>()
-const remunerationDataX = ref<number[]>([])
-const remunerationDataY = ref<string[]>([])
+const remunerationDataX = ref<string[]>([])
+const remunerationDataY = ref<number[]>([])
 const scholarshipTypeData = ref<PieChartSeries[]>()
 const scholarshipTypeLegend = ref<string[]>()
 const postGraduateLocalData = ref<PieChartSeries[]>()
@@ -226,11 +226,8 @@ const postGraduateLocalLegend = ref<string[]>()
 const postGraduateCourseData = ref<PieChartSeries[]>()
 const postGraduateCourseLegend = ref<string[]>()
 
-const loading = ref(false)
-
 onMounted(async () => {
   await getGraphData()
-  loading.value = true
 })
 
 const getGraphData = async () => {
