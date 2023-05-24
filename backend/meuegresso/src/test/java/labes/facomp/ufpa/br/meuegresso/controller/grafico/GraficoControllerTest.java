@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -29,6 +29,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -43,11 +45,17 @@ import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.AreaAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.BolsistasGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotistaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.CursosGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.EnderecoEmpresasGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.GenerosGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.IdadesGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.InteresseEmPosGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.PosGraduacaoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.RemuneracaoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.SalarioGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoAlunoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoBolsaGraficoDTO;
@@ -61,6 +69,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
@@ -75,6 +84,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoEmpresaReposito
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoTitulacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.endereco.EnderecoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
@@ -97,6 +107,10 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
 @TestMethodOrder(OrderAnnotation.class)
 class GraficoControllerTest {
 
+        static final String ENDERECO_CIDADE = "Barcarena";
+        static final String ENDERECO_ESTADO = "Para";
+        static final String ENDERECO_PAIS = "Brasil";
+
         static final Integer EMPRESA_ID = 1;
         static final String EMPRESA_NOME = "EmpresaTeste";
         static final String SETORATUACAO = "SetorTeste";
@@ -116,7 +130,7 @@ class GraficoControllerTest {
         static final String COTA_NOME = "CotaTeste";
 
         static final Integer FAIXASALARIAL_ID = 1;
-        static final String FAIXASALARIAL = "5000 - 15000";
+        static final String FAIXASALARIAL = "1 salario minimo";
 
         static final Integer TITULACAO_ID = 1;
         static final String TITULACAO_NOME = "TitulacaoTeste";
@@ -154,6 +168,9 @@ class GraficoControllerTest {
         private EmpresaRepository empresaRepository;
 
         @Autowired
+        private EnderecoRepository enderecoRepository;
+
+        @Autowired
         private TitulacaoRepository titulacaoRepository;
 
         @Autowired
@@ -177,6 +194,8 @@ class GraficoControllerTest {
         String token;
 
         UsuarioModel usuarioModel;
+
+        EnderecoModel enderecoModel;
 
         EmpresaDTO empresaDTO;
         EmpresaModel empresaModel;
@@ -205,7 +224,10 @@ class GraficoControllerTest {
         @Autowired
         ModelMapper modelMapper;
 
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+        ObjectMapper objectMapper = JsonMapper.builder()
+                        .addModule(new JavaTimeModule())
+                        .disable(MapperFeature.CAN_OVERRIDE_ACCESS_MODIFIERS)
+                        .build();
 
         @BeforeAll
         void setUp() throws Exception {
@@ -299,10 +321,19 @@ class GraficoControllerTest {
 
                 egressoRepository.save(this.egressoModel);
 
+                /* Endereco */
+                enderecoModel = EnderecoModel.builder()
+                                .cidade(ENDERECO_CIDADE)
+                                .estado(ENDERECO_ESTADO)
+                                .pais(ENDERECO_PAIS)
+                                .build();
+                enderecoModel = enderecoRepository.save(enderecoModel);
+
                 /* Empresa */
                 empresaModel = EmpresaModel.builder()
                                 .id(EGRESSO_ID)
                                 .nome(EMPRESA_NOME)
+                                .endereco(enderecoModel)
                                 .build();
                 empresaModel = empresaRepository.save(empresaModel);
 
@@ -535,13 +566,15 @@ class GraficoControllerTest {
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
-                CursosGraficoDTO cursosGraficoDTO = objectMapper.readValue(
+                List<CursosGraficoDTO> cursosGraficoDTO = objectMapper.readValue(
                                 resposta.getResponse().getContentAsString(),
-                                CursosGraficoDTO.class);
+                                new TypeReference<List<CursosGraficoDTO>>() {
+                                });
 
                 assertNotNull(cursosGraficoDTO);
-                assertEquals(1, cursosGraficoDTO.getNomeCursosPos().size());
-                assertEquals(Arrays.asList(CURSO_NOME), cursosGraficoDTO.getNomeCursosPos());
+                assertEquals(1, cursosGraficoDTO.size());
+                assertEquals(1, cursosGraficoDTO.get(0).getQuantidade());
+                assertEquals(CURSO_NOME, cursosGraficoDTO.get(0).getCurso());
         }
 
         @Test
@@ -580,5 +613,103 @@ class GraficoControllerTest {
                 assertEquals(1, setorAtuacaoGraficoDTO.getSetorAtuacao().size());
                 assertEquals(1, setorAtuacaoGraficoDTO.getSetorAtuacao()
                                 .get(SETORATUACAO_NOME));
+        }
+
+        @Test
+        @Order(12)
+        void testGetIdades() throws Exception {
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/idades")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                // .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                IdadesGraficoDTO idadesGraficoDTO = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(),
+                                IdadesGraficoDTO.class);
+
+                assertNotNull(idadesGraficoDTO);
+                assertEquals(1, idadesGraficoDTO.getIdadesEgressos().size());
+                // O get(26) seleciona a chave com idade 26 e retorna quantos egressos
+                // tem essa idade, que nesse caso é 1
+                assertEquals(1, idadesGraficoDTO.getIdadesEgressos().get(26));
+                assertEquals(26.0, idadesGraficoDTO.getMediaIdades());
+        }
+
+        @Test
+        @Order(13)
+        void testGetSalarios() throws Exception {
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/salarios")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                // .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                SalarioGraficoDTO salarioGraficoDTO = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(),
+                                SalarioGraficoDTO.class);
+
+                assertNotNull(salarioGraficoDTO);
+                assertEquals(1, salarioGraficoDTO.getSalarios().size());
+                assertEquals(1, salarioGraficoDTO.getSalarios().get("1 salario minimo"));
+        }
+
+        @Test
+        @Order(14)
+        void testGetRemuneracao() throws Exception {
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/remuneracao")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                // .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                RemuneracaoGraficoDTO remuneracaoGraficoDTO = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(),
+                                RemuneracaoGraficoDTO.class);
+
+                assertNotNull(remuneracaoGraficoDTO);
+                assertEquals(1, remuneracaoGraficoDTO.getRemuneracaoContagem().size());
+                assertEquals(1, remuneracaoGraficoDTO.getRemuneracaoContagem().get(REMUNERACAOBOLSA));
+        }
+
+        @Test
+        @Order(15)
+        void testGetLocalPos() throws Exception {
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/localPos")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                // .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                List<LocalPosGraficoDTO> localPosGraficoDTOs = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(),
+                                new TypeReference<List<LocalPosGraficoDTO>>() {
+                                });
+
+                assertNotNull(localPosGraficoDTOs);
+                assertEquals(1, localPosGraficoDTOs.size());
+                assertEquals(EMPRESA_NOME, localPosGraficoDTOs.get(0).getInstituicao());
+                assertEquals(1, localPosGraficoDTOs.get(0).getQuantidade());
+        }
+
+        @Test
+        @Order(16)
+        void testGetEnderecoEmpresas() throws Exception {
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/enderecoEmpresas")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                // .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                EnderecoEmpresasGraficoDTO enderecoEmpresasGraficoDTO = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(),
+                                EnderecoEmpresasGraficoDTO.class);
+
+                assertNotNull(enderecoEmpresasGraficoDTO);
+                assertEquals(1, enderecoEmpresasGraficoDTO.getEnderecoEmpresas().size());
+                assertEquals(EMPRESA_NOME, enderecoEmpresasGraficoDTO.getEnderecoEmpresas().get(0).get(0));
+                assertEquals(ENDERECO_PAIS, enderecoEmpresasGraficoDTO.getEnderecoEmpresas().get(0).get(1));
+                assertEquals(ENDERECO_ESTADO, enderecoEmpresasGraficoDTO.getEnderecoEmpresas().get(0).get(2));
+                assertEquals(ENDERECO_CIDADE, enderecoEmpresasGraficoDTO.getEnderecoEmpresas().get(0).get(3));
         }
 }
