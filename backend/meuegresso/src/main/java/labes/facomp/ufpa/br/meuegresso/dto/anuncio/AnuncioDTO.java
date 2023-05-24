@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import labes.facomp.ufpa.br.meuegresso.dto.areaemprego.AreaEmpregoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.usuario.UsuarioDTO;
 import lombok.Data;
 
 /**
@@ -40,4 +41,6 @@ public class AnuncioDTO {
     @NotBlank
     @NotNull
     private String salario;
+
+    private UsuarioDTO createdBy;
 }

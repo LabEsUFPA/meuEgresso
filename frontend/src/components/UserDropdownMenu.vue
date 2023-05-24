@@ -77,7 +77,7 @@ const { userLogged } = props
 const store = useLoginStore()
 const userLoggedName = ref(userLogged ? store.getLoggedUser()?.username : '')
 const userLoggedGroupID = ref(userLogged ? store.getLoggedUser()?.grupos[0].id : '')
-console.log(userLoggedGroupID)
+
 
 const userMenuIsOpen = ref(false)
 const toggleUserMenu = () => {

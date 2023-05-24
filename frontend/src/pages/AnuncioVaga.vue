@@ -21,7 +21,7 @@
 
         <div class="flex flex-col text-cyan-800">
           <p class="text-sm sm:text-lg font-medium leading-tight">
-            {{ anuncio.nome }}
+            {{ $store.anuncio.createdBy.nome }}
           </p>
           <p class="flex text-xs sm:text-sm font-normal">
             anunciou uma vaga
@@ -34,7 +34,7 @@
       <div class="flex flex-col w-[960px] bg-white rounded-bl-2xl rounded-br-2xl mx-4 sm:mx-6 mb-10">
         <div class="flex flex-col gap-6 sm:gap-8 p-6 sm:p-8 border-b-[1px] border-b-gray-200">
           <h1 class="text-cyan-600 text-xl sm:text-2xl font-bold">
-            {{ anuncio.titulo }}
+            {{ $store.anuncio.titulo }}
           </h1>
 
           <div class="flex gap-4 items-center text-gray-400">
@@ -51,7 +51,7 @@
                 Área de emprego
               </p>
               <p class="text-sm">
-                {{ anuncio.area }}
+                {{ $store.anuncio.areaEmprego.nome }}
               </p>
             </div>
           </div>
@@ -61,7 +61,7 @@
               Descrição
             </h2>
             <p class="text-neutral-900">
-              {{ anuncio.descricao }}
+              {{ $store.anuncio.descricao }}
             </p>
           </div>
 
@@ -70,7 +70,7 @@
               Salário
             </h2>
             <p class="text-neutral-900">
-              R$ {{ anuncio.salario }}
+              R$ {{ $store.anuncio.salario }}
             </p>
           </div>
         </div>
@@ -84,7 +84,7 @@
             <CustomButton
               tag="a"
               color="emerald"
-              :link="anuncio.linkContato"
+              :link="$store.anuncio.link"
               class="w-fit"
               target="_blank"
             >
@@ -102,7 +102,7 @@
 
           <div class="flex justify-end">
             <p class="text-gray-400 text-sm">
-              Vaga disponível até {{ anuncio.dataExpiracao.split('-').reverse().join('/') }}
+              Vaga disponível até {{ $store.anuncio.dataExpiracao.split('-').reverse().join('/') }}
             </p>
           </div>
         </div>
@@ -113,58 +113,17 @@
 
 <script setup lang="ts">
 
-import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronLeft, mdiBullhorn, mdiOpenInNew } from '@mdi/js'
+import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
 
 import CustomButton from 'src/components/CustomButton.vue'
 
+const $store = useAnuncioVagaStore()
 const $route = useRoute()
 const { id } = $route.params
-
-const defaultProps = {
-  id: 0,
-  nome: 'Nome Completo',
-  titulo: 'Título da vaga',
-  area: 'Área de emprego',
-  descricao: 'Descrição da vaga',
-  salario: 0,
-  linkContato: 'https://www.ufpa.br/',
-  dataExpiracao: '31-12-2023'
-}
-
-const anuncios = [
-  {
-    id: 1,
-    nome: 'Victor Hugo Machado da Silva',
-    titulo: 'Vaga Front-end vaga vaga vaga',
-    area: 'Programador',
-    descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    salario: 1000.0,
-    linkContato: 'https://www.google.com.br',
-    dataExpiracao: '2023-08-01'
-  },
-  {
-    id: 2,
-    nome: 'Marcus Loureiro',
-    titulo: 'Vaga Back-end',
-    area: 'Programador',
-    descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    salario: 1200.0,
-    linkContato: 'https://www.google.com.br',
-    dataExpiracao: '2023-08-01'
-  }
-]
-
-const fetchAnuncio = (id: number) => {
-  return anuncios[id - 1]
-}
-
-const anuncio = ref(defaultProps)
-
-onMounted(() => {
-  anuncio.value = fetchAnuncio(Number(id))
-})
+$store.getAnuncioId(parseInt(id.toString()))
+console.log('resposta pelo id:', $store.anuncio)
 
 </script>

@@ -248,6 +248,7 @@ export namespace models {
   }
 
   export interface AnuncioModel {
+    id: number
     titulo: string
     areaEmprego: {
       id: number
@@ -256,8 +257,30 @@ export namespace models {
     descricao: string
     dataExpiracao: string
     link: string
-    salario: number
+    salario: string
+    createdBy: {
+      email: string
+      nome: string
+    }
   }
+  export interface AnuncioModelPost {
+    titulo: string
+    areaEmprego: {
+      id: number
+      nome: string
+    }
+    descricao: string
+    dataExpiracao: string
+    link: string
+    salario: string
+  }
+
+  export interface areasEmpregoFiltro {
+    id: number
+    name: string
+    applied: boolean
+  }
+
 }
 
 // export interface EgressoModelUpdate {

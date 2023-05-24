@@ -88,14 +88,9 @@
           >
             Cancelar
           </CustomButton>
-          <CustomButton
-            tag="router"
-            link="/vagas"
-            type="submit"
-            color="emerald"
-          >
-            Salvar
-          </CustomButton>
+          <CustomButton type="submit" color="emerald">
+              Salvar
+            </CustomButton>
         </div>
       </div>
     </div>

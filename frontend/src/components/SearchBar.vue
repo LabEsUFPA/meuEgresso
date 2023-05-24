@@ -13,20 +13,22 @@
     <OField :root-class="classNames(['flex h-full w-full'])">
       <OInput
         override
-        :v-model="refPesquisa"
+        :v-model="props.modelValue"
         expanded
         placeholder="Pesquisar vaga"
         :root-class="classNames(['flex h-full w-full'])"
         :input-class="classNames(['flex w-full h-full focus:outline-0 text-zinc-700'])"
+        @change=" $emit('update:modelValue', $event.target.value)"
         @focus="toggleSearchbarFocus()"
         @blur="toggleSearchbarFocus()"
       />
     </OField>
 
     <CustomButton
-      type="submit"
+      type="button"
       color="blue"
       text-class="text-sm sm:text-lg text-white"
+      @click="$emit('update:modelValue', $event.target.value)"
     >
       Buscar
     </CustomButton>
@@ -35,7 +37,7 @@
 
 <script setup lang="ts">
 
-import { onMounted, ref, watch } from 'vue'
+import { ref } from 'vue'
 import { OField, OInput } from '@oruga-ui/oruga-next'
 import classNames from 'classnames'
 import SvgIcon from '@jamescoyle/vue-icon'
@@ -43,29 +45,15 @@ import { mdiMagnify } from '@mdi/js'
 
 import CustomButton from 'src/components/CustomButton.vue'
 
-interface Props {
-    pesquisaValue: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  pesquisaValue: ''
-})
+defineEmits(['update:modelValue'])
+const props = defineProps<{
+  modelValue:string
+}>()
 
 const searchbarFocused = ref(false)
 
 const toggleSearchbarFocus = () => {
   searchbarFocused.value = !searchbarFocused.value
 }
-
-const refPesquisa = ref('')
-
-onMounted(() => {
-  refPesquisa.value = props.pesquisaValue
-  console.log(refPesquisa)
-
-  watch(refPesquisa, () => {
-    console.log(refPesquisa)
-  })
-})
 
 </script>
