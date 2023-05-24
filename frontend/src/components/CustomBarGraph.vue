@@ -1,15 +1,9 @@
 <template>
-  <div class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-[650px]">
-    <div class="pl-1">
-      <h1 class="font-bold text-2xl">
-        {{ legend }}
-      </h1>
-      <p class="text-base">
-        {{ info }}
-      </p>
-    </div>
+  <div
+    v-if="loading"
+    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-[650px]"
+  >
     <div
-      v-if="loading"
       class="w-full h-full flex items-center justify-center"
     >
       <SvgIcon
@@ -19,8 +13,20 @@
         :path="mdiLoading"
       />
     </div>
+  </div>
+  <div
+    v-else
+    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-[650px]"
+  >
+    <div class="pl-1">
+      <h1 class="font-bold text-2xl">
+        {{ legend }}
+      </h1>
+      <p class="text-base">
+        {{ info }}
+      </p>
+    </div>
     <v-chart
-      v-else
       :option="option"
       autoresize
     />
