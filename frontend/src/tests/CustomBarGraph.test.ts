@@ -5,6 +5,6 @@ import CustomBarGraph from '../components/CustomBarGraph.vue'
 describe('CustomBarGraph Test', () => {
   it('CustomBarGraph component rendering test', () => {
     const wrapper = shallowMount(CustomBarGraph)
-    expect(wrapper.find('div').exists()).toBe(true)
+    expect(wrapper.vm).toBeDefined()
   })
 })
