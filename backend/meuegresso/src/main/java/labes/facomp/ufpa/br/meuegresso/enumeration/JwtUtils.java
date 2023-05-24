@@ -7,6 +7,7 @@ public enum JwtUtils {
     USER_ID("idUsuario"),
     NOME("nome"),
     SOBRENOME("sobrenome"),
+    EGRESSO("isEgresso"),
     SCOPE("scope");
 
     private String propriedade;
