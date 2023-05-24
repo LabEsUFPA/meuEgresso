@@ -11,12 +11,12 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/cursos'
       })
 
-      if ((response?.data?.tipoBolsas) != null) {
+      if ((response?.data) != null) {
         const postGraduateCourseData: PieChartSeries[] = []
         const postGraduateCourseLegend: string[] = []
-        Object.keys(response?.data?.tipoBolsas).forEach((item) => {
-          postGraduateCourseData.push({ value: Math.floor(Math.random() * 100), name: item })
-          postGraduateCourseLegend.push(item)
+        response.data.forEach((item: { curso: string, quantidade: number }) => {
+          postGraduateCourseData.push({ value: Math.floor(Math.random() * 100), name: item.curso })
+          postGraduateCourseLegend.push(item.curso)
         })
 
         return {
@@ -33,12 +33,12 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/localPos'
       })
 
-      if ((response?.data?.tipoBolsas) != null) {
+      if ((response?.data) != null) {
         const postGraduateLocalData: PieChartSeries[] = []
         const postGraduateLocalLegend: string[] = []
-        Object.keys(response?.data?.tipoBolsas).forEach((item) => {
-          postGraduateLocalData.push({ value: Math.floor(Math.random() * 100), name: item })
-          postGraduateLocalLegend.push(item)
+        response.data.forEach((item: { instituicao: string, quantidade: number }) => {
+          postGraduateLocalData.push({ value: Math.floor(Math.random() * 100), name: item.instituicao })
+          postGraduateLocalLegend.push(item.instituicao)
         })
 
         return {

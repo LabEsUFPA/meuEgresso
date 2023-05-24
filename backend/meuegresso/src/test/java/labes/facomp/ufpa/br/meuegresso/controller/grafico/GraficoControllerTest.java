@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,11 +41,15 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.AreaAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.BolsistasGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotistaGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.CursosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.GenerosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.InteresseEmPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.PosGraduacaoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoAlunoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoBolsaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
@@ -64,9 +69,11 @@ import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.areaatuacao.AreaAtuacaoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.cota.CotaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.curso.CursoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoEmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoTitulacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
@@ -117,6 +124,12 @@ class GraficoControllerTest {
         static final Integer TIPOBOLSA_ID = 1;
         static final String TIPOBOLSA_NOME = "TipoBolsaTeste";
 
+        static final Integer AREAATUACAO_ID = 1;
+        static final String AREAATUACAO_NOME = "AreaAtuacaoTeste";
+
+        static final Integer SETORATUACAO_ID = 1;
+        static final String SETORATUACAO_NOME = "SetorAtuacaoTeste";
+
         private final Double REMUNERACAOBOLSA = 800.0;
 
         @Autowired
@@ -132,6 +145,9 @@ class GraficoControllerTest {
         private EgressoEmpresaRepository egressoEmpresaRepository;
 
         @Autowired
+        private EgressoTitulacaoRepository egressoTitulacaoRepository;
+
+        @Autowired
         private GeneroRepository generoRepository;
 
         @Autowired
@@ -145,6 +161,9 @@ class GraficoControllerTest {
 
         @Autowired
         private CursoRepository cursoRepository;
+
+        @Autowired
+        private CotaRepository cotaRepository;
 
         @Autowired
         private FaixaSalarialRepository faixaSalarialRepository;
@@ -260,6 +279,7 @@ class GraficoControllerTest {
                                 .id(COTA_ID)
                                 .nome(COTA_NOME)
                                 .build();
+                cotaModel = cotaRepository.save(cotaModel);
                 Set<CotaModel> cotas = new HashSet<>();
                 cotas.add(cotaModel);
 
@@ -280,37 +300,44 @@ class GraficoControllerTest {
                 egressoRepository.save(this.egressoModel);
 
                 /* Empresa */
-                empresaModel = EmpresaModel.builder().id(EGRESSO_ID).nome(EMPRESA_NOME).build();
-                empresaRepository.save(empresaModel);
+                empresaModel = EmpresaModel.builder()
+                                .id(EGRESSO_ID)
+                                .nome(EMPRESA_NOME)
+                                .build();
+                empresaModel = empresaRepository.save(empresaModel);
 
                 /* EgressoTitulacao ModelId */
-                egressoTitulacaoModelId = EgressoTitulacaoModelId.builder().egressoId(EGRESSO_ID)
-                                .titulacaoId(TITULACAO_ID).build();
+                egressoTitulacaoModelId = EgressoTitulacaoModelId.builder()
+                                .egressoId(EGRESSO_ID)
+                                .titulacaoId(TITULACAO_ID)
+                                .build();
 
                 /* EgressoEmpresa ModelId */
-                egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(EGRESSO_ID)
-                                .empresaId(EMPRESA_ID).build();
+                egressoEmpresaModelId = EgressoEmpresaModelId.builder()
+                                .egressoId(EGRESSO_ID)
+                                .empresaId(EMPRESA_ID)
+                                .build();
 
                 /* FaixaSalarial */
                 faixaSalarialDTO = FaixaSalarialDTO.builder().id(FAIXASALARIAL_ID).faixa(FAIXASALARIAL).build();
                 FaixaSalarialModel faixaSalarialModel = modelMapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
-                faixaSalarialRepository.save(faixaSalarialModel);
+                faixaSalarialModel = faixaSalarialRepository.save(faixaSalarialModel);
 
                 /* Curso */
                 cursoDTO = CursoDTO.builder().id(CURSO_ID).nome(CURSO_NOME).build();
                 CursoModel cursoModel = modelMapper.map(cursoDTO, CursoModel.class);
-                cursoRepository.save(cursoModel);
+                cursoModel = cursoRepository.save(cursoModel);
 
                 /* Area Atuacao */
                 AreaAtuacaoModel area = new AreaAtuacaoModel();
-                area.setId(1);
-                area.setNome("area x");
-                areaAtuacaoRepository.save(area);
+                area.setId(AREAATUACAO_ID);
+                area.setNome(AREAATUACAO_NOME);
+                area = areaAtuacaoRepository.save(area);
 
                 /* Setor Atuacao */
                 SetorAtuacaoModel setorAtuacaoModel = SetorAtuacaoModel.builder()
-                                .nome("SETOR X").build();
-                setorAtuacaoRepository.save(setorAtuacaoModel);
+                                .nome(SETORATUACAO_NOME).build();
+                setorAtuacaoModel = setorAtuacaoRepository.save(setorAtuacaoModel);
 
                 /* Egresso Titulacao Model */
                 egressoTitulacaoModel = new EgressoTitulacaoModel();
@@ -320,6 +347,8 @@ class GraficoControllerTest {
                 egressoTitulacaoModel.setTitulacao(titulacao);
                 egressoTitulacaoModel.setEmpresa(empresaModel);
                 egressoTitulacaoModel.setCurso(cursoModel);
+
+                egressoTitulacaoModel = egressoTitulacaoRepository.save(egressoTitulacaoModel);
 
                 /* Egresso Empresa Model */
                 egressoEmpresaModel = new EgressoEmpresaModel();
@@ -333,16 +362,14 @@ class GraficoControllerTest {
                 Set<EgressoModel> egressos = new HashSet<>();
                 egressos.add(egressoModel);
 
-                areaAtuacaoRepository.save(area);
-
                 egressoEmpresaModel.setAreaAtuacao(area);
-                egressoEmpresaRepository.save(egressoEmpresaModel);
+                egressoEmpresaModel = egressoEmpresaRepository.save(egressoEmpresaModel);
 
         }
 
         @Test
         @Order(1)
-        void testgetGeneros() throws Exception {
+        void testGetGeneros() throws Exception {
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/generos")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -361,7 +388,7 @@ class GraficoControllerTest {
 
         @Test
         @Order(2)
-        void testgetBolsistas() throws Exception {
+        void testGetBolsistas() throws Exception {
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/bolsistas")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -382,7 +409,7 @@ class GraficoControllerTest {
 
         @Test
         @Order(3)
-        void testgetTipoBolsa() throws Exception {
+        void testGetTipoBolsa() throws Exception {
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/tipoBolsa")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -401,7 +428,7 @@ class GraficoControllerTest {
 
         @Test
         @Order(4)
-        void testgetInteresseEmPos() throws Exception {
+        void testGetInteresseEmPos() throws Exception {
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/interesseEmPos")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -443,7 +470,7 @@ class GraficoControllerTest {
 
         @Test
         @Order(6)
-        void testgetCotistas() throws Exception {
+        void testGetCotistas() throws Exception {
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/cotista")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -460,5 +487,98 @@ class GraficoControllerTest {
                 assertEquals(1, cotistaGraficoDTO.getCotistasEnumerados().get("Cotista"));
                 // TODO: verificar troca de null para 0 quando não houver instancia
                 assertNull(cotistaGraficoDTO.getCotistasEnumerados().get("Não Cotista"));
+        }
+
+        @Test
+        @Order(7)
+        void testGetCotas() throws Exception {
+
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/cotas")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                // .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                CotaGraficoDTO cotaGraficoDTO = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(),
+                                CotaGraficoDTO.class);
+
+                assertNotNull(cotaGraficoDTO);
+                assertEquals(1, cotaGraficoDTO.getCotaAtuacao().size());
+                assertEquals(1, cotaGraficoDTO.getCotaAtuacao().get(COTA_NOME));
+        }
+
+        @Test
+        @Order(8)
+        void testGetTipoAlunos() throws Exception {
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/tipoAlunos")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                // .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                TipoAlunoGraficoDTO tipoAlunoGraficoDTO = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(),
+                                TipoAlunoGraficoDTO.class);
+
+                assertNotNull(tipoAlunoGraficoDTO);
+                assertEquals(1, tipoAlunoGraficoDTO.getTipoAlunos().size());
+                assertEquals(1, tipoAlunoGraficoDTO.getTipoAlunos().get(TITULACAO_NOME));
+        }
+
+        @Test
+        @Order(9)
+        void testGetCursos() throws Exception {
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/cursos")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                // .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                CursosGraficoDTO cursosGraficoDTO = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(),
+                                CursosGraficoDTO.class);
+
+                assertNotNull(cursosGraficoDTO);
+                assertEquals(1, cursosGraficoDTO.getNomeCursosPos().size());
+                assertEquals(Arrays.asList(CURSO_NOME), cursosGraficoDTO.getNomeCursosPos());
+        }
+
+        @Test
+        @Order(10)
+        void testGetAtuacao() throws Exception {
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/atuacao")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                // .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                AreaAtuacaoGraficoDTO areaAtuacaoGraficoDTO = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(),
+                                AreaAtuacaoGraficoDTO.class);
+
+                assertNotNull(areaAtuacaoGraficoDTO);
+                assertEquals(1, areaAtuacaoGraficoDTO.getAreaAtuacao().size());
+                assertEquals(1, areaAtuacaoGraficoDTO.getAreaAtuacao()
+                                .get(AREAATUACAO_NOME));
+        }
+
+        @Test
+        @Order(11)
+        void testGetSetor() throws Exception {
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/setor")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                // .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                SetorAtuacaoGraficoDTO setorAtuacaoGraficoDTO = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(),
+                                SetorAtuacaoGraficoDTO.class);
+
+                assertNotNull(setorAtuacaoGraficoDTO);
+                assertEquals(1, setorAtuacaoGraficoDTO.getSetorAtuacao().size());
+                assertEquals(1, setorAtuacaoGraficoDTO.getSetorAtuacao()
+                                .get(SETORATUACAO_NOME));
         }
 }
