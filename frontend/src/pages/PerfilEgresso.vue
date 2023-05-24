@@ -9,7 +9,6 @@
       alt="Loading"
     >
   </div>
-
   <div
     v-else
     class="flex-1 min-h-screen items-center justify-center bg-neutral-100"
@@ -25,37 +24,36 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
         >
-        <h1 class="absolute ml-[220px] sm:ml-[270px] md:ml-[300px] mr-1 ">
-              <ButtonEdit
-                label="Editar"
-                icon-path="/src/assets/edit.svg"
-                icon-path2="/src/assets/wcheck.svg"
-                color="whitesky"
-                color2="emerald"
-                @toggle="toggleIsInput('profileHead')"
-                :is-input="dataEgresso.profileHead.isInput"
-                v-if="!isPublic"
-              />
-        </h1>
+          <h1 class="absolute ml-[220px] sm:ml-[270px] md:ml-[300px] mr-1 ">
+            <ButtonEdit
+              label="Editar"
+              icon-path="/src/assets/edit.svg"
+              icon-path2="/src/assets/wcheck.svg"
+              color="whitesky"
+              color2="emerald"
+              @toggle="toggleIsInput('profileHead')"
+              :is-input="dataEgresso.profileHead.isInput"
+              v-if="!isPublic"
+            />
+          </h1>
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
-             <!-- :class="{
+            <!-- :class="{
                 ['ml-[110px]']: !isPublic,
                 ['ml-[110px]']: isPublic
               }" -->
             <div
               class="mt-[37px] flex flex-col items-center justify-center"
-             
             >
-            <!-- @remove="removeImageEgresso" -->
-            <ProfileImage
-              ref="profileImageRef"
-              @imageUploadBack="profileImageSave"
-              @remove="removeImageEgresso"
-              :img-url="dataEgresso.profileHead.image"
-              img-default="src/assets/profile-pic.png"
-              :is-input="dataEgresso.profileHead.isInput"
-              :trigger-back-upload="dataEgresso.profileHead.isInput"
-            />
+              <!-- @remove="removeImageEgresso" -->
+              <ProfileImage
+                ref="profileImageRef"
+                @imageUploadBack="profileImageSave"
+                @remove="removeImageEgresso"
+                :img-url="dataEgresso.profileHead.image"
+                img-default="src/assets/profile-pic.png"
+                :is-input="dataEgresso.profileHead.isInput"
+                :trigger-back-upload="dataEgresso.profileHead.isInput"
+              />
             </div>
           </div>
           <div class="head">
@@ -665,16 +663,15 @@ function handleStatus (status: any) {
 }
 const profileImageRef = ref<typeof ProfileImage | null>(null)
 const profileImageSave = () => {
-  return profileImageRef.value.imageUploadBack()
+  return profileImageRef?.value?.imageUploadBack()
 }
 async function handleSubmitHeader (values: any) {
-  // futuro add foto
   jsonResponse.usuario.nome = values.geral.nome
   jsonResponse.linkedin = values.geral.linkedin
   jsonResponse.lattes = values.geral.lattes
-  let status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await egressoStore.atualizarEgresso(jsonResponse)
   const responseImage = await profileImageSave()
-  console.log(status)  
+  console.log(status)
   console.log(responseImage)
 
   if (status === 201 && responseImage === 201) {
@@ -684,11 +681,9 @@ async function handleSubmitHeader (values: any) {
     toggleIsInput('profileHead')
     fetchUpdateEgresso()
     fetchUpdateEgresso()
-  }
-  else{
+  } else {
     dialogFalha.value = true
   }
-  
 }
 
 async function handleSubmitGeral (values: any) {
@@ -734,8 +729,6 @@ async function handleSubmitAcademico (values: any) {
   if (!values.academico.posGrad.value) {
     jsonResponse.interesseEmPos = values.academico.posGrad.desejaPos
     jsonResponse.titulacao = null
-    // jsonResponse.titulacao.empresa = ''
-    // jsonResponse.titulacao.curso = ''
   } else {
     jsonResponse.interesseEmPos = false
 
@@ -759,8 +752,6 @@ async function handleSubmitAcademico (values: any) {
         }
       }
       jsonResponse.titulacao = titulacao
-      // jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
-      // jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
     } else {
       jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
       jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
@@ -867,7 +858,6 @@ async function handleSubmitCarreira (values: any) {
   fetchUpdateEgresso()
 }
 async function handleSubmitAdicionais (values: any) {
-  // dataEgresso.value.adicionais = values.adicionais
   jsonResponse.depoimento.descricao = values.adicionais.experiencias
   jsonResponse.contribuicao.descricao = values.adicionais.contribuicoes
   if (values.adicionais.palestras) {
@@ -875,7 +865,6 @@ async function handleSubmitAdicionais (values: any) {
   } else {
     jsonResponse.palestras.descricao = ''
   }
-  // jsonResponse.depoimento.descricao = values.adicionais.descricao
   egressoStore.atualizarEgresso(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
@@ -1033,7 +1022,6 @@ let egressoImageResponse : any
 let imageEgressoUrl: string
 imageEgressoUrl = ''
 async function handleEgressoImage (id : string) {
-  // egressoImageResponse = await egressoStore.fetchImageEgresso(id)
   egressoImageResponse = await egressoStore.fetchImageEgressoUrl(id)
   imageEgressoUrl = egressoImageResponse
   console.log('URL:')
@@ -1045,9 +1033,6 @@ async function handleEgressoImage (id : string) {
   }
 }
 
-// fetchEgressoIfLoggedUser()
-
-// fetchUpdateEgresso()
 async function fetchUpdateEgresso () {
   if (storage.has('loggedUser')) {
     userData = JSON.parse(storage.get('loggedUser'))
@@ -1359,7 +1344,7 @@ const schemaAdicionais = object().shape({
 })
 async function removeImageEgresso () {
   const removeResp = await egressoStore.removeImageEgresso()
-  dataEgresso.value.profileHead.image= ''
+  dataEgresso.value.profileHead.image = ''
   console.log('removeimageresso')
   console.log(removeResp)
 }

@@ -39,7 +39,7 @@
           v-if="!isValid.value"
           class="text-red-500 absolute ml-[-60px] mt-[-5px]"
         >
-        O arquivo deve ser menor que 5 MB
+          O arquivo deve ser menor que 5 MB
           <!-- {{ meta.valid ? null : errorMessage }} -->
         </div>
       </template>
@@ -82,10 +82,8 @@
         </div>
 
       </span>
-      
     </o-field>
   </section>
-  
   <ButtonActionIcon
     v-if="isInput"
     class="buttonTrash absolute z-5 ml-[90px] mt-[90px] rounded-full"
@@ -98,17 +96,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, getCurrentInstance } from 'vue'
-import { OUpload, OSidebar, section, OField, OIcon, OButton } from '@oruga-ui/oruga-next'
+import { ref, computed, watch } from 'vue'
+import { OUpload, section, OField, OButton } from '@oruga-ui/oruga-next'
 import ButtonActionIcon from 'src/components/ButtonActionIcon.vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import classNames from 'classnames'
-import { useField } from 'vee-validate'
+// import { useField } from 'vee-validate'
 
 const $emit = defineEmits(['remove', 'clean', 'imageUploadBack'])
 
 const egressoStore = usePerfilEgressoStore()
-const renderComponent = ref(true)
+// const renderComponent = ref(true)
 interface Props {
   imgUrl?: string
   imgDefault: string
@@ -125,9 +123,8 @@ const props = withDefaults(defineProps<Props>(), {
   height: 'h-[120px]',
   isInput: false,
   triggerBackUpload: false,
-  clearUpload: false,
+  clearUpload: false
 })
-
 
 const isValid = ref({
   value: true
@@ -146,18 +143,13 @@ function getObjectURL (file: File) {
 
 async function imageUploadBack () {
   const response = await egressoStore.uploadImageEgresso(imageEgressoFile)
-  if(response === 201){
-    isValid.value.value = true 
-  }
-  else{
+  if (response === 201) {
+    isValid.value.value = true
+  } else {
     isValid.value.value = false
   }
   return response
-  
-  
-  
 }
-
 
 const styleImageInput = computed(() => {
   const imageStyle = [' hover:duration-200 w-[120px] h-[120px] absolute z-5 rounded-full']
@@ -171,25 +163,22 @@ defineExpose({
   imageUploadBack
 })
 
-
 function cleanImageState () {
-    imgUrl.value.value = ''
-    file.value = null
-    imageEgressoFile = null
-    isValid.value.value = true
-    $emit('clean')
+  imgUrl.value.value = ''
+  file.value = null
+  imageEgressoFile = null
+  isValid.value.value = true
+  $emit('clean')
 }
 
 watch(() => props.imgUrl, (newValue) => {
-  if(newValue === ''){
+  if (newValue === '') {
     cleanImageState()
   }
   imgUrl.value.value = newValue
-  
 })
 // watch(() => props.imgUrl, (newValue) => {
 
 // }
-
 
 </script>

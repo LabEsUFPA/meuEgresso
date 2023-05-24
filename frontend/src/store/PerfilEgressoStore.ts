@@ -3,7 +3,6 @@ import { type models } from 'src/@types'
 import Api from 'src/services/api'
 // interface UserModel extends models.UserModel {}
 import LocalStorage from 'src/services/localStorage'
-import { ref } from 'vue'
 import axios from 'axios'
 interface ComplexOpts extends models.ComplexOpts {}
 // interface EgressoModel extends models.EgressoModel {}
@@ -273,27 +272,6 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       // maxContentLength: 5 * 1024 * 1024 // 5 MB
       console.log(response?.data)
       return (response?.status) !== undefined ? response.status : 500
-    },
-
-    async handleFileUpload (event: Event) {
-      const file = ref<File | null>(null)
-      const target = event.target as HTMLInputElement
-      if (target.files != null) {
-        file.value = target.files[0]
-      }
-
-      if (file.value == null) {
-        const formData = new FormData()
-        formData.append('arquivo', file.value)
-
-        const response = await Api.request({
-          method: 'post',
-          route: '/egresso/foto',
-          body: formData
-        })
-
-        console.log(response.data)
-      }
     },
 
     async fetchImageEgresso (egressoId: string) {

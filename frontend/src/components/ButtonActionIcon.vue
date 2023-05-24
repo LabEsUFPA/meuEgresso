@@ -180,12 +180,6 @@ const styles = computed(() => {
       classes.push(colorClassNames[props.color].background.hoverLight)
       break
   }
-  if (props.variant === 'standard') {
-    classes.push(props.textClass)
-  } else {
-    classes.push(colorClassNames[props.color].text)
-  }
-
   return classes.join(' ')
 })
 
