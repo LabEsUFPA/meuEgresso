@@ -76,13 +76,10 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
-import { ref, computed, watch, onMounted } from 'vue'
-import { Country, State, City } from 'country-state-city'
-import { object, string, boolean } from 'yup'
+import { ref, watch, onMounted } from 'vue'
 import { mdiMessage } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
-import CustomPerfilData from 'src/components/CustomPerfilData.vue'
 
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
