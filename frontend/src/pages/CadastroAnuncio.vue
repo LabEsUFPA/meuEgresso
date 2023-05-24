@@ -121,7 +121,7 @@
 
 <script setup lang="ts">
 
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomButton from 'src/components/CustomButton.vue'
@@ -184,6 +184,9 @@ const onInvalid = (e: any) => {
   console.log(e)
 }
 
+onMounted(() => {
+  window.scrollTo(0, 0)
+})
 
 
 </script>
