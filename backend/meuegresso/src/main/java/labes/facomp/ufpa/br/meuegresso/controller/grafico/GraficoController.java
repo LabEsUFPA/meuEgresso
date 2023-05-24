@@ -147,7 +147,7 @@ public class GraficoController {
 
         }
 
-        return new IdadesGraficoDTO(egressoService.findAllIdades().stream().mapToDouble(a -> a).average(),
+        return new IdadesGraficoDTO(egressoService.findAllIdades().stream().mapToDouble(a -> a).average().orElse(-1),
                 idadesContagens);
     }
 

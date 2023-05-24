@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
 import java.util.HashMap;
-import java.util.OptionalDouble;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class IdadesGraficoDTO {
 
-    private OptionalDouble mediaIdades;
+    private double mediaIdades;
     
     private HashMap<Integer, Integer> idadesEgressos;
 
