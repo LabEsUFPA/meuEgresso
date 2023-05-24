@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col w-[650px] h-96 bg-white rounded-xl p-4 text-gray-600 gap-y-10">
+  <div class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-[650px]">
     <div class="pl-1">
       <h1 class="font-bold text-2xl">
         {{ legend }}

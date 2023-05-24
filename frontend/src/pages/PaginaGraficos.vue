@@ -57,7 +57,7 @@
     </div>
   </div>
   <div class="flex justify-center gap-y-4 mb-14 py-10">
-    <div class="grid grid-cols-1 md:grid-cols-2 md:px-10 px-1 gap-y-10 gap-x-20 justify-items-center items-center">
+    <div class="grid grid-cols-1 xl:grid-cols-2 md:px-10 px-4 gap-y-10 gap-x-20 justify-items-center items-center">
       <CustomPieGraph
         v-if="loading"
         v-show="filters.all || filters.general"
