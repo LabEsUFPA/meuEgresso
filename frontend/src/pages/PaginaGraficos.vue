@@ -78,7 +78,7 @@
         v-show="filters.all || filters.general"
         legend="Idade"
         info="Quantidade de egressos por idade"
-        :loading="ageDataX ? false : true"
+        :loading="ageDataX.length ? false : true"
         :x="ageDataX"
         :y="ageDataY"
       />
@@ -150,7 +150,7 @@
         v-show="filters.all || filters.career"
         legend="Remuneração"
         info="Remuneração mensal média da bolsa do egresso"
-        :loading="remunerationDataX ? false : true"
+        :loading="remunerationDataX.length ? false : true"
         :x="remunerationDataX"
         :y="remunerationDataY"
       />
