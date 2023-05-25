@@ -1,30 +1,42 @@
 <template>
   <button
-    class="flex gap-3 px-4 py-2 rounded-3xl items-center"
+    type="button"
     :class="{
-      ['text-indigo-800 bg-indigo-600/30 font-medium'] : applied,
-      ['text-zinc-700 bg-gray-200'] : !applied
+      ['font-medium flex gap-3 px-4 py-2 rounded-3xl items-center']: true,
+      ['text-indigo-800 bg-indigo-600/30']: !selectable || selected,
+      ['text-gray-800 bg-gray-600/30']: selectable && !selected
     }"
   >
+    <Icon
+      v-if="icon"
+      :icon="icon"
+      width="16"
+      height="16"
+    />
     <p class="text-sm">
       {{ title }}
     </p>
-    <SvgIcon
-      v-show="applied"
-      type="mdi"
-      size="16"
-      :path="mdiClose"
+    <Icon
+      v-if="!selectable"
+      icon="ic:round-close"
+      width="16"
+      height="16"
     />
   </button>
 </template>
 
 <script setup lang="ts">
-import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiClose } from '@mdi/js'
+import { Icon } from '@iconify/vue'
 
-defineProps<{
-    title: string
-    applied: boolean
-}>()
+interface Props {
+  title: string
+  selectable?: boolean
+  selected?: boolean
+  icon?: string
+}
+
+withDefaults(defineProps<Props>(), {
+  icon: ''
+})
 
 </script>
