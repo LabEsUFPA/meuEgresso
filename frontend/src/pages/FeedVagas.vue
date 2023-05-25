@@ -82,19 +82,35 @@
         </div>
       </div>
 
+      <div v-if="$store.anuncios.length > 0">
+        <div
+          v-for="anuncio in $store.anuncios"
+          :key="anuncio.id"
+          class="flex justify-center"
+        >
+          <ShortPost
+            :id="anuncio.id"
+            :nome="anuncio.createdBy.nome"
+            :titulo="anuncio.titulo"
+            :area="anuncio.areaEmprego.nome"
+            :descricao="anuncio.descricao"
+            :salario="anuncio.salario"
+          />
+        </div>
+      </div>
+
       <div
-        v-for="anuncio in $store.anuncios"
-        :key="anuncio.id"
-        class="flex justify-center"
+        v-else
+        class="flex flex-col gap-4 justify-center items-center text-gray-400"
       >
-        <ShortPost
-          :id="anuncio.id"
-          :nome="anuncio.createdBy.nome"
-          :titulo="anuncio.titulo"
-          :area="anuncio.areaEmprego.nome"
-          :descricao="anuncio.descricao"
-          :salario="anuncio.salario"
+        <SvgIcon
+          type="mdi"
+          size="48"
+          :path="mdiEmoticonSadOutline"
         />
+        <h1 class="text-xl sm:text-2xl font-medium">
+          Nenhuma vaga encontrada
+        </h1>
       </div>
 
       <div
@@ -140,7 +156,7 @@
 
 import { ref, onMounted, watch } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiBullhorn, mdiFilterVariant, mdiPlus, mdiChevronRight, mdiChevronLeft } from '@mdi/js'
+import { mdiBullhorn, mdiFilterVariant, mdiPlus, mdiChevronRight, mdiChevronLeft, mdiEmoticonSadOutline } from '@mdi/js'
 import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
 import CustomButton from 'src/components/CustomButton.vue'
 import ShortPost from 'src/components/ShortPost.vue'
@@ -170,7 +186,6 @@ onMounted(async () => {
   await $store.fetchAreasEmprego()
   await $store.fetchBusca(currentPage.value, size.value)
 
-  console.log($store.anuncios)
   loading.value = true
   watch(currentPage, () => {
     $store.fetchBusca(currentPage.value, size.value)
@@ -179,11 +194,9 @@ onMounted(async () => {
     $store.fetchBuscaAnuncioTitulo(pesquisaValue.value, currentPage.value, size.value)
   })
   watch(filtersById, () => {
-    console.log('filtros:', filtersById.value)
     if (filtersById.value.length > 0) {
       $store.fetchBuscaAnuncioAreas(filtersById.value, currentPage.value, size.value)
     } else {
-      console.log('entrou no else')
       $store.fetchBusca(currentPage.value, size.value)
     }
   })
@@ -201,6 +214,7 @@ const toggleFilterApplied = (id:number) => {
   const filtro = $store.areasEmpregoFiltros.find(f => f.id === id)
   if (filtro) {
     filtro.applied = !filtro.applied
+    applyFilters(filtersById.value.filter(f => f === filtro.id))
   }
 }
 

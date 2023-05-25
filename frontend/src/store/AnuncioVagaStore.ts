@@ -50,7 +50,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
 
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
-        console.log('resposta API:', response.data?.content)
+        // console.log('resposta API:', response.data?.content)
         this.anuncios = response.data?.content.map((elem: any) => ({
           id: elem.id,
           titulo: elem.titulo,

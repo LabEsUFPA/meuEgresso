@@ -139,6 +139,5 @@ const $store = useAnuncioVagaStore()
 const $route = useRoute()
 const { id } = $route.params
 $store.getAnuncioId(parseInt(id.toString()))
-console.log('resposta pelo id:', $store.anuncio)
 
 </script>
