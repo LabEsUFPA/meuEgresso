@@ -19,7 +19,6 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiClose } from '@mdi/js'
 
@@ -27,6 +26,5 @@ defineProps<{
     title: string
     applied: boolean
 }>()
-
 
 </script>
