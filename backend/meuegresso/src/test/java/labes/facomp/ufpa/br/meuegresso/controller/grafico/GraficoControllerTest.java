@@ -48,6 +48,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.grafico.BolsistasGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotistaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.CursosGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.EmpresaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.EnderecoEmpresasGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.GenerosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.IdadesGraficoDTO;
@@ -129,6 +130,7 @@ class GraficoControllerTest {
         static final Integer COTA_ID = 1;
         static final String COTA_NOME = "CotaTeste";
 
+        // TODO: faixa salarial quebra quando usa acentuação, talvez pelo banco
         static final Integer FAIXASALARIAL_ID = 1;
         static final String FAIXASALARIAL = "1 salario minimo";
 
@@ -711,5 +713,25 @@ class GraficoControllerTest {
                 assertEquals(ENDERECO_PAIS, enderecoEmpresasGraficoDTO.getEnderecoEmpresas().get(0).get(1));
                 assertEquals(ENDERECO_ESTADO, enderecoEmpresasGraficoDTO.getEnderecoEmpresas().get(0).get(2));
                 assertEquals(ENDERECO_CIDADE, enderecoEmpresasGraficoDTO.getEnderecoEmpresas().get(0).get(3));
+        }
+
+        @Test
+        @Order(17)
+        void testGetEmpresas() throws Exception {
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/empresas")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                // .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                List<EmpresaGraficoDTO> empresaGraficoDTOs = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(),
+                                new TypeReference<List<EmpresaGraficoDTO>>() {
+                                });
+
+                assertNotNull(empresaGraficoDTOs);
+                assertEquals(1, empresaGraficoDTOs.size());
+                assertEquals(EMPRESA_NOME, empresaGraficoDTOs.get(0).getEmpresa());
+                assertEquals(1, empresaGraficoDTOs.get(0).getQuantidade());
         }
 }
