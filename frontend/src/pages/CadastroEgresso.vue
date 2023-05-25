@@ -50,7 +50,7 @@
               class="mb-5"
               name="geral.genero"
               label="Gênero"
-              :options="$store.generos"
+              :options="$storeCadastro.generos"
               required
             />
 
@@ -163,7 +163,7 @@
               name="academico.bolsista.tipo"
               label="Tipo de Bolsa"
               placeholder="Selecione"
-              :options="$store.tiposBolsa"
+              :options="$storeCadastro.tiposBolsa"
               :required="bools.bolsista"
               :disabled="!bools.bolsista"
             />
@@ -258,7 +258,7 @@
               class="mb-5"
               name="carreira.faixaSalarial"
               label="Faixa Salarial"
-              :options="$store.faixasSalariais"
+              :options="$storeCadastro.faixasSalariais"
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
             />
@@ -506,11 +506,13 @@ import {
 } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
+import { useLoginStore } from 'src/store/LoginStore'
 
-const $store = useCadastroEgressoStore()
+const $storeCadastro = useCadastroEgressoStore()
+const $storeLogin = useLoginStore()
 const storage = new LocalStorage()
 
-$store.fetchAll()
+$storeCadastro.fetchAll()
 
 const urlShare = 'https://meuegresso.alverad.com.br'
 const mensagemShare = '🎉%20Acabei%20de%20me%20cadastrar%20na%20plataforma%20Meu%20Egresso,%20se%20cadastre%20também:%0D%0A➡️ https://meuegresso.alverad.com.br'
@@ -634,7 +636,7 @@ async function handleSubmit (values: any) {
   const formData = new FormData()
   formData.append('arquivo', values.geral.foto)
 
-  const status = await $store.cadastrarEgresso({
+  const status = await $storeCadastro.cadastrarEgresso({
     temFoto: temFoto.value, // false por padrao
     foto: formData
   }, {

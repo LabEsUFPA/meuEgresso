@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -55,6 +57,8 @@ public class AuthenticationController {
 
 	private final AuthenticationManager authenticationManager;
 
+	private final JwtService jwtService;
+
 	/**
 	 * Endpoint responsavel por autentica um determinado usuário.
 	 *
@@ -75,6 +79,28 @@ public class AuthenticationController {
 						authenticationRequest.getPassword()));
 
 		String token = authService.authenticate((UsuarioModel) auth.getPrincipal());
+
+		ResponseCookie cookie = ResponseCookie.from("Token", token)
+				.httpOnly(false)
+				.secure(false)
+				.domain(tokenProperties.getDomain())
+				.sameSite("Lax")
+				.path("/")
+				.maxAge(Duration.ofHours(tokenProperties.getExpiresHours()))
+				.build();
+
+		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+				.body(AuthenticationResponse.builder().token(token).build());
+	}
+
+	@PostMapping(value = "/atualizarCookie")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public ResponseEntity<AuthenticationResponse> authenticationUser(JwtAuthenticationToken tokenAtual,
+			HttpServletRequest request) {
+
+		UsuarioModel usuario = usuarioService.findById(jwtService.getIdUsuario(tokenAtual));
+
+		String token = authService.authenticate(usuario);
 
 		ResponseCookie cookie = ResponseCookie.from("Token", token)
 				.httpOnly(false)
