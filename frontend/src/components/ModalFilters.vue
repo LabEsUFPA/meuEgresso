@@ -1,5 +1,8 @@
 <template>
-  <div v-show="modelValue">
+  <div
+    v-show="modelValue"
+    id="modal-filters"
+  >
     <div class="inset-0 fixed top-0 left-0 bg-black/75 flex items-center justify-center">
       <div class="flex flex-col md:w-2/4 sm:w-10/12 max-w-2xl bg-white rounded-md m-4">
         <div class="flex gap-4 px-8 pt-8 pb-4 justify-between items-center border-b-[1px] border-b-gray-200 text-cyan-800">

@@ -26,7 +26,7 @@
 
     <CustomButton
       type="button"
-      color="blue"
+      color="sky"
       text-class="text-sm sm:text-lg text-white"
       @click="$emit('update:modelValue', $event.target.value)"
     >
