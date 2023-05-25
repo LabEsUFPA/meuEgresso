@@ -17,29 +17,31 @@
         <CustomSelect
           class="mb-5"
           name="localizacao.pais"
-          :placeholder="placeHolder.paisHolder"
           label="País"
           :options="countries"
           v-model:value="pais"
+          @change="pais = $event"
           required
+          :placeholder="placeHolder.paisHolder"
         />
 
         <CustomSelect
           class="mb-5"
           name="localizacao.estado"
-          :placeholder="placeHolder.estadoHolder"
           label="Estado"
           :options="states"
           v-model:value="estado"
+          @change="estado = $event"
           required
+          :placeholder="placeHolder.estadoHolder"
         />
 
         <CustomSelect
           name="localizacao.cidade"
-          :placeholder="placeHolder.cidadeHolder"
           label="Cidade"
           :options="cities"
           required
+          :placeholder="placeHolder.cidadeHolder"
         />
       </div>
       <div v-else>
@@ -61,7 +63,6 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
 import { ref, computed, watch, onMounted } from 'vue'
 import { Country, State, City } from 'country-state-city'
-import { object, string, boolean } from 'yup'
 import { mdiMapMarker } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
@@ -69,10 +70,6 @@ const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 
 $store.fetchAll()
-
-const dialogSucesso = ref(false)
-const dialogFalha = ref(false)
-const camposFaltosos = ref(false)
 
 const pais = ref('')
 const estado = ref('')
@@ -135,13 +132,22 @@ const cities = computed(() => {
 })
 
 onMounted(() => {
+  const estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
+  const cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
   watch(pais, () => {
     form.value?.setFieldValue('localizacao.cidade', '')
     form.value?.setFieldValue('localizacao.estado', '')
+    setTimeout(() => {
+      estadoInput.value = ''
+      cidadeInput.value = ''
+    }, 10)
   })
 
   watch(estado, () => {
     form.value?.setFieldValue('localizacao.cidade', '')
+    setTimeout(() => {
+      cidadeInput.value = ''
+    }, 10)
   })
 
   if (storage.has('loggedUser')) {

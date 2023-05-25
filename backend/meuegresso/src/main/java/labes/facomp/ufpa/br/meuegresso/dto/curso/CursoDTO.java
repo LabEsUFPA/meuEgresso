@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.curso;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -12,6 +13,7 @@ import lombok.Data;
  * @version 1.2
  */
 @Data
+@Builder
 public class CursoDTO {
 
     private Integer id;

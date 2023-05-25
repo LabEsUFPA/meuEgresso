@@ -1,13 +1,3 @@
-// import { mount } from '@vue/test-utils'
-// import { describe, expect, it } from 'vitest'
-// import CustomButtonLink from '../components/CustomButtonLink.vue'
-
-// describe('CustomButtonLink Render Test', () => {
-//   it('renders properly', () => {
-//     const wrapper = mount(CustomButtonLink)
-//     expect(wrapper.vm).toBeDefined()
-//   })
-// })
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import ButtonLink from 'src/components/CustomButtonLink.vue'

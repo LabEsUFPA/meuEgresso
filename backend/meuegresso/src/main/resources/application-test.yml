@@ -37,4 +37,8 @@ spring:
 server:
   port: 15000
 
+token:
+  domain: teste.com
+  expiresHours: 3
+  
 fotosDir: test/fotosTeste/

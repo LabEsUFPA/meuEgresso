@@ -21,16 +21,16 @@ services:
         - "traefik.docker.network=traefik-public"
         - "traefik.constraint-label=traefik-public"
 
-        - "traefik.http.routers.front_egresso_http.rule=Host(`meuegresso.alverad.com.br`)"
-        - "traefik.http.routers.front_egresso_http.entrypoints=http"
-        - "traefik.http.routers.front_egresso_http.middlewares=https-redirect@file"
+        - "traefik.http.routers.front_egresso.rule=Host(`meuegresso.alverad.com.br`)"
+        - "traefik.http.routers.front_egresso.entrypoints=http"
+        - "traefik.http.routers.front_egresso.middlewares=https-redirect@file"
 
-        - "traefik.http.routers.front_egresso-secure.rule=Host(`meuegresso.alverad.com.br`)"
-        - "traefik.http.routers.front_egresso-secure.entrypoints=https"
-        - "traefik.http.routers.front_egresso-secure.tls=true"
-        - "traefik.http.routers.front_egresso-secure.tls.certresolver=le"
-        - "traefik.http.routers.front_egresso.middlewares=default-headers@file"
-        - "traefik.http.services.front_egresso.loadbalancer.server.port=80"
+        - "traefik.http.routers.front_egresso_https.rule=Host(`meuegresso.alverad.com.br`)"
+        - "traefik.http.routers.front_egresso_https.entrypoints=https"
+        - "traefik.http.routers.front_egresso_https.tls=true"
+        - "traefik.http.routers.front_egresso_https.tls.certresolver=le"
+        - "traefik.http.routers.front_egresso_https.middlewares=default-headers@file"
+        - "traefik.http.services.front_egresso_https.loadbalancer.server.port=80"
 
 networks:
   traefik-public:

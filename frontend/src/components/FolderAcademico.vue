@@ -20,6 +20,9 @@
           label="Matrícula"
           mask="############"
           placeholder="205004940001"
+          :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
+          custom-error-message
+          @update:value="checkRegistrationLength"
         />
 
         <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -154,6 +157,7 @@ $store.fetchAll()
 const pais = ref('')
 const estado = ref('')
 const form = ref<typeof Form | null>(null)
+const missingDigits = ref(0)
 
 interface Props {
   isInput?: boolean
@@ -183,9 +187,10 @@ const bolsaHolder = ref({
   placeholder: props.bolsaHolder
 })
 
-console.log('bools')
+const checkRegistrationLength = ($event: Event) => {
+  missingDigits.value = 12 - String($event).length
+}
 
-console.log(props.bolsaHolder)
 onMounted(() => {
   watch(pais, () => {
     form.value?.setFieldValue('localizacao.cidade', '')

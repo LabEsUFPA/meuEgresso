@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.service.curso;
 
 import java.util.List;
 
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.CursosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 
@@ -61,6 +62,13 @@ public interface CursoService {
 	 */
 	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
- 	public CursoModel findByNome(String nome);
+	public CursoModel findByNome(String nome);
+
+	/**
+	 * Método responsável por retornar os cursos cadastrados e a quantidade de egressos por curso.
+	 * 
+	 * @return {@link List<CursosGraficoDTO>} lista de DTOs com as contagens de egresso por curso.
+	 */
+	public List<CursosGraficoDTO> countEgressoByCurso();
 
 }

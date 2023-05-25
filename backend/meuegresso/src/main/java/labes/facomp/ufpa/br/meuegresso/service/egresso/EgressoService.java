@@ -22,6 +22,16 @@ public interface EgressoService {
 
 	public EgressoModel findByUsuarioId(Integer idUsuario);
 
+	/**
+	 * Metodo responsavel retornar lista de idades dos egressos.
+	 *
+	 * @param nenhum
+	 * @return Lista com idade de todos os egressos
+	 * @author Pedro Inácio
+	 * @since 19/05/2023
+	 */
+	public List<Integer> findAllIdades();
+
 	public EgressoModel findById(Integer id);
 
 	public List<EgressoModel> findAll();
@@ -36,7 +46,6 @@ public interface EgressoService {
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
-
 	public EgressoModel updateEgresso(EgressoModel egresso);
 
 	/**

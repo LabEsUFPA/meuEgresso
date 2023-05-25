@@ -7,7 +7,10 @@ export default [
       { path: '/entrar', component: async () => await import('src/pages/PaginaLogin.vue') },
       {
         path: '/cadastro',
-        component: async () => await import('src/pages/CadastroEgresso.vue')
+        component: async () => await import('src/pages/CadastroEgresso.vue'),
+        meta: {
+          shouldNotForce: true
+        }
       },
       {
         path: '/cadastro-perfil',
@@ -44,6 +47,10 @@ export default [
         component: async () => await import('src/pages/EdicaoContaAdmin.vue')
       },
       {
+        path: '/graficos',
+        component: async () => await import('src/pages/PaginaGraficos.vue')
+      },
+      {
         path: '/vagas',
         component: async () => await import('src/pages/FeedVagas.vue')
       },
@@ -52,5 +59,6 @@ export default [
         component: async () => await import('src/pages/AnuncioVaga.vue')
       }
     ]
-  }
+  },
+  { path: '/:pathMatch(.*)*', component: async () => await import('src/pages/PageNotFound.vue') }
 ]
