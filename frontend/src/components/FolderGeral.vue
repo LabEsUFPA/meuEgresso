@@ -92,10 +92,6 @@ const storage = new LocalStorage()
 
 $store.fetchAll()
 
-const dialogSucesso = ref(false)
-const dialogFalha = ref(false)
-const camposFaltosos = ref(false)
-
 const pais = ref('')
 const estado = ref('')
 const form = ref<typeof Form | null>(null)

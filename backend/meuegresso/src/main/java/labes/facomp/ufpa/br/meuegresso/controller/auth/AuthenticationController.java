@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.config.properties.TokenProperties;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
@@ -66,7 +67,8 @@ public class AuthenticationController {
 	@PostMapping(value = "/login")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public ResponseEntity<AuthenticationResponse> authenticationUser(
-			@RequestBody AuthenticationRequest authenticationRequest) {
+			@RequestBody AuthenticationRequest authenticationRequest,
+			HttpServletRequest request) {
 
 		Authentication auth = authenticationManager.authenticate(
 				UsernamePasswordAuthenticationToken.unauthenticated(authenticationRequest.getUsername(),
@@ -77,6 +79,7 @@ public class AuthenticationController {
 		ResponseCookie cookie = ResponseCookie.from("Token", token)
 				.httpOnly(false)
 				.secure(false)
+				.domain(tokenProperties.getDomain())
 				.sameSite("Lax")
 				.path("/")
 				.maxAge(Duration.ofHours(tokenProperties.getExpiresHours()))

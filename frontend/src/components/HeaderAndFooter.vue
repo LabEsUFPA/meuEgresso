@@ -80,7 +80,7 @@
               -->
             </li>
             <li class="cursor-pointer relative group hover:text-white h-full">
-              <RouterLink to="/">
+              <RouterLink to="/graficos">
                 <div class="h-full flex items-center">
                   Gráficos
                 </div>

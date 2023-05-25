@@ -55,20 +55,14 @@ const props = defineProps<{
   name: string
   disabled?: boolean
 }>()
-
+type Booleanish = 'true' | 'false'
 const $emit = defineEmits(['update:value'])
 
 const name = toRef(props, 'name')
-// const {
-//   value: inputValue,
-//   handleChange
-// } = useField(name, undefined, {
-//   initialValue: props.value
-// })
 
 const {
   value: inputValue,
   handleChange
-} = useField(name, undefined)
+} = useField<Booleanish | 'mixed' | undefined>(name, undefined)
 
 </script>

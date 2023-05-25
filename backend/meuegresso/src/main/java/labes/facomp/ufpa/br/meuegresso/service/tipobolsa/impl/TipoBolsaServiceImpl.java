@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.repository.tipobolsa.TipoBolsaRepository;
@@ -33,6 +34,7 @@ public class TipoBolsaServiceImpl implements TipoBolsaService {
     }
 
     @Override
+    @Transactional
     public List<TipoBolsaModel> findAll() {
         return tipoBolsaRepository.findAll();
     }

@@ -44,6 +44,10 @@ export default [
         component: async () => await import('src/pages/EdicaoContaAdmin.vue')
       },
       {
+        path: '/graficos',
+        component: async () => await import('src/pages/PaginaGraficos.vue')
+      },
+      {
         path: '/vagas',
         component: async () => await import('src/pages/FeedVagas.vue')
       },

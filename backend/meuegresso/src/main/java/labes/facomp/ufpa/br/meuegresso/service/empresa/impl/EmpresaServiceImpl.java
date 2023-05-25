@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
@@ -64,6 +65,11 @@ public class EmpresaServiceImpl implements EmpresaService {
     @Override
     public EmpresaModel findByNome(String nome) {
         return empresaRepository.findByNomeIgnoreCase(nome).orElse(null);
+    }
+
+    @Override
+    public List<LocalPosGraficoDTO> countEgressoByPos() {
+        return empresaRepository.countEgressoByPos();
     }
 
 }

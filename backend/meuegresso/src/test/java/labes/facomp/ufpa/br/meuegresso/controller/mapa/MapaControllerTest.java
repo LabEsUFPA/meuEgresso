@@ -74,7 +74,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @TestMethodOrder(OrderAnnotation.class)
 class MapaControllerTest {
 
-        static final Integer EMRPESA_ID = 1;
+        static final Integer EMPRESA_ID = 1;
         static final String NOME = "EmpresaTeste";
         static final String SETORATUACAO = "SetorTeste";
 
@@ -204,7 +204,7 @@ class MapaControllerTest {
                 empresaRepository.save(empresaModel);
 
                 /* ModelId */
-                egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(EGRESSO_ID).empresaId(EMRPESA_ID)
+                egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(EGRESSO_ID).empresaId(EMPRESA_ID)
                                 .build();
 
                 /* FaixaSalarial */

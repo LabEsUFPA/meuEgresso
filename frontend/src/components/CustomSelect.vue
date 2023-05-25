@@ -23,8 +23,8 @@
           :class="classNames({
             ['bg-gray-100 cursor-not-allowed']: disabled,
             ['cursor-pointer']: !disabled,
-            ['outline-2 outline outline-red-500']: !meta.valid && meta.validated && meta.touched,
-            ['outline-2 outline outline-emerald-500']: meta.valid && meta.validated && meta.touched,
+            ['outline-2 outline outline-red-500']: !meta.valid && meta.validated && meta.dirty && meta.touched,
+            ['outline-2 outline outline-emerald-500']: meta.valid && meta.validated && meta.dirty && meta.touched,
             ['rounded-t-lg']: open,
             ['rounded-lg']: !open,
             ['w-64 py-1 px-3 relative border bg-white']: true,
@@ -58,6 +58,7 @@
             keep-first
             open-on-focus
             selectable-header
+            check-infinite-scroll
             menu-class="absolute shadow-md bg-white w-64 z-50 cursor-pointer -left-[1px] overflow-y-auto top-8 rounded-b-lg border border-t-0"
             item-class="p-2 text-left border-t hover:bg-gray-200"
             item-hover-class="bg-gray-200"
@@ -69,11 +70,11 @@
             :field="typeof options[0] === 'object' ? 'label' : 'value'"
             :required="required"
             :disabled="disabled"
-            check-infinite-scroll
             :loading="isFetching"
             :input-class="classNames({
               ['cursor-not-allowed']: disabled,
-              ['bg-transparent focus:outline-none']: true
+              ['bg-transparent focus:outline-none']: true,
+              [name.replaceAll('.', '-')]: true
             })"
             :root-class="classNames({
               ['col-span-6']: iconPath,
@@ -82,7 +83,7 @@
             :debounce-typing="infinite ? 500 : 0"
             @select="(option: IOpts) => (handleEmit(option))"
             @focus="() => { !disabled ? open = !open : '' }"
-            @blur="open = false"
+            @blur="handleBlur(); open = false"
             @keydown="open = true"
             @keydown.esc.enter="open = false"
             @typing="$emit('typing', $event)"
@@ -105,7 +106,10 @@
         </div>
       </template>
       <template #message>
-        <div class="text-red-500">
+        <div
+          v-if="meta.touched"
+          class="text-red-500"
+        >
           {{ errorMessage }}
         </div>
         <div>
@@ -174,6 +178,7 @@ const filteredDataArray = computed(() => {
 const name = toRef(props, 'name')
 const {
   handleChange,
+  handleBlur,
   meta,
   errorMessage
 } = useField(name, undefined)
