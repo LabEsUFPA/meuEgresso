@@ -18,6 +18,6 @@ public class EmpresaGraficoDTO {
     
     private String empresa;
 
-    private Integer quantidade;
+    private Long quantidade;
 
 }
