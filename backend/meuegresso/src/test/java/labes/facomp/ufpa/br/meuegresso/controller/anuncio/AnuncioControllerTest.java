@@ -20,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -36,6 +37,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import labes.facomp.ufpa.br.meuegresso.dto.anuncio.AnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
+import labes.facomp.ufpa.br.meuegresso.dto.page.PageDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.model.AreaEmpregoModel;
@@ -298,24 +300,25 @@ public class AnuncioControllerTest {
 
         @Order(7)
         @Test
-        void findByAreaEMprego() throws Exception {
-                // ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+        void findByAreaEmprego() throws Exception {
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-                // MvcResult resposta = mockMvc.perform(
-                //                 MockMvcRequestBuilders.get("/anuncio/busca")
-                //                                 .contentType(MediaType.APPLICATION_JSON)
-                //                                 .param("areaEmprego", "1")
-                //                                 .header("Authorization", "Bearer " + this.token))
-                //                 .andDo(MockMvcResultHandlers.print())
-                //                 .andExpect(status().isOk()).andReturn();
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.get("/anuncio/busca")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .param("areaEmprego", "1")
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
 
-                // List<AnuncioDTO> anuncios = objectMapper.readValue(
-                //                 resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {
-                //                 });
+                List<AnuncioDTO> anuncios = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(), new TypeReference<PageDTO<AnuncioDTO>>() {
+                                }).getContent();
 
-                // assertNotNull(anuncios);
-                // assertEquals(2, anuncios.size());
-                // assertEquals(1, anuncios.get(0).getAreaEmprego().getId());
+
+                assertNotNull(anuncios);
+                assertEquals(2, anuncios.size());
+                assertEquals(1, anuncios.get(0).getAreaEmprego().getId());
         }
 
 }
