@@ -14,7 +14,8 @@ router.beforeEach((to) => {
   const loggedUser = JSON.parse(localStorage.getItem('loggedUser') ?? '{}')
   const userData = parseToken(storage.getToken())
 
-  if (userData !== null && !userData.isEgresso && !(to.meta?.shouldNotForce === true) && loggedUser.grupos[0].nomeGrupo === 'EGRESSO') {
+  if (to.path !== '/cadastro' && userData !== null && !userData.isEgresso && !(to.meta?.shouldNotForce === true) && loggedUser.grupos[0].nomeGrupo === 'EGRESSO') {
+    alert('É necessário realizar o cadastro completo para usar o sistema')
     return {
       path: '/cadastro'
     }

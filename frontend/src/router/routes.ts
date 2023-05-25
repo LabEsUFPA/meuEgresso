@@ -55,5 +55,6 @@ export default [
         component: async () => await import('src/pages/AnuncioVaga.vue')
       }
     ]
-  }
+  },
+  { path: '/:pathMatch(.*)*', component: async () => await import('src/pages/PageNotFound.vue') }
 ]
