@@ -62,4 +62,5 @@ public class EgressoTitulacaoServiceImpl implements EgressoTitulacaoService {
         return egressoTitulacaoRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
+
 }

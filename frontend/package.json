@@ -22,6 +22,7 @@
     "axios": "^1.4.0",
     "classnames": "^2.3.2",
     "country-state-city": "^3.1.2",
+    "echarts": "^5.4.2",
     "husky": "^4.3.8",
     "leaflet": "^1.9.4",
     "lint-staged": "^13.2.1",
@@ -30,6 +31,7 @@
     "tailwindcss": "^3.3.1",
     "vee-validate": "^4.8.6",
     "vue": "^3.2.47",
+    "vue-echarts": "^6.5.5",
     "vue-router": "^4.1.6",
     "yup": "^1.1.1"
   },
