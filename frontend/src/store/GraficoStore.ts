@@ -5,6 +5,28 @@ interface PieChartSeries extends models.Graphics.PieChartSeries {}
 
 export const useGraficoStore = defineStore('GraficoStore', {
   actions: {
+    async getCompanyData () {
+      const response = await Api.request({
+        method: 'get',
+        route: '/grafico/empresas'
+      })
+
+      if ((response?.data) != null) {
+        const companyData: PieChartSeries[] = []
+        const companyLegend: string[] = []
+        response.data.forEach((item: { empresa: string, quantidade: number }) => {
+          companyData.push({ value: Math.floor(Math.random() * 100), name: item.empresa })
+          companyLegend.push(item.empresa)
+        })
+
+        return {
+          companyData,
+          companyLegend,
+          status: (response?.status) !== undefined ? response.status : 500
+        }
+      }
+    },
+
     async getPostGraduateCourseData () {
       const response = await Api.request({
         method: 'get',

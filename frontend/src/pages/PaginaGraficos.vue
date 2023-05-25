@@ -178,6 +178,14 @@
         :data="postGraduateCourseData"
         :legend-data="postGraduateCourseLegend"
       />
+      <CustomPieGraph
+        v-show="filters.all || filters.career"
+        legend="Vículo empregatício"
+        info="Onde os egressos estão trabalhando"
+        :loading="companyData ? false : true"
+        :data="companyData"
+        :legend-data="companyLegend"
+      />
     </div>
   </div>
 </template>
@@ -225,6 +233,8 @@ const postGraduateLocalData = ref<PieChartSeries[]>()
 const postGraduateLocalLegend = ref<string[]>()
 const postGraduateCourseData = ref<PieChartSeries[]>()
 const postGraduateCourseLegend = ref<string[]>()
+const companyData = ref<PieChartSeries[]>()
+const companyLegend = ref<string[]>()
 
 onMounted(async () => {
   await getGraphData()
@@ -290,6 +300,10 @@ const getGraphData = async () => {
   const postGraduateCourseGraph = await store.getPostGraduateCourseData()
   postGraduateCourseData.value = postGraduateCourseGraph?.postGraduateCourseData
   postGraduateCourseLegend.value = postGraduateCourseGraph?.postGraduateCourseLegend
+
+  const companyGraph = await store.getCompanyData()
+  companyData.value = companyGraph?.companyData
+  companyLegend.value = companyGraph?.companyLegend
 }
 
 interface Filters {
