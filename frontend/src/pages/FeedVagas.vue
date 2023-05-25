@@ -102,6 +102,8 @@
       >
         <button
           class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-lg"
+          v-show="currentPage>0"
+          @click="decrementaPage()"
         >
           <SvgIcon
             type="mdi"
@@ -112,6 +114,8 @@
         </button>
         <button
           class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-md"
+          v-show="currentPage<$store.totalPages-1"
+          @click="incrementaPage()"
         >
           <div>Próximo</div>
           <SvgIcon
@@ -150,19 +154,37 @@ const loading = ref(false)
 
 const filtersById = ref([])
 
+const currentPage = ref(0)
+
+const size = ref(3)
+
+const incrementaPage = () => {
+  currentPage.value++
+}
+
+const decrementaPage = () => {
+  currentPage.value--
+}
+
 onMounted(async () => {
   await $store.fetchAreasEmprego()
-  await $store.fetchAnuncios()
+  await $store.fetchBusca(currentPage.value, size.value)
+
   console.log($store.anuncios)
   loading.value = true
+  watch(currentPage, () => {
+    $store.fetchBusca(currentPage.value, size.value)
+  })
   watch(pesquisaValue, () => {
-    $store.fetchBuscaAnuncioTitulo(pesquisaValue.value)
+    $store.fetchBuscaAnuncioTitulo(pesquisaValue.value, currentPage.value, size.value)
   })
   watch(filtersById, () => {
+    console.log('filtros:', filtersById.value)
     if (filtersById.value.length > 0) {
-      $store.fetchBuscaAnuncioAreas(filtersById.value)
+      $store.fetchBuscaAnuncioAreas(filtersById.value, currentPage.value, size.value)
     } else {
-      $store.fetchAnuncios()
+      console.log('entrou no else')
+      $store.fetchBusca(currentPage.value, size.value)
     }
   })
 })

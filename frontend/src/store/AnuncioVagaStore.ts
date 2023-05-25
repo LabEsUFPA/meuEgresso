@@ -13,6 +13,7 @@ interface State {
   anuncios: AnuncioVaga []
   areasEmpregoFiltros: AreaEmpregoFiltro []
   areasEmprego: ComplexOpts []
+  totalPages: number
 
 }
 
@@ -36,7 +37,8 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
     },
     anuncios: [],
     areasEmprego: [],
-    areasEmpregoFiltros: []
+    areasEmpregoFiltros: [],
+    totalPages: 0
   }),
 
   actions: {
@@ -47,8 +49,9 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       })
 
       if (response?.status === 200) {
-        console.log('resposta API:', response.data)
-        this.anuncios = response.data?.map((elem: any) => ({
+        this.totalPages = response.data?.totalPages
+        console.log('resposta API:', response.data?.content)
+        this.anuncios = response.data?.content.map((elem: any) => ({
           id: elem.id,
           titulo: elem.titulo,
           areaEmprego: {
@@ -67,6 +70,145 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       }
     },
 
+    async fetchBusca (page: number, size: number) {
+      const BASE_URL = 'http://localhost:15000'
+      const rota = '/anuncio/busca'
+      const params = {
+        page,
+        size
+      }
+      axios.get(`${BASE_URL}${rota}`, { params })
+        .then(response => {
+          console.log('data:', response.data)
+          this.totalPages = response.data?.totalPages
+          this.anuncios = response.data?.content.map((elem: any) => ({
+            id: elem.id,
+            titulo: elem.titulo,
+            areaEmprego: {
+              id: elem.areaEmprego.id,
+              nome: elem.areaEmprego.nome
+            },
+            descricao: elem.descricao,
+            dataExpiracao: elem.dataExpiracao,
+            link: elem.link,
+            salario: elem.salario,
+            createdBy: {
+              email: elem.createdBy.email,
+              nome: elem.createdBy.nome
+            }
+          }))
+        })
+        .catch(error => {
+          console.log('Falha na requisição', error)
+        })
+    },
+
+    async fetchBuscaAnuncio (titulo: string, areasEmpregos: number[], page: number, size: number) {
+      const BASE_URL = 'http://localhost:15000'
+      const rota = '/anuncio/busca'
+      const params = {
+        titulo,
+        areaEmprego: areasEmpregos.join(),
+        page,
+        size
+      }
+      console.log(`${BASE_URL}${rota}`, { params })
+      axios.get(`${BASE_URL}${rota}`, { params })
+        .then(response => {
+          this.totalPages = response.data?.totalPages
+          console.log('data:', response.data)
+          this.anuncios = response.data?.content.map((elem: any) => ({
+            id: elem.id,
+            titulo: elem.titulo,
+            areaEmprego: {
+              id: elem.areaEmprego.id,
+              nome: elem.areaEmprego.nome
+            },
+            descricao: elem.descricao,
+            dataExpiracao: elem.dataExpiracao,
+            link: elem.link,
+            salario: elem.salario,
+            createdBy: {
+              email: elem.createdBy.email,
+              nome: elem.createdBy.nome
+            }
+          }))
+        })
+        .catch(error => {
+          console.log('Falha na requisição', error)
+        })
+    },
+
+    async fetchBuscaAnuncioTitulo (titulo: string, page: number, size: number) {
+      const BASE_URL = 'http://localhost:15000'
+      const rota = '/anuncio/busca'
+      const params = {
+        titulo,
+        page,
+        size
+      }
+      console.log(`${BASE_URL}${rota}`, { params })
+      axios.get(`${BASE_URL}${rota}`, { params })
+        .then(response => {
+          console.log('data:', response.data?.content)
+          this.totalPages = response.data?.totalPages
+          this.anuncios = response.data?.content.map((elem: any) => ({
+            id: elem.id,
+            titulo: elem.titulo,
+            areaEmprego: {
+              id: elem.areaEmprego.id,
+              nome: elem.areaEmprego.nome
+            },
+            descricao: elem.descricao,
+            dataExpiracao: elem.dataExpiracao,
+            link: elem.link,
+            salario: elem.salario,
+            createdBy: {
+              email: elem.createdBy.email,
+              nome: elem.createdBy.nome
+            }
+          }))
+        })
+        .catch(error => {
+          console.log('Falha na requisição', error)
+        })
+    },
+
+    async fetchBuscaAnuncioAreas (areasEmpregos: number[], page: number, size: number) {
+      const BASE_URL = 'http://localhost:15000'
+      const rota = '/anuncio/busca'
+      const params = {
+        areaEmprego: areasEmpregos.join(),
+        page,
+        size
+      }
+      console.log(`${BASE_URL}${rota}`, { params })
+      axios.get(`${BASE_URL}${rota}`, { params })
+        .then(response => {
+          console.log('data:', response.data?.content)
+          this.totalPages = response.data?.totalPages
+          this.anuncios = response.data?.content?.map((elem: any) => ({
+            id: elem.id,
+            titulo: elem.titulo,
+            areaEmprego: {
+              id: elem.areaEmprego.id,
+              nome: elem.areaEmprego.nome
+            },
+            descricao: elem.descricao,
+            dataExpiracao: elem.dataExpiracao,
+            link: elem.link,
+            salario: elem.salario,
+            createdBy: {
+              email: elem.createdBy.email,
+              nome: elem.createdBy.nome
+            }
+          }))
+        })
+        .catch(error => {
+          console.log('Falha na requisição', error)
+        })
+    },
+
     async fetchAreasEmprego () {
       const response = await Api.request({
         method: 'get',
@@ -83,103 +225,6 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
           value: elem.id
         }))
       }
-    },
-
-    async fetchBuscaAnuncio (titulo: string, areasEmpregos: number[]) {
-      const BASE_URL = 'http://localhost:15000'
-      const rota = '/anuncio/busca'
-      const params = {
-        titulo,
-        areaEmprego: areasEmpregos.join()
-      }
-      console.log(`${BASE_URL}${rota}`, { params })
-      axios.get(`${BASE_URL}${rota}`, { params })
-        .then(response => {
-          console.log('data:', response.data)
-          this.anuncios = response.data?.map((elem: any) => ({
-            id: elem.id,
-            titulo: elem.titulo,
-            areaEmprego: {
-              id: elem.areaEmprego.id,
-              nome: elem.areaEmprego.nome
-            },
-            descricao: elem.descricao,
-            dataExpiracao: elem.dataExpiracao,
-            link: elem.link,
-            salario: elem.salario,
-            createdBy: {
-              email: elem.createdBy.email,
-              nome: elem.createdBy.nome
-            }
-          }))
-        })
-        .catch(error => {
-          console.log('Falha na requisição', error)
-        })
-    },
-
-    async fetchBuscaAnuncioTitulo (titulo: string) {
-      const BASE_URL = 'http://localhost:15000'
-      const rota = '/anuncio/busca'
-      const params = {
-        titulo
-      }
-      console.log(`${BASE_URL}${rota}`, { params })
-      axios.get(`${BASE_URL}${rota}`, { params })
-        .then(response => {
-          console.log('data:', response.data)
-          this.anuncios = response.data?.map((elem: any) => ({
-            id: elem.id,
-            titulo: elem.titulo,
-            areaEmprego: {
-              id: elem.areaEmprego.id,
-              nome: elem.areaEmprego.nome
-            },
-            descricao: elem.descricao,
-            dataExpiracao: elem.dataExpiracao,
-            link: elem.link,
-            salario: elem.salario,
-            createdBy: {
-              email: elem.createdBy.email,
-              nome: elem.createdBy.nome
-            }
-          }))
-        })
-        .catch(error => {
-          console.log('Falha na requisição', error)
-        })
-    },
-
-    async fetchBuscaAnuncioAreas (areasEmpregos: number[]) {
-      const BASE_URL = 'http://localhost:15000'
-      const rota = '/anuncio/busca'
-      const params = {
-        areaEmprego: areasEmpregos.join()
-      }
-      console.log(`${BASE_URL}${rota}`, { params })
-      axios.get(`${BASE_URL}${rota}`, { params })
-        .then(response => {
-          console.log('data:', response.data)
-          this.anuncios = response.data?.map((elem: any) => ({
-            id: elem.id,
-            titulo: elem.titulo,
-            areaEmprego: {
-              id: elem.areaEmprego.id,
-              nome: elem.areaEmprego.nome
-            },
-            descricao: elem.descricao,
-            dataExpiracao: elem.dataExpiracao,
-            link: elem.link,
-            salario: elem.salario,
-            createdBy: {
-              email: elem.createdBy.email,
-              nome: elem.createdBy.nome
-            }
-          }))
-        })
-        .catch(error => {
-          console.log('Falha na requisição', error)
-        })
     },
 
     async cadastraAnuncio (dadosAnuncio: AnuncioVagaPost) {
