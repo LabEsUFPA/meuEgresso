@@ -2,7 +2,6 @@ package labes.facomp.ufpa.br.meuegresso.controller.anuncio;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
@@ -21,9 +20,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -38,6 +37,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import labes.facomp.ufpa.br.meuegresso.dto.anuncio.AnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
+import labes.facomp.ufpa.br.meuegresso.dto.page.PageDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.model.AreaEmpregoModel;
@@ -47,7 +47,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.areaemprego.AreaEmpregoReposit
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 
 @SpringBootTest
-@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
+@DirtiesContext
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
@@ -57,7 +57,7 @@ public class AnuncioControllerTest {
         final String USERNAME = "username_test";
 
         final String ANUNCIO_TITULO = "Vagas pra burros";
-        final Double ANUNCIO_SAL = 3000.0;
+        final String ANUNCIO_SAL = "3000.0";
         final LocalDate ANUNCIO_EXPIRACAO = LocalDate.parse("2023-12-12");
         final String ANUNCIO_DESC = "descrição test";
         final String ANUNCIO_LINK = "http://test.com/test";
@@ -135,7 +135,7 @@ public class AnuncioControllerTest {
                 anuncioModel2.setTitulo("anuncio_test2");
                 anuncioModel2.setAreaEmprego(areaEmprego);
                 anuncioModel2.setDataExpiracao(ANUNCIO_EXPIRACAO);
-                anuncioModel2.setSalario(55000);
+                anuncioModel2.setSalario("55000");
                 anuncioModel2.setDescricao(ANUNCIO_DESC);
                 anuncioModel2.setLink(ANUNCIO_LINK);
 
@@ -201,9 +201,9 @@ public class AnuncioControllerTest {
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
-                List<AnuncioDTO> anuncios = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-                                new TypeReference<List<AnuncioDTO>>() {
-                                });
+                List<AnuncioDTO> anuncios = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(), new TypeReference<PageDTO<AnuncioDTO>>() {
+                                }).getContent();
 
                 assertNotNull(anuncios);
                 assertEquals(2, anuncios.size());
@@ -237,21 +237,18 @@ public class AnuncioControllerTest {
                                 MockMvcRequestBuilders.get("/anuncio/busca")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .param("titulo", ANUNCIO_TITULO)
-                                                .param("minValorSalario", "0")
-                                                .param("maxValorSalario", "10000")
                                                 .param("areaEmprego", "1")
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
                 List<AnuncioDTO> anuncios = objectMapper.readValue(
-                                resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {
-                                });
+                                resposta.getResponse().getContentAsString(), new TypeReference<PageDTO<AnuncioDTO>>() {
+                                }).getContent();
 
                 assertNotNull(anuncios);
                 assertEquals(2, anuncios.size());
                 assertEquals(ANUNCIO_TITULO, anuncios.get(0).getTitulo());
-                assertTrue(anuncios.get(0).getSalario() > 0 && anuncios.get(0).getSalario() < 10000);
                 assertEquals(1, anuncios.get(0).getAreaEmprego().getId());
         }
 
@@ -269,8 +266,8 @@ public class AnuncioControllerTest {
                                 .andExpect(status().isOk()).andReturn();
 
                 List<AnuncioDTO> anuncios = objectMapper.readValue(
-                                resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {
-                                });
+                                resposta.getResponse().getContentAsString(), new TypeReference<PageDTO<AnuncioDTO>>() {
+                                }).getContent();
 
                 assertNotNull(anuncios);
                 assertEquals(2, anuncios.size());
@@ -279,30 +276,7 @@ public class AnuncioControllerTest {
 
         @Order(6)
         @Test
-        void findBySalario() throws Exception {
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
-                MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.get("/anuncio/busca")
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .param("minValorSalario", "0")
-                                                .param("maxValorSalario", "10000")
-                                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk()).andReturn();
-
-                List<AnuncioDTO> anuncios = objectMapper.readValue(
-                                resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {
-                                });
-
-                assertNotNull(anuncios);
-                assertEquals(2, anuncios.size());
-                assertTrue(anuncios.get(0).getSalario() > 0 && anuncios.get(0).getSalario() < 10000);
-        }
-
-        @Order(7)
-        @Test
-        void findByAreaEMprego() throws Exception {
+        void findByAreaEmprego() throws Exception {
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
@@ -314,8 +288,8 @@ public class AnuncioControllerTest {
                                 .andExpect(status().isOk()).andReturn();
 
                 List<AnuncioDTO> anuncios = objectMapper.readValue(
-                                resposta.getResponse().getContentAsString(), new TypeReference<List<AnuncioDTO>>() {
-                                });
+                                resposta.getResponse().getContentAsString(), new TypeReference<PageDTO<AnuncioDTO>>() {
+                                }).getContent();
 
                 assertNotNull(anuncios);
                 assertEquals(2, anuncios.size());

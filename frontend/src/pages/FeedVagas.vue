@@ -1,162 +1,225 @@
 <template>
-    <div class="flex flex-col">
-
-      <div class="flex justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
-        <div class="flex w-[960px] border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl p-8 mt-10 mx-6 items-center justify-between">
-          
-          <div class="flex text-cyan-800 items-center">
-            <Icon icon="majesticons:megaphone" width="32" height="32" class="mr-5 inline" />
-            <h1 class="text-3xl font-bold">
-              Vagas de emprego
-            </h1>
-          </div>
-          
-          <CustomButton type="submit" color="emerald" text-class="text-white font-medium">
-              <RouterLink
-                    to="/cadastro-anuncio"
-                    
-                  >
-                  Anuncie uma vaga
-              </RouterLink>
-            <Icon icon="mingcute:right-line" width="32" height="32" />
-          </CustomButton>
-
-        </div>
-      </div>
-
-      <div class="flex flex-col gap-8 mb-10" >
-
-        <div class="flex justify-center">
-          <div class="flex flex-col w-[960px] bg-white rounded-bl-2xl rounded-br-2xl p-2 mx-6 items-center">
-            
-            <div class="flex w-full px-8 pt-2 pb-4 border-b-[1px] border-sky-200">
-              <Searchbar :pesquisaValue="pesquisaValue"/>
-            </div>
-
-            <div class="flex w-full items-start gap-8 px-8 pt-4 pb-8">
-              
-              <div class="flex gap-4 text-cyan-800 items-center">
-                <Icon icon="material-symbols:filter-list-rounded" width="24" height="24" />
-                <p class="font-medium text-lg">Filtros</p>
-              </div>
-
-              <div class="flex flex-wrap gap-4">
-
-                <FilterChip title="Engenharia de software"/>
-                <button 
-                  class="flex gap-3 px-4 py-2 rounded-3xl items-center text-cyan-800 bg-gray-200 font-medium"
-                  @click="openModalFilters()"
-                >
-                  <Icon icon="ic:round-plus" width="16" height="16"/>
-                  <p class="text-sm">Adicionar filtro</p>
-                </button>
-
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
-          <div v-for="anuncio in anuncios" class="flex justify-center">
-            <ShortPost
-              :id="anuncio.id"
-              :nome="anuncio.nome"
-              :titulo="anuncio.titulo"
-              :area="anuncio.area"
-              :descricao="anuncio.descricao"
-              :salario="anuncio.salario"
-            />
-          </div>
-        
-      </div>
-
-    </div>
-
-    
-    <ModalFilters v-model="isModalFiltersOpen" />
-
-    
-    
-    
-    
-    <!--
-    <CustomDialog :v-model="true">
-      <div class="h-full flex justify-center items-center">
-        <div class="w-1/2">
-          <div class="text-green-500 text-center mb-3">
-            <SvgIcon
-              type="mdi"
-              size="100"
-              class="inline"
-              :path="mdiCheckCircle"
-            />
-          </div>
-          <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
-            Dados atualizados com sucesso!
+  <div class="flex flex-col">
+    <div class="flex justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
+      <div class="flex flex-col gap-4 sm:flex-row w-[960px] border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl p-6 sm:p-8 mt-10 mx-4 sm:mx-6 items-start sm:items-center justify-between">
+        <div class="flex gap-6 text-cyan-800 items-center">
+          <SvgIcon
+            type="mdi"
+            size="32"
+            :path="mdiBullhorn"
+          />
+          <h1 class="text-2xl sm:text-3xl font-bold">
+            Vagas de emprego
           </h1>
         </div>
+
+        <CustomButton
+          tag="router"
+          link="/cadastro-anuncio"
+          color="emerald"
+          text-class="text-white font-medium"
+          class="w-full sm:w-fit sm:self-end"
+        >
+          <div>
+            Anuncie uma vaga
+          </div>
+          <SvgIcon
+            type="mdi"
+            size="32"
+            :path="mdiChevronRight"
+          />
+        </CustomButton>
       </div>
-    </CustomDialog>
-    -->
-  
-  </template>
-  
-  <script setup lang="ts">
-  
-  import { Icon } from '@iconify/vue';
-  import { ref, onMounted } from 'vue'
-  import SvgIcon from '@jamescoyle/vue-icon'
-  import { mdiCheckCircle } from '@mdi/js'
-  import { OModal } from '@oruga-ui/oruga-next'
+    </div>
 
-  import CustomButton from 'src/components/CustomButton.vue'
-  import CustomDialog from 'src/components/CustomDialog.vue'
-  import router from 'src/router'
-  import ShortPost from 'src/components/ShortPost.vue'
-  import Searchbar from 'src/components/Searchbar.vue'
-  import FilterChip from 'src/components/FilterChip.vue';
-  import ModalFilters from 'src/components/ModalFilters.vue';
+    <div class="flex flex-col gap-4 sm:gap-8 mb-10">
+      <div class="flex justify-center">
+        <div class="flex flex-col gap-4 sm:gap-6 w-[960px] bg-white rounded-bl-2xl rounded-br-2xl p-6 sm:p-8 mx-4 sm:mx-6 items-center">
+          <SearchBar
+            name="pesquisa"
+            v-model="pesquisaValue"
+          />
 
-  const anuncios = [
-    { 
-      id: 1,
-      nome: 'Victor Silva',
-      titulo: 'Vaga Front-end',
-      area: 'Programador',
-      descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      salario: 1000.0,
-      linkContato: 'https://www.google.com.br',
-      dataExpiracao: '2023-08-01'
-    },
-    { 
-      id: 2,
-      nome: 'Marcus Loureiro',
-      titulo: 'Vaga Back-end',
-      area: 'Programador',
-      descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      salario: 1200.0,
-      linkContato: 'https://www.google.com.br',
-      dataExpiracao: '2023-08-01'
+          <div class="flex flex-col sm:flex-row w-full items-start gap-4 sm:gap-8">
+            <div class="flex gap-4 text-cyan-800 items-center">
+              <SvgIcon
+                type="mdi"
+                size="24"
+                :path="mdiFilterVariant"
+              />
+              <p class="font-medium text-lg">
+                Filtros
+              </p>
+            </div>
+
+            <div class="flex flex-wrap gap-4">
+              <div
+                v-for="filtro in $store.areasEmpregoFiltros.filter(f => f.applied)"
+                :key="filtro.id"
+              >
+                <FilterChip
+                  :title="filtro.name"
+                  :applied="filtro.applied"
+                  @click="toggleFilterApplied(filtro.id)"
+                />
+              </div>
+
+              <button
+                class="flex gap-3 px-4 py-2 rounded-3xl items-center text-cyan-800 bg-gray-200 font-medium"
+                @click="openModalFilters()"
+              >
+                <SvgIcon
+                  type="mdi"
+                  size="16"
+                  :path="mdiPlus"
+                />
+                <p class="text-sm">
+                  Adicionar filtro
+                </p>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="$store.anuncios.length > 0">
+        <div
+          v-for="anuncio in $store.anuncios"
+          :key="anuncio.id"
+          class="flex justify-center"
+        >
+          <ShortPost
+            :id="anuncio.id"
+            :nome="anuncio.createdBy.nome"
+            :titulo="anuncio.titulo"
+            :area="anuncio.areaEmprego.nome"
+            :descricao="anuncio.descricao"
+            :salario="anuncio.salario"
+          />
+        </div>
+      </div>
+
+      <div
+        v-else
+        class="flex flex-col gap-4 justify-center items-center text-gray-400"
+      >
+        <SvgIcon
+          type="mdi"
+          size="48"
+          :path="mdiEmoticonSadOutline"
+        />
+        <h1 class="text-xl sm:text-2xl font-medium">
+          Nenhuma vaga encontrada
+        </h1>
+      </div>
+
+      <div
+        class="flex gap-16 sm:gap-32 justify-center"
+      >
+        <button
+          class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-lg"
+          v-show="currentPage>0"
+          @click="decrementaPage()"
+        >
+          <SvgIcon
+            type="mdi"
+            size="32"
+            :path="mdiChevronLeft"
+          />
+          <div>Anterior</div>
+        </button>
+        <button
+          class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-md"
+          v-show="currentPage<$store.totalPages-1"
+          @click="incrementaPage()"
+        >
+          <div>Próximo</div>
+          <SvgIcon
+            type="mdi"
+            size="32"
+            :path="mdiChevronRight"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ModalFilters
+    v-if="loading"
+    v-model="isModalFiltersOpen"
+    :filters="$store.areasEmpregoFiltros"
+    @apply-filters="applyFilters"
+  />
+</template>
+
+<script setup lang="ts">
+
+import { ref, onMounted, watch } from 'vue'
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiBullhorn, mdiFilterVariant, mdiPlus, mdiChevronRight, mdiChevronLeft, mdiEmoticonSadOutline } from '@mdi/js'
+import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
+import CustomButton from 'src/components/CustomButton.vue'
+import ShortPost from 'src/components/ShortPost.vue'
+import SearchBar from 'src/components/SearchBar.vue'
+import FilterChip from 'src/components/FilterChip.vue'
+import ModalFilters from 'src/components/ModalFilters.vue'
+
+const $store = useAnuncioVagaStore()
+
+const loading = ref(false)
+
+const filtersById = ref([])
+
+const currentPage = ref(0)
+
+const size = ref(3)
+
+const incrementaPage = () => {
+  currentPage.value++
+}
+
+const decrementaPage = () => {
+  currentPage.value--
+}
+
+onMounted(async () => {
+  await $store.fetchAreasEmprego()
+  await $store.fetchBusca(currentPage.value, size.value)
+
+  loading.value = true
+  watch(currentPage, () => {
+    $store.fetchBusca(currentPage.value, size.value)
+  })
+  watch(pesquisaValue, () => {
+    $store.fetchBuscaAnuncioTitulo(pesquisaValue.value, currentPage.value, size.value)
+  })
+  watch(filtersById, () => {
+    if (filtersById.value.length > 0) {
+      $store.fetchBuscaAnuncioAreas(filtersById.value, currentPage.value, size.value)
+    } else {
+      $store.fetchBusca(currentPage.value, size.value)
     }
-  ]
-
-  const pesquisaValue = ref('')
-  
-  const isModalFiltersOpen = ref(false)
-
-  const openModalFilters = () => {
-    isModalFiltersOpen.value = true
-    console.log('abre modal')
-  }
-
-  const closeModalFilters = () => {
-    isModalFiltersOpen.value = false
-  }
-
-  onMounted(() => {
-  window.scrollTo(0, 0)
+  })
 })
 
-  
-  </script>
+const isModalFiltersOpen = ref(false)
+
+const openModalFilters = () => {
+  isModalFiltersOpen.value = true
+}
+
+const pesquisaValue = ref('')
+
+const toggleFilterApplied = (id:number) => {
+  const filtro = $store.areasEmpregoFiltros.find(f => f.id === id)
+  if (filtro) {
+    filtro.applied = !filtro.applied
+    applyFilters(filtersById.value.filter(f => f === filtro.id))
+  }
+}
+
+const applyFilters = (filters:any) => {
+  filtersById.value = filters.map((elem: any) => (elem.id))
+}
+
+</script>

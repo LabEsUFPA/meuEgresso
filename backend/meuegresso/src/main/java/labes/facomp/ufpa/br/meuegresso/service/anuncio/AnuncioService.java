@@ -1,6 +1,9 @@
 package labes.facomp.ufpa.br.meuegresso.service.anuncio;
 
-import java.util.List;
+import java.time.LocalDate;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
@@ -37,8 +40,8 @@ public interface AnuncioService {
 	 * @return Lista de objetos da classe AnuncioModel.
 	 */
 
-	List<AnuncioModel> findBySearch(String tituloAnuncio, Double salarioMin, Double salarioMax,
-			Integer[] areaEmpregoIds);
+	Page<AnuncioModel> findBySearch(String tituloAnuncio, Integer[] areaEmpregoIds, Integer page, Integer size,
+			Direction direction);
 
 	/**
 	 * Método responsável por encontrar todos os anuncios cadastrados.
@@ -46,7 +49,7 @@ public interface AnuncioService {
 	 * @return Lista de objetos da classe AnuncioModel.
 	 */
 
-	public List<AnuncioModel> findAll();
+	public Page<AnuncioModel> findAll(Integer page, Integer size, Direction direction);
 
 	/**
 	 * Método responsável por atualizar dados de um anuncio cadastrado.
@@ -71,4 +74,8 @@ public interface AnuncioService {
 	 * @return
 	 */
 	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
+	Page<AnuncioModel> findByDataExpiracaoAfter(LocalDate dataExpiracao, Integer page, Integer size,
+			Direction direction);
+
 }
