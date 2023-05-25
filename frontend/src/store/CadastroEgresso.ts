@@ -88,21 +88,24 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
     },
 
     async cadastrarEgresso (foto: { temFoto: boolean, foto: FormData }, dadosEgresso: EgressoModel) {
-      const response = await Api.request({
+      let response = await Api.request({
         method: 'post',
         route: '/egresso',
         body: dadosEgresso
       })
 
       if (response?.status === 201 && foto.temFoto) {
-        const responseFoto = await Api.request({
+        response = await Api.request({
           method: 'post',
           route: 'egresso/foto',
           body: foto
         })
-
-        return (responseFoto?.status) !== undefined ? responseFoto.status : 500
       }
+
+      await Api.request({
+        method: 'post',
+        route: 'auth/atualizarCookie'
+      })
 
       return (response?.status) !== undefined ? response.status : 500
     }
