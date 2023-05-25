@@ -24,6 +24,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -111,13 +114,19 @@ class AnuncioServiceTest {
         @Test
         @Order(2)
         void testFindAll() {
-                // BDDMockito.given(anuncioRepository.findAll())
-                // .willReturn(List.of(getMockAnuncioIdOne(), getMockAnuncioIdTwo(),
-                // getMockAnuncioIdThree()));
+                List<AnuncioModel> lista = List.of(getMockAnuncioIdOne(),
+                        getMockAnuncioIdTwo(), getMockAnuncioIdThree());
+                
+                Page<AnuncioModel> page = new PageImpl<>(lista, PageRequest.of(0, 20), lista.size());
 
-                // Page<AnuncioModel> response = anuncioService.findAll(0, 0, Direction.ASC);
+                BDDMockito.given(anuncioRepository.findAll(Mockito.any(
+                                Pageable.class)))
+                        .willReturn(page);
 
-                // assertNotNull(response);
+                Page<AnuncioModel> response = anuncioService.findAll(0, 20, Direction.ASC);
+                List<AnuncioModel> content = response.getContent();
+
+                assertNotNull(content);
         }
 
         /**
