@@ -6,9 +6,37 @@ interface LoginModel extends models.LoginModel {}
 
 const storage = new LocalStorage()
 
+interface UserData {
+  exp: number
+  iat: number
+  idUsuario: number
+  isEgresso: boolean
+  iss: string
+  nome: string
+  scope: string
+  sobrenome: string
+  sub: string
+}
+
+interface State {
+  userLogged: boolean
+  userData: UserData | null
+}
+
+export function parseToken (token: string | undefined): UserData | null {
+  if (token === undefined) {
+    return null
+  }
+
+  const base64Url = token.split('.')[1]
+  const base64 = base64Url.replace('-', '+').replace('_', '/')
+  return JSON.parse(window.atob(base64))
+}
+
 export const useLoginStore = defineStore('LoginStore', {
-  state: () => ({
-    userLogged: storage.getToken() !== undefined
+  state: (): State => ({
+    userLogged: storage.getToken() !== undefined,
+    userData: parseToken(storage.getToken())
   }),
 
   actions: {
