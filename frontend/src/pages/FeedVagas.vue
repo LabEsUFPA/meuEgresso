@@ -39,10 +39,6 @@
             name="pesquisa"
             v-model="pesquisaValue"
           />
-          <SearchBar
-            name="pesquisa"
-            v-model="pesquisaValue"
-          />
 
           <div class="flex flex-col sm:flex-row w-full items-start gap-4 sm:gap-8">
             <div class="flex gap-4 text-cyan-800 items-center">
@@ -58,7 +54,6 @@
 
             <div class="flex flex-wrap gap-4">
               <div
-                v-for="filtro in $store.areasEmpregoFiltros.filter(f => f.applied)"
                 v-for="filtro in $store.areasEmpregoFiltros.filter(f => f.applied)"
                 :key="filtro.id"
               >
@@ -89,7 +84,6 @@
 
       <div
         v-for="anuncio in $store.anuncios"
-        v-for="anuncio in $store.anuncios"
         :key="anuncio.id"
         class="flex justify-center"
       >
@@ -98,20 +92,41 @@
           :nome="anuncio.createdBy.nome"
           :titulo="anuncio.titulo"
           :area="anuncio.areaEmprego.nome"
-          :area="anuncio.areaEmprego.nome"
           :descricao="anuncio.descricao"
           :salario="anuncio.salario"
         />
+      </div>
+
+      <div
+        class="flex gap-16 sm:gap-32 justify-center"
+      >
+        <button
+          class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-lg"
+        >
+          <SvgIcon
+            type="mdi"
+            size="32"
+            :path="mdiChevronLeft"
+          />
+          <div>Anterior</div>
+        </button>
+        <button
+          class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-md"
+        >
+          <div>Próximo</div>
+          <SvgIcon
+            type="mdi"
+            size="32"
+            :path="mdiChevronRight"
+          />
+        </button>
       </div>
     </div>
   </div>
 
   <ModalFilters
     v-if="loading"
-    v-if="loading"
     v-model="isModalFiltersOpen"
-    :filters="$store.areasEmpregoFiltros"
-    @apply-filters="applyFilters"
     :filters="$store.areasEmpregoFiltros"
     @apply-filters="applyFilters"
   />
@@ -120,10 +135,8 @@
 <script setup lang="ts">
 
 import { ref, onMounted, watch } from 'vue'
-import { ref, onMounted, watch } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiBullhorn, mdiFilterVariant, mdiPlus, mdiChevronRight } from '@mdi/js'
-import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
+import { mdiBullhorn, mdiFilterVariant, mdiPlus, mdiChevronRight, mdiChevronLeft } from '@mdi/js'
 import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
 import CustomButton from 'src/components/CustomButton.vue'
 import ShortPost from 'src/components/ShortPost.vue'
@@ -131,11 +144,6 @@ import SearchBar from 'src/components/SearchBar.vue'
 import FilterChip from 'src/components/FilterChip.vue'
 import ModalFilters from 'src/components/ModalFilters.vue'
 
-const $store = useAnuncioVagaStore()
-
-const loading = ref(false)
-
-const filtersById = ref([])
 const $store = useAnuncioVagaStore()
 
 const loading = ref(false)
@@ -167,8 +175,6 @@ const openModalFilters = () => {
 
 const pesquisaValue = ref('')
 
-const pesquisaValue = ref('')
-
 const toggleFilterApplied = (id:number) => {
   const filtro = $store.areasEmpregoFiltros.find(f => f.id === id)
   if (filtro) {
@@ -177,7 +183,6 @@ const toggleFilterApplied = (id:number) => {
 }
 
 const applyFilters = (filters:any) => {
-  filtersById.value = filters.map((elem: any) => (elem.id))
   filtersById.value = filters.map((elem: any) => (elem.id))
 }
 

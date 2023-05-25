@@ -1,7 +1,13 @@
 <template>
   <div class="flex flex-col w-[960px] bg-white rounded-2xl mx-4 sm:mx-6">
     <div class="flex gap-4 px-6 sm:px-8 pt-6 sm:pt-8 pb-4 items-center border-b-[1px] border-b-gray-200">
-      <div class="shrink-0 w-8 h-8 bg-cyan-800 rounded-3xl" />
+      <div class="shrink-0 p-2 bg-cyan-800 rounded-3xl text-white">
+        <SvgIcon
+          type="mdi"
+          size="21"
+          :path="mdiAccount"
+        />
+      </div>
 
       <div class="flex flex-col text-cyan-800">
         <p class="text-sm sm:text-lg font-medium leading-tight">
@@ -36,7 +42,10 @@
         {{ descricao }}
       </p>
 
-      <p class="text-neutral-900 font-medium">
+      <p
+        v-show="salario"
+        class="text-neutral-900 font-medium"
+      >
         R$ {{ salario }}
       </p>
     </div>
@@ -64,12 +73,9 @@
 <script setup lang="ts">
 
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiBullhorn, mdiChevronRight } from '@mdi/js'
-import { useRoute } from 'vue-router';
+import { mdiAccount, mdiBullhorn, mdiChevronRight } from '@mdi/js'
 
 import CustomButton from 'src/components/CustomButton.vue'
-
-const $route = useRoute()
 
 defineProps<
   {

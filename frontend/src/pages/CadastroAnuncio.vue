@@ -65,7 +65,7 @@
               />
               <CustomInput
                 name="link"
-                label="link"
+                label="Link da vaga"
                 placeholder="Link referente a vaga"
                 :required="true"
                 :icon-path="mdiLink"
@@ -73,7 +73,7 @@
               <CustomInput
                 name="dataExpiracao"
                 type="date"
-                label="dd/mm/aaaa"
+                label="Data de expiração"
                 :required="true"
               />
             </div>
@@ -88,9 +88,12 @@
           >
             Cancelar
           </CustomButton>
-          <CustomButton type="submit" color="emerald">
-              Salvar
-            </CustomButton>
+          <CustomButton
+            type="submit"
+            color="emerald"
+          >
+            Salvar
+          </CustomButton>
         </div>
       </div>
     </div>

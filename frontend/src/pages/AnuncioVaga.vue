@@ -17,7 +17,13 @@
           </button>
         </RouterLink>
 
-        <div class="shrink-0 w-8 h-8 bg-cyan-800 rounded-3xl" />
+        <div class="shrink-0 p-2 bg-cyan-800 rounded-3xl text-white">
+          <SvgIcon
+            type="mdi"
+            size="21"
+            :path="mdiAccount"
+          />
+        </div>
 
         <div class="flex flex-col text-cyan-800">
           <p class="text-sm sm:text-lg font-medium leading-tight">
@@ -69,8 +75,17 @@
             <h2 class="text-neutral-900 text-lg font-semibold">
               Salário
             </h2>
-            <p class="text-neutral-900">
+            <p
+              v-if="$store.anuncio.salario"
+              class="text-neutral-900"
+            >
               R$ {{ $store.anuncio.salario }}
+            </p>
+            <p
+              v-else
+              class="text-gray-400"
+            >
+              Não foi informado
             </p>
           </div>
         </div>
@@ -115,9 +130,8 @@
 
 import { useRoute } from 'vue-router'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiChevronLeft, mdiBullhorn, mdiOpenInNew } from '@mdi/js'
+import { mdiChevronLeft, mdiBullhorn, mdiOpenInNew, mdiAccount } from '@mdi/js'
 import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
-import { type models } from 'src/@types';
 
 import CustomButton from 'src/components/CustomButton.vue'
 
