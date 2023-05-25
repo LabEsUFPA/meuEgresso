@@ -115,13 +115,13 @@ class AnuncioServiceTest {
         @Order(2)
         void testFindAll() {
                 List<AnuncioModel> lista = List.of(getMockAnuncioIdOne(),
-                        getMockAnuncioIdTwo(), getMockAnuncioIdThree());
-                
+                                getMockAnuncioIdTwo(), getMockAnuncioIdThree());
+
                 Page<AnuncioModel> page = new PageImpl<>(lista, PageRequest.of(0, 20), lista.size());
 
                 BDDMockito.given(anuncioRepository.findAll(Mockito.any(
                                 Pageable.class)))
-                        .willReturn(page);
+                                .willReturn(page);
 
                 Page<AnuncioModel> response = anuncioService.findAll(0, 20, Direction.ASC);
                 List<AnuncioModel> content = response.getContent();
@@ -185,56 +185,62 @@ class AnuncioServiceTest {
 
         @Test
         @Order(6)
-        void TestFindBySearchSalary() {
-                // TODO CORRIGIR TESTES JP
+        void TestFindBySearchTitulo() {
 
-                // BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(),
-                // Mockito.any()))
-                // .willReturn(List.of(getMockAnuncioIdOne()));
+                List<AnuncioModel> lista = List.of(getMockAnuncioIdOne());
 
-                // List<AnuncioModel> response = anuncioService.findBySearch("", null);
-                // assertEquals(1, response.size());
+                Page<AnuncioModel> page = new PageImpl<>(lista, PageRequest.of(0, 20), lista.size());
+
+                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(),
+                                Mockito.any(), Mockito.any(Pageable.class)))
+                                .willReturn(page);
+
+                Page<AnuncioModel> response = anuncioService.findBySearch("teste", null, 0, 20, Direction.ASC);
+
+                assertEquals(1, response.getContent().size());
+
         }
 
         @Test
         @Order(7)
-        void TestFindBySearchTitulo() {
+        void TestFindBySearchArea() {
 
-                // BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(),
-                // Mockito.any()))
-                // .willReturn(List.of(getMockAnuncioIdOne()));
+                List<AnuncioModel> lista = List.of(getMockAnuncioIdOne(), getMockAnuncioIdTwo());
 
-                // Integer[] areas = { 0 };
+                Page<AnuncioModel> page = new PageImpl<>(lista, PageRequest.of(0, 20), lista.size());
 
-                // List<AnuncioModel> response = anuncioService.findBySearch("Google", areas);
-                // assertEquals(1, response.size());
+                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(),
+                                Mockito.any(), Mockito.any(Pageable.class)))
+                                .willReturn(page);
+
+                Integer[] areas = { 1, 2 };
+
+                Page<AnuncioModel> response = anuncioService.findBySearch(null, areas, 0, 20, Direction.ASC);
+
+                assertEquals(2, response.getContent().size());
+                assertEquals(getMockAnuncioIdOne(), response.getContent().get(0));
+                assertEquals(getMockAnuncioIdTwo(), response.getContent().get(1));
+
         }
 
         @Test
         @Order(8)
-        void TestFindBySearchArea() {
-
-                // BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(),
-                // Mockito.any()))
-                // .willReturn(List.of(getMockAnuncioIdOne(), getMockAnuncioIdTwo()));
-
-                // Integer[] areas = { 1, 2 };
-
-                // List<AnuncioModel> response = anuncioService.findBySearch("null", areas);
-                // assertEquals(2, response.size());
-        }
-
-        @Test
-        @Order(9)
         void TestFindBySearchArea2() {
 
-                // BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(),
-                // Mockito.any()))
-                // .willReturn(List.of(getMockAnuncioIdTwo()));
+                List<AnuncioModel> lista = List.of(getMockAnuncioIdTwo());
 
-                // Integer[] areas = { 2 };
-                // List<AnuncioModel> response = anuncioService.findBySearch("null", areas);
-                // assertEquals(1, response.size());
+                Page<AnuncioModel> page = new PageImpl<>(lista, PageRequest.of(0, 20), lista.size());
+
+                BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(),
+                                Mockito.any(), Mockito.any(Pageable.class)))
+                                .willReturn(page);
+
+                Integer[] area = { 2 };
+
+                Page<AnuncioModel> response = anuncioService.findBySearch(null, area, 0, 20, Direction.ASC);
+
+                assertEquals(1, response.getContent().size());
+                assertEquals(getMockAnuncioIdTwo(), response.getContent().get(0));
         }
 
         /**
