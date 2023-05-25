@@ -10,7 +10,7 @@ const router = createRouter({
 
 const storage = new LocalStorage()
 
-router.beforeEach((to) => {
+router.beforeEach((to, from) => {
   const loggedUser = JSON.parse(localStorage.getItem('loggedUser') ?? '{}')
   const userData = parseToken(storage.getToken())
 
@@ -18,6 +18,11 @@ router.beforeEach((to) => {
     alert('É necessário realizar o cadastro completo para usar o sistema')
     return {
       path: '/cadastro'
+    }
+  } else if (to.path === '/cadastro' && loggedUser.grupos[0].nomeGrupo === 'EGRESSO' && userData !== null && userData.isEgresso) {
+    console.log(from)
+    return {
+      path: from.path
     }
   }
 
