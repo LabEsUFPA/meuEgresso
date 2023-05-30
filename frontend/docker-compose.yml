@@ -21,11 +21,10 @@ services:
         - "traefik.docker.network=traefik-public"
         - "traefik.constraint-label=traefik-public"
 
-        - "traefik.http.routers.front_egresso.rule=Host(`meuegresso.alverad.com.br`)"
+        - "traefik.http.routers.front_egresso.rule=Host(`egressos.computacao.ufpa.br`)"
         - "traefik.http.routers.front_egresso.entrypoints=http"
-        - "traefik.http.routers.front_egresso.middlewares=https-redirect@file"
 
-        - "traefik.http.routers.front_egresso_https.rule=Host(`meuegresso.alverad.com.br`)"
+        - "traefik.http.routers.front_egresso_https.rule=Host(`egressos.computacao.ufpa.br`)"
         - "traefik.http.routers.front_egresso_https.entrypoints=https"
         - "traefik.http.routers.front_egresso_https.tls=true"
         - "traefik.http.routers.front_egresso_https.tls.certresolver=le"

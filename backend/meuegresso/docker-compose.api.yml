@@ -28,15 +28,18 @@ services:
         - "traefik.docker.network=traefik-public"
         - "traefik.constraint-label=traefik-public"
 
-        - "traefik.http.routers.api_egresso.rule=Host(`api.meuegresso.alverad.com.br`)"
+        - "traefik.http.routers.api_egresso.rule=Host(`egressos.computacao.ufpa.br`) && PathPrefix(`/api`)"
         - "traefik.http.routers.api_egresso.entrypoints=http"
-        - "traefik.http.routers.api_egresso.middlewares=https-redirect@file"
+        - "traefik.http.routers.api_egresso.middlewares=https-redirect@file,api_egresso-strip@docker"
 
-        - "traefik.http.routers.api_egresso_https.rule=Host(`api.meuegresso.alverad.com.br`)"
+        - "traefik.http.middlewares.api_egresso-strip.stripprefix.prefixes=/api"
+        - "traefik.http.middlewares.api_egresso-strip.stripprefix.forceslash=true"
+
+        - "traefik.http.routers.api_egresso_https.rule=Host(`egressos.computacao.ufpa.br`) && PathPrefix(`/api`)"
         - "traefik.http.routers.api_egresso_https.entrypoints=https"
         - "traefik.http.routers.api_egresso_https.tls=true"
         - "traefik.http.routers.api_egresso_https.tls.certresolver=le"
-        - "traefik.http.routers.api_egresso_https.middlewares=default-headers@file"
+        - "traefik.http.routers.api_egresso_https.middlewares=meuegresso-headers@file,api_egresso-strip@docker"
         - "traefik.http.services.api_egresso_https.loadbalancer.server.port=80"
 
 networks:
