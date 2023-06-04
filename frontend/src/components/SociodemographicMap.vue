@@ -155,25 +155,35 @@ async function componentToHtml (props: EgressoMapa[]) {
   return html
 }
 
-let map: L.Map | L.LayerGroup<any>
+let map: L.Map
 
-onMounted(() => {
-  createMapLayer()
+onMounted(async () => {
+  await createMapLayer()
 })
 
-const createMapLayer = () => {
-  map = L.map('mapContainer').setView([-15.7801, -47.9292], 4)
+const createMapLayer = async () => {
+  map = L.map('mapContainer', {
+    minZoom: 3,
+    maxBounds: [
+      [90, -180],
+      [-90, 180]
+    ]
+  }).setView([-15.7801, -47.9292], 4)
   L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     noWrap: true
   }).addTo(map)
 
-  const setMarkers = () => {
-    props.egressList.forEach(async (mapElement, index) => {
-      L.circleMarker(getLatLng(index)).addTo(map).on('click', selectMarker).bindTooltip(await componentToHtml(mapElement))
-    })
+  map.on('drag', function () {
+    map.panInsideBounds([[90, -180], [-90, 180]], { animate: false })
+  })
+
+  const setMarkers = async () => {
+    for (const [keyMapElement, valueMapElement] of props.egressList) {
+      L.circleMarker(getLatLng(keyMapElement)).addTo(map).on('click', selectMarker).bindTooltip(await componentToHtml(valueMapElement))
+    }
   }
-  setMarkers()
+  await setMarkers()
 }
 
 const currentPage = ref(0)
