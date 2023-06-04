@@ -30,8 +30,6 @@ public class EgressoPublicDTO {
     @Pattern(regexp = "[0-9]{12}|$", message = "Informe uma matricula valida.")
     private String matricula;
 
-    private LocalDate nascimento;
-
     @Email
     @NotBlank(message = "Infome um email.")
     private String email;

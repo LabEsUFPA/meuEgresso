@@ -33,7 +33,7 @@ public interface EgressoService {
 	public List<Integer> findAllIdades();
 	
 	public EgressoModel findById(Integer id);
-	
+
 	/**
 	 * Método responsável por encontrar todos os egressoEmpresas cadastrados.
 	 *
@@ -83,7 +83,7 @@ public interface EgressoService {
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
-	public boolean deleteById(Integer id);
+	public void deleteById(Integer id);
 
 	/**
 	 * Método responsável por verificar se existe um determinado elemento.
