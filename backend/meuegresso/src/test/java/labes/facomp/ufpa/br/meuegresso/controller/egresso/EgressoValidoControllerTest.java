@@ -81,6 +81,8 @@ class EgressoValidoControllerTest {
 
     }
 
+    
+    //TODO consertar teste
     @Test
     void testValidarEgresso() throws Exception {
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();

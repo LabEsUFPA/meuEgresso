@@ -39,7 +39,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaBasicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.setoratuacao.SetorAtuacaoDTO;
@@ -61,7 +61,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRep
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.setoratuacao.SetorAtuacaoRepository;
-
+//TODO consertar teste
 @SpringBootTest
 @DirtiesContext
 @AutoConfigureMockMvc
@@ -111,7 +111,7 @@ class EgressoEmpresaControllerTest {
 
     UsuarioModel usuarioModel;
 
-    EmpresaDTO empresaDTO;
+    EmpresaBasicDTO empresaBasicDTO;
     EmpresaModel empresaModel;
 
     EgressoEmpresaDTO egressoEmpresaDTO;
@@ -136,15 +136,14 @@ class EgressoEmpresaControllerTest {
         genero = generoRepository.save(genero);
 
         /* Egresso */
-        egressoPublicDTO = EgressoPublicDTO.builder().id(EGRESSO_ID).email(EGRESSO_EMAIL).nascimento(EGRESSO_NASCIMENTO)
+        egressoPublicDTO = EgressoPublicDTO.builder().id(EGRESSO_ID).email(EGRESSO_EMAIL)
                 .genero(generoDTO).build();
         egressoModel = modelMapper.map(egressoPublicDTO, EgressoModel.class);
         egressoRepository.save(this.egressoModel);
 
         /* Empresa */
-        empresaDTO = EmpresaDTO.builder().id(EMPRESA_ID).nome(NOME).setorAtuacao(SETORATUACAO)
-                .faixaSalarialId(FAIXASALARIAL_ID).build();
-        empresaModel = modelMapper.map(empresaDTO, EmpresaModel.class);
+        empresaBasicDTO = EmpresaBasicDTO.builder().id(EMPRESA_ID).nome(NOME).build();
+        empresaModel = modelMapper.map(empresaBasicDTO, EmpresaModel.class);
         empresaRepository.save(empresaModel);
 
         /* ModelId */
@@ -167,7 +166,7 @@ class EgressoEmpresaControllerTest {
 
         /* EgressoEmpresa */
         egressoEmpresaDTO = EgressoEmpresaDTO.builder().id(egressoEmpresaModelId).egresso(egressoPublicDTO)
-                .empresa(empresaDTO).areaAtuacao(areaAtuacaoDTO).setorAtuacao(setorAtuacaoDTO).faixaSalarial(faixaSalarialDTO).build();
+                .empresa(empresaBasicDTO).areaAtuacao("AreaTesteEE").faixaSalarial(faixaSalarialDTO).build();
 
         GrupoModel grupoModel = new GrupoModel();
         grupoModel.setNomeGrupo("ADMIN");
@@ -247,7 +246,7 @@ class EgressoEmpresaControllerTest {
         MvcResult resposta = mockMvc
                 .perform(MockMvcRequestBuilders
                         .get("/egressoEmpresa?egressoId=" + egressoPublicDTO.getId() + "&empresaId="
-                                + empresaDTO.getId())
+                                + empresaBasicDTO.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + this.token))
                 .andDo(MockMvcResultHandlers.print())
@@ -304,7 +303,7 @@ class EgressoEmpresaControllerTest {
         MvcResult resposta = mockMvc.perform(
                 MockMvcRequestBuilders
                         .delete("/egressoEmpresa?egressoId=" + egressoPublicDTO.getId() + "&empresaId="
-                                + empresaDTO.getId())
+                                + empresaBasicDTO.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + this.token))
                 .andDo(MockMvcResultHandlers.print())

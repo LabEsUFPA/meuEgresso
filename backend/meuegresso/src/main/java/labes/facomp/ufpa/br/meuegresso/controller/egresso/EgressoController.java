@@ -259,12 +259,13 @@ public class EgressoController {
      * @author Bruno Eiki
      * @since 17/04/2023
      */
-    @DeleteMapping(params = { "id" })
+    @DeleteMapping
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public String deletarEgresso(@RequestParam(required = false) Integer id) {
-        if (egressoService.deleteById(id)) {
+    public String deletarEgresso(@RequestBody @Valid EgressoPublicDTO egressoPublicDTO) {
+        EgressoModel egressoModel = mapper.map(egressoPublicDTO, EgressoModel.class);
+        if (egressoService.deleteEgresso(egressoModel)) {
             return ResponseType.SUCESS_DELETE.getMessage();
         } else {
             return ResponseType.FAIL_DELETE.getMessage();
@@ -311,7 +312,7 @@ public class EgressoController {
         if (egressoModel.getFotoNome() != null) {
             egressoService.deleteFile(egressoModel.getFotoNome());
             egressoModel.setFotoNome(null);
-            egressoService.updateEgresso(egressoModel);
+            egressoService.update(egressoModel);
             return ResponseEntity.ok(ResponseType.SUCESS_IMAGE_DELETE.getMessage());
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseType.FAIL_IMAGE_DELETE.getMessage());
@@ -337,7 +338,7 @@ public class EgressoController {
             egressoService.deleteFile(egressoModel.getFotoNome());
         }
         egressoModel.setFotoNome(fileCode);
-        egressoService.updateEgresso(egressoModel);
+        egressoService.update(egressoModel);
         egressoService.saveFoto(fileCode, arquivo);
         return ResponseType.SUCESS_IMAGE_SAVE.getMessage();
     }

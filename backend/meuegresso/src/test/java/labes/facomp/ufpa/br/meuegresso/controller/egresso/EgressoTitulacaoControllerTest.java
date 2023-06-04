@@ -36,7 +36,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoTitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
@@ -57,7 +56,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
-
+//TODO consertar teste
 @SpringBootTest
 @DirtiesContext
 @AutoConfigureMockMvc
@@ -74,7 +73,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
  * @since 03/05/2023
  */
  class EgressoTitulacaoControllerTest {
-//TODO: consertar teste
     static final Integer TITULACAO_ID = 1;
     static final String NOME = "TituloTeste";
     static final String SETORATUACAO = "SetorTeste";

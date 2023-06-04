@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -78,9 +79,9 @@ class EgressoServiceTest {
 
         BDDMockito.given(egressoRepository.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
-
-        BDDMockito.given(egressoService.deleteById(Mockito.anyInt()))
-                .willReturn(true);
+         
+        /*BDDMockito.given(egressoService.deleteById(Mockito.anyInt()))
+                .willReturn(true);*/
 
     }
 
@@ -187,8 +188,9 @@ class EgressoServiceTest {
                 
         Mockito.when(egressoRepository.existsById(Mockito.anyInt())).thenReturn(true);
 
-        Boolean response = egressoService.deleteById(ID);
-        assertTrue(response);
+        //Boolean response = egressoService.deleteById(ID);
+        egressoService.deleteById(ID);
+        assertNull(egressoService.findById(ID));
     }
 
     /**
