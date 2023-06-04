@@ -21,54 +21,69 @@
             Preencha os campos abaixo
           </p>
           <div class="flex flex-col gap-y-5 mb-4">
-            <CustomInput
-              name="name"
-              label="Nome Completo"
-              :required="true"
-              :icon-path="mdiAccount"
-            />
-            <CustomInput
-              name="username"
-              label="Usuário"
-              helper-text="Letras minúsculas e números com no mínimo seis caracteres"
-              class-helper-text="text-gray-600"
-              :required="true"
-              :icon-path="mdiAccount"
-            />
-            <CustomInput
-              name="registration"
-              type="number"
-              label="Matrícula"
-              :icon-path="mdiSchool"
-              :max-length="12"
-              :min-length="12"
-            />
-            <CustomInput
-              name="email"
-              type="email"
-              label="Email"
-              helper-text="Se possível informe o mesmo e-mail que está cadastrado no SIGAA"
-              class-helper-text="text-gray-600"
-              :required="true"
-              :icon-path="mdiEmail"
-            />
-            <CustomInput
-              name="password"
-              type="password"
-              label="Senha"
-              helper-text="Letras e números com no mínimo oito caracteres"
-              class-helper-text="text-gray-600"
-              error-message="Senha inválida"
-              :required="true"
-              :icon-path="mdiLock"
-            />
-            <CustomInput
-              name="confirmationPassword"
-              type="password"
-              label="Confirme Senha"
-              error-message="As senhas informadas são diferentes"
-              :required="true"
-              :icon-path="mdiLock"
+            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
+              <CustomInput
+                name="name"
+                label="Nome Completo"
+                class-helper-text="text-gray-600"
+                :required="true"
+                :icon-path="mdiAccount"
+              />
+              <CustomInput
+                name="username"
+                label="Usuário"
+                helper-text="Use no mínimo quatro caracteres sem espaços"
+                class-helper-text="text-gray-600"
+                :required="true"
+                :icon-path="mdiAccount"
+              />
+            </div>
+            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
+              <CustomInput
+                name="registration"
+                type="text"
+                label="Matrícula"
+                helper-text="Informe a sua matrícula da faculdade"
+                class-helper-text="text-gray-600"
+                :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
+                custom-error-message
+                :icon-path="mdiSchool"
+                :max-length="12"
+                :min-length="12"
+                :min="0"
+                @update:value="checkRegistrationLength"
+              />
+              <CustomInput
+                name="email"
+                type="email"
+                label="Email"
+                helper-text="Informe o mesmo e-mail que está cadastrado no SIGAA"
+                class-helper-text="text-gray-600"
+                :icon-path="mdiEmail"
+              />
+            </div>
+            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
+              <CustomInput
+                name="password"
+                label="Senha"
+                helper-text="Use oito ou mais caracteres com uma combinação de letras, números e símbolos"
+                class-helper-text="text-gray-600"
+                :type="showPassword? 'text' : 'password'"
+                :required="true"
+                :icon-path="mdiLock"
+              />
+              <CustomInput
+                name="confirmationPassword"
+                label="Confirme Senha"
+                :type="showPassword? 'text' : 'password'"
+                :required="true"
+                :icon-path="mdiLock"
+              />
+            </div>
+            <CustomCheckbox
+              label="Visualizar senhas"
+              name="showPassword"
+              @update:value="toggleShowPassword"
             />
           </div>
         </div>
@@ -111,13 +126,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import { mdiAccount, mdiSchool, mdiEmail, mdiLock } from '@mdi/js'
 import { Form } from 'vee-validate'
 import { object, string, ref as refYup } from 'yup'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 import router from 'src/router'
 import { models } from 'src/@types'
@@ -132,17 +148,29 @@ const errorMessages = ref({
 const errorText = ref('')
 const submitSuccess = ref(false)
 const storeLogin = useLoginStore()
+const missingDigits = ref(0)
+const showPassword = ref(false)
 
 const schema = object().shape({
-  name: string().required().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/),
-  username: string().required().matches(/^[a-z0-9_.-]{6,}$/),
-  registration: string().optional().matches(/^(\d{1,12})?$/),
-  email: string().optional().matches(/^[a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/),
-  password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/),
-  confirmationPassword: string().required().oneOf([refYup('password')])
+  name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/, 'Informe nome e sobrenome'),
+  username: string().required('Informe um nome de usuário').trim().matches(/^[a-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
+  registration: string().max(12).matches(/^(\d{12})?$/),
+  email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))?$/, 'Email inválido'),
+  password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
+  confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida')
 })
 
-const handleSubmit = async (profileData: any) => {
+const checkRegistrationLength = ($event: Event) => {
+  missingDigits.value = 12 - String($event).length
+}
+
+const toggleShowPassword = () => {
+  showPassword.value = !showPassword.value
+}
+
+const handleSubmit = async (submitData: any) => {
+  const profileData: ProfileRegisterModel = submitData
+
   const responseValidation = await useCadastroPerfilStore().egressValidation(
     profileData.name,
     profileData.registration,
@@ -182,6 +210,10 @@ const handleSubmit = async (profileData: any) => {
 const onInvalid = (e: any) => {
   console.log(e)
 }
+
+onMounted(() => {
+  window.scrollTo(0, 0)
+})
 </script>
 
 <style>
@@ -196,5 +228,10 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
   /* Firefox */
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
 }
 </style>

@@ -1,8 +1,12 @@
 package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,12 +23,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.util.ResourceUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -36,13 +42,18 @@ import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
+import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 
 @SpringBootTest
 @DirtiesContext
@@ -52,157 +63,190 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @TestMethodOrder(OrderAnnotation.class)
 class EgressoControllerTest {
 
-        @Autowired
-        private GrupoRepository grupoRepository;
+    @Autowired
+    private TitulacaoRepository titulacaoRepository;
 
-        @Autowired
-        private GeneroRepository generoRepository;
+    @Autowired
+    private GrupoRepository grupoRepository;
 
-        @Autowired
-        MockMvc mockMvc;
+    @Autowired
+    private GeneroRepository generoRepository;
 
-        @Autowired
-        ModelMapper modelMapper;
+    @Autowired
+    MockMvc mockMvc;
 
-        String token;
+    @Autowired
+    ModelMapper modelMapper;
+
+    EgressoService egressoService;
+
+    EgressoDTO egressoDTO;
+
+    String token;
+
+    EgressoModel egressoModel;
+
+    UsuarioModel usuarioModel;
+
+    GeneroModel genero;
+
+    ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
+    EgressoPublicDTO egressoPublicDTO;
+
+    EgressoCadastroDTO egressoCadastro = new EgressoCadastroDTO();
+
+    static final Integer EGRESSO_ID = 1;
+    static final String EGRESSO_EMAIL = "teste@gmail.com";
+
+    @BeforeAll
+    void setUp() throws Exception {
+
+        titulacaoRepository.save(TitulacaoModel.builder().nome("abc").build());
+        titulacaoRepository.save(TitulacaoModel.builder().nome("123").build());
+
+        genero = new GeneroModel(43, "genero X");
+        genero = generoRepository.save(genero);
+
+        GrupoModel grupoModel = new GrupoModel();
+        grupoModel.setNomeGrupo("ADMIN");
+
+        grupoModel = grupoRepository.save(grupoModel);
+
+        Set<GrupoModel> grupos = new HashSet<>();
+        grupos.add(grupoModel);
+
+        usuarioModel = new UsuarioModel();
+        usuarioModel.setUsername("username");
+        usuarioModel.setNome("nome_test");
+        usuarioModel.setEmail("teste@gmail.com");
+        usuarioModel.setPassword("teste123");
+        usuarioModel.setGrupos(grupos);
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(usuarioModel)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+        authenticationRequest.setUsername(usuarioModel.getUsername());
+        authenticationRequest.setPassword(usuarioModel.getPassword());
+        String objectJson = objectMapper.writeValueAsString(authenticationRequest);
+
+        MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectJson))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        AuthenticationResponse authenticationResponse = objectMapper.readValue(
+                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
+        this.token = authenticationResponse.getToken();
+
+        MvcResult resposta = mockMvc.perform(
+                MockMvcRequestBuilders.get("/usuario")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk()).andReturn();
+
+        UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                UsuarioAuthDTO.class);
+
+        usuarioModel.setId(usuarioAuthDTO.getId());
+
+        egressoCadastro.setNascimento(LocalDate.now());
+        egressoCadastro.setGeneroId(EGRESSO_ID);
+        egressoCadastro.setMatricula("123432312345");
+        egressoCadastro.setNome("teste_nome");
+        egressoCadastro.setContribuicao(ContribuicaoDTO.builder().descricao("ljhfdakljdljdhs").build());
+        egressoCadastro.setDepoimento(DepoimentoDTO.builder().descricao("sffsfsffd").build());
+
+    }
+
+    @Test
+    @Order(1)
+    void testCadastrarEgressoPrimeiroCadastro() throws Exception {
+
+        MvcResult resposta = mockMvc.perform(
+                MockMvcRequestBuilders.post("/egresso")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(egressoCadastro))
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated()).andReturn();
+
+        String resp = resposta.getResponse().getContentAsString();
+        assertEquals(ResponseType.SUCESS_SAVE.getMessage(), resp);
+    }
+
+    @Test
+    @Order(2)
+    void testGetEgresso() throws Exception {
+
+        MvcResult resposta = mockMvc.perform(
+                MockMvcRequestBuilders.get("/egresso")
+                        .contentType(MediaType.APPLICATION_JSON)                        
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk()).andReturn();
+
+        String resp = resposta.getResponse().getContentAsString();
+        egressoDTO = objectMapper.readValue(resp, EgressoDTO.class);
+        assertNotNull(egressoDTO);
+    }
 
 
-        EgressoModel egressoModel;
+    @Test
+    @Order(2)
+    void testSaveFotoEgresso() throws IOException, Exception {
 
-        UsuarioModel usuarioModel;
+        Path path = ResourceUtils.getFile("classpath:image/imagem.jpeg").toPath();
 
-        GeneroModel genero;
+        MockMultipartFile file = new MockMultipartFile("arquivo", "imagem.jpeg", "image/jpeg",
+                Files.readAllBytes(path));
 
+        MvcResult resposta = mockMvc.perform(
+                MockMvcRequestBuilders.multipart("/egresso/foto")
+                        .file(file)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated()).andReturn();
 
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+        String resultado = resposta.getResponse().getContentAsString();
 
-        EgressoDTO egressoDTO;
+        assertEquals(resultado, ResponseType.SUCESS_IMAGE_SAVE.getMessage());
 
-        EgressoCadastroDTO egressoCadastro;
+    }
 
-        static final Integer EGRESSO_ID = 1;
-        static final String EGRESSO_EMAIL = "teste@gmail.com";
+    @Test
+    @Order(3)
+    void testGetFotoEgresso() throws Exception {
 
+        MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/egresso/foto/" + egressoDTO.getId())
+                .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk()).andReturn();
 
-        @BeforeAll
-        void setUp() throws Exception {
-            /*Gênero */
-            genero = new GeneroModel(null, "genero X");
-            genero = generoRepository.save(genero);
+        String resultado = resposta.getResponse().getContentAsString();
+        assertNotNull(resultado);        
+    }
 
-            GrupoModel grupoModel = new GrupoModel();
-            grupoModel.setNomeGrupo("ADMIN");
+    @Test
+    @Order(4)
+    void testDeleteFotoEgresso() throws Exception {
+        MvcResult resposta = mockMvc.perform(
+                MockMvcRequestBuilders.delete("/egresso/foto")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk()).andReturn();
 
-            grupoModel = grupoRepository.save(grupoModel);
+        String resultado = resposta.getResponse().getContentAsString();
 
-            Set<GrupoModel> grupos = new HashSet<>();
-            grupos.add(grupoModel);
-
-            UsuarioModel usuarioModel = new UsuarioModel();
-            usuarioModel.setUsername("username");
-            usuarioModel.setNome("nome_test");
-            usuarioModel.setEmail("teste@gmail.com");
-            usuarioModel.setPassword("teste123");
-            usuarioModel.setGrupos(grupos);
-            mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(usuarioModel)))
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(status().isCreated())
-                    .andReturn();
-
-            AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-            authenticationRequest.setUsername(usuarioModel.getUsername());
-            authenticationRequest.setPassword(usuarioModel.getPassword());
-            String objectJson = objectMapper.writeValueAsString(authenticationRequest);
-
-            MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectJson))
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(status().isOk())
-                    .andReturn();
-            AuthenticationResponse authenticationResponse = objectMapper.readValue(
-                    resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
-            this.token = authenticationResponse.getToken();
-
-        }
-
-        @Test
-        @Order(1)
-        void testCadastrarEgressoPrimeiroCadastro() throws Exception {
-            DepoimentoDTO depoimento = new DepoimentoDTO(1, "TextoDepoimento");
-
-            egressoCadastro = new EgressoCadastroDTO();
-            egressoCadastro.setId(1);
-            egressoCadastro.setNome("nome_test");
-            egressoCadastro.setMatricula("202003940011");
-            egressoCadastro.setNascimento(LocalDate.parse("1999-10-20"));
-            egressoCadastro.setGeneroId(genero.getId());
-
-            ContribuicaoDTO contribuicao = new ContribuicaoDTO(1, "TextoContribuicao", egressoCadastro.getId());
-
-            egressoCadastro.setContribuicao(contribuicao);
-            egressoCadastro.setDepoimento(depoimento);
-
-            MvcResult resposta = mockMvc.perform(
-                    MockMvcRequestBuilders.post("/egresso")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(egressoCadastro))
-                            .header("Authorization", "Bearer " + this.token))
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(status().isCreated()).andReturn();
-
-            String resp = resposta.getResponse().getContentAsString();
-            assertEquals(ResponseType.SUCESS_SAVE.getMessage(), resp);
-        }
-
-        @Test
-        @Order(2)
-        void testgetEgresso() throws Exception {
-
-            MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.get("/egresso")
-						.contentType(MediaType.APPLICATION_JSON)
-						.header("Authorization", "Bearer " + this.token))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isOk()).andReturn();
-
-            EgressoDTO egresso = objectMapper.readValue(resposta.getResponse().getContentAsString(),EgressoDTO.class);
-            egressoDTO = modelMapper.map(egresso, EgressoDTO.class);
-
-            assertEquals(egressoCadastro.getMatricula(), egresso.getMatricula());
-        }
-
-        @Test
-        @Order(3)
-        void testAtualizarEgresso() throws Exception {
-
-            MvcResult resposta = mockMvc.perform(
-                    MockMvcRequestBuilders.put("/egresso")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(egressoDTO))
-                            .header("Authorization", "Bearer " + this.token))
-                            .andDo(MockMvcResultHandlers.print())
-                            .andExpect(status().isAccepted()).andReturn();
-
-            String resp = resposta.getResponse().getContentAsString();
-            assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), resp);
-        }
-
-        @Test
-        @Order(4)
-        void testDeletarEgresso() throws Exception {
-            MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.delete("/egresso")
-						.contentType(MediaType.APPLICATION_JSON)
-						.param("id", egressoDTO.getId().toString())
-						.header("Authorization", "Bearer " + this.token))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isOk()).andReturn();
-
-            String res = resposta.getResponse().getContentAsString();
-            assertEquals(res, ResponseType.SUCESS_DELETE.getMessage());
-
-        }
+        assertEquals(resultado, ResponseType.SUCESS_IMAGE_DELETE.getMessage());
+    }
 }

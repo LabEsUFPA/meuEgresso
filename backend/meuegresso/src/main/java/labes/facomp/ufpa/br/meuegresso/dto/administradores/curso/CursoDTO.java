@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.curso;
 
+import jakarta.validation.constraints.NotBlank;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.AuditableDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,5 +24,6 @@ public class CursoDTO extends AuditableDTO {
 
     private Integer id;
 
+    @NotBlank(message = "Insira o nome do curso.")
     private String nome;
 }

@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.endereco;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +11,8 @@ import lombok.NoArgsConstructor;
  * sensiveis.
  *
  * @author Pedro Inácio
- * @since 16/04/2023
- * @version 1.0
+ * @since 13/05/2023
+ * @version 1.1
  */
 @Data
 @Builder
@@ -21,9 +22,12 @@ public class EnderecoDTO {
 
     private Integer id;
 
+    @NotBlank(message = "Insira o nome da cidade.")
     private String cidade;
 
+    @NotBlank(message = "Insira o nome do estado.")
     private String estado;
 
+    @NotBlank(message = "Insira o nome do pais.")
     private String pais;
 }

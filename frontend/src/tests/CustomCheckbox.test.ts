@@ -9,6 +9,7 @@ describe('CustomCheckbox', () => {
         label: 'Testing',
         value: false,
         name: 'testing',
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: !(wrapper.props('value')) }) }
       }
     })
@@ -22,7 +23,8 @@ describe('CustomCheckbox', () => {
         label: 'Testing',
         value: false,
         name: 'testing',
-        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: !wrapper.props('value') }) }
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: !(wrapper.props('value')) }) }
       }
     })
 
@@ -35,6 +37,7 @@ describe('CustomCheckbox', () => {
         label: 'Testing',
         value: false,
         name: 'testing',
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         'onUpdate:value': async (e: any) => { await wrapper.setProps({ value: !wrapper.props('value') }) }
       }
     })

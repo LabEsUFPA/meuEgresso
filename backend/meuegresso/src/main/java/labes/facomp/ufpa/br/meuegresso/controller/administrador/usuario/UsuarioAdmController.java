@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
@@ -60,15 +61,16 @@ public class UsuarioAdmController {
 	 *                   atualizar o Usuário.
 	 * @return {@link UsuarioAuthDTO} Dados gravados no banco com a Id atualizada.
 	 * @author Camilo Santos
+	 * @throws InvalidRequestException
 	 * @throws UnauthorizedRequestException
 	 * @since 16/04/2023
 	 */
 	@PutMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
-	public UsuarioAuthDTO atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
+	public UsuarioAuthDTO atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) throws InvalidRequestException {
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
-		usuarioModel = usuarioService.save(usuarioModel);
+		usuarioModel = usuarioService.update(usuarioModel);
 		return mapper.map(usuarioModel, UsuarioAuthDTO.class);
 	}
 

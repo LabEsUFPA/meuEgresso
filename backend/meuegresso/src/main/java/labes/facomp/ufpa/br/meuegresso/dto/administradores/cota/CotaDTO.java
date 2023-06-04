@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.cota;
 
+import jakarta.validation.constraints.NotBlank;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.AuditableDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +22,6 @@ public class CotaDTO extends AuditableDTO {
 
     private Integer id;
 
+    @NotBlank(message = "Insira o nome da cota.")
     private String nome;
 }

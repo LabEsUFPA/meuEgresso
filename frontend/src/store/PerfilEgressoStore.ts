@@ -3,17 +3,30 @@ import { type models } from 'src/@types'
 import Api from 'src/services/api'
 // interface UserModel extends models.UserModel {}
 import LocalStorage from 'src/services/localStorage'
+import axios from 'axios'
 interface ComplexOpts extends models.ComplexOpts {}
-interface EgressoModel extends models.EgressoModel {}
-interface EgressoModelUpdate extends models.EgressoModelUpdate {}
+// interface EgressoModel extends models.EgressoModel {}
+// interface EgressoModelUpdate extends models.EgressoModelUpdate {}
 const storage = new LocalStorage()
 
+const baseURL = import.meta.env.VITE_API_URL_LOCAL
+
+const Axios = axios.create({
+  baseURL,
+  withCredentials: true
+})
 interface State {
   generos: ComplexOpts[]
   faixasSalariais: ComplexOpts[]
   tiposBolsa: ComplexOpts[]
   tiposCota: ComplexOpts[]
+
 }
+Axios.interceptors.request.use((config) => {
+  const Token = new LocalStorage().getToken()
+  if (Token !== undefined) config.headers.Authorization = `Bearer ${Token}`
+  return config
+})
 
 export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
   state: (): State => ({
@@ -244,6 +257,63 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         body: dataEgresso
       })
       return (response?.status) !== undefined ? response.status : 500
+    },
+
+    async uploadImageEgresso (file: File) {
+      if (file === undefined || file === null || file.size === 0 || file.length === 0) {
+        return 201
+      } else {
+        const formData = new FormData()
+        formData.append('arquivo', file)
+
+        const response = await Api.request({
+          method: 'post',
+          route: '/egresso/foto',
+          body: formData
+        })
+        // maxContentLength: 5 * 1024 * 1024 // 5 MB
+        // console.log(response?.data)
+        return (response?.status) !== undefined ? response.status : 500
+      }
+    },
+    async fetchImageEgresso (egressoId: string) {
+      const route = '/egresso/foto/' + egressoId
+      // const url = ''
+      let response: any
+      await Axios.get(route, {
+        responseType: 'blob'
+      }).then(res => {
+        response = res
+      })
+      return response
+    },
+
+    async fetchImageEgressoUrl (egressoId: string) {
+      const route = '/egresso/foto/' + egressoId
+      let url = ''
+      let response = ''
+      await Axios.get(route, {
+        responseType: 'blob'
+      }).then(res => {
+        if (res?.status === 200) {
+          const blob = new Blob([res.data], { type: 'image/png' })
+          url = URL.createObjectURL(blob)
+        }
+        if (res?.status === 204) {
+          url = ''
+        }
+      })
+      response = url
+      return response
+    },
+    // futuro remover por id: async removeImageEgresso (egressoId: string) {
+    async removeImageEgresso () {
+      const response = await Api.request({
+        method: 'delete',
+        route: '/egresso/foto'
+      })
+      return (response?.status) !== undefined ? response.status : 500
     }
   }
+
 })
