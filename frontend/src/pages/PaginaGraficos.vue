@@ -56,8 +56,8 @@
       </div>
     </div>
   </div>
-  <div class="flex justify-center gap-y-4 mb-14 py-10">
-    <div class="grid grid-cols-1 xl:grid-cols-2 md:px-10 px-4 gap-y-10 gap-x-20 justify-items-center items-center">
+  <div class="flex w-full justify-center px-3">
+    <div class="w-full min-w-[250px] max-w-[1400px] grid grid-cols-1 lg:grid-cols-2 gap-12 mb-14 py-10">
       <CustomPieGraph
         v-show="filters.all || filters.general"
         legend="Gênero"

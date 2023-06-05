@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="loading"
-    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-[650px]"
+    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-full"
   >
     <div
       class="w-full h-full flex items-center justify-center"
@@ -16,7 +16,7 @@
   </div>
   <div
     v-else
-    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-[650px]"
+    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96"
   >
     <div class="pl-1">
       <h1 class="font-bold text-2xl">
