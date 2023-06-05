@@ -841,10 +841,6 @@ async function handleSubmitCarreira (values: any) {
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
 
-    for (let i = 0; i < selectOpts.value.areaAtuacao.length; i++) {
-      if (selectOpts.value.areaAtuacao[i] === values.carreira.area) {
-      }
-    }
   } else {
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego = null
@@ -1045,7 +1041,7 @@ async function fetchUpdateEgresso () {
   }
 
   const ResponseBack = await egressoResponseBack
-
+  
   const json = JSON.parse(ResponseBack)
 
   jsonResponse = json
@@ -1068,7 +1064,7 @@ async function fetchUpdateEgresso () {
 
     geral:
     {
-      email: isPublic.value ? json.usuario.email : userData.email,
+      email: json.usuario.email,
       genero: json.genero.nome,
       confirmacaoEmail: '',
       nascimento: json.nascimento,
@@ -1125,9 +1121,8 @@ async function fetchUpdateEgresso () {
       contribuicoes: json.contribuicao?.descricao || '',
       isInput: false
     },
-    // nome: isPublic.value ? json.usuario.nome : userData.nome,
     profileHead: {
-      nome: isPublic.value ? userData.nome : json.usuario.nome,
+      nome: json.usuario.nome,
       linkedin: json.linkedin || '',
       lattes: json.lattes || '',
       isInput: false,
@@ -1162,8 +1157,6 @@ async function fetchUpdateEgresso () {
     setorAtuacao: dataEgresso.value.carreira.setor,
     faixaSalarial: dataEgresso.value.carreira.faixaSalarial
   }
-  // formGeral.value?.setFieldValue('geral.email', userData.email)
-  // formGeral.value?.setFieldValue('geral.email', dataEgresso.value.geral.email)
   formHeader.value?.setFieldValue('geral.nome', dataEgresso.value.profileHead.nome)
   formHeader.value?.setValues({
     'geral.nome': dataEgresso.value.profileHead.nome,
@@ -1215,8 +1208,6 @@ async function fetchUpdateEgresso () {
     'adicionais.experiencias': dataEgresso.value.adicionais.experiencias,
     'adicionais.contribuicoes': dataEgresso.value.adicionais.contribuicoes
   })
-
-  return egressoStore.fetchEgresso()
 }
 onMounted(() => {
   window.scrollTo(0, 0)
