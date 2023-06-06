@@ -627,10 +627,10 @@ import { useRoute } from 'vue-router'
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const $route = useRoute()
-const $store = useCadastroEgressoStore()
+const $store = usePerfilEgressoStore()
 const egressoStore = usePerfilEgressoStore()
 
-$store.fetchAll()
+//$store.fetchAll()
 const storage = new LocalStorage()
 const formHeader = ref<typeof Form | null>(null)
 const formGeral = ref<typeof Form | null>(null)
@@ -639,12 +639,22 @@ const formCarreira = ref<typeof Form | null>(null)
 const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 
+// const isPublic = ref({
+//   value: false
+// })
 const isPublic = computed(() => {
-  if (Object.keys($route.params).length === 1 && dataEgresso.value.egressoId !== Number($route.params?.id)) {
+  // if (storage.has('loggedUser') && storage.has('loggedEgresso')) {
+  // if (storage?.has('loggedUser')) { 
+  //   const logEgresso = JSON.parse(storage.get('loggedEgresso'))
+  //   console.log(logEgresso);
+  //   return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id)) 
+  // }
+  // else{
+  //   return (Object.keys($route.params).length === 1) 
+
+  // }
     return true
-  } else {
-    return false
-  }
+
 })
 
 function handleStatus (status: any) {
@@ -1039,13 +1049,14 @@ async function handleEgressoImage (id : string) {
 async function fetchUpdateEgresso () {
   if (storage.has('loggedUser')) {
     userData = JSON.parse(storage.get('loggedUser'))
-    // getEgresso
-    if (isPublic.value) {
-      egressoResponseBack = fetchPublicEgresso(Number($route.params?.id))
-    } else {
-      egressoResponseBack = fetchEgresso()
-    }
   }
+  // getEgresso
+  if (isPublic.value) {
+    egressoResponseBack = fetchPublicEgresso(Number($route.params?.id))
+  } else {
+    egressoResponseBack = egressoStore.fetchEgresso()
+  }
+  
 
   const ResponseBack = await egressoResponseBack
   
@@ -1223,7 +1234,7 @@ onMounted(() => {
 })
 
 function fetchEgresso () {
-  return egressoStore.fetchEgresso()
+  
 }
 
 function fetchPublicEgresso (id: number) {
