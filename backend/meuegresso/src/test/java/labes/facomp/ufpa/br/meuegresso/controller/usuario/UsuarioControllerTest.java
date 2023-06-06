@@ -133,7 +133,7 @@ class UsuarioControllerTest {
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andExpect(status().isCreated()).andReturn();
                 String retornoString = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
+                assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
         }
 
         @Test
@@ -145,7 +145,7 @@ class UsuarioControllerTest {
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
                 String resultado = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCESS_DELETE.getMessage(), resultado);
+                assertEquals(ResponseType.SUCCESS_DELETE.getMessage(), resultado);
 
         }
 }

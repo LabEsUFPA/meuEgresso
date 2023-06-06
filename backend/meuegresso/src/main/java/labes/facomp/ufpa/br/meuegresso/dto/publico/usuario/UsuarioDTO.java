@@ -6,7 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * Encapsulamento da tabela Usuario a fim de representar os dados publicos representados pelo Egresso
+ * Encapsulamento da tabela Usuario a fim de representar os dados publicos
+ * representados pelo Egresso
  *
  * @author Marcus Maciel Oliveira
  * @since 13/05/2023
@@ -16,10 +17,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class UsuarioDTO  {
+public class UsuarioDTO {
 
 	private String email;
 
 	private String nome;
-	
+
 }

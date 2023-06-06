@@ -85,9 +85,11 @@ public class EgressoController {
     /**
      * Endpoint responsavel por cadastrar o egresso.
      *
-     * @param egressoCadastroDTO,token Estruturas de dados contendo as informações necessárias para
-     *                salvar o egresso.
-     * @return {@link String} Uma string representando uma mensagem de êxito indicando que o egresso
+     * @param egressoCadastroDTO,token Estruturas de dados contendo as informações
+     *                                 necessárias para
+     *                                 salvar o egresso.
+     * @return {@link String} Uma string representando uma mensagem de êxito
+     *         indicando que o egresso
      *         foi salvo.
      * @author João Paulo, Alfredo Gabriel
      * @since 16/04/2023
@@ -166,14 +168,14 @@ public class EgressoController {
 
         egressoService.adicionarEgresso(egresso);
 
-        return ResponseType.SUCESS_SAVE.getMessage();
+        return ResponseType.SUCCESS_SAVE.getMessage();
     }
 
     /**
      * Endpoint responsavel por buscar o egresso.
      *
      * @param token Estrutura de dados contendo as informações necessárias para
-     *                buscar o egresso.
+     *              buscar o egresso.
      * @return {@link EgressoDTO} Dados retornados do banco.
      * @author Pedro Inácio, João Paulo, Alfredo Gabriel, Camilo Santos
      * @since 11/05/2023
@@ -245,7 +247,7 @@ public class EgressoController {
                 egressoModel.getTitulacao().setEgresso(egressoModel);
             }
             egressoService.updateEgresso(egressoModel);
-            return ResponseType.SUCESS_UPDATE.getMessage();
+            return ResponseType.SUCCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
     }
@@ -256,8 +258,8 @@ public class EgressoController {
      * @param egressoPublicDTO Estrutura de dados contendo as informações
      *                         necessárias para deletar o egresso.
      * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
-     * @author Bruno Eiki
-     * @since 17/04/2023
+     * @author Bruno Eiki, Marcus Maciel Oliveira
+     * @since 05/06/2023
      */
     @DeleteMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -265,11 +267,11 @@ public class EgressoController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarEgresso(@RequestBody @Valid EgressoPublicDTO egressoPublicDTO) {
         EgressoModel egressoModel = mapper.map(egressoPublicDTO, EgressoModel.class);
-        if (egressoService.deletarEgresso(egressoModel)) {
-            return ResponseType.SUCESS_DELETE.getMessage();
-        } else {
-            return ResponseType.FAIL_DELETE.getMessage();
+        if (egressoService.existsById(egressoModel.getId())) {
+            egressoService.deleteById(egressoModel.getId());
+            return ResponseType.SUCCESS_DELETE.getMessage();
         }
+        return ResponseType.FAIL_DELETE.getMessage();
     }
 
     /**
@@ -289,9 +291,8 @@ public class EgressoController {
         EgressoModel egressoModel = egressoService.findById(id);
         if (egressoModel.getFotoNome() != null) {
             return egressoService.getFileAsResource(egressoModel.getFotoNome());
-        } else {
-            throw new NotFoundFotoEgressoException();
         }
+        throw new NotFoundFotoEgressoException();
     }
 
     /**
@@ -313,7 +314,7 @@ public class EgressoController {
             egressoService.deleteFile(egressoModel.getFotoNome());
             egressoModel.setFotoNome(null);
             egressoService.updateEgresso(egressoModel);
-            return ResponseEntity.ok(ResponseType.SUCESS_IMAGE_DELETE.getMessage());
+            return ResponseEntity.ok(ResponseType.SUCCESS_IMAGE_DELETE.getMessage());
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseType.FAIL_IMAGE_DELETE.getMessage());
 
@@ -340,7 +341,7 @@ public class EgressoController {
         egressoModel.setFotoNome(fileCode);
         egressoService.updateEgresso(egressoModel);
         egressoService.saveFoto(fileCode, arquivo);
-        return ResponseType.SUCESS_IMAGE_SAVE.getMessage();
+        return ResponseType.SUCCESS_IMAGE_SAVE.getMessage();
     }
 
     private void validaSetorAtuacao(String setorAtuacaoNome, EgressoModel egressoModel) {

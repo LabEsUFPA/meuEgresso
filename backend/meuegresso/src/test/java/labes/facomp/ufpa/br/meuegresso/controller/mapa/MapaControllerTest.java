@@ -37,7 +37,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoMapaDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
@@ -123,7 +122,6 @@ class MapaControllerTest {
         EgressoEmpresaDTO egressoEmpresaDTO;
         EgressoEmpresaModelId egressoEmpresaModelId;
 
-        EgressoPublicDTO egressoPublicDTO;
         EgressoCadastroDTO egressoCadastroDTO;
         EgressoModel egressoModel;
 

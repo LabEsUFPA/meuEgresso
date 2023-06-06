@@ -184,8 +184,8 @@ public class AnuncioControllerTest {
                                 .andExpect(status().isCreated()).andReturn();
                 String retornoString2 = resposta2.getResponse().getContentAsString();
 
-                assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString);
-                assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString2);
+                assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
+                assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString2);
         }
 
         @Order(2)
@@ -223,7 +223,7 @@ public class AnuncioControllerTest {
                                 .andExpect(status().isCreated())
                                 .andReturn();
                 String retornoString = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
+                assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
 
         }
 

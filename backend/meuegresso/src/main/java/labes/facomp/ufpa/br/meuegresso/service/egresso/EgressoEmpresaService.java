@@ -2,7 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso;
 
 import java.util.List;
 
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.EmpresaGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EmpresaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;

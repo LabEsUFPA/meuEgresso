@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.dto.grafico;
+package labes.facomp.ufpa.br.meuegresso.dto.publico.grafico;
 
 import java.util.HashMap;
 
@@ -16,8 +16,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenerosGraficoDTO {
+public class IdadesGraficoDTO {
 
-    private HashMap<String, Integer> generos; 
+    private double mediaIdades;
     
+    private HashMap<Integer, Integer> idadesEgressos;
+
 }

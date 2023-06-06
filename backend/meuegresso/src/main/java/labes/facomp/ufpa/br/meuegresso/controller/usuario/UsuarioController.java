@@ -81,7 +81,7 @@ public class UsuarioController {
 			UsuarioModel usuarioModel = usuarioService.findById(jwtService.getIdUsuario(token));
 			mapper.map(usuarioDTO, usuarioModel);
 			usuarioService.update(usuarioModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}
@@ -100,10 +100,9 @@ public class UsuarioController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String deleteById(@PathVariable(name = "id") Integer id) {
 		if (usuarioService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
-		} else {
-			return ResponseType.FAIL_DELETE.getMessage();
-		}
+			return ResponseType.SUCCESS_DELETE.getMessage();
+		} 
+		return ResponseType.FAIL_DELETE.getMessage();
 	}
 
 }
