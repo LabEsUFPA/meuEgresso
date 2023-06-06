@@ -62,17 +62,17 @@
         v-show="filters.all || filters.general"
         legend="Gênero"
         info="Quantidade de egressos por cada gênero"
-        :loading="genderData ? false : true"
-        :data="genderData"
-        :legend-data="genderDataLegend"
+        :loading="gender ? false : true"
+        :data="gender?.values"
+        :legend-data="gender?.legend"
       />
       <CustomPieGraph
         v-show="filters.all || filters.career"
         legend="Área de atuação"
         info="Quantidade de egressos pro cada área de atuação"
-        :loading="activitySectorData ? false : true"
-        :data="activitySectorData"
-        :legend-data="activitySectorLegend"
+        :loading="sector ? false : true"
+        :data="sector?.values"
+        :legend-data="sector?.legend"
       />
       <CustomBarGraph
         v-show="filters.all || filters.general"
@@ -86,65 +86,65 @@
         v-show="filters.all || filters.academic"
         legend="Nível de ensino"
         info="Quantidade de egressos por nível de ensino"
-        :loading="studentData ? false : true"
-        :data="studentData"
-        :legend-data="studentLegend"
+        :loading="student ? false : true"
+        :data="student?.values"
+        :legend-data="student?.legend"
       />
       <CustomPieGraph
         v-show="filters.all || filters.career"
         legend="Salário"
         info="Quantidade de egressos por faixa salárial"
-        :loading="wageData ? false : true"
-        :data="wageData"
-        :legend-data="wageLegend"
+        :loading="wage ? false : true"
+        :data="wage?.values"
+        :legend-data="wage?.legend"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Pos-graduação"
         info="Quantidade de egressos que fizeram pós-graduação"
-        :loading="postGraduateData ? false : true"
-        :data="postGraduateData"
-        :legend-data="postGraduateLegend"
+        :loading="postGraduate ? false : true"
+        :data="postGraduate?.values"
+        :legend-data="postGraduate?.legend"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Cotistas"
         info="Quantidade de egressos que foram cotistas"
-        :loading="shareHolderData ? false : true"
-        :data="shareHolderData"
-        :legend-data="shareHolderLegend"
+        :loading="shareHolder ? false : true"
+        :data="shareHolder?.values"
+        :legend-data="shareHolder?.legend"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Cotas"
         info="Quantidade de egressos por cada conta"
-        :loading="quotasData ? false : true"
-        :data="quotasData"
-        :legend-data="quotasLegend"
+        :loading="quotas ? false : true"
+        :data="quotas?.values"
+        :legend-data="quotas?.legend"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Bolsista"
         info="Quantidade de egressos que foram bolsistas"
-        :loading="scholarData ? false : true"
-        :data="scholarData"
-        :legend-data="scholarLegend"
+        :loading="scholar ? false : true"
+        :data="scholar?.values"
+        :legend-data="scholar?.legend"
       />
       <CustomPieGraph
         v-show="filters.all || filters.career"
         legend="Área de atuação"
         info="Quantidade de egressos por cada área de atuação"
-        :loading="actingData ? false : true"
-        :data="actingData"
-        :legend-data="actingLegend"
+        :loading="acting ? false : true"
+        :data="acting?.values"
+        :legend-data="acting?.legend"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Deseja realizar Pós-graduação"
         info="Quantidade de egressos que desejam realizar pós-graduação"
-        :loading="interestInPostData ? false : true"
-        :data="interestInPostData"
-        :legend-data="interestInPostLegend"
+        :loading="interestInPost ? false : true"
+        :data="interestInPost?.values"
+        :legend-data="interestInPost?.legend"
       />
       <CustomBarGraph
         v-show="filters.all || filters.career"
@@ -158,33 +158,33 @@
         v-show="filters.all || filters.academic"
         legend="Tipo de bolsa"
         info="Quantidade de egressos por cada tipo de bolsa"
-        :loading="scholarshipTypeData ? false : true"
-        :data="scholarshipTypeData"
-        :legend-data="scholarshipTypeLegend"
+        :loading="scholarshipType ? false : true"
+        :data="scholarshipType?.values"
+        :legend-data="scholarshipType?.legend"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Local de Pós-graduação"
         info="Quantidade de egressos por instituição de pós-graduação"
-        :loading="postGraduateLocalData ? false : true"
-        :data="postGraduateLocalData"
-        :legend-data="postGraduateLocalLegend"
+        :loading="postGraduateLocal ? false : true"
+        :data="postGraduateLocal?.values"
+        :legend-data="postGraduateLocal?.legend"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Curso de Pós-graduação"
         info="Quantidade de egressos por curso de pós graduação"
-        :loading="postGraduateCourseData ? false : true"
-        :data="postGraduateCourseData"
-        :legend-data="postGraduateCourseLegend"
+        :loading="postGraduateCourse ? false : true"
+        :data="postGraduateCourse?.values"
+        :legend-data="postGraduateCourse?.legend"
       />
       <CustomPieGraph
         v-show="filters.all || filters.career"
-        legend="Vículo empregatício"
+        legend="Vínculo empregatício"
         info="Onde os egressos estão trabalhando"
-        :loading="companyData ? false : true"
-        :data="companyData"
-        :legend-data="companyLegend"
+        :loading="company ? false : true"
+        :data="company?.values"
+        :legend-data="company?.legend"
       />
     </div>
   </div>
@@ -203,107 +203,45 @@ interface PieChartSeries extends models.Graphics.PieChartSeries {}
 
 const store = useGraficoStore()
 
-const genderData = ref<PieChartSeries[]>()
-const genderDataLegend = ref<string[]>()
-const activitySectorData = ref<PieChartSeries[]>()
-const activitySectorLegend = ref<string[]>()
 const ageDataX = ref<string[]>([])
 const ageDataY = ref<number[]>([])
-const studentData = ref<PieChartSeries[]>()
-const studentLegend = ref<string[]>()
-const wageData = ref<PieChartSeries[]>()
-const wageLegend = ref<string[]>()
-const postGraduateData = ref<PieChartSeries[]>()
-const postGraduateLegend = ref<string[]>()
-const shareHolderData = ref<PieChartSeries[]>()
-const shareHolderLegend = ref<string[]>()
-const quotasData = ref<PieChartSeries[]>()
-const quotasLegend = ref<string[]>()
-const scholarData = ref<PieChartSeries[]>()
-const scholarLegend = ref<string[]>()
-const actingData = ref<PieChartSeries[]>()
-const actingLegend = ref<string[]>()
-const interestInPostData = ref<PieChartSeries[]>()
-const interestInPostLegend = ref<string[]>()
 const remunerationDataX = ref<string[]>([])
 const remunerationDataY = ref<number[]>([])
-const scholarshipTypeData = ref<PieChartSeries[]>()
-const scholarshipTypeLegend = ref<string[]>()
-const postGraduateLocalData = ref<PieChartSeries[]>()
-const postGraduateLocalLegend = ref<string[]>()
-const postGraduateCourseData = ref<PieChartSeries[]>()
-const postGraduateCourseLegend = ref<string[]>()
-const companyData = ref<PieChartSeries[]>()
-const companyLegend = ref<string[]>()
+
+interface dataGraph {
+  values: PieChartSeries[]
+  legend: string[]
+}
+
+const company = ref<dataGraph>()
+const postGraduateCourse = ref<dataGraph>()
+const postGraduateLocal = ref<dataGraph>()
+const scholarshipType = ref<dataGraph>()
+const interestInPost = ref<dataGraph>()
+const acting = ref<dataGraph>()
+const scholar = ref<dataGraph>()
+const quotas = ref<dataGraph>()
+const shareHolder = ref<dataGraph>()
+const postGraduate = ref<dataGraph>()
+const student = ref<dataGraph>()
+const wage = ref<dataGraph>()
+const sector = ref<dataGraph>()
+const gender = ref<dataGraph>()
 
 onMounted(async () => {
   await getGraphData()
 })
 
 const getGraphData = async () => {
-  const genderGraph = await store.getGenderData()
-  genderData.value = genderGraph?.genderData
-  genderDataLegend.value = genderGraph?.genderDataLegend
-
-  const activitySectorGraph = await store.getSectorData()
-  activitySectorData.value = activitySectorGraph?.activitySectorData
-  activitySectorLegend.value = activitySectorGraph?.activitySectorLegend
-
   const ageGraph = await store.getAgeData()
   ageDataX.value = ageGraph?.ageDataX
   ageDataY.value = ageGraph?.ageDataY
-
-  const studentGraph = await store.getStudentData()
-  studentData.value = studentGraph?.studentData
-  studentLegend.value = studentGraph?.studentLegend
-
-  const wageGraph = await store.getWageData()
-  wageData.value = wageGraph?.wageData
-  wageLegend.value = wageGraph?.wageLegend
-
-  const postGraduateGraph = await store.getPostGraduateData()
-  postGraduateData.value = postGraduateGraph?.postGraduateData
-  postGraduateLegend.value = postGraduateGraph?.postGraduateLegend
-
-  const shareHolderGraph = await store.getShareHolderData()
-  shareHolderData.value = shareHolderGraph?.shareHolderData
-  shareHolderLegend.value = shareHolderGraph?.shareHolderLegend
-
-  const quotasGraph = await store.getQuotasData()
-  quotasData.value = quotasGraph?.quotasData
-  quotasLegend.value = quotasGraph?.quotasLegend
-
-  const scholarGraph = await store.getScholarData()
-  scholarData.value = scholarGraph?.scholarData
-  scholarLegend.value = scholarGraph?.scholarLegend
-
-  const actingGraph = await store.getActingData()
-  actingData.value = actingGraph?.actingData
-  actingLegend.value = actingGraph?.actingLegend
-
-  const interestInPostGraph = await store.getInterestInPostData()
-  interestInPostData.value = interestInPostGraph?.interestInPostData
-  interestInPostLegend.value = interestInPostGraph?.interestInPostLegend
 
   const remunerationGraph = await store.getRemunerationData()
   remunerationDataX.value = remunerationGraph?.remunerationDataX
   remunerationDataY.value = remunerationGraph?.remunerationDataY
 
-  const scholarshipTypeGraph = await store.getScholarshipTypeData()
-  scholarshipTypeData.value = scholarshipTypeGraph?.scholarshipTypeData
-  scholarshipTypeLegend.value = scholarshipTypeGraph?.scholarshipTypeLegend
-
-  const postGraduateLocalGraph = await store.getPostGraduateLocalData()
-  postGraduateLocalData.value = postGraduateLocalGraph?.postGraduateLocalData
-  postGraduateLocalLegend.value = postGraduateLocalGraph?.postGraduateLocalLegend
-
-  const postGraduateCourseGraph = await store.getPostGraduateCourseData()
-  postGraduateCourseData.value = postGraduateCourseGraph?.postGraduateCourseData
-  postGraduateCourseLegend.value = postGraduateCourseGraph?.postGraduateCourseLegend
-
-  const companyGraph = await store.getCompanyData()
-  companyData.value = companyGraph?.companyData
-  companyLegend.value = companyGraph?.companyLegend
+  const loadedData = await store.fetchAll()
 }
 
 interface Filters {

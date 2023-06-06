@@ -3,8 +3,64 @@ import Api from 'src/services/api'
 import { type models } from 'src/@types'
 interface PieChartSeries extends models.Graphics.PieChartSeries {}
 
+interface dataGraph {
+  values: PieChartSeries[]
+  legend: string[]
+}
+
 export const useGraficoStore = defineStore('GraficoStore', {
   actions: {
+    async fetchAll () {
+      const [
+        company,
+        postGraduateCourse,
+        postGraduateLocal,
+        scholarshipType,
+        interestInPost,
+        acting,
+        scholar,
+        quotas,
+        shareHolder,
+        postGraduate,
+        student,
+        wage,
+        sector,
+        gender
+      ] = await Promise.all([
+        this.getCompanyData(),
+        this.getPostGraduateCourseData(),
+        this.getPostGraduateLocalData(),
+        this.getScholarshipTypeData(),
+        this.getInterestInPostData(),
+        this.getActingData(),
+        this.getScholarData(),
+        this.getQuotasData(),
+        this.getShareHolderData(),
+        this.getPostGraduateData(),
+        this.getStudentData(),
+        this.getWageData(),
+        this.getSectorData(),
+        this.getGenderData()
+      ])
+
+      return {
+        company,
+        postGraduateCourse,
+        postGraduateLocal,
+        scholarshipType,
+        interestInPost,
+        acting,
+        scholar,
+        quotas,
+        shareHolder,
+        postGraduate,
+        student,
+        wage,
+        sector,
+        gender
+      }
+    },
+
     async getCompanyData () {
       const response = await Api.request({
         method: 'get',
@@ -12,17 +68,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data) != null) {
-        const companyData: PieChartSeries[] = []
-        const companyLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         response.data.forEach((item: { empresa: string, quantidade: number }) => {
-          companyData.push({ value: Math.floor(Math.random() * 100), name: item.empresa })
-          companyLegend.push(item.empresa)
+          values.push({ value: Math.floor(Math.random() * 100), name: item.empresa })
+          legend.push(item.empresa)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          companyData,
-          companyLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
@@ -34,17 +93,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data) != null) {
-        const postGraduateCourseData: PieChartSeries[] = []
-        const postGraduateCourseLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         response.data.forEach((item: { curso: string, quantidade: number }) => {
-          postGraduateCourseData.push({ value: Math.floor(Math.random() * 100), name: item.curso })
-          postGraduateCourseLegend.push(item.curso)
+          values.push({ value: Math.floor(Math.random() * 100), name: item.curso })
+          legend.push(item.curso)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          postGraduateCourseData,
-          postGraduateCourseLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
@@ -56,17 +118,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data) != null) {
-        const postGraduateLocalData: PieChartSeries[] = []
-        const postGraduateLocalLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         response.data.forEach((item: { instituicao: string, quantidade: number }) => {
-          postGraduateLocalData.push({ value: Math.floor(Math.random() * 100), name: item.instituicao })
-          postGraduateLocalLegend.push(item.instituicao)
+          values.push({ value: Math.floor(Math.random() * 100), name: item.instituicao })
+          legend.push(item.instituicao)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          postGraduateLocalData,
-          postGraduateLocalLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
@@ -78,17 +143,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data?.tipoBolsas) != null) {
-        const scholarshipTypeData: PieChartSeries[] = []
-        const scholarshipTypeLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         Object.keys(response?.data?.tipoBolsas).forEach((item) => {
-          scholarshipTypeData.push({ value: Math.floor(Math.random() * 100), name: item })
-          scholarshipTypeLegend.push(item)
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          scholarshipTypeData,
-          scholarshipTypeLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
@@ -123,17 +191,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data?.interesseContagem) != null) {
-        const interestInPostData: PieChartSeries[] = []
-        const interestInPostLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         Object.keys(response?.data?.interesseContagem).forEach((item) => {
-          interestInPostData.push({ value: Math.floor(Math.random() * 100), name: item })
-          interestInPostLegend.push(item)
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          interestInPostData,
-          interestInPostLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
@@ -145,17 +216,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data?.areaAtuacao) != null) {
-        const actingData: PieChartSeries[] = []
-        const actingLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         Object.keys(response?.data?.areaAtuacao).forEach((item) => {
-          actingData.push({ value: Math.floor(Math.random() * 100), name: item })
-          actingLegend.push(item)
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          actingData,
-          actingLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
@@ -167,17 +241,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data?.bolsistasContagem) != null) {
-        const scholarData: PieChartSeries[] = []
-        const scholarLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         Object.keys(response?.data?.bolsistasContagem).forEach((item) => {
-          scholarData.push({ value: Math.floor(Math.random() * 100), name: item })
-          scholarLegend.push(item)
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          scholarData,
-          scholarLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
@@ -189,17 +266,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data?.cotaAtuacao) != null) {
-        const quotasData: PieChartSeries[] = []
-        const quotasLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         Object.keys(response?.data?.cotaAtuacao).forEach((item) => {
-          quotasData.push({ value: Math.floor(Math.random() * 100), name: item })
-          quotasLegend.push(item)
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          quotasData,
-          quotasLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
@@ -211,17 +291,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data?.cotistasEnumerados) != null) {
-        const shareHolderData: PieChartSeries[] = []
-        const shareHolderLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         Object.keys(response?.data?.cotistasEnumerados).forEach((item) => {
-          shareHolderData.push({ value: Math.floor(Math.random() * 100), name: item })
-          shareHolderLegend.push(item)
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          shareHolderData,
-          shareHolderLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
@@ -233,17 +316,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data?.posGraduacaoContagem) != null) {
-        const postGraduateData: PieChartSeries[] = []
-        const postGraduateLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         Object.keys(response?.data?.posGraduacaoContagem).forEach((item) => {
-          postGraduateData.push({ value: Math.floor(Math.random() * 100), name: item })
-          postGraduateLegend.push(item)
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          postGraduateData,
-          postGraduateLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
@@ -255,17 +341,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data?.tipoAlunos) != null) {
-        const studentData: PieChartSeries[] = []
-        const studentLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         Object.keys(response?.data?.tipoAlunos).forEach((item) => {
-          studentData.push({ value: Math.floor(Math.random() * 100), name: item })
-          studentLegend.push(item)
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          studentData,
-          studentLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
@@ -277,17 +366,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data?.salarios) != null) {
-        const wageData: PieChartSeries[] = []
-        const wageLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         Object.keys(response?.data?.salarios).forEach((item) => {
-          wageData.push({ value: Math.floor(Math.random() * 100), name: item })
-          wageLegend.push(item)
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          wageData,
-          wageLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
@@ -299,17 +391,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data?.setorAtuacao) != null) {
-        const activitySectorData: PieChartSeries[] = []
-        const activitySectorLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         Object.keys(response?.data?.setorAtuacao).forEach((item) => {
-          activitySectorData.push({ value: Math.floor(Math.random() * 100), name: item })
-          activitySectorLegend.push(item)
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          activitySectorData,
-          activitySectorLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
@@ -321,17 +416,20 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       if ((response?.data?.generos) != null) {
-        const genderData: PieChartSeries[] = []
-        const genderDataLegend: string[] = []
+        const values: PieChartSeries[] = []
+        const legend: string[] = []
         Object.keys(response?.data?.generos).forEach((item) => {
-          genderData.push({ value: Math.floor(Math.random() * 100), name: item })
-          genderDataLegend.push(item)
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
         })
 
+        const data: dataGraph = {
+          values,
+          legend
+        }
+
         return {
-          genderData,
-          genderDataLegend,
-          status: (response?.status) !== undefined ? response.status : 500
+          data
         }
       }
     },
