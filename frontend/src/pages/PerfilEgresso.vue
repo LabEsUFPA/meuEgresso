@@ -37,14 +37,9 @@
             />
           </h1>
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
-            <!-- :class="{
-                ['ml-[110px]']: !isPublic,
-                ['ml-[110px]']: isPublic
-              }" -->
             <div
               class="mt-[37px] flex flex-col items-center justify-center"
             >
-              <!-- @remove="removeImageEgresso" -->
               <ProfileImage
                 ref="profileImageRef"
                 @imageUploadBack="profileImageSave"
@@ -645,7 +640,7 @@ const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 
 const isPublic = computed(() => {
-  if (Object.keys($route.params).length === 1) {
+  if (Object.keys($route.params).length === 1 && dataEgresso.value.egressoId !== Number($route.params?.id)) {
     return true
   } else {
     return false
@@ -667,8 +662,20 @@ const profileImageSave = () => {
 }
 async function handleSubmitHeader (values: any) {
   jsonResponse.usuario.nome = values.geral.nome
-  jsonResponse.linkedin = values.geral.linkedin
-  jsonResponse.lattes = values.geral.lattes
+  if(values.geral.linkedin !== '' && values.geral.linkedin !== undefined){
+    jsonResponse.linkedin = values.geral.linkedin
+  }
+  else{
+    jsonResponse.linkedin = null
+  }
+  if(values.geral.lattes !== '' && values.geral.lattes !== undefined){
+    console.log(jsonResponse.lattes);
+    jsonResponse.lattes = values.geral.lattes
+  }
+  else{
+    jsonResponse.lattes = null
+  }
+  
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   const responseImage = await profileImageSave()
   // console.log(status)
