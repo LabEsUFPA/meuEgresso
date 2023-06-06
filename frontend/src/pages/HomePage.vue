@@ -1,45 +1,50 @@
-<script setup lang="ts">
-import HelloWorld from '../components/HelloWorld.vue'
-
-</script>
-
 <template>
-  <div class="flex justify-around">
-    <a
-      href="https://vitejs.dev"
-      target="_blank"
-    >
-      <img
-        src="/vite.svg"
-        class="logo"
-        alt="Vite logo"
-      >
-    </a>
-    <a
-      href="https://vuejs.org/"
-      target="_blank"
-    >
-      <img
-        src="src/assets/vue.svg"
-        class="logo vue"
-        alt="Vue logo"
-      >
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <MapaSociodemografico
+    v-if="!loading"
+    :egress-list="markers"
+  />
 </template>
 
-<style lang="scss" scoped>
-.logo {
-  height: 8em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useHomeStore } from 'src/store/HomeStore'
+import MapaSociodemografico from 'src/components/MapaSociodemografico.vue'
+import { City } from 'country-state-city'
+import { type models } from 'src/@types'
+interface EgressoMapa extends models.EgressoMapa {}
+
+const loading = ref(true)
+const markers = ref<any>([])
+
+onMounted(() => {
+  window.scrollTo(0, 0)
+  getEgresso()
+})
+
+const getEgresso = async () => {
+  const store = useHomeStore()
+  await store.getEgress()
+  const data = store.egressList
+  const filtered = new Map<string, EgressoMapa[]>()
+
+  data.forEach(egresso => {
+    const cidade = City.getCitiesOfState(egresso.empresa.endereco.pais, egresso.empresa.endereco.estado).filter(elem => elem.name === egresso.empresa.endereco.cidade)[0]
+    egresso.empresa.endereco.latitude = parseInt(String(cidade.latitude))
+    egresso.empresa.endereco.longitude = parseInt(String(cidade.longitude))
+
+    const mapKey = `${egresso.empresa.endereco.latitude}:${egresso.empresa.endereco.longitude}`
+    const mapElement = filtered.get(mapKey)
+
+    if (mapElement) {
+      filtered.set(mapKey, [...mapElement, egresso])
+    } else {
+      filtered.set(mapKey, [egresso])
+    }
+  })
+
+  markers.value = filtered
+  loading.value = false
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+
+
+</script>

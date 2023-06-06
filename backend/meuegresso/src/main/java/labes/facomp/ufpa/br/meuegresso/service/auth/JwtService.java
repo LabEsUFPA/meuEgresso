@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import labes.facomp.ufpa.br.meuegresso.config.properties.TokenProperties;
 import labes.facomp.ufpa.br.meuegresso.enumeration.JwtUtils;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,6 +24,7 @@ public class JwtService {
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
     private final TokenProperties tokenProperties;
+    private final EgressoRepository egressoRepository;
 
     public String extractUsername(String token) {
         return jwtDecoder.decode(token).getSubject();
@@ -38,6 +40,7 @@ public class JwtService {
                 .claim(JwtUtils.NOME.getPropriedade(), userModel.getFirstName())
                 .claim(JwtUtils.SOBRENOME.getPropriedade(), userModel.getLastName())
                 .claim(JwtUtils.USER_ID.getPropriedade(), userModel.getId())
+                .claim(JwtUtils.EGRESSO.getPropriedade(), egressoRepository.existsByUsuarioId(userModel.getId()))
                 .claim(JwtUtils.SCOPE.getPropriedade(), scope);
         return jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet.build())).getTokenValue();
 

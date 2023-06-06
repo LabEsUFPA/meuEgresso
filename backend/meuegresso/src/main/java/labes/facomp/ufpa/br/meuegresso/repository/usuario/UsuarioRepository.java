@@ -8,7 +8,8 @@ import org.springframework.data.repository.CrudRepository;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 
 /**
- * Interface utilizada para realizar a comunicação entre a aplicação é o banco de dados.
+ * Interface utilizada para realizar a comunicação entre a aplicação é o banco
+ * de dados.
  * Nota: O Spring Boot irá cuidar da implementação da mesma.
  *
  * @author Alfredo Gabriel
@@ -22,5 +23,5 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
-	boolean existsByUsername(String username);
+	boolean existsByUsernameIgnoreCase(String username);
 }

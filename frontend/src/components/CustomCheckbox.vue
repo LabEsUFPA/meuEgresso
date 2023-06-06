@@ -1,12 +1,19 @@
+
 <template>
   <button
-    class="flex flex-row items-center w-fit"
+    class="flex flex-row pr-1 items-center w-fit focus-visible:rounded-sm"
+    role="checkbox"
     :class="{
       ['cursor-not-allowed opacity-80']: disabled,
       ['cursor-pointer']: !disabled
     }"
-    type="button"
+    :aria-labelledby="name"
+
+    :aria-checked="inputValue"
     @click="!disabled && handleChange(!inputValue); $emit('update:value', inputValue)"
+    @keydown.enter.space="!disabled && handleChange(!inputValue); $emit('update:value', inputValue)"
+    :id="`checkbox-${name}`"
+    type="button"
   >
     <div class="text-teal-600">
       <SvgIcon
@@ -30,7 +37,7 @@
         ['cursor-not-allowed opacity-80']: disabled,
         ['cursor-pointer']: !disabled
       }"
-      :for="id"
+      :id="name"
     >
       {{ label }}
     </label>
@@ -42,23 +49,20 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiCheckboxBlankOutline, mdiCheckboxMarked } from '@mdi/js'
 import { useField } from 'vee-validate'
 import { toRef } from 'vue'
-
 const props = defineProps<{
   value?: boolean
   label: string
   name: string
   disabled?: boolean
 }>()
-
+type Booleanish = 'true' | 'false'
 const $emit = defineEmits(['update:value'])
 
 const name = toRef(props, 'name')
+
 const {
   value: inputValue,
   handleChange
-} = useField(name, undefined, {
-  initialValue: props.value
-})
+} = useField<Booleanish | 'mixed' | undefined>(name, undefined)
 
-const id = `checkbox-input-${Math.floor(Math.random() * 1000000).toString()}`
 </script>

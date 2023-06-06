@@ -1,47 +1,63 @@
 <template>
-  <div class="flex-1 min-h-screen items-center justify-center bg-neutral-100">
+  <div
+    v-if="loading"
+    class="flex items-center justify-center text-center"
+  >
+    <img
+      class="animate-spin mr-3 max-w-[100px]"
+      src="../assets/loading.svg"
+      alt="Loading"
+    >
+  </div>
+  <div
+    v-else
+    class="flex-1 min-h-screen items-center justify-center bg-neutral-100"
+  >
     <div
       class="flex place-items-center justify-between flex-wrap relative w-full h-[335px] pin-t bg-gradient-to-b from-sky-200 to-indigo-200 "
     >
-      <!-- <ProfileHead /> -->
-      <!-- Head Start-->
-
+      <!-- Head Start -->
       <div class="items-center flex relative w-[7000px] flex-col">
         <Form
+          ref="formHeader"
           @submit="handleSubmitHeader"
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
         >
+          <h1 class="absolute ml-[220px] sm:ml-[270px] md:ml-[300px] mr-1 ">
+            <ButtonEdit
+              label="Editar"
+              icon-path="/src/assets/edit.svg"
+              icon-path2="/src/assets/wcheck.svg"
+              color="whitesky"
+              color2="emerald"
+              @toggle="toggleIsInput('profileHead')"
+              :is-input="dataEgresso.profileHead.isInput"
+              v-if="!isPublic"
+            />
+          </h1>
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
+            <!-- :class="{
+                ['ml-[110px]']: !isPublic,
+                ['ml-[110px]']: isPublic
+              }" -->
             <div
               class="mt-[37px] flex flex-col items-center justify-center"
-              :class="{
-                ['ml-[200px]']: !isPublic,
-                ['ml-[110px]']: isPublic
-              }"
             >
-              <img
-                class="w-[120px] h-[120px] rounded-full"
-                src="/src/assets/profile-pic.png"
-                alt="Avatar"
-              >
-            </div>
-            <h1 class="mt-[5px] ml-[100px] ">
-              <ButtonEdit
-                label="Editar"
-                icon-path="/src/assets/edit.svg"
-                icon-path2="/src/assets/wcheck.svg"
-                color="whitesky"
-                color2="emerald"
-                @toggle="toggleIsInput('profileHead')"
+              <!-- @remove="removeImageEgresso" -->
+              <ProfileImage
+                ref="profileImageRef"
+                @imageUploadBack="profileImageSave"
+                @remove="removeImageEgresso"
+                :img-url="dataEgresso.profileHead.image"
+                img-default="src/assets/profile-pic.png"
                 :is-input="dataEgresso.profileHead.isInput"
-                v-if="!isPublic"
+                :trigger-back-upload="dataEgresso.profileHead.isInput"
               />
-            </h1>
+            </div>
           </div>
           <div class="head">
             <h1 class="grid place-items-center text-cyan-800 text-xl font-bold mt-5 ">
-              <!-- name="geral.nome" -->
               <div v-if="!dataEgresso.profileHead.isInput">
                 <slot v-if="dataEgresso.profileHead.nome">
                   {{ dataEgresso.profileHead.nome }}
@@ -66,8 +82,6 @@
                 />
               </div>
             </h1>
-            <!-- helper-text="Números e caracteres especiais não são permitidos" -->
-
             <div
               v-if="!dataEgresso.profileHead.isInput"
               class="items-start flex justify-center mt-8 relative gap-[10px]"
@@ -146,10 +160,10 @@
     </div>
     <!-- Head End-->
     <div class="w-full mt-[12px]">
-      <!-- <ProfileBodyView /> -->
       <!-- Body Start -->
       <div class="container mx-auto p-3 pb-0">
         <Form
+          ref="formGeral"
           @submit="handleSubmitGeral"
           @invalid-submit="onInvalid"
           :validation-schema="schemaGeral"
@@ -205,7 +219,6 @@
                   :icon-path="mdiEmail"
                   v-if="!isPublic"
                 />
-
                 <CustomPerfilData
                   type="date"
                   class="mb-1"
@@ -221,23 +234,21 @@
                 <CustomSelect
                   class="mb-5"
                   name="geral.genero"
-                  :value="dataEgresso.geral.genero"
-                  :value-id="dataEgresso.generoId"
+                  :placeholder="dataEgresso.geral.genero"
                   label="Gênero"
-                  :options="egressoStore.generos"
-                  :pre-filled="true"
+                  :options="$store.generos"
                   required
                 />
+
                 <CustomInput
                   class="mb-5"
                   name="geral.email"
-                  :value="dataEgresso.geral.email"
                   label="E-mail"
                   placeholder="Ex: marcelle.mota.@gov.br"
                   helper-text="Use um email válido: hotmail, outlook, gmail, etc."
                   :icon-path="mdiEmail"
+                  required
                 />
-
                 <CustomInput
                   class="mb-5"
                   name="geral.nascimento"
@@ -250,11 +261,16 @@
           </FolderSection>
         </Form>
         <Form
+          ref="formAcademico"
           @submit="handleSubmitAcademico"
           @invalid-submit="onInvalid"
           :validation-schema="schemaAcademico"
         >
-          <FolderSection class="mt-6">
+          <FolderAcademico
+            :is-input="dataEgresso.academico.isInput"
+            :bools="bools"
+            :bolsa-holder="placeHolders.bolsaNome"
+          >
             <template #EditButton>
               <h1 class="relative">
                 <ButtonEdit
@@ -271,241 +287,81 @@
                 />
               </h1>
             </template>
-            <template #title>
-              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-                <SvgIcon
-                  type="mdi"
-                  size="20"
-                  class="inline mr-2"
-                  :path="mdiSchool"
-                />
-                Acadêmico
-              </h1>
+            <template #NonInputData>
+              <CustomPerfilData
+                type="number"
+                class="mb-5"
+                :vmodel="dataEgresso.academico.matricula"
+                name="academico.matricula"
+                label="Matrícula"
+                placeholder="205004940001"
+                icon-path=""
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-5"
+                :vmodel="dataEgresso.academico.cotista.tipo"
+                name="academico.cotista.tipo"
+                label="Cotas"
+                placeholder="Tipo de cota"
+                icon-path=""
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-5"
+                :vmodel="dataEgresso.academico.tipoAluno"
+                name="academico.tipoAluno"
+                label="Formação"
+                placeholder="Selecione"
+                icon-path=""
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-5"
+                :vmodel="dataEgresso.academico.posGrad.curso"
+                name="academico.posGrad.curso"
+                label="Curso"
+                placeholder="Curso de pós-graduação"
+                icon-path=""
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-5"
+                :vmodel="dataEgresso.academico.posGrad.local"
+                name="academico.posGrad.local"
+                label="Local da pós-graduação"
+                placeholder="Local da pós-graduação"
+                icon-path=""
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-1"
+                :vmodel="dataEgresso.academico.bolsista.tipo"
+                name="academico.bolsista.tipo"
+                label="Bolsa"
+                placeholder="Bolsa"
+                icon-path=""
+              />
             </template>
-
-            <template #default>
-              <div v-if="!dataEgresso.academico.isInput">
-                <CustomPerfilData
-                  type="number"
-                  class="mb-5"
-                  :vmodel="dataEgresso.academico.matricula"
-                  name="academico.matricula"
-                  label="Matrícula"
-                  placeholder="205004940001"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.academico.cotista.tipo"
-                  name="academico.cotista.tipo"
-                  label="Cotas"
-                  placeholder="Tipo de cota"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.academico.tipoAluno"
-                  name="academico.tipoAluno"
-                  label="Formação"
-                  placeholder="Selecione"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.academico.posGrad.curso"
-                  name="academico.posGrad.curso"
-                  label="Curso"
-                  placeholder="Curso de pós-graduação"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.academico.posGrad.local"
-                  name="academico.posGrad.local"
-                  label="Local da pós-graduação"
-                  placeholder="Local da pós-graduação"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-1"
-                  :vmodel="dataEgresso.academico.bolsista.tipo"
-                  name="academico.bolsista.tipo"
-                  label="Bolsa"
-                  placeholder="Bolsa"
-                  icon-path=""
-                />
-              </div>
-              <div v-else>
-                <CustomInput
-                  class="mb-5"
-                  name="academico.matricula"
-                  :value="dataEgresso.academico.matricula"
-                  label="Matrícula"
-                  mask="############"
-                  placeholder="205004940001"
-                  required
-                />
-
-                <!-- <CustomInput
-                  class="mb-5"
-                  name="academico.email"
-                  :value="dataEgresso.academico.email"
-                  label="Email institucional"
-                  placeholder="Selecione"
-                  required
-                /> -->
-
-                <!-- <CustomSelect
-                  class="mb-5"
-                  name="academico.tipoAluno"
-                  :value="dataEgresso.academico.tipoAluno"
-                  label="Tipo de Aluno"
-                  placeholder="Selecione"
-                  :options="selectOpts.tipoAluno"
-                  v-model:value="dataEgresso.academico.tipoAluno"
-                  :pre-filled="true"
-                  required
-                /> -->
-
-                <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Marque todos as opções que sejam verdadeiras abaixo:
-                </div>
-
-                <CustomCheckbox
-                  class="mb-5"
-                  name="academico.cotista.value"
-                  :value="dataEgresso.academico.cotista.value"
-                  label="Cotista"
-                  v-model:value?="dataEgresso.academico.cotista.value"
-                />
-
-                <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Tipos de cota:
-                </div>
-
-                <div class="w-fit p-3 pr-5 rounded-xl bg-gray-100 mb-5">
-                  <CustomCheckbox
-                    class="mb-5"
-                    name="academico.cotista.tipos.renda"
-                    label="Cota Renda"
-                    :disabled="!dataEgresso.academico.cotista.value"
-                    :value="dataEgresso.academico.cotista.tipos.renda"
-                    v-model:value?="dataEgresso.academico.cotista.tipos.renda"
-                  />
-                  <CustomCheckbox
-                    class="mb-5"
-                    name="academico.cotista.tipos.raca"
-                    label="Autodeclaração de Raça"
-                    :disabled="!dataEgresso.academico.cotista.value"
-                    :value="dataEgresso.academico.cotista.tipos.raca"
-                    v-model:value?="dataEgresso.academico.cotista.tipos.raca"
-                  />
-
-                  <CustomCheckbox
-                    class="mb-5"
-                    name="academico.cotista.tipos.escola"
-                    label="Cota Escola"
-                    :disabled="!dataEgresso.academico.cotista.value"
-                    :value="dataEgresso.academico.cotista.tipos.escola"
-                    v-model:value?="dataEgresso.academico.cotista.tipos.escola"
-                  />
-
-                  <CustomCheckbox
-                    name="academico.cotista.tipos.quilombolaIndigena"
-                    label="Quilombola/Indigena"
-                    :disabled="!dataEgresso.academico.cotista.value"
-                    :value="dataEgresso.academico.cotista.tipos.quilombolaIndigena"
-                    v-model:value?="dataEgresso.academico.cotista.tipos.quilombolaIndigena"
-                  />
-                </div>
-
-                <CustomCheckbox
-                  class="mb-5"
-                  name="academico.bolsista.value"
-                  :value="dataEgresso.academico.bolsista.value"
-                  label="Bolsista"
-                  v-model:value?="dataEgresso.academico.bolsista.value"
-                />
-
-                <CustomSelect
-                  class="mb-5"
-                  name="academico.bolsista.tipo"
-                  :value="dataEgresso.academico.bolsista.tipo"
-                  :value-id="dataEgresso.bolsaId"
-                  label="Tipo de Bolsa"
-                  placeholder="Selecione"
-                  :options="egressoStore.tiposBolsa"
-                  :required="dataEgresso.academico.bolsista.value"
-                  :disabled="!dataEgresso.academico.bolsista.value"
-                  :pre-filled="true"
-                />
-
-                <CustomInput
-                  class="mb-5"
-                  name="academico.bolsista.remuneracao"
-                  :value="dataEgresso.academico.bolsista.remuneracao"
-                  label="Remuneração da bolsa"
-                  placeholder="Selecione"
-                  type="number"
-                  step="0.01"
-                  :required="dataEgresso.academico.bolsista.value"
-                  :disabled="!dataEgresso.academico.bolsista.value"
-                />
-
-                <CustomCheckbox
-                  class="mb-5"
-                  name="academico.posGrad.value"
-                  :value="dataEgresso.academico.posGrad.value"
-                  v-model:value?="dataEgresso.academico.posGrad.value"
-                  label="Pós-graduação"
-                />
-
-                <CustomInput
-                  class="mb-5"
-                  name="academico.posGrad.local"
-                  :value="dataEgresso.academico.posGrad.local"
-                  label="Local da pós-graduação"
-                  placeholder="Selecione"
-                  :required="dataEgresso.academico.posGrad.value"
-                  :disabled="!dataEgresso.academico.posGrad.value"
-                />
-
-                <CustomInput
-                  class="mb-5"
-                  name="academico.posGrad.curso"
-                  :value="dataEgresso.academico.posGrad.curso"
-                  label="Curso de pós-graduação"
-                  placeholder="Selecione"
-                  :required="dataEgresso.academico.posGrad.value"
-                  :disabled="!dataEgresso.academico.posGrad.value"
-                />
-
-                <CustomCheckbox
-                  name="academico.posGrad.desejaPos"
-                  :value="dataEgresso.academico.posGrad.desejaPos"
-                  label="Deseja realizar pós graduação"
-                  v-if="!dataEgresso.academico.posGrad.value"
-                />
-              </div>
-            </template>
-          </FolderSection>
+          </FolderAcademico>
         </Form>
         <Form
+          ref="formCarreira"
           @submit="handleSubmitCarreira"
           @invalid-submit="onInvalid"
           :validation-schema="schemaCarreira"
         >
-          <FolderSection class="mt-6">
+          <FolderCarreira
+            :is-input="dataEgresso.carreira.isInput"
+            :area-atuacao-holder="placeHolders.areaAtuacao"
+            :setor-atuacao-holder="placeHolders.setorAtuacao"
+            :faixa-salarial-holder="placeHolders.faixaSalarial"
+          >
             <template #EditButton>
               <h1 class="relative">
                 <ButtonEdit
@@ -522,145 +378,68 @@
                 />
               </h1>
             </template>
-            <template #title>
-              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-                <SvgIcon
-                  type="mdi"
-                  size="20"
-                  class="inline mr-2"
-                  :path="mdiBriefcase"
-                />
-                Carreira
-              </h1>
+            <template #NonInputData>
+              <CustomPerfilData
+                type="text"
+                class="mb-10"
+                :vmodel="dataEgresso.carreira.area"
+                name="carreira.area"
+                label="Área de Atuação"
+                placeholder="Área"
+                icon-path=""
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-10"
+                :vmodel="dataEgresso.carreira.setor"
+                name="carreira.setor"
+                label="Setor de Atuação"
+                placeholder="Setor"
+                icon-path=""
+              />
+
+              <CustomPerfilData
+                type="text"
+                class="mb-5"
+                :vmodel="dataEgresso.carreira.empresa"
+                name="carreira.empresa"
+                label="Empresa Atual"
+                placeholder="Empresa"
+                icon-path=""
+              />
             </template>
+          </FolderCarreira>
 
-            <template #default>
-              <div v-if="!dataEgresso.carreira.isInput">
-                <CustomPerfilData
-                  type="text"
-                  class="mb-10"
-                  :vmodel="dataEgresso.carreira.area"
-                  name="carreira.area"
-                  label="Área de Atuação"
-                  placeholder="Área"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-10"
-                  :vmodel="dataEgresso.carreira.setor"
-                  name="carreira.setor"
-                  label="Setor de Atuação"
-                  placeholder="Setor"
-                  icon-path=""
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.carreira.empresa"
-                  name="carreira.empresa"
-                  label="Empresa Atual"
-                  placeholder="Empresa"
-                  icon-path=""
-                />
-              </div>
-              <div v-else>
-                <CustomSelect
-                  class="mb-5"
-                  name="carreira.area"
-                  :value="dataEgresso.carreira.area"
-                  label="Área de Atuação"
-                  placeholder="Selecione"
-                  v-model:value?="dataEgresso.carreira.area"
-                  :options="selectOpts.areaAtuacao"
-                  :pre-filled="true"
-                />
-
-                <CustomSelect
-                  class="mb-5"
-                  name="carreira.setor"
-                  :value="dataEgresso.carreira.setor"
-                  label="Setor de Atuação"
-                  placeholder="Selecione"
-                  :options="selectOpts.setorAtuacao"
-                  :required="dataEgresso.carreira.area !== 'Desempregado'"
-                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
-                  :pre-filled="true"
-                />
-                <CustomInput
-                  class="mb-5"
-                  name="carreira.empresa"
-                  :value="dataEgresso.carreira.empresa"
-                  label="Empresa"
-                  placeholder="Ex: Google"
-                  :required="dataEgresso.carreira.area !== 'Desempregado'"
-                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
-                  :pre-filled="true"
-                />
-                <CustomSelect
-                  class="mb-5"
-                  name="carreira.faixaSalarial"
-                  :value="dataEgresso.carreira.faixaSalarial"
-                  :value-id="dataEgresso.faixaSalarialId"
-                  label="Faixa Salarial"
-                  :options="egressoStore.faixasSalariais"
-                  :required="dataEgresso.carreira.area !== 'Desempregado'"
-                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
-                  :pre-filled="true"
-                />
-              </div>
-            </template>
-          </FolderSection>
-        </Form>
-        <Form
-          @submit="handleSubmitLocalizacao"
-          @invalid-submit="onInvalid"
-          :validation-schema="schemaLocalizacao"
-        >
-          <FolderSection class="mt-6">
-            <template #EditButton>
-              <h1 class="relative">
-                <ButtonEdit
-                  label="Editar"
-                  icon-path="/src/assets/edit.svg"
-                  icon-path2="/src/assets/wcheck.svg"
-                  color="invisiblesky"
-                  color2="emerald"
-                  classimg="sky-600"
-                  :has-shadow="false"
-                  @toggle="toggleIsInput('localizacao')"
-                  :is-input="dataEgresso.localizacao.isInput"
-                  v-if="!isPublic"
-                />
-              </h1>
-            </template>
-            <template #title>
-              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-                <SvgIcon
-                  type="mdi"
-                  size="20"
-                  class="inline mr-2"
-                  :path="mdiMapMarker"
-                />
-                Localização
-              </h1>
-            </template>
-
-            <template #default>
-              <div v-if="!dataEgresso.localizacao.isInput">
-                <!-- <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.localizacao.cep"
-                  name="localizacao.cep"
-                  label="CEP"
-                  placeholder="00000-000"
-                  mask="#####-###"
-                  :icon-path="mdiHome"
-                /> -->
-
+          <Form
+            ref="formLocalizacao"
+            @submit="handleSubmitLocalizacao"
+            @invalid-submit="onInvalid"
+            :validation-schema="schemaLocalizacao"
+          >
+            <FolderLocalizacao
+              :is-input="dataEgresso.localizacao.isInput"
+              :pais-holder="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
+              :estado-holder="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
+              :cidade-holder="dataEgresso.localizacao.cidade"
+            >
+              <template #EditButton>
+                <h1 class="relative">
+                  <ButtonEdit
+                    label="Editar"
+                    icon-path="/src/assets/edit.svg"
+                    icon-path2="/src/assets/wcheck.svg"
+                    color="invisiblesky"
+                    color2="emerald"
+                    classimg="sky-600"
+                    :has-shadow="false"
+                    @toggle="toggleIsInput('localizacao')"
+                    :is-input="dataEgresso.localizacao.isInput"
+                    v-if="!isPublic"
+                  />
+                </h1>
+              </template>
+              <template #NonInputData>
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
@@ -690,110 +469,60 @@
                   placeholder="Belém"
                   :icon-path="mdiMapMarkerRadius"
                 />
-              </div>
-              <div v-else>
-                <!-- <CustomInput
-                  class="mb-5"
-                  name="localizacao.cep"
-                  label="CEP"
-                  placeholder="00000-000"
-                  mask="#####-###"
-                /> -->
-
-                <CustomSelect
-                  class="mb-5"
-                  name="localizacao.pais"
-                  :value="dataEgresso.localizacao.pais"
-                  label="País"
-                  :options="countries"
-                  v-model:value?="dataEgresso.localizacao.pais"
-                  :pre-filled="true"
-                  required
-                />
-
-                <CustomSelect
-                  class="mb-5"
-                  name="localizacao.estado"
-                  :value="dataEgresso.localizacao.estado"
-                  label="Estado"
-                  :options="states"
-                  v-model:value?="dataEgresso.localizacao.estado"
-                  :pre-filled="true"
-                  required
-                />
-
-                <CustomSelect
-                  name="localizacao.cidade"
-                  :value="dataEgresso.localizacao.cidade"
-                  label="Cidade"
-                  :options="cities"
-                  :pre-filled="true"
-                  required
-                />
-              </div>
-            </template>
-          </FolderSection>
-        </Form>
-        <Form
-          @submit="handleSubmitAdicionais"
-          @invalid-submit="onInvalid"
-          :validation-schema="schemaAdicionais"
-        >
-          <FolderSection class="mt-6">
-            <template #EditButton>
-              <h1 class="relative">
-                <ButtonEdit
-                  label="Editar"
-                  icon-path="/src/assets/edit.svg"
-                  icon-path2="/src/assets/wcheck.svg"
-                  color="invisiblesky"
-                  color2="emerald"
-                  classimg="sky-600"
-                  :has-shadow="false"
-                  @toggle="toggleIsInput('adicionais')"
-                  :is-input="dataEgresso.adicionais.isInput"
-                  v-if="!isPublic"
-                />
-              </h1>
-            </template>
-            <template #title>
-              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-                <SvgIcon
-                  type="mdi"
-                  size="20"
-                  class="inline mr-2"
-                  :path="mdiMessage"
-                />
-                Adicionais
-              </h1>
-            </template>
-
-            <template #default>
-              <div v-if="!dataEgresso.adicionais.isInput">
+              </template>
+            </FolderLocalizacao>
+          </Form>
+          <Form
+            ref="formAdicionais"
+            @submit="handleSubmitAdicionais"
+            @invalid-submit="onInvalid"
+            :validation-schema="schemaAdicionais"
+          >
+            <FolderAdicionais
+              :is-input="dataEgresso.adicionais.isInput"
+              :bools="bools"
+            >
+              <template #EditButton>
+                <h1 class="relative">
+                  <ButtonEdit
+                    label="Editar"
+                    icon-path="/src/assets/edit.svg"
+                    icon-path2="/src/assets/wcheck.svg"
+                    color="invisiblesky"
+                    color2="emerald"
+                    classimg="sky-600"
+                    :has-shadow="false"
+                    @toggle="toggleIsInput('adicionais')"
+                    :is-input="dataEgresso.adicionais.isInput"
+                    v-if="!isPublic"
+                  />
+                </h1>
+              </template>
+              <template #NonInputData>
                 <!-- <CustomPerfilData
-                  type="text"
-                  class="flex-auto mb-5"
-                  :vmodel="dataEgresso.adicionais.assuntosPalestras"
-                  name="adicionais.assuntosPalestras"
-                  label="Palestras"
-                  placeholder="Lorem ipsum dolor sit amet, consect
-              etur adipiscing elit, sed do eiusmod tempor incididun
-              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                  icon-path=""
-                /> -->
+                      type="text"
+                      class="flex-auto mb-5"
+                      :vmodel="dataEgresso.adicionais.assuntosPalestras"
+                      name="adicionais.assuntosPalestras"
+                      label="Palestras"
+                      placeholder="Lorem ipsum dolor sit amet, consect
+                  etur adipiscing elit, sed do eiusmod tempor incididun
+                  t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                  ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                      icon-path=""
+                    /> -->
                 <!-- <CustomPerfilData
-                  type="text"
-                  class="flex-auto mb-5"
-                  :vmodel="dataEgresso.adicionais.assuntosPalestras"
-                  name="adicionais.assuntosPalestras"
-                  label="Palestras"
-                  placeholder="Lorem ipsum dolor sit amet, consect
-              etur adipiscing elit, sed do eiusmod tempor incididun
-              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                  icon-path=""
-                /> -->
+                      type="text"
+                      class="flex-auto mb-5"
+                      :vmodel="dataEgresso.adicionais.assuntosPalestras"
+                      name="adicionais.assuntosPalestras"
+                      label="Palestras"
+                      placeholder="Lorem ipsum dolor sit amet, consect
+                  etur adipiscing elit, sed do eiusmod tempor incididun
+                  t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                  ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                      icon-path=""
+                    /> -->
                 <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"
@@ -801,9 +530,9 @@
                   name="adicionais.experiencias"
                   label="Depoimento"
                   placeholder="Lorem ipsum dolor sit amet, consect
-              etur adipiscing elit, sed do eiusmod tempor incididun
-              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                  etur adipiscing elit, sed do eiusmod tempor incididun
+                  t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                  ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                   icon-path=""
                 />
                 <CustomPerfilData
@@ -813,101 +542,60 @@
                   name="adicionais.contribuicoes"
                   label="Contribuições"
                   placeholder="Lorem ipsum dolor sit amet, consect
-              etur adipiscing elit, sed do eiusmod tempor incididun
-              t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-              ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                  etur adipiscing elit, sed do eiusmod tempor incididun
+                  t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                  ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                   icon-path=""
                 />
-              </div>
-              <div v-else>
-                <CustomCheckbox
-                  name="adicionais.palestras"
-                  label="Gostaria de apresentar palestras"
-                  class="mb-5"
-                  :value="dataEgresso.adicionais.palestras"
-                  v-model:value?="dataEgresso.adicionais.palestras"
-                />
+              </template>
+            </FolderAdicionais>
 
-                <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Use o campo abaixo para listar aqueles assuntos que melhor você se sente para apresentar palestras:
-                </div>
-
-                <CustomTextarea
-                  class="mb-5"
-                  name="adicionais.assuntosPalestras"
-                  :value="dataEgresso.adicionais.assuntosPalestras"
-                  :required="dataEgresso.adicionais.palestras"
-                  :disabled="!dataEgresso.adicionais.palestras"
-                />
-
-                <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Use o campo abaixo para de forma simples e resumida compartilhar com outras pessoas experiências
-                  positivas ao realizar o curso:
-                </div>
-
-                <CustomTextarea
-                  class="mb-5"
-                  name="adicionais.experiencias"
-                  :value="dataEgresso.adicionais.experiencias"
-                />
-
-                <div class="mb-5 text-sm font-semibold text-cyan-600">
-                  Use o campo abaixo para que todos possam ter conhecimento sobre suas contribuições para a sociedade seja
-                  pequena ou grande, pois tudo tem seu impacto:
-                </div>
-
-                <CustomTextarea
-                  name="adicionais.contribuicoes"
-                  :value="dataEgresso.adicionais.contribuicoes"
-                />
-              </div>
-            </template>
-          </FolderSection>
-          <div class="py-10 flex flex-row justify-center items-center" />
-        </Form>
+            <div class="py-10 flex flex-row justify-center items-center" />
+          </Form>
+        </form>
       </div>
-      <!-- Body End-->
+    <!-- Body End-->
     </div>
+    <!-- </div> -->
+    <CustomDialog v-model="dialogSucesso">
+      <div class="h-full flex justify-center items-center">
+        <div class="w-1/2">
+          <div class="text-green-500 text-center mb-3">
+            <SvgIcon
+              type="mdi"
+              size="100"
+              class="inline"
+              :path="mdiCheckCircle"
+            />
+          </div>
+          <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+            Dados Atualizados com sucesso!
+          </h1>
+        </div>
+      </div>
+    </CustomDialog>
+
+    <CustomDialog v-model="dialogFalha">
+      <div class="h-full flex justify-center items-center">
+        <div class="w-1/2">
+          <div class="text-red-600 text-center mb-3">
+            <SvgIcon
+              type="mdi"
+              size="100"
+              class="inline"
+              :path="mdiAlertCircle"
+            />
+          </div>
+          <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+            Falha ao atualizar os dados
+          </h1>
+        </div>
+      </div>
+    </CustomDialog>
   </div>
-  <CustomDialog v-model="dialogSucesso">
-    <div class="h-full flex justify-center items-center">
-      <div class="w-1/2">
-        <div class="text-green-500 text-center mb-3">
-          <SvgIcon
-            type="mdi"
-            size="100"
-            class="inline"
-            :path="mdiCheckCircle"
-          />
-        </div>
-        <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
-          Dados Atualizados com sucesso!
-        </h1>
-      </div>
-    </div>
-  </CustomDialog>
-
-  <CustomDialog v-model="dialogFalha">
-    <div class="h-full flex justify-center items-center">
-      <div class="w-1/2">
-        <div class="text-red-600 text-center mb-3">
-          <SvgIcon
-            type="mdi"
-            size="100"
-            class="inline"
-            :path="mdiAlertCircle"
-          />
-        </div>
-        <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
-          Falha ao atualizar os dados
-        </h1>
-      </div>
-    </div>
-  </CustomDialog>
 </template>
 
 <script setup lang="ts">
-
 import CustomButtonLink from 'src/components/CustomButtonLink.vue'
 import ButtonEdit from 'src/components/ButtonEdit.vue'
 import FolderSection from 'src/components/FolderSection.vue'
@@ -915,23 +603,23 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomPerfilData from 'src/components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
-import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Country, State, City } from 'country-state-city'
-import { computed, ref } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
-import CustomTextarea from 'src/components/CustomTextarea.vue'
 import { Form } from 'vee-validate'
-import { object, string, date, boolean } from 'yup'
+import { object, string, mixed, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
 import { useLoginStore } from 'src/store/LoginStore'
 import CustomDialog from 'src/components/CustomDialog.vue'
+import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
+import FolderAcademico from 'src/components/FolderAcademico.vue'
+import FolderCarreira from 'src/components/FolderCarreira.vue'
+import FolderLocalizacao from 'src/components/FolderLocalizacao.vue'
+import FolderAdicionais from 'src/components/FolderAdicionais.vue'
+import ProfileImage from 'src/components/ProfileImage.vue'
 import {
   mdiAccount,
-  mdiBriefcase,
   mdiEmail,
-  mdiMapMarker,
-  mdiMessage,
-  mdiSchool,
   mdiCake,
   mdiWeb,
   mdiMapOutline,
@@ -941,20 +629,30 @@ import {
   mdiAlertCircle
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
-// mdiHome CEP,
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const $route = useRoute()
-// const camposFaltosos = ref(false)
-
+const $store = useCadastroEgressoStore()
 const egressoStore = usePerfilEgressoStore()
+
+$store.fetchAll()
 const storage = new LocalStorage()
+const formHeader = ref<typeof Form | null>(null)
+const formGeral = ref<typeof Form | null>(null)
+const formAcademico = ref<typeof Form | null>(null)
+const formCarreira = ref<typeof Form | null>(null)
+const formLocalizacao = ref<typeof Form | null>(null)
+const formAdicionais = ref<typeof Form | null>(null)
 
 const isPublic = computed(() => {
-  return Object.keys($route.params).length === 1
+  if (Object.keys($route.params).length === 1) {
+    return true
+  } else {
+    return false
+  }
 })
 
-function handleStatus (status : any) {
+function handleStatus (status: any) {
   if (status !== 201) {
     dialogFalha.value = true
     return false
@@ -963,30 +661,34 @@ function handleStatus (status : any) {
     return true
   }
 }
-
+const profileImageRef = ref<typeof ProfileImage | null>(null)
+const profileImageSave = () => {
+  return profileImageRef?.value?.imageUploadBack()
+}
 async function handleSubmitHeader (values: any) {
-  // futuro add foto
   jsonResponse.usuario.nome = values.geral.nome
   jsonResponse.linkedin = values.geral.linkedin
   jsonResponse.lattes = values.geral.lattes
-  // jsonResponse.emprego = null
-
   const status = await egressoStore.atualizarEgresso(jsonResponse)
-  if (handleStatus(status)) {
+  const responseImage = await profileImageSave()
+  // console.log(status)
+  // console.log(responseImage)
+
+  if (status === 201 && responseImage === 201) {
+    dialogSucesso.value = true
     await useLoginStore().saveUser()
 
     toggleIsInput('profileHead')
+    fetchUpdateEgresso()
+    fetchUpdateEgresso()
+  } else {
+    dialogFalha.value = true
   }
-
-  fetchUpdateEgresso()
 }
 
 async function handleSubmitGeral (values: any) {
-  // dataEgresso.value.geral = values.geral
-
   jsonResponse.usuario.email = values.geral.email
   // ID request
-  // jsonResponse.genero.nome = values.geral.genero
   jsonResponse.genero.id = values.geral.genero
   jsonResponse.nascimento = values.geral.nascimento
   const status = await egressoStore.atualizarEgresso(jsonResponse)
@@ -1026,9 +728,10 @@ async function handleSubmitAcademico (values: any) {
   jsonResponse.posGraduacao = values.academico.posGrad.value
   if (!values.academico.posGrad.value) {
     jsonResponse.interesseEmPos = values.academico.posGrad.desejaPos
-    // jsonResponse.titulacao.empresa = null
-    // jsonResponse.titulacao.curso = null
+    jsonResponse.titulacao = null
   } else {
+    jsonResponse.interesseEmPos = false
+
     if (jsonResponse.titulacao === undefined) {
       const titulacao = {
         id: {
@@ -1049,8 +752,6 @@ async function handleSubmitAcademico (values: any) {
         }
       }
       jsonResponse.titulacao = titulacao
-      // jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
-      // jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
     } else {
       jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
       jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
@@ -1099,18 +800,54 @@ async function handleSubmitLocalizacao (values: any) {
   fetchUpdateEgresso()
 }
 async function handleSubmitCarreira (values: any) {
+  if (jsonResponse.emprego === undefined) {
+    jsonResponse.emprego = {
+      id: {
+        egressoId: jsonResponse.id,
+        empresaId: 1
+      },
+      setorAtuacao: {
+        id: 1,
+        nome: ''
+      },
+      areaAtuacao: {
+        id: 1,
+        nome: ''
+      },
+      faixaSalarial: {
+        id: 2
+
+      },
+      empresa: {
+        id: 1,
+        nome: '',
+        endereco: {
+          id: 6,
+          cidade: '',
+          estado: '',
+          pais: ''
+        },
+        faixaSalarial: {
+          id: 2
+        }
+
+      }
+
+    }
+  }
   if (values.carreira.area !== 'Desempregado') {
     jsonResponse.emprego.empresa.nome = values.carreira.empresa
-    // setor.push(values.carreira.setor)
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
-    // jsonResponse.emprego.faixaSalarial.faixa = values.carreira.faixaSalarial
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
+
     for (let i = 0; i < selectOpts.value.areaAtuacao.length; i++) {
       if (selectOpts.value.areaAtuacao[i] === values.carreira.area) {
-      // jsonResponse.emprego.areaAtuacao.id = i + 1
       }
     }
+  } else {
+    jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
+    jsonResponse.emprego = null
   }
 
   const status = await egressoStore.atualizarEgresso(jsonResponse)
@@ -1121,13 +858,13 @@ async function handleSubmitCarreira (values: any) {
   fetchUpdateEgresso()
 }
 async function handleSubmitAdicionais (values: any) {
-  // dataEgresso.value.adicionais = values.adicionais
   jsonResponse.depoimento.descricao = values.adicionais.experiencias
   jsonResponse.contribuicao.descricao = values.adicionais.contribuicoes
   if (values.adicionais.palestras) {
     jsonResponse.palestras.descricao = values.adicionais.assuntosPalestras
+  } else {
+    jsonResponse.palestras.descricao = ''
   }
-  // jsonResponse.depoimento.descricao = values.adicionais.descricao
   egressoStore.atualizarEgresso(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
@@ -1141,6 +878,7 @@ function toggleIsInput (FolderLabel: string) {
   switch (FolderLabel) {
     case 'profileHead':
       dataEgresso.value.profileHead.isInput = !dataEgresso.value.profileHead.isInput
+
       break
     case 'geral':
       dataEgresso.value.geral.isInput = !dataEgresso.value.geral.isInput
@@ -1175,127 +913,10 @@ const selectOpts = ref({
   areaAtuacao: ['Computação', 'Pesquisa', 'Outros'],
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
 })
-const countries = computed(() => {
-  const countries = Country.getAllCountries()
-  const filteredCountries = []
-  for (const country of countries) {
-    filteredCountries.push({
-      label: country.name,
-      value: country.isoCode
-    })
-  }
-  return filteredCountries
-})
-
-const states = computed(() => {
-  const states = State.getStatesOfCountry(dataEgresso.value.localizacao.pais)
-  const filteredStates = []
-  for (const state of states) {
-    filteredStates.push({
-      label: state.name,
-      value: state.isoCode
-    })
-  }
-  return filteredStates
-})
-const cities = computed(() => {
-  const cities = City.getCitiesOfState(dataEgresso.value.localizacao.pais, dataEgresso.value.localizacao.estado)
-  const filteredCities = []
-  for (const city of cities) {
-    filteredCities.push(city.name)
-  }
-  return filteredCities
-})
-
 function onInvalid (e: any) {
   // updateEgressoDataModel(e)
-  console.log('INVALID')
-  console.log(e)
+  // console.log(e)
 }
-
-const schemaHeader = object().shape({
-  geral: object({
-    nome: string().required(),
-    linkedin: string(),
-    lattes: string()
-  })
-
-})
-
-const schemaGeral = object().shape({
-  geral: object({
-    nascimento: date().required(),
-    email: string().email().required(),
-    genero: string().required()
-  })
-})
-const schemaLocalizacao = object().shape({
-  localizacao: object({
-    pais: string().required(),
-    estado: string().required(),
-    cidade: string().required()
-  })
-})
-
-const schemaAcademico = object().shape({
-  academico: object({
-    matricula: string().required().min(12).max(12),
-    cotista: object({
-      value: boolean(),
-      tipos: object({
-        renda: boolean(),
-        escola: boolean(),
-        raca: boolean(),
-        quilombolaIndigena: boolean()
-      })
-
-    }),
-    bolsista: object({
-      value: boolean(),
-      tipo: string().when('value', ([value], schemaAcademico) => {
-        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
-      }),
-      remuneracao: string().when('value', ([value], schemaAcademico) => {
-        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
-      })
-    }),
-    posGrad: object({
-      value: boolean(),
-      local: string().when('value', ([value], schemaAcademico) => {
-        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
-      }),
-      curso: string().when('value', ([value], schemaAcademico) => {
-        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
-      })
-    }),
-    desejaPos: boolean()
-  })
-})
-
-const schemaCarreira = object().shape({
-  carreira: object({
-    area: string().required(),
-    setor: string().when('area', ([area], schemaCarreira) => {
-      return area !== 'Desempregado' ? schemaCarreira.required() : schemaCarreira.notRequired()
-    }),
-    empresa: string().when('area', ([area], schemaCarreira) => {
-      return area !== 'Desempregado' ? schemaCarreira.required() : schemaCarreira.notRequired()
-    }),
-    faixaSalarial: string().when('area', ([area], schemaCarreira) => {
-      return area !== 'Desempregado' ? schemaCarreira.required() : schemaCarreira.notRequired()
-    })
-  })
-})
-const schemaAdicionais = object().shape({
-  adicionais: object({
-    palestras: boolean(),
-    assuntosPalestras: string().when('palestras', ([palestras], schemaAdicionais) => {
-      return palestras ? schemaAdicionais.required() : schemaAdicionais.notRequired()
-    }),
-    experiencias: string().required(),
-    contribuicoes: string().required()
-  })
-})
 
 const dataEgresso = ref({
   egressoId: 0,
@@ -1303,22 +924,6 @@ const dataEgresso = ref({
   bolsaId: 0,
   areaAtuacaoId: 0,
   faixaSalarialId: 0,
-  // cotasIds: [0, 0],
-
-  // usuarioId: 0,
-  // usuarioGruposId: [0],
-
-  // palestrasId: 0,
-  // contribuicaoId: 0,
-  // titulacaoId: 0,
-  // empregoId: 0,
-  // empresaId: 0,
-  // setorAtuacaoId: 0,
-  // endereçoId: 0,
-
-  // areaAtuacaoId: 0,
-  // depoimentoId: 0,
-
   grupos: [''],
 
   geral: {
@@ -1383,21 +988,54 @@ const dataEgresso = ref({
     nome: '',
     linkedin: '',
     lattes: '',
-    isInput: false
+    isInput: false,
+    triggerBackUpload: false,
+    image: ''
+  }
+})
+const bools = ref({
+  cotista: true,
+  bolsista: true,
+  posGrad: true,
+  palestras: true
+})
+const placeHolders = ref({
+  bolsaNome: dataEgresso.value.academico.bolsista.tipo,
+  areaAtuacao: dataEgresso.value.carreira.area,
+  setorAtuacao: dataEgresso.value.carreira.setor,
+  faixaSalarial: dataEgresso.value.carreira.faixaSalarial
+})
+
+const loading = ref(true)
+watch(() => dataEgresso.value.egressoId, () => {
+  if (dataEgresso.value.egressoId !== 0) {
+    loading.value = false
+    fetchUpdateEgresso()
   }
 })
 
-let jsonResponse : any
-let userData : any
+let jsonResponse: any
+let userData: any
 let egressoResponseBack: any
-// fetchEgressoIfLoggedUser()
-fetchUpdateEgresso()
+
+let egressoImageResponse : any
+let imageEgressoUrl: string
+imageEgressoUrl = ''
+async function handleEgressoImage (id : string) {
+  egressoImageResponse = await egressoStore.fetchImageEgressoUrl(id)
+  imageEgressoUrl = egressoImageResponse
+  // console.log('URL:')
+  // console.log(imageEgressoUrl)
+  if (imageEgressoUrl === '') {
+    return ''
+  } else {
+    return imageEgressoUrl
+  }
+}
+
 async function fetchUpdateEgresso () {
   if (storage.has('loggedUser')) {
     userData = JSON.parse(storage.get('loggedUser'))
-    // dataEgresso.value.profileHead.nome = userData.nome
-    // dataEgresso.value.geral.email = userData.email
-
     // getEgresso
     if (isPublic.value) {
       egressoResponseBack = fetchPublicEgresso(Number($route.params?.id))
@@ -1406,66 +1044,18 @@ async function fetchUpdateEgresso () {
     }
   }
 
-  // console.log(egressoStore.generos)
-  // const generosArray = []
-
-  // generos.forEach(option => generosArray.push(option))
-
-  // console.log(generosArray[0].label)
-
-  let json = JSON.parse(storage.get('loggedEgresso'))
   const ResponseBack = await egressoResponseBack
 
-  json = JSON.parse(ResponseBack)
+  const json = JSON.parse(ResponseBack)
 
   jsonResponse = json
 
   // Cotas
-
-  // Considerando que json.cotas retorna os ids já que acentos retornam quebrado
-  // Caso contrario: cotasEgresso += json.cotas[i].nome
-
   let cotasEgresso = ''
-  // let cotasEgressoArr = []
+  imageEgressoUrl = await handleEgressoImage(json.id)
 
   for (let i = 0; i < json.cotas.length; i++) {
     cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
-  }
-
-  if (jsonResponse.emprego === undefined) {
-    jsonResponse.emprego = {
-      id: {
-        egressoId: jsonResponse.id,
-        empresaId: 1
-      },
-      setorAtuacao: {
-        id: 1,
-        nome: ''
-      },
-      areaAtuacao: {
-        id: 1,
-        nome: ''
-      },
-      faixaSalarial: {
-        id: 2
-
-      },
-      empresa: {
-        id: 1,
-        nome: '',
-        endereco: {
-          id: 6,
-          cidade: '',
-          estado: '',
-          pais: ''
-        },
-        faixaSalarial: {
-          id: 2
-        }
-
-      }
-
-    }
   }
 
   dataEgresso.value = {
@@ -1477,13 +1067,13 @@ async function fetchUpdateEgresso () {
     grupos: [''],
 
     geral:
-      {
-        email: isPublic.value ? json.usuario.email : userData.email,
-        genero: json.genero.nome,
-        confirmacaoEmail: '',
-        nascimento: json.nascimento,
-        isInput: false
-      },
+    {
+      email: isPublic.value ? json.usuario.email : userData.email,
+      genero: json.genero.nome,
+      confirmacaoEmail: '',
+      nascimento: json.nascimento,
+      isInput: false
+    },
     localizacao: {
       cep: '',
       pais: json.emprego?.empresa.endereco.pais || '',
@@ -1535,31 +1125,103 @@ async function fetchUpdateEgresso () {
       contribuicoes: json.contribuicao?.descricao || '',
       isInput: false
     },
+    // nome: isPublic.value ? json.usuario.nome : userData.nome,
     profileHead: {
-      nome: isPublic.value ? json.usuario.nome : userData.nome,
+      nome: isPublic.value ? userData.nome : json.usuario.nome,
       linkedin: json.linkedin || '',
       lattes: json.lattes || '',
-      isInput: false
+      isInput: false,
+      triggerBackUpload: false,
+      image: imageEgressoUrl
     }
   }
-
-  for (let i = 0; i < json.cotas.length; i++) {
-    if (json.cotas[i].id === 1) {
+  for (const element of json.cotas) {
+    if (element.id === 1) {
       dataEgresso.value.academico.cotista.tipos.escola = true
     }
-    if (json.cotas[i].id === 2) {
+    if (element.id === 2) {
       dataEgresso.value.academico.cotista.tipos.renda = true
     }
-    if (json.cotas[i].id === 3) {
+    if (element.id === 3) {
       dataEgresso.value.academico.cotista.tipos.raca = true
     }
-    if (json.cotas[i].id === 4) {
+    if (element.id === 4) {
       dataEgresso.value.academico.cotista.tipos.quilombolaIndigena = true
     }
   }
+  bools.value = {
+    cotista: dataEgresso.value.academico.cotista.value,
+    bolsista: dataEgresso.value.academico.bolsista.value,
+    posGrad: dataEgresso.value.academico.posGrad.value,
+    palestras: dataEgresso.value.adicionais.palestras
+  }
+
+  placeHolders.value = {
+    bolsaNome: dataEgresso.value.academico.bolsista.tipo,
+    areaAtuacao: dataEgresso.value.carreira.area,
+    setorAtuacao: dataEgresso.value.carreira.setor,
+    faixaSalarial: dataEgresso.value.carreira.faixaSalarial
+  }
+  // formGeral.value?.setFieldValue('geral.email', userData.email)
+  // formGeral.value?.setFieldValue('geral.email', dataEgresso.value.geral.email)
+  formHeader.value?.setFieldValue('geral.nome', dataEgresso.value.profileHead.nome)
+  formHeader.value?.setValues({
+    'geral.nome': dataEgresso.value.profileHead.nome,
+    'geral.linkedin': dataEgresso.value.profileHead.linkedin,
+    'geral.lattes': dataEgresso.value.profileHead.lattes
+  })
+  formGeral.value?.setValues({
+    'geral.nascimento': dataEgresso.value.geral.nascimento,
+    'geral.email': dataEgresso.value.geral.email,
+    // passa Id para o select
+    'geral.genero': dataEgresso.value.generoId
+  })
+  // passa o nome para o placeholder
+  // dataEgresso.value.geral.genero
+  formLocalizacao.value?.setValues({
+    'localizacao.pais': dataEgresso.value.localizacao.pais,
+    'localizacao.estado': dataEgresso.value.localizacao.estado,
+    'localizacao.cidade': dataEgresso.value.localizacao.cidade
+  })
+  // dataEgresso.value.academico.cotista.value
+  formAcademico.value?.setValues({
+    'academico.matricula': dataEgresso.value.academico.matricula,
+    'academico.cotista.value': dataEgresso.value.academico.cotista.value,
+    'academico.cotista.tipos.renda': dataEgresso.value.academico.cotista.tipos.renda,
+    'academico.cotista.tipos.escola': dataEgresso.value.academico.cotista.tipos.escola,
+    'academico.cotista.tipos.raca': dataEgresso.value.academico.cotista.tipos.raca,
+    'academico.cotista.tipos.quilombolaIndigena': dataEgresso.value.academico.cotista.tipos.quilombolaIndigena,
+    'academico.bolsista.value': dataEgresso.value.academico.bolsista.value,
+    // id
+    // nome dataEgresso.value.academico.bolsista.tipo,
+    'academico.bolsista.tipo': dataEgresso.value.bolsaId,
+
+    'academico.bolsista.remuneracao': dataEgresso.value.academico.bolsista.remuneracao,
+    'academico.posGrad.value': dataEgresso.value.academico.posGrad.value,
+    'academico.posGrad.local': dataEgresso.value.academico.posGrad.local,
+    'academico.posGrad.curso': dataEgresso.value.academico.posGrad.curso,
+    'academico.posGrad.desejaPos': dataEgresso.value.academico.posGrad.desejaPos
+  })
+  formCarreira.value?.setValues({
+    'carreira.area': dataEgresso.value.carreira.area,
+    'carreira.setor': dataEgresso.value.carreira.setor,
+    'carreira.empresa': dataEgresso.value.carreira.empresa,
+    // id
+    'carreira.faixaSalarial': dataEgresso.value.faixaSalarialId
+  })
+  formAdicionais.value?.setValues({
+    'adicionais.palestras': dataEgresso.value.adicionais.palestras,
+    'adicionais.assuntosPalestras': dataEgresso.value.adicionais.assuntosPalestras,
+    'adicionais.experiencias': dataEgresso.value.adicionais.experiencias,
+    'adicionais.contribuicoes': dataEgresso.value.adicionais.contribuicoes
+  })
 
   return egressoStore.fetchEgresso()
 }
+onMounted(() => {
+  window.scrollTo(0, 0)
+  fetchUpdateEgresso()
+})
 
 function fetchEgresso () {
   return egressoStore.fetchEgresso()
@@ -1569,13 +1231,125 @@ function fetchPublicEgresso (id: number) {
   return egressoStore.fetchPublicEgresso(id)
 }
 
-// watch(pais, () => {
-//   form.value?.setFieldValue('localizacao.cidade', '')
-//   form.value?.setFieldValue('localizacao.estado', '')
-// })
+const schemaHeader = object().shape({
+  geral: object({
+    nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
+      if (value) {
+        return value?.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/)
+      }
 
-// watch(estado, () => {
-//   form.value?.setFieldValue('localizacao.cidade', '')
-// })
+      return (typeof value).constructor(true)
+    }),
+    linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
+      if (value) {
+        return value?.match(/https?:\/\/(?:www\.)?br\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/*/)
+      }
+
+      return (typeof value).constructor(true)
+    }),
+    lattes: string().notRequired().test('lattes', 'Link inválido', (value) => {
+      if (value) {
+        return value?.match(/(https?:\/\/)?(www\.)?lattes\.cnpq\.br\/(\d+)/)
+      }
+      return (typeof value).constructor(true)
+    })
+  })
+
+})
+const schemaGeral = object().shape({
+  geral: object({
+    nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
+      if (value) {
+        const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
+        const minDate = new Date('1940-01-01')
+        const maxDate = new Date('2023-12-31')
+        const inputDate = new Date(date)
+
+        // Check if the person is at least 18 years old
+        const eighteenYearsAgo = new Date()
+        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
+
+        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo
+      }
+      return true
+    }),
+    email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/, 'Email inválido'),
+    genero: string().required('Campo obrigatório')
+  })
+})
+const schemaAcademico = object().shape({
+  academico: object({
+    matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres').matches(/^(\d{12})?$/),
+    cotista: object({
+      value: boolean(),
+      tipos: object({
+        renda: boolean(),
+        escola: boolean(),
+        raca: boolean(),
+        quilombolaIndigena: boolean()
+      })
+
+    }),
+    bolsista: object({
+      value: boolean(),
+      tipo: string().when('value', ([value], schemaAcademico) => {
+        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
+      }),
+      remuneracao: string().when('value', ([value], schemaAcademico) => {
+        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
+      })
+    }),
+    posGrad: object({
+      value: boolean(),
+      local: string().when('value', ([value], schemaAcademico) => {
+        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
+      }),
+      curso: string().when('value', ([value], schemaAcademico) => {
+        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
+      })
+    }),
+    desejaPos: boolean()
+  })
+})
+const schemaCarreira = object().shape({
+  carreira: object({
+    area: string().required('Campo obrigatório'),
+    setor: string().when('area', ([area], schemaCarreira) => {
+      return area !== 'Desempregado' ? schemaCarreira.required('Campo obrigatório') : schemaCarreira.notRequired()
+    }),
+    empresa: string().when('area', ([area], schemaCarreira) => {
+      return area !== 'Desempregado' ? schemaCarreira.required('Campo obrigatório') : schemaCarreira.notRequired()
+    }),
+    faixaSalarial: string().when('area', ([area], schemaCarreira) => {
+      return area !== 'Desempregado' ? schemaCarreira.required('Campo obrigatório') : schemaCarreira.notRequired()
+    })
+  })
+})
+const schemaLocalizacao = object().shape({
+  localizacao: object({
+    pais: string().required('Campo obrigatório'),
+    estado: string().required('Campo obrigatório'),
+    cidade: string().required('Campo obrigatório')
+  })
+})
+const schemaAdicionais = object().shape({
+  adicionais: object({
+    palestras: boolean(),
+    assuntosPalestras: string().when('palestras', ([palestras], schemaAdicionais) => {
+      return palestras ? schemaAdicionais.required() : schemaAdicionais.notRequired()
+    }),
+    experiencias: string().required(),
+    contribuicoes: string().required()
+  })
+})
+async function removeImageEgresso () {
+  const removeResp = await egressoStore.removeImageEgresso()
+  dataEgresso.value.profileHead.image = '0'
+  console.log(removeResp)
+}
+
+watch(() => dataEgresso.value.profileHead.image, (newValue) => {
+  dataEgresso.value.profileHead.image = newValue
+})
 
 </script>

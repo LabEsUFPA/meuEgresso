@@ -1,10 +1,12 @@
 package labes.facomp.ufpa.br.meuegresso.config.security;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -53,7 +55,10 @@ public class SecurityConfig {
 								"/egressoValido",
 								"/mapa",
 								"/publico/egresso**/**",
+								"/grafico**/**",
 								"/")
+						.permitAll()
+						.requestMatchers(HttpMethod.GET, "/anuncio**/**")
 						.permitAll()
 						.anyRequest().authenticated())
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
@@ -69,14 +74,13 @@ public class SecurityConfig {
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOriginPatterns(List.of(corsProperties.getAllowedOriginPatterns()));
+		configuration.setAllowedOrigins(List.of(corsProperties.getAllowedOrigins()));
 		configuration.setAllowedHeaders(List.of("Authorization"));
 		configuration.setAllowCredentials(true);
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Requestor-Type", "Content-Type",
-				"Access-Control-Allow-Headers", "access-control-allow-origin"));
-		configuration.setExposedHeaders(Arrays.asList("X-Get-Header", "Access-Control-Allow-Methods"));
-		configuration.setAllowedMethods(
-				Arrays.asList("POST", "GET", "PUT", "DELETE", "PATCH"));
+				"Access-Control-Allow-Headers","Access-Control-Allow-Origin"));
+		configuration.setExposedHeaders(Arrays.asList("X-Get-Header", "Access-Control-Allow-Methods", "Access-Control-Allow-Origin"));
+		configuration.setAllowedMethods(Collections.singletonList("*"));
 
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);

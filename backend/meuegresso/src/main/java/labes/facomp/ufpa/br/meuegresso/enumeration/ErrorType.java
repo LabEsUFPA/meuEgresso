@@ -27,7 +27,9 @@ public enum ErrorType {
 
     USER_002("Usuario ou Senha inválida.", "US-002"),
 
-    EGRESSO_NAO_VALIDO("Usuario não cadastrado pela faculdade", "EV-001");
+    EGRESSO_NAO_VALIDO("Usuario não cadastrado pela faculdade", "EV-001"),
+
+    FOTO_NAO_ENCONTRADA("Egresso não possui foto","E-001");
 
     private String message;
     private String internalCode;

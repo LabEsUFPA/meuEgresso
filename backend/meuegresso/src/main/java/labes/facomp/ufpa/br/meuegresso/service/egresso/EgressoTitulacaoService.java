@@ -63,4 +63,6 @@ public interface EgressoTitulacaoService {
 	 * @return boolean
 	 */
 	boolean existsByIdAndCreatedById(EgressoTitulacaoModelId id, Integer createdBy);
+
+
 }
