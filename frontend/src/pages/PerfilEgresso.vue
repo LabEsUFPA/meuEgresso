@@ -50,7 +50,7 @@
                 @imageUploadBack="profileImageSave"
                 @remove="removeImageEgresso"
                 :img-url="dataEgresso.profileHead.image"
-                img-default="src/assets/profile-pic.png"
+                img-default="/src/assets/profile-pic.png"
                 :is-input="dataEgresso.profileHead.isInput"
                 :trigger-back-upload="dataEgresso.profileHead.isInput"
               />
@@ -1208,6 +1208,7 @@ async function fetchUpdateEgresso () {
     'adicionais.experiencias': dataEgresso.value.adicionais.experiencias,
     'adicionais.contribuicoes': dataEgresso.value.adicionais.contribuicoes
   })
+  return json;
 }
 onMounted(() => {
   window.scrollTo(0, 0)
