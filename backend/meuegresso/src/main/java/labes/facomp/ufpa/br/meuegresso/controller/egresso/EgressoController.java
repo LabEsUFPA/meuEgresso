@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +29,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
-import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
@@ -272,27 +269,6 @@ public class EgressoController {
             return ResponseType.SUCCESS_DELETE.getMessage();
         }
         return ResponseType.FAIL_DELETE.getMessage();
-    }
-
-    /**
-     * Endpoint responsável pelo retorno do caminho do arquivo da foto do egresso
-     *
-     * @author Camilo Santos, Eude Monteiro
-     * @since 11/05/2023
-     * @param token
-     * @return Um arquivo do tipo resource correspondente ao caminho da foto do
-     *         egresso
-     * @throws NotFoundFotoEgressoException
-     * @throws IOException
-     */
-    @GetMapping(value = "/foto/{id}", produces = "image/png")
-    @ResponseStatus(code = HttpStatus.OK)
-    public Resource getFotoEgresso(@PathVariable Integer id) throws NotFoundFotoEgressoException {
-        EgressoModel egressoModel = egressoService.findById(id);
-        if (egressoModel.getFotoNome() != null) {
-            return egressoService.getFileAsResource(egressoModel.getFotoNome());
-        }
-        throw new NotFoundFotoEgressoException();
     }
 
     /**

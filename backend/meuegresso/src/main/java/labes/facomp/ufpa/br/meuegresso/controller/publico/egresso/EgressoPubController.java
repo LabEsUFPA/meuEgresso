@@ -1,10 +1,12 @@
 package labes.facomp.ufpa.br.meuegresso.controller.publico.egresso;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import labes.facomp.ufpa.br.meuegresso.dto.publico.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
 
@@ -63,6 +67,27 @@ public class EgressoPubController {
 	public EgressoDTO findById(@PathVariable Integer id) {
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
 		return mapper.map(egressoService.findById(id), EgressoDTO.class);
+	}
+
+	/**
+	 * Endpoint responsável pelo retorno do caminho do arquivo da foto do egresso
+	 *
+	 * @author Camilo Santos, Eude Monteiro
+	 * @since 11/05/2023
+	 * @param token
+	 * @return Um arquivo do tipo resource correspondente ao caminho da foto do
+	 *         egresso
+	 * @throws NotFoundFotoEgressoException
+	 * @throws IOException
+	 */
+	@GetMapping(value = "/foto/{id}", produces = "image/png")
+	@ResponseStatus(code = HttpStatus.OK)
+	public Resource getFotoEgresso(@PathVariable Integer id) throws NotFoundFotoEgressoException {
+		EgressoModel egressoModel = egressoService.findById(id);
+		if (egressoModel.getFotoNome() != null) {
+			return egressoService.getFileAsResource(egressoModel.getFotoNome());
+		}
+		throw new NotFoundFotoEgressoException();
 	}
 
 }
