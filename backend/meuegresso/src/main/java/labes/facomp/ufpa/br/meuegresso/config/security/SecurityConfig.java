@@ -55,7 +55,7 @@ public class SecurityConfig {
 								"/egressoValido",
 								"/mapa",
 								"/publico/egresso**/**",
-								"/grafico**/**",
+								"/publico/grafico**/**",
 								"/")
 						.permitAll()
 						.requestMatchers(HttpMethod.GET, "/anuncio**/**")
@@ -78,8 +78,9 @@ public class SecurityConfig {
 		configuration.setAllowedHeaders(List.of("Authorization"));
 		configuration.setAllowCredentials(true);
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Requestor-Type", "Content-Type",
-				"Access-Control-Allow-Headers","Access-Control-Allow-Origin"));
-		configuration.setExposedHeaders(Arrays.asList("X-Get-Header", "Access-Control-Allow-Methods", "Access-Control-Allow-Origin"));
+				"Access-Control-Allow-Headers", "Access-Control-Allow-Origin"));
+		configuration.setExposedHeaders(
+				Arrays.asList("X-Get-Header", "Access-Control-Allow-Methods", "Access-Control-Allow-Origin"));
 		configuration.setAllowedMethods(Collections.singletonList("*"));
 
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

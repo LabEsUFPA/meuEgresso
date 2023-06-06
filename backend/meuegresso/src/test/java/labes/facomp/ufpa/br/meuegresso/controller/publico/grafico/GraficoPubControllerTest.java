@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.controller.grafico;
+package labes.facomp.ufpa.br.meuegresso.controller.publico.grafico;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -106,7 +106,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class GraficoControllerTest {
+class GraficoPubControllerTest {
 
         static final String ENDERECO_CIDADE = "Barcarena";
         static final String ENDERECO_ESTADO = "Para";
@@ -404,7 +404,7 @@ class GraficoControllerTest {
         @Order(1)
         void testGetGeneros() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/generos")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/generos")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -423,7 +423,7 @@ class GraficoControllerTest {
         @Order(2)
         void testGetBolsistas() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/bolsistas")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/bolsistas")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -444,7 +444,7 @@ class GraficoControllerTest {
         @Order(3)
         void testGetTipoBolsa() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/tipoBolsa")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/tipoBolsa")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -463,7 +463,7 @@ class GraficoControllerTest {
         @Order(4)
         void testGetInteresseEmPos() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/interesseEmPos")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/interesseEmPos")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -484,7 +484,7 @@ class GraficoControllerTest {
         @Order(5)
         void testGetPos() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/pos")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/pos")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -505,7 +505,7 @@ class GraficoControllerTest {
         @Order(6)
         void testGetCotistas() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/cotista")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/cotista")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -526,7 +526,7 @@ class GraficoControllerTest {
         @Order(7)
         void testGetCotas() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/cotas")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/cotas")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -544,7 +544,7 @@ class GraficoControllerTest {
         @Test
         @Order(8)
         void testGetTipoAlunos() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/tipoAlunos")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/tipoAlunos")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -562,7 +562,7 @@ class GraficoControllerTest {
         @Test
         @Order(9)
         void testGetCursos() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/cursos")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/cursos")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -582,7 +582,7 @@ class GraficoControllerTest {
         @Test
         @Order(10)
         void testGetAtuacao() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/atuacao")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/atuacao")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -601,7 +601,7 @@ class GraficoControllerTest {
         @Test
         @Order(11)
         void testGetSetor() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/setor")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/setor")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -620,7 +620,7 @@ class GraficoControllerTest {
         @Test
         @Order(12)
         void testGetIdades() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/idades")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/idades")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -641,7 +641,7 @@ class GraficoControllerTest {
         @Test
         @Order(13)
         void testGetSalarios() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/salarios")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/salarios")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -659,7 +659,7 @@ class GraficoControllerTest {
         @Test
         @Order(14)
         void testGetRemuneracao() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/remuneracao")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/remuneracao")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -677,7 +677,7 @@ class GraficoControllerTest {
         @Test
         @Order(15)
         void testGetLocalPos() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/localPos")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/localPos")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -697,7 +697,7 @@ class GraficoControllerTest {
         @Test
         @Order(16)
         void testGetEnderecoEmpresas() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/enderecoEmpresas")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/enderecoEmpresas")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
@@ -718,7 +718,7 @@ class GraficoControllerTest {
         @Test
         @Order(17)
         void testGetEmpresas() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/empresas")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/empresas")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
