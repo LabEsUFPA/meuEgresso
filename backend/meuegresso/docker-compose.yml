@@ -2,18 +2,6 @@ version: '3.9'
 
 services:
 
-  mongodb:
-    container_name: mongodb-meu-egresso
-    image: mongo:6
-    restart: unless-stopped
-    ports:
-      - ${MONGO_EXPOSE_PORT}:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    #volumes:
-    #  - ./mongoDB:/data/db
-
   postgres:
     container_name: postgres-meu-egresso
     build:
@@ -42,9 +30,4 @@ services:
       - ${APP_PORT}:${APP_PORT}
     restart: always
     depends_on:
-      - mongodb
       - postgres
-
-#volumes:
-#  mongo_report:
-#    driver: local

@@ -2,6 +2,9 @@ package labes.facomp.ufpa.br.meuegresso.config.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @ConfigurationProperties(prefix = "token")
 public class TokenProperties {
 
@@ -11,6 +14,8 @@ public class TokenProperties {
 	 */
 	private Integer expiresHours;
 
+	private String domain;
+
 	public Integer getExpiresHours() {
 		return expiresHours;
 	}
@@ -18,4 +23,14 @@ public class TokenProperties {
 	public void setExpiresHours(Integer expiresHours) {
 		this.expiresHours = expiresHours;
 	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+
+
 }

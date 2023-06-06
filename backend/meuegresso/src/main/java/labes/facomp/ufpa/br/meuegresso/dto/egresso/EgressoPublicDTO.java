@@ -49,4 +49,5 @@ public class EgressoPublicDTO {
     @Valid
     private EnderecoDTO endereco;
 
+    private String fotoNome;
 }

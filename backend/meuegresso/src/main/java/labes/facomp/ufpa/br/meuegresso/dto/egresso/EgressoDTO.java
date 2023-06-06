@@ -92,4 +92,5 @@ public class EgressoDTO {
 
     @PositiveOrZero(message = "Informe a remuneração da bolsa.")
     private Double remuneracaoBolsa;
+
 }

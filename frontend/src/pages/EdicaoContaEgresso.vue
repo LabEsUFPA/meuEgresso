@@ -166,6 +166,7 @@ const onInvalid = (e: any) => {
 
 
 onMounted(() => {
+  window.scrollTo(0, 0)
   console.log("onMounted front iniciado...")
   watch(nomeCompleto, () => {
     console.log("watch front nomeCompleto:", nomeCompleto.value)

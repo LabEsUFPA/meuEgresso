@@ -28,8 +28,8 @@ export namespace models {
     email: string
     confirmationEmail?: string
     password: string
-    confirmationPassword: string
-    accessLevel: string
+    confirmationPassword?: string
+    accessLevel?: string
     idAccessLevel?: number
   }
 
@@ -246,6 +246,48 @@ export namespace models {
     }
     remuneracaoBolsa?: number
   }
+
+  export namespace Graphics {
+    export interface PieChartSeries {
+      value: number
+      name: string
+    }
+  }
+
+  export interface AnuncioModel {
+    id: number
+    titulo: string
+    areaEmprego: {
+      id: number
+      nome: string
+    }
+    descricao: string
+    dataExpiracao: string
+    link: string
+    salario: string
+    createdBy: {
+      email: string
+      nome: string
+    }
+  }
+  export interface AnuncioModelPost {
+    titulo: string
+    areaEmprego: {
+      id: number
+      nome: string
+    }
+    descricao: string
+    dataExpiracao: string
+    link: string
+    salario: string
+  }
+
+  export interface areasEmpregoFiltro {
+    id: number
+    name: string
+    applied: boolean
+  }
+
 }
 
 // export interface EgressoModelUpdate {

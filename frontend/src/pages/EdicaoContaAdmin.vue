@@ -215,7 +215,6 @@ const onInvalid = (e: any) => {
   console.log(e)
 }
 
-
 onMounted(() => {
   console.log("onMounted front iniciado...")
   watch(nomeCompleto, () => {
@@ -230,6 +229,10 @@ onMounted(() => {
     console.log("watch front email:", email.value)
     form.value?.setFieldValue('email', email.value)
   })
+})
+
+onMounted(() => {
+  window.scrollTo(0, 0)
 })
 
 </script>

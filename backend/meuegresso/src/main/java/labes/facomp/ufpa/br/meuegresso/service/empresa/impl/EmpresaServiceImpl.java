@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
@@ -70,6 +71,11 @@ public class EmpresaServiceImpl implements EmpresaService {
     @Override
     public List<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(String nome) {
         return empresaRepository.findByNomeContainsIgnoreCaseOrderByNomeAsc(nome);
+    }
+
+    @Override
+    public List<LocalPosGraficoDTO> countEgressoByPos() {
+        return empresaRepository.countEgressoByPos();
     }
 
 }

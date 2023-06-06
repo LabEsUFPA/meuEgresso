@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Sort;
 
+import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 
@@ -64,6 +65,16 @@ public interface EmpresaService {
 	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
 	public EmpresaModel findByNome(String nome);
+
+	/**
+	 * Método responsável por retornar as Pós graduações cadastradas e a quantidade
+	 * de
+	 * egressos por pós.
+	 *
+	 * @return {@link List<LocalPosGraficoDTO>} lista de DTOs com as contagens de
+	 *         egresso por pós.
+	 */
+	public List<LocalPosGraficoDTO> countEgressoByPos();
 
 	public List<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(String nome);
 
