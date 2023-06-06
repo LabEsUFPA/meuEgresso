@@ -41,6 +41,7 @@ import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.curso.CursoService;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoEmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.endereco.EnderecoService;
@@ -62,6 +63,7 @@ import lombok.RequiredArgsConstructor;
 public class EgressoController {
 
     private final EgressoService egressoService;
+    private final EgressoEmpresaService egressoEmpresaService;
     private final UsuarioService usuarioService;
     private final EmpresaService empresaService;
     private final SetorAtuacaoService setorAtuacaoService;
@@ -191,8 +193,8 @@ public class EgressoController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(
-            @RequestBody EgressoDTO egresso, JwtAuthenticationToken token) throws UnauthorizedRequestException {
-
+            @RequestBody EgressoDTO egresso, JwtAuthenticationToken token)
+            throws UnauthorizedRequestException {
         if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
@@ -202,27 +204,27 @@ public class EgressoController {
             if (egressoModel.getDepoimento() != null) {
                 egressoModel.getDepoimento().setEgresso(egressoModel);
             }
-
-            EmpresaModel empresa;
-            EnderecoModel enderecoEmpresa;
             if (egressoModel.getEmprego() != null) {
-                empresa = empresaService.findById(egressoModel.getEmprego().getEmpresa().getId());
-                enderecoEmpresa = enderecoService.findById(empresa.getEndereco().getId());
-                if (enderecoEmpresa != null) {
-                    empresa.setEndereco(enderecoEmpresa);
-                } else {
-                    empresa.setEndereco(EnderecoModel.builder()
-                            .cidade(empresa.getEndereco().getCidade())
-                            .estado(empresa.getEndereco().getEstado())
-                            .pais(empresa.getEndereco().getPais())
-                            .build());
+                EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
+                EmpresaModel empresaModelNoBanco = empresaService
+                        .findById(egressoEmpresaModel.getEmpresa().getId());
+                if (empresaModelNoBanco != null) {
+                    egressoEmpresaModel.setEmpresa(empresaModelNoBanco);
+                }
+                egressoModel.getEmprego().setEgresso(egressoModel);
+                EnderecoModel enderecoModel = egressoEmpresaModel.getEmpresa().getEndereco();
+                EnderecoModel enderecoModelNoBanco = enderecoService.findById(enderecoModel.getId());
+                if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
+                    egressoEmpresaModel.getEmpresa().setEndereco(enderecoModelNoBanco);
+                } else if (enderecoModelNoBanco == null) {
+                    egressoEmpresaModel.getEmpresa()
+                            .setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
+                                    .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
                 }
                 SetorAtuacaoModel setorAtuacaoModel = egressoModel.getEmprego().getSetorAtuacao();
                 AreaAtuacaoModel areaAtuacaoModel = egressoModel.getEmprego().getAreaAtuacao();
-                validaSetorAtuacao(setorAtuacaoModel.getNome(), egressoModel);
                 validaAreaAtuacao(areaAtuacaoModel.getNome(), egressoModel);
-            } else { // desempregado
-                egressoModel.setEmprego(null);
+                validaSetorAtuacao(setorAtuacaoModel.getNome(), egressoModel);
             }
             if (egressoModel.getPalestras() != null) {
                 egressoModel.getPalestras().setEgresso(egressoModel);
@@ -233,6 +235,7 @@ public class EgressoController {
             if (egressoModel.getTitulacao() != null) {
                 validaCurso(egressoModel.getTitulacao().getCurso().getNome(), egressoModel);
                 validaInstituicao(egresso.getTitulacao().getEmpresa().getNome(), egressoModel);
+                egressoModel.getTitulacao().setEgresso(egressoModel);
             }
             egressoService.updateEgresso(egressoModel);
             return ResponseType.SUCESS_UPDATE.getMessage();
