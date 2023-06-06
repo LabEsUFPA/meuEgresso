@@ -77,5 +77,4 @@ public interface EmpresaService {
 	public List<LocalPosGraficoDTO> countEgressoByPos();
 
 	public List<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(String nome);
-
 }
