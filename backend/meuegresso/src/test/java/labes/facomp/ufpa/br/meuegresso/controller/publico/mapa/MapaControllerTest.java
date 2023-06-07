@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.controller.mapa;
+package labes.facomp.ufpa.br.meuegresso.controller.publico.mapa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -234,7 +234,7 @@ class MapaControllerTest {
         @Test
         void testFindAllEgressoMapaDTO() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/mapa")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/mapa")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
