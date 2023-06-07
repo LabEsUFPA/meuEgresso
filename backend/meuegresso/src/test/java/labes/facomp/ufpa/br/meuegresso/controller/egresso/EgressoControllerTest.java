@@ -222,8 +222,9 @@ class EgressoControllerTest {
         @Order(3)
         void testGetFotoEgresso() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/egresso/foto/" + egressoDTO.getId())
-                                .header("Authorization", "Bearer " + this.token))
+                MvcResult resposta = mockMvc
+                                .perform(MockMvcRequestBuilders.get("/publico/egresso/foto/" + egressoDTO.getId())
+                                                .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 

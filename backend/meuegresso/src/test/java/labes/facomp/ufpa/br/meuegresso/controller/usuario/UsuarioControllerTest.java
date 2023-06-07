@@ -135,17 +135,4 @@ class UsuarioControllerTest {
                 String retornoString = resposta.getResponse().getContentAsString();
                 assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
         }
-
-        @Test
-        @Order(3)
-        void testDeleteById() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.delete("/usuario/" + usuarioModel.getId())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk()).andReturn();
-                String resultado = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCCESS_DELETE.getMessage(), resultado);
-
-        }
 }

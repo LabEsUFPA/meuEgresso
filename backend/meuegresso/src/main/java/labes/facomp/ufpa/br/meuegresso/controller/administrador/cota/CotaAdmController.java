@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.DataNotDeletedException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;

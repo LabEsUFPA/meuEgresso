@@ -85,24 +85,4 @@ public class UsuarioController {
 		}
 		throw new UnauthorizedRequestException();
 	}
-
-	/**
-	 * Endpoint responsável por deletar usuário por sua ID>
-	 *
-	 * @param id Integer
-	 * @return Boolean
-	 * @author Camilo Santos
-	 * @since 19/04/2023
-	 */
-	@DeleteMapping(value = "/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	@ResponseStatus(code = HttpStatus.OK)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String deleteById(@PathVariable(name = "id") Integer id) {
-		if (usuarioService.deleteById(id)) {
-			return ResponseType.SUCCESS_DELETE.getMessage();
-		} 
-		return ResponseType.FAIL_DELETE.getMessage();
-	}
-
 }

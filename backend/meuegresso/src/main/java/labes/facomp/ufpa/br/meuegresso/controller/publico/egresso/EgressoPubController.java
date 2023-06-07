@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import labes.facomp.ufpa.br.meuegresso.dto.publico.egresso.EgressoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
@@ -41,7 +40,7 @@ public class EgressoPubController {
 	 * Endpoint responsável por retornar a lista de egressos cadastrados no banco de
 	 * dados.
 	 *
-	 * @return {@link UsuarioAuthDTO} Lista de egressos cadastrados
+	 * @return {@link List<EgressoDTO>} Lista de egressos cadastrados
 	 * @author Marcus Maciel Oliveira
 	 * @since 13/05/2023
 	 */
@@ -57,7 +56,7 @@ public class EgressoPubController {
 	 * Endpoint responsável por coletar dados do egressos por sua ID
 	 *
 	 * @param id Integer
-	 * @return
+	 * @return {@link EgressoDTO}
 	 * @author Marcus Maciel Oliveira
 	 * @since 13/05/2023
 	 */
