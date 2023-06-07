@@ -11,7 +11,7 @@ const baseURL = import.meta.env.VITE_API_URL_LOCAL
 const Axios = axios.create({
   baseURL,
   withCredentials: true
-  
+
 })
 interface State {
   generos: ComplexOpts[]
@@ -175,16 +175,16 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         return (response?.status) !== undefined ? response.status : 500
       }
     },
-  //   response = await this.uploadImageEgresso(foto.foto);
-  //   async uploadImageEgresso (foto: FormData) {
-  //     const response = await Api.request({
-  //       method: 'post',
-  //       route: '/egresso/foto',
-  //       body: foto
-  //     })
-  //     return response
- 
-  // },
+    //   response = await this.uploadImageEgresso(foto.foto);
+    //   async uploadImageEgresso (foto: FormData) {
+    //     const response = await Api.request({
+    //       method: 'post',
+    //       route: '/egresso/foto',
+    //       body: foto
+    //     })
+    //     return response
+
+    // },
     async fetchImageEgresso (egressoId: string) {
       const route = '/egresso/foto/' + egressoId
       // const url = ''

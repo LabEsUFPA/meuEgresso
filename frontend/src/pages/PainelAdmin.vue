@@ -1,0 +1,208 @@
+<template>
+  <div class="flex flex-col">
+    <div class="flex justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
+      <div class="flex flex-col gap-4 sm:flex-row w-[960px] border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl p-6 sm:p-8 mt-10 mx-4 sm:mx-6 items-start sm:items-center justify-between">
+        <div class="flex gap-6 text-cyan-800 items-center">
+          <SvgIcon
+            type="mdi"
+            size="32"
+            :path="mdiCog"
+          />
+          <h1 class="text-2xl sm:text-3xl font-bold">
+            Gerenciar Sistema
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="flex flex-col gap-4 sm:gap-8 mb-10 "
+    >
+      <div
+        class="flex justify-center"
+      >
+        <div
+          class="flex flex-col gap-4 sm:gap-6 w-[960px] bg-white rounded-bl-2xl rounded-br-2xl p-6 sm:p-8 mx-4 sm:mx-6 items-center"
+        >
+          <div class="flex flex-col sm:flex-row w-full items-start gap-4 sm:gap-8">
+            <div class="flex gap-4 text-cyan-800 items-center">
+              <SvgIcon
+                type="mdi"
+                size="24"
+                :path="mdiFilterVariant"
+              />
+              <p class="font-medium text-lg">
+                Filtros
+              </p>
+            </div>
+
+            <div class="flex flex-wrap gap-4">
+              <div
+                v-for="filtro in $store.areasEmpregoFiltros.filter(f => f.selected)"
+                :key="filtro.id"
+              >
+                <FilterChip
+                  :title="filtro.name"
+                  :selected="filtro.selected"
+                  :selectable="filtro.selectable"
+                  @click="toggleFilterApplied(filtro.id)"
+                />
+              </div>
+
+              <button
+                class="flex gap-3 px-4 py-2 rounded-3xl items-center text-cyan-800 bg-gray-200 font-medium"
+                @click="openModalFilters()"
+              >
+                <SvgIcon
+                  type="mdi"
+                  size="16"
+                  :path="mdiPlus"
+                />
+                <p class="text-sm">
+                  Adicionar filtro
+                </p>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="$store.anuncios.length > 0">
+        <div
+          v-for="anuncio in $store.anuncios"
+          :key="anuncio.id"
+          class="flex justify-center mb-8"
+        >
+          <ShortPost
+            :id="anuncio.id"
+            :nome="anuncio.createdBy.nome"
+            :titulo="anuncio.titulo"
+            :area="anuncio.areaEmprego.nome"
+            :descricao="anuncio.descricao"
+            :salario="anuncio.salario"
+          />
+        </div>
+      </div>
+
+      <div
+        v-else
+        class="flex flex-col gap-4 justify-center items-center text-gray-400"
+      >
+        <SvgIcon
+          type="mdi"
+          size="48"
+          :path="mdiEmoticonSadOutline"
+        />
+        <h1 class="text-xl sm:text-2xl font-medium">
+          Nenhuma vaga encontrada
+        </h1>
+      </div>
+
+      <div
+        class="flex gap-16 sm:gap-32 justify-center"
+      >
+        <button
+          class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-lg"
+          v-show="currentPage>0"
+          @click="decrementaPage()"
+        >
+          <SvgIcon
+            type="mdi"
+            size="32"
+            :path="mdiChevronLeft"
+          />
+          <div>Anterior</div>
+        </button>
+        <div
+          class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-md"
+          v-show="currentPage<$store.totalPages-1"
+          @click="incrementaPage()"
+        >
+          <div>Próximo</div>
+          <SvgIcon
+            type="mdi"
+            size="32"
+            :path="mdiChevronRight"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ModalFilters
+    v-if="loading"
+    v-model="isModalFiltersOpen"
+    :filters="$store.areasEmpregoFiltros"
+    @apply-filters="applyFilters"
+  />
+</template>
+
+<script setup lang="ts">
+
+import { ref, onMounted, watch } from 'vue'
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiCog, mdiFilterVariant, mdiPlus, mdiChevronRight, mdiChevronLeft, mdiEmoticonSadOutline } from '@mdi/js'
+import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
+import ShortPost from 'src/components/ShortPost.vue'
+import FilterChip from 'src/components/FilterChip.vue'
+import ModalFilters from 'src/components/ModalFilters.vue'
+
+const $store = useAnuncioVagaStore()
+
+const loading = ref(false)
+
+const filtersById = ref([])
+
+const currentPage = ref(0)
+
+const size = ref(3)
+
+const incrementaPage = () => {
+  currentPage.value++
+}
+
+const decrementaPage = () => {
+  currentPage.value--
+}
+
+onMounted(async () => {
+  await $store.fetchAreasEmprego()
+  await $store.fetchBusca(currentPage.value, size.value)
+
+  loading.value = true
+  watch(currentPage, () => {
+    $store.fetchBusca(currentPage.value, size.value)
+  })
+  watch(pesquisaValue, () => {
+    $store.fetchBuscaAnuncioTitulo(pesquisaValue.value, currentPage.value, size.value)
+  })
+  watch(filtersById, () => {
+    if (filtersById.value.length > 0) {
+      $store.fetchBuscaAnuncioAreas(filtersById.value, currentPage.value, size.value)
+    } else {
+      $store.fetchBusca(currentPage.value, size.value)
+    }
+  })
+})
+
+const isModalFiltersOpen = ref(false)
+
+const openModalFilters = () => {
+  isModalFiltersOpen.value = true
+}
+
+const pesquisaValue = ref('')
+
+const toggleFilterApplied = (id:number) => {
+  const filtro = $store.areasEmpregoFiltros.find(f => f.id === id)
+  if (filtro) {
+    filtro.selected = !filtro.selected
+    applyFilters(filtersById.value.filter(f => f === filtro.id))
+  }
+}
+
+const applyFilters = (filters:any) => {
+  filtersById.value = filters.map((elem: any) => (elem.id))
+}
+
+</script>

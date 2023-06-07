@@ -84,7 +84,7 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
       await this.fetchBolsas()
       await this.fetchCotas()
     },
-    
+
     async cadastrarEgresso (foto: { temFoto: boolean, foto: FormData }, dadosEgresso: EgressoModel) {
       let response = await Api.request({
         method: 'post',
@@ -96,8 +96,8 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
         response = await Api.request({
           method: 'post',
           route: 'egresso/foto',
-          body: foto.foto,
-        
+          body: foto.foto
+
         })
       }
 
