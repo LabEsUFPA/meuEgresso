@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { defineStore } from 'pinia'
 import Api from 'src/services/api'
 import { type models } from 'src/@types'
@@ -78,7 +79,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
         page,
         size
       }
-      console.log(`${BASE_URL}${rota}`, { params })
+
       axios.get(`${BASE_URL}${rota}`, { params })
         .then(response => {
           console.log('data:', response.data)
@@ -217,7 +218,8 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
         this.areasEmpregoFiltros = response.data?.map((elem: any) => ({
           id: elem.id,
           name: elem.nome,
-          applied: false
+          selected: false,
+          selectable: true
         }))
         this.areasEmprego = response.data?.map((elem: any) => ({
           label: elem.nome,

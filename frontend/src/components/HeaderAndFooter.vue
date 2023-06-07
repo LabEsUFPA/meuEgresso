@@ -163,8 +163,10 @@
         </nav>
       </div>
     </header>
-    <main class="h-full">
-      <RouterView />
+    <main class="flex-1 bg-neutral-100">
+      <div class="h-fit">
+        <RouterView />
+      </div>
     </main>
     <footer>
       <div class="bg-gradient-to-br h-24 from-pacific-cyan to-bondi-blue flex flex-row items-center justify-start pl-20">

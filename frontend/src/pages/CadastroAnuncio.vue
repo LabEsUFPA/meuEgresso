@@ -131,13 +131,14 @@ import CustomButton from 'src/components/CustomButton.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
-import router from 'src/router'
 import { Form } from 'vee-validate'
 import { object, string, date } from 'yup'
 import { mdiCheckCircle, mdiBullhorn, mdiLink } from '@mdi/js'
 import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
 import classNames from 'classnames'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const form = ref<typeof Form | null>(null)
 const $store = useAnuncioVagaStore()
 const error = ref(false)
@@ -151,7 +152,7 @@ const retornaFeed = () => {
 $store.fetchAreasEmprego()
 
 const schema = object().shape({
-  titulo: string().required('O título é um campo obrigatório').trim().matches(/^[a-zA-Z0-9 ]+$/, 'Somente letras e números.'),
+  titulo: string().required('O título é um campo obrigatório').trim().matches(/^[a-zA-ZÀ-ÿ0-9]+$/, 'Somente letras e números.'),
   areasEmprego: string().required('A área da emprego é um campo obrigatório.'),
   dataExpiracao: date().required('A data de expiração é um campo obrigatório.'),
   salario: string().max(12),
