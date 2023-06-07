@@ -25,10 +25,11 @@
               class="ml-6"
               width="30"
               height="30"
-              src="src/assets/round-upload.svg"
+              src="/src/assets/round-upload.svg"
             >
 
-            <h1 class="mt-1 ml-1 text-white text-[10px] ">
+            
+            <h1 class="mt-1 text-white text-[10px] ">
               Máximo de 5MB
             </h1>
           </div>
@@ -103,8 +104,8 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { OUpload, section, OField, OButton } from '@oruga-ui/oruga-next'
-import ButtonActionIcon from 'src/components/ButtonActionIcon.vue'
-import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
+import ButtonActionIcon from '../components/ButtonActionIcon.vue'
+import { usePerfilEgressoStore } from '../store/PerfilEgressoStore'
 import classNames from 'classnames'
 // import { useField } from 'vee-validate'
 
