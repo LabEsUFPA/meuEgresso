@@ -8,6 +8,8 @@ interface AreaEmpregoFiltro extends models.areasEmpregoFiltro {}
 
 interface ComplexOpts extends models.ComplexOpts {}
 
+const BASE_URL = import.meta.env.VITE_API_URL_LOCAL
+
 interface State {
   anuncio: AnuncioVaga
   anuncios: AnuncioVaga []
@@ -71,12 +73,12 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
     },
 
     async fetchBusca (page: number, size: number) {
-      const BASE_URL = 'http://localhost:15000'
-      const rota = '/anuncio/busca'
+      const rota = 'anuncio/busca'
       const params = {
         page,
         size
       }
+      console.log(`${BASE_URL}${rota}`, { params })
       axios.get(`${BASE_URL}${rota}`, { params })
         .then(response => {
           console.log('data:', response.data)
@@ -104,8 +106,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
     },
 
     async fetchBuscaAnuncio (titulo: string, areasEmpregos: number[], page: number, size: number) {
-      const BASE_URL = 'http://localhost:15000'
-      const rota = '/anuncio/busca'
+      const rota = 'anuncio/busca'
       const params = {
         titulo,
         areaEmprego: areasEmpregos.join(),
@@ -140,8 +141,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
     },
 
     async fetchBuscaAnuncioTitulo (titulo: string, page: number, size: number) {
-      const BASE_URL = 'http://localhost:15000'
-      const rota = '/anuncio/busca'
+      const rota = 'anuncio/busca'
       const params = {
         titulo,
         page,
@@ -175,8 +175,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
     },
 
     async fetchBuscaAnuncioAreas (areasEmpregos: number[], page: number, size: number) {
-      const BASE_URL = 'http://localhost:15000'
-      const rota = '/anuncio/busca'
+      const rota = 'anuncio/busca'
       const params = {
         areaEmprego: areasEmpregos.join(),
         page,
