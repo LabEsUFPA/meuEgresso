@@ -24,7 +24,7 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
         >
-          <h1 class="absolute ml-[220px] sm:ml-[270px] md:ml-[300px] mr-1 ">
+          <h1 class="absolute top-[10px] right-[20px] sm:right-[120px]">
             <ButtonEdit
               label="Editar"
               icon-path="/src/assets/edit.svg"
@@ -664,7 +664,6 @@ async function handleSubmitHeader (values: any) {
   if (stagedChanges.value.profileHead.removedImage) {
     responseImage = await removeImageEgresso()
     stagedChanges.value.profileHead.removedImage = false
-    responseImage = responseImage?.status
   } else {
     responseImage = await profileImageSave()
   }
