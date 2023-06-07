@@ -630,7 +630,7 @@ const $route = useRoute()
 const $store = usePerfilEgressoStore()
 const egressoStore = usePerfilEgressoStore()
 
-//$store.fetchAll()
+
 const storage = new LocalStorage()
 const formHeader = ref<typeof Form | null>(null)
 const formGeral = ref<typeof Form | null>(null)
@@ -639,21 +639,22 @@ const formCarreira = ref<typeof Form | null>(null)
 const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 
-// const isPublic = ref({
-//   value: false
-// })
-const isPublic = computed(() => {
-  // if (storage.has('loggedUser') && storage.has('loggedEgresso')) {
-  // if (storage?.has('loggedUser')) { 
-  //   const logEgresso = JSON.parse(storage.get('loggedEgresso'))
-  //   console.log(logEgresso);
-  //   return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id)) 
-  // }
-  // else{
-  //   return (Object.keys($route.params).length === 1) 
 
-  // }
-    return true
+if(storage.has('loggedEgresso')){
+  $store.fetchAll()
+}
+
+
+const isPublic = computed(() => {
+  if (storage.has('loggedUser') && storage.has('loggedEgresso')) {
+    const logEgresso = JSON.parse(storage.get('loggedEgresso'))
+    console.log(logEgresso);
+    return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id)) 
+  }
+  else{
+    return (Object.keys($route.params).length === 1) 
+
+  }
 
 })
 
@@ -1233,9 +1234,9 @@ onMounted(() => {
   fetchUpdateEgresso()
 })
 
-function fetchEgresso () {
+// function fetchEgresso () {
   
-}
+// }
 
 function fetchPublicEgresso (id: number) {
   return egressoStore.fetchPublicEgresso(id)
