@@ -19,8 +19,10 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class UsuarioDTO {
 
-	private String email;
+	private Integer id;
 
 	private String nome;
+
+	private String email;
 
 }

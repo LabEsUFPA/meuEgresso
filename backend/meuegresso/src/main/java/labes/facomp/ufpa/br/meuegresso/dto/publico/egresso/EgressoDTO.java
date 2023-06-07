@@ -32,6 +32,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 
 public class EgressoDTO {
+
         private Integer id;
 
         private GeneroDTO genero;
@@ -57,4 +58,5 @@ public class EgressoDTO {
         private String linkedin;
 
         private UsuarioDTO usuario;
+        
 }
