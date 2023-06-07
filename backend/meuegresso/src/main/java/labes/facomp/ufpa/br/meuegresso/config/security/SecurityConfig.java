@@ -56,6 +56,7 @@ public class SecurityConfig {
 								"/mapa",
 								"/publico/egresso**/**",
 								"/publico/grafico**/**",
+								"/publico**/**",
 								"/")
 						.permitAll()
 						.requestMatchers(HttpMethod.GET, "/anuncio**/**")
