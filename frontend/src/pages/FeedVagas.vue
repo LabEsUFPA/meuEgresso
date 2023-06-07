@@ -54,12 +54,13 @@
 
             <div class="flex flex-wrap gap-4">
               <div
-                v-for="filtro in $store.areasEmpregoFiltros.filter(f => f.applied)"
+                v-for="filtro in $store.areasEmpregoFiltros.filter(f => f.selected)"
                 :key="filtro.id"
               >
                 <FilterChip
                   :title="filtro.name"
-                  :applied="filtro.applied"
+                  :selected="filtro.selected"
+                  :selectable="filtro.selectable"
                   @click="toggleFilterApplied(filtro.id)"
                 />
               </div>
@@ -86,7 +87,7 @@
         <div
           v-for="anuncio in $store.anuncios"
           :key="anuncio.id"
-          class="flex justify-center"
+          class="flex justify-center mb-8"
         >
           <ShortPost
             :id="anuncio.id"
@@ -213,7 +214,7 @@ const pesquisaValue = ref('')
 const toggleFilterApplied = (id:number) => {
   const filtro = $store.areasEmpregoFiltros.find(f => f.id === id)
   if (filtro) {
-    filtro.applied = !filtro.applied
+    filtro.selected = !filtro.selected
     applyFilters(filtersById.value.filter(f => f === filtro.id))
   }
 }

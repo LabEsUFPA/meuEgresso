@@ -3,14 +3,12 @@ import { type models } from 'src/@types'
 import Api from 'src/services/api'
 interface ComplexOpts extends models.ComplexOpts {}
 interface EgressoModel extends models.EgressoModel {}
-
 interface State {
   generos: ComplexOpts[]
   faixasSalariais: ComplexOpts[]
   tiposBolsa: ComplexOpts[]
   tiposCota: ComplexOpts[]
 }
-
 export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
   state: (): State => ({
     generos: [],
@@ -86,7 +84,7 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
       await this.fetchBolsas()
       await this.fetchCotas()
     },
-
+    
     async cadastrarEgresso (foto: { temFoto: boolean, foto: FormData }, dadosEgresso: EgressoModel) {
       let response = await Api.request({
         method: 'post',
@@ -98,7 +96,8 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
         response = await Api.request({
           method: 'post',
           route: 'egresso/foto',
-          body: foto
+          body: foto.foto,
+        
         })
       }
 

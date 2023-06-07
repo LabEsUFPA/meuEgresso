@@ -285,7 +285,8 @@ export namespace models {
   export interface areasEmpregoFiltro {
     id: number
     name: string
-    applied: boolean
+    selected: boolean
+    selectable: boolean
   }
 
 }

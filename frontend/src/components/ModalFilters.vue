@@ -37,7 +37,8 @@
             v-for="filtro in filtrosAreaEmprego"
             :key="filtro.id"
             :title="filtro.name"
-            :applied="filtro.applied"
+            :selected="filtro.selected"
+            :selectable="filtro.selectable"
             @click="toggleFilterApplied(filtro.id)"
           />
         </div>
@@ -51,7 +52,7 @@
           </CustomButton>
           <CustomButton
             color="emerald"
-            @click="$emit('applyFilters', filtrosAreaEmprego.filter(f => f.applied)); $emit('update:modelValue', false)"
+            @click="$emit('applyFilters', filtrosAreaEmprego.filter(f => f.selected)); $emit('update:modelValue', false)"
           >
             Aplicar filtros
           </CustomButton>
@@ -77,7 +78,8 @@ interface Props {
     filters: {
         id: number
         name: string
-        applied: boolean
+        selected: boolean
+        selectable: boolean
     }[]
 
 }
@@ -93,7 +95,7 @@ onMounted(async () => {
 const toggleFilterApplied = (id:number) => {
   const filtro = filtrosAreaEmprego.value.find(f => f.id === id)
   if (filtro) {
-    filtro.applied = !filtro.applied
+    filtro.selected = !filtro.selected
   }
 }
 
