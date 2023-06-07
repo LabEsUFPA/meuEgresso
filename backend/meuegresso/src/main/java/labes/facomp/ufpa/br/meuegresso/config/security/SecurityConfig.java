@@ -54,8 +54,6 @@ public class SecurityConfig {
 								"/swagger-ui.html",
 								"/egressoValido",
 								"/mapa",
-								"/publico/egresso**/**",
-								"/publico/grafico**/**",
 								"/publico**/**",
 								"/")
 						.permitAll()
@@ -65,7 +63,7 @@ public class SecurityConfig {
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
 				.sessionManagement(session -> session
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.exceptionHandling(exeption -> exeption
+				.exceptionHandling(exception -> exception
 						.authenticationEntryPoint(
 								new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
 				.build();

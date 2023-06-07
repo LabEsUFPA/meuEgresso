@@ -2,8 +2,10 @@ package labes.facomp.ufpa.br.meuegresso.dto.anuncio;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import labes.facomp.ufpa.br.meuegresso.dto.areaemprego.AreaEmpregoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.usuario.UsuarioDTO;
 import lombok.Data;
@@ -21,25 +23,22 @@ public class AnuncioDTO {
 
     private Integer id;
 
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "Informe um título.")
     private String titulo;
 
     @NotNull
     private AreaEmpregoDTO areaEmprego;
 
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "Informe uma descrição.")
     private String descricao;
 
+    @Future(message = "Informe uma data futura.")
     private LocalDate dataExpiracao;
 
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "Informe um link que descreva sobre a vaga.")
     private String link;
 
-    @NotBlank
-    @NotNull
+    @Pattern(regexp = "\\b\\d+(?:,\\s*\\d{2})?\\b", message = "Informe um salário válido.")
     private String salario;
 
     private UsuarioDTO createdBy;
