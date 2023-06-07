@@ -494,30 +494,6 @@
                 </h1>
               </template>
               <template #NonInputData>
-                <!-- <CustomPerfilData
-                      type="text"
-                      class="flex-auto mb-5"
-                      :vmodel="dataEgresso.adicionais.assuntosPalestras"
-                      name="adicionais.assuntosPalestras"
-                      label="Palestras"
-                      placeholder="Lorem ipsum dolor sit amet, consect
-                  etur adipiscing elit, sed do eiusmod tempor incididun
-                  t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-                  ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                      icon-path=""
-                    /> -->
-                <!-- <CustomPerfilData
-                      type="text"
-                      class="flex-auto mb-5"
-                      :vmodel="dataEgresso.adicionais.assuntosPalestras"
-                      name="adicionais.assuntosPalestras"
-                      label="Palestras"
-                      placeholder="Lorem ipsum dolor sit amet, consect
-                  etur adipiscing elit, sed do eiusmod tempor incididun
-                  t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
-                  ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                      icon-path=""
-                    /> -->
                 <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"
@@ -551,7 +527,6 @@
       </div>
     <!-- Body End-->
     </div>
-    <!-- </div> -->
     <CustomDialog v-model="dialogSucesso">
       <div class="h-full flex justify-center items-center">
         <div class="w-1/2">
@@ -598,15 +573,14 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomPerfilData from 'src/components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
-import { Country, State, City } from 'country-state-city'
+import { Country, State} from 'country-state-city'
 import { computed, ref, watch, onMounted } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import { Form } from 'vee-validate'
-import { object, string, mixed, boolean } from 'yup'
+import { object, string, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
 import { useLoginStore } from 'src/store/LoginStore'
 import CustomDialog from 'src/components/CustomDialog.vue'
-import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import FolderAcademico from 'src/components/FolderAcademico.vue'
 import FolderCarreira from 'src/components/FolderCarreira.vue'
 import FolderLocalizacao from 'src/components/FolderLocalizacao.vue'
@@ -892,7 +866,6 @@ function toggleIsInput (FolderLabel: string) {
   switch (FolderLabel) {
     case 'profileHead':
       dataEgresso.value.profileHead.isInput = !dataEgresso.value.profileHead.isInput
-
       break
     case 'geral':
       dataEgresso.value.geral.isInput = !dataEgresso.value.geral.isInput
@@ -900,15 +873,12 @@ function toggleIsInput (FolderLabel: string) {
       break
     case 'localizacao':
       dataEgresso.value.localizacao.isInput = !dataEgresso.value.localizacao.isInput
-
       break
     case 'academico':
       dataEgresso.value.academico.isInput = !dataEgresso.value.academico.isInput
-
       break
     case 'carreira':
       dataEgresso.value.carreira.isInput = !dataEgresso.value.carreira.isInput
-
       break
     case 'adicionais':
       dataEgresso.value.adicionais.isInput = !dataEgresso.value.adicionais.isInput
@@ -1233,10 +1203,6 @@ onMounted(() => {
   window.scrollTo(0, 0)
   fetchUpdateEgresso()
 })
-
-// function fetchEgresso () {
-  
-// }
 
 function fetchPublicEgresso (id: number) {
   return egressoStore.fetchPublicEgresso(id)

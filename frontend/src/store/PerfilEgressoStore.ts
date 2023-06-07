@@ -1,12 +1,9 @@
 import { defineStore } from 'pinia'
 import { type models } from 'src/@types'
 import Api from 'src/services/api'
-// interface UserModel extends models.UserModel {}
 import LocalStorage from 'src/services/localStorage'
 import axios from 'axios'
 interface ComplexOpts extends models.ComplexOpts {}
-// interface EgressoModel extends models.EgressoModel {}
-// interface EgressoModelUpdate extends models.EgressoModelUpdate {}
 const storage = new LocalStorage()
 
 const baseURL = import.meta.env.VITE_API_URL_LOCAL
@@ -14,6 +11,7 @@ const baseURL = import.meta.env.VITE_API_URL_LOCAL
 const Axios = axios.create({
   baseURL,
   withCredentials: true
+  
 })
 interface State {
   generos: ComplexOpts[]
@@ -152,105 +150,6 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
     },
 
     async atualizarEgresso (dataEgresso: any) {
-      //   const data: EgressoModelUpdate = {
-      //     id: number,
-      // nascimento: string,
-      // genero: {
-      //   id: number,
-      //   nome: string,
-      // },
-      // matricula: string,
-      // cotista: boolean,
-      // bolsista: boolean,
-      // interesseEmPos: boolean,
-      // lattes: string,
-      // linkedin: string,
-      // posGraduacao: boolean,
-      // cotas: [
-      //   {
-      //     id: number,
-      //     nome: string,
-      //   },
-      //   {
-      //     id: number,
-      //     nome: string,
-      //   }
-      // ]
-      // usuario: {
-      //   id: 1,
-      //   username: "string",
-      //   email: "string",
-      //   nome: "string",
-      //   grupos: [
-      //     {
-      //       id: number,
-      //       nomeGrupo: string
-      //     }
-      //   ]
-      // }
-      // palestras: {
-      //   id: number,
-      //   descricao: string,
-      // }
-      // contribuicao: {
-      //   id: number,
-      //   descricao: string,
-      // }
-      // titulacao: {
-      //   id: {
-      //     egressoId: number,
-      //     titulacaoId: number,
-      //   }
-      //   curso: {
-      //     id: number,
-      //     nome: string,
-      //   }
-      //   titulacao: {
-      //     id: number,
-      //     nome: string,
-      //   }
-      // }
-      // emprego: {
-      //   id: {
-      //     egressoId: number,
-      //     empresaId: number,
-      //   }
-      //   empresa: {
-      //     id: number,
-      //     nome: string,
-      //     setorAtuacoes: [
-      //       {
-      //         id: number,
-      //         nome: string,
-      //       }
-      //     ]
-      //     endereco: {
-      //       id: number,
-      //       cidade: string,
-      //       estado: string,
-      //       pais: string,
-      //     }
-      //   }
-      //   faixaSalarial: {
-      //     id: number,
-      //     faixa: string,
-      //   }
-      //   areaAtuacao: {
-      //     id: number,
-      //     nome: string,
-      //   }
-      // }
-      // depoimento: {
-      //   id: number,
-      //   descricao: string,
-      // }
-      // bolsa: {
-      //   id: number,
-      //   nome: string,
-      // }
-
-      //  }
-
       const response = await Api.request({
         method: 'put',
         route: '/egresso',
@@ -276,6 +175,16 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         return (response?.status) !== undefined ? response.status : 500
       }
     },
+  //   response = await this.uploadImageEgresso(foto.foto);
+  //   async uploadImageEgresso (foto: FormData) {
+  //     const response = await Api.request({
+  //       method: 'post',
+  //       route: '/egresso/foto',
+  //       body: foto
+  //     })
+  //     return response
+ 
+  // },
     async fetchImageEgresso (egressoId: string) {
       const route = '/egresso/foto/' + egressoId
       // const url = ''
