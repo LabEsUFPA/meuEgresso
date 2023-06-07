@@ -62,12 +62,16 @@ use([
 
 const windowWidth = ref(window.innerWidth)
 
+interface dataGraph {
+  values: PieChartSeries[]
+  legend: string[]
+}
+
 interface Props {
     legend?: string,
     info?: string
     loading: boolean
-    data: PieChartSeries[] | undefined
-    legendData: string[] | undefined
+    data: dataGraph | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -97,7 +101,7 @@ const optionDesktop = ref({
   legend: {
     orient: 'vertical',
     left: 'left',
-    data: props.legendData
+    data: props.data?.legend
   },
   series: [
     {
@@ -113,7 +117,7 @@ const optionDesktop = ref({
         show: false
       },
       center: ['70%', '50%'],
-      data: props.data
+      data: props.data?.values
     }
   ]
 })
@@ -130,7 +134,7 @@ const optionMobile = ref({
   legend: {
     orient: 'horizontal',
     left: 'left',
-    data: props.legendData
+    data: props.data?.legend
   },
   series: [
     {
@@ -146,13 +150,13 @@ const optionMobile = ref({
         show: false
       },
       center: ['50%', '65%'],
-      data: props.data
+      data: props.data?.values
     }
   ]
 })
 
 const setOptionData = () => {
-  optionDesktop.value.series[0].data = props.data
-  optionMobile.value.series[0].data = props.data
+  optionDesktop.value.series[0].data = props.data?.values
+  optionMobile.value.series[0].data = props.data?.values
 }
 </script>

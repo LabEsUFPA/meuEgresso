@@ -3,11 +3,6 @@ import Api from 'src/services/api'
 import { type models } from 'src/@types'
 interface PieChartSeries extends models.Graphics.PieChartSeries {}
 
-interface dataGraph {
-  values: PieChartSeries[]
-  legend: string[]
-}
-
 export const useGraficoStore = defineStore('GraficoStore', {
   actions: {
     async fetchAll () {
@@ -16,6 +11,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
         postGraduateCourse,
         postGraduateLocal,
         scholarshipType,
+        remuneration,
         interestInPost,
         acting,
         scholar,
@@ -25,12 +21,14 @@ export const useGraficoStore = defineStore('GraficoStore', {
         student,
         wage,
         sector,
-        gender
+        gender,
+        age
       ] = await Promise.all([
         this.getCompanyData(),
         this.getPostGraduateCourseData(),
         this.getPostGraduateLocalData(),
         this.getScholarshipTypeData(),
+        this.getRemunerationData(),
         this.getInterestInPostData(),
         this.getActingData(),
         this.getScholarData(),
@@ -40,7 +38,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
         this.getStudentData(),
         this.getWageData(),
         this.getSectorData(),
-        this.getGenderData()
+        this.getGenderData(),
+        this.getAgeData()
       ])
 
       return {
@@ -48,6 +47,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
         postGraduateCourse,
         postGraduateLocal,
         scholarshipType,
+        remuneration,
         interestInPost,
         acting,
         scholar,
@@ -57,7 +57,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
         student,
         wage,
         sector,
-        gender
+        gender,
+        age
       }
     },
 
@@ -67,23 +68,17 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/empresas'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = ['1']
+
       if ((response?.data) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
         response.data.forEach((item: { empresa: string, quantidade: number }) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item.empresa })
           legend.push(item.empresa)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getPostGraduateCourseData () {
@@ -92,23 +87,17 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/cursos'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
+
       if ((response?.data) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
         response.data.forEach((item: { curso: string, quantidade: number }) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item.curso })
           legend.push(item.curso)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getPostGraduateLocalData () {
@@ -117,23 +106,17 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/localPos'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
+
       if ((response?.data) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
         response.data.forEach((item: { instituicao: string, quantidade: number }) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item.instituicao })
           legend.push(item.instituicao)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getScholarshipTypeData () {
@@ -142,46 +125,36 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/tipoBolsa'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
+
       if ((response?.data?.tipoBolsas) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
         Object.keys(response?.data?.tipoBolsas).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getRemunerationData () {
-      const remunerationDataX: string[] = []
-      const remunerationDataY: number[] = []
-
       const response = await Api.request({
         method: 'get',
         route: '/grafico/remuneracao'
       })
 
+      const x: string[] = []
+      const y: number[] = []
+
       if ((response?.data?.remuneracaoContagem) != null) {
         Object.keys(response?.data.remuneracaoContagem).forEach((item: string) => {
-          remunerationDataX.push(item)
-          remunerationDataY.push(response?.data?.remuneracaoContagem[item])
+          x.push(item)
+          y.push(response?.data?.remuneracaoContagem[item])
         })
       }
 
-      return {
-        remunerationDataX,
-        remunerationDataY,
-        status: (response?.status) !== undefined ? response.status : 500
-      }
+      return x.length > 0 && y.length > 0 ? { x, y } : null
     },
 
     async getInterestInPostData () {
@@ -190,6 +163,9 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/interesseEmPos'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
+
       if ((response?.data?.interesseContagem) != null) {
         const values: PieChartSeries[] = []
         const legend: string[] = []
@@ -197,16 +173,9 @@ export const useGraficoStore = defineStore('GraficoStore', {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getActingData () {
@@ -215,6 +184,9 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/atuacao'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
+
       if ((response?.data?.areaAtuacao) != null) {
         const values: PieChartSeries[] = []
         const legend: string[] = []
@@ -222,16 +194,9 @@ export const useGraficoStore = defineStore('GraficoStore', {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getScholarData () {
@@ -240,6 +205,9 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/bolsistas'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
+
       if ((response?.data?.bolsistasContagem) != null) {
         const values: PieChartSeries[] = []
         const legend: string[] = []
@@ -247,16 +215,9 @@ export const useGraficoStore = defineStore('GraficoStore', {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getQuotasData () {
@@ -265,6 +226,9 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/cotas'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
+
       if ((response?.data?.cotaAtuacao) != null) {
         const values: PieChartSeries[] = []
         const legend: string[] = []
@@ -272,16 +236,9 @@ export const useGraficoStore = defineStore('GraficoStore', {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getShareHolderData () {
@@ -290,23 +247,17 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/cotista'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
+
       if ((response?.data?.cotistasEnumerados) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
         Object.keys(response?.data?.cotistasEnumerados).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getPostGraduateData () {
@@ -315,23 +266,17 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/pos'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
+
       if ((response?.data?.posGraduacaoContagem) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
         Object.keys(response?.data?.posGraduacaoContagem).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getStudentData () {
@@ -340,23 +285,17 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/tipoAlunos'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
+
       if ((response?.data?.tipoAlunos) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
         Object.keys(response?.data?.tipoAlunos).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getWageData () {
@@ -365,23 +304,17 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/salarios'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
+
       if ((response?.data?.salarios) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
         Object.keys(response?.data?.salarios).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getSectorData () {
@@ -390,23 +323,17 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/setor'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
+
       if ((response?.data?.setorAtuacao) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
         Object.keys(response?.data?.setorAtuacao).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getGenderData () {
@@ -415,46 +342,36 @@ export const useGraficoStore = defineStore('GraficoStore', {
         route: '/grafico/generos'
       })
 
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
+
       if ((response?.data?.generos) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
         Object.keys(response?.data?.generos).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
-
-        const data: dataGraph = {
-          values,
-          legend
-        }
-
-        return {
-          data
-        }
       }
+
+      return values.length > 0 && legend.length > 0 ? { values, legend } : null
     },
 
     async getAgeData () {
-      const ageDataX: string[] = []
-      const ageDataY: number[] = []
-
       const response = await Api.request({
         method: 'get',
         route: '/grafico/idades'
       })
 
+      const x: string[] = []
+      const y: number[] = []
+
       if ((response?.data?.idadesEgressos) != null) {
         Object.keys(response?.data.idadesEgressos).forEach((item: string) => {
-          ageDataX.push(item)
-          ageDataY.push(response?.data?.idadesEgressos[item])
+          x.push(item)
+          y.push(response?.data?.idadesEgressos[item])
         })
       }
 
-      return {
-        ageDataX,
-        ageDataY,
-        status: (response?.status) !== undefined ? response.status : 500
-      }
+      return x.length > 0 && y.length > 0 ? { x, y } : null
     }
   }
 })

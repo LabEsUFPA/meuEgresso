@@ -252,6 +252,11 @@ export namespace models {
       value: number
       name: string
     }
+
+    export interface BarChartSeries {
+      x: string[]
+      y: number[]
+    }
   }
 
   export interface AnuncioModel {

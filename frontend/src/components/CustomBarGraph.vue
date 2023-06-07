@@ -47,6 +47,8 @@ import {
 } from 'echarts/components'
 import VChart from 'vue-echarts'
 import { ref, watch } from 'vue'
+import { models } from 'src/@types'
+interface BarChartSeries extends models.Graphics.BarChartSeries {}
 
 use([
   CanvasRenderer,
@@ -62,8 +64,7 @@ interface Props {
     legend?: string,
     info?: string
     loading: boolean
-    x: string[]
-    y: number[]
+    data: BarChartSeries | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -71,28 +72,28 @@ const props = withDefaults(defineProps<Props>(), {
   info: 'Um belo gráfico'
 })
 
-watch(() => props.x, () => {
+watch(() => props.data?.x, () => {
   setOptionData()
 })
 
 const option = ref({
   xAxis: {
     type: 'category',
-    data: props.x
+    data: props.data?.x
   },
   yAxis: {
     type: 'value'
   },
   series: [
     {
-      data: props.y,
+      data: props.data?.y,
       type: 'bar'
     }
   ]
 })
 
 const setOptionData = () => {
-  option.value.xAxis.data = props.x
-  option.value.series[0].data = props.y
+  option.value.xAxis.data = props.data?.x
+  option.value.series[0].data = props.data?.y
 }
 </script>

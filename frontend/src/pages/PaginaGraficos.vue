@@ -63,128 +63,112 @@
         legend="Gênero"
         info="Quantidade de egressos por cada gênero"
         :loading="gender ? false : true"
-        :data="gender?.values"
-        :legend-data="gender?.legend"
+        :data="gender"
       />
       <CustomPieGraph
         v-show="filters.all || filters.career"
         legend="Área de atuação"
         info="Quantidade de egressos pro cada área de atuação"
         :loading="sector ? false : true"
-        :data="sector?.values"
-        :legend-data="sector?.legend"
+        :data="sector"
       />
       <CustomBarGraph
         v-show="filters.all || filters.general"
         legend="Idade"
         info="Quantidade de egressos por idade"
-        :loading="ageDataX.length ? false : true"
-        :x="ageDataX"
-        :y="ageDataY"
+        :loading="age ? false : true"
+        :data="age"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Nível de ensino"
         info="Quantidade de egressos por nível de ensino"
         :loading="student ? false : true"
-        :data="student?.values"
-        :legend-data="student?.legend"
+        :data="student"
       />
       <CustomPieGraph
         v-show="filters.all || filters.career"
         legend="Salário"
         info="Quantidade de egressos por faixa salárial"
         :loading="wage ? false : true"
-        :data="wage?.values"
-        :legend-data="wage?.legend"
+        :data="wage"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Pos-graduação"
         info="Quantidade de egressos que fizeram pós-graduação"
         :loading="postGraduate ? false : true"
-        :data="postGraduate?.values"
-        :legend-data="postGraduate?.legend"
+        :data="postGraduate"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Cotistas"
         info="Quantidade de egressos que foram cotistas"
         :loading="shareHolder ? false : true"
-        :data="shareHolder?.values"
-        :legend-data="shareHolder?.legend"
+        :data="shareHolder"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Cotas"
         info="Quantidade de egressos por cada conta"
         :loading="quotas ? false : true"
-        :data="quotas?.values"
-        :legend-data="quotas?.legend"
+        :data="quotas"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Bolsista"
         info="Quantidade de egressos que foram bolsistas"
         :loading="scholar ? false : true"
-        :data="scholar?.values"
-        :legend-data="scholar?.legend"
+        :data="scholar"
       />
       <CustomPieGraph
         v-show="filters.all || filters.career"
         legend="Área de atuação"
         info="Quantidade de egressos por cada área de atuação"
         :loading="acting ? false : true"
-        :data="acting?.values"
-        :legend-data="acting?.legend"
+        :data="acting"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Deseja realizar Pós-graduação"
         info="Quantidade de egressos que desejam realizar pós-graduação"
         :loading="interestInPost ? false : true"
-        :data="interestInPost?.values"
-        :legend-data="interestInPost?.legend"
+        :data="interestInPost"
       />
       <CustomBarGraph
         v-show="filters.all || filters.career"
         legend="Remuneração"
         info="Remuneração mensal média da bolsa do egresso"
-        :loading="remunerationDataX.length ? false : true"
-        :x="remunerationDataX"
-        :y="remunerationDataY"
+        :loading="remuneration ? false : true"
+        :data="remuneration"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Tipo de bolsa"
         info="Quantidade de egressos por cada tipo de bolsa"
         :loading="scholarshipType ? false : true"
-        :data="scholarshipType?.values"
-        :legend-data="scholarshipType?.legend"
+        :data="scholarshipType"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Local de Pós-graduação"
         info="Quantidade de egressos por instituição de pós-graduação"
         :loading="postGraduateLocal ? false : true"
-        :data="postGraduateLocal?.values"
-        :legend-data="postGraduateLocal?.legend"
+        :data="postGraduateLocal"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Curso de Pós-graduação"
         info="Quantidade de egressos por curso de pós graduação"
         :loading="postGraduateCourse ? false : true"
-        :data="postGraduateCourse?.values"
-        :legend-data="postGraduateCourse?.legend"
+        :data="postGraduateCourse"
       />
       <CustomPieGraph
         v-show="filters.all || filters.career"
         legend="Vínculo empregatício"
         info="Onde os egressos estão trabalhando"
         :loading="company ? false : true"
-        :data="company?.values"
-        :legend-data="company?.legend"
+        :data="company"
       />
     </div>
   </div>
@@ -200,48 +184,54 @@ import FilterChip from 'src/components/FilterChip.vue'
 import { useGraficoStore } from 'src/store/GraficoStore'
 import { models } from 'src/@types'
 interface PieChartSeries extends models.Graphics.PieChartSeries {}
+interface BarChartSeries extends models.Graphics.BarChartSeries {}
 
 const store = useGraficoStore()
-
-const ageDataX = ref<string[]>([])
-const ageDataY = ref<number[]>([])
-const remunerationDataX = ref<string[]>([])
-const remunerationDataY = ref<number[]>([])
 
 interface dataGraph {
   values: PieChartSeries[]
   legend: string[]
 }
 
-const company = ref<dataGraph>()
-const postGraduateCourse = ref<dataGraph>()
-const postGraduateLocal = ref<dataGraph>()
-const scholarshipType = ref<dataGraph>()
-const interestInPost = ref<dataGraph>()
-const acting = ref<dataGraph>()
-const scholar = ref<dataGraph>()
-const quotas = ref<dataGraph>()
-const shareHolder = ref<dataGraph>()
-const postGraduate = ref<dataGraph>()
-const student = ref<dataGraph>()
-const wage = ref<dataGraph>()
-const sector = ref<dataGraph>()
-const gender = ref<dataGraph>()
+const company = ref<dataGraph | null>(null)
+const postGraduateCourse = ref<dataGraph | null>(null)
+const postGraduateLocal = ref<dataGraph | null>(null)
+const scholarshipType = ref<dataGraph | null>(null)
+const remuneration = ref<BarChartSeries | null>(null)
+const interestInPost = ref<dataGraph | null>(null)
+const acting = ref<dataGraph | null>(null)
+const scholar = ref<dataGraph | null>(null)
+const quotas = ref<dataGraph | null>(null)
+const shareHolder = ref<dataGraph | null>(null)
+const postGraduate = ref<dataGraph | null>(null)
+const student = ref<dataGraph | null>(null)
+const wage = ref<dataGraph | null>(null)
+const sector = ref<dataGraph | null>(null)
+const gender = ref<dataGraph | null>(null)
+const age = ref<BarChartSeries | null>(null)
 
 onMounted(async () => {
   await getGraphData()
 })
 
 const getGraphData = async () => {
-  const ageGraph = await store.getAgeData()
-  ageDataX.value = ageGraph?.ageDataX
-  ageDataY.value = ageGraph?.ageDataY
-
-  const remunerationGraph = await store.getRemunerationData()
-  remunerationDataX.value = remunerationGraph?.remunerationDataX
-  remunerationDataY.value = remunerationGraph?.remunerationDataY
-
   const loadedData = await store.fetchAll()
+  company.value = loadedData.company
+  postGraduateCourse.value = loadedData.postGraduateCourse
+  postGraduateLocal.value = loadedData.postGraduateLocal
+  scholarshipType.value = loadedData.scholarshipType
+  remuneration.value = loadedData.remuneration
+  interestInPost.value = loadedData.interestInPost
+  acting.value = loadedData.acting
+  scholar.value = loadedData.scholar
+  quotas.value = loadedData.quotas
+  shareHolder.value = loadedData.shareHolder
+  postGraduate.value = loadedData.postGraduate
+  student.value = loadedData.student
+  wage.value = loadedData.wage
+  sector.value = loadedData.sector
+  gender.value = loadedData.gender
+  age.value = loadedData.age
 }
 
 interface Filters {
