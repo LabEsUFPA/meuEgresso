@@ -8,7 +8,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getCompanyData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/empresas'
+        route: '/publico/grafico/empresas'
       })
 
       if ((response?.data) != null) {
@@ -30,7 +30,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getPostGraduateCourseData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/cursos'
+        route: '/publico/grafico/cursos'
       })
 
       if ((response?.data) != null) {
@@ -52,7 +52,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getPostGraduateLocalData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/localPos'
+        route: '/publico/grafico/localPos'
       })
 
       if ((response?.data) != null) {
@@ -74,7 +74,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getScholarshipTypeData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/tipoBolsa'
+        route: '/publico/grafico/tipoBolsa'
       })
 
       if ((response?.data?.tipoBolsas) != null) {
@@ -99,7 +99,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/remuneracao'
+        route: '/publico/grafico/remuneracao'
       })
 
       if ((response?.data?.remuneracaoContagem) != null) {
@@ -119,7 +119,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getInterestInPostData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/interesseEmPos'
+        route: '/publico/grafico/interesseEmPos'
       })
 
       if ((response?.data?.interesseContagem) != null) {
@@ -141,7 +141,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getActingData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/atuacao'
+        route: '/publico/grafico/atuacao'
       })
 
       if ((response?.data?.areaAtuacao) != null) {
@@ -163,7 +163,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getScholarData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/bolsistas'
+        route: '/publico/grafico/bolsistas'
       })
 
       if ((response?.data?.bolsistasContagem) != null) {
@@ -185,7 +185,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getQuotasData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/cotas'
+        route: '/publico/grafico/cotas'
       })
 
       if ((response?.data?.cotaAtuacao) != null) {
@@ -207,7 +207,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getShareHolderData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/cotista'
+        route: '/publico/grafico/cotista'
       })
 
       if ((response?.data?.cotistasEnumerados) != null) {
@@ -229,7 +229,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getPostGraduateData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/pos'
+        route: '/publico/grafico/pos'
       })
 
       if ((response?.data?.posGraduacaoContagem) != null) {
@@ -251,7 +251,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getStudentData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/tipoAlunos'
+        route: '/publico/grafico/tipoAlunos'
       })
 
       if ((response?.data?.tipoAlunos) != null) {
@@ -273,7 +273,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getWageData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/salarios'
+        route: '/publico/grafico/salarios'
       })
 
       if ((response?.data?.salarios) != null) {
@@ -295,7 +295,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getSectorData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/setor'
+        route: '/publico/grafico/setor'
       })
 
       if ((response?.data?.setorAtuacao) != null) {
@@ -317,7 +317,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getGenderData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/generos'
+        route: '/publico/grafico/generos'
       })
 
       if ((response?.data?.generos) != null) {
@@ -342,7 +342,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/idades'
+        route: '/publico/grafico/idades'
       })
 
       if ((response?.data?.idadesEgressos) != null) {
