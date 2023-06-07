@@ -25,10 +25,7 @@ export default [
       },
       {
         path: '/cadastro-anuncio',
-        component: async () => await import('src/pages/CadastroAnuncio.vue'),
-        meta: {
-          requiresAuth: true
-        }
+        component: async () => await import('src/pages/CadastroAnuncio.vue')
       },
       {
         path: '/egresso',
