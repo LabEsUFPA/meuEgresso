@@ -7,10 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de informacoes da área de atuação dos egressos para o grafico
+ * Dto para retorno de informacoes da área de atuação dos egressos para o
+ * grafico
  *
- * @author Camilo Santos
- * @since 20/05/2023
+ * @author Camilo Santos, Alfredo Gabriel
+ * @since 08/06/2023
  * @version 1.0
  */
 @Data

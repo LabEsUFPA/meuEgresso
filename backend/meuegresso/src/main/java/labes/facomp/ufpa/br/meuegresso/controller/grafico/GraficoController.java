@@ -30,7 +30,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoAlunoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoBolsaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
-import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.cota.CotaService;
 import labes.facomp.ufpa.br.meuegresso.service.curso.CursoService;
@@ -314,8 +313,8 @@ public class GraficoController {
      *
      * @return {@link AreaAtuacaoGraficoDTO} Retorna a contagem de egresso por área
      *         de atuação.
-     * @author Camilo Santos
-     * @since 20/05/2023
+     * @author Camilo Santos, Alfredo Gabriel
+     * @since 08/06/2023
      */
     @GetMapping(value = "/atuacao")
     @ResponseStatus(code = HttpStatus.OK)
@@ -332,27 +331,13 @@ public class GraficoController {
      *
      * @return {@link SetorAtuacaoGraficoDTO} Retorna a contagem de egresso por
      *         setor de atuação.
-     * @author Camilo Santos
-     * @since 20/05/2023
+     * @author Camilo Santos, Alfredo Gabriel
+     * @since 08/06/2023
      */
     @GetMapping(value = "/setor")
     @ResponseStatus(code = HttpStatus.OK)
     public SetorAtuacaoGraficoDTO getSetor() {
-        List<EgressoModel> lista = egressoService.findAll();
-        List<EgressoModel> listaFiltrada = lista.stream().filter(e -> e.getEmprego() != null).toList();
-
-        List<SetorAtuacaoModel> setorAtuacao = setorAtuacaoService.findAll();
-
-        HashMap<String, Integer> setorAtuacaoContagens = new HashMap<>();
-
-        int count = 0;
-        for (int i = 0; i < setorAtuacao.size(); i++) {
-            final String nomeFinal = setorAtuacao.get(i).getNome();
-            count = (int) listaFiltrada.stream()
-                    .filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
-
-            setorAtuacaoContagens.put(nomeFinal, count);
-        }
+        Map<String, Integer> setorAtuacaoContagens = setorAtuacaoService.countEgressoBySetorAtuacao();
 
         return new SetorAtuacaoGraficoDTO(setorAtuacaoContagens);
     }

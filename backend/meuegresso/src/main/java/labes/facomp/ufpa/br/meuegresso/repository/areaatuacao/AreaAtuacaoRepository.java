@@ -15,7 +15,7 @@ public interface AreaAtuacaoRepository extends CrudRepository<AreaAtuacaoModel, 
 
     Optional<AreaAtuacaoModel> findByNomeIgnoreCase(String nome);
 
-    @Query(value = "SELECT aa.nome, COUNT(ee.setorAtuacao) FROM area_atuacao aa LEFT JOIN egresso_empresa ee ON ee.areaAtuacao.id  = aa.id  GROUP BY aa.nome ")
+    @Query(value = "SELECT aa.nome, COUNT(ee.areaAtuacao) FROM area_atuacao aa LEFT JOIN egresso_empresa ee ON ee.areaAtuacao.id  = aa.id  GROUP BY aa.nome ")
     List<Tuple> countEgressoByAreaAtuacao();
 
 }
