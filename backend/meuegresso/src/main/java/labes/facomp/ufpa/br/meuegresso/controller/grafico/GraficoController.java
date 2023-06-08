@@ -203,23 +203,7 @@ public class GraficoController {
     @GetMapping(value = "/tipoBolsa")
     @ResponseStatus(code = HttpStatus.OK)
     public TipoBolsaGraficoDTO getTipoBolsa() {
-        List<EgressoModel> lista = egressoService.findAll();
-        List<EgressoModel> listaFiltrada = lista.stream().filter(a -> a.getBolsa() != null).toList();
-
-        List<TipoBolsaModel> tipoBolsa = tipoBolsaService.findAll();
-
-        HashMap<String, Integer> tipoBolsaContagens = new HashMap<>();
-
-        int count = 0;
-        for (int i = 0; i < tipoBolsa.size(); i++) {
-            String nomeFinal = tipoBolsa.get(i).getNome();
-
-            count = (int) listaFiltrada.stream().filter(a -> a.getBolsa().getNome().equalsIgnoreCase(nomeFinal))
-                    .count();
-
-            tipoBolsaContagens.put(nomeFinal, count);
-
-        }
+        Map<String, Integer> tipoBolsaContagens = tipoBolsaService.countEgressoForBolsa();
 
         return new TipoBolsaGraficoDTO(tipoBolsaContagens);
     }

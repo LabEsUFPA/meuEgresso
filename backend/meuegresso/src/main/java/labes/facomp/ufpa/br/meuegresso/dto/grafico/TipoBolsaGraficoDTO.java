@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TipoBolsaGraficoDTO {
-    
-    private HashMap<String, Integer> tipoBolsas;
-    
+
+    private Map<String, Integer> tipoBolsas;
+
 }

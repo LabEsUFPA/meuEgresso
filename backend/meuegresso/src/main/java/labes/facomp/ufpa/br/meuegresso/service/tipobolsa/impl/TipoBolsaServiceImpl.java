@@ -1,6 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.service.tipobolsa.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -61,6 +63,14 @@ public class TipoBolsaServiceImpl implements TipoBolsaService {
     @Override
     public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
         return tipoBolsaRepository.existsByIdAndCreatedById(id, createdBy);
+    }
+
+    @Override
+    public Map<String, Integer> countEgressoForBolsa() {
+        Map<String, Integer> contagem = new HashMap<>(7);
+        tipoBolsaRepository.countEgressoForBolsa().stream()
+                .forEach(e -> contagem.put(e.get(0, String.class), e.get(1, Long.class).intValue()));
+        return contagem;
     }
 
 }
