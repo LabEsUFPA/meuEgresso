@@ -88,7 +88,6 @@ app.use(pinia)
 const error = ref(false)
 const storeLogin = useLoginStore()
 
-
 const schema = object().shape({
   username: string().required('Informe o seu usuário'),
   password: string().required('Informe a sua senha')
@@ -107,7 +106,7 @@ const handleSubmit = async (submitData: any) => {
 
     if (response === 200) {
       error.value = false
-      router.push('/')
+      await router.push('/')
     } else {
       error.value = true
     }
