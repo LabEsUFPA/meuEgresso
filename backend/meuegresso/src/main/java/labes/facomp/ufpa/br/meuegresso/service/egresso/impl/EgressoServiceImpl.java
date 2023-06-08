@@ -206,4 +206,18 @@ public class EgressoServiceImpl implements EgressoService {
 		return contagem;
 	}
 
+	@Override
+	public Map<String, Integer> countCotista() {
+		Map<String, Integer> contagem = new HashMap<>(2);
+		final String cotista = "Cotista", naoCotista = "Não Cotista";
+		egressoRepository.countCotista().forEach((e) -> {
+			if (e.get(0, Boolean.class)) {
+				contagem.put(cotista, e.get(1, Long.class).intValue());
+			} else {
+				contagem.put(naoCotista, e.get(1, Long.class).intValue());
+			}
+		});
+		return contagem;
+	}
+
 }

@@ -230,18 +230,14 @@ public class GraficoController {
      * não-cotistas.
      *
      * @return {@link CotistaGraficoDTO} retorna cotistas e não-cotistas enumerados.
-     * @author Camilo Santos
-     * @since 22/05/2023
+     * @author Camilo Santos, Alfredo Gabriel
+     * @since 08/06/2023
      */
     @GetMapping(value = "/cotista")
     @ResponseStatus(code = HttpStatus.OK)
     public CotistaGraficoDTO getCotista() {
-        List<EgressoModel> lista = egressoService.findAll();
 
-        HashMap<String, Long> cotistaContagem = new HashMap<>();
-
-        cotistaContagem.put("Cotista", lista.stream().filter(e -> e.getCotista().equals(true)).count());
-        cotistaContagem.put("Não Cotista", lista.stream().filter(e -> e.getCotista().equals(false)).count());
+        Map<String, Integer> cotistaContagem = egressoService.countCotista();
 
         return new CotistaGraficoDTO(cotistaContagem);
     }
