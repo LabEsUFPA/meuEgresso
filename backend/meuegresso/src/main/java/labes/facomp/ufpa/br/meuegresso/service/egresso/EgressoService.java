@@ -124,4 +124,6 @@ public interface EgressoService {
 
 	Map<Integer, Integer> countAgeFromEgressos();
 
+	Map<String, Integer> countFezPos();
+	
 }

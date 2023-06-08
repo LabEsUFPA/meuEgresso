@@ -170,4 +170,20 @@ public class EgressoServiceImpl implements EgressoService {
 		return countIdades;
 	}
 
+	@Override
+	public Map<String, Integer> countFezPos() {
+		Map<String, Integer> contagem = new HashMap<>(2);
+		final String fez = "Não fez", naoFez = "Não fez";
+		contagem.put(fez, 0);
+		contagem.put(naoFez, 0);
+		egressoRepository.countFezPos().forEach((e) -> {
+			if (e.get(0, Boolean.class)) {
+				contagem.replace(fez, contagem.get(fez) + 1);
+			} else {
+				contagem.replace(naoFez, contagem.get(naoFez) + 1);
+			}
+		});
+		return contagem;
+	}
+
 }

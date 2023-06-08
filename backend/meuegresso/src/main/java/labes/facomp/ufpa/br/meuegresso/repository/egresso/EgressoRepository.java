@@ -21,4 +21,7 @@ public interface EgressoRepository extends CrudRepository<EgressoModel, Integer>
 
     @Query(value = "select extract(year from age(CURRENT_DATE, e.nascimento_egresso)), count(*) from egresso e group by e.nascimento_egresso", nativeQuery = true)
     List<Tuple> countAgeFromEgressos();
+
+    @Query(value = "select e.posGraduacao, count(e) from egresso e group by e.posGraduacao")
+    List<Tuple> countFezPos();
 }

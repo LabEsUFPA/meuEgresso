@@ -34,22 +34,18 @@ import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
-import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.cota.CotaService;
 import labes.facomp.ufpa.br.meuegresso.service.curso.CursoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoEmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
-import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.faixasalarial.FaixaSalarialService;
 import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
 import labes.facomp.ufpa.br.meuegresso.service.setoratuacao.SetorAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.tipobolsa.TipoBolsaService;
-import labes.facomp.ufpa.br.meuegresso.service.titulacao.TitulacaoService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -77,10 +73,6 @@ public class GraficoController {
     private final SetorAtuacaoService setorAtuacaoService;
 
     private final TipoBolsaService tipoBolsaService;
-
-    private final EgressoTitulacaoService egressoTitulacaoService;
-
-    private final TitulacaoService titulacaoService;
 
     private final CotaService cotaService;
 
@@ -140,8 +132,8 @@ public class GraficoController {
      *
      * @return {@link GenerosGraficoDTO} Retorna a contagem de cada genero (masc,
      *         fem, trans e outros).
-     * @author Pedro Inácio
-     * @since 19/05/2023
+     * @author Pedro Inácio, Alfredo Gabriel
+     * @since 08/06/2023
      */
     @GetMapping(value = "/generos")
     @ResponseStatus(code = HttpStatus.OK)
@@ -156,8 +148,8 @@ public class GraficoController {
      *
      * @return {@link GenerosGraficoDTO} Retorna a contagem de cada egressos por
      *         faixa salarial.
-     * @author Pedro Inácio
-     * @since 22/05/2023
+     * @author Pedro Inácio, Alfredo Gabriel
+     * @since 08/06/2023
      */
     @GetMapping(value = "/salarios")
     @ResponseStatus(code = HttpStatus.OK)
@@ -172,28 +164,14 @@ public class GraficoController {
      * banco.
      *
      * @return {@link TipoAlunoGraficoDTO} Retorna a contagem de cada tipo de aluno.
-     * @author Pedro Inácio
-     * @since 22/05/2023
+     * @author Pedro Inácio, Alfredo Gabriel
+     * @since 08/06/2023
      */
     @GetMapping(value = "/tipoAlunos")
     @ResponseStatus(code = HttpStatus.OK)
     public TipoAlunoGraficoDTO getTipoAlunos() {
 
-        List<EgressoTitulacaoModel> egressoTitulacao = egressoTitulacaoService.findAll();
-
-        List<TitulacaoModel> titulacoes = titulacaoService.findAll();
-
-        HashMap<String, Integer> tipoAluno = new HashMap<>();
-
-        int count = 0;
-        for (int i = 0; i < titulacoes.size(); i++) {
-
-            final String nomeFinal = titulacoes.get(i).getNome();
-            count = (int) egressoTitulacao.stream().filter(a -> a.getTitulacao().getNome().equalsIgnoreCase(nomeFinal))
-                    .count();
-            tipoAluno.put(nomeFinal, count);
-
-        }
+        Map<String, Integer> tipoAluno = egressoService.countFezPos();
 
         return new TipoAlunoGraficoDTO(tipoAluno);
     }
