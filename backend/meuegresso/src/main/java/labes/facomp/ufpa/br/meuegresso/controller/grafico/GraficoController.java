@@ -1,11 +1,10 @@
 package labes.facomp.ufpa.br.meuegresso.controller.grafico;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
@@ -37,7 +36,6 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
-import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
@@ -131,23 +129,10 @@ public class GraficoController {
     @GetMapping(value = "/idades")
     @ResponseStatus(code = HttpStatus.OK)
     public IdadesGraficoDTO getIdades() {
-        List<EgressoModel> lista = egressoService.findAll();
 
-        List<Integer> idades = egressoService.findAllIdades();
+        Map<Integer, Integer> idadesContagens = egressoService.countAgeFromEgressos();
 
-        HashMap<Integer, Integer> idadesContagens = new HashMap<>();
-
-        int count = 0;
-        for (int i = 0; i < idades.size(); i++) {
-            final Integer idadeFinal = idades.get(i);
-            count = (int) lista.stream()
-                    .filter(a -> Period.between(a.getNascimento(), LocalDate.now()).getYears() == idadeFinal).count();
-
-            idadesContagens.put(idadeFinal, count);
-
-        }
-
-        return new IdadesGraficoDTO(egressoService.findAllIdades().stream().mapToDouble(a -> a).average().orElse(-1),
+        return new IdadesGraficoDTO(idadesContagens.values().stream().mapToDouble(a -> a).average().orElse(-1),
                 idadesContagens);
     }
 
@@ -162,20 +147,7 @@ public class GraficoController {
     @GetMapping(value = "/generos")
     @ResponseStatus(code = HttpStatus.OK)
     public GenerosGraficoDTO getGeneros() {
-        List<EgressoModel> lista = egressoService.findAll();
-
-        List<GeneroModel> generos = generoService.findAll();
-
-        HashMap<String, Integer> generosContagens = new HashMap<>();
-
-        int count = 0;
-        for (int i = 0; i < generos.size(); i++) {
-            final String nomeFinal = generos.get(i).getNome();
-            count = (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase(nomeFinal)).count();
-
-            generosContagens.put(nomeFinal, count);
-
-        }
+        Map<String, Integer> generosContagens = generoService.countEgressoByGenero();
 
         return new GenerosGraficoDTO(generosContagens);
     }

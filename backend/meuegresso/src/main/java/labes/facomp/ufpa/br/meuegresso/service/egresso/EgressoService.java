@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
@@ -120,5 +121,7 @@ public interface EgressoService {
 	 * @since 07/05/2023
 	 */
 	public void saveFoto(String nomeAnexo, MultipartFile arquivo) throws IOException;
+
+	Map<Integer, Integer> countAgeFromEgressos();
 
 }

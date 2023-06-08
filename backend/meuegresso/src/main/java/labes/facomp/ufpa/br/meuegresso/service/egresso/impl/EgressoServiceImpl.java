@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,7 +11,9 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -156,6 +159,15 @@ public class EgressoServiceImpl implements EgressoService {
 		} catch (IOException ioe) {
 			throw new IOException("Could not save file: " + arquivo.getOriginalFilename(), ioe);
 		}
+	}
+
+	@Override
+	public Map<Integer, Integer> countAgeFromEgressos() {
+		Map<Integer, Integer> countIdades = new HashMap<>();
+		egressoRepository.countAgeFromEgressos().stream().forEach(e -> {
+			countIdades.put(e.get(0, BigDecimal.class).intValue(), e.get(1, Long.class).intValue());
+			});
+		return countIdades;
 	}
 
 }
