@@ -1,13 +1,13 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de bolsistas 
+ * Dto para retorno de bolsistas
  *
  * @author Pedro Inácio
  * @since 21/05/2023
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BolsistasGraficoDTO {
-    
-    private HashMap<String, Long> bolsistasContagem;
+
+    private Map<String, Integer> bolsistasContagem;
 
 }

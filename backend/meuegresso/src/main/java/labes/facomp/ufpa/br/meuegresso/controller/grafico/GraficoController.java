@@ -187,12 +187,8 @@ public class GraficoController {
     @GetMapping(value = "/bolsistas")
     @ResponseStatus(code = HttpStatus.OK)
     public BolsistasGraficoDTO getBolsistas() {
-        List<EgressoModel> lista = egressoService.findAll();
 
-        HashMap<String, Long> bolsistasContagens = new HashMap<>();
-
-        bolsistasContagens.put("Bolsistas", lista.stream().filter(e -> e.getBolsista().equals(true)).count());
-        bolsistasContagens.put("Não Bolsistas", lista.stream().filter(e -> e.getBolsista().equals(false)).count());
+        Map<String, Integer> bolsistasContagens = egressoService.countBolsista();
 
         return new BolsistasGraficoDTO(bolsistasContagens);
     }

@@ -173,14 +173,26 @@ public class EgressoServiceImpl implements EgressoService {
 	@Override
 	public Map<String, Integer> countFezPos() {
 		Map<String, Integer> contagem = new HashMap<>(2);
-		final String fez = "Não fez", naoFez = "Não fez";
-		contagem.put(fez, 0);
-		contagem.put(naoFez, 0);
+		final String fez = "Fez", naoFez = "Não fez";
 		egressoRepository.countFezPos().forEach((e) -> {
 			if (e.get(0, Boolean.class)) {
-				contagem.replace(fez, contagem.get(fez) + 1);
+				contagem.put(fez, e.get(1, Long.class).intValue());
 			} else {
-				contagem.replace(naoFez, contagem.get(naoFez) + 1);
+				contagem.put(naoFez, e.get(1, Long.class).intValue());
+			}
+		});
+		return contagem;
+	}
+
+	@Override
+	public Map<String, Integer> countBolsista() {
+		Map<String, Integer> contagem = new HashMap<>(2);
+		final String bolsistas = "Bolsistas", naoBolsistas = "Não Bolsistas";
+		egressoRepository.countBolsista().forEach((e) -> {
+			if (e.get(0, Boolean.class)) {
+				contagem.put(bolsistas, e.get(1, Long.class).intValue());
+			} else {
+				contagem.put(naoBolsistas, e.get(1, Long.class).intValue());
 			}
 		});
 		return contagem;

@@ -24,4 +24,7 @@ public interface EgressoRepository extends CrudRepository<EgressoModel, Integer>
 
     @Query(value = "select e.posGraduacao, count(e) from egresso e group by e.posGraduacao")
     List<Tuple> countFezPos();
+
+    @Query(value = "select e.bolsista, count(e) from egresso e group by e.bolsista")
+    List<Tuple> countBolsista();
 }
