@@ -48,7 +48,7 @@ import {
 import VChart from 'vue-echarts'
 import { ref, watch } from 'vue'
 import { models } from 'src/@types'
-interface BarChartSeries extends models.Graphics.BarChartSeries {}
+interface BarChartModel extends models.Graphics.BarChartModel {}
 
 use([
   CanvasRenderer,
@@ -64,7 +64,7 @@ interface Props {
     legend?: string,
     info?: string
     loading: boolean
-    data: BarChartSeries | null
+    data: BarChartModel | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -82,7 +82,8 @@ const option = ref({
     data: props.data?.x
   },
   yAxis: {
-    type: 'value'
+    type: 'value',
+    minInterval: 1
   },
   series: [
     {

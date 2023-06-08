@@ -48,7 +48,7 @@ import {
 import VChart from 'vue-echarts'
 import { onMounted, ref, watch } from 'vue'
 import { models } from 'src/@types'
-interface PieChartSeries extends models.Graphics.PieChartSeries {}
+interface PieChartModel extends models.Graphics.PieChartModel {}
 
 use([
   CanvasRenderer,
@@ -62,16 +62,11 @@ use([
 
 const windowWidth = ref(window.innerWidth)
 
-interface dataGraph {
-  values: PieChartSeries[]
-  legend: string[]
-}
-
 interface Props {
     legend?: string,
     info?: string
     loading: boolean
-    data: dataGraph | null
+    data: PieChartModel | null
 }
 
 const props = withDefaults(defineProps<Props>(), {

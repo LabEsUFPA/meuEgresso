@@ -253,9 +253,33 @@ export namespace models {
       name: string
     }
 
-    export interface BarChartSeries {
+    export interface PieChartModel {
+      values: PieChartSeries[]
+      legend: string[]
+    }
+
+    export interface BarChartModel {
       x: string[]
       y: number[]
+    }
+
+    export interface AllChartSeries {
+      company: PieChartModel | null
+      postGraduateCourse: PieChartModel | null
+      postGraduateLocal: PieChartModel | null
+      scholarshipType: PieChartModel | null
+      remuneration: BarChartModel | null
+      interestInPost: PieChartModel | null
+      acting: PieChartModel | null
+      scholar: PieChartModel | null
+      quotas: PieChartModel | null
+      shareHolder: PieChartModel | null
+      postGraduate: PieChartModel | null
+      student: PieChartModel | null
+      wage: PieChartModel | null
+      sector: PieChartModel | null
+      gender: PieChartModel | null
+      age: BarChartModel | null
     }
   }
 
@@ -294,44 +318,3 @@ export namespace models {
   }
 
 }
-
-// export interface EgressoModelUpdate {
-//   nascimento: string
-//   generoId: id
-//   matricula: string | null
-//   cotista: boolean
-//   bolsista: boolean
-//   interesseEmPos: boolean
-//   lattes?: string | null
-//   linkedin?: string | null
-//   posGraduacao: boolean
-//   cotas: Array<{
-//     id: id
-//   }> | null
-//   nome: string
-//   palestras?: {
-//     descricao?: string
-//   } | null
-//   contribuicao: {
-//     descricao: string
-//   }
-//   depoimento: {
-//     descricao: string
-//   }
-//   bolsaId?: id | null
-//   remuneracaoBolsa?: number
-//   empresa: {
-//     faixaSalarialId?: id | null
-//     setorAtuacao?: string
-//     nome?: string
-//     endereco?: {
-//       pais: string
-//       estado: string
-//       cidade: string
-//     }
-//   } | null
-//   titulacao?: {
-//     instituicao?: string
-//     curso?: string
-//   } | null
-// }
