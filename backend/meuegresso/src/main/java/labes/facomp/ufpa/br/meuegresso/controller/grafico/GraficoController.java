@@ -181,8 +181,8 @@ public class GraficoController {
      *
      * @return {@link BolsistasGraficoDTO} Retorna a quantidade de egressos com e
      *         sem bolsa
-     * @author Pedro Inácio
-     * @since 21/05/2023
+     * @author Pedro Inácio, Alfredo Gabriel
+     * @since 08/06/2023
      */
     @GetMapping(value = "/bolsistas")
     @ResponseStatus(code = HttpStatus.OK)
@@ -197,8 +197,8 @@ public class GraficoController {
      * Endpoint responsavel por buscar todos os Tipo de Bolsa dos egressos no banco.
      *
      * @return {@link TipoBolsaGraficoDTO} Retorna a contagem de cada tipo de Bolsa.
-     * @author Pedro Inácio
-     * @since 21/05/2023
+     * @author Pedro Inácio, Alfredo Gabriel
+     * @since 08/06/2023
      */
     @GetMapping(value = "/tipoBolsa")
     @ResponseStatus(code = HttpStatus.OK)
@@ -214,35 +214,14 @@ public class GraficoController {
      *
      * @return {@link RemuneracaoGraficoDTO} retorna a quantidade de egressos por
      *         cada tipo de remuneração.
-     * @author Camilo Santos
-     * @since 22/05/2023
+     * @author Camilo Santos, Alfredo Gabriel
+     * @since 08/06/2023
      */
-    @GetMapping(value = "/remuneracao") // TODO verificar possibilidade de refatoração
+    @GetMapping(value = "/remuneracao")
     @ResponseStatus(code = HttpStatus.OK)
     public RemuneracaoGraficoDTO getRemuneracao() {
-        List<EgressoModel> lista = egressoService.findAll();
+        Map<Double, Integer> remuneracaoContagem = egressoService.countRemuneracaoBolsa();
 
-        List<EgressoModel> listaBolsista = new ArrayList<>();
-
-        Set<Double> remuneracoes = new HashSet<>();
-
-        HashMap<Double, Integer> remuneracaoContagem = new HashMap<>();
-        for (EgressoModel egresso : lista) {
-            if (egresso.getRemuneracaoBolsa() != null) {
-                remuneracoes.add(egresso.getRemuneracaoBolsa());
-                listaBolsista.add(egresso);
-            }
-        }
-
-        List<Double> remuneracoesLista = new ArrayList<>(remuneracoes);
-
-        int count = 0;
-        for (int i = 0; i < remuneracoesLista.size(); i++) {
-            final Double remuneracaoFinal = remuneracoesLista.get(i);
-
-            count = (int) listaBolsista.stream().filter(e -> e.getRemuneracaoBolsa().equals(remuneracaoFinal)).count();
-            remuneracaoContagem.put(remuneracaoFinal, count);
-        }
         return new RemuneracaoGraficoDTO(remuneracaoContagem);
     }
 

@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.grafico;
 
-import java.util.HashMap;
+
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RemuneracaoGraficoDTO {
 
-    private HashMap<Double, Integer> remuneracaoContagem;
-    
+    private Map<Double, Integer> remuneracaoContagem;
+
 }

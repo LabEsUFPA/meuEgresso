@@ -128,4 +128,6 @@ public interface EgressoService {
 
 	Map<String, Integer> countBolsista();
 
+	Map<Double, Integer> countRemuneracaoBolsa();
+
 }

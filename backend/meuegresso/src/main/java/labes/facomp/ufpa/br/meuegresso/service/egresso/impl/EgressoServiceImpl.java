@@ -166,7 +166,7 @@ public class EgressoServiceImpl implements EgressoService {
 		Map<Integer, Integer> countIdades = new HashMap<>();
 		egressoRepository.countAgeFromEgressos().stream().forEach(e -> {
 			countIdades.put(e.get(0, BigDecimal.class).intValue(), e.get(1, Long.class).intValue());
-			});
+		});
 		return countIdades;
 	}
 
@@ -195,6 +195,14 @@ public class EgressoServiceImpl implements EgressoService {
 				contagem.put(naoBolsistas, e.get(1, Long.class).intValue());
 			}
 		});
+		return contagem;
+	}
+
+	@Override
+	public Map<Double, Integer> countRemuneracaoBolsa() {
+		Map<Double, Integer> contagem = new HashMap<>(12);
+		egressoRepository.countRemuneracaoBolsa().stream()
+				.forEach(e -> contagem.put(e.get(0, Double.class), e.get(1, Long.class).intValue()));
 		return contagem;
 	}
 
