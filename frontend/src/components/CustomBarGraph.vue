@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="loading"
-    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-[650px]"
+    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-full"
   >
     <div
       class="w-full h-full flex items-center justify-center"
@@ -16,7 +16,7 @@
   </div>
   <div
     v-else
-    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-[650px]"
+    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96"
   >
     <div class="pl-1">
       <h1 class="font-bold text-2xl">
@@ -47,6 +47,8 @@ import {
 } from 'echarts/components'
 import VChart from 'vue-echarts'
 import { ref, watch } from 'vue'
+import { models } from 'src/@types'
+interface BarChartModel extends models.Graphics.BarChartModel {}
 
 use([
   CanvasRenderer,
@@ -62,8 +64,7 @@ interface Props {
     legend?: string,
     info?: string
     loading: boolean
-    x: string[]
-    y: number[]
+    data: BarChartModel | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -71,28 +72,29 @@ const props = withDefaults(defineProps<Props>(), {
   info: 'Um belo gráfico'
 })
 
-watch(() => props.x, () => {
+watch(() => props.data?.x, () => {
   setOptionData()
 })
 
 const option = ref({
   xAxis: {
     type: 'category',
-    data: props.x
+    data: props.data?.x
   },
   yAxis: {
-    type: 'value'
+    type: 'value',
+    minInterval: 1
   },
   series: [
     {
-      data: props.y,
+      data: props.data?.y,
       type: 'bar'
     }
   ]
 })
 
 const setOptionData = () => {
-  option.value.xAxis.data = props.x
-  option.value.series[0].data = props.y
+  option.value.xAxis.data = props.data?.x
+  option.value.series[0].data = props.data?.y
 }
 </script>

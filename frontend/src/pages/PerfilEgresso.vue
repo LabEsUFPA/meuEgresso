@@ -24,7 +24,7 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
         >
-          <h1 class="absolute ml-[220px] sm:ml-[270px] md:ml-[300px] mr-1 ">
+          <h1 class=" absolute flex flex-auto top-[15px] right-[10px] sm:right-[20%]">
             <ButtonEdit
               label="Editar"
               icon-path="/src/assets/edit.svg"
@@ -43,7 +43,7 @@
               <ProfileImage
                 ref="profileImageRef"
                 @imageUploadBack="profileImageSave"
-                @remove="removeImageEgresso"
+                @remove="softRemoveImageEgresso"
                 :img-url="dataEgresso.profileHead.image"
                 img-default="/src/assets/profile-pic.png"
                 :is-input="dataEgresso.profileHead.isInput"
@@ -612,6 +612,12 @@ const formCarreira = ref<typeof Form | null>(null)
 const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 
+const stagedChanges = ref({
+  profileHead: {
+    removedImage: false
+  }
+})
+
 if (storage.has('loggedEgresso')) {
   $store.fetchAll()
 }
@@ -654,11 +660,18 @@ async function handleSubmitHeader (values: any) {
   }
 
   const status = await egressoStore.atualizarEgresso(jsonResponse)
-  const responseImage = await profileImageSave()
-  // console.log(status)
-  // console.log(responseImage)
+  let responseImage: any
+  if (stagedChanges.value.profileHead.removedImage) {
+    responseImage = await removeImageEgresso()
+    stagedChanges.value.profileHead.removedImage = false
+  } else {
+    responseImage = await profileImageSave()
+  }
 
-  if (status === 201 && responseImage === 201) {
+  // console.log(status)
+  console.log(responseImage)
+
+  if (status === 201 && (responseImage === 201 || responseImage === 200 || responseImage === 204)) {
     dialogSucesso.value = true
     await useLoginStore().saveUser()
 
@@ -1305,7 +1318,11 @@ const schemaAdicionais = object().shape({
 async function removeImageEgresso () {
   const removeResp = await egressoStore.removeImageEgresso()
   dataEgresso.value.profileHead.image = '0'
-  console.log(removeResp)
+  return removeResp
+}
+async function softRemoveImageEgresso () {
+  stagedChanges.value.profileHead.removedImage = true
+  dataEgresso.value.profileHead.image = '0'
 }
 
 watch(() => dataEgresso.value.profileHead.image, (newValue) => {
