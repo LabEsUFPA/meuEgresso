@@ -43,14 +43,12 @@
                 name="registration"
                 type="text"
                 label="Matrícula"
+                mask="############"
                 helper-text="Informe a sua matrícula da faculdade"
                 class-helper-text="text-gray-600"
                 :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
                 custom-error-message
                 :icon-path="mdiSchool"
-                :max-length="12"
-                :min-length="12"
-                :min="0"
                 @update:value="checkRegistrationLength"
               />
               <CustomInput
