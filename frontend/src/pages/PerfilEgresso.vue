@@ -857,7 +857,6 @@ async function handleSubmitAdicionais (values: any) {
   } else {
     jsonResponse.palestras.descricao = ''
   }
-  egressoStore.atualizarEgresso(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('adicionais')
