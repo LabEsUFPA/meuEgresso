@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 /**
  * Dto para retorno de bolsistas
  *
- * @author Pedro Inácio
- * @since 21/05/2023
+ * @author Pedro Inácio, Alfredo Gabriel
+ * @since 08/06/2023
  * @version 1.0
  */
 @Data

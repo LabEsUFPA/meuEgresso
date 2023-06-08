@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 /**
  * Dto para retorno de informacoes de egressos cotistas e não cotistas.
  *
- * @author Camilo Santos
- * @since 22/05/2023
+ * @author Camilo Santos, Alfredo Gabriel
+ * @since 08/06/2023
  * @version 1.0
  */
 @Data

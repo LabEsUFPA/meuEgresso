@@ -220,4 +220,23 @@ public class EgressoServiceImpl implements EgressoService {
 		return contagem;
 	}
 
+	@Override
+	public Map<String, Integer> countInteressePos() {
+		Map<String, Integer> contagem = new HashMap<>(2);
+		final String sim = "Sim", nao = "Não";
+		egressoRepository.countInteressePos().forEach((e) -> {
+			if (e.get(0, Boolean.class)) {
+				contagem.put(sim, e.get(1, Long.class).intValue());
+			} else {
+				contagem.put(nao, e.get(1, Long.class).intValue());
+			}
+		});
+		if (!contagem.containsKey(sim)) {
+			contagem.put(sim, 0);
+		}
+		if (!contagem.containsKey(nao)) {
+			contagem.put(nao, 0);
+		}
+		return contagem;
+	}
 }

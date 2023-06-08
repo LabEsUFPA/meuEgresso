@@ -2,7 +2,6 @@ package labes.facomp.ufpa.br.meuegresso.controller.grafico;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +34,6 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
-import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.cota.CotaService;
 import labes.facomp.ufpa.br.meuegresso.service.curso.CursoService;
@@ -273,18 +271,13 @@ public class GraficoController {
      *
      * @return {@link SetorAtuacaoGraficoDTO} Retorna a quantidade de egressos
      *         interesse em pós graduação
-     * @author Pedro Inácio
-     * @since 22/05/2023
+     * @author Pedro Inácio, Alfredo Gabriel
+     * @since 08/06/2023
      */
     @GetMapping(value = "/interesseEmPos")
     @ResponseStatus(code = HttpStatus.OK)
     public InteresseEmPosGraficoDTO getInteresseEmPos() {
-        List<EgressoModel> lista = egressoService.findAll();
-
-        HashMap<String, Long> interesseContagens = new HashMap<>();
-
-        interesseContagens.put("Sim", lista.stream().filter(e -> e.getInteresseEmPos().equals(true)).count());
-        interesseContagens.put("Não", lista.stream().filter(e -> e.getInteresseEmPos().equals(false)).count());
+        Map<String, Integer> interesseContagens = egressoService.countInteressePos();
 
         return new InteresseEmPosGraficoDTO(interesseContagens);
     }

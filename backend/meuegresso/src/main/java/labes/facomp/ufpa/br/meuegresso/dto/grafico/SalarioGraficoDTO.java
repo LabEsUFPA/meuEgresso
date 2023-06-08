@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 /**
  * Dto para retorno de informacoes de salario dos egressos para o grafico
  *
- * @author Pedro Inácio
- * @since 22/05/2023
+ * @author Pedro Inácio, Alfredo Gabriel
+ * @since 08/06/2023
  * @version 1.0
  */
 @Data
