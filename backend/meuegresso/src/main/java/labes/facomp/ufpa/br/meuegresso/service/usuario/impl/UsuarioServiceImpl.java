@@ -1,8 +1,13 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -86,6 +91,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
 		return usuarioRepository.existsByIdAndCreatedById(id, createdBy);
+	}
+
+	@Override
+	public Page<UsuarioModel> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate minDate, LocalDate maxDate,
+			Boolean ativo, Integer page, Integer size, Direction direction) {
+		return usuarioRepository.findBySearch("%" + nomeUsuario + "%", "%" + nomeEmpresa + "%", minDate, maxDate, ativo,
+				PageRequest.of(page, size, Sort.by(direction, "createdDate")));
 	}
 
 }
