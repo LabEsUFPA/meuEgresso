@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import Api from 'src/services/api'
 import { type models } from 'src/@types'
 interface PieChartSeries extends models.Graphics.PieChartSeries {}
+interface AllChartSeries extends models.Graphics.AllChartSeries {}
 
 export const useGraficoStore = defineStore('GraficoStore', {
   actions: {
@@ -42,7 +43,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
         this.getAgeData()
       ])
 
-      return {
+      const response: AllChartSeries = {
         company,
         postGraduateCourse,
         postGraduateLocal,
@@ -60,6 +61,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
         gender,
         age
       }
+
+      return response
     },
 
     async getCompanyData () {
@@ -69,10 +72,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
       })
 
       const values: PieChartSeries[] = []
-      const legend: string[] = ['1']
+      const legend: string[] = []
 
-      if ((response?.data) != null) {
-        response.data.forEach((item: { empresa: string, quantidade: number }) => {
+      if ((response?.status) === 200) {
+        response.data?.forEach((item: { empresa: string, quantidade: number }) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item.empresa })
           legend.push(item.empresa)
         })
@@ -90,8 +93,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const values: PieChartSeries[] = []
       const legend: string[] = []
 
-      if ((response?.data) != null) {
-        response.data.forEach((item: { curso: string, quantidade: number }) => {
+      if ((response?.status) === 200) {
+        response.data?.forEach((item: { curso: string, quantidade: number }) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item.curso })
           legend.push(item.curso)
         })
@@ -109,8 +112,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const values: PieChartSeries[] = []
       const legend: string[] = []
 
-      if ((response?.data) != null) {
-        response.data.forEach((item: { instituicao: string, quantidade: number }) => {
+      if ((response?.status) === 200) {
+        response.data?.forEach((item: { instituicao: string, quantidade: number }) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item.instituicao })
           legend.push(item.instituicao)
         })
@@ -128,8 +131,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const values: PieChartSeries[] = []
       const legend: string[] = []
 
-      if ((response?.data?.tipoBolsas) != null) {
-        Object.keys(response?.data?.tipoBolsas).forEach((item) => {
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.tipoBolsas).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
@@ -147,10 +150,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const x: string[] = []
       const y: number[] = []
 
-      if ((response?.data?.remuneracaoContagem) != null) {
-        Object.keys(response?.data.remuneracaoContagem).forEach((item: string) => {
-          x.push(item)
-          y.push(response?.data?.remuneracaoContagem[item])
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.remuneracaoContagem).forEach((item: string) => {
+          x.push(`R$${item}`)
+          y.push(response.data?.remuneracaoContagem[item])
         })
       }
 
@@ -166,10 +169,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const values: PieChartSeries[] = []
       const legend: string[] = []
 
-      if ((response?.data?.interesseContagem) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
-        Object.keys(response?.data?.interesseContagem).forEach((item) => {
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.interesseContagem).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
@@ -187,10 +188,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const values: PieChartSeries[] = []
       const legend: string[] = []
 
-      if ((response?.data?.areaAtuacao) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
-        Object.keys(response?.data?.areaAtuacao).forEach((item) => {
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.areaAtuacao).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
@@ -208,10 +207,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const values: PieChartSeries[] = []
       const legend: string[] = []
 
-      if ((response?.data?.bolsistasContagem) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
-        Object.keys(response?.data?.bolsistasContagem).forEach((item) => {
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.bolsistasContagem).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
@@ -229,10 +226,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const values: PieChartSeries[] = []
       const legend: string[] = []
 
-      if ((response?.data?.cotaAtuacao) != null) {
-        const values: PieChartSeries[] = []
-        const legend: string[] = []
-        Object.keys(response?.data?.cotaAtuacao).forEach((item) => {
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.cotaAtuacao).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
@@ -250,8 +245,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const values: PieChartSeries[] = []
       const legend: string[] = []
 
-      if ((response?.data?.cotistasEnumerados) != null) {
-        Object.keys(response?.data?.cotistasEnumerados).forEach((item) => {
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.cotistasEnumerados).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
@@ -269,8 +264,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const values: PieChartSeries[] = []
       const legend: string[] = []
 
-      if ((response?.data?.posGraduacaoContagem) != null) {
-        Object.keys(response?.data?.posGraduacaoContagem).forEach((item) => {
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.posGraduacaoContagem).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
@@ -288,8 +283,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const values: PieChartSeries[] = []
       const legend: string[] = []
 
-      if ((response?.data?.tipoAlunos) != null) {
-        Object.keys(response?.data?.tipoAlunos).forEach((item) => {
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.tipoAlunos).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
@@ -307,8 +302,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const values: PieChartSeries[] = []
       const legend: string[] = []
 
-      if ((response?.data?.salarios) != null) {
-        Object.keys(response?.data?.salarios).forEach((item) => {
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.salarios).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
@@ -326,8 +321,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const values: PieChartSeries[] = []
       const legend: string[] = []
 
-      if ((response?.data?.setorAtuacao) != null) {
-        Object.keys(response?.data?.setorAtuacao).forEach((item) => {
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.setorAtuacao).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
@@ -345,8 +340,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const values: PieChartSeries[] = []
       const legend: string[] = []
 
-      if ((response?.data?.generos) != null) {
-        Object.keys(response?.data?.generos).forEach((item) => {
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.generos).forEach((item) => {
           values.push({ value: Math.floor(Math.random() * 100), name: item })
           legend.push(item)
         })
@@ -364,10 +359,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
       const x: string[] = []
       const y: number[] = []
 
-      if ((response?.data?.idadesEgressos) != null) {
-        Object.keys(response?.data.idadesEgressos).forEach((item: string) => {
-          x.push(item)
-          y.push(response?.data?.idadesEgressos[item])
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.idadesEgressos).forEach((item: string) => {
+          x.push(`${item} anos`)
+          y.push(response.data?.idadesEgressos[item])
         })
       }
 
