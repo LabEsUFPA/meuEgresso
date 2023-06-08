@@ -28,7 +28,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.grafico.SalarioGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoAlunoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoBolsaGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
@@ -321,23 +320,10 @@ public class GraficoController {
     @GetMapping(value = "/atuacao")
     @ResponseStatus(code = HttpStatus.OK)
     public AreaAtuacaoGraficoDTO getAtuacao() {
-        List<EgressoModel> lista = egressoService.findAll();
-        List<EgressoModel> listaFiltrada = lista.stream().filter(e -> e.getEmprego() != null).toList();
 
-        List<AreaAtuacaoModel> areaAtuacao = areaAtuacaoService.findAll();
+        Map<String, Integer> areaAtuacao = areaAtuacaoService.countEgressoByAreaAtuacao();
 
-        HashMap<String, Integer> areaAtuacaoContagens = new HashMap<>();
-
-        int count = 0;
-        for (int i = 0; i < areaAtuacao.size(); i++) {
-            final String nomeFinal = areaAtuacao.get(i).getNome();
-            count = (int) listaFiltrada.stream()
-                    .filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
-
-            areaAtuacaoContagens.put(nomeFinal, count);
-        }
-
-        return new AreaAtuacaoGraficoDTO(areaAtuacaoContagens);
+        return new AreaAtuacaoGraficoDTO(areaAtuacao);
     }
 
     /**

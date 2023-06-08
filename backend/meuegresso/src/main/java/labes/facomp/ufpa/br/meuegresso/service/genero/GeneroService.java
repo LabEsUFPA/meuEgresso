@@ -60,7 +60,7 @@ public interface GeneroService {
 	 * @param createdBy
 	 * @return
 	 */
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
-	Map<String, Integer> countEgressoByGenero();
+	public Map<String, Integer> countEgressoByGenero();
 }

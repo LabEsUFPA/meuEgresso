@@ -60,8 +60,8 @@ public interface CotaService  {
 	 * @param createdBy
 	 * @return
 	 */
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
- 	Map<String, Integer> countEgressoByCota();
+ 	public Map<String, Integer> countEgressoByCota();
 
 }

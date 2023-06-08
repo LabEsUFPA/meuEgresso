@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.areaatuacao;
 
 import java.util.List;
+import java.util.Map;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
@@ -53,5 +54,7 @@ public interface AreaAtuacaoService {
 	public boolean deleteById(Integer id);
 
 	public AreaAtuacaoModel findByNome(String nome);
+
+	public Map<String, Integer> countEgressoByAreaAtuacao();
 
 }

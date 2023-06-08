@@ -122,16 +122,16 @@ public interface EgressoService {
 	 */
 	public void saveFoto(String nomeAnexo, MultipartFile arquivo) throws IOException;
 
-	Map<Integer, Integer> countAgeFromEgressos();
+	public Map<Integer, Integer> countAgeFromEgressos();
 
-	Map<String, Integer> countFezPos();
+	public Map<String, Integer> countFezPos();
 
-	Map<String, Integer> countBolsista();
+	public Map<String, Integer> countBolsista();
 
-	Map<Double, Integer> countRemuneracaoBolsa();
+	public Map<Double, Integer> countRemuneracaoBolsa();
 
-	Map<String, Integer> countCotista();
+	public Map<String, Integer> countCotista();
 
-	Map<String, Integer> countInteressePos();
+	public Map<String, Integer> countInteressePos();
 
 }
