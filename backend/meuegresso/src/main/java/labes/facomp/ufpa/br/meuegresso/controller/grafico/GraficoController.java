@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +29,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoAlunoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoBolsaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
-import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
@@ -301,33 +299,14 @@ public class GraficoController {
      *
      * @return {@link CotaGraficoDTO} Retorna a contagem de cotistas e não cotistas,
      *         usernames separados por grupo.
-     * @author Camilo Santos
-     * @since 20/05/2023
+     * @author Camilo Santos, Alfredo Gabriel
+     * @since 08/06/2023
      */
     @GetMapping(value = "/cotas")
     @ResponseStatus(code = HttpStatus.OK)
-    public CotaGraficoDTO getCotas() { // TODO verificar possibilidade de refatoração
-        List<EgressoModel> lista = egressoService.findAll();
+    public CotaGraficoDTO getCotas() {
+        Map<String, Integer> cotasContagens = cotaService.countEgressoByCota();
 
-        List<CotaModel> cotas = cotaService.findAll();
-
-        HashMap<String, Integer> cotasContagens = new HashMap<>();
-
-        for (int i = 0; i < cotas.size(); i++) {
-            final CotaModel cotaFinal = cotas.get(i);
-
-            int count = 0;
-            for (int j = 0; j < lista.size(); j++) {
-                EgressoModel egresso = lista.get(j);
-
-                Set<CotaModel> cotaEgresso = egresso.getCotas();
-
-                if (cotaEgresso.contains(cotaFinal)) {
-                    count += 1;
-                }
-            }
-            cotasContagens.put(cotaFinal.getNome(), count);
-        }
         return new CotaGraficoDTO(cotasContagens);
     }
 

@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.cota;
 
 import java.util.List;
+import java.util.Map;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
@@ -59,5 +60,8 @@ public interface CotaService  {
 	 * @param createdBy
 	 * @return
 	 */
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
+ 	Map<String, Integer> countEgressoByCota();
+
 }

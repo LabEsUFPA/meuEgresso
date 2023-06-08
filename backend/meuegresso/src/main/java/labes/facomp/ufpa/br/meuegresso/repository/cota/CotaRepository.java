@@ -2,8 +2,10 @@ package labes.facomp.ufpa.br.meuegresso.repository.cota;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import jakarta.persistence.Tuple;
 import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 
 /**
@@ -18,4 +20,9 @@ public interface CotaRepository extends CrudRepository<CotaModel, Integer> {
     public List<CotaModel> findAll();
 
     boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
+    //@Query(value = "SELECT c.nome, COUNT(e.id) FROM cota c LEFT JOIN egresso e ON e.cotas.id = c.id GROUP BY c.nome")
+    @Query(value = "SELECT c.nome, COUNT(ec) FROM cota c LEFT JOIN egresso_cota ec ON ec.id.cotaId = c.id GROUP BY c.nome")
+
+    List<Tuple> countEgressoByCota();
 }
