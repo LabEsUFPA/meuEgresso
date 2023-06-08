@@ -35,7 +35,6 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
-import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
@@ -163,21 +162,7 @@ public class GraficoController {
     @GetMapping(value = "/salarios")
     @ResponseStatus(code = HttpStatus.OK)
     public SalarioGraficoDTO getSalarios() {
-        List<EgressoEmpresaModel> lista = egressoEmpresaService.findAll();
-
-        List<FaixaSalarialModel> faixasSalariais = faixaSalarialService.findAll();
-
-        HashMap<String, Integer> salariosContagens = new HashMap<>();
-
-        int count = 0;
-        for (int i = 0; i < faixasSalariais.size(); i++) {
-            final String nomeFinal = faixasSalariais.get(i).getFaixa();
-            count = (int) lista.stream().filter(a -> a.getFaixaSalarial().getFaixa().equalsIgnoreCase(nomeFinal))
-                    .count();
-
-            salariosContagens.put(nomeFinal, count);
-
-        }
+        Map<String, Integer> salariosContagens = faixaSalarialService.countEgressoInFaixa();
 
         return new SalarioGraficoDTO(salariosContagens);
     }
