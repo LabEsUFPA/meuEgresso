@@ -24,7 +24,7 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
         >
-          <h1 class="absolute top-[10px] right-[20px] sm:right-[120px]">
+          <h1 class=" absolute flex flex-auto top-[15px] right-[10px] sm:right-[20%]">
             <ButtonEdit
               label="Editar"
               icon-path="/src/assets/edit.svg"
