@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.grafico;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +28,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoAlunoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoBolsaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.cota.CotaService;
 import labes.facomp.ufpa.br.meuegresso.service.curso.CursoService;
@@ -165,7 +163,7 @@ public class GraficoController {
     @ResponseStatus(code = HttpStatus.OK)
     public TipoAlunoGraficoDTO getTipoAlunos() {
 
-        Map<String, Integer> tipoAluno = egressoService.countFezPos();
+        Map<String, Integer> tipoAluno = egressoService.countTipoAluno();
 
         return new TipoAlunoGraficoDTO(tipoAluno);
     }
@@ -347,18 +345,13 @@ public class GraficoController {
      *
      * @return {@link SetorAtuacaoGraficoDTO} Retorna a quantidade de egressos com e
      *         sem pós
-     * @author Camilo Santos
-     * @since 20/05/2023
+     * @author Camilo Santos, Alfredo Gabriel
+     * @since 08/06/2023
      */
     @GetMapping(value = "/pos")
     @ResponseStatus(code = HttpStatus.OK)
     public PosGraduacaoGraficoDTO getPos() {
-        List<EgressoModel> lista = egressoService.findAll();
-
-        HashMap<String, Long> posGradContagens = new HashMap<>();
-
-        posGradContagens.put("Fez", lista.stream().filter(e -> e.getPosGraduacao().equals(true)).count());
-        posGradContagens.put("Não fez", lista.stream().filter(e -> e.getPosGraduacao().equals(false)).count());
+        Map<String, Integer> posGradContagens = egressoService.countFezPos();
 
         return new PosGraduacaoGraficoDTO(posGradContagens);
     }

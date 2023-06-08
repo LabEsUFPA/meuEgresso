@@ -126,6 +126,8 @@ public interface EgressoService {
 
 	public Map<String, Integer> countFezPos();
 
+	public Map<String, Integer> countTipoAluno();
+
 	public Map<String, Integer> countBolsista();
 
 	public Map<Double, Integer> countRemuneracaoBolsa();

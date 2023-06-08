@@ -239,4 +239,18 @@ public class EgressoServiceImpl implements EgressoService {
 		}
 		return contagem;
 	}
+
+	@Override
+	public Map<String, Integer> countTipoAluno() {
+		Map<String, Integer> contagem = new HashMap<>(2);
+		final String graduacao = "GRADUAÇÃO", posGraduacao = "PÓS-GRADUAÇÃO";
+		egressoRepository.countFezPos().forEach((e) -> {
+			if (e.get(0, Boolean.class)) {
+				contagem.put(posGraduacao, e.get(1, Long.class).intValue());
+			} else {
+				contagem.put(graduacao, e.get(1, Long.class).intValue());
+			}
+		});
+		return contagem;
+	}
 }
