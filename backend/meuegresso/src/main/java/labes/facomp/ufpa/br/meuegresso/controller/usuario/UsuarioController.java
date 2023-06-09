@@ -4,9 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,29 +79,8 @@ public class UsuarioController {
 			UsuarioModel usuarioModel = usuarioService.findById(jwtService.getIdUsuario(token));
 			mapper.map(usuarioDTO, usuarioModel);
 			usuarioService.update(usuarioModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}
-
-	/**
-	 * Endpoint responsável por deletar usuário por sua ID>
-	 *
-	 * @param id Integer
-	 * @return Boolean
-	 * @author Camilo Santos
-	 * @since 19/04/2023
-	 */
-	@DeleteMapping(value = "/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	@ResponseStatus(code = HttpStatus.OK)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String deleteById(@PathVariable(name = "id") Integer id) {
-		if (usuarioService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
-		} else {
-			return ResponseType.FAIL_DELETE.getMessage();
-		}
-	}
-
 }

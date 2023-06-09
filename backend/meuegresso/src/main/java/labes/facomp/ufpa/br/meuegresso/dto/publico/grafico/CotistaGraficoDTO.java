@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.dto.grafico;
+package labes.facomp.ufpa.br.meuegresso.dto.publico.grafico;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de informacoes de cota dos egressos para o grafico
+ * Dto para retorno de informacoes de egressos cotistas e não cotistas.
  *
  * @author Camilo Santos, Alfredo Gabriel
  * @since 08/06/2023
@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CotaGraficoDTO {
+public class CotistaGraficoDTO {
 
-    private Map<String, Integer> cotaAtuacao;
+    private Map<String, Integer> cotistasEnumerados;
 
 }

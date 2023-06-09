@@ -65,7 +65,7 @@ public class GeneroController {
      * Endpoint responsavel por adicionar uma genero no banco.
      *
      * @param generoDTO Estrutura de dados contendo as informações necessárias para
-     *                 adicionar uma cota.
+     *                  adicionar uma cota.
      * @return {@link String} Mensagem de confirmacao.
      * @author Bruno Eiki
      * @since 21/04/2023
@@ -77,7 +77,7 @@ public class GeneroController {
             @RequestBody @Valid GeneroDTO generoDTO) {
         GeneroModel generoModel = mapper.map(generoDTO, GeneroModel.class);
         generoService.save(generoModel);
-        return ResponseType.SUCESS_SAVE.getMessage();
+        return ResponseType.SUCCESS_SAVE.getMessage();
     }
 
     /**
@@ -98,7 +98,7 @@ public class GeneroController {
         if (generoService.existsByIdAndCreatedById(generoDTO.getId(), jwtService.getIdUsuario(token))) {
             GeneroModel generoModel = mapper.map(generoDTO, GeneroModel.class);
             generoService.update(generoModel);
-            return ResponseType.SUCESS_UPDATE.getMessage();
+            return ResponseType.SUCCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
     }
@@ -119,6 +119,6 @@ public class GeneroController {
 
         GeneroModel generoModel = mapper.map(generoDTO, GeneroModel.class);
         generoService.deleteById(generoModel.getId());
-        return ResponseType.SUCESS_DELETE.getMessage();
+        return ResponseType.SUCCESS_DELETE.getMessage();
     }
 }

@@ -507,6 +507,7 @@ import {
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
 import { useLoginStore } from 'src/store/LoginStore'
+const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
 const $storeCadastro = useCadastroEgressoStore()
 const $storeLogin = useLoginStore()
@@ -514,8 +515,7 @@ const storage = new LocalStorage()
 
 $storeCadastro.fetchAll()
 
-const urlShare = 'https://meuegresso.alverad.com.br'
-const mensagemShare = '🎉%20Acabei%20de%20me%20cadastrar%20na%20plataforma%20Meu%20Egresso,%20se%20cadastre%20também:%0D%0A➡️ https://meuegresso.alverad.com.br'
+const mensagemShare = `🎉%20Acabei%20de%20me%20cadastrar%20na%20plataforma%20Meu%20Egresso,%20se%20cadastre%20também:%0D%0A➡️ ${baseURL}`
 
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)

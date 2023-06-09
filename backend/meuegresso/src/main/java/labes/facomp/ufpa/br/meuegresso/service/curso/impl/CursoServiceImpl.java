@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.CursosGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.CursosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.curso.CursoRepository;

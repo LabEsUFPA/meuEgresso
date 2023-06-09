@@ -72,7 +72,7 @@ public class EgressoModel extends Auditable {
 	private String fotoNome;
 
 	@Builder.Default
-	@Column(name = "pos_graducao_egresso", unique = false, nullable = true)
+	@Column(name = "pos_graduacao_egresso", unique = false, nullable = true)
 	private Boolean posGraduacao = false;
 
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -104,7 +104,7 @@ public class EgressoModel extends Auditable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "tipo_bolsa_id", unique = false, nullable = true)
 	private TipoBolsaModel bolsa;
-	
+
 	@Min(value = 0L, message = "O valor deve ser positivo")
 	@Column(name = "remuneracao_bolsa_egresso", unique = false, nullable = true)
 	private Double remuneracaoBolsa;

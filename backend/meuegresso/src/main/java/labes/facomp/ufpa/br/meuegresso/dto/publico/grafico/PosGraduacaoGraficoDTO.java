@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.dto.grafico;
+package labes.facomp.ufpa.br.meuegresso.dto.publico.grafico;
 
 import java.util.Map;
 
@@ -7,8 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de informacoes da área de atuação dos egressos para o
- * grafico
+ * DTO para retorno de egressos com e sem pós graduação contabilizado.
  *
  * @author Camilo Santos, Alfredo Gabriel
  * @since 08/06/2023
@@ -17,8 +16,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SetorAtuacaoGraficoDTO {
+public class PosGraduacaoGraficoDTO {
 
-    private Map<String, Integer> setorAtuacao;
+    private Map<String, Integer> posGraduacaoContagem;
 
 }

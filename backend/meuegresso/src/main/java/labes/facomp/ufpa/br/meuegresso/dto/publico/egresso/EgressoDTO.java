@@ -17,6 +17,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * Encapsulamento da tabela Egresso a fim de representar os dados publicos
+ * representados pelo Egresso
+ *
+ * @author Marcus Maciel Oliveira
+ * @since 13/05/2023
+ * @version 1.0
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -24,6 +32,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 
 public class EgressoDTO {
+
         private Integer id;
 
         private GeneroDTO genero;
@@ -49,4 +58,5 @@ public class EgressoDTO {
         private String linkedin;
 
         private UsuarioDTO usuario;
+        
 }

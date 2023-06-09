@@ -68,7 +68,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getCompanyData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/empresas'
+        route: '/publico/grafico/empresas'
       })
 
       const values: PieChartSeries[] = []
@@ -87,7 +87,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getPostGraduateCourseData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/cursos'
+        route: '/publico/grafico/cursos'
       })
 
       const values: PieChartSeries[] = []
@@ -106,7 +106,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getPostGraduateLocalData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/localPos'
+        route: '/publico/grafico/localPos'
       })
 
       const values: PieChartSeries[] = []
@@ -125,7 +125,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getScholarshipTypeData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/tipoBolsa'
+        route: '/publico/grafico/tipoBolsa'
       })
 
       const values: PieChartSeries[] = []
@@ -144,7 +144,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getRemunerationData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/remuneracao'
+        route: '/publico/grafico/remuneracao'
       })
 
       const x: string[] = []
@@ -163,7 +163,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getInterestInPostData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/interesseEmPos'
+        route: '/publico/grafico/interesseEmPos'
       })
 
       const values: PieChartSeries[] = []
@@ -182,7 +182,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getActingData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/atuacao'
+        route: '/publico/grafico/atuacao'
       })
 
       const values: PieChartSeries[] = []
@@ -201,7 +201,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getScholarData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/bolsistas'
+        route: '/publico/grafico/bolsistas'
       })
 
       const values: PieChartSeries[] = []
@@ -220,7 +220,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getQuotasData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/cotas'
+        route: '/publico/grafico/cotas'
       })
 
       const values: PieChartSeries[] = []
@@ -239,7 +239,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getShareHolderData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/cotista'
+        route: '/publico/grafico/cotista'
       })
 
       const values: PieChartSeries[] = []
@@ -258,7 +258,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getPostGraduateData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/pos'
+        route: '/publico/grafico/pos'
       })
 
       const values: PieChartSeries[] = []
@@ -277,7 +277,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getStudentData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/tipoAlunos'
+        route: '/publico/grafico/tipoAlunos'
       })
 
       const values: PieChartSeries[] = []
@@ -296,7 +296,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getWageData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/salarios'
+        route: '/publico/grafico/salarios'
       })
 
       const values: PieChartSeries[] = []
@@ -315,7 +315,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getSectorData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/setor'
+        route: '/publico/grafico/setor'
       })
 
       const values: PieChartSeries[] = []
@@ -334,7 +334,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getGenderData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/generos'
+        route: '/publico/grafico/generos'
       })
 
       const values: PieChartSeries[] = []
@@ -353,7 +353,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getAgeData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/idades'
+        route: '/publico/grafico/idades'
       })
 
       const x: string[] = []

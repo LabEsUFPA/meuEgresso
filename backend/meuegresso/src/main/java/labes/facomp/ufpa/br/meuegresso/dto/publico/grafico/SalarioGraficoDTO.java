@@ -1,4 +1,5 @@
-package labes.facomp.ufpa.br.meuegresso.dto.grafico;
+package labes.facomp.ufpa.br.meuegresso.dto.publico.grafico;
+
 
 import java.util.Map;
 
@@ -7,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de bolsistas
+ * Dto para retorno de informacoes de salario dos egressos para o grafico
  *
  * @author Pedro Inácio, Alfredo Gabriel
  * @since 08/06/2023
@@ -16,8 +17,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BolsistasGraficoDTO {
+public class SalarioGraficoDTO {
 
-    private Map<String, Integer> bolsistasContagem;
+    private Map<String, Integer> salarios;
 
 }

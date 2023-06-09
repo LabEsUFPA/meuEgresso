@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.dto.grafico;
+package labes.facomp.ufpa.br.meuegresso.dto.publico.grafico;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de informacoes de Tipos de Bolsa dos egressos para o grafico
+ * Dto para retorno de informacoes de idades dos egressos para o grafico
  *
  * @author Pedro Inácio, Alfredo Gabriel
  * @since 08/06/2023
@@ -16,8 +16,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TipoBolsaGraficoDTO {
+public class IdadesGraficoDTO {
 
-    private Map<String, Integer> tipoBolsas;
+    private double mediaIdades;
+
+    private Map<Integer, Integer> idadesEgressos;
 
 }
