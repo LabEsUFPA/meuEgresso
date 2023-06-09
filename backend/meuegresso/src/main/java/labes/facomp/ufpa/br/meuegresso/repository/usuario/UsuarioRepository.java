@@ -25,8 +25,6 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	List<UsuarioModel> findAll();
 
-	List<UsuarioModel> findAllByEgressoNullAndGrupoContainsEgresso();
-
 	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
 	boolean existsByUsernameIgnoreCase(String username);
@@ -36,10 +34,10 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			from
 			    usuario u
 			where
-			    u.created_date >= :minDate and u.created_date <= :maxDate
-			    and u.nome_usuario ilike :nomeUsuario
-			    and u.nome_empresa ilike :nomeEmpresa
-			    and (:ativo = '' OR u.ativo = :ativo))
+			    u.createdDate >= :minDate and u.createdDate <= :maxDate
+			    and u.nome = :nomeUsuario
+			    and u.ativo = :ativo
+			    and u.id in (select e.usuario.id from egresso e where e.emprego.empresa.nome ilike :nomeEmpresa)
 			""")
 	Page<UsuarioModel> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate minDate, LocalDate maxDate,
 			Boolean ativo, Pageable page);
