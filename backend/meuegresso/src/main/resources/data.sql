@@ -7,7 +7,7 @@ INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario) VALUES ('eg
 -- Grupos Padrões
 
 INSERT INTO grupo (nome_grupo, created_by) values ('ADMIN', 1) ON CONFLICT DO NOTHING;
-INSERT INTO grupo (nome_grupo, created_by) values ('SECRETARIO', 1) ON CONFLICT DO NOTHING;
+INSERT INTO grupo (nome_grupo, created_by) values ('SECRETÁRIO', 1) ON CONFLICT DO NOTHING;
 INSERT INTO grupo (nome_grupo, created_by) values ('EGRESSO', 1) ON CONFLICT DO NOTHING;
 
 
@@ -50,7 +50,7 @@ INSERT INTO public.area_atuacao (nome_area_atuacao, created_by) VALUES ('Outros'
 
 --- Empresa/Instituição
 
-INSERT INTO public.empresa (nome_empresa, created_by) VALUES ('UNIVERSIDADE FEDERAL DO PARA', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.empresa (nome_empresa, created_by) VALUES ('UNIVERSIDADE FEDERAL DO PARÁ', 1) ON CONFLICT DO NOTHING;
 
 --- Endereço
 
@@ -82,7 +82,7 @@ INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PIBIC', 1) 
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PROAD', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PROEX', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PROBAC', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PERMANENCIA', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PERMANÊNCIA', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('CAPES/CNPQ', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('OUTROS', 1) ON CONFLICT DO NOTHING;
 
@@ -94,8 +94,8 @@ INSERT INTO public.titulacao (nome_titulacao, created_by) VALUES ('PÓS-GRADUAÇ
 --- Area de Emprego
 
 INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Engenharia de Software', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Programacao', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Informatica', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Programação', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Informática', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Suporte a TI', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Analista de Sistema', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.area_emprego (nome_area_emprego, created_by) VALUES ('Analista de QA', 1) ON CONFLICT DO NOTHING;
