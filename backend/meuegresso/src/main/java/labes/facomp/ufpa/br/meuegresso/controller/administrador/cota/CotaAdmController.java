@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.DataNotDeletedException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
@@ -40,25 +40,25 @@ public class CotaAdmController {
 	private final ModelMapper mapper;
 
 	/**
-     * Endpoint responsavel por buscar todas as cotas no banco.
-     *
-     * @param void
-     * @return {@link CotaDTO} Retorna uma lista com todos as cotas.
-     * @author Bruno Eiki
-     * @since 21/04/2023
-     */
-    @GetMapping
-    @ResponseStatus(code = HttpStatus.OK)
-    public List<CotaDTO> buscarCotas() {
-        return mapper.map(cotaService.findAll(), new TypeToken<List<CotaDTO>>() {
-        }.getType());
-    }
+	 * Endpoint responsavel por buscar todas as cotas no banco.
+	 *
+	 * @param void
+	 * @return {@link CotaDTO} Retorna uma lista com todos as cotas.
+	 * @author Bruno Eiki
+	 * @since 21/04/2023
+	 */
+	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
+	public List<CotaDTO> buscarCotas() {
+		return mapper.map(cotaService.findAll(), new TypeToken<List<CotaDTO>>() {
+		}.getType());
+	}
 
 	/**
 	 * Endpoint responsavel por atualizar a cota do egresso.
 	 *
 	 * @param cotaDTO Estrutura de dados contendo as informações necessárias
-	 *                    para atualizar a cota.
+	 *                para atualizar a cota.
 	 * @return Mensagem de confirmacao.
 	 * @author Alfredo Gabriel.
 	 * @throws InvalidRequestException
@@ -70,7 +70,7 @@ public class CotaAdmController {
 	public String atualizarCota(@RequestBody @Valid CotaDTO cotaDTO) throws InvalidRequestException {
 		CotaModel cotaModel = mapper.map(cotaDTO, CotaModel.class);
 		cotaService.update(cotaModel);
-		return ResponseType.SUCESS_UPDATE.getMessage();
+		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class CotaAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteById(Integer id) throws DataNotDeletedException {
 		if (cotaService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
+			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
 		throw new DataNotDeletedException();
 	}

@@ -49,16 +49,6 @@ public interface EgressoService {
 	public EgressoModel updateEgresso(EgressoModel egresso);
 
 	/**
-	 * Metodo responsavel por deletar informacoes do egresso no banco de dados.
-	 *
-	 * @param egresso Dados do egresso
-	 * @return Mensagem de confirmacao
-	 * @author Bruno Eiki
-	 * @since 17/04/2023
-	 */
-	public boolean deletarEgresso(EgressoModel egresso);
-
-	/**
 	 * Metodo responsavel por verificar se egresso existe no banco de dados.
 	 *
 	 * @param id Id do egresso

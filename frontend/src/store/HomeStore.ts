@@ -15,7 +15,7 @@ export const useHomeStore = defineStore('HomeStore', {
     async fetchEgress () {
       const response = await Api.request({
         method: 'get',
-        route: 'mapa'
+        route: '/publico/mapa'
       })
 
       if (response?.status === 200) {

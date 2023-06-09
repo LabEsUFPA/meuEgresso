@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.dto.grafico;
+package labes.facomp.ufpa.br.meuegresso.dto.publico.grafico;
 
 import java.util.HashMap;
 
@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de informacoes de cota dos egressos para o grafico
+ * DTO para retorno de egressos com e sem pós graduação contabilizado.
  *
  * @author Camilo Santos
  * @since 20/05/2023
@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CotaGraficoDTO {
+public class PosGraduacaoGraficoDTO {
 
-    private HashMap<String, Integer> cotaAtuacao;
-    
+    private HashMap<String, Long> posGraduacaoContagem;
+
 }

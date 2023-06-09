@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.dto.grafico;
+package labes.facomp.ufpa.br.meuegresso.dto.publico.grafico;
 
 import java.util.HashMap;
 
@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de informacoes de egressos cotistas e não cotistas.
+ * Dto para retorno de informacoes de remuneração de egressos bolsistas
  *
  * @author Camilo Santos
  * @since 22/05/2023
@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CotistaGraficoDTO {
+public class RemuneracaoGraficoDTO {
 
-    private HashMap<String, Long> cotistasEnumerados;
-    
+    private HashMap<Double, Integer> remuneracaoContagem;
+
 }

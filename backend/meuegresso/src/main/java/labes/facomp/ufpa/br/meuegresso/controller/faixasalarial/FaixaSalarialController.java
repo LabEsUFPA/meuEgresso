@@ -56,7 +56,7 @@ public class FaixaSalarialController {
      */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public List<FaixaSalarialDTO> buscarFaixaSalarials() {
 
         return mapper.map(faixaSalarialService.findAll(), new TypeToken<List<FaixaSalarialDTO>>() {
@@ -74,12 +74,12 @@ public class FaixaSalarialController {
      */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarFaixaSalarial(
             @RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO) {
         FaixaSalarialModel faixaSalarialModel = mapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
         faixaSalarialService.save(faixaSalarialModel);
-        return ResponseType.SUCESS_SAVE.getMessage();
+        return ResponseType.SUCCESS_SAVE.getMessage();
     }
 
     /**
@@ -94,14 +94,14 @@ public class FaixaSalarialController {
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO,
             JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
         if (faixaSalarialService.existsByIdAndCreatedById(faixaSalarialDTO.getId(), jwtService.getIdUsuario(token))) {
             FaixaSalarialModel faixaSalarialModel = mapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
             faixaSalarialService.update(faixaSalarialModel);
-            return ResponseType.SUCESS_UPDATE.getMessage();
+            return ResponseType.SUCCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
     }
@@ -117,11 +117,11 @@ public class FaixaSalarialController {
      */
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO) {
 
         FaixaSalarialModel faixaSalarialModel = mapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
         faixaSalarialService.deleteById(faixaSalarialModel.getId());
-        return ResponseType.SUCESS_DELETE.getMessage();
+        return ResponseType.SUCCESS_DELETE.getMessage();
     }
 }

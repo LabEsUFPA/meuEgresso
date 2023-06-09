@@ -93,7 +93,7 @@ public class EnderecoController {
 	public String cadastrarEndereco(@RequestBody @Valid EnderecoDTO enderecoDTO) {
 		EnderecoModel enderecoModel = mapper.map(enderecoDTO, EnderecoModel.class);
 		enderecoService.save(enderecoModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class EnderecoController {
 		if (enderecoService.existsByIdAndCreatedById(enderecoDTO.getId(), jwtService.getIdUsuario(token))) {
 			EnderecoModel enderecoModel = mapper.map(enderecoDTO, EnderecoModel.class);
 			enderecoService.update(enderecoModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}

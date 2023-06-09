@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.dto.grafico;
+package labes.facomp.ufpa.br.meuegresso.dto.publico.grafico;
 
 import java.util.HashMap;
 
@@ -7,7 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de informacoes da área de atuação dos egressos para o grafico
+ * Dto para retorno de informacoes da área de atuação dos egressos para o
+ * grafico
  *
  * @author Camilo Santos
  * @since 20/05/2023
@@ -19,5 +20,5 @@ import lombok.NoArgsConstructor;
 public class SetorAtuacaoGraficoDTO {
 
     private HashMap<String, Integer> setorAtuacao;
-    
+
 }

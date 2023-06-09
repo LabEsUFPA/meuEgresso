@@ -105,16 +105,6 @@ public class EgressoServiceImpl implements EgressoService {
 	}
 
 	@Override
-	public boolean deletarEgresso(EgressoModel egresso) {
-		if (egressoRepository.existsById(egresso.getId())) {
-			egressoRepository.deleteById(egresso.getId());
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	@Override
 	public boolean existsById(Integer id) {
 		return egressoRepository.existsById(id);
 	}
