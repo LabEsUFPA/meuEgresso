@@ -174,8 +174,10 @@
               label="Remuneração da bolsa"
               type="number"
               step="0.01"
+              placeholder="R$ 0,00"
               :required="bools.bolsista"
               :disabled="!bools.bolsista"
+              money
             />
 
             <CustomCheckbox
