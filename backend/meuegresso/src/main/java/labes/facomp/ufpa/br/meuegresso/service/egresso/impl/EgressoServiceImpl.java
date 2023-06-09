@@ -181,6 +181,12 @@ public class EgressoServiceImpl implements EgressoService {
 				contagem.put(naoFez, e.get(1, Long.class).intValue());
 			}
 		});
+		if (!contagem.containsKey(fez)) {
+			contagem.put(fez, 0);
+		}
+		if (!contagem.containsKey(naoFez)) {
+			contagem.put(naoFez, 0);
+		}
 		return contagem;
 	}
 
@@ -195,6 +201,12 @@ public class EgressoServiceImpl implements EgressoService {
 				contagem.put(naoBolsistas, e.get(1, Long.class).intValue());
 			}
 		});
+		if (!contagem.containsKey(bolsistas)) {
+			contagem.put(bolsistas, 0);
+		}
+		if (!contagem.containsKey(naoBolsistas)) {
+			contagem.put(naoBolsistas, 0);
+		}
 		return contagem;
 	}
 
@@ -217,6 +229,12 @@ public class EgressoServiceImpl implements EgressoService {
 				contagem.put(naoCotista, e.get(1, Long.class).intValue());
 			}
 		});
+		if (!contagem.containsKey(cotista)) {
+			contagem.put(cotista, 0);
+		}
+		if (!contagem.containsKey(naoCotista)) {
+			contagem.put(naoCotista, 0);
+		}
 		return contagem;
 	}
 
@@ -251,6 +269,12 @@ public class EgressoServiceImpl implements EgressoService {
 				contagem.put(graduacao, e.get(1, Long.class).intValue());
 			}
 		});
+		if (!contagem.containsKey(graduacao)) {
+			contagem.put(graduacao, 0);
+		}
+		if (!contagem.containsKey(posGraduacao)) {
+			contagem.put(posGraduacao, 0);
+		}
 		return contagem;
 	}
 }
