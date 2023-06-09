@@ -154,49 +154,42 @@ public class EgressoServiceImpl implements EgressoService {
 	@Override
 	public Map<Integer, Integer> countAgeFromEgressos() {
 		Map<Integer, Integer> countIdades = new HashMap<>();
-		egressoRepository.countAgeFromEgressos().stream().forEach(e -> {
-			countIdades.put(e.get(0, BigDecimal.class).intValue(), e.get(1, Long.class).intValue());
-		});
+		egressoRepository.countAgeFromEgressos().stream()
+				.forEach(e -> countIdades.put(e.get(0, BigDecimal.class).intValue(), e.get(1, Long.class).intValue()));
 		return countIdades;
 	}
 
 	@Override
 	public Map<String, Integer> countFezPos() {
 		Map<String, Integer> contagem = new HashMap<>(2);
-		final String fez = "Fez", naoFez = "Não fez";
-		egressoRepository.countFezPos().forEach((e) -> {
-			if (e.get(0, Boolean.class)) {
+		final String fez = "Fez";
+		final String naoFez = "Não fez";
+		egressoRepository.countFezPos().forEach(e -> {
+			if (e.get(0, Boolean.class).booleanValue()) {
 				contagem.put(fez, e.get(1, Long.class).intValue());
 			} else {
 				contagem.put(naoFez, e.get(1, Long.class).intValue());
 			}
 		});
-		if (!contagem.containsKey(fez)) {
-			contagem.put(fez, 0);
-		}
-		if (!contagem.containsKey(naoFez)) {
-			contagem.put(naoFez, 0);
-		}
+		contagem.computeIfAbsent(fez, k -> 0);
+		contagem.computeIfAbsent(naoFez, k -> 0);
 		return contagem;
 	}
 
 	@Override
 	public Map<String, Integer> countBolsista() {
 		Map<String, Integer> contagem = new HashMap<>(2);
-		final String bolsistas = "Bolsistas", naoBolsistas = "Não Bolsistas";
-		egressoRepository.countBolsista().forEach((e) -> {
-			if (e.get(0, Boolean.class)) {
+		final String bolsistas = "Bolsistas";
+		final String naoBolsistas = "Não Bolsistas";
+		egressoRepository.countBolsista().forEach(e -> {
+			if (e.get(0, Boolean.class).booleanValue()) {
 				contagem.put(bolsistas, e.get(1, Long.class).intValue());
 			} else {
 				contagem.put(naoBolsistas, e.get(1, Long.class).intValue());
 			}
 		});
-		if (!contagem.containsKey(bolsistas)) {
-			contagem.put(bolsistas, 0);
-		}
-		if (!contagem.containsKey(naoBolsistas)) {
-			contagem.put(naoBolsistas, 0);
-		}
+		contagem.computeIfAbsent(bolsistas, k -> 0);
+		contagem.computeIfAbsent(naoBolsistas, k -> 0);
 		return contagem;
 	}
 
@@ -211,60 +204,51 @@ public class EgressoServiceImpl implements EgressoService {
 	@Override
 	public Map<String, Integer> countCotista() {
 		Map<String, Integer> contagem = new HashMap<>(2);
-		final String cotista = "Cotista", naoCotista = "Não Cotista";
-		egressoRepository.countCotista().forEach((e) -> {
-			if (e.get(0, Boolean.class)) {
+		final String cotista = "Cotista";
+		final String naoCotista = "Não Cotista";
+		egressoRepository.countCotista().forEach(e -> {
+			if (e.get(0, Boolean.class).booleanValue()) {
 				contagem.put(cotista, e.get(1, Long.class).intValue());
 			} else {
 				contagem.put(naoCotista, e.get(1, Long.class).intValue());
 			}
 		});
-		if (!contagem.containsKey(cotista)) {
-			contagem.put(cotista, 0);
-		}
-		if (!contagem.containsKey(naoCotista)) {
-			contagem.put(naoCotista, 0);
-		}
+		contagem.computeIfAbsent(cotista, k -> 0);
+		contagem.computeIfAbsent(naoCotista, k -> 0);
 		return contagem;
 	}
 
 	@Override
 	public Map<String, Integer> countInteressePos() {
 		Map<String, Integer> contagem = new HashMap<>(2);
-		final String sim = "Sim", nao = "Não";
-		egressoRepository.countInteressePos().forEach((e) -> {
-			if (e.get(0, Boolean.class)) {
+		final String sim = "Sim";
+		final String nao = "Não";
+		egressoRepository.countInteressePos().forEach(e -> {
+			if (e.get(0, Boolean.class).booleanValue()) {
 				contagem.put(sim, e.get(1, Long.class).intValue());
 			} else {
 				contagem.put(nao, e.get(1, Long.class).intValue());
 			}
 		});
-		if (!contagem.containsKey(sim)) {
-			contagem.put(sim, 0);
-		}
-		if (!contagem.containsKey(nao)) {
-			contagem.put(nao, 0);
-		}
+		contagem.computeIfAbsent(sim, k -> 0);
+		contagem.computeIfAbsent(nao, k -> 0);
 		return contagem;
 	}
 
 	@Override
 	public Map<String, Integer> countTipoAluno() {
 		Map<String, Integer> contagem = new HashMap<>(2);
-		final String graduacao = "GRADUAÇÃO", posGraduacao = "PÓS-GRADUAÇÃO";
-		egressoRepository.countFezPos().forEach((e) -> {
-			if (e.get(0, Boolean.class)) {
+		final String graduacao = "GRADUAÇÃO";
+		final String posGraduacao = "PÓS-GRADUAÇÃO";
+		egressoRepository.countFezPos().forEach(e -> {
+			if (e.get(0, Boolean.class).booleanValue()) {
 				contagem.put(posGraduacao, e.get(1, Long.class).intValue());
 			} else {
 				contagem.put(graduacao, e.get(1, Long.class).intValue());
 			}
 		});
-		if (!contagem.containsKey(graduacao)) {
-			contagem.put(graduacao, 0);
-		}
-		if (!contagem.containsKey(posGraduacao)) {
-			contagem.put(posGraduacao, 0);
-		}
+		contagem.computeIfAbsent(graduacao, k -> 0);
+		contagem.computeIfAbsent(posGraduacao, k -> 0);
 		return contagem;
 	}
 }
