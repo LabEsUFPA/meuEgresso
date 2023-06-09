@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.controller.mapa;
+package labes.facomp.ufpa.br.meuegresso.controller.publico.mapa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -37,7 +37,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoMapaDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
@@ -123,7 +122,6 @@ class MapaControllerTest {
         EgressoEmpresaDTO egressoEmpresaDTO;
         EgressoEmpresaModelId egressoEmpresaModelId;
 
-        EgressoPublicDTO egressoPublicDTO;
         EgressoCadastroDTO egressoCadastroDTO;
         EgressoModel egressoModel;
 
@@ -236,7 +234,7 @@ class MapaControllerTest {
         @Test
         void testFindAllEgressoMapaDTO() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/mapa")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/mapa")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())

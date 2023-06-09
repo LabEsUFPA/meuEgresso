@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;

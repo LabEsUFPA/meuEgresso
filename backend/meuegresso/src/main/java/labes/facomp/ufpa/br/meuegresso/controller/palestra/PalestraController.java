@@ -81,7 +81,7 @@ public class PalestraController {
 	 * Endpoint responsavel por cadastrar o palestra.
 	 *
 	 * @param palestraDTO Estrutura de dados contendo as informações necessárias
-	 *                        para persistir o palestra.
+	 *                    para persistir o palestra.
 	 * @return String confirmando a transação.
 	 * @author Alfredo Gabriel
 	 * @see {@link PalestraDTO}
@@ -93,7 +93,7 @@ public class PalestraController {
 	public String cadastrarPalestra(@RequestBody @Valid PalestraDTO palestraDTO) {
 		PalestraModel palestraModel = mapper.map(palestraDTO, PalestraModel.class);
 		palestraService.save(palestraModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class PalestraController {
 			PalestraModel palestraModel = palestraService.findByEgressoUsuarioId(jwtService.getIdUsuario(token));
 			palestraModel.setDescricao(palestraDTO.getDescricao());
 			palestraService.update(palestraModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}
@@ -126,7 +126,7 @@ public class PalestraController {
 	 * Endpoint responsavel por deletar a palestra do egresso.
 	 *
 	 * @param palestra Estrutura de dados contendo as informações
-	 *                     necessárias para deletar a palestra.
+	 *                 necessárias para deletar a palestra.
 	 * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
 	 * @author Bruno Eiki
 	 * @since 17/04/2023

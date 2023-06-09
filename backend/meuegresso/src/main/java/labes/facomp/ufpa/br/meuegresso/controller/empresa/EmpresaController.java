@@ -115,7 +115,7 @@ public class EmpresaController {
 	public String cadastrarEmpresa(@RequestBody @Valid EmpresaBasicDTO empresaDTO) {
 		EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);
 		empresaService.save(empresaModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class EmpresaController {
 		if (empresaService.existsByIdAndCreatedById(empresaDTO.getId(), jwtService.getIdUsuario(token))) {
 			EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);
 			empresaService.update(empresaModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}

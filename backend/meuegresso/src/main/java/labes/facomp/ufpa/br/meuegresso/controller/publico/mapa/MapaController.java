@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.controller.mapa;
+package labes.facomp.ufpa.br.meuegresso.controller.publico.mapa;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/mapa")
+@RequestMapping("/publico/mapa")
 public class MapaController {
 
     private final EgressoEmpresaService egressoEmpresaService;

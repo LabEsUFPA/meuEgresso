@@ -55,7 +55,7 @@ public class CotaController {
      */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public List<CotaDTO> buscarCotas() {
         return mapper.map(cotaService.findAll(), new TypeToken<List<CotaDTO>>() {
         }.getType());
@@ -72,13 +72,13 @@ public class CotaController {
      */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarCota(
             @RequestBody @Valid CotaDTO cotaDTO) {
 
         CotaModel cotaModel = mapper.map(cotaDTO, CotaModel.class);
         cotaService.save(cotaModel);
-        return ResponseType.SUCESS_SAVE.getMessage();
+        return ResponseType.SUCCESS_SAVE.getMessage();
     }
 
     /**
@@ -93,17 +93,16 @@ public class CotaController {
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarCota(@RequestBody @Valid CotaDTO cotaDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
         if (cotaService.existsByIdAndCreatedById(cotaDTO.getId(), jwtService.getIdUsuario(token))) {
             CotaModel cotaModel = mapper.map(cotaDTO, CotaModel.class);
             cotaService.update(cotaModel);
-            return ResponseType.SUCESS_UPDATE.getMessage();
+            return ResponseType.SUCCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
     }
-
 
     /**
      * Endpoint responsavel por deletar a cota.
@@ -116,10 +115,10 @@ public class CotaController {
      */
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarCota(@RequestBody @Valid CotaDTO cotaDTO) {
         CotaModel cotaModel = mapper.map(cotaDTO, CotaModel.class);
         cotaService.deleteById(cotaModel.getId());
-        return ResponseType.SUCESS_DELETE.getMessage();
+        return ResponseType.SUCCESS_DELETE.getMessage();
     }
 }

@@ -1,3 +1,5 @@
+--
+
 CREATE TABLE public.anuncio (
     id_anuncio integer NOT NULL,
     ativo boolean DEFAULT true NOT NULL,

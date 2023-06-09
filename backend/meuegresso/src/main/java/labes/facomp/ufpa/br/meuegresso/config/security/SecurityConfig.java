@@ -54,8 +54,7 @@ public class SecurityConfig {
 								"/swagger-ui.html",
 								"/egressoValido",
 								"/mapa",
-								"/publico/egresso**/**",
-								"/grafico**/**",
+								"/publico**/**",
 								"/")
 						.permitAll()
 						.requestMatchers(HttpMethod.GET, "/anuncio**/**")
@@ -64,7 +63,7 @@ public class SecurityConfig {
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
 				.sessionManagement(session -> session
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.exceptionHandling(exeption -> exeption
+				.exceptionHandling(exception -> exception
 						.authenticationEntryPoint(
 								new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
 				.build();
@@ -78,8 +77,9 @@ public class SecurityConfig {
 		configuration.setAllowedHeaders(List.of("Authorization"));
 		configuration.setAllowCredentials(true);
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Requestor-Type", "Content-Type",
-				"Access-Control-Allow-Headers","Access-Control-Allow-Origin"));
-		configuration.setExposedHeaders(Arrays.asList("X-Get-Header", "Access-Control-Allow-Methods", "Access-Control-Allow-Origin"));
+				"Access-Control-Allow-Headers", "Access-Control-Allow-Origin"));
+		configuration.setExposedHeaders(
+				Arrays.asList("X-Get-Header", "Access-Control-Allow-Methods", "Access-Control-Allow-Origin"));
 		configuration.setAllowedMethods(Collections.singletonList("*"));
 
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

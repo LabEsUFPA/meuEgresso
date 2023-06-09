@@ -53,7 +53,7 @@ public class TitulacaoController {
             @RequestBody @Valid TitulacaoDTO titulacaoDTO) {
         TitulacaoModel titulacaoModel = mapper.map(titulacaoDTO, TitulacaoModel.class);
         titulacaoService.save(titulacaoModel);
-        return ResponseType.SUCESS_SAVE.getMessage();
+        return ResponseType.SUCCESS_SAVE.getMessage();
     }
 
     @PutMapping
@@ -64,7 +64,7 @@ public class TitulacaoController {
         if (titulacaoService.existsByIdAndCreatedById(titulacaoDTO.getId(), jwtService.getIdUsuario(token))) {
             TitulacaoModel titulacaoModel = mapper.map(titulacaoDTO, TitulacaoModel.class);
             titulacaoService.update(titulacaoModel);
-            return ResponseType.SUCESS_UPDATE.getMessage();
+            return ResponseType.SUCCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
     }
@@ -76,6 +76,6 @@ public class TitulacaoController {
 
         TitulacaoModel titulacaoModel = mapper.map(titulacaoDTO, TitulacaoModel.class);
         titulacaoService.deleteById(titulacaoModel.getId());
-        return ResponseType.SUCESS_DELETE.getMessage();
+        return ResponseType.SUCCESS_DELETE.getMessage();
     }
 }

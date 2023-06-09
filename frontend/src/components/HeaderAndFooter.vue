@@ -2,14 +2,14 @@
   <div class="flex flex-col min-h-screen justify-between">
     <header class="text-white">
       <div class="bg-gradient-to-br from-pacific-cyan to-bondi-blue">
-        <div class="py-4 px-8 md:pl-14 flex flex-row items-center bg-[url('src/assets/textura.svg')] h-full w-full bg-right bg-no-repeat">
+        <div class="py-4 px-8 md:pl-14 flex flex-row items-center bg-[url('/src/assets/textura.svg')] h-full w-full bg-right bg-no-repeat">
           <RouterLink
             to="/"
             class="flex flex-row items-center"
           >
             <img
               class="w-12"
-              src="src/assets/logo.svg"
+              src="/src/assets/logo.svg"
               alt="Logo"
             >
             <div class="ml-8">
@@ -163,15 +163,17 @@
         </nav>
       </div>
     </header>
-    <main class="h-full">
-      <RouterView />
+    <main class="flex-1 bg-neutral-100">
+      <div class="h-fit">
+        <RouterView />
+      </div>
     </main>
     <footer>
       <div class="bg-gradient-to-br h-24 from-pacific-cyan to-bondi-blue flex flex-row items-center justify-start pl-20">
         <div class="mr-10">
           <img
             class="w-14"
-            src="src/assets/brasão.png"
+            src="../assets/brasão.png"
             alt="Brasão"
           >
         </div>
@@ -198,8 +200,8 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { watch, ref } from 'vue'
 import { mdiMenu } from '@mdi/js'
 
-import { useLoginStore } from 'src/store/LoginStore'
-import CustomButton from 'src/components/CustomButton.vue'
+import { useLoginStore } from '../store/LoginStore'
+import CustomButton from '../components/CustomButton.vue'
 import UserDropdownMenu from './UserDropdownMenu.vue'
 
 const store = useLoginStore()

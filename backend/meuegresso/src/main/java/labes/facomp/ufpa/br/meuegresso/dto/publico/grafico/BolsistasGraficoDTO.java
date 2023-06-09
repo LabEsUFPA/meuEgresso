@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.dto.grafico;
+package labes.facomp.ufpa.br.meuegresso.dto.publico.grafico;
 
 import java.util.HashMap;
 
@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para retorno de informacoes de Tipos de Bolsa dos egressos para o grafico
+ * Dto para retorno de bolsistas
  *
  * @author Pedro Inácio
  * @since 21/05/2023
@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TipoBolsaGraficoDTO {
-    
-    private HashMap<String, Integer> tipoBolsas;
-    
+public class BolsistasGraficoDTO {
+
+    private HashMap<String, Long> bolsistasContagem;
+
 }
