@@ -1,12 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.controller.publico.grafico;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,28 +27,17 @@ import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.SalarioGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.SetorAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.TipoAlunoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.TipoBolsaGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
-import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
-import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
-import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
-import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
-import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
-import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.cota.CotaService;
 import labes.facomp.ufpa.br.meuegresso.service.curso.CursoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoEmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
-import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.faixasalarial.FaixaSalarialService;
 import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
 import labes.facomp.ufpa.br.meuegresso.service.setoratuacao.SetorAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.tipobolsa.TipoBolsaService;
-import labes.facomp.ufpa.br.meuegresso.service.titulacao.TitulacaoService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -80,10 +65,6 @@ public class GraficoPubController {
 	private final SetorAtuacaoService setorAtuacaoService;
 
 	private final TipoBolsaService tipoBolsaService;
-
-	private final EgressoTitulacaoService egressoTitulacaoService;
-
-	private final TitulacaoService titulacaoService;
 
 	private final CotaService cotaService;
 
@@ -125,29 +106,15 @@ public class GraficoPubController {
 	 *
 	 * @return {@link IdadesGraficoDTO} Retorna uma lista com todas as idades e a
 	 *         media delas.
-	 * @author Pedro Inácio
-	 * @since 19/05/2023
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 * @since 08/06/2023
 	 */
 	@GetMapping(value = "/idades")
 	@ResponseStatus(code = HttpStatus.OK)
 	public IdadesGraficoDTO getIdades() {
-		List<EgressoModel> lista = egressoService.findAll();
+		Map<Integer, Integer> idadesContagens = egressoService.countAgeFromEgressos();
 
-		List<Integer> idades = egressoService.findAllIdades();
-
-		HashMap<Integer, Integer> idadesContagens = new HashMap<>();
-
-		int count = 0;
-		for (int i = 0; i < idades.size(); i++) {
-			final Integer idadeFinal = idades.get(i);
-			count = (int) lista.stream()
-					.filter(a -> Period.between(a.getNascimento(), LocalDate.now()).getYears() == idadeFinal).count();
-
-			idadesContagens.put(idadeFinal, count);
-
-		}
-
-		return new IdadesGraficoDTO(egressoService.findAllIdades().stream().mapToDouble(a -> a).average().orElse(-1),
+		return new IdadesGraficoDTO(idadesContagens.values().stream().mapToDouble(a -> a).average().orElse(-1),
 				idadesContagens);
 	}
 
@@ -156,26 +123,13 @@ public class GraficoPubController {
 	 *
 	 * @return {@link GenerosGraficoDTO} Retorna a contagem de cada genero (masc,
 	 *         fem, trans e outros).
-	 * @author Pedro Inácio
-	 * @since 19/05/2023
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 * @since 08/06/2023
 	 */
 	@GetMapping(value = "/generos")
 	@ResponseStatus(code = HttpStatus.OK)
 	public GenerosGraficoDTO getGeneros() {
-		List<EgressoModel> lista = egressoService.findAll();
-
-		List<GeneroModel> generos = generoService.findAll();
-
-		HashMap<String, Integer> generosContagens = new HashMap<>();
-
-		int count = 0;
-		for (int i = 0; i < generos.size(); i++) {
-			final String nomeFinal = generos.get(i).getNome();
-			count = (int) lista.stream().filter(a -> a.getGenero().getNome().equalsIgnoreCase(nomeFinal)).count();
-
-			generosContagens.put(nomeFinal, count);
-
-		}
+		Map<String, Integer> generosContagens = generoService.countEgressoByGenero();
 
 		return new GenerosGraficoDTO(generosContagens);
 	}
@@ -185,27 +139,13 @@ public class GraficoPubController {
 	 *
 	 * @return {@link GenerosGraficoDTO} Retorna a contagem de cada egressos por
 	 *         faixa salarial.
-	 * @author Pedro Inácio
-	 * @since 22/05/2023
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 * @since 08/06/2023
 	 */
 	@GetMapping(value = "/salarios")
 	@ResponseStatus(code = HttpStatus.OK)
 	public SalarioGraficoDTO getSalarios() {
-		List<EgressoEmpresaModel> lista = egressoEmpresaService.findAll();
-
-		List<FaixaSalarialModel> faixasSalariais = faixaSalarialService.findAll();
-
-		HashMap<String, Integer> salariosContagens = new HashMap<>();
-
-		int count = 0;
-		for (int i = 0; i < faixasSalariais.size(); i++) {
-			final String nomeFinal = faixasSalariais.get(i).getFaixa();
-			count = (int) lista.stream().filter(a -> a.getFaixaSalarial().getFaixa().equalsIgnoreCase(nomeFinal))
-					.count();
-
-			salariosContagens.put(nomeFinal, count);
-
-		}
+		Map<String, Integer> salariosContagens = faixaSalarialService.countEgressoInFaixa();
 
 		return new SalarioGraficoDTO(salariosContagens);
 	}
@@ -215,28 +155,14 @@ public class GraficoPubController {
 	 * banco.
 	 *
 	 * @return {@link TipoAlunoGraficoDTO} Retorna a contagem de cada tipo de aluno.
-	 * @author Pedro Inácio
-	 * @since 22/05/2023
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 * @since 08/06/2023
 	 */
 	@GetMapping(value = "/tipoAlunos")
 	@ResponseStatus(code = HttpStatus.OK)
 	public TipoAlunoGraficoDTO getTipoAlunos() {
 
-		List<EgressoTitulacaoModel> egressoTitulacao = egressoTitulacaoService.findAll();
-
-		List<TitulacaoModel> titulacoes = titulacaoService.findAll();
-
-		HashMap<String, Integer> tipoAluno = new HashMap<>();
-
-		int count = 0;
-		for (int i = 0; i < titulacoes.size(); i++) {
-
-			final String nomeFinal = titulacoes.get(i).getNome();
-			count = (int) egressoTitulacao.stream().filter(a -> a.getTitulacao().getNome().equalsIgnoreCase(nomeFinal))
-					.count();
-			tipoAluno.put(nomeFinal, count);
-
-		}
+		Map<String, Integer> tipoAluno = egressoService.countTipoAluno();
 
 		return new TipoAlunoGraficoDTO(tipoAluno);
 	}
@@ -246,18 +172,13 @@ public class GraficoPubController {
 	 *
 	 * @return {@link BolsistasGraficoDTO} Retorna a quantidade de egressos com e
 	 *         sem bolsa
-	 * @author Pedro Inácio
-	 * @since 21/05/2023
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 * @since 08/06/2023
 	 */
 	@GetMapping(value = "/bolsistas")
 	@ResponseStatus(code = HttpStatus.OK)
 	public BolsistasGraficoDTO getBolsistas() {
-		List<EgressoModel> lista = egressoService.findAll();
-
-		HashMap<String, Long> bolsistasContagens = new HashMap<>();
-
-		bolsistasContagens.put("Bolsistas", lista.stream().filter(e -> e.getBolsista().equals(true)).count());
-		bolsistasContagens.put("Não Bolsistas", lista.stream().filter(e -> e.getBolsista().equals(false)).count());
+		Map<String, Integer> bolsistasContagens = egressoService.countBolsista();
 
 		return new BolsistasGraficoDTO(bolsistasContagens);
 	}
@@ -266,29 +187,13 @@ public class GraficoPubController {
 	 * Endpoint responsavel por buscar todos os Tipo de Bolsa dos egressos no banco.
 	 *
 	 * @return {@link TipoBolsaGraficoDTO} Retorna a contagem de cada tipo de Bolsa.
-	 * @author Pedro Inácio
-	 * @since 21/05/2023
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 * @since 08/06/2023
 	 */
 	@GetMapping(value = "/tipoBolsa")
 	@ResponseStatus(code = HttpStatus.OK)
 	public TipoBolsaGraficoDTO getTipoBolsa() {
-		List<EgressoModel> lista = egressoService.findAll();
-		List<EgressoModel> listaFiltrada = lista.stream().filter(a -> a.getBolsa() != null).toList();
-
-		List<TipoBolsaModel> tipoBolsa = tipoBolsaService.findAll();
-
-		HashMap<String, Integer> tipoBolsaContagens = new HashMap<>();
-
-		int count = 0;
-		for (int i = 0; i < tipoBolsa.size(); i++) {
-			String nomeFinal = tipoBolsa.get(i).getNome();
-
-			count = (int) listaFiltrada.stream().filter(a -> a.getBolsa().getNome().equalsIgnoreCase(nomeFinal))
-					.count();
-
-			tipoBolsaContagens.put(nomeFinal, count);
-
-		}
+		Map<String, Integer> tipoBolsaContagens = tipoBolsaService.countEgressoForBolsa();
 
 		return new TipoBolsaGraficoDTO(tipoBolsaContagens);
 	}
@@ -299,35 +204,14 @@ public class GraficoPubController {
 	 *
 	 * @return {@link RemuneracaoGraficoDTO} retorna a quantidade de egressos por
 	 *         cada tipo de remuneração.
-	 * @author Camilo Santos
-	 * @since 22/05/2023
+	 * @author Camilo Santos, Alfredo Gabriel
+	 * @since 08/06/2023
 	 */
-	@GetMapping(value = "/remuneracao") // TODO verificar possibilidade de refatoração
+	@GetMapping(value = "/remuneracao")
 	@ResponseStatus(code = HttpStatus.OK)
 	public RemuneracaoGraficoDTO getRemuneracao() {
-		List<EgressoModel> lista = egressoService.findAll();
+		Map<Double, Integer> remuneracaoContagem = egressoService.countRemuneracaoBolsa();
 
-		List<EgressoModel> listaBolsista = new ArrayList<>();
-
-		Set<Double> remuneracoes = new HashSet<>();
-
-		HashMap<Double, Integer> remuneracaoContagem = new HashMap<>();
-		for (EgressoModel egresso : lista) {
-			if (egresso.getRemuneracaoBolsa() != null) {
-				remuneracoes.add(egresso.getRemuneracaoBolsa());
-				listaBolsista.add(egresso);
-			}
-		}
-
-		List<Double> remuneracoesLista = new ArrayList<>(remuneracoes);
-
-		int count = 0;
-		for (int i = 0; i < remuneracoesLista.size(); i++) {
-			final Double remuneracaoFinal = remuneracoesLista.get(i);
-
-			count = (int) listaBolsista.stream().filter(e -> e.getRemuneracaoBolsa().equals(remuneracaoFinal)).count();
-			remuneracaoContagem.put(remuneracaoFinal, count);
-		}
 		return new RemuneracaoGraficoDTO(remuneracaoContagem);
 	}
 
@@ -336,18 +220,13 @@ public class GraficoPubController {
 	 * não-cotistas.
 	 *
 	 * @return {@link CotistaGraficoDTO} retorna cotistas e não-cotistas enumerados.
-	 * @author Camilo Santos
-	 * @since 22/05/2023
+	 * @author Camilo Santos, Alfredo Gabriel
+	 * @since 08/06/2023
 	 */
 	@GetMapping(value = "/cotista")
 	@ResponseStatus(code = HttpStatus.OK)
 	public CotistaGraficoDTO getCotista() {
-		List<EgressoModel> lista = egressoService.findAll();
-
-		HashMap<String, Long> cotistaContagem = new HashMap<>();
-
-		cotistaContagem.put("Cotista", lista.stream().filter(e -> e.getCotista().equals(true)).count());
-		cotistaContagem.put("Não Cotista", lista.stream().filter(e -> e.getCotista().equals(false)).count());
+		Map<String, Integer> cotistaContagem = egressoService.countCotista();
 
 		return new CotistaGraficoDTO(cotistaContagem);
 	}
@@ -383,18 +262,13 @@ public class GraficoPubController {
 	 *
 	 * @return {@link SetorAtuacaoGraficoDTO} Retorna a quantidade de egressos
 	 *         interesse em pós graduação
-	 * @author Pedro Inácio
-	 * @since 22/05/2023
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 * @since 08/06/2023
 	 */
 	@GetMapping(value = "/interesseEmPos")
 	@ResponseStatus(code = HttpStatus.OK)
 	public InteresseEmPosGraficoDTO getInteresseEmPos() {
-		List<EgressoModel> lista = egressoService.findAll();
-
-		HashMap<String, Long> interesseContagens = new HashMap<>();
-
-		interesseContagens.put("Sim", lista.stream().filter(e -> e.getInteresseEmPos().equals(true)).count());
-		interesseContagens.put("Não", lista.stream().filter(e -> e.getInteresseEmPos().equals(false)).count());
+		Map<String, Integer> interesseContagens = egressoService.countInteressePos();
 
 		return new InteresseEmPosGraficoDTO(interesseContagens);
 	}
@@ -418,33 +292,14 @@ public class GraficoPubController {
 	 *
 	 * @return {@link CotaGraficoDTO} Retorna a contagem de cotistas e não cotistas,
 	 *         usernames separados por grupo.
-	 * @author Camilo Santos
-	 * @since 20/05/2023
+	 * @author Camilo Santos, Alfredo Gabriel
+	 * @since 08/06/2023
 	 */
 	@GetMapping(value = "/cotas")
 	@ResponseStatus(code = HttpStatus.OK)
-	public CotaGraficoDTO getCotas() { // TODO verificar possibilidade de refatoração
-		List<EgressoModel> lista = egressoService.findAll();
+	public CotaGraficoDTO getCotas() {
+		Map<String, Integer> cotasContagens = cotaService.countEgressoByCota();
 
-		List<CotaModel> cotas = cotaService.findAll();
-
-		HashMap<String, Integer> cotasContagens = new HashMap<>();
-
-		for (int i = 0; i < cotas.size(); i++) {
-			final CotaModel cotaFinal = cotas.get(i);
-
-			int count = 0;
-			for (int j = 0; j < lista.size(); j++) {
-				EgressoModel egresso = lista.get(j);
-
-				Set<CotaModel> cotaEgresso = egresso.getCotas();
-
-				if (cotaEgresso.contains(cotaFinal)) {
-					count += 1;
-				}
-			}
-			cotasContagens.put(cotaFinal.getNome(), count);
-		}
 		return new CotaGraficoDTO(cotasContagens);
 	}
 
@@ -453,29 +308,15 @@ public class GraficoPubController {
 	 *
 	 * @return {@link AreaAtuacaoGraficoDTO} Retorna a contagem de egresso por área
 	 *         de atuação.
-	 * @author Camilo Santos
-	 * @since 20/05/2023
+	 * @author Camilo Santos, Alfredo Gabriel
+	 * @since 08/06/2023
 	 */
 	@GetMapping(value = "/atuacao")
 	@ResponseStatus(code = HttpStatus.OK)
 	public AreaAtuacaoGraficoDTO getAtuacao() {
-		List<EgressoModel> lista = egressoService.findAll();
-		List<EgressoModel> listaFiltrada = lista.stream().filter(e -> e.getEmprego() != null).toList();
+		Map<String, Integer> areaAtuacao = areaAtuacaoService.countEgressoByAreaAtuacao();
 
-		List<AreaAtuacaoModel> areaAtuacao = areaAtuacaoService.findAll();
-
-		HashMap<String, Integer> areaAtuacaoContagens = new HashMap<>();
-
-		int count = 0;
-		for (int i = 0; i < areaAtuacao.size(); i++) {
-			final String nomeFinal = areaAtuacao.get(i).getNome();
-			count = (int) listaFiltrada.stream()
-					.filter(a -> a.getEmprego().getAreaAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
-
-			areaAtuacaoContagens.put(nomeFinal, count);
-		}
-
-		return new AreaAtuacaoGraficoDTO(areaAtuacaoContagens);
+		return new AreaAtuacaoGraficoDTO(areaAtuacao);
 	}
 
 	/**
@@ -484,27 +325,13 @@ public class GraficoPubController {
 	 *
 	 * @return {@link SetorAtuacaoGraficoDTO} Retorna a contagem de egresso por
 	 *         setor de atuação.
-	 * @author Camilo Santos
-	 * @since 20/05/2023
+	 * @author Camilo Santos, Alfredo Gabriel
+	 * @since 08/06/2023
 	 */
 	@GetMapping(value = "/setor")
 	@ResponseStatus(code = HttpStatus.OK)
 	public SetorAtuacaoGraficoDTO getSetor() {
-		List<EgressoModel> lista = egressoService.findAll();
-		List<EgressoModel> listaFiltrada = lista.stream().filter(e -> e.getEmprego() != null).toList();
-
-		List<SetorAtuacaoModel> setorAtuacao = setorAtuacaoService.findAll();
-
-		HashMap<String, Integer> setorAtuacaoContagens = new HashMap<>();
-
-		int count = 0;
-		for (int i = 0; i < setorAtuacao.size(); i++) {
-			final String nomeFinal = setorAtuacao.get(i).getNome();
-			count = (int) listaFiltrada.stream()
-					.filter(a -> a.getEmprego().getSetorAtuacao().getNome().equalsIgnoreCase(nomeFinal)).count();
-
-			setorAtuacaoContagens.put(nomeFinal, count);
-		}
+		Map<String, Integer> setorAtuacaoContagens = setorAtuacaoService.countEgressoBySetorAtuacao();
 
 		return new SetorAtuacaoGraficoDTO(setorAtuacaoContagens);
 	}
@@ -514,18 +341,13 @@ public class GraficoPubController {
 	 *
 	 * @return {@link SetorAtuacaoGraficoDTO} Retorna a quantidade de egressos com e
 	 *         sem pós
-	 * @author Camilo Santos
-	 * @since 20/05/2023
+	 * @author Camilo Santos, Alfredo Gabriel
+	 * @since 08/06/2023
 	 */
 	@GetMapping(value = "/pos")
 	@ResponseStatus(code = HttpStatus.OK)
 	public PosGraduacaoGraficoDTO getPos() {
-		List<EgressoModel> lista = egressoService.findAll();
-
-		HashMap<String, Long> posGradContagens = new HashMap<>();
-
-		posGradContagens.put("Fez", lista.stream().filter(e -> e.getPosGraduacao().equals(true)).count());
-		posGradContagens.put("Não fez", lista.stream().filter(e -> e.getPosGraduacao().equals(false)).count());
+		Map<String, Integer> posGradContagens = egressoService.countFezPos();
 
 		return new PosGraduacaoGraficoDTO(posGradContagens);
 	}
