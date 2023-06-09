@@ -64,7 +64,7 @@ INSERT INTO public.endereco (cidade_endereco, estado_endereco, pais_endereco, cr
 
 INSERT INTO public.faixa_salarial (faixa_faixa_salarial, created_by) VALUES ('1 salário mínimo', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.faixa_salarial (faixa_faixa_salarial, created_by) VALUES ('de 2 a 4 salários mínimos', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.faixa_salarial (faixa_faixa_salarial, created_by) VALUES ('5 a 10 salários mínimos', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.faixa_salarial (faixa_faixa_salarial, created_by) VALUES ('de 5 a 10 salários mínimos', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.faixa_salarial (faixa_faixa_salarial, created_by) VALUES ('11 ou mais salários mínimos', 1) ON CONFLICT DO NOTHING;
 
 --- Genero
@@ -82,9 +82,9 @@ INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PIBIC', 1) 
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PROAD', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PROEX', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PROBAC', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PERMANÊNCIA', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('Permanência', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('CAPES/CNPQ', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('OUTROS', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('Outros', 1) ON CONFLICT DO NOTHING;
 
 --- Titulação
 
