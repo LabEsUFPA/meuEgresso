@@ -2,7 +2,10 @@ package labes.facomp.ufpa.br.meuegresso.service.empresa.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.LocalPosGraficoDTO;
@@ -35,8 +38,8 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
-    public List<EmpresaModel> findAll(Sort sort) {
-        return empresaRepository.findAll(sort);
+    public Page<EmpresaModel> findAll(Integer page, Integer size, Direction direction) {
+        return empresaRepository.findAll(PageRequest.of(page, size, Sort.by(direction, "nome")));
     }
 
     @Override
@@ -69,8 +72,11 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
-    public List<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(String nome) {
-        return empresaRepository.findByNomeContainsIgnoreCaseOrderByNomeAsc(nome);
+    public Page<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(Integer page, Integer size,
+            Direction direction,
+            String nome) {
+        return empresaRepository.findByNomeContainsIgnoreCaseOrderByNomeAsc(
+                PageRequest.of(page, size, Sort.by(direction, "nome")), nome);
     }
 
     @Override

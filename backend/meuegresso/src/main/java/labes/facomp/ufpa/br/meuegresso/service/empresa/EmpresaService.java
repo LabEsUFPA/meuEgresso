@@ -2,7 +2,8 @@ package labes.facomp.ufpa.br.meuegresso.service.empresa;
 
 import java.util.List;
 
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
 
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
@@ -38,7 +39,7 @@ public interface EmpresaService {
 	 *
 	 * @return Lista de objetos da classe EmpresaModel.
 	 */
-	public List<EmpresaModel> findAll(Sort sort);
+	public Page<EmpresaModel> findAll(Integer page, Integer size, Direction direction);
 
 	/**
 	 * Método responsável por atualizar dados de um empresa cadastrado.
@@ -76,5 +77,7 @@ public interface EmpresaService {
 	 */
 	public List<LocalPosGraficoDTO> countEgressoByPos();
 
-	public List<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(String nome);
+	public Page<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(Integer page, Integer size,
+			Direction direction,
+			String nome);
 }

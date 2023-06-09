@@ -1,10 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.controller.empresa;
 
-import java.util.List;
-
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -60,10 +58,11 @@ public class EmpresaController {
 	 */
 	@GetMapping
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<EmpresaBasicDTO> consultarEmpresas() {
-		return mapper.map(empresaService.findAll(Sort.by(Sort.Direction.ASC, "nome")),
-				new TypeToken<List<EmpresaBasicDTO>>() {
-				}.getType());
+	public Page<EmpresaBasicDTO> consultarEmpresas(
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "15", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
+		return empresaService.findAll(page, size, direction).map(e -> mapper.map(e, EmpresaBasicDTO.class));
 	}
 
 	/**
@@ -76,12 +75,16 @@ public class EmpresaController {
 	 * @author Marcus Maciel
 	 * @since 21/05/2023
 	 */
+
 	@GetMapping(params = { "nome" })
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<EmpresaBasicDTO> consultarEmpresasContainsNome(@RequestParam("nome") String nome) {
-		return mapper.map(empresaService.findByNomeContainsIgnoreCaseOrderByNomeAsc(nome),
-				new TypeToken<List<EmpresaBasicDTO>>() {
-				}.getType());
+	public Page<EmpresaBasicDTO> consultarEmpresasContainsNome(
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "15", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction,
+			@RequestParam("nome") String nome) {
+		return empresaService.findByNomeContainsIgnoreCaseOrderByNomeAsc(page, size, direction, nome)
+				.map(e -> mapper.map(e, EmpresaBasicDTO.class));
 	}
 
 	/**
