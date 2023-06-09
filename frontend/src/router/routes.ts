@@ -24,11 +24,22 @@ export default [
         }
       },
       {
-        path: '/cadastro-anuncio',
-        component: async () => await import('src/pages/CadastroAnuncio.vue'),
+        path: '/painel-admin',
+        component: async () => await import('src/pages/PainelAdmin.vue'),
         meta: {
           requiresAuth: true
         }
+      },
+      {
+        path: '/notificacoes-admin',
+        component: async () => await import('src/pages/NotificacoesAdmin.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/cadastro-anuncio',
+        component: async () => await import('src/pages/CadastroAnuncio.vue')
       },
       {
         path: '/egresso',

@@ -84,7 +84,10 @@ import LocalStorage from 'src/services/localStorage'
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 
-$store.fetchAll()
+if(storage.has('loggedEgresso')){
+  $store.fetchAll()
+}
+
 
 const pais = ref('')
 const estado = ref('')

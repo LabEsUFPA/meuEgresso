@@ -6,40 +6,24 @@
           <SvgIcon
             type="mdi"
             size="32"
-            :path="mdiBullhorn"
+            :path="mdiCog"
           />
           <h1 class="text-2xl sm:text-3xl font-bold">
-            Vagas de emprego
+            Gerenciar Sistema
           </h1>
         </div>
-
-        <CustomButton
-          tag="router"
-          link="/cadastro-anuncio"
-          color="emerald"
-          text-class="text-white font-medium"
-          class="w-full sm:w-fit sm:self-end"
-        >
-          <div>
-            Anuncie uma vaga
-          </div>
-          <SvgIcon
-            type="mdi"
-            size="32"
-            :path="mdiChevronRight"
-          />
-        </CustomButton>
       </div>
     </div>
 
-    <div class="flex flex-col gap-4 sm:gap-8 mb-10">
-      <div class="flex justify-center">
-        <div class="flex flex-col gap-4 sm:gap-6 w-[960px] bg-white rounded-bl-2xl rounded-br-2xl p-6 sm:p-8 mx-4 sm:mx-6 items-center">
-          <SearchBar
-            name="pesquisa"
-            v-model="pesquisaValue"
-          />
-
+    <div
+      class="flex flex-col gap-4 sm:gap-8 mb-10 "
+    >
+      <div
+        class="flex justify-center"
+      >
+        <div
+          class="flex flex-col gap-4 sm:gap-6 w-[960px] bg-white rounded-bl-2xl rounded-br-2xl p-6 sm:p-8 mx-4 sm:mx-6 items-center"
+        >
           <div class="flex flex-col sm:flex-row w-full items-start gap-4 sm:gap-8">
             <div class="flex gap-4 text-cyan-800 items-center">
               <SvgIcon
@@ -129,7 +113,7 @@
           />
           <div>Anterior</div>
         </button>
-        <button
+        <div
           class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-md"
           v-show="currentPage<$store.totalPages-1"
           @click="incrementaPage()"
@@ -140,7 +124,7 @@
             size="32"
             :path="mdiChevronRight"
           />
-        </button>
+        </div>
       </div>
     </div>
   </div>
@@ -157,11 +141,9 @@
 
 import { ref, onMounted, watch } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiBullhorn, mdiFilterVariant, mdiPlus, mdiChevronRight, mdiChevronLeft, mdiEmoticonSadOutline } from '@mdi/js'
+import { mdiCog, mdiFilterVariant, mdiPlus, mdiChevronRight, mdiChevronLeft, mdiEmoticonSadOutline } from '@mdi/js'
 import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
-import CustomButton from 'src/components/CustomButton.vue'
 import ShortPost from 'src/components/ShortPost.vue'
-import SearchBar from 'src/components/SearchBar.vue'
 import FilterChip from 'src/components/FilterChip.vue'
 import ModalFilters from 'src/components/ModalFilters.vue'
 

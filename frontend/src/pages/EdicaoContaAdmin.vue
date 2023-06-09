@@ -11,7 +11,6 @@
           Editar conta
         </h1>
       </div>
-      
     </div>
     <div class="w-full flex items-center justify-center bg-neutral-100 mb-10 ">
       <div
@@ -49,7 +48,6 @@
                 type="email"
                 :required="true"
                 :icon-path="mdiEmail"
-                
               />
               <CustomInput
                 name="confirmationEmail"
@@ -63,7 +61,7 @@
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 name="password"
-                label="Nova senha"
+                label="Senha atual ou uma nova"
                 type="password"
                 :required="true"
                 :icon-path="mdiLock"
@@ -81,17 +79,21 @@
 
           <div class="flex w-full justify-center gap-16 border-t-[1px] pt-8 mt-8 border-gray-200">
             <RouterLink to="/">
-              <CustomButton type="button" color="gray">
+              <CustomButton
+                type="button"
+                color="gray"
+              >
                 Cancelar
               </CustomButton>
             </RouterLink>
-            <CustomButton type="submit" color="emerald">
+            <CustomButton
+              type="submit"
+              color="emerald"
+            >
               Salvar
             </CustomButton>
           </div>
-
         </div>
-        
       </div>
     </div>
   </Form>
@@ -113,7 +115,6 @@
       </div>
     </div>
   </CustomDialog>
-
 </template>
 
 <script setup lang="ts">
@@ -125,59 +126,48 @@ import CustomButton from 'src/components/CustomButton.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import { Form } from 'vee-validate'
-import { models } from 'src/@types'
-import { object, string, ref as refYup, number } from 'yup'
+import { object, string, ref as refYup } from 'yup'
 import { mdiAccount, mdiEmail, mdiLock, mdiCheckCircle } from '@mdi/js'
 import { useEditaContaUsuarioStore } from 'src/store/EditaContaUsuarioStore.js'
-interface ProfileRegisterModel extends models.ProfileRegisterModel { }
-
 
 const form = ref<typeof Form | null>(null)
 const username = ref('')
 const email = ref('')
 const nomeCompleto = ref('')
 
-
-
 let dataUserUpdate = {
   id: 0,
-  username: "",
-  email: "",
-  nome: "",
-  password: "",
+  username: '',
+  email: '',
+  nome: '',
+  password: '',
   idGrupo: 0,
-  nomeGrupo: "",
+  nomeGrupo: ''
 }
 
-
 const error = ref(false)
-const errorMessages = ref({
-  errorRequest: 'Requisição não aceita',
-  userNotFound: 'Usuario não cadastrado pela faculdade'
-})
+
 const errorText = ref('')
 const submitSuccess = ref(false)
+
 const schema = object().shape({
-  name: string().required(),
-  email: string().email().required(),
-  username: string().required(),
-  confirmationEmail: string().email().required().oneOf([refYup('email')]),
-  password: string().required(),
-  confirmationPassword: string().required().oneOf([refYup('password')]),
+  name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/, 'Informe nome e sobrenome'),
+  email: string().required().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))?$/, 'Email inválido'),
+  username: string().required('Informe um nome de usuário').trim().matches(/^[a-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
+  confirmationEmail: string().email().required('Confirme seu email').oneOf([refYup('email')], 'Email diferente').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))?$/, 'Email inválido'),
+  password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
+  confirmationPassword: string().required().oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida')
 })
 
-//Chamando getUsuario
+//  Chamando getUsuario
 const $store = useEditaContaUsuarioStore()
 $store.fetchUsuario().then(usuario => {
-  console.log("THEN:", usuario)
   nomeCompleto.value = usuario?.nome
   username.value = usuario?.username
   email.value = usuario?.email
 })
 
-
-
-//Update Usuario
+// Update Usuario
 const handleSubmit = async (submitData: any) => {
   const usuario = await $store.fetchUsuario()
   dataUserUpdate = {
@@ -189,8 +179,6 @@ const handleSubmit = async (submitData: any) => {
     idGrupo: usuario?.grupos[0].id,
     nomeGrupo: usuario?.grupos[0].nomeGrupo
   }
-  console.log("Dados novos:", dataUserUpdate);
-
 
   const responseValidation = await useEditaContaUsuarioStore().updateContaUsuario(
     dataUserUpdate.id,
@@ -199,34 +187,26 @@ const handleSubmit = async (submitData: any) => {
     dataUserUpdate.nome,
     dataUserUpdate.password,
     dataUserUpdate.idGrupo,
-    dataUserUpdate.nomeGrupo,
+    dataUserUpdate.nomeGrupo
   )
-
-  console.log("Status:", responseValidation.status)
 
   if (responseValidation.status === 201) {
     error.value = false
-    console.log("Usuário atualizado: " + responseValidation.status)
     submitSuccess.value = true
   }
-
 }
 const onInvalid = (e: any) => {
   console.log(e)
 }
 
 onMounted(() => {
-  console.log("onMounted front iniciado...")
   watch(nomeCompleto, () => {
-    console.log("watch front nomeCompleto:", nomeCompleto.value)
     form.value?.setFieldValue('name', nomeCompleto.value)
   })
   watch(username, () => {
-    console.log("watch front username:", username.value)
     form.value?.setFieldValue('username', username.value)
   })
   watch(email, () => {
-    console.log("watch front email:", email.value)
     form.value?.setFieldValue('email', email.value)
   })
 })
