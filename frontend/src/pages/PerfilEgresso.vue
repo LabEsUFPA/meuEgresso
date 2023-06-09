@@ -853,9 +853,21 @@ async function handleSubmitAdicionais (values: any) {
   jsonResponse.depoimento.descricao = values.adicionais.experiencias
   jsonResponse.contribuicao.descricao = values.adicionais.contribuicoes
   if (values.adicionais.palestras) {
-    jsonResponse.palestras.descricao = values.adicionais.assuntosPalestras
-  } else {
-    jsonResponse.palestras.descricao = ''
+    if(jsonResponse.palestras){
+      jsonResponse.palestras.descricao = values.adicionais.assuntosPalestras
+
+    }
+    else{
+      const palestras = {
+      descricao: values.adicionais.assuntosPalestras
+    }
+    jsonResponse.palestras = palestras
+    }
+    
+  }
+  else{
+
+    jsonResponse.palestras = null
   }
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
