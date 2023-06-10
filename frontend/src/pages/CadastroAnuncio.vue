@@ -120,6 +120,25 @@
       </div>
     </div>
   </CustomDialog>
+  <CustomDialog
+    v-model="submitError"
+  >
+    <div class="h-full flex justify-center items-center">
+      <div class="w-1/2">
+        <div class="text-red-500 text-center mb-3">
+          <SvgIcon
+            type="mdi"
+            size="100"
+            class="inline"
+            :path="mdiCloseCircle"
+          />
+        </div>
+        <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+          Erro no cadastro
+        </h1>
+      </div>
+    </div>
+  </CustomDialog>
 </template>
 
 <script setup lang="ts">
@@ -133,7 +152,7 @@ import CustomSelect from 'src/components/CustomSelect.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import { Form } from 'vee-validate'
 import { object, string } from 'yup'
-import { mdiCheckCircle, mdiBullhorn, mdiLink } from '@mdi/js'
+import { mdiCheckCircle, mdiBullhorn, mdiLink, mdiCloseCircle } from '@mdi/js'
 import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
 import classNames from 'classnames'
 import { useRouter } from 'vue-router'
@@ -144,6 +163,7 @@ const $store = useAnuncioVagaStore()
 const error = ref(false)
 const errorText = ref('')
 const submitSuccess = ref(false)
+const submitError = ref(false)
 
 const retornaFeed = () => {
   router.push({ path: '/vagas' })
@@ -171,7 +191,6 @@ const schema = object().shape({
 
 // Post Anuncio
 const handleSubmit = async (submitData: any) => {
-  console.log('submit:', submitData)
   const responseValidation = await $store.cadastraAnuncio({
     titulo: submitData.titulo,
     areaEmprego: {
@@ -186,8 +205,9 @@ const handleSubmit = async (submitData: any) => {
 
   if (responseValidation === 201) {
     error.value = false
-    console.log('Anúncio criado: ' + responseValidation)
     submitSuccess.value = true
+  } else {
+    submitError.value = true
   }
 }
 const onInvalid = (e: any) => {

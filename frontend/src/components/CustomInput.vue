@@ -196,7 +196,7 @@ const name = toRef(props, 'name')
 const config = ref({
   prefix: 'R$ ',
   suffix: '',
-  masked: true,
+  masked: false,
   thousands: '.',
   decimal: ',',
   precision: 2,
