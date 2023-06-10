@@ -156,8 +156,8 @@ public class EgressoServiceImpl implements EgressoService {
 		Map<Integer, Integer> countIdades = new HashMap<>();
 		egressoRepository.countAgeFromEgressos().stream()
 				.forEach(e -> {
-					if (e.get(0) instanceof BigDecimal idade1 && e.get(1) instanceof BigDecimal idade2) {
-						countIdades.put(idade1.intValue(), idade2.intValue());
+					if (e.get(0) instanceof BigDecimal && e.get(1) instanceof Long) {
+						countIdades.put(e.get(0, BigDecimal.class).intValue(), e.get(1, Long.class).intValue());
 					} else if (e.get(0) instanceof Integer && e.get(1) instanceof Long) {
 						countIdades.put(e.get(0, Integer.class), e.get(1, Long.class).intValue());
 					}
