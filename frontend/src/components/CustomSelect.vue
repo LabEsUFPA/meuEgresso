@@ -193,6 +193,7 @@ function handleEmit (option: IOpts) {
       $emit('change', selected.value.value)
       return
     }
+
     handleChange(selected.value)
     $emit('change', selected.value)
   }
