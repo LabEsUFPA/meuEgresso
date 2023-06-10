@@ -199,6 +199,15 @@ function handleEmit (option: IOpts) {
 }
 
 onMounted(() => {
+  if (props.preFilled) {
+    model.value = props.placeholder || ''
+    // handleChange(model.value)
+    // $emit('change', model.value)
+    const inputElement = input.value as HTMLInputElement
+    if (inputElement) {
+      inputElement.value = model.value
+    }
+  }
   watch(focusInput, () => {
     if (model.value !== '') {
       model.value = ''

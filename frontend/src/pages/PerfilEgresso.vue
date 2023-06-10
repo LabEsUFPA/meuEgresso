@@ -233,6 +233,7 @@
                   label="Gênero"
                   :options="$store.generos"
                   required
+                  :pre-filled="true"
                 />
 
                 <CustomInput
@@ -484,6 +485,7 @@
                       @change="dataEgresso.localizacao.pais = $event"
                       required
                       :placeholder="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
+                      :pre-filled="true"
                     />
 
                     <CustomSelect
@@ -495,6 +497,7 @@
                       @change="dataEgresso.localizacao.estado = $event"
                       required
                       :placeholder="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
+                      :pre-filled="true"
                     />
 
                     <CustomSelect
@@ -504,6 +507,7 @@
                       v-model:value="dataEgresso.localizacao.cidade"
                       required
                       :placeholder="dataEgresso.localizacao.cidade"
+                      :pre-filled="true"
                     />
                   </div>
                 </div>
@@ -1271,11 +1275,10 @@ onMounted(() => {
   estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
 
   cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
-
   watch(() => dataEgresso.value.localizacao.pais, (newValue) => {
     formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
     formLocalizacao.value?.setFieldValue('localizacao.estado', '')
-    dataEgresso.value.localizacao.cidade = ''
+    // dataEgresso.value.localizacao.cidade = ''
 
     setTimeout(() => {
       estadoInput.value = ''
@@ -1287,13 +1290,14 @@ onMounted(() => {
     console.log('estado')
     console.log(formLocalizacao.value)
     formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
-    dataEgresso.value.localizacao.cidade = ''
+    // dataEgresso.value.localizacao.cidade = ''
 
     setTimeout(() => {
       cidadeInput.value = ''
     }, 10)
   })
 })
+
 onMounted(() => {
   window.scrollTo(0, 0)
   fetchUpdateEgresso()
