@@ -337,7 +337,7 @@
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
               <p>
-                Descreva abaixo os assuntos nos quais você se sente mais confiante para apresentar palestras. (max. 300 caracteres)<sup
+                Descreva abaixo os assuntos nos quais você se sente mais confiante para apresentar palestras.<sup
                   v-if="bools.palestras"
                   class="text-red-500"
                 >*</sup>
@@ -365,7 +365,7 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              <p>Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes, pois tudo tem impacto. (max. 300 caracteres)<sup class="text-red-500">*</sup></p>
+              <p>Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes, pois tudo tem impacto.<sup class="text-red-500">*</sup></p>
               <span>(max. 300 caracteres)</span>
             </div>
 
