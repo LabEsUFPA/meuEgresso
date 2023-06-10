@@ -41,6 +41,12 @@
     >
       {{ label }}
     </label>
+    <sup
+      class="text-red-500"
+      v-if="required"
+    >
+      *
+    </sup>
   </button>
 </template>
 
@@ -54,6 +60,7 @@ const props = defineProps<{
   label: string
   name: string
   disabled?: boolean
+  required?: boolean
 }>()
 type Booleanish = 'true' | 'false'
 const $emit = defineEmits(['update:value'])
