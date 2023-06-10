@@ -376,7 +376,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
     async getGenderData () {
       const response = await Api.request({
         method: 'get',
-        route: '/publico/grafico/genero'
+        route: '/publico/grafico/generos'
       })
 
       const values: PieChartSeries[] = []
