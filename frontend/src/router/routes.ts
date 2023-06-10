@@ -61,6 +61,13 @@ export default [
       {
         path: '/vagas/:id',
         component: async () => await import('src/pages/AnuncioVaga.vue')
+      },
+      {
+        path: '/registro-egressos',
+        component: async () => await import('src/pages/RegistroEgressos.vue'),
+        meta: {
+          requiresAuth: true
+        }
       }
     ]
   },
