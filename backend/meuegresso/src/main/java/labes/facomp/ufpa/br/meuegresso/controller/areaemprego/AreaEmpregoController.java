@@ -55,7 +55,7 @@ public class AreaEmpregoController {
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public List<AreaEmpregoDTO> buscarGeneros() {
+    public List<AreaEmpregoDTO> buscarAreaEmpregos() {
 
         return mapper.map(areaEmpregoService.findAll(), new TypeToken<List<AreaEmpregoDTO>>() {}.getType());
     }
@@ -72,7 +72,7 @@ public class AreaEmpregoController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public String cadastrarGenero(
+    public String cadastrarAreaEmprego(
             @RequestBody @Valid AreaEmpregoDTO areaEmpregoDTO) {
         AreaEmpregoModel areaEmpregoModel = mapper.map(areaEmpregoDTO, AreaEmpregoModel.class);
         areaEmpregoService.save(areaEmpregoModel);
@@ -91,7 +91,7 @@ public class AreaEmpregoController {
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public String atualizarGenero(@RequestBody @Valid AreaEmpregoDTO areaEmpregoDTO, JwtAuthenticationToken token)
+    public String atualizarAreaEmprego(@RequestBody @Valid AreaEmpregoDTO areaEmpregoDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
         if (areaEmpregoService.existsByIdAndCreatedById(areaEmpregoDTO.getId(), jwtService.getIdUsuario(token))) {
             AreaEmpregoModel areaEmpregoModel = mapper.map(areaEmpregoDTO, AreaEmpregoModel.class);
@@ -113,7 +113,7 @@ public class AreaEmpregoController {
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public String deletarGenero(@RequestBody @Valid AreaEmpregoDTO areaEmpregoDTO) {
+    public String deletarAreaEmprego(@RequestBody @Valid AreaEmpregoDTO areaEmpregoDTO) {
 
         AreaEmpregoModel areaEmpregoModel = mapper.map(areaEmpregoDTO, AreaEmpregoModel.class);
         areaEmpregoService.deleteById(areaEmpregoModel.getId());

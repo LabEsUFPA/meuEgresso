@@ -24,6 +24,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.palestra.PalestraDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.PalestraModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.palestra.PalestraService;
@@ -90,8 +91,9 @@ public class PalestraController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarPalestra(@RequestBody @Valid PalestraDTO palestraDTO) {
+	public String cadastrarPalestra(@RequestBody @Valid PalestraDTO palestraDTO, JwtAuthenticationToken token) {
 		PalestraModel palestraModel = mapper.map(palestraDTO, PalestraModel.class);
+		palestraModel.setEgresso(EgressoModel.builder().id(jwtService.getIdUsuario(token)).build());
 		palestraService.save(palestraModel);
 		return ResponseType.SUCESS_SAVE.getMessage();
 	}
@@ -114,7 +116,7 @@ public class PalestraController {
 	public String atualizarPalestra(@RequestBody @Valid PalestraDTO palestraDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (palestraService.existsByIdAndCreatedById(palestraDTO.getId(), jwtService.getIdUsuario(token))) {
-			PalestraModel palestraModel = palestraService.findByEgressoUsuarioId(jwtService.getIdUsuario(token));
+			PalestraModel palestraModel = palestraService.findByEgressoId(jwtService.getIdUsuario(token));
 			palestraModel.setDescricao(palestraDTO.getDescricao());
 			palestraService.update(palestraModel);
 			return ResponseType.SUCESS_UPDATE.getMessage();
@@ -131,11 +133,16 @@ public class PalestraController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping
+	@DeleteMapping(value = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(Integer id) {
-		return palestraService.deleteById(id);
+	public String deleteById(@PathVariable(name = "id") Integer id) {
+		if (palestraService.deleteById(id)) {
+			return ResponseType.SUCESS_DELETE.getMessage();
+		} else {
+			return ResponseType.FAIL_DELETE.getMessage();
+		}
 	}
 
 }
