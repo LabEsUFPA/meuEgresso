@@ -3,6 +3,7 @@ package labes.facomp.ufpa.br.meuegresso.controller.publico.grafico;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -114,8 +115,11 @@ public class GraficoPubController {
 	public IdadesGraficoDTO getIdades() {
 		Map<Integer, Integer> idadesContagens = egressoService.countAgeFromEgressos();
 
-		return new IdadesGraficoDTO(idadesContagens.values().stream().mapToDouble(a -> a).average().orElse(-1),
-				idadesContagens);
+		Double media = 0.0;
+		for (Entry<Integer, Integer> entry : idadesContagens.entrySet()) {
+			media += entry.getKey() * entry.getValue();
+		}
+		return new IdadesGraficoDTO(media,idadesContagens);
 	}
 
 	/**

@@ -49,6 +49,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.CursosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EmpresaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EnderecoEmpresasGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.GenerosGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.IdadesGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.InteresseEmPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.PosGraduacaoGraficoDTO;
@@ -600,28 +601,26 @@ class GraficoPubControllerTest {
                                 .get(SETORATUACAO_NOME));
         }
 
-        // H2 não oferece suporte ao age()
-        // @Test
-        // @Order(12)
-        // void testGetIdades() throws Exception {
-        // MvcResult resposta =
-        // mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/idades")
-        // .contentType(MediaType.APPLICATION_JSON))
+        @Test
+        @Order(12)
+        void testGetIdades() throws Exception {
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/idades")
+                                .contentType(MediaType.APPLICATION_JSON))
 
-        // .andDo(MockMvcResultHandlers.print())
-        // .andExpect(status().isOk()).andReturn();
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
 
-        // IdadesGraficoDTO idadesGraficoDTO = objectMapper.readValue(
-        // resposta.getResponse().getContentAsString(),
-        // IdadesGraficoDTO.class);
+                IdadesGraficoDTO idadesGraficoDTO = objectMapper.readValue(
+                                resposta.getResponse().getContentAsString(),
+                                IdadesGraficoDTO.class);
 
-        // assertNotNull(idadesGraficoDTO);
-        // assertEquals(1, idadesGraficoDTO.getIdadesEgressos().size());
-        // // O get(26) seleciona a chave com idade 26 e retorna quantos egressos
-        // // tem essa idade, que nesse caso é 1
-        // assertEquals(1, idadesGraficoDTO.getIdadesEgressos().get(26));
-        // assertEquals(26.0, idadesGraficoDTO.getMediaIdades());
-        // }
+                assertNotNull(idadesGraficoDTO);
+                assertEquals(1, idadesGraficoDTO.getIdadesEgressos().size());
+                // O get(26) seleciona a chave com idade 26 e retorna quantos egressos
+                // tem essa idade, que nesse caso é 1
+                assertEquals(1, idadesGraficoDTO.getIdadesEgressos().get(26));
+                assertEquals(26.0, idadesGraficoDTO.getMediaIdades());
+        }
 
         @Test
         @Order(13)
