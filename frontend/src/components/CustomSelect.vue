@@ -214,7 +214,6 @@ onMounted(() => {
       model.value = ''
     }
     if (input.value) {
-      console.log(model.value)
       input.value.focus()
     }
   })
