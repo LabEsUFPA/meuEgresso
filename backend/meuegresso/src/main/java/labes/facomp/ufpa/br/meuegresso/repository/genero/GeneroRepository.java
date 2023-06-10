@@ -2,8 +2,10 @@ package labes.facomp.ufpa.br.meuegresso.repository.genero;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import jakarta.persistence.Tuple;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 
 /**
@@ -19,4 +21,8 @@ public interface GeneroRepository extends CrudRepository<GeneroModel, Integer> {
     List<GeneroModel> findAll();
 
     boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
+    @Query(value = "SELECT g.nome, COUNT(e.id) FROM genero g LEFT JOIN egresso e ON e.genero.id = g.id GROUP BY g.nome")
+
+    List<Tuple> countEgressoByGenero();
 }

@@ -1,6 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.service.areaatuacao.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -59,6 +61,14 @@ public class AreaAtuacaoImpl implements AreaAtuacaoService {
     @Override
     public AreaAtuacaoModel findByNome(String nome) {
         return areaAtuacaoRepository.findByNomeIgnoreCase(nome).orElse(null);
+    }
+
+    @Override
+    public Map<String, Integer> countEgressoByAreaAtuacao() {
+        Map<String, Integer> contagem = new HashMap<>(7);
+        areaAtuacaoRepository.countEgressoByAreaAtuacao().stream()
+                .forEach(e -> contagem.put(e.get(0, String.class), e.get(1, Long.class).intValue()));
+        return contagem;
     }
 
 }

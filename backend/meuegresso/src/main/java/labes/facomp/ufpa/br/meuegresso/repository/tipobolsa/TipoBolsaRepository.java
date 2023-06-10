@@ -2,8 +2,10 @@ package labes.facomp.ufpa.br.meuegresso.repository.tipobolsa;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import jakarta.persistence.Tuple;
 import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 
 /**
@@ -17,6 +19,14 @@ import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 public interface TipoBolsaRepository extends CrudRepository<TipoBolsaModel, Integer> {
 
     List<TipoBolsaModel> findAll();
-    
+
     boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
+    @Query(value = """
+        SELECT tb.nome, COUNT(e) AS total_egressos
+            FROM tipo_bolsa tb
+            LEFT JOIN egresso e ON e.bolsa.id = tb.id
+            GROUP BY tb.nome
+    """)
+    List<Tuple> countEgressoForBolsa();
 }
