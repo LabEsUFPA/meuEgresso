@@ -1,9 +1,9 @@
 <template>
   <div
-    v-if="loading"
-    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-full"
+    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 sm:h-96"
   >
     <div
+      v-if="loading"
       class="w-full h-full flex items-center justify-center"
     >
       <SvgIcon
@@ -13,29 +13,47 @@
         :path="mdiLoading"
       />
     </div>
-  </div>
-  <div
-    v-else
-    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96"
-  >
-    <div class="pl-1">
-      <h1 class="font-bold text-2xl">
-        {{ legend }}
-      </h1>
-      <p class="text-base">
-        {{ info }}
-      </p>
+    <div
+      class="flex h-full w-full"
+      v-else
+    >
+      <div
+        v-if="data?.error"
+        class="flex flex-col w-full justify-center items-center"
+      >
+        <SvgIcon
+          type="mdi"
+          size="80"
+          class="text-gray-400"
+          :path="mdiAlertCircleOutline"
+        />
+        <h1>Ocorreu algum erro :(</h1>
+      </div>
+
+      <div
+        v-else
+        class="flex flex-col h-full w-full gap-y-10"
+      >
+        <div class="pl-1">
+          <h1 class="font-bold text-2xl">
+            {{ legend }}
+          </h1>
+          <p class="text-base">
+            {{ info }}
+          </p>
+        </div>
+        <v-chart
+          :option="windowWidth < 600 ? optionMobile : optionDesktop"
+          autoresize
+        />
+      </div>
     </div>
-    <v-chart
-      :option="windowWidth < 600 ? optionMobile : optionDesktop"
-      autoresize
-    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiLoading } from '@mdi/js'
+import { mdiLoading, mdiAlertCircleOutline } from '@mdi/js'
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { PieChart, BarChart } from 'echarts/charts'
@@ -66,7 +84,10 @@ interface Props {
     legend?: string,
     info?: string
     loading: boolean
-    data: PieChartModel | null
+    data: {
+      series: PieChartModel
+      error: boolean
+    } | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -96,7 +117,7 @@ const optionDesktop = ref({
   legend: {
     orient: 'vertical',
     left: 'left',
-    data: props.data?.legend
+    data: props.data?.series.legend
   },
   series: [
     {
@@ -112,7 +133,7 @@ const optionDesktop = ref({
         show: false
       },
       center: ['70%', '50%'],
-      data: props.data?.values
+      data: props.data?.series.values
     }
   ]
 })
@@ -129,7 +150,7 @@ const optionMobile = ref({
   legend: {
     orient: 'horizontal',
     left: 'left',
-    data: props.data?.legend
+    data: props.data?.series.legend
   },
   series: [
     {
@@ -145,13 +166,13 @@ const optionMobile = ref({
         show: false
       },
       center: ['50%', '65%'],
-      data: props.data?.values
+      data: props.data?.series.values
     }
   ]
 })
 
 const setOptionData = () => {
-  optionDesktop.value.series[0].data = props.data?.values
-  optionMobile.value.series[0].data = props.data?.values
+  optionDesktop.value.series[0].data = props.data?.series.values
+  optionMobile.value.series[0].data = props.data?.series.values
 }
 </script>

@@ -1,9 +1,9 @@
 <template>
   <div
-    v-if="loading"
-    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-full"
+    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 sm:h-96"
   >
     <div
+      v-if="loading"
       class="w-full h-full flex items-center justify-center"
     >
       <SvgIcon
@@ -13,29 +13,47 @@
         :path="mdiLoading"
       />
     </div>
-  </div>
-  <div
-    v-else
-    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96"
-  >
-    <div class="pl-1">
-      <h1 class="font-bold text-2xl">
-        {{ legend }}
-      </h1>
-      <p class="text-base">
-        {{ info }}
-      </p>
+    <div
+      class="flex h-full w-full"
+      v-else
+    >
+      <div
+        v-if="data?.error"
+        class="flex flex-col w-full justify-center items-center"
+      >
+        <SvgIcon
+          type="mdi"
+          size="80"
+          class="text-gray-400"
+          :path="mdiAlertCircleOutline"
+        />
+        <h1>Ocorreu algum erro :(</h1>
+      </div>
+
+      <div
+        v-else
+        class="flex flex-col h-full w-full gap-y-10"
+      >
+        <div class="pl-1">
+          <h1 class="font-bold text-2xl">
+            {{ legend }}
+          </h1>
+          <p class="text-base">
+            {{ info }}
+          </p>
+        </div>
+        <v-chart
+          :option="option"
+          autoresize
+        />
+      </div>
     </div>
-    <v-chart
-      :option="option"
-      autoresize
-    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiLoading } from '@mdi/js'
+import { mdiLoading, mdiAlertCircleOutline } from '@mdi/js'
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { PieChart, BarChart } from 'echarts/charts'
@@ -64,7 +82,10 @@ interface Props {
     legend?: string,
     info?: string
     loading: boolean
-    data: BarChartModel | null
+    data: {
+      series: BarChartModel
+      error: boolean
+    } | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -72,14 +93,14 @@ const props = withDefaults(defineProps<Props>(), {
   info: 'Um belo gráfico'
 })
 
-watch(() => props.data?.x, () => {
+watch(() => props.data?.series.x, () => {
   setOptionData()
 })
 
 const option = ref({
   xAxis: {
     type: 'category',
-    data: props.data?.x
+    data: props.data?.series.x
   },
   yAxis: {
     type: 'value',
@@ -87,14 +108,14 @@ const option = ref({
   },
   series: [
     {
-      data: props.data?.y,
+      data: props.data?.series.y,
       type: 'bar'
     }
   ]
 })
 
 const setOptionData = () => {
-  option.value.xAxis.data = props.data?.x
-  option.value.series[0].data = props.data?.y
+  option.value.xAxis.data = props.data?.series.x
+  option.value.series[0].data = props.data?.series.y
 }
 </script>
