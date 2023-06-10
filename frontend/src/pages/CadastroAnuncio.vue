@@ -1,4 +1,3 @@
-
 <template>
   <Form
     ref="form"
@@ -133,7 +132,7 @@ import CustomDialog from 'src/components/CustomDialog.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import { Form } from 'vee-validate'
-import { object, string, date } from 'yup'
+import { object, string } from 'yup'
 import { mdiCheckCircle, mdiBullhorn, mdiLink } from '@mdi/js'
 import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
 import classNames from 'classnames'
@@ -153,9 +152,18 @@ const retornaFeed = () => {
 $store.fetchAreasEmprego()
 
 const schema = object().shape({
-  titulo: string().required('O título é um campo obrigatório').trim().matches(/^[a-zA-ZÀ-ÿ0-9]+$/, 'Somente letras e números.'),
+  titulo: string().required('O título é um campo obrigatório').trim().matches(/^[\w\s\d\SÀ-ÿ]+$/, 'Somente letras e números.'),
   areasEmprego: string().required('A área da emprego é um campo obrigatório.'),
-  dataExpiracao: date().required('A data de expiração é um campo obrigatório.'),
+  dataExpiracao: string().required('Campo obrigatório').test('Data', 'Data deve ser sempre no futuro', (value) => {
+    if (value) {
+      const date = value.split('/').reverse().join('-') // Converte data para (YYYY-MM-DD)
+      const minDate = new Date()
+      const maxDate = new Date((minDate.getFullYear() + 1).toString() + '-12-31')
+      const inputDate = new Date(date)
+      return inputDate >= minDate && inputDate <= maxDate
+    }
+    return true
+  }),
   salario: string().max(12),
   link: string().required('O link para contato é um campo obrigatório.').trim().matches(/^(http|https):\/\/[a-zA-Z0-9\-.]+\.[a-zA-Z]{2,}(\/\S*)?$/, 'Deve ser um formato de link válido em http ou https.'),
   descricao: string().required('A descrição é um campo obrigatório.')
