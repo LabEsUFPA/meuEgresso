@@ -19,6 +19,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class InteresseEmPosGraficoDTO {
 
-    private Map<String, Integer> InteresseContagem;
+    private Map<String, Integer> interesseContagem;
 
 }
