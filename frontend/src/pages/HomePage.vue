@@ -46,5 +46,4 @@ const getEgresso = async () => {
   loading.value = false
 }
 
-
 </script>

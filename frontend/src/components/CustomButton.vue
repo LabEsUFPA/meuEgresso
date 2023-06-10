@@ -132,7 +132,7 @@ const colorClassNames = {
 }
 
 const styles = computed(() => {
-  const classes = ['rounded-md px-4 py-1 text-lg font-semibold hover:duration-200 inline-block flex flex-row items-center justify-center max-h-[32px]']
+  const classes = ['rounded-md px-4 py-1 text-lg font-semibold hover:duration-200 inline-block flex flex-row items-center justify-center max-h-[32px] w-full']
   switch (props.variant) {
     case 'standard':
       classes.push(colorClassNames[props.color].background.standard)

@@ -573,7 +573,7 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomPerfilData from 'src/components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
-import { Country, State} from 'country-state-city'
+import { Country, State } from 'country-state-city'
 import { computed, ref, watch, onMounted } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import { Form } from 'vee-validate'
@@ -604,7 +604,6 @@ const $route = useRoute()
 const $store = usePerfilEgressoStore()
 const egressoStore = usePerfilEgressoStore()
 
-
 const storage = new LocalStorage()
 const formHeader = ref<typeof Form | null>(null)
 const formGeral = ref<typeof Form | null>(null)
@@ -613,23 +612,18 @@ const formCarreira = ref<typeof Form | null>(null)
 const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 
-
-if(storage.has('loggedEgresso')){
+if (storage.has('loggedEgresso')) {
   $store.fetchAll()
 }
-
 
 const isPublic = computed(() => {
   if (storage.has('loggedUser') && storage.has('loggedEgresso')) {
     const logEgresso = JSON.parse(storage.get('loggedEgresso'))
-    console.log(logEgresso);
-    return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id)) 
+    console.log(logEgresso)
+    return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id))
+  } else {
+    return (Object.keys($route.params).length === 1)
   }
-  else{
-    return (Object.keys($route.params).length === 1) 
-
-  }
-
 })
 
 function handleStatus (status: any) {
@@ -647,20 +641,18 @@ const profileImageSave = () => {
 }
 async function handleSubmitHeader (values: any) {
   jsonResponse.usuario.nome = values.geral.nome
-  if(values.geral.linkedin !== '' && values.geral.linkedin !== undefined){
+  if (values.geral.linkedin !== '' && values.geral.linkedin !== undefined) {
     jsonResponse.linkedin = values.geral.linkedin
-  }
-  else{
+  } else {
     jsonResponse.linkedin = null
   }
-  if(values.geral.lattes !== '' && values.geral.lattes !== undefined){
-    console.log(jsonResponse.lattes);
+  if (values.geral.lattes !== '' && values.geral.lattes !== undefined) {
+    console.log(jsonResponse.lattes)
     jsonResponse.lattes = values.geral.lattes
-  }
-  else{
+  } else {
     jsonResponse.lattes = null
   }
-  
+
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   const responseImage = await profileImageSave()
   // console.log(status)
@@ -832,7 +824,6 @@ async function handleSubmitCarreira (values: any) {
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
-
   } else {
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego = null
@@ -1027,10 +1018,9 @@ async function fetchUpdateEgresso () {
   } else {
     egressoResponseBack = egressoStore.fetchEgresso()
   }
-  
 
   const ResponseBack = await egressoResponseBack
-  
+
   const json = JSON.parse(ResponseBack)
 
   jsonResponse = json
@@ -1197,7 +1187,7 @@ async function fetchUpdateEgresso () {
     'adicionais.experiencias': dataEgresso.value.adicionais.experiencias,
     'adicionais.contribuicoes': dataEgresso.value.adicionais.contribuicoes
   })
-  return json;
+  return json
 }
 onMounted(() => {
   window.scrollTo(0, 0)

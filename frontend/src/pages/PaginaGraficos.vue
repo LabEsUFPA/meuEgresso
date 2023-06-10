@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full px-3 justify-center bg-gradient-to-b from-sky-200 to-indigo-200">
-    <div class="flex w-full min-w-[250px] max-w-[1400px] justify-start border-2 border-b-0 border-white rounded-t-2xl text-blue-900 py-8 pl-6 md:pl-11 mt-10 shadow-md">
+    <div class="flex w-full min-w-[250px] max-w-[1400px] justify-start border-2 border-b-0 border-white rounded-t-2xl text-sky-800 py-8 pl-6 md:pl-11 mt-10 shadow-md">
       <SvgIcon
         type="mdi"
         size="30"
@@ -14,7 +14,7 @@
     </div>
   </div>
   <div class="flex px-3 justify-center">
-    <div class="w-full min-w-[250px] max-w-[1400px] flex flex-col md:flex-row bg-white rounded-b-2xl py-8 pl-7 md:pl-11 text-blue-900 gap-x-5">
+    <div class="w-full min-w-[250px] max-w-[1400px] flex flex-col md:flex-row bg-white rounded-b-2xl py-8 pl-7 md:pl-11 text-sky-800 gap-x-5">
       <span class="font-semibold md:text-lg flex items-center mb-3 md:mb-0">
         <SvgIcon
           type="mdi"
@@ -25,7 +25,7 @@
         Filtros
       </span>
 
-      <div class="overflow-x-auto flex-1' flex flex-row gap-x-1 md:gap-x-3">
+      <div class="overflow-x-auto flex-1 flex flex-row gap-x-1 md:gap-x-3">
         <FilterChip
           title="Todos"
           :selected="filters.all"
@@ -306,20 +306,14 @@ const getGraphData = async () => {
   companyLegend.value = companyGraph?.companyLegend
 }
 
-interface Filters {
-  all: boolean
-  general: boolean
-  academic: boolean
-  career: boolean
-}
-const filters = ref<Filters>({
+const filters = ref({
   all: true,
   general: false,
   academic: false,
   career: false
 })
 
-type filterTypes = keyof Filters
+type filterTypes = keyof typeof filters.value
 function handleFilters (clicked: filterTypes) {
   Object.keys(filters.value).forEach((key) => {
     filters.value[(key as filterTypes)] = key === clicked

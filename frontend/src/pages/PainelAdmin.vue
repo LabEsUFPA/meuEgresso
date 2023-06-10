@@ -15,194 +15,303 @@
       </div>
     </div>
 
-    <div
-      class="flex flex-col gap-4 sm:gap-8 mb-10 "
-    >
-      <div
-        class="flex justify-center"
-      >
-        <div
-          class="flex flex-col gap-4 sm:gap-6 w-[960px] bg-white rounded-bl-2xl rounded-br-2xl p-6 sm:p-8 mx-4 sm:mx-6 items-center"
-        >
-          <div class="flex flex-col sm:flex-row w-full items-start gap-4 sm:gap-8">
-            <div class="flex gap-4 text-cyan-800 items-center">
-              <SvgIcon
-                type="mdi"
-                size="24"
-                :path="mdiFilterVariant"
-              />
-              <p class="font-medium text-lg">
-                Filtros
-              </p>
+    <div class="flex flex-col gap-4 sm:gap-8 mb-5">
+      <div class="flex justify-center">
+        <div class="flex flex-col w-[960px] bg-white rounded-bl-2xl rounded-br-2xl overflow-hidden mx-4 sm:mx-6">
+          <div class="p-6 sm:p-8 flex flex-row items-start border-b">
+            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center shrink-0 bg-sky-200 mr-10">
+              <img :src="eagle">
             </div>
-
-            <div class="flex flex-wrap gap-4">
-              <div
-                v-for="filtro in $store.areasEmpregoFiltros.filter(f => f.selected)"
-                :key="filtro.id"
-              >
-                <FilterChip
-                  :title="filtro.name"
-                  :selected="filtro.selected"
-                  :selectable="filtro.selectable"
-                  @click="toggleFilterApplied(filtro.id)"
-                />
+            <div>
+              <div class="text-cyan-800 font-semibold text-lg mb-5">
+                Marcelle Mota
               </div>
 
-              <button
-                class="flex gap-3 px-4 py-2 rounded-3xl items-center text-cyan-800 bg-gray-200 font-medium"
-                @click="openModalFilters()"
-              >
+              <div class="text-amber-500 border border-amber-500 py-1 px-3 rounded-xl flex items-center">
                 <SvgIcon
                   type="mdi"
-                  size="16"
-                  :path="mdiPlus"
+                  size="20"
+                  class="inline mr-2"
+                  :path="mdiCrown"
                 />
-                <p class="text-sm">
-                  Adicionar filtro
-                </p>
-              </button>
+
+                Administrador
+              </div>
             </div>
+          </div>
+          <div class="flex flex-col items-start sm:flex-row justify-end gap-4 p-4">
+            <CustomButton variant="flat">
+              <SvgIcon
+                type="mdi"
+                size="20"
+                class="inline mr-2"
+                :path="mdiBell"
+              />
+
+              Ver atividades
+            </CustomButton>
+
+            <CustomButton variant="flat">
+              <SvgIcon
+                type="mdi"
+                size="20"
+                class="inline mr-2"
+                :path="mdiCog"
+              />
+
+              Editar Conta
+            </CustomButton>
+
+            <CustomButton
+              color="red"
+              variant="flat"
+            >
+              <SvgIcon
+                type="mdi"
+                size="20"
+                class="inline mr-2"
+                :path="mdiExitToApp"
+              />
+
+              Sair
+            </CustomButton>
           </div>
         </div>
       </div>
+    </div>
 
-      <div v-if="$store.anuncios.length > 0">
-        <div
-          v-for="anuncio in $store.anuncios"
-          :key="anuncio.id"
-          class="flex justify-center mb-8"
-        >
-          <ShortPost
-            :id="anuncio.id"
-            :nome="anuncio.createdBy.nome"
-            :titulo="anuncio.titulo"
-            :area="anuncio.areaEmprego.nome"
-            :descricao="anuncio.descricao"
-            :salario="anuncio.salario"
-          />
+    <div class="flex justify-center">
+      <div class="flex flex-col md:grid grid-cols-2 grid-rows-5 gap-5 mb-5 w-[960px] mx-4 sm:mx-6">
+        <div class="row-start-1 row-end-3 col-start-1 col-end-2 bg-white rounded-lg">
+          <div class="text-xl font-semibold text-cyan-800 border-b p-4">
+            Ações
+          </div>
+
+          <div class="border-b text-cyan-600 p-4 font-semibold text-left">
+            <RouterLink
+              to="/"
+              class="flex items-center"
+            >
+              <SvgIcon
+                type="mdi"
+                size="20"
+                class="inline mr-2"
+                :path="mdiAccountPlus"
+              />
+
+              Criar perfil de usuário
+
+              <div class="flex-1" />
+
+              <SvgIcon
+                type="mdi"
+                size="20"
+                class="inline"
+                :path="mdiChevronRight"
+              />
+            </RouterLink>
+          </div>
+          <div class="border-b text-cyan-600 p-4 font-semibold text-left">
+            <RouterLink
+              to="/"
+              class="flex items-center"
+            >
+              <SvgIcon
+                type="mdi"
+                size="20"
+                class="inline mr-2"
+                :path="mdiEmail"
+              />
+
+              Configurar e-mail de atualização
+
+              <div class="flex-1" />
+
+              <SvgIcon
+                type="mdi"
+                size="20"
+                class="inline"
+                :path="mdiChevronRight"
+              />
+            </RouterLink>
+          </div>
+          <div class="border-b text-cyan-600 p-4 font-semibold text-left">
+            <button>
+              <SvgIcon
+                type="mdi"
+                size="20"
+                class="inline"
+                :path="mdiFileDocument"
+              />
+
+              Exportar dados em pdf
+            </button>
+          </div>
+          <div class="border-b text-cyan-600 p-4 font-semibold text-left">
+            <button>
+              <SvgIcon
+                type="mdi"
+                size="20"
+                class="inline"
+                :path="mdiTrashCan"
+              />
+              Apagar dados
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div
-        v-else
-        class="flex flex-col gap-4 justify-center items-center text-gray-400"
-      >
-        <SvgIcon
-          type="mdi"
-          size="48"
-          :path="mdiEmoticonSadOutline"
-        />
-        <h1 class="text-xl sm:text-2xl font-medium">
-          Nenhuma vaga encontrada
-        </h1>
-      </div>
+        <div class="row-start-3 row-end-6 col-start-1 col-end-2 bg-white rounded-lg">
+          <div class="text-xl font-semibold text-cyan-800 border-b p-4">
+            Análise de Cadastros
+          </div>
 
-      <div
-        class="flex gap-16 sm:gap-32 justify-center"
-      >
-        <button
-          class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-lg"
-          v-show="currentPage>0"
-          @click="decrementaPage()"
-        >
-          <SvgIcon
-            type="mdi"
-            size="32"
-            :path="mdiChevronLeft"
-          />
-          <div>Anterior</div>
-        </button>
-        <div
-          class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-md"
-          v-show="currentPage<$store.totalPages-1"
-          @click="incrementaPage()"
-        >
-          <div>Próximo</div>
-          <SvgIcon
-            type="mdi"
-            size="32"
-            :path="mdiChevronRight"
-          />
+          <div class="flex flex-col p-4">
+            <div class="text-cyan-800 flex flex-col sm:flex-row md:flex-col lg:flex-row justify-between gap-2">
+              <div class="flex items-center font-semibold">
+                <SvgIcon
+                  type="mdi"
+                  class="inline mr-2"
+                  :path="mdiCalendar"
+                />
+
+                Periodos
+              </div>
+
+              <div class="overflow-x-auto flex flex-row gap-x-1 md:gap-x-3">
+                <FilterChip
+                  selectable
+                  :selected="selected.anos"
+                  @click="handleSelect('anos')"
+                  title="Anos"
+                />
+                <FilterChip
+                  selectable
+                  :selected="selected.meses"
+                  @click="handleSelect('meses')"
+                  title="Meses"
+                />
+                <FilterChip
+                  selectable
+                  :selected="selected.semanas"
+                  @click="handleSelect('semanas')"
+                  title="Semanas"
+                />
+                <FilterChip
+                  selectable
+                  :selected="selected.dias"
+                  @click="handleSelect('dias')"
+                  title="Dias"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row-start-1 row-end-6 col-start-2 col-end-3 bg-white rounded-lg">
+          <div class="text-xl font-semibold text-cyan-800 border-b p-4">
+            Registro de egressos
+          </div>
+
+          <div class="text-gray-400 px-4 py-2 flex items-center gap-2 border-b">
+            <SvgIcon
+              type="mdi"
+              size="20"
+              class="inline"
+              :path="mdiClock"
+            />
+
+            Mais Recentes
+          </div>
+
+          <div
+            v-for="egresso in egressos"
+            :key="egresso.id"
+            class="px-4 py-3 border-b flex items-center gap-3"
+          >
+            <div class="w-10 h-10 rounded-full bg-cyan-900">
+              foto
+            </div>
+
+            <div flex="flex items-center">
+              <div class="font-semibold text-cyan-800">
+                {{ egresso.name }}
+              </div>
+
+              <div
+                class="text-xs text-white font-semibold text-center rounded-xl w-20 py-[1px]"
+                :class="{
+                  ['bg-emerald-500']: egresso.status === 'Ativo',
+                  ['bg-amber-500']: egresso.status === 'Pendente',
+                  ['bg-indigo-800']: egresso.status === 'Incompleto'
+                }"
+              >
+                {{ egresso.status }}
+              </div>
+            </div>
+
+            <div class="flex-1" />
+
+            <div>
+              <AdminOptionsDropdown
+                :id="egresso.id"
+                :status="egresso.status"
+              />
+            </div>
+          </div>
+
+          <div class="flex p-4 justify-end">
+            <CustomButton variant="flat">
+              Ver lista completa
+
+              <SvgIcon
+                type="mdi"
+                size="20"
+                class="inline"
+                :path="mdiChevronRight"
+              />
+            </CustomButton>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
-  <ModalFilters
-    v-if="loading"
-    v-model="isModalFiltersOpen"
-    :filters="$store.areasEmpregoFiltros"
-    @apply-filters="applyFilters"
-  />
 </template>
 
 <script setup lang="ts">
-
-import { ref, onMounted, watch } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiCog, mdiFilterVariant, mdiPlus, mdiChevronRight, mdiChevronLeft, mdiEmoticonSadOutline } from '@mdi/js'
-import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
-import ShortPost from 'src/components/ShortPost.vue'
+import {
+  mdiAccountPlus,
+  mdiBell,
+  mdiChevronRight,
+  mdiCog,
+  mdiCrown,
+  mdiExitToApp,
+  mdiEmail,
+  mdiFileDocument,
+  mdiTrashCan,
+  mdiCalendar,
+  mdiClock
+} from '@mdi/js'
+import CustomButton from 'src/components/CustomButton.vue'
+import eagle from 'src/assets/eagle.svg'
 import FilterChip from 'src/components/FilterChip.vue'
-import ModalFilters from 'src/components/ModalFilters.vue'
+import { getRandomEgressoList } from 'src/mock/EgressosPainel'
+import AdminOptionsDropdown from 'src/components/AdminOptionsDropdown.vue'
+import { ref } from 'vue'
 
-const $store = useAnuncioVagaStore()
-
-const loading = ref(false)
-
-const filtersById = ref([])
-
-const currentPage = ref(0)
-
-const size = ref(3)
-
-const incrementaPage = () => {
-  currentPage.value++
-}
-
-const decrementaPage = () => {
-  currentPage.value--
-}
-
-onMounted(async () => {
-  await $store.fetchAreasEmprego()
-  await $store.fetchBusca(currentPage.value, size.value)
-
-  loading.value = true
-  watch(currentPage, () => {
-    $store.fetchBusca(currentPage.value, size.value)
-  })
-  watch(pesquisaValue, () => {
-    $store.fetchBuscaAnuncioTitulo(pesquisaValue.value, currentPage.value, size.value)
-  })
-  watch(filtersById, () => {
-    if (filtersById.value.length > 0) {
-      $store.fetchBuscaAnuncioAreas(filtersById.value, currentPage.value, size.value)
-    } else {
-      $store.fetchBusca(currentPage.value, size.value)
-    }
-  })
+const selected = ref({
+  anos: true,
+  meses: false,
+  semanas: false,
+  dias: false
 })
 
-const isModalFiltersOpen = ref(false)
+const egressos = ref(getRandomEgressoList(10))
 
-const openModalFilters = () => {
-  isModalFiltersOpen.value = true
+type clickedTypes = keyof typeof selected.value
+function handleSelect (clicked: string) {
+  Object.keys(selected.value).forEach(key => {
+    selected.value[key as clickedTypes] = key === clicked
+  })
 }
-
-const pesquisaValue = ref('')
-
-const toggleFilterApplied = (id:number) => {
-  const filtro = $store.areasEmpregoFiltros.find(f => f.id === id)
-  if (filtro) {
-    filtro.selected = !filtro.selected
-    applyFilters(filtersById.value.filter(f => f === filtro.id))
-  }
-}
-
-const applyFilters = (filters:any) => {
-  filtersById.value = filters.map((elem: any) => (elem.id))
-}
-
 </script>
