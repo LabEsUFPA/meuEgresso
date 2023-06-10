@@ -404,6 +404,21 @@
                 placeholder="Empresa"
                 icon-path=""
               />
+              <div v-if="dataEgresso.carreira.area === '' ">
+                <div>
+                  <div class="text-gray-400 text-center mb-6 mt-12">
+                    <SvgIcon
+                      type="mdi"
+                      size="30"
+                      class="inline"
+                      :path="mdiAlertCircleOutline"
+                    />
+                    <div class="mt-4">
+                      Sem dados cadastrados
+                    </div>
+                  </div>
+                </div>
+              </div>
             </template>
           </FolderCarreira>
 
@@ -473,6 +488,21 @@
                     placeholder="Belém"
                     :icon-path="mdiMapMarkerRadius"
                   />
+                  <div v-if="dataEgresso.localizacao.pais === '' ">
+                    <div>
+                      <div class="text-gray-400 text-center mb-6 mt-12">
+                        <SvgIcon
+                          type="mdi"
+                          size="30"
+                          class="inline"
+                          :path="mdiAlertCircleOutline"
+                        />
+                        <div class="mt-4">
+                          Sem dados cadastrados
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div v-show="dataEgresso.localizacao.isInput">
                   <div>
@@ -644,7 +674,8 @@ import {
   mdiLinkVariant,
   mdiCheckCircle,
   mdiAlertCircle,
-  mdiMapMarker
+  mdiMapMarker,
+  mdiAlertCircleOutline
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
 const dialogSucesso = ref(false)
@@ -999,7 +1030,7 @@ const selectOpts = ref({
 })
 function onInvalid (e: any) {
   // updateEgressoDataModel(e)
-  // console.log(e)
+  console.log(e)
 }
 
 const dataEgresso = ref({
