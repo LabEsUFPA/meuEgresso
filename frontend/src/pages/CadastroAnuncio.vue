@@ -1,4 +1,3 @@
-
 <template>
   <Form
     ref="form"
@@ -63,6 +62,7 @@
                 :max-length="12"
                 :min-length="0"
                 :min="0"
+                money
               />
               <CustomInput
                 name="link"
