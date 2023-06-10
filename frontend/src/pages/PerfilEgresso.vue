@@ -1275,6 +1275,8 @@ onMounted(() => {
   watch(() => dataEgresso.value.localizacao.pais, (newValue) => {
     formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
     formLocalizacao.value?.setFieldValue('localizacao.estado', '')
+    dataEgresso.value.localizacao.cidade = ''
+
     setTimeout(() => {
       estadoInput.value = ''
       cidadeInput.value = ''
@@ -1285,6 +1287,8 @@ onMounted(() => {
     console.log('estado')
     console.log(formLocalizacao.value)
     formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
+    dataEgresso.value.localizacao.cidade = ''
+
     setTimeout(() => {
       cidadeInput.value = ''
     }, 10)
