@@ -406,7 +406,7 @@
           <div class="flex flex-row justify-center gap-2">
             <CustomButton
               tag="a"
-              link="https://www.linkedin.com/sharing/share-offsite/?url=https://meuegresso.alverad.com.br"
+              :link="`https://www.linkedin.com/sharing/share-offsite/?url=${baseURL}`"
               target="_blank"
             >
               <SvgIcon
