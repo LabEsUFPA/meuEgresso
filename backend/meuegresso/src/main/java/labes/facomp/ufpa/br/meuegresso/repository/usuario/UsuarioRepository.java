@@ -1,8 +1,12 @@
 package labes.facomp.ufpa.br.meuegresso.repository.usuario;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
@@ -24,4 +28,17 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
 	boolean existsByUsernameIgnoreCase(String username);
+
+	@Query(value = """
+			select u
+			from
+			    usuario u
+			where
+			    u.createdDate >= :minDate and u.createdDate <= :maxDate
+			    and u.nome = :nomeUsuario
+			    and u.ativo = :ativo
+			    and u.id in (select e.usuario.id from egresso e where e.emprego.empresa.nome ilike :nomeEmpresa)
+			""")
+	Page<UsuarioModel> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate minDate, LocalDate maxDate,
+			Boolean ativo, Pageable page);
 }

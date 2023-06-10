@@ -1,7 +1,10 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
@@ -67,7 +70,21 @@ public interface UsuarioService extends UserDetailsService {
 	 * @param createdBy
 	 * @return
 	 */
-    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
-    public boolean existsByUsername(String username);
+	public boolean existsByUsername(String username);
+
+	/**
+	 * Método responsável por encontrar todos os usuários com
+	 * cadastro de egresso incompleto, ou seja, com EgressoModel vazio.
+	 * A exceção são os usuários de grupo ADMIN e SECRETARIO, pois
+	 * não são egressos.
+	 *
+	 * @return Lista de objetos da classe UsuarioModel.
+	 * @author Bruno Eiki
+	 */
+
+	public Page<UsuarioModel> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate dateMin, LocalDate dateMax,
+			Boolean ativo,  Integer page, Integer size, Direction direction);
+
 }
