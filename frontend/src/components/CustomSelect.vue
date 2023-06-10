@@ -162,7 +162,7 @@ const $emit = defineEmits(['change', 'infiniteScroll', 'typing'])
 const model = ref<any>('')
 const selected = ref<IOpts>('')
 const open = ref(false)
-const input = ref<HTMLElement | null>(null)
+const input = ref<HTMLInputElement | null>(null)
 const focusInput = ref(false)
 
 const filteredDataArray = computed(() => {
@@ -200,7 +200,19 @@ function handleEmit (option: IOpts) {
 }
 
 onMounted(() => {
+  if (props.preFilled) {
+    model.value = props.placeholder || ''
+    // handleChange(model.value)
+    // $emit('change', model.value)
+    const inputElement = input.value as HTMLInputElement
+    if (inputElement) {
+      inputElement.value = model.value
+    }
+  }
   watch(focusInput, () => {
+    if (model.value !== '') {
+      model.value = ''
+    }
     if (input.value) {
       input.value.focus()
     }

@@ -23,6 +23,7 @@
           @change="area = $event"
           :options="selectOpts.areaAtuacao"
           required
+          :pre-filled="true"
         />
 
         <CustomSelect
@@ -33,6 +34,7 @@
           :options="selectOpts.setorAtuacao"
           :required="area !== 'Desempregado'"
           :disabled="area === 'Desempregado'"
+          :pre-filled="true"
         />
 
         <CustomInput
@@ -52,6 +54,7 @@
           :options="$store.faixasSalariais"
           :required="area !== 'Desempregado'"
           :disabled="area === 'Desempregado'"
+          :pre-filled="true"
         />
       </div>
       <div v-else>
@@ -78,10 +81,9 @@ import LocalStorage from 'src/services/localStorage'
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 
-if(storage.has('loggedEgresso')){
+if (storage.has('loggedEgresso')) {
   $store.fetchAll()
 }
-
 
 const pais = ref('')
 const estado = ref('')
