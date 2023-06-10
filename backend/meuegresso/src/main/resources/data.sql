@@ -7,7 +7,7 @@ INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario) VALUES ('eg
 -- Grupos Padrões
 
 INSERT INTO grupo (nome_grupo, created_by) values ('ADMIN', 1) ON CONFLICT DO NOTHING;
-INSERT INTO grupo (nome_grupo, created_by) values ('SECRETÁRIO', 1) ON CONFLICT DO NOTHING;
+INSERT INTO grupo (nome_grupo, created_by) values ('SECRETARIO', 1) ON CONFLICT DO NOTHING;
 INSERT INTO grupo (nome_grupo, created_by) values ('EGRESSO', 1) ON CONFLICT DO NOTHING;
 
 
