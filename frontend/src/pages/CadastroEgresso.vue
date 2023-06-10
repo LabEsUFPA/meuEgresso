@@ -127,6 +127,7 @@
                 class="mb-5"
                 name="academico.cotista.tipos.renda"
                 label="Cota Renda"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -134,6 +135,7 @@
                 class="mb-5"
                 name="academico.cotista.tipos.escola"
                 label="Cota Escola"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -141,12 +143,14 @@
                 class="mb-5"
                 name="academico.cotista.tipos.raca"
                 label="Autodeclaração de Raça"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
               <CustomCheckbox
                 name="academico.cotista.tipos.quilombolaIndigena"
                 label="Quilombola/Indigena"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
             </div>
@@ -193,6 +197,7 @@
               label="Instituição da pós-graduação"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
+              id="posGradLocal"
             />
 
             <CustomInput
@@ -505,7 +510,6 @@ import {
   mdiMapMarker,
   mdiMessage,
   mdiSchool,
-  mdiCheckCircle,
   mdiAlertCircle,
   mdiLinkedin,
   mdiWhatsapp,
@@ -517,7 +521,7 @@ import { useLoginStore } from 'src/store/LoginStore'
 const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
 const $storeCadastro = useCadastroEgressoStore()
-const $storeLogin = useLoginStore()
+useLoginStore()
 const storage = new LocalStorage()
 
 $storeCadastro.fetchAll()
@@ -699,12 +703,11 @@ const schema = object().shape({
     }),
     nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
       if (value) {
-        const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
+        const date = value.split('/').reverse().join('-')
         const minDate = new Date('1940-01-01')
         const maxDate = new Date('2023-12-31')
         const inputDate = new Date(date)
 
-        // Check if the person is at least 18 years old
         const eighteenYearsAgo = new Date()
         eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
 
