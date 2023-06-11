@@ -127,6 +127,7 @@
                 class="mb-5"
                 name="academico.cotista.tipos.renda"
                 label="Cota Renda"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -134,6 +135,7 @@
                 class="mb-5"
                 name="academico.cotista.tipos.escola"
                 label="Cota Escola"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -141,12 +143,14 @@
                 class="mb-5"
                 name="academico.cotista.tipos.raca"
                 label="Autodeclaração de Raça"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
               <CustomCheckbox
                 name="academico.cotista.tipos.quilombolaIndigena"
                 label="Quilombola/Indigena"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
             </div>
@@ -174,8 +178,10 @@
               label="Remuneração da bolsa"
               type="number"
               step="0.01"
+              placeholder="R$ 0,00"
               :required="bools.bolsista"
               :disabled="!bools.bolsista"
+              money
             />
 
             <CustomCheckbox
@@ -191,6 +197,7 @@
               label="Instituição da pós-graduação"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
+              id="posGradLocal"
             />
 
             <CustomInput
@@ -334,10 +341,13 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Descreva abaixo os assuntos nos quais você se sente mais confiante para apresentar palestras. <sup
-                v-if="bools.palestras"
-                class="text-red-500"
-              >*</sup>
+              <p>
+                Descreva abaixo os assuntos nos quais você se sente mais confiante para apresentar palestras. (max. 300 caracteres)<sup
+                  v-if="bools.palestras"
+                  class="text-red-500"
+                >*</sup>
+              </p>
+              <span>(max. 300 caracteres)</span>
             </div>
 
             <CustomInput
@@ -349,7 +359,8 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Compartilhe abaixo, de forma simples e resumida, suas experiências positivas ao realizar o curso. <sup class="text-red-500">*</sup>
+              <p>Compartilhe abaixo, de forma simples e resumida, suas experiências positivas ao realizar o curso.<sup class="text-red-500">*</sup></p>
+              <span>(max. 300 caracteres)</span>
             </div>
 
             <CustomInput
@@ -359,7 +370,8 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes, pois tudo tem impacto. <sup class="text-red-500">*</sup>
+              <p>Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes, pois tudo tem impacto. (max. 300 caracteres)<sup class="text-red-500">*</sup></p>
+              <span>(max. 300 caracteres)</span>
             </div>
 
             <CustomInput
@@ -498,7 +510,6 @@ import {
   mdiMapMarker,
   mdiMessage,
   mdiSchool,
-  mdiCheckCircle,
   mdiAlertCircle,
   mdiLinkedin,
   mdiWhatsapp,
@@ -510,7 +521,7 @@ import { useLoginStore } from 'src/store/LoginStore'
 const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
 const $storeCadastro = useCadastroEgressoStore()
-const $storeLogin = useLoginStore()
+useLoginStore()
 const storage = new LocalStorage()
 
 $storeCadastro.fetchAll()
@@ -692,12 +703,11 @@ const schema = object().shape({
     }),
     nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
       if (value) {
-        const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
+        const date = value.split('/').reverse().join('-')
         const minDate = new Date('1940-01-01')
         const maxDate = new Date('2023-12-31')
         const inputDate = new Date(date)
 
-        // Check if the person is at least 18 years old
         const eighteenYearsAgo = new Date()
         eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
 

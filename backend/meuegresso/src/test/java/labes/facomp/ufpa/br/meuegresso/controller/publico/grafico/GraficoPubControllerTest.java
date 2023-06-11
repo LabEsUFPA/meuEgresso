@@ -2,7 +2,6 @@ package labes.facomp.ufpa.br.meuegresso.controller.publico.grafico;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
@@ -129,12 +128,11 @@ class GraficoPubControllerTest {
         static final Integer COTA_ID = 1;
         static final String COTA_NOME = "CotaTeste";
 
-        // TODO: faixa salarial quebra quando usa acentuação, talvez pelo banco
         static final Integer FAIXASALARIAL_ID = 1;
         static final String FAIXASALARIAL = "1 salario minimo";
 
         static final Integer TITULACAO_ID = 1;
-        static final String TITULACAO_NOME = "TitulacaoTeste";
+        static final String TITULACAO_NOME = "GRADUAÇÃO";
 
         static final Integer TIPOBOLSA_ID = 1;
         static final String TIPOBOLSA_NOME = "TipoBolsaTeste";
@@ -404,7 +402,6 @@ class GraficoPubControllerTest {
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/generos")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -423,7 +420,6 @@ class GraficoPubControllerTest {
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/bolsistas")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -434,8 +430,7 @@ class GraficoPubControllerTest {
                 assertNotNull(bolsistasGraficoDTO);
                 assertEquals(2, bolsistasGraficoDTO.getBolsistasContagem().size());
                 assertEquals(1, bolsistasGraficoDTO.getBolsistasContagem().get("Bolsistas"));
-                // TODO: verificar troca de null para 0 quando não houver instancia
-                assertNull(bolsistasGraficoDTO.getBolsistasContagem().get("Não Bolsistas"));
+                assertEquals(0, bolsistasGraficoDTO.getBolsistasContagem().get("Não Bolsistas"));
         }
 
         @Test
@@ -444,7 +439,6 @@ class GraficoPubControllerTest {
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/tipoBolsa")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -463,7 +457,6 @@ class GraficoPubControllerTest {
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/interesseEmPos")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -474,8 +467,7 @@ class GraficoPubControllerTest {
                 assertNotNull(interesseEmPosGraficoDTO);
                 assertEquals(2, interesseEmPosGraficoDTO.getInteresseContagem().size());
                 assertEquals(1, interesseEmPosGraficoDTO.getInteresseContagem().get("Sim"));
-                // TODO: verificar troca de null para 0 quando não houver instancia
-                assertNull(interesseEmPosGraficoDTO.getInteresseContagem().get("Não"));
+                assertEquals(0, interesseEmPosGraficoDTO.getInteresseContagem().get("Não"));
         }
 
         @Test
@@ -484,7 +476,6 @@ class GraficoPubControllerTest {
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/pos")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -495,8 +486,7 @@ class GraficoPubControllerTest {
                 assertNotNull(posGraduacaoGraficoDTO);
                 assertEquals(2, posGraduacaoGraficoDTO.getPosGraduacaoContagem().size());
                 assertEquals(1, posGraduacaoGraficoDTO.getPosGraduacaoContagem().get("Fez"));
-                // TODO: verificar troca de null para 0 quando não houver instancia
-                assertNull(posGraduacaoGraficoDTO.getPosGraduacaoContagem().get("Não fez"));
+                assertEquals(0, posGraduacaoGraficoDTO.getPosGraduacaoContagem().get("Não fez"));
         }
 
         @Test
@@ -505,7 +495,6 @@ class GraficoPubControllerTest {
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/cotista")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -516,8 +505,7 @@ class GraficoPubControllerTest {
                 assertNotNull(cotistaGraficoDTO);
                 assertEquals(2, cotistaGraficoDTO.getCotistasEnumerados().size());
                 assertEquals(1, cotistaGraficoDTO.getCotistasEnumerados().get("Cotista"));
-                // TODO: verificar troca de null para 0 quando não houver instancia
-                assertNull(cotistaGraficoDTO.getCotistasEnumerados().get("Não Cotista"));
+                assertEquals(0, cotistaGraficoDTO.getCotistasEnumerados().get("Não Cotista"));
         }
 
         @Test
@@ -526,7 +514,6 @@ class GraficoPubControllerTest {
 
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/cotas")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -544,7 +531,6 @@ class GraficoPubControllerTest {
         void testGetTipoAlunos() throws Exception {
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/tipoAlunos")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -553,8 +539,8 @@ class GraficoPubControllerTest {
                                 TipoAlunoGraficoDTO.class);
 
                 assertNotNull(tipoAlunoGraficoDTO);
-                assertEquals(1, tipoAlunoGraficoDTO.getTipoAlunos().size());
-                assertEquals(1, tipoAlunoGraficoDTO.getTipoAlunos().get(TITULACAO_NOME));
+                assertEquals(2, tipoAlunoGraficoDTO.getTipoAlunos().size());
+                assertEquals(0, tipoAlunoGraficoDTO.getTipoAlunos().get(TITULACAO_NOME));
         }
 
         @Test
@@ -562,7 +548,7 @@ class GraficoPubControllerTest {
         void testGetCursos() throws Exception {
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/cursos")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -582,7 +568,7 @@ class GraficoPubControllerTest {
         void testGetAtuacao() throws Exception {
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/atuacao")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -601,7 +587,7 @@ class GraficoPubControllerTest {
         void testGetSetor() throws Exception {
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/setor")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -620,7 +606,7 @@ class GraficoPubControllerTest {
         void testGetIdades() throws Exception {
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/idades")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -641,7 +627,7 @@ class GraficoPubControllerTest {
         void testGetSalarios() throws Exception {
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/salarios")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -659,7 +645,7 @@ class GraficoPubControllerTest {
         void testGetRemuneracao() throws Exception {
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/remuneracao")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -677,7 +663,7 @@ class GraficoPubControllerTest {
         void testGetLocalPos() throws Exception {
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/localPos")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -697,7 +683,7 @@ class GraficoPubControllerTest {
         void testGetEnderecoEmpresas() throws Exception {
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/enderecoEmpresas")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -718,7 +704,7 @@ class GraficoPubControllerTest {
         void testGetEmpresas() throws Exception {
                 MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/empresas")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
