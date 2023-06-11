@@ -15,21 +15,30 @@ const router = createRouter({
 const storage = new LocalStorage()
 
 router.beforeEach((to, from) => {
-  const loggedUser = JSON.parse(localStorage.getItem('loggedUser') ?? '{}')
+  const unauthenticatedUser = storage.get('loggedUser') === undefined
+  const loggedUser = JSON.parse(storage.get('loggedUser') ?? '{}')
   const userData = parseToken(storage.getToken())
+  console.log(loggedUser)
+  if (to.meta.requiresAuth === true && unauthenticatedUser) {
+    return {
+      path: '/'
+    }
+  }
 
-  if (to.path !== '/cadastro' && userData !== null && !userData.isEgresso && !(to.meta?.shouldNotForce === true) && loggedUser.grupos[0].nomeGrupo === 'EGRESSO') {
+  if (to.path !== '/cadastro' && userData !== null && !userData.isEgresso && (to.meta?.shouldNotForce !== true) && loggedUser.grupos[0].nomeGrupo === 'EGRESSO') {
     return {
       path: '/cadastro'
     }
-  } else if (to.path === '/cadastro' && loggedUser.grupos[0].nomeGrupo === 'EGRESSO' && userData !== null && userData.isEgresso) {
-    return {
-      path: from.path
+  } else if (!unauthenticatedUser) {
+    if (to.path === '/cadastro' && loggedUser.grupos[0].nomeGrupo === 'EGRESSO' && userData !== null && userData.isEgresso) {
+      return {
+        path: from.path
+      }
     }
   }
 
   try {
-    if (to.meta.requiresAuth === true && loggedUser.grupos[0].nomeGrupo !== 'ADMIN') {
+    if (to.meta.requiresAuthAdmin === true && loggedUser.grupos[0].nomeGrupo !== 'ADMIN') {
       return {
         path: '/'
       }
