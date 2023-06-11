@@ -1,10 +1,10 @@
 <template>
   <div
     v-if="loading"
-    class="flex items-center justify-center text-center"
+    class="flex h-[70vh] items-center justify-center text-center"
   >
     <img
-      class="animate-spin mr-3 max-w-[100px]"
+      class="animate-spin mr-3 w-[100px]"
       src="../assets/loading.svg"
       alt="Loading"
     >
