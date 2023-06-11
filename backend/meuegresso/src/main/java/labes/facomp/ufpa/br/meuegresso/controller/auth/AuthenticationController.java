@@ -153,8 +153,8 @@ public class AuthenticationController {
 
 		EgressoValidoModel egressoValido;
 		try {
-			egressoValido = egressosValidosService.validarEgresso(Optional.of(usuarioDTO.getRegistration()),
-					Optional.of(usuarioDTO.getNome()), Optional.of(usuarioDTO.getEmail()));
+			egressoValido = egressosValidosService.validarEgresso(Optional.ofNullable(usuarioDTO.getRegistration()),
+					Optional.ofNullable(usuarioDTO.getNome()), Optional.ofNullable(usuarioDTO.getEmail()));
 			mapper.map(egressoValido, usuarioModel);
 		} catch (NotValidEgressoException e) {
 			usuarioModel.setValido(false);

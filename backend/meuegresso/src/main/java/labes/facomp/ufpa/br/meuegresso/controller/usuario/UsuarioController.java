@@ -71,7 +71,6 @@ public class UsuarioController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	@PreAuthorize("hasRole('EGRESSO') or hasRole('SECRETARIA') or hasRole('ADMIN')")
 	public String atualizarUsuario(
 			@RequestBody @Valid UsuarioDTO usuarioDTO, JwtAuthenticationToken token)
 			throws UnauthorizedRequestException, InvalidRequestException {

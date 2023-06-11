@@ -73,9 +73,10 @@ public class UsuarioModel extends Auditable implements UserDetails {
 			"id_usuario", "grupo" }))
 	private Set<Grupos> grupos;
 
+	@Builder.Default
 	@ColumnDefault(value = "TRUE")
 	@Column(name = "valido_usuario", nullable = false)
-	private Boolean valido;
+	private Boolean valido = true;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

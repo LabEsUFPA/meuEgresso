@@ -65,7 +65,6 @@ class UsuarioControllerTest {
                 usuarioModel.setNome("nome_test");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
-                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
                 mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(usuarioModel)))
