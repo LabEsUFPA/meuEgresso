@@ -177,10 +177,9 @@ const handleSubmit = async (submitData: any) => {
   if (response.status === 201) {
     submitSuccess.value = true
     await storeLogin.userLogin(profileData.username, profileData.password)
-    await storeLogin.saveUser()
     await router.push({ path: '/cadastro' })
   } else if (response.status === 400) {
-    errorText.value = response.data?.message
+    errorText.value = response.data?.technicalMessage
     error.value = true
   } else {
     errorText.value = 'Requisição não aceita'
