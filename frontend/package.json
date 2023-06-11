@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test:unit": "vitest --environment happy-dom",
     "test:unit:ui": "vitest --ui --environment happy-dom",
-    "lint": "eslint src --ext .ts",
+    "lint": "eslint src --ext .ts --ext .vue",
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
