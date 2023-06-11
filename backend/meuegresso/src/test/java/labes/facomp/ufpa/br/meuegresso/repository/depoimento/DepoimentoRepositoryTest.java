@@ -2,21 +2,32 @@ package labes.facomp.ufpa.br.meuegresso.repository.depoimento;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.mockito.BDDMockito;
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
+import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
+import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 /**
  * Classe que testa as features do DepoimentoRepository
@@ -30,29 +41,79 @@ import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
 @TestInstance(Lifecycle.PER_CLASS)
 class DepoimentoRepositoryTest {
 
-    @MockBean
+    @Autowired
     DepoimentoRepository depoimentoRepository;
+
+    @Autowired
+    private EgressoRepository egressoRepository;
+
+    @Autowired
+    private GeneroRepository generoRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private GrupoRepository grupoRepository;
+
+    private DepoimentoModel depoimentoModel;
+        
+    private GrupoModel grupoModel;
+    
+    private EgressoModel egressoModel;
+    
+    private GeneroModel generoModel;
+
+    private UsuarioModel usuarioModel;
 
     private final static Integer ID = 1;
     private final static String DESCRICAO = "DescricaoTeste";
 
-    DepoimentoModel depoimentoModel;
+    @BeforeEach
+    void setUp() {
+        generoModel = new GeneroModel();
+        generoModel.setId(1);
+        generoModel.setNome("Masculino");
+        generoModel = generoRepository.save(generoModel);
 
-    /**
-     * Método que testa o repositório que salva Depoimento
-     *
-     * @author Bruno Eiki
-     * @since 29/04/2023
-     */
-    @Test
-    void testSave() {
-        BDDMockito.given(depoimentoRepository.save(Mockito.any(DepoimentoModel.class)))
-                .willReturn(getMockDepoimento());
+        grupoModel = GrupoModel.builder().id(1).nomeGrupo("ADMIN").build();
+        grupoModel = grupoRepository.save(grupoModel);
+        Set<GrupoModel> grupos = new HashSet<>();
+        grupos.add(grupoModel);
 
-        DepoimentoModel response = depoimentoRepository.save(getMockDepoimento());
+        usuarioModel = UsuarioModel.builder()
+                .id(1)
+                .nome("John")
+                .username("john123")
+                .email("john@example.com")
+                .password("password123")
+                .grupos(grupos)
+                .build();
+        usuarioModel = usuarioRepository.save(usuarioModel);
 
-        assertNotNull(response);
-        assertEquals(DESCRICAO, response.getDescricao());
+        egressoModel = EgressoModel.builder()
+                .id(1)
+                .nascimento(LocalDate.parse("1999-10-20"))
+                .genero(generoModel)
+                .matricula("202003940011")
+                .interesseEmPos(true)
+                .lattes("null")
+                .linkedin("null")
+                .usuario(usuarioModel)
+                .build();
+        egressoModel.setCreatedBy(usuarioModel);
+
+        egressoModel = egressoRepository.save(egressoModel);
+
+        depoimentoModel = DepoimentoModel.builder()
+            .id(ID)
+            .descricao(DESCRICAO)
+            .egresso(egressoModel)
+            .build();
+
+        depoimentoModel.setCreatedBy(usuarioModel);
+
+        depoimentoModel = depoimentoRepository.save(depoimentoModel);
     }
 
     /**
@@ -64,21 +125,18 @@ class DepoimentoRepositoryTest {
     @Test
     void testFindAll() {
 
-        BDDMockito.given(depoimentoRepository.findAll())
-                .willReturn(List.of(getMockDepoimento()));
-
         List<DepoimentoModel> response = depoimentoRepository.findAll();
 
         assertNotNull(response);
-        assertEquals(response, List.of(getMockDepoimento()));
+        assertEquals(List.of(depoimentoModel), response);
     }
 
-    private DepoimentoModel getMockDepoimento() {
-        DepoimentoModel depoimentoTest = DepoimentoModel.builder()
-                .id(ID)
-                .descricao(DESCRICAO)
-                .build();
-        return depoimentoTest;
+    @Test
+    void testExistsByIdAndCreatedById() {
+        Boolean response = depoimentoRepository.existsByIdAndCreatedById(depoimentoModel.getId(), usuarioModel.getId());
+
+        assertNotNull(response);
+        assertTrue(response);
     }
 
     /**
