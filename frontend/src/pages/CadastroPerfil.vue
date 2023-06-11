@@ -170,7 +170,8 @@ const handleSubmit = async (submitData: any) => {
     profileData.username,
     profileData.password,
     profileData.email,
-    profileData.name
+    profileData.name,
+    profileData.registration
   )
 
   if (response.status === 201) {

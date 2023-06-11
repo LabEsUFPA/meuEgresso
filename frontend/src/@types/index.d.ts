@@ -39,6 +39,7 @@ export namespace models {
     password: string
     email: string
     nome: string
+    registration: string
     egresso?: {
       id: number
       matricula: number
