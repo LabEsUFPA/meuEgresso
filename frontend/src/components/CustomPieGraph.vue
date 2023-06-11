@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 sm:h-96"
+    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 shadow-md sm:h-96"
   >
     <div
       v-if="loading"
