@@ -116,9 +116,10 @@
               name="academico.cotista.value"
               label="Cotista"
               v-model:value="bools.cotista"
+              :required="bools.cotista"
             />
 
-            <div class="mb-5 text-sm font-semibold text-cyan-600">
+            <div class="mb-5 mt-5 text-sm font-semibold text-cyan-600">
               Tipos de cota:
             </div>
 
@@ -127,7 +128,7 @@
                 class="mb-5"
                 name="academico.cotista.tipos.renda"
                 label="Cota Renda"
-                :required="bools.cotista"
+                :value="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -135,7 +136,7 @@
                 class="mb-5"
                 name="academico.cotista.tipos.escola"
                 label="Cota Escola"
-                :required="bools.cotista"
+                :value="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -143,14 +144,14 @@
                 class="mb-5"
                 name="academico.cotista.tipos.raca"
                 label="Autodeclaração de Raça"
-                :required="bools.cotista"
+                :value="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
               <CustomCheckbox
                 name="academico.cotista.tipos.quilombolaIndigena"
                 label="Quilombola/Indigena"
-                :required="bools.cotista"
+                :value="bools.cotista"
                 :disabled="!bools.cotista"
               />
             </div>
