@@ -82,7 +82,7 @@ public class EmpresaController {
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "15", required = false) Integer size,
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction,
-			@RequestParam("nome") String nome) {
+			@RequestParam(defaultValue = "", required = false) String nome) {
 		return empresaService.findByNomeContainsIgnoreCaseOrderByNomeAsc(page, size, direction, nome)
 				.map(e -> mapper.map(e, EmpresaBasicDTO.class));
 	}
