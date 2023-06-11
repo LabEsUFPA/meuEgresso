@@ -73,7 +73,7 @@ class SetorAtuacaoRepositoryTest {
     private UsuarioModel usuarioModel;
 
     private final static Integer ID = 1;
-    private final static String NOME = "nomeTeste";
+    private final static String SETOR = "setorTeste";
 
     @BeforeEach
     void setUp() {
@@ -113,7 +113,7 @@ class SetorAtuacaoRepositoryTest {
 
         setorAtuacaoModel = SetorAtuacaoModel.builder()
             .id(ID)
-            .nome(NOME)
+            .nome(SETOR)
             .build();
 
         setorAtuacaoModel.setCreatedBy(usuarioModel);
