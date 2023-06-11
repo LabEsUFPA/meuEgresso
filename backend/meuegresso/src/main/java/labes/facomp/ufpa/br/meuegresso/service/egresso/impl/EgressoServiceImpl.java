@@ -8,12 +8,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -21,6 +24,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
@@ -268,4 +272,50 @@ public class EgressoServiceImpl implements EgressoService {
 		contagem.computeIfAbsent(posGraduacao, k -> 0);
 		return contagem;
 	}
+
+	@Override
+	public Map<Date, Integer> countEgressoDiario() {
+
+		Map<Date, Integer> contagem = new HashMap<>();
+
+		egressoRepository.countEgressoData().stream()
+				.forEach(e -> contagem.put(e.get(0, Date.class), e.get(1, Long.class).intValue()));
+		return contagem;
+
+	}
+
+	@Override
+	public Map<Integer, Long> countEgressoPorAno() {
+		Map<Date, Integer> contagem = new HashMap<>();
+
+		List<Tuple> cadastros = egressoRepository.countEgressoData();
+
+		Map<Integer, Long> cadastrosPorAno = cadastros.stream()
+            .collect(Collectors.groupingBy(
+                    tuple -> Year.of(
+                            tuple.get(0, java.sql.Date.class)
+                                    .toLocalDate()
+                                    .getYear()
+                    ).getValue(),
+                    Collectors.counting()
+            ));
+				
+		return cadastrosPorAno;
+	}
+
+	@Override
+	public Map<LocalDate, Long> countEgressoPorMesEAno() {
+		List<Tuple> cadastros = egressoRepository.countEgressoData();
+	
+		Map<LocalDate, Long> cadastrosPorMesAno = cadastros.stream()
+				.collect(Collectors.groupingBy(
+						tuple -> tuple.get(0, java.sql.Date.class)
+								.toLocalDate()
+								.withDayOfMonth(1),
+						Collectors.counting()
+				));
+	
+		return cadastrosPorMesAno;
+	}
+
 }
