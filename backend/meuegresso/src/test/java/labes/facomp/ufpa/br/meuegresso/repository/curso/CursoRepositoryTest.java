@@ -51,7 +51,7 @@ class CursoRepositoryTest {
         CursoModel response = cursoRepository.save(getMockCurso());
 
         assertNotNull(response);
-        assertEquals(response.getNome(), response.getNome());
+        assertEquals(NOME, response.getNome());
     }
 
     /**
@@ -67,7 +67,7 @@ class CursoRepositoryTest {
         List<CursoModel> response = cursoRepository.findAll();
 
         assertNotNull(response);
-        assertEquals(response, List.of(getMockCurso()));
+        assertEquals(List.of(getMockCurso()),response);
     }
 
     private CursoModel getMockCurso() {
