@@ -40,7 +40,7 @@ public class RecuperacaoSenhaModel {
     @Column(name = "token_recuperacao_senha", unique = true, nullable = false, length = 36)
     private UUID token;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario", unique = false, nullable = false)
     private UsuarioModel usuario;
 
