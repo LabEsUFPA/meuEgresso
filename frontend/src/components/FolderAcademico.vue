@@ -84,6 +84,7 @@
           :options="$store.tiposBolsa"
           :required="bools.bolsista"
           :disabled="!bools.bolsista"
+          :pre-filled="true"
         />
 
         <CustomInput
@@ -152,10 +153,9 @@ import { propsToAttrMap } from '@vue/shared'
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 
-if(storage.has('loggedEgresso')){
+if (storage.has('loggedEgresso')) {
   $store.fetchAll()
 }
-
 
 const pais = ref('')
 const estado = ref('')

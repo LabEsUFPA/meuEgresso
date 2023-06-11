@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.dto.grafico;
+package labes.facomp.ufpa.br.meuegresso.dto.publico.grafico;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

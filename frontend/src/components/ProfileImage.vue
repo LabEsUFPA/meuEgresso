@@ -28,7 +28,6 @@
               src="/src/assets/round-upload.svg"
             >
 
-            
             <h1 class="mt-1 text-white text-[10px] ">
               Máximo de 5MB
             </h1>

@@ -22,18 +22,6 @@
         class="absolute shadow-md bg-white min-w-32 z-50 cursor-pointer right-[1px] max-h-96 overflow-y-auto top-8 py-3 rounded-lg border border-t-0 text-sm justify-self-end"
       >
         <RouterLink
-          to="/painel-admin"
-          v-show="userLoggedGroupID === 1"
-        >
-          <div
-            class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900"
-            @click="toggleUserMenu()"
-          >
-            Painel
-          </div>
-        </RouterLink>
-
-        <RouterLink
           to="/egresso"
           v-show="userLoggedGroupID === 3"
         >

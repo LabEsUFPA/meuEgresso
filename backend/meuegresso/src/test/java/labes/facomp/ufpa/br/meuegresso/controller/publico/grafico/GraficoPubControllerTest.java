@@ -1,8 +1,7 @@
-package labes.facomp.ufpa.br.meuegresso.controller.grafico;
+package labes.facomp.ufpa.br.meuegresso.controller.publico.grafico;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
@@ -40,26 +39,25 @@ import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.AreaAtuacaoGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.BolsistasGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotaGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.CotistaGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.CursosGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.EmpresaGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.EnderecoEmpresasGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.GenerosGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.IdadesGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.InteresseEmPosGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.PosGraduacaoGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.RemuneracaoGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.SalarioGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.SetorAtuacaoGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoAlunoGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.TipoBolsaGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.AreaAtuacaoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.BolsistasGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.CotaGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.CotistaGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.CursosGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EmpresaGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EnderecoEmpresasGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.GenerosGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.IdadesGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.InteresseEmPosGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.LocalPosGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.PosGraduacaoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.RemuneracaoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.SalarioGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.SetorAtuacaoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.TipoAlunoGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.TipoBolsaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
@@ -106,7 +104,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class GraficoControllerTest {
+class GraficoPubControllerTest {
 
         static final String ENDERECO_CIDADE = "Barcarena";
         static final String ENDERECO_ESTADO = "Para";
@@ -130,12 +128,11 @@ class GraficoControllerTest {
         static final Integer COTA_ID = 1;
         static final String COTA_NOME = "CotaTeste";
 
-        // TODO: faixa salarial quebra quando usa acentuação, talvez pelo banco
         static final Integer FAIXASALARIAL_ID = 1;
         static final String FAIXASALARIAL = "1 salario minimo";
 
         static final Integer TITULACAO_ID = 1;
-        static final String TITULACAO_NOME = "TitulacaoTeste";
+        static final String TITULACAO_NOME = "GRADUAÇÃO";
 
         static final Integer TIPOBOLSA_ID = 1;
         static final String TIPOBOLSA_NOME = "TipoBolsaTeste";
@@ -217,7 +214,6 @@ class GraficoControllerTest {
 
         EgressoTitulacaoModelId egressoTitulacaoModelId;
 
-        EgressoPublicDTO egressoPublicDTO;
         EgressoCadastroDTO egressoCadastroDTO;
         EgressoModel egressoModel;
 
@@ -404,9 +400,8 @@ class GraficoControllerTest {
         @Order(1)
         void testGetGeneros() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/generos")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/generos")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -423,9 +418,8 @@ class GraficoControllerTest {
         @Order(2)
         void testGetBolsistas() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/bolsistas")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/bolsistas")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -436,17 +430,15 @@ class GraficoControllerTest {
                 assertNotNull(bolsistasGraficoDTO);
                 assertEquals(2, bolsistasGraficoDTO.getBolsistasContagem().size());
                 assertEquals(1, bolsistasGraficoDTO.getBolsistasContagem().get("Bolsistas"));
-                // TODO: verificar troca de null para 0 quando não houver instancia
-                assertNull(bolsistasGraficoDTO.getBolsistasContagem().get("Não Bolsistas"));
+                assertEquals(0, bolsistasGraficoDTO.getBolsistasContagem().get("Não Bolsistas"));
         }
 
         @Test
         @Order(3)
         void testGetTipoBolsa() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/tipoBolsa")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/tipoBolsa")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -463,9 +455,8 @@ class GraficoControllerTest {
         @Order(4)
         void testGetInteresseEmPos() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/interesseEmPos")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/interesseEmPos")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -476,17 +467,15 @@ class GraficoControllerTest {
                 assertNotNull(interesseEmPosGraficoDTO);
                 assertEquals(2, interesseEmPosGraficoDTO.getInteresseContagem().size());
                 assertEquals(1, interesseEmPosGraficoDTO.getInteresseContagem().get("Sim"));
-                // TODO: verificar troca de null para 0 quando não houver instancia
-                assertNull(interesseEmPosGraficoDTO.getInteresseContagem().get("Não"));
+                assertEquals(0, interesseEmPosGraficoDTO.getInteresseContagem().get("Não"));
         }
 
         @Test
         @Order(5)
         void testGetPos() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/pos")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/pos")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -497,17 +486,15 @@ class GraficoControllerTest {
                 assertNotNull(posGraduacaoGraficoDTO);
                 assertEquals(2, posGraduacaoGraficoDTO.getPosGraduacaoContagem().size());
                 assertEquals(1, posGraduacaoGraficoDTO.getPosGraduacaoContagem().get("Fez"));
-                // TODO: verificar troca de null para 0 quando não houver instancia
-                assertNull(posGraduacaoGraficoDTO.getPosGraduacaoContagem().get("Não fez"));
+                assertEquals(0, posGraduacaoGraficoDTO.getPosGraduacaoContagem().get("Não fez"));
         }
 
         @Test
         @Order(6)
         void testGetCotistas() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/cotista")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/cotista")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -518,17 +505,15 @@ class GraficoControllerTest {
                 assertNotNull(cotistaGraficoDTO);
                 assertEquals(2, cotistaGraficoDTO.getCotistasEnumerados().size());
                 assertEquals(1, cotistaGraficoDTO.getCotistasEnumerados().get("Cotista"));
-                // TODO: verificar troca de null para 0 quando não houver instancia
-                assertNull(cotistaGraficoDTO.getCotistasEnumerados().get("Não Cotista"));
+                assertEquals(0, cotistaGraficoDTO.getCotistasEnumerados().get("Não Cotista"));
         }
 
         @Test
         @Order(7)
         void testGetCotas() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/cotas")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/cotas")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -544,9 +529,8 @@ class GraficoControllerTest {
         @Test
         @Order(8)
         void testGetTipoAlunos() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/tipoAlunos")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/tipoAlunos")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -555,16 +539,16 @@ class GraficoControllerTest {
                                 TipoAlunoGraficoDTO.class);
 
                 assertNotNull(tipoAlunoGraficoDTO);
-                assertEquals(1, tipoAlunoGraficoDTO.getTipoAlunos().size());
-                assertEquals(1, tipoAlunoGraficoDTO.getTipoAlunos().get(TITULACAO_NOME));
+                assertEquals(2, tipoAlunoGraficoDTO.getTipoAlunos().size());
+                assertEquals(0, tipoAlunoGraficoDTO.getTipoAlunos().get(TITULACAO_NOME));
         }
 
         @Test
         @Order(9)
         void testGetCursos() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/cursos")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/cursos")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -582,9 +566,9 @@ class GraficoControllerTest {
         @Test
         @Order(10)
         void testGetAtuacao() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/atuacao")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/atuacao")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -601,9 +585,9 @@ class GraficoControllerTest {
         @Test
         @Order(11)
         void testGetSetor() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/setor")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/setor")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -620,9 +604,9 @@ class GraficoControllerTest {
         @Test
         @Order(12)
         void testGetIdades() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/idades")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/idades")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -641,9 +625,9 @@ class GraficoControllerTest {
         @Test
         @Order(13)
         void testGetSalarios() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/salarios")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/salarios")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -659,9 +643,9 @@ class GraficoControllerTest {
         @Test
         @Order(14)
         void testGetRemuneracao() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/remuneracao")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/remuneracao")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -677,9 +661,9 @@ class GraficoControllerTest {
         @Test
         @Order(15)
         void testGetLocalPos() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/localPos")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/localPos")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -697,9 +681,9 @@ class GraficoControllerTest {
         @Test
         @Order(16)
         void testGetEnderecoEmpresas() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/enderecoEmpresas")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/enderecoEmpresas")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 
@@ -718,9 +702,9 @@ class GraficoControllerTest {
         @Test
         @Order(17)
         void testGetEmpresas() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/grafico/empresas")
+                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/publico/grafico/empresas")
                                 .contentType(MediaType.APPLICATION_JSON))
-                                // .header("Authorization", "Bearer " + this.token))
+
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isOk()).andReturn();
 

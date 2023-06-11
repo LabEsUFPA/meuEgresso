@@ -48,7 +48,8 @@ public class AreaEmpregoController {
     /**
      * Endpoint responsavel por buscar todas as áreas de emprego.
      *
-     * @return {@link List<AreaEmpregoDTO>} Retorna uma lista com todas as áreas de emprego.
+     * @return {@link List<AreaEmpregoDTO>} Retorna uma lista com todas as áreas de
+     *         emprego.
      * @author Lucas Cantão
      * @since 18/05/2023
      */
@@ -57,14 +58,16 @@ public class AreaEmpregoController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public List<AreaEmpregoDTO> buscarGeneros() {
 
-        return mapper.map(areaEmpregoService.findAll(), new TypeToken<List<AreaEmpregoDTO>>() {}.getType());
+        return mapper.map(areaEmpregoService.findAll(), new TypeToken<List<AreaEmpregoDTO>>() {
+        }.getType());
     }
 
     /**
      * Endpoint responsavel por adicionar uma área de emprego no banco.
      *
-     * @param areaEmpregoDTO Estrutura de dados contendo as informações necessárias para
-     *                 adicionar uma Area de Emprego.
+     * @param areaEmpregoDTO Estrutura de dados contendo as informações necessárias
+     *                       para
+     *                       adicionar uma Area de Emprego.
      * @return {@link String} Mensagem de confirmacao.
      * @author Lucas Cantão
      * @since 18/05/2023
@@ -76,14 +79,15 @@ public class AreaEmpregoController {
             @RequestBody @Valid AreaEmpregoDTO areaEmpregoDTO) {
         AreaEmpregoModel areaEmpregoModel = mapper.map(areaEmpregoDTO, AreaEmpregoModel.class);
         areaEmpregoService.save(areaEmpregoModel);
-        return ResponseType.SUCESS_SAVE.getMessage();
+        return ResponseType.SUCCESS_SAVE.getMessage();
     }
 
     /**
      * Endpoint responsavel por atualizar uma área de emprego no banco.
      *
-     * @param areaEmpregoDTO Estrutura de dados contendo as informações necessárias para
-     *                  atualizar uma area de emprego.
+     * @param areaEmpregoDTO Estrutura de dados contendo as informações necessárias
+     *                       para
+     *                       atualizar uma area de emprego.
      * @return {@link String} Mensagem de confirmacao.
      * @author Lucas Cantão
      * @since 18/05/2023
@@ -96,7 +100,7 @@ public class AreaEmpregoController {
         if (areaEmpregoService.existsByIdAndCreatedById(areaEmpregoDTO.getId(), jwtService.getIdUsuario(token))) {
             AreaEmpregoModel areaEmpregoModel = mapper.map(areaEmpregoDTO, AreaEmpregoModel.class);
             areaEmpregoService.update(areaEmpregoModel);
-            return ResponseType.SUCESS_UPDATE.getMessage();
+            return ResponseType.SUCCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
     }
@@ -104,8 +108,9 @@ public class AreaEmpregoController {
     /**
      * Endpoint responsavel por deletar uma area de emprego.
      *
-     * @param areaEmpregoDTO Estrutura de dados contendo as informações necessárias para
-     *                  deletar uma area de emprego.
+     * @param areaEmpregoDTO Estrutura de dados contendo as informações necessárias
+     *                       para
+     *                       deletar uma area de emprego.
      * @return {@link String} Mensagem de confirmacao.
      * @author Lucas Cantão
      * @since 18/05/2023
@@ -117,7 +122,7 @@ public class AreaEmpregoController {
 
         AreaEmpregoModel areaEmpregoModel = mapper.map(areaEmpregoDTO, AreaEmpregoModel.class);
         areaEmpregoService.deleteById(areaEmpregoModel.getId());
-        return ResponseType.SUCESS_DELETE.getMessage();
+        return ResponseType.SUCCESS_DELETE.getMessage();
     }
-    
+
 }

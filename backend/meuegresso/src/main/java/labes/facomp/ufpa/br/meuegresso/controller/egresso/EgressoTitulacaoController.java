@@ -98,7 +98,7 @@ public class EgressoTitulacaoController {
 	public String cadastrarEgressoTitulacao(@RequestBody @Valid EgressoTitulacaoDTO egressoTitulacaoDTO) {
 		EgressoTitulacaoModel egressoTitulacaoModel = mapper.map(egressoTitulacaoDTO, EgressoTitulacaoModel.class);
 		egressoTitulacaoService.save(egressoTitulacaoModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class EgressoTitulacaoController {
 				jwtService.getIdUsuario(token))) {
 			EgressoTitulacaoModel egressoTitulacaoModel = mapper.map(egressoTitulacaoDTO, EgressoTitulacaoModel.class);
 			egressoTitulacaoService.update(egressoTitulacaoModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}

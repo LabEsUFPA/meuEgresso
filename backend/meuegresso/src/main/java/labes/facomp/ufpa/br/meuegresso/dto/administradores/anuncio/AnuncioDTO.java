@@ -1,7 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.anuncio;
 
-import java.util.Set;
-
 import jakarta.validation.constraints.NotBlank;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.AuditableDTO;
 import lombok.AllArgsConstructor;
@@ -26,6 +24,4 @@ public class AnuncioDTO extends AuditableDTO {
 
     @NotBlank(message = "Insira a descrição do anúncio.")
     private String descricao;
-
-    private Set<ComentarioDTO> comentarios;
 }

@@ -80,7 +80,7 @@ public class TipoBolsaController {
             @RequestBody @Valid TipoBolsaDTO tipoBolsaDTO) {
         TipoBolsaModel tipoBolsaModel = mapper.map(tipoBolsaDTO, TipoBolsaModel.class);
         tipoBolsaService.save(tipoBolsaModel);
-        return ResponseType.SUCESS_SAVE.getMessage();
+        return ResponseType.SUCCESS_SAVE.getMessage();
     }
 
     /**
@@ -101,7 +101,7 @@ public class TipoBolsaController {
         if (tipoBolsaService.existsByIdAndCreatedById(tipoBolsaDTO.getId(), jwtService.getIdUsuario(token))) {
             TipoBolsaModel tipoBolsaModel = mapper.map(tipoBolsaDTO, TipoBolsaModel.class);
             tipoBolsaService.update(tipoBolsaModel);
-            return ResponseType.SUCESS_UPDATE.getMessage();
+            return ResponseType.SUCCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
     }
@@ -123,6 +123,6 @@ public class TipoBolsaController {
 
         TipoBolsaModel tipoBolsaModel = mapper.map(tipoBolsaDTO, TipoBolsaModel.class);
         tipoBolsaService.deleteById(tipoBolsaModel.getId());
-        return ResponseType.SUCESS_DELETE.getMessage();
+        return ResponseType.SUCCESS_DELETE.getMessage();
     }
 }

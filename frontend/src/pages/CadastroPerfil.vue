@@ -43,14 +43,12 @@
                 name="registration"
                 type="text"
                 label="Matrícula"
+                mask="############"
                 helper-text="Informe a sua matrícula da faculdade"
                 class-helper-text="text-gray-600"
                 :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
                 custom-error-message
                 :icon-path="mdiSchool"
-                :max-length="12"
-                :min-length="12"
-                :min="0"
                 @update:value="checkRegistrationLength"
               />
               <CustomInput
@@ -155,7 +153,7 @@ const schema = object().shape({
   name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/, 'Informe nome e sobrenome'),
   username: string().required('Informe um nome de usuário').trim().matches(/^[a-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
   registration: string().max(12).matches(/^(\d{12})?$/),
-  email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))?$/, 'Email inválido'),
+  email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.[a-zA-Z]{2,}))?$/, 'Email inválido'),
   password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
   confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida')
 })

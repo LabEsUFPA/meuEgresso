@@ -93,7 +93,7 @@ public class ContribuicaoController {
 	public String cadastrarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO) {
 		ContribuicaoModel contribuicaoModel = mapper.map(contribuicaoDTO, ContribuicaoModel.class);
 		contribuicaoService.save(contribuicaoModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -114,10 +114,11 @@ public class ContribuicaoController {
 	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (contribuicaoService.existsByIdAndCreatedById(contribuicaoDTO.getId(), jwtService.getIdUsuario(token))) {
-			ContribuicaoModel contribuicaoModel = contribuicaoService.findByEgressoUsuarioId(jwtService.getIdUsuario(token));
+			ContribuicaoModel contribuicaoModel = contribuicaoService
+					.findByEgressoUsuarioId(jwtService.getIdUsuario(token));
 			contribuicaoModel.setDescricao(contribuicaoDTO.getDescricao());
 			contribuicaoService.update(contribuicaoModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}

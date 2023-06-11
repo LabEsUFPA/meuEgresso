@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="loading"
-    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-[650px]"
+    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-full"
   >
     <div
       class="w-full h-full flex items-center justify-center"
@@ -16,7 +16,7 @@
   </div>
   <div
     v-else
-    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96 lg:w-[650px] xl:w-[550px] 2xl:w-[650px]"
+    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 gap-y-10 sm:h-96"
   >
     <div class="pl-1">
       <h1 class="font-bold text-2xl">
@@ -48,7 +48,7 @@ import {
 import VChart from 'vue-echarts'
 import { onMounted, ref, watch } from 'vue'
 import { models } from 'src/@types'
-interface PieChartSeries extends models.Graphics.PieChartSeries {}
+interface PieChartModel extends models.Graphics.PieChartModel {}
 
 use([
   CanvasRenderer,
@@ -66,8 +66,7 @@ interface Props {
     legend?: string,
     info?: string
     loading: boolean
-    data: PieChartSeries[] | undefined
-    legendData: string[] | undefined
+    data: PieChartModel | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -97,7 +96,7 @@ const optionDesktop = ref({
   legend: {
     orient: 'vertical',
     left: 'left',
-    data: props.legendData
+    data: props.data?.legend
   },
   series: [
     {
@@ -113,7 +112,7 @@ const optionDesktop = ref({
         show: false
       },
       center: ['70%', '50%'],
-      data: props.data
+      data: props.data?.values
     }
   ]
 })
@@ -130,7 +129,7 @@ const optionMobile = ref({
   legend: {
     orient: 'horizontal',
     left: 'left',
-    data: props.legendData
+    data: props.data?.legend
   },
   series: [
     {
@@ -146,13 +145,13 @@ const optionMobile = ref({
         show: false
       },
       center: ['50%', '65%'],
-      data: props.data
+      data: props.data?.values
     }
   ]
 })
 
 const setOptionData = () => {
-  optionDesktop.value.series[0].data = props.data
-  optionMobile.value.series[0].data = props.data
+  optionDesktop.value.series[0].data = props.data?.values
+  optionMobile.value.series[0].data = props.data?.values
 }
 </script>

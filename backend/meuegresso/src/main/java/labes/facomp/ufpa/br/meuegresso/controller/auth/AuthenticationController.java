@@ -138,7 +138,7 @@ public class AuthenticationController {
 		}
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 		usuarioService.save(usuarioModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 }

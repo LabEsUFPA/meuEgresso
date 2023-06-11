@@ -14,6 +14,7 @@
         </div>
 
         <CustomButton
+          v-show="logado"
           tag="router"
           link="/cadastro-anuncio"
           color="emerald"
@@ -95,7 +96,7 @@
             :titulo="anuncio.titulo"
             :area="anuncio.areaEmprego.nome"
             :descricao="anuncio.descricao"
-            :salario="anuncio.salario"
+            :salario="formatCurrency(parseFloat(anuncio.salario))"
           />
         </div>
       </div>
@@ -159,11 +160,14 @@ import { ref, onMounted, watch } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiBullhorn, mdiFilterVariant, mdiPlus, mdiChevronRight, mdiChevronLeft, mdiEmoticonSadOutline } from '@mdi/js'
 import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
+import { useLoginStore } from 'src/store/LoginStore'
 import CustomButton from 'src/components/CustomButton.vue'
 import ShortPost from 'src/components/ShortPost.vue'
 import SearchBar from 'src/components/SearchBar.vue'
 import FilterChip from 'src/components/FilterChip.vue'
 import ModalFilters from 'src/components/ModalFilters.vue'
+
+const logado = ref(useLoginStore().userLogged)
 
 const $store = useAnuncioVagaStore()
 
@@ -222,5 +226,16 @@ const toggleFilterApplied = (id:number) => {
 const applyFilters = (filters:any) => {
   filtersById.value = filters.map((elem: any) => (elem.id))
 }
+
+function formatCurrency (value:number) {
+  const formattedValue = value.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  })
+
+  return formattedValue
+}
+
+console.log(formatCurrency(5000.00))
 
 </script>

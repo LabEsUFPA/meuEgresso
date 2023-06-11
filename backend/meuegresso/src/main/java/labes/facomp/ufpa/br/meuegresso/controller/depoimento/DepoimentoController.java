@@ -93,7 +93,7 @@ public class DepoimentoController {
 	public String cadastrarDepoimento(@RequestBody @Valid DepoimentoDTO depoimentoDTO) {
 		DepoimentoModel depoimentoModel = mapper.map(depoimentoDTO, DepoimentoModel.class);
 		depoimentoService.save(depoimentoModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class DepoimentoController {
 		if (depoimentoService.existsByIdAndCreatedById(depoimentoDTO.getId(), jwtService.getIdUsuario(token))) {
 			DepoimentoModel depoimentoModel = mapper.map(depoimentoDTO, DepoimentoModel.class);
 			depoimentoService.update(depoimentoModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}

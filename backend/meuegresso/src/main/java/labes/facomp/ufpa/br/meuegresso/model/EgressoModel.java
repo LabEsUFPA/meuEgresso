@@ -72,7 +72,7 @@ public class EgressoModel extends Auditable {
 	private String fotoNome;
 
 	@Builder.Default
-	@Column(name = "pos_graducao_egresso", unique = false, nullable = true)
+	@Column(name = "pos_graduacao_egresso", unique = false, nullable = true)
 	private Boolean posGraduacao = false;
 
 	@ManyToMany(fetch = FetchType.LAZY)

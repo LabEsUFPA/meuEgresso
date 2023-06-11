@@ -56,8 +56,8 @@ public class AnuncioControllerTest {
         final String USERNAME = "username_test";
 
         final String ANUNCIO_TITULO = "Vagas pra burros";
-        final String ANUNCIO_SAL = "3000.0";
-        final LocalDate ANUNCIO_EXPIRACAO = LocalDate.parse("2023-12-12");
+        final String ANUNCIO_SAL = "3000.00";
+        final LocalDate ANUNCIO_EXPIRACAO = LocalDate.parse("2050-12-12");
         final String ANUNCIO_DESC = "descrição test";
         final String ANUNCIO_LINK = "http://test.com/test";
 
@@ -184,8 +184,8 @@ public class AnuncioControllerTest {
                                 .andExpect(status().isCreated()).andReturn();
                 String retornoString2 = resposta2.getResponse().getContentAsString();
 
-                assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString);
-                assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString2);
+                assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
+                assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString2);
         }
 
         @Order(2)
@@ -223,7 +223,7 @@ public class AnuncioControllerTest {
                                 .andExpect(status().isCreated())
                                 .andReturn();
                 String retornoString = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
+                assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
 
         }
 
