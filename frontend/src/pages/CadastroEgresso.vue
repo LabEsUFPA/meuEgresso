@@ -191,22 +191,48 @@
               label="Pós-graduação"
             />
 
-            <CustomInput
-              class="mb-5"
+            <CustomSelect
+              class="mb-1"
               name="academico.posGrad.local"
               label="Instituição da pós-graduação"
+              placeholder="Selecione"
+              :options="$storeCadastro.instituicoes"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
+              :is-fetching="$storeCadastro.isFetchingUniversidades"
+              @typing="$storeCadastro.fetchUniversidadesAsync($event, true)"
+              @infinite-scroll="$storeCadastro.fetchMoreUniversidadesAsync"
+              infinite
               id="posGradLocal"
             />
 
-            <CustomInput
-              class="mb-5"
+            <button
+              type="button"
+              class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
+              :disabled="!bools.posGrad"
+              @click="dialogInstituicao = true"
+            >
+              Não encontrou sua instituição? Clique aqui
+            </button>
+
+            <CustomSelect
+              class="mb-1"
               name="academico.posGrad.curso"
               label="Curso de pós-graduação"
+              placeholder="Selecione"
+              :options="$storeCadastro.cursos"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
             />
+
+            <button
+              type="button"
+              class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
+              :disabled="!bools.posGrad"
+              @click="dialogCurso = true"
+            >
+              Não encontrou seu curso? Clique aqui
+            </button>
 
             <CustomCheckbox
               name="academico.posGrad.desejaPos"
@@ -485,6 +511,54 @@
         </div>
       </div>
     </CustomDialog>
+
+    <CustomDialog v-model="dialogInstituicao">
+      <div class="h-full flex justify-center gap-10 flex-col items-center">
+        <div class="text-2xl font-semibold text-cyan-800">
+          Cadastrar instituição
+        </div>
+
+        <Form
+          :validation-schema="instituicaoSchema"
+          @submit="handleNewInstituicao"
+          class="flex flex-col items-center gap-4"
+        >
+          <CustomInput
+            name="nome"
+            label="Nome da instituição de ensino"
+            placeholder="Universidade Federal do Pará (UFPA)"
+          />
+
+          <CustomButton type="submit">
+            Cadastrar
+          </CustomButton>
+        </Form>
+      </div>
+    </CustomDialog>
+
+    <CustomDialog v-model="dialogCurso">
+      <div class="h-full flex justify-center gap-10 flex-col items-center">
+        <div class="text-2xl font-semibold text-cyan-800">
+          Cadastrar curso
+        </div>
+
+        <Form
+          :validation-schema="cursoSchema"
+          @submit="handleNewCurso"
+          class="flex flex-col items-center gap-4"
+        >
+          <CustomInput
+            name="nome"
+            label="Nome da curso"
+            placeholder="Engenharia de software"
+          />
+
+          <CustomButton type="submit">
+            Cadastrar
+          </CustomButton>
+        </Form>
+      </div>
+    </CustomDialog>
   </div>
 </template>
 
@@ -518,6 +592,7 @@ import {
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
 import { useLoginStore } from 'src/store/LoginStore'
+
 const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
 const $storeCadastro = useCadastroEgressoStore()
@@ -530,6 +605,8 @@ const mensagemShare = `🎉%20Acabei%20de%20me%20cadastrar%20na%20plataforma%20M
 
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
+const dialogInstituicao = ref(false)
+const dialogCurso = ref(false)
 const camposFaltosos = ref(false)
 const missingDigits = ref(0)
 
@@ -688,6 +765,32 @@ function handleFail (e: any) {
   console.log(e)
   camposFaltosos.value = true
 }
+
+async function handleNewInstituicao (event: any) {
+  const response = await $storeCadastro.cadastrarInstituicao(event.nome)
+
+  if (response?.status === 201) {
+    alert('Instituição cadastrada com sucesso.')
+    dialogInstituicao.value = false
+  }
+}
+
+async function handleNewCurso (event: any) {
+  const response = await $storeCadastro.cadastrarCurso(event.nome)
+
+  if (response?.status === 201) {
+    alert('Instituição cadastrada com sucesso.')
+    dialogCurso.value = false
+  }
+}
+
+const instituicaoSchema = object().shape({
+  nome: string().required('Insira o nome da instituição')
+})
+
+const cursoSchema = object().shape({
+  nome: string().required('Insira o nome do curso')
+})
 
 const schema = object().shape({
   geral: object({
