@@ -5,6 +5,7 @@ export namespace API {
     method: string
     route: string
     body?: Record<string, any>
+    params?: Record<string, any>
   }
 
   export interface Response {
