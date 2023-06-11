@@ -19,12 +19,10 @@ router.beforeEach((to, from) => {
   const userData = parseToken(storage.getToken())
 
   if (to.path !== '/cadastro' && userData !== null && !userData.isEgresso && !(to.meta?.shouldNotForce === true) && loggedUser.grupos[0].nomeGrupo === 'EGRESSO') {
-    alert('É necessário realizar o cadastro completo para usar o sistema')
     return {
       path: '/cadastro'
     }
   } else if (to.path === '/cadastro' && loggedUser.grupos[0].nomeGrupo === 'EGRESSO' && userData !== null && userData.isEgresso) {
-    console.log(from)
     return {
       path: from.path
     }
