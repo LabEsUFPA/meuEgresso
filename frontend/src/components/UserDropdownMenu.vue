@@ -21,8 +21,10 @@
         id="dropdown"
         class="absolute shadow-md bg-white min-w-32 z-50 cursor-pointer right-[1px] max-h-96 overflow-y-auto top-8 py-3 rounded-lg border border-t-0 text-sm justify-self-end"
       >
-
-        <RouterLink to="/egresso" v-show="userLoggedGroupID === 3">
+        <RouterLink
+          to="/egresso"
+          v-show="userLoggedGroupID === 3"
+        >
           <div
             class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900"
             @click="toggleUserMenu()"
@@ -55,12 +57,11 @@
 
 <script lang="ts" setup>
 
-import { ref } from 'vue'
+import { ref, createApp } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiMenuDown, mdiMenuUp } from '@mdi/js'
 import { createPinia } from 'pinia'
 import { useLoginStore } from 'src/store/LoginStore'
-import { createApp } from 'vue'
 
 interface Props {
   userLogged: boolean
@@ -69,15 +70,13 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   userLogged: false
 })
-const pinia = createPinia();
-const app = createApp({});
-app.use(pinia);
+const pinia = createPinia()
+const app = createApp({})
+app.use(pinia)
 
-const { userLogged } = props
 const store = useLoginStore()
-const userLoggedName = ref(userLogged ? store.getLoggedUser()?.username : '')
-const userLoggedGroupID = ref(userLogged ? store.getLoggedUser()?.grupos[0].id : '')
-
+const userLoggedName = ref(props.userLogged ? store.getLoggedUser()?.username : '')
+const userLoggedGroupID = ref(props.userLogged ? store.getLoggedUser()?.grupos[0].id : '')
 
 const userMenuIsOpen = ref(false)
 const toggleUserMenu = () => {

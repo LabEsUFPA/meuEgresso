@@ -9,12 +9,13 @@
       :src="iconPath"
       :width="iconSize"
       :height="iconSize"
+      alt="icone"
     >
   </button>
 </template>
 
 <script lang="ts" setup>
-import { computed, pushScopeId } from 'vue'
+import { computed } from 'vue'
 
 defineEmits(['click'])
 
