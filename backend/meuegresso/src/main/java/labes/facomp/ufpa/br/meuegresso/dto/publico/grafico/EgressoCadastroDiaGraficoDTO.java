@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.publico.grafico;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EgressoCadastroDiaGraficoDTO {
-    private Map<Date, Integer> egressosCadastradosPorDia;
+    Map<LocalDate, Long> egressosCadastradosPorDia;
 }

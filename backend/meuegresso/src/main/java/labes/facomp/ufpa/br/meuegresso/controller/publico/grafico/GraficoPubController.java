@@ -365,7 +365,7 @@ public class GraficoPubController {
 	@GetMapping(value = "/cadastro/dia")
 	@ResponseStatus(code = HttpStatus.OK)
 	public EgressoCadastroDiaGraficoDTO getCadastroEgressoDiario() {
-		Map<Date, Integer> egressoCadDia = egressoService.countEgressoDiario();
+		Map<LocalDate, Long> egressoCadDia = egressoService.countEgressoPorData();
 
 		return new EgressoCadastroDiaGraficoDTO(egressoCadDia);
 	}

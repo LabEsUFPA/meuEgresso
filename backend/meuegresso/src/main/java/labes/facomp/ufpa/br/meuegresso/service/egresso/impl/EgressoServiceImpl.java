@@ -274,20 +274,24 @@ public class EgressoServiceImpl implements EgressoService {
 	}
 
 	@Override
-	public Map<Date, Integer> countEgressoDiario() {
-
-		Map<Date, Integer> contagem = new HashMap<>();
-
-		egressoRepository.countEgressoData().stream()
-				.forEach(e -> contagem.put(e.get(0, Date.class), e.get(1, Long.class).intValue()));
-		return contagem;
-
+	public Map<LocalDate, Long> countEgressoPorData() {
+		List<Tuple> cadastros = egressoRepository.countEgressoData();
+	
+		Map<LocalDate, Long> cadastrosPorData = cadastros.stream()
+			.collect(Collectors.groupingBy(
+				tuple -> {
+					LocalDate data = tuple.get(0, java.sql.Date.class)
+						.toLocalDate();
+					return data;
+				},
+				Collectors.counting()
+			));
+	
+		return cadastrosPorData;
 	}
-
+	
 	@Override
 	public Map<Integer, Long> countEgressoPorAno() {
-		Map<Date, Integer> contagem = new HashMap<>();
-
 		List<Tuple> cadastros = egressoRepository.countEgressoData();
 
 		Map<Integer, Long> cadastrosPorAno = cadastros.stream()
