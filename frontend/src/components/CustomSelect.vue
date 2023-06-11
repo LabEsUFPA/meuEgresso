@@ -216,6 +216,9 @@ onMounted(() => {
     if (input.value) {
       input.value.focus()
     }
+    if (props.infinite) {
+      $emit('typing', '')
+    }
   })
 })
 </script>

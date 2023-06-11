@@ -320,7 +320,11 @@
               label="País"
               :options="countries"
               v-model:value="pais"
-              @change="pais = $event"
+              @change="pais.id = $event"
+              :is-fetching="pais.isFetching"
+              @typing="fetchCountries($event, true)"
+              @infinite-scroll="fetchMoreCounties"
+              infinite
               required
             />
 
@@ -330,7 +334,11 @@
               label="Estado"
               :options="states"
               v-model:value="estado"
-              @change="estado = $event"
+              @change="estado.id = $event"
+              :is-fetching="pais.isFetching"
+              @typing="fetchStates($event, true)"
+              @infinite-scroll="fetchMoreStates"
+              infinite
               required
             />
 
@@ -338,6 +346,10 @@
               name="localizacao.cidade"
               label="Cidade"
               :options="cities"
+              :is-fetching="pais.isFetching"
+              @typing="fetchCities($event, true)"
+              @infinite-scroll="fetchMoreCities"
+              infinite
               required
             />
           </div>
@@ -573,8 +585,7 @@ import FotoInput from 'src/components/FotoInput.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
-import { ref, computed, watch, onMounted } from 'vue'
-import { Country, State, City } from 'country-state-city'
+import { ref, watch, onMounted } from 'vue'
 import svgPath from 'src/assets/svgPaths.json'
 import { object, string, boolean, mixed } from 'yup'
 import {
@@ -592,6 +603,10 @@ import {
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
 import { useLoginStore } from 'src/store/LoginStore'
+import apiEnderecos from 'src/services/apiEnderecos'
+import { type models } from 'src/@types'
+
+interface ComplexOpts extends models.ComplexOpts {}
 
 const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
@@ -610,8 +625,96 @@ const dialogCurso = ref(false)
 const camposFaltosos = ref(false)
 const missingDigits = ref(0)
 
-const pais = ref('')
-const estado = ref('')
+const pais = ref({
+  id: 0,
+  page: 0,
+  isFetching: false,
+  query: ''
+})
+
+const countries = ref<ComplexOpts[]>([])
+async function fetchCountries (query: string, clean: boolean) {
+  if (clean) {
+    console.log('aqui')
+    pais.value.id = 0
+    pais.value.page = 0
+    countries.value = []
+  }
+
+  pais.value.query = query
+  pais.value.isFetching = true
+  const response = await apiEnderecos.getPaises(query, pais.value.page)
+  pais.value.isFetching = false
+
+  if (response.status === 200) {
+    countries.value = [...countries.value, ...response.data]
+    pais.value.page++
+  }
+}
+
+async function fetchMoreCounties () {
+  fetchCountries(pais.value.query, false)
+}
+
+const estado = ref({
+  id: 0,
+  page: 0,
+  isFetching: false,
+  query: ''
+})
+
+const states = ref<ComplexOpts[]>([])
+async function fetchStates (query: string, clean: boolean) {
+  if (clean) {
+    estado.value.id = 0
+    estado.value.page = 0
+    states.value = []
+  }
+
+  estado.value.query = query
+  estado.value.isFetching = true
+  const response = await apiEnderecos.getEstados(query, pais.value.id, estado.value.page)
+  estado.value.isFetching = false
+
+  if (response.status === 200) {
+    states.value = [...states.value, ...response.data]
+    estado.value.page++
+  }
+}
+
+async function fetchMoreStates () {
+  fetchStates(estado.value.query, false)
+}
+
+const cidade = ref({
+  page: 0,
+  isFetching: false,
+  query: ''
+})
+
+const cities = ref<ComplexOpts[]>([])
+async function fetchCities (query: string, clean: boolean) {
+  if (clean) {
+    cidade.value.id = 0
+    cidade.value.page = 0
+    cities.value = []
+  }
+
+  cidade.value.query = query
+  cidade.value.isFetching = true
+  const response = await apiEnderecos.getCidades(query, estado.value.id, cidade.value.page)
+  cidade.value.isFetching = false
+
+  if (response.status === 200) {
+    cities.value = [...cities.value, ...response.data]
+    cidade.value.page++
+  }
+}
+
+async function fetchMoreCities () {
+  fetchStates(cidade.value.query, false)
+}
+
 const area = ref('')
 const temFoto = ref(false)
 const form = ref<typeof Form | null>(null)
@@ -627,42 +730,6 @@ const selectOpts = ref({
   tipoAluno: ['Graduação', 'Pós-graduação'],
   areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Outros'],
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
-})
-
-const countries = computed(() => {
-  const countries = Country.getAllCountries()
-  const filteredCountries = []
-  for (const country of countries) {
-    filteredCountries.push({
-      label: country.name,
-      value: country.isoCode
-    })
-  }
-
-  return filteredCountries
-})
-
-const states = computed(() => {
-  const states = State.getStatesOfCountry(pais.value)
-  const filteredStates = []
-
-  for (const state of states) {
-    filteredStates.push({
-      label: state.name,
-      value: state.isoCode
-    })
-  }
-  return filteredStates
-})
-
-const cities = computed(() => {
-  const cities = City.getCitiesOfState(pais.value, estado.value)
-  const filteredCities = []
-
-  for (const city of cities) {
-    filteredCities.push(city.name)
-  }
-  return filteredCities
 })
 
 async function handleSubmit (values: any) {
@@ -927,7 +994,7 @@ const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
 }
 
-onMounted(() => {
+onMounted(async () => {
   window.scrollTo(0, 0)
 })
 
