@@ -29,6 +29,5 @@ public class EmpresaBasicDTO {
     private String nome;
 
     @Valid
-    @NotNull(message = "Informe o endereço.")
     private EnderecoDTO endereco;
 }
