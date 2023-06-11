@@ -99,8 +99,12 @@ public class EgressoServiceImpl implements EgressoService {
 	}
 
 	@Override
-	public void deleteById(Integer id) {
-		egressoRepository.deleteById(id);
+	public boolean deleteById(Integer id) {
+		if (egressoRepository.existsById(id)) {
+            egressoRepository.deleteById(id);
+            return true;
+        }
+        return false;
 	}
 
 	@Override

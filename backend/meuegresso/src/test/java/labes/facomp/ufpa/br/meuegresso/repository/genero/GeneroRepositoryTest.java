@@ -67,9 +67,6 @@ class GeneroRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        generoModel = new GeneroModel();
-        generoModel.setId(ID);
-        generoModel.setNome(GENERO);
 
         grupoModel = GrupoModel.builder().id(1).nomeGrupo("ADMIN").build();
         grupoModel = grupoRepository.save(grupoModel);
@@ -98,7 +95,13 @@ class GeneroRepositoryTest {
                 .usuario(usuarioModel)
                 .build();
         
+        generoModel = GeneroModel.builder()
+                .id(ID)
+                .nome(GENERO)
+                .build();
+        
         generoModel.setCreatedBy(usuarioModel);
+
         generoModel = generoRepository.save(generoModel);
 
         egressoModel.setGenero(generoModel);

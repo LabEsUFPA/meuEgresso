@@ -83,7 +83,7 @@ public interface EgressoService {
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
-	public void deleteById(Integer id);
+	public boolean deleteById(Integer id);
 
 	/**
 	 * Método responsável por verificar se existe um determinado elemento.
