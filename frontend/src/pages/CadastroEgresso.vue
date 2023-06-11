@@ -458,6 +458,7 @@
                 <img
                   src="src/assets/telegram.svg"
                   width="20"
+                  alt="Ícone do Telegram"
                 >
               </div>
             </CustomButton>

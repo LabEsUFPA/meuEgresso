@@ -63,21 +63,6 @@
                   Mapa
                 </div>
               </RouterLink>
-              <!--
-              <div class="hidden absolute z-50 bg-cyan-900 cursor-default text-white py-3 overflow-hidden rounded-b-xl group-hover:block hover:block">
-                <ul class="text-sm font-normal">
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
-                    Anúncios
-                  </li>
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
-                    Programa
-                  </li>
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer">
-                    Faculdade
-                  </li>
-                </ul>
-              </div>
-              -->
             </li>
             <li class="cursor-pointer relative group hover:text-white h-full">
               <RouterLink to="/graficos">
@@ -85,21 +70,6 @@
                   Gráficos
                 </div>
               </RouterLink>
-              <!--
-              <div class="hidden absolute z-50 bg-cyan-900 cursor-default text-white py-3 overflow-hidden rounded-b-xl group-hover:block hover:block">
-                <ul class="text-sm font-normal">
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
-                    Anúncios
-                  </li>
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
-                    Programa
-                  </li>
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer">
-                    Faculdade
-                  </li>
-                </ul>
-              </div>
-              -->
             </li>
             <li class="cursor-pointer relative group hover:text-white h-full">
               <RouterLink to="/vagas">
@@ -107,21 +77,6 @@
                   Vagas
                 </div>
               </RouterLink>
-              <!--
-              <div class="hidden absolute z-50 bg-cyan-900 cursor-default text-white py-3 overflow-hidden rounded-b-xl group-hover:block hover:block">
-                <ul class="text-sm font-normal">
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
-                    Anúncios
-                  </li>
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
-                    Programa
-                  </li>
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer">
-                    Faculdade
-                  </li>
-                </ul>
-              </div>
-              -->
             </li>
           </ul>
 

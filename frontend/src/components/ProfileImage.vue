@@ -1,6 +1,5 @@
 <template>
   <section>
-    <!-- class="file" -->
     <o-field
       class="file"
       :root-class="classNames({
@@ -26,6 +25,7 @@
               width="30"
               height="30"
               src="/src/assets/round-upload.svg"
+              alt="Ícone Usuário"
             >
 
             <h1 class="mt-1 text-white text-[10px] ">

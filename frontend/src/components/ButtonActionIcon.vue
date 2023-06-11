@@ -9,7 +9,7 @@
       :src="iconPath"
       :width="iconSize"
       :height="iconSize"
-      alt="icone"
+      alt="Ícone"
     >
   </button>
 </template>
@@ -185,7 +185,3 @@ const styles = computed(() => {
 })
 
 </script>
-
-<style>
-
-</style>
