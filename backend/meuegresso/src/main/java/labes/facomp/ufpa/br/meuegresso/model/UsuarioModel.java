@@ -3,21 +3,25 @@ package labes.facomp.ufpa.br.meuegresso.model;
 import java.util.Collection;
 import java.util.Set;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,7 +43,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "usuario")
-@EqualsAndHashCode(callSuper = false, exclude = "grupos")
+@EqualsAndHashCode(callSuper = false)
 public class UsuarioModel extends Auditable implements UserDetails {
 
 	@Id
@@ -62,11 +66,16 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
 	private transient EgressoModel egresso;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "usuario_grupo", joinColumns = { @JoinColumn(name = "id_usuario") }, inverseJoinColumns = {
-			@JoinColumn(name = "id_grupo") }, uniqueConstraints = @UniqueConstraint(columnNames = { "id_usuario",
-					"id_grupo" }))
-	private Set<GrupoModel> grupos;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "grupo", unique = false, nullable = false, length = 10)
+	@ElementCollection(targetClass = Grupos.class, fetch = FetchType.EAGER)
+	@CollectionTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "id_usuario"), uniqueConstraints = @UniqueConstraint(columnNames = {
+			"id_usuario", "grupo" }))
+	private Set<Grupos> grupos;
+
+	@ColumnDefault(value = "TRUE")
+	@Column(name = "valido_usuario", nullable = false)
+	private Boolean valido;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

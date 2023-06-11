@@ -15,7 +15,7 @@ public class AuthService {
     private final JwtService tokenService;
 
     public String authenticate(UsuarioModel usuarioModel) {
-        String scope = usuarioModel.getAuthorities().stream()
+        String scope = usuarioModel.getGrupos().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
         return tokenService.generateToken(usuarioModel, scope);
