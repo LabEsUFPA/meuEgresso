@@ -464,7 +464,7 @@
                   <CustomPerfilData
                     type="text"
                     class="mb-5"
-                    :vmodel="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
+                    :vmodel="dataEgresso.localizacao.pais"
                     name="localizacao.pais"
                     placeholder="Brasil"
                     label="País"
@@ -474,7 +474,7 @@
                   <CustomPerfilData
                     type="text"
                     class="mb-5"
-                    :vmodel="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
+                    :vmodel="dataEgresso.localizacao.estado"
                     name="localizacao.estado"
                     label="Estado"
                     placeholder="Pará"
@@ -513,30 +513,39 @@
                       name="localizacao.pais"
                       label="País"
                       :options="countries"
-                      v-model:value="dataEgresso.localizacao.pais"
-                      @change="dataEgresso.localizacao.pais = $event"
+                      v-model:value="pais"
+                      @change="pais.id = $event"
+                      :is-fetching="pais.isFetching"
+                      @typing="fetchCountries($event, true)"
+                      @infinite-scroll="fetchMoreCounties"
+                      infinite
                       required
-                      :placeholder="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
+                      :placeholder="dataEgresso.localizacao.pais"
                       :pre-filled="true"
                     />
-
                     <CustomSelect
                       class="mb-5"
                       name="localizacao.estado"
                       label="Estado"
                       :options="states"
-                      v-model:value="dataEgresso.localizacao.estado"
-                      @change="dataEgresso.localizacao.estado = $event"
+                      v-model:value="estado"
+                      @change="estado.id = $event"
+                      :is-fetching="pais.isFetching"
+                      @typing="fetchStates($event, true)"
+                      @infinite-scroll="fetchMoreStates"
+                      infinite
                       required
-                      :placeholder="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
+                      :placeholder="dataEgresso.localizacao.estado"
                       :pre-filled="true"
                     />
-
                     <CustomSelect
                       name="localizacao.cidade"
                       label="Cidade"
                       :options="cities"
-                      v-model:value="dataEgresso.localizacao.cidade"
+                      :is-fetching="pais.isFetching"
+                      @typing="fetchCities($event, true)"
+                      @infinite-scroll="fetchMoreCities"
+                      infinite
                       required
                       :pre-filled="true"
                       :placeholder="dataEgresso.localizacao.cidade"
@@ -652,7 +661,6 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomPerfilData from 'src/components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
-import { Country, State, City } from 'country-state-city'
 import { computed, ref, watch, onMounted } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
@@ -679,6 +687,10 @@ import {
   mdiAlertCircleOutline
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
+import apiEnderecos from 'src/services/apiEnderecos'
+import { type models } from 'src/@types'
+
+interface ComplexOpts extends models.ComplexOpts {}
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const $route = useRoute()
@@ -692,42 +704,95 @@ const formCarreira = ref<typeof Form | null>(null)
 const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 
-const countries = computed(() => {
-  const countries = Country.getAllCountries()
-  const filteredCountries = []
-  for (const country of countries) {
-    filteredCountries.push({
-      label: country.name,
-      value: country.isoCode
-    })
-  }
-
-  return filteredCountries
+const pais = ref({
+  id: 0,
+  page: 0,
+  isFetching: false,
+  query: ''
 })
 
-const states = computed(() => {
-  const states = State.getStatesOfCountry(dataEgresso.value.localizacao.pais)
-  const filteredStates = []
-
-  for (const state of states) {
-    filteredStates.push({
-      label: state.name,
-      value: state.isoCode
-    })
+const countries = ref<ComplexOpts[]>([])
+async function fetchCountries (query: string, clean: boolean) {
+  if (clean) {
+    console.log('aqui')
+    pais.value.id = 0
+    pais.value.page = 0
+    countries.value = []
   }
-  return filteredStates
+
+  pais.value.query = query
+  pais.value.isFetching = true
+  const response = await apiEnderecos.getPaises(query, pais.value.page)
+  pais.value.isFetching = false
+
+  if (response.status === 200) {
+    countries.value = [...countries.value, ...response.data]
+    pais.value.page++
+  }
+}
+
+async function fetchMoreCounties () {
+  fetchCountries(pais.value.query, false)
+}
+
+const estado = ref({
+  id: 0,
+  page: 0,
+  isFetching: false,
+  query: ''
 })
 
-const cities = computed(() => {
-  const cities = City.getCitiesOfState(dataEgresso.value.localizacao.pais, dataEgresso.value.localizacao.estado)
-  const filteredCities = []
-
-  for (const city of cities) {
-    filteredCities.push(city.name)
+const states = ref<ComplexOpts[]>([])
+async function fetchStates (query: string, clean: boolean) {
+  if (clean) {
+    estado.value.id = 0
+    estado.value.page = 0
+    states.value = []
   }
-  return filteredCities
+
+  estado.value.query = query
+  estado.value.isFetching = true
+  const response = await apiEnderecos.getEstados(query, pais.value.id, estado.value.page)
+  estado.value.isFetching = false
+
+  if (response.status === 200) {
+    states.value = [...states.value, ...response.data]
+    estado.value.page++
+  }
+}
+
+async function fetchMoreStates () {
+  fetchStates(estado.value.query, false)
+}
+
+const cidade = ref({
+  page: 0,
+  isFetching: false,
+  query: ''
 })
 
+const cities = ref<ComplexOpts[]>([])
+async function fetchCities (query: string, clean: boolean) {
+  if (clean) {
+    cidade.value.id = 0
+    cidade.value.page = 0
+    cities.value = []
+  }
+
+  cidade.value.query = query
+  cidade.value.isFetching = true
+  const response = await apiEnderecos.getCidades(query, estado.value.id, cidade.value.page)
+  cidade.value.isFetching = false
+
+  if (response.status === 200) {
+    cities.value = [...cities.value, ...response.data]
+    cidade.value.page++
+  }
+}
+
+async function fetchMoreCities () {
+  fetchStates(cidade.value.query, false)
+}
 const stagedChanges = ref({
   profileHead: {
     removedImage: false
@@ -763,6 +828,7 @@ const profileImageSave = () => {
 }
 
 async function handleSubmitHeader (values: any) {
+  console.log('123')
   jsonResponse.usuario.nome = values.geral.nome
   if (values.geral.linkedin !== '' && values.geral.linkedin !== undefined) {
     jsonResponse.linkedin = values.geral.linkedin
@@ -1036,6 +1102,7 @@ const selectOpts = ref({
 })
 function onInvalid (e: any) {
   // updateEgressoDataModel(e)
+  console.log('invalid')
   console.log(e)
 }
 
