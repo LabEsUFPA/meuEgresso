@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.dto.empresa;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.endereco.EnderecoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,4 +30,7 @@ public class EmpresaBasicDTO {
 
     @Valid
     private EnderecoDTO endereco;
+
+    @NotNull(message = "Insira se é empresa de emprego ou não.")
+    private Boolean isEmprego;
 }
