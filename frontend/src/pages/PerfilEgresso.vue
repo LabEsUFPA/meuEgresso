@@ -1,10 +1,10 @@
 <template>
   <div
     v-if="loading"
-    class="flex items-center justify-center text-center"
+    class="flex h-[70vh] items-center justify-center text-center"
   >
     <img
-      class="animate-spin mr-3 max-w-[100px]"
+      class="animate-spin mr-3 w-[100px]"
       src="../assets/loading.svg"
       alt="Loading"
     >
@@ -42,7 +42,7 @@
             >
               <ProfileImage
                 ref="profileImageRef"
-                @imageUploadBack="profileImageSave"
+                @image-upload-back="profileImageSave"
                 @remove="softRemoveImageEgresso"
                 :img-url="dataEgresso.profileHead.image"
                 img-default="/src/assets/profile-pic.png"
@@ -657,7 +657,6 @@ import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import { Form } from 'vee-validate'
 import { object, string, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
-import { useLoginStore } from 'src/store/LoginStore'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import FolderAcademico from 'src/components/FolderAcademico.vue'
 import FolderCarreira from 'src/components/FolderCarreira.vue'
@@ -790,7 +789,6 @@ async function handleSubmitHeader (values: any) {
 
   if (status === 201 && (responseImage === 201 || responseImage === 200 || responseImage === 204)) {
     dialogSucesso.value = true
-    await useLoginStore().saveUser()
 
     toggleIsInput('profileHead')
     fetchUpdateEgresso()
@@ -807,7 +805,6 @@ async function handleSubmitGeral (values: any) {
   jsonResponse.nascimento = values.geral.nascimento
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
-    await useLoginStore().saveUser()
     toggleIsInput('geral')
   }
 

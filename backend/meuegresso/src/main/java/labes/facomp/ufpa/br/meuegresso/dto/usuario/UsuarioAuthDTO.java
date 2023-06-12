@@ -5,7 +5,7 @@ import java.util.Set;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import labes.facomp.ufpa.br.meuegresso.dto.grupo.GrupoDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import lombok.Data;
 
 /**
@@ -32,5 +32,5 @@ public class UsuarioAuthDTO {
     @NotBlank(message = "Infome um nome.")
     private String nome;
 
-    private Set<GrupoDTO> grupos = new HashSet<>();
+    private Set<Grupos> grupos = new HashSet<>();
 }

@@ -59,6 +59,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.SetorAtuacaoGraficoDT
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.TipoAlunoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.TipoBolsaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
@@ -71,7 +72,6 @@ import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.TipoBolsaModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
@@ -86,7 +86,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.endereco.EnderecoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.setoratuacao.SetorAtuacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.tipobolsa.TipoBolsaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
@@ -144,9 +143,6 @@ class GraficoPubControllerTest {
         static final String SETORATUACAO_NOME = "SetorAtuacaoTeste";
 
         private final Double REMUNERACAOBOLSA = 800.0;
-
-        @Autowired
-        private GrupoRepository grupoRepository;
 
         @Autowired
         private AreaAtuacaoRepository areaAtuacaoRepository;
@@ -230,19 +226,12 @@ class GraficoPubControllerTest {
         @BeforeAll
         void setUp() throws Exception {
 
-                GrupoModel grupoModel = new GrupoModel();
-                grupoModel.setNomeGrupo("ADMIN");
-                grupoModel = grupoRepository.save(grupoModel);
-
-                Set<GrupoModel> grupos = new HashSet<>();
-                grupos.add(grupoModel);
-
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
                 usuarioModel.setNome("nome_test");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
-                usuarioModel.setGrupos(grupos);
+                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
                 mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                                 .contentType(MediaType.APPLICATION_JSON)

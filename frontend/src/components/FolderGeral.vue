@@ -76,10 +76,8 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
-import { ref, computed, watch, onMounted } from 'vue'
-import { Country, State, City } from 'country-state-city'
+import { ref, watch, onMounted } from 'vue'
 import svgPath from 'src/assets/svgPaths.json'
-import { object, string, boolean } from 'yup'
 import {
   mdiAccount,
   mdiEmail
@@ -103,9 +101,8 @@ const form = ref<typeof Form | null>(null)
 
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   isInput: true
-
 })
 const geral = ref({
   email: ''
@@ -124,9 +121,7 @@ onMounted(() => {
     const userData = JSON.parse(storage.get('loggedUser'))
     geral.value.email = 'userData1'
     // form.value?.setFieldValue('geral.email', userData.email)
-    form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
-      return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
-    }).join(' '))
+    form.value?.setFieldValue('geral.nome', userData.nome)
   }
 })
 </script>

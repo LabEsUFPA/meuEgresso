@@ -12,6 +12,7 @@ interface UserData {
   idUsuario: number
   isEgresso: boolean
   iss: string
+  nomeCompleto: string
   nome: string
   scope: string
   sobrenome: string
@@ -23,6 +24,13 @@ interface State {
   userData: UserData | null
 }
 
+const capitalize = (nome: string): string => {
+  const result = nome.toLocaleLowerCase().split(' ').map((str) => {
+    return str !== 'de' && str !== 'da' && str !== '' ? str[0].toUpperCase() + str.substring(1) : str
+  }).join(' ')
+
+  return result.trim()
+}
 export function parseToken (token: string | undefined): UserData | null {
   if (token === undefined) {
     return null
@@ -30,7 +38,13 @@ export function parseToken (token: string | undefined): UserData | null {
 
   const base64Url = token.split('.')[1]
   const base64 = base64Url.replace('-', '+').replace('_', '/')
-  return JSON.parse(window.atob(base64))
+
+  const result: UserData = JSON.parse(window.atob(base64))
+  result.nome = capitalize(result.nome)
+  result.sobrenome = capitalize(result.sobrenome)
+  result.nomeCompleto = `${result.nome} ${result.sobrenome}`
+
+  return result
 }
 
 export const useLoginStore = defineStore('LoginStore', {
@@ -55,8 +69,13 @@ export const useLoginStore = defineStore('LoginStore', {
       if (response?.status === 200) {
         await this.saveUser()
         this.userLogged = true
+        storage.set('loggedUser', JSON.stringify(parseToken(response.data?.token)))
       }
-      return (response?.status) !== undefined ? response.status : 500
+
+      return {
+        status: (response?.status) !== undefined ? response.status : 500,
+        data: (response?.data !== undefined) ? response?.data : null
+      }
     },
 
     userLogout () {
@@ -74,7 +93,7 @@ export const useLoginStore = defineStore('LoginStore', {
         route: '/usuario'
       })
       if (response?.status === 200) {
-        storage.set('loggedUser', JSON.stringify(response.data))
+        console.log(response.data)
       }
     },
 

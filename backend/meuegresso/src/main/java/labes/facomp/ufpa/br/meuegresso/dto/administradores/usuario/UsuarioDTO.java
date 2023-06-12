@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.AuditableDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.administradores.grupo.GrupoDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -47,6 +47,6 @@ public class UsuarioDTO extends AuditableDTO {
 	@Valid
 	private EgressoDTO egresso;
 
-	private Set<GrupoDTO> grupos = new HashSet<>();
+	private Set<Grupos> grupos = new HashSet<>();
 
 }

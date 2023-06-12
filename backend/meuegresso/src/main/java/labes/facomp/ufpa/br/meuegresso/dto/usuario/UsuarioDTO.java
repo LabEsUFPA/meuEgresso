@@ -7,7 +7,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grupo.GrupoDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -45,6 +45,6 @@ public class UsuarioDTO {
 	private EgressoPublicDTO egresso;
 
 	@Builder.Default
-	private Set<GrupoDTO> grupos = new HashSet<>();
+	private Set<Grupos> grupos = new HashSet<>();
 
 }
