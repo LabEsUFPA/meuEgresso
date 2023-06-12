@@ -1,7 +1,9 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
@@ -87,4 +89,9 @@ public interface UsuarioService extends UserDetailsService {
 	public Page<UsuarioModel> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate dateMin, LocalDate dateMax,
 			Boolean ativo, String email, Integer page, Integer size, Direction direction);
 
+	public Map<String, LocalDate> findByCompleto();
+
+	public Map<String, LocalDate> findByIncompleto();
+
+	public Map<String, LocalDate> findByPendente();
 }
