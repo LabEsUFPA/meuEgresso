@@ -36,16 +36,14 @@ export const useCadastroPerfilStore = defineStore('CadastroPerfilStore', {
       password: string,
       email: string,
       nome: string,
-      grupos?: [{
-        id: number
-      }]
+      registration?: string
     ) {
       const data: UserModel = {
         username,
         password,
         email,
         nome,
-        grupos
+        registration
       }
 
       const response = await Api.request({
