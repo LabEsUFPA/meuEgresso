@@ -1,4 +1,48 @@
 --
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 15.2
+-- Dumped by pg_dump version 15.2
+
+-- Started on 2023-06-11 23:48:06
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 4 (class 2615 OID 2200)
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA public;
+
+
+--
+-- TOC entry 3713 (class 0 OID 0)
+-- Dependencies: 4
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 217 (class 1259 OID 111681)
+-- Name: anuncio; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE public.anuncio (
     id_anuncio integer NOT NULL,
@@ -8,7 +52,7 @@ CREATE TABLE public.anuncio (
     data_expiracao_anuncio date NOT NULL,
     descricao_anuncio oid NOT NULL,
     link_anuncio character varying(255) NOT NULL,
-    salario_anuncio character varying(255),
+    salario_anuncio double precision,
     titulo_anuncio character varying(255) NOT NULL,
     created_by integer,
     last_modified_by integer,
@@ -17,7 +61,7 @@ CREATE TABLE public.anuncio (
 
 
 --
--- TOC entry 215 (class 1259 OID 16392)
+-- TOC entry 216 (class 1259 OID 111680)
 -- Name: anuncio_id_anuncio_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -31,8 +75,8 @@ CREATE SEQUENCE public.anuncio_id_anuncio_seq
 
 
 --
--- TOC entry 3704 (class 0 OID 0)
--- Dependencies: 215
+-- TOC entry 3714 (class 0 OID 0)
+-- Dependencies: 216
 -- Name: anuncio_id_anuncio_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -40,7 +84,7 @@ ALTER SEQUENCE public.anuncio_id_anuncio_seq OWNED BY public.anuncio.id_anuncio;
 
 
 --
--- TOC entry 216 (class 1259 OID 16393)
+-- TOC entry 219 (class 1259 OID 111692)
 -- Name: area_atuacao; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -56,7 +100,7 @@ CREATE TABLE public.area_atuacao (
 
 
 --
--- TOC entry 217 (class 1259 OID 16398)
+-- TOC entry 218 (class 1259 OID 111691)
 -- Name: area_atuacao_id_area_atuacao_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -70,8 +114,8 @@ CREATE SEQUENCE public.area_atuacao_id_area_atuacao_seq
 
 
 --
--- TOC entry 3705 (class 0 OID 0)
--- Dependencies: 217
+-- TOC entry 3715 (class 0 OID 0)
+-- Dependencies: 218
 -- Name: area_atuacao_id_area_atuacao_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -79,7 +123,7 @@ ALTER SEQUENCE public.area_atuacao_id_area_atuacao_seq OWNED BY public.area_atua
 
 
 --
--- TOC entry 218 (class 1259 OID 16399)
+-- TOC entry 221 (class 1259 OID 111701)
 -- Name: area_emprego; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -95,7 +139,7 @@ CREATE TABLE public.area_emprego (
 
 
 --
--- TOC entry 219 (class 1259 OID 16404)
+-- TOC entry 220 (class 1259 OID 111700)
 -- Name: area_emprego_id_area_emprego_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -109,8 +153,8 @@ CREATE SEQUENCE public.area_emprego_id_area_emprego_seq
 
 
 --
--- TOC entry 3706 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3716 (class 0 OID 0)
+-- Dependencies: 220
 -- Name: area_emprego_id_area_emprego_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -118,7 +162,7 @@ ALTER SEQUENCE public.area_emprego_id_area_emprego_seq OWNED BY public.area_empr
 
 
 --
--- TOC entry 220 (class 1259 OID 16405)
+-- TOC entry 223 (class 1259 OID 111710)
 -- Name: comentario; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -135,7 +179,7 @@ CREATE TABLE public.comentario (
 
 
 --
--- TOC entry 221 (class 1259 OID 16410)
+-- TOC entry 222 (class 1259 OID 111709)
 -- Name: comentario_id_comentario_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -149,8 +193,8 @@ CREATE SEQUENCE public.comentario_id_comentario_seq
 
 
 --
--- TOC entry 3707 (class 0 OID 0)
--- Dependencies: 221
+-- TOC entry 3717 (class 0 OID 0)
+-- Dependencies: 222
 -- Name: comentario_id_comentario_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -158,7 +202,7 @@ ALTER SEQUENCE public.comentario_id_comentario_seq OWNED BY public.comentario.id
 
 
 --
--- TOC entry 222 (class 1259 OID 16411)
+-- TOC entry 225 (class 1259 OID 111719)
 -- Name: contribuicao; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -175,7 +219,7 @@ CREATE TABLE public.contribuicao (
 
 
 --
--- TOC entry 223 (class 1259 OID 16416)
+-- TOC entry 224 (class 1259 OID 111718)
 -- Name: contribuicao_id_contribuicao_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -189,8 +233,8 @@ CREATE SEQUENCE public.contribuicao_id_contribuicao_seq
 
 
 --
--- TOC entry 3708 (class 0 OID 0)
--- Dependencies: 223
+-- TOC entry 3718 (class 0 OID 0)
+-- Dependencies: 224
 -- Name: contribuicao_id_contribuicao_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -198,7 +242,7 @@ ALTER SEQUENCE public.contribuicao_id_contribuicao_seq OWNED BY public.contribui
 
 
 --
--- TOC entry 224 (class 1259 OID 16417)
+-- TOC entry 227 (class 1259 OID 111728)
 -- Name: cota; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -214,7 +258,7 @@ CREATE TABLE public.cota (
 
 
 --
--- TOC entry 225 (class 1259 OID 16422)
+-- TOC entry 226 (class 1259 OID 111727)
 -- Name: cota_id_cota_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -228,8 +272,8 @@ CREATE SEQUENCE public.cota_id_cota_seq
 
 
 --
--- TOC entry 3709 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3719 (class 0 OID 0)
+-- Dependencies: 226
 -- Name: cota_id_cota_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -237,7 +281,7 @@ ALTER SEQUENCE public.cota_id_cota_seq OWNED BY public.cota.id_cota;
 
 
 --
--- TOC entry 226 (class 1259 OID 16423)
+-- TOC entry 229 (class 1259 OID 111737)
 -- Name: curso; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -253,7 +297,7 @@ CREATE TABLE public.curso (
 
 
 --
--- TOC entry 227 (class 1259 OID 16428)
+-- TOC entry 228 (class 1259 OID 111736)
 -- Name: curso_id_curso_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -267,8 +311,8 @@ CREATE SEQUENCE public.curso_id_curso_seq
 
 
 --
--- TOC entry 3710 (class 0 OID 0)
--- Dependencies: 227
+-- TOC entry 3720 (class 0 OID 0)
+-- Dependencies: 228
 -- Name: curso_id_curso_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -276,7 +320,7 @@ ALTER SEQUENCE public.curso_id_curso_seq OWNED BY public.curso.id_curso;
 
 
 --
--- TOC entry 228 (class 1259 OID 16429)
+-- TOC entry 231 (class 1259 OID 111746)
 -- Name: depoimento; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -293,7 +337,7 @@ CREATE TABLE public.depoimento (
 
 
 --
--- TOC entry 229 (class 1259 OID 16434)
+-- TOC entry 230 (class 1259 OID 111745)
 -- Name: depoimento_id_depoimento_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -307,8 +351,8 @@ CREATE SEQUENCE public.depoimento_id_depoimento_seq
 
 
 --
--- TOC entry 3711 (class 0 OID 0)
--- Dependencies: 229
+-- TOC entry 3721 (class 0 OID 0)
+-- Dependencies: 230
 -- Name: depoimento_id_depoimento_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -316,7 +360,7 @@ ALTER SEQUENCE public.depoimento_id_depoimento_seq OWNED BY public.depoimento.id
 
 
 --
--- TOC entry 230 (class 1259 OID 16435)
+-- TOC entry 233 (class 1259 OID 111755)
 -- Name: egresso; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -333,19 +377,29 @@ CREATE TABLE public.egresso (
     linkedin_egresso character varying(255),
     matricula_egresso character varying(12),
     nascimento_egresso date NOT NULL,
-    pos_graduacao_egresso boolean,
+    pos_graducao_egresso boolean,
     remuneracao_bolsa_egresso double precision,
     created_by integer,
     last_modified_by integer,
     tipo_bolsa_id integer,
     genero_id integer NOT NULL,
-    usuario_id integer,
-    CONSTRAINT egresso_remuneracao_bolsa_egresso_check CHECK ((remuneracao_bolsa_egresso >= (0)::double precision))
+    usuario_id integer
 );
 
 
 --
--- TOC entry 231 (class 1259 OID 16443)
+-- TOC entry 214 (class 1259 OID 71878)
+-- Name: egresso_area_atuacao; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.egresso_area_atuacao (
+    id_area_atuacao integer NOT NULL,
+    id_egresso integer NOT NULL
+);
+
+
+--
+-- TOC entry 234 (class 1259 OID 111765)
 -- Name: egresso_cota; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -356,7 +410,7 @@ CREATE TABLE public.egresso_cota (
 
 
 --
--- TOC entry 232 (class 1259 OID 16446)
+-- TOC entry 235 (class 1259 OID 111770)
 -- Name: egresso_empresa; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -375,7 +429,7 @@ CREATE TABLE public.egresso_empresa (
 
 
 --
--- TOC entry 233 (class 1259 OID 16451)
+-- TOC entry 232 (class 1259 OID 111754)
 -- Name: egresso_id_egresso_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -389,8 +443,8 @@ CREATE SEQUENCE public.egresso_id_egresso_seq
 
 
 --
--- TOC entry 3712 (class 0 OID 0)
--- Dependencies: 233
+-- TOC entry 3722 (class 0 OID 0)
+-- Dependencies: 232
 -- Name: egresso_id_egresso_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -398,7 +452,7 @@ ALTER SEQUENCE public.egresso_id_egresso_seq OWNED BY public.egresso.id_egresso;
 
 
 --
--- TOC entry 234 (class 1259 OID 16452)
+-- TOC entry 236 (class 1259 OID 111777)
 -- Name: egresso_titulacao; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -416,7 +470,7 @@ CREATE TABLE public.egresso_titulacao (
 
 
 --
--- TOC entry 235 (class 1259 OID 16457)
+-- TOC entry 238 (class 1259 OID 111785)
 -- Name: egresso_valido; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -429,7 +483,7 @@ CREATE TABLE public.egresso_valido (
 
 
 --
--- TOC entry 236 (class 1259 OID 16460)
+-- TOC entry 237 (class 1259 OID 111784)
 -- Name: egresso_valido_id_egresso_valido_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -443,8 +497,8 @@ CREATE SEQUENCE public.egresso_valido_id_egresso_valido_seq
 
 
 --
--- TOC entry 3713 (class 0 OID 0)
--- Dependencies: 236
+-- TOC entry 3723 (class 0 OID 0)
+-- Dependencies: 237
 -- Name: egresso_valido_id_egresso_valido_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -452,7 +506,7 @@ ALTER SEQUENCE public.egresso_valido_id_egresso_valido_seq OWNED BY public.egres
 
 
 --
--- TOC entry 237 (class 1259 OID 16461)
+-- TOC entry 240 (class 1259 OID 111792)
 -- Name: empresa; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -469,7 +523,7 @@ CREATE TABLE public.empresa (
 
 
 --
--- TOC entry 238 (class 1259 OID 16466)
+-- TOC entry 239 (class 1259 OID 111791)
 -- Name: empresa_id_empresa_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -483,8 +537,8 @@ CREATE SEQUENCE public.empresa_id_empresa_seq
 
 
 --
--- TOC entry 3714 (class 0 OID 0)
--- Dependencies: 238
+-- TOC entry 3724 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: empresa_id_empresa_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -492,7 +546,7 @@ ALTER SEQUENCE public.empresa_id_empresa_seq OWNED BY public.empresa.id_empresa;
 
 
 --
--- TOC entry 239 (class 1259 OID 16467)
+-- TOC entry 242 (class 1259 OID 111801)
 -- Name: endereco; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -510,7 +564,7 @@ CREATE TABLE public.endereco (
 
 
 --
--- TOC entry 240 (class 1259 OID 16474)
+-- TOC entry 241 (class 1259 OID 111800)
 -- Name: endereco_id_endereco_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -524,8 +578,8 @@ CREATE SEQUENCE public.endereco_id_endereco_seq
 
 
 --
--- TOC entry 3715 (class 0 OID 0)
--- Dependencies: 240
+-- TOC entry 3725 (class 0 OID 0)
+-- Dependencies: 241
 -- Name: endereco_id_endereco_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -533,7 +587,7 @@ ALTER SEQUENCE public.endereco_id_endereco_seq OWNED BY public.endereco.id_ender
 
 
 --
--- TOC entry 241 (class 1259 OID 16475)
+-- TOC entry 244 (class 1259 OID 111812)
 -- Name: faixa_salarial; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -549,7 +603,7 @@ CREATE TABLE public.faixa_salarial (
 
 
 --
--- TOC entry 242 (class 1259 OID 16480)
+-- TOC entry 243 (class 1259 OID 111811)
 -- Name: faixa_salarial_id_faixa_salarial_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -563,8 +617,8 @@ CREATE SEQUENCE public.faixa_salarial_id_faixa_salarial_seq
 
 
 --
--- TOC entry 3716 (class 0 OID 0)
--- Dependencies: 242
+-- TOC entry 3726 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: faixa_salarial_id_faixa_salarial_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -572,7 +626,7 @@ ALTER SEQUENCE public.faixa_salarial_id_faixa_salarial_seq OWNED BY public.faixa
 
 
 --
--- TOC entry 243 (class 1259 OID 16481)
+-- TOC entry 246 (class 1259 OID 111821)
 -- Name: genero; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -588,7 +642,7 @@ CREATE TABLE public.genero (
 
 
 --
--- TOC entry 244 (class 1259 OID 16486)
+-- TOC entry 245 (class 1259 OID 111820)
 -- Name: genero_id_genero_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -602,15 +656,55 @@ CREATE SEQUENCE public.genero_id_genero_seq
 
 
 --
--- TOC entry 3717 (class 0 OID 0)
--- Dependencies: 244
+-- TOC entry 3727 (class 0 OID 0)
+-- Dependencies: 245
 -- Name: genero_id_genero_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.genero_id_genero_seq OWNED BY public.genero.id_genero;
 
+
 --
--- TOC entry 247 (class 1259 OID 16493)
+-- TOC entry 248 (class 1259 OID 111830)
+-- Name: grupo; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.grupo (
+    id_grupo integer NOT NULL,
+    ativo boolean DEFAULT true NOT NULL,
+    created_date timestamp(6) without time zone DEFAULT now(),
+    last_modified_date timestamp(6) without time zone,
+    nome_grupo character varying(50) NOT NULL,
+    created_by integer,
+    last_modified_by integer
+);
+
+
+--
+-- TOC entry 247 (class 1259 OID 111829)
+-- Name: grupo_id_grupo_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.grupo_id_grupo_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3728 (class 0 OID 0)
+-- Dependencies: 247
+-- Name: grupo_id_grupo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.grupo_id_grupo_seq OWNED BY public.grupo.id_grupo;
+
+
+--
+-- TOC entry 250 (class 1259 OID 111839)
 -- Name: palestra; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -627,7 +721,7 @@ CREATE TABLE public.palestra (
 
 
 --
--- TOC entry 248 (class 1259 OID 16498)
+-- TOC entry 249 (class 1259 OID 111838)
 -- Name: palestra_id_palestra_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -641,8 +735,8 @@ CREATE SEQUENCE public.palestra_id_palestra_seq
 
 
 --
--- TOC entry 3719 (class 0 OID 0)
--- Dependencies: 248
+-- TOC entry 3729 (class 0 OID 0)
+-- Dependencies: 249
 -- Name: palestra_id_palestra_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -650,7 +744,7 @@ ALTER SEQUENCE public.palestra_id_palestra_seq OWNED BY public.palestra.id_pales
 
 
 --
--- TOC entry 249 (class 1259 OID 16499)
+-- TOC entry 252 (class 1259 OID 111848)
 -- Name: setor_atuacao; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -666,7 +760,18 @@ CREATE TABLE public.setor_atuacao (
 
 
 --
--- TOC entry 250 (class 1259 OID 16504)
+-- TOC entry 215 (class 1259 OID 71974)
+-- Name: setor_atuacao_empresa; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.setor_atuacao_empresa (
+    id_setor_atuacao integer NOT NULL,
+    id_empresa integer NOT NULL
+);
+
+
+--
+-- TOC entry 251 (class 1259 OID 111847)
 -- Name: setor_atuacao_id_setor_atuacao_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -680,8 +785,8 @@ CREATE SEQUENCE public.setor_atuacao_id_setor_atuacao_seq
 
 
 --
--- TOC entry 3720 (class 0 OID 0)
--- Dependencies: 250
+-- TOC entry 3730 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: setor_atuacao_id_setor_atuacao_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -689,7 +794,7 @@ ALTER SEQUENCE public.setor_atuacao_id_setor_atuacao_seq OWNED BY public.setor_a
 
 
 --
--- TOC entry 251 (class 1259 OID 16505)
+-- TOC entry 254 (class 1259 OID 111857)
 -- Name: tipo_bolsa; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -705,7 +810,7 @@ CREATE TABLE public.tipo_bolsa (
 
 
 --
--- TOC entry 252 (class 1259 OID 16510)
+-- TOC entry 253 (class 1259 OID 111856)
 -- Name: tipo_bolsa_id_tipo_bolsa_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -719,8 +824,8 @@ CREATE SEQUENCE public.tipo_bolsa_id_tipo_bolsa_seq
 
 
 --
--- TOC entry 3721 (class 0 OID 0)
--- Dependencies: 252
+-- TOC entry 3731 (class 0 OID 0)
+-- Dependencies: 253
 -- Name: tipo_bolsa_id_tipo_bolsa_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -728,7 +833,7 @@ ALTER SEQUENCE public.tipo_bolsa_id_tipo_bolsa_seq OWNED BY public.tipo_bolsa.id
 
 
 --
--- TOC entry 253 (class 1259 OID 16511)
+-- TOC entry 256 (class 1259 OID 111866)
 -- Name: titulacao; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -744,7 +849,7 @@ CREATE TABLE public.titulacao (
 
 
 --
--- TOC entry 254 (class 1259 OID 16516)
+-- TOC entry 255 (class 1259 OID 111865)
 -- Name: titulacao_id_titulacao_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -758,8 +863,8 @@ CREATE SEQUENCE public.titulacao_id_titulacao_seq
 
 
 --
--- TOC entry 3722 (class 0 OID 0)
--- Dependencies: 254
+-- TOC entry 3732 (class 0 OID 0)
+-- Dependencies: 255
 -- Name: titulacao_id_titulacao_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -767,7 +872,7 @@ ALTER SEQUENCE public.titulacao_id_titulacao_seq OWNED BY public.titulacao.id_ti
 
 
 --
--- TOC entry 255 (class 1259 OID 16517)
+-- TOC entry 258 (class 1259 OID 111875)
 -- Name: usuario; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -786,18 +891,18 @@ CREATE TABLE public.usuario (
 
 
 --
--- TOC entry 256 (class 1259 OID 16522)
+-- TOC entry 259 (class 1259 OID 111883)
 -- Name: usuario_grupo; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.usuario_grupo (
     id_usuario integer NOT NULL,
-    grupo haracter varying(10) NOT NULL
+    id_grupo integer NOT NULL
 );
 
 
 --
--- TOC entry 257 (class 1259 OID 16525)
+-- TOC entry 257 (class 1259 OID 111874)
 -- Name: usuario_id_usuario_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -811,7 +916,7 @@ CREATE SEQUENCE public.usuario_id_usuario_seq
 
 
 --
--- TOC entry 3723 (class 0 OID 0)
+-- TOC entry 3733 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: usuario_id_usuario_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
@@ -820,7 +925,7 @@ ALTER SEQUENCE public.usuario_id_usuario_seq OWNED BY public.usuario.id_usuario;
 
 
 --
--- TOC entry 3287 (class 2604 OID 16526)
+-- TOC entry 3292 (class 2604 OID 111684)
 -- Name: anuncio id_anuncio; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -828,7 +933,7 @@ ALTER TABLE ONLY public.anuncio ALTER COLUMN id_anuncio SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 3290 (class 2604 OID 16527)
+-- TOC entry 3295 (class 2604 OID 111695)
 -- Name: area_atuacao id_area_atuacao; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -836,7 +941,7 @@ ALTER TABLE ONLY public.area_atuacao ALTER COLUMN id_area_atuacao SET DEFAULT ne
 
 
 --
--- TOC entry 3293 (class 2604 OID 16528)
+-- TOC entry 3298 (class 2604 OID 111704)
 -- Name: area_emprego id_area_emprego; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -844,7 +949,7 @@ ALTER TABLE ONLY public.area_emprego ALTER COLUMN id_area_emprego SET DEFAULT ne
 
 
 --
--- TOC entry 3296 (class 2604 OID 16529)
+-- TOC entry 3301 (class 2604 OID 111713)
 -- Name: comentario id_comentario; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -852,7 +957,7 @@ ALTER TABLE ONLY public.comentario ALTER COLUMN id_comentario SET DEFAULT nextva
 
 
 --
--- TOC entry 3299 (class 2604 OID 16530)
+-- TOC entry 3304 (class 2604 OID 111722)
 -- Name: contribuicao id_contribuicao; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -860,7 +965,7 @@ ALTER TABLE ONLY public.contribuicao ALTER COLUMN id_contribuicao SET DEFAULT ne
 
 
 --
--- TOC entry 3302 (class 2604 OID 16531)
+-- TOC entry 3307 (class 2604 OID 111731)
 -- Name: cota id_cota; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -868,7 +973,7 @@ ALTER TABLE ONLY public.cota ALTER COLUMN id_cota SET DEFAULT nextval('public.co
 
 
 --
--- TOC entry 3305 (class 2604 OID 16532)
+-- TOC entry 3310 (class 2604 OID 111740)
 -- Name: curso id_curso; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -876,7 +981,7 @@ ALTER TABLE ONLY public.curso ALTER COLUMN id_curso SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 3308 (class 2604 OID 16533)
+-- TOC entry 3313 (class 2604 OID 111749)
 -- Name: depoimento id_depoimento; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -884,7 +989,7 @@ ALTER TABLE ONLY public.depoimento ALTER COLUMN id_depoimento SET DEFAULT nextva
 
 
 --
--- TOC entry 3311 (class 2604 OID 16534)
+-- TOC entry 3316 (class 2604 OID 111758)
 -- Name: egresso id_egresso; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -892,7 +997,7 @@ ALTER TABLE ONLY public.egresso ALTER COLUMN id_egresso SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 3318 (class 2604 OID 16535)
+-- TOC entry 3323 (class 2604 OID 111788)
 -- Name: egresso_valido id_egresso_valido; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -900,7 +1005,7 @@ ALTER TABLE ONLY public.egresso_valido ALTER COLUMN id_egresso_valido SET DEFAUL
 
 
 --
--- TOC entry 3319 (class 2604 OID 16536)
+-- TOC entry 3324 (class 2604 OID 111795)
 -- Name: empresa id_empresa; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -908,7 +1013,7 @@ ALTER TABLE ONLY public.empresa ALTER COLUMN id_empresa SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 3322 (class 2604 OID 16537)
+-- TOC entry 3327 (class 2604 OID 111804)
 -- Name: endereco id_endereco; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -916,7 +1021,7 @@ ALTER TABLE ONLY public.endereco ALTER COLUMN id_endereco SET DEFAULT nextval('p
 
 
 --
--- TOC entry 3325 (class 2604 OID 16538)
+-- TOC entry 3330 (class 2604 OID 111815)
 -- Name: faixa_salarial id_faixa_salarial; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -924,7 +1029,7 @@ ALTER TABLE ONLY public.faixa_salarial ALTER COLUMN id_faixa_salarial SET DEFAUL
 
 
 --
--- TOC entry 3328 (class 2604 OID 16539)
+-- TOC entry 3333 (class 2604 OID 111824)
 -- Name: genero id_genero; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -932,7 +1037,15 @@ ALTER TABLE ONLY public.genero ALTER COLUMN id_genero SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 3334 (class 2604 OID 16541)
+-- TOC entry 3336 (class 2604 OID 111833)
+-- Name: grupo id_grupo; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.grupo ALTER COLUMN id_grupo SET DEFAULT nextval('public.grupo_id_grupo_seq'::regclass);
+
+
+--
+-- TOC entry 3339 (class 2604 OID 111842)
 -- Name: palestra id_palestra; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -940,7 +1053,7 @@ ALTER TABLE ONLY public.palestra ALTER COLUMN id_palestra SET DEFAULT nextval('p
 
 
 --
--- TOC entry 3337 (class 2604 OID 16542)
+-- TOC entry 3342 (class 2604 OID 111851)
 -- Name: setor_atuacao id_setor_atuacao; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -948,7 +1061,7 @@ ALTER TABLE ONLY public.setor_atuacao ALTER COLUMN id_setor_atuacao SET DEFAULT 
 
 
 --
--- TOC entry 3340 (class 2604 OID 16543)
+-- TOC entry 3345 (class 2604 OID 111860)
 -- Name: tipo_bolsa id_tipo_bolsa; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -956,7 +1069,7 @@ ALTER TABLE ONLY public.tipo_bolsa ALTER COLUMN id_tipo_bolsa SET DEFAULT nextva
 
 
 --
--- TOC entry 3343 (class 2604 OID 16544)
+-- TOC entry 3348 (class 2604 OID 111869)
 -- Name: titulacao id_titulacao; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -964,7 +1077,7 @@ ALTER TABLE ONLY public.titulacao ALTER COLUMN id_titulacao SET DEFAULT nextval(
 
 
 --
--- TOC entry 3346 (class 2604 OID 16545)
+-- TOC entry 3351 (class 2604 OID 111878)
 -- Name: usuario id_usuario; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -972,123 +1085,148 @@ ALTER TABLE ONLY public.usuario ALTER COLUMN id_usuario SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 3654 (class 0 OID 16385)
--- Dependencies: 214
+-- TOC entry 3665 (class 0 OID 111681)
+-- Dependencies: 217
 -- Data for Name: anuncio; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 
 
 --
--- TOC entry 3656 (class 0 OID 16393)
--- Dependencies: 216
+-- TOC entry 3667 (class 0 OID 111692)
+-- Dependencies: 219
 -- Data for Name: area_atuacao; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.area_atuacao VALUES (1, true, '2023-06-06 14:52:47.386707', NULL, 'Computação', 1, NULL);
-INSERT INTO public.area_atuacao VALUES (2, true, '2023-06-06 14:52:47.394533', NULL, 'Pesquisa', 1, NULL);
-INSERT INTO public.area_atuacao VALUES (3, true, '2023-06-06 14:52:47.40205', NULL, 'Desempregado', 1, NULL);
-INSERT INTO public.area_atuacao VALUES (4, true, '2023-06-06 14:52:47.409768', NULL, 'Programador', 1, NULL);
-INSERT INTO public.area_atuacao VALUES (5, true, '2023-06-06 14:52:47.417918', NULL, 'Analista', 1, NULL);
-INSERT INTO public.area_atuacao VALUES (6, true, '2023-06-06 14:52:47.425474', NULL, 'Outros', 1, NULL);
+INSERT INTO public.area_atuacao VALUES (1, true, '2023-05-22 22:57:40.622661', NULL, 'DESENVOLVIMENTO', 1, NULL);
+INSERT INTO public.area_atuacao VALUES (4, true, '2023-05-22 23:34:13.695382', '2023-05-22 23:34:13.695382', 'Computação', 11, 11);
+INSERT INTO public.area_atuacao VALUES (18, true, '2023-05-22 23:51:36.682024', '2023-05-22 23:51:36.682024', 'Pesquisa', 51, 51);
 
 
 --
--- TOC entry 3658 (class 0 OID 16399)
--- Dependencies: 218
+-- TOC entry 3669 (class 0 OID 111701)
+-- Dependencies: 221
 -- Data for Name: area_emprego; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.area_emprego VALUES (8, true, '2023-06-06 14:52:47.640584', NULL, 'Engenharia de Software', 1, NULL);
-INSERT INTO public.area_emprego VALUES (9, true, '2023-06-06 14:52:47.649162', NULL, 'Programacao', 1, NULL);
-INSERT INTO public.area_emprego VALUES (10, true, '2023-06-06 14:52:47.656642', NULL, 'Informatica', 1, NULL);
-INSERT INTO public.area_emprego VALUES (11, true, '2023-06-06 14:52:47.664045', NULL, 'Suporte a TI', 1, NULL);
-INSERT INTO public.area_emprego VALUES (12, true, '2023-06-06 14:52:47.671208', NULL, 'Analista de Sistema', 1, NULL);
-INSERT INTO public.area_emprego VALUES (13, true, '2023-06-06 14:52:47.679522', NULL, 'Analista de QA', 1, NULL);
-INSERT INTO public.area_emprego VALUES (14, true, '2023-06-06 14:52:47.686876', NULL, 'Outros', 1, NULL);
+INSERT INTO public.area_emprego VALUES (1, true, '2023-05-22 22:57:40.638583', NULL, 'Engenharia de Software', 1, NULL);
+INSERT INTO public.area_emprego VALUES (2, true, '2023-05-22 22:57:40.640152', NULL, 'Programacao', 1, NULL);
+INSERT INTO public.area_emprego VALUES (3, true, '2023-05-22 22:57:40.640853', NULL, 'Informatica', 1, NULL);
+INSERT INTO public.area_emprego VALUES (4, true, '2023-05-22 22:57:40.641337', NULL, 'Suporte a TI', 1, NULL);
+INSERT INTO public.area_emprego VALUES (5, true, '2023-05-22 22:57:40.641767', NULL, 'Analista de Sistema', 1, NULL);
+INSERT INTO public.area_emprego VALUES (6, true, '2023-05-22 22:57:40.642277', NULL, 'Analista de QA', 1, NULL);
+INSERT INTO public.area_emprego VALUES (7, true, '2023-05-22 22:57:40.642704', NULL, 'Outros', 1, NULL);
 
 
 --
--- TOC entry 3660 (class 0 OID 16405)
--- Dependencies: 220
+-- TOC entry 3671 (class 0 OID 111710)
+-- Dependencies: 223
 -- Data for Name: comentario; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 
 
 --
--- TOC entry 3662 (class 0 OID 16411)
--- Dependencies: 222
+-- TOC entry 3673 (class 0 OID 111719)
+-- Dependencies: 225
 -- Data for Name: contribuicao; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.contribuicao VALUES (1, true, '2023-05-22 23:32:12.095762', '2023-05-22 23:32:12.095762', 112261, 10, 10, 1);
+INSERT INTO public.contribuicao VALUES (2, true, '2023-05-22 23:34:13.675379', '2023-05-22 23:34:13.675379', 112263, 11, 11, 2);
+INSERT INTO public.contribuicao VALUES (3, true, '2023-05-22 23:51:36.661024', '2023-05-22 23:51:36.661024', 112265, 51, 51, 3);
 
 
 --
--- TOC entry 3664 (class 0 OID 16417)
--- Dependencies: 224
+-- TOC entry 3675 (class 0 OID 111728)
+-- Dependencies: 227
 -- Data for Name: cota; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.cota VALUES (1, true, '2023-06-06 14:52:47.29681', NULL, 'Escola', 1, NULL);
-INSERT INTO public.cota VALUES (2, true, '2023-06-06 14:52:47.309365', NULL, 'Renda', 1, NULL);
-INSERT INTO public.cota VALUES (3, true, '2023-06-06 14:52:47.317204', NULL, 'Autodeclaração de Raça', 1, NULL);
-INSERT INTO public.cota VALUES (4, true, '2023-06-06 14:52:47.325149', NULL, 'Quilombolas/Indígenas', 1, NULL);
-INSERT INTO public.cota VALUES (5, true, '2023-06-06 14:52:47.33307', NULL, 'PCD', 1, NULL);
+INSERT INTO public.cota VALUES (1, true, '2023-05-22 22:57:40.61764', NULL, 'ESCOLA', 1, NULL);
+INSERT INTO public.cota VALUES (2, true, '2023-05-22 22:57:40.618705', NULL, 'RENDA', 1, NULL);
+INSERT INTO public.cota VALUES (3, true, '2023-05-22 22:57:40.619232', NULL, 'AUTODECLARAÃ‡ÃƒO DE RAÃ‡A', 1, NULL);
+INSERT INTO public.cota VALUES (4, true, '2023-05-22 22:57:40.619724', NULL, 'QUILOMBOLAS/INDÃ�GENAS', 1, NULL);
 
 
 --
--- TOC entry 3666 (class 0 OID 16423)
--- Dependencies: 226
+-- TOC entry 3677 (class 0 OID 111737)
+-- Dependencies: 229
 -- Data for Name: curso; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.curso VALUES (1, true, '2023-06-06 14:52:47.340416', NULL, 'CIÊNCIA DA COMPUTAÇÃO', 1, NULL);
+INSERT INTO public.curso VALUES (1, true, '2023-05-22 22:57:40.620273', NULL, 'CIÃŠNCIA DA COMPUTAÃ‡ÃƒO', 1, NULL);
+INSERT INTO public.curso VALUES (4, true, '2023-05-22 23:34:13.595382', '2023-05-22 23:34:13.595382', 'PPGCC', 11, 11);
+INSERT INTO public.curso VALUES (18, true, '2023-05-22 23:51:36.591022', '2023-05-22 23:51:36.591022', 'CCSDAS', 51, 51);
 
 
 --
--- TOC entry 3668 (class 0 OID 16429)
--- Dependencies: 228
+-- TOC entry 3679 (class 0 OID 111746)
+-- Dependencies: 231
 -- Data for Name: depoimento; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.depoimento VALUES (1, true, '2023-05-22 23:32:12.119763', '2023-05-22 23:32:12.119763', 112262, 10, 10, 1);
+INSERT INTO public.depoimento VALUES (2, true, '2023-05-22 23:34:13.68138', '2023-05-22 23:34:13.68138', 112264, 11, 11, 2);
+INSERT INTO public.depoimento VALUES (3, true, '2023-05-22 23:51:36.671022', '2023-05-22 23:51:36.671022', 112266, 51, 51, 3);
 
 
 --
--- TOC entry 3670 (class 0 OID 16435)
--- Dependencies: 230
+-- TOC entry 3681 (class 0 OID 111755)
+-- Dependencies: 233
 -- Data for Name: egresso; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.egresso VALUES (1, true, '2023-05-22 23:32:12.086763', '2023-05-22 23:32:12.086763', false, false, NULL, false, NULL, NULL, NULL, '2001-02-01', false, NULL, 10, 10, NULL, 6, 10);
+INSERT INTO public.egresso VALUES (2, true, '2023-05-22 23:34:13.669383', '2023-05-22 23:34:13.669383', true, true, NULL, false, NULL, NULL, NULL, '2002-02-07', true, 700, 11, 11, 1, 2, 11);
+INSERT INTO public.egresso VALUES (3, true, '2023-05-22 23:51:36.652023', '2023-05-22 23:51:36.652023', false, true, NULL, false, NULL, NULL, NULL, '2002-02-02', true, NULL, 51, 51, NULL, 1, 51);
 
 
 --
--- TOC entry 3671 (class 0 OID 16443)
--- Dependencies: 231
+-- TOC entry 3662 (class 0 OID 71878)
+-- Dependencies: 214
+-- Data for Name: egresso_area_atuacao; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- TOC entry 3682 (class 0 OID 111765)
+-- Dependencies: 234
 -- Data for Name: egresso_cota; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.egresso_cota VALUES (2, 4);
+INSERT INTO public.egresso_cota VALUES (2, 3);
+INSERT INTO public.egresso_cota VALUES (2, 2);
+INSERT INTO public.egresso_cota VALUES (2, 1);
+INSERT INTO public.egresso_cota VALUES (3, 4);
+INSERT INTO public.egresso_cota VALUES (3, 1);
 
 
 --
--- TOC entry 3672 (class 0 OID 16446)
--- Dependencies: 232
+-- TOC entry 3683 (class 0 OID 111770)
+-- Dependencies: 235
 -- Data for Name: egresso_empresa; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.egresso_empresa VALUES (true, '2023-05-22 23:34:13.69038', '2023-05-22 23:34:13.69038', 5, 2, 11, 11, 4, 3, 4);
+INSERT INTO public.egresso_empresa VALUES (true, '2023-05-22 23:51:36.679024', '2023-05-22 23:51:36.679024', 20, 3, 51, 51, 18, 2, 18);
 
 
 --
--- TOC entry 3674 (class 0 OID 16452)
--- Dependencies: 234
+-- TOC entry 3684 (class 0 OID 111777)
+-- Dependencies: 236
 -- Data for Name: egresso_titulacao; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.egresso_titulacao VALUES (true, '2023-05-22 23:34:13.712379', '2023-05-22 23:34:13.712379', 2, 2, 11, 11, 4, 4);
+INSERT INTO public.egresso_titulacao VALUES (true, '2023-05-22 23:51:36.694023', '2023-05-22 23:51:36.694023', 3, 2, 51, 51, 18, 19);
 
 
 --
--- TOC entry 3675 (class 0 OID 16457)
--- Dependencies: 235
+-- TOC entry 3686 (class 0 OID 111785)
+-- Dependencies: 238
 -- Data for Name: egresso_valido; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -1111,7 +1249,7 @@ INSERT INTO public.egresso_valido VALUES (16, 'anovaes27@gmail.com', '2011111400
 INSERT INTO public.egresso_valido VALUES (17, 'andufpa@gmail.com', '201111140018', 'ANDERSON JORGE SANTOS FERREIRA');
 INSERT INTO public.egresso_valido VALUES (18, 'andsilvapara@bol.com.br', '200311140029', 'ANDERSON JUNIOR PARAENSE DA SILVA');
 INSERT INTO public.egresso_valido VALUES (19, 'andervilo@hotmail.com', '201111140007', 'ANDERSON NAZARENO ALCANTARA DE OLIVEIRA');
-INSERT INTO public.egresso_valido VALUES (20, 'andre.n.los@gmail.com', '201211140004', 'ANDRÉ AVELINO DA SILVA NETO');
+INSERT INTO public.egresso_valido VALUES (20, 'andre.n.los@gmail.com', '201211140004', 'ANDRÃ‰ AVELINO DA SILVA NETO');
 INSERT INTO public.egresso_valido VALUES (21, 'andre.def93@gmail.com', '201311140016', 'ANDRE DEFREMONT');
 INSERT INTO public.egresso_valido VALUES (22, 'acgrafic@gmail.com', '200711140013', 'ANDRE LUIZ COELHO PINHEIRO');
 INSERT INTO public.egresso_valido VALUES (23, 'andredgusmao@gmail.com', '200811140002', 'ANDRE LUIZ DE GUSMAO');
@@ -1221,7 +1359,7 @@ INSERT INTO public.egresso_valido VALUES (126, 'junior.jairo1@gmail.com', '20081
 INSERT INTO public.egresso_valido VALUES (127, 'jamysonmatoso@yahoo.com.br', '200911140011', 'JAMYSON DA SILVA MATOSO');
 INSERT INTO public.egresso_valido VALUES (128, NULL, '200211140010', 'JANDER DE SOUZA E SILVA');
 INSERT INTO public.egresso_valido VALUES (129, 'jeffklister@gmail.com', '201311140001', 'JEFFERSON KLISTER DUARTE DA SILVA JUNIOR');
-INSERT INTO public.egresso_valido VALUES (130, 'jesserocha2012@gmail.com', '201111140001', 'JESSÉ DA COSTA ROCHA');
+INSERT INTO public.egresso_valido VALUES (130, 'jesserocha2012@gmail.com', '201111140001', 'JESSÃ‰ DA COSTA ROCHA');
 INSERT INTO public.egresso_valido VALUES (131, 'jessicadepaula.stm@gmail.com', '201411140036', 'JESSICA DE PAULA FIGUEIRA RIBEIRO');
 INSERT INTO public.egresso_valido VALUES (132, 'j0g4d0r1@hotmail.com', '200611140012', 'JHONATHAS SOUSA DOS SANTOS');
 INSERT INTO public.egresso_valido VALUES (133, NULL, '200211140028', 'JHOVAN OBEDE TERRA DA SILVA');
@@ -1231,7 +1369,7 @@ INSERT INTO public.egresso_valido VALUES (136, 'jq.quaresma12@gmail.com', '20111
 INSERT INTO public.egresso_valido VALUES (137, NULL, '200711140020', 'JOSE BRICIO MACHADO CARDOSO NETO');
 INSERT INTO public.egresso_valido VALUES (138, 'deivisonvx@gmail.com', '201311140026', 'JOSE DEIVISON VIEIRA XAVIER');
 INSERT INTO public.egresso_valido VALUES (139, NULL, '200211140012', 'JOSE HIRVALDO LOBO MONTEIRO');
-INSERT INTO public.egresso_valido VALUES (140, 'jose.monteiro@icen.ufpa.br', '201411140019', 'JOSE RAMON DA CONCEIÇAO MONTEIRO');
+INSERT INTO public.egresso_valido VALUES (140, 'jose.monteiro@icen.ufpa.br', '201411140019', 'JOSE RAMON DA CONCEIÃ‡AO MONTEIRO');
 INSERT INTO public.egresso_valido VALUES (141, 'joycesinfo03@yahoo.com.br', '200311140015', 'JOYCE ANNE PINTO RODRIGUES');
 INSERT INTO public.egresso_valido VALUES (142, 'julio.menezesi2013@gmail.com', '201311140036', 'JULIO DE PADUA LOPES MENEZES');
 INSERT INTO public.egresso_valido VALUES (143, 'julioebs20@hotmail.com', '200711140014', 'JULIO EDUARDO BITTENCOURT DA SILVA');
@@ -1448,7 +1586,7 @@ INSERT INTO public.egresso_valido VALUES (353, NULL, '199704940007', 'ANDERSON J
 INSERT INTO public.egresso_valido VALUES (354, 'andersonjsc@gmail.com', '200204940052', 'ANDERSON JORGE SERRA DA COSTA');
 INSERT INTO public.egresso_valido VALUES (355, 'andersonoanjo18@gmail.com', '200904940016', 'ANDERSON MARQUES MORAIS');
 INSERT INTO public.egresso_valido VALUES (356, 'arr@ufpa.br', '199504940002', 'ANDERSON RAIOL RODRIGUES');
-INSERT INTO public.egresso_valido VALUES (357, 'agoes@ufpa.br', '200304940016', 'ANDERSON SILVA DE OLIVEIRA GÓES');
+INSERT INTO public.egresso_valido VALUES (357, 'agoes@ufpa.br', '200304940016', 'ANDERSON SILVA DE OLIVEIRA GÃ“ES');
 INSERT INTO public.egresso_valido VALUES (358, 'andre.cbcc@gmail.com', '200804940001', 'ANDRE LUIS MACHADO DE VASCONCELOS');
 INSERT INTO public.egresso_valido VALUES (359, 'andrebahia.cbcc@gmail.com', '200804940022', 'ANDRE MIGUEL PENA BAHIA');
 INSERT INTO public.egresso_valido VALUES (360, 'andremirandap93@gmail.com', '201604940032', 'ANDRE MIRANDA PINHEIRO');
@@ -1599,7 +1737,7 @@ INSERT INTO public.egresso_valido VALUES (504, NULL, '200504940004', 'EWERTON AL
 INSERT INTO public.egresso_valido VALUES (505, NULL, '199304940010', 'EWERTON DA COSTA VAZ');
 INSERT INTO public.egresso_valido VALUES (506, NULL, '199404940009', 'EWERTON DAVID MARTINS LEITE');
 INSERT INTO public.egresso_valido VALUES (507, NULL, '199304940011', 'EZEQUIAS CARLOS FERREIRA DA SILVA');
-INSERT INTO public.egresso_valido VALUES (508, 'fabil.goes@gmail.com', '200904940024', 'FABIANA RODRIGUES DE GÓES');
+INSERT INTO public.egresso_valido VALUES (508, 'fabil.goes@gmail.com', '200904940024', 'FABIANA RODRIGUES DE GÃ“ES');
 INSERT INTO public.egresso_valido VALUES (509, 'fa.vasconc@gmail.com', '201504940030', 'FABIO ALEX MENDES CAMPOS VASCONCELOS');
 INSERT INTO public.egresso_valido VALUES (510, NULL, '199304940012', 'FABIO AUGUSTO DAS DORES SILVA');
 INSERT INTO public.egresso_valido VALUES (511, NULL, '200004940001', 'FABIO AUGUSTO GUIMARAES TEIXEIRA');
@@ -1669,7 +1807,7 @@ INSERT INTO public.egresso_valido VALUES (574, NULL, '199104940096', 'HELDER LUI
 INSERT INTO public.egresso_valido VALUES (575, NULL, '199304940016', 'HELIO CARVALHO OLIVEIRA');
 INSERT INTO public.egresso_valido VALUES (576, NULL, '199904940048', 'HELIO MARCOS PAZ DE ALMEIDA');
 INSERT INTO public.egresso_valido VALUES (577, NULL, '199204940014', 'HENLY KOUICHI TSUCHIYA');
-INSERT INTO public.egresso_valido VALUES (578, 'heresson@gmail.com', '200504940006', 'HERESSON JOÃO PAMPOLHA DE SIQUEIRA MENDES');
+INSERT INTO public.egresso_valido VALUES (578, 'heresson@gmail.com', '200504940006', 'HERESSON JOÃƒO PAMPOLHA DE SIQUEIRA MENDES');
 INSERT INTO public.egresso_valido VALUES (579, NULL, '199604940011', 'HERIVELTON BARBOSA LIMA');
 INSERT INTO public.egresso_valido VALUES (580, 'hugo141592@gmail.com', '201104940023', 'HUGO BRITO LIMA');
 INSERT INTO public.egresso_valido VALUES (581, NULL, '200104940052', 'HUGO CEZAR DO NASCIMENTO GOES');
@@ -1710,7 +1848,7 @@ INSERT INTO public.egresso_valido VALUES (615, 'jnane@ufpa.br', '200004940022', 
 INSERT INTO public.egresso_valido VALUES (616, NULL, '199104940063', 'JOAO CALDAS JUNIOR');
 INSERT INTO public.egresso_valido VALUES (617, 'lubien1996@gmail.com', '201504940020', 'JOAO DE DEUS FERREIRA FILHO');
 INSERT INTO public.egresso_valido VALUES (618, 'jjcf_cc_ufpa@hotmail.com', '201004940018', 'JOAO JOSE CORSI FILHO');
-INSERT INTO public.egresso_valido VALUES (619, 'salvatti@ufpa.br', '200104940050', 'JOÃO JÚLIO SALVATTI NETO');
+INSERT INTO public.egresso_valido VALUES (619, 'salvatti@ufpa.br', '200104940050', 'JOÃƒO JÃšLIO SALVATTI NETO');
 INSERT INTO public.egresso_valido VALUES (620, 'jmfda00@gmail.com', '201704940004', 'JOAO MARCELO FREITAS DE ALMEIDA');
 INSERT INTO public.egresso_valido VALUES (621, NULL, '200004940047', 'JOAO MAURICIO SILVA DE CARVALHO');
 INSERT INTO public.egresso_valido VALUES (622, NULL, '199904940043', 'JOAO PAULO SOUZA ALVES DE SOUZA');
@@ -1726,14 +1864,14 @@ INSERT INTO public.egresso_valido VALUES (631, NULL, '199604940030', 'JONATHAS R
 INSERT INTO public.egresso_valido VALUES (632, NULL, '200104940045', 'JONE KAZUKI YAMAGUCHI');
 INSERT INTO public.egresso_valido VALUES (633, NULL, '199104940065', 'JORGE LUIS MORAES VALENTE');
 INSERT INTO public.egresso_valido VALUES (634, 'jorgedelima911@gmail.com', '200904940023', 'JORGE LUIZ VASCONCELOS DE LIMA');
-INSERT INTO public.egresso_valido VALUES (635, 'ailtonvaladares@yahoo.com.br', '200404940023', 'JOSÉ AILTON SOARES VALADARES JÚNIOR');
+INSERT INTO public.egresso_valido VALUES (635, 'ailtonvaladares@yahoo.com.br', '200404940023', 'JOSÃ‰ AILTON SOARES VALADARES JÃšNIOR');
 INSERT INTO public.egresso_valido VALUES (636, 'zeavila@gmail.com', '200504940028', 'JOSE ALBERTO DE ANDRADE AVILA');
 INSERT INTO public.egresso_valido VALUES (637, NULL, '199604940010', 'JOSE ALEX AIRES DOS SANTOS');
 INSERT INTO public.egresso_valido VALUES (638, NULL, '200204940037', 'JOSEANE DE CASSIA DA SILVA VIANA');
 INSERT INTO public.egresso_valido VALUES (639, 'josesarmanho@ufpa.br', '199304940019', 'JOSE ANTONIO SARMANHO DOS SANTOS FREIRE');
 INSERT INTO public.egresso_valido VALUES (640, 'correasjunior@gmail.com', '200904940028', 'JOSE CORREA DA SILVA JUNIOR');
 INSERT INTO public.egresso_valido VALUES (641, NULL, '200104940041', 'JOSE ENDERSON FERREIRA RODRIGUES');
-INSERT INTO public.egresso_valido VALUES (642, 'contato@joseflavio.com', '200404940035', 'JOSÉ FLÁVIO DE SOUZA DIAS JÚNIOR');
+INSERT INTO public.egresso_valido VALUES (642, 'contato@joseflavio.com', '200404940035', 'JOSÃ‰ FLÃ�VIO DE SOUZA DIAS JÃšNIOR');
 INSERT INTO public.egresso_valido VALUES (643, NULL, '200604940037', 'JOSE MARIA DE OLIVEIRA JUNIOR');
 INSERT INTO public.egresso_valido VALUES (644, NULL, '199604940037', 'JOSE RAIMUNDO FREITAS DE MENESES');
 INSERT INTO public.egresso_valido VALUES (645, NULL, '199204940018', 'JOSE RICARDO SIQUEIRA DE MIRANDA');
@@ -1855,7 +1993,7 @@ INSERT INTO public.egresso_valido VALUES (760, NULL, '199904940005', 'MARCOS ROM
 INSERT INTO public.egresso_valido VALUES (761, 'marcosbenaion@gmail.com', '201204940019', 'MARCOS SENNA BENAION LEAL');
 INSERT INTO public.egresso_valido VALUES (762, NULL, '199104940106', 'MARCUS DE BARROS BRAGA');
 INSERT INTO public.egresso_valido VALUES (763, NULL, '199204940024', 'MARIA ADALZIRA SEIXAS LOPES');
-INSERT INTO public.egresso_valido VALUES (764, 'mariaandreia@ufpa.br', '199504940021', 'MARIA ANDRÉIA RODRIGUES DOS SANTOS');
+INSERT INTO public.egresso_valido VALUES (764, 'mariaandreia@ufpa.br', '199504940021', 'MARIA ANDRÃ‰IA RODRIGUES DOS SANTOS');
 INSERT INTO public.egresso_valido VALUES (765, NULL, '200004940011', 'MARIANA DE NAZARE DOS ANJOS LIMA');
 INSERT INTO public.egresso_valido VALUES (766, NULL, '200104940007', 'MARINA ATSUMI OIKAWA');
 INSERT INTO public.egresso_valido VALUES (767, NULL, '199404940025', 'MARINA NERY BRACCHI');
@@ -1901,7 +2039,7 @@ INSERT INTO public.egresso_valido VALUES (806, NULL, '199404940027', 'NOEL BASTO
 INSERT INTO public.egresso_valido VALUES (807, NULL, '200004940009', 'ODNALRO CRUZ VIDEIRA JUNIOR');
 INSERT INTO public.egresso_valido VALUES (808, NULL, '199104940028', 'OLINDA MIOKA CHUBACHI');
 INSERT INTO public.egresso_valido VALUES (809, NULL, '199704940011', 'OSIEL MARLON NEGRAO DA SILVA');
-INSERT INTO public.egresso_valido VALUES (810, 'onoura@gmail.com', '199504940023', 'OTÁVIO NOURA TEIXEIRA');
+INSERT INTO public.egresso_valido VALUES (810, 'onoura@gmail.com', '199504940023', 'OTÃ�VIO NOURA TEIXEIRA');
 INSERT INTO public.egresso_valido VALUES (811, 'orvoltz@gmail.com', '200004940053', 'OTAVIO RODRIGUES JUNIOR');
 INSERT INTO public.egresso_valido VALUES (812, 'patriciaufpa@gmail.com', '200404940011', 'PATRICIA MATIAS LOPES');
 INSERT INTO public.egresso_valido VALUES (813, 'pdanni@gmail.com', '200204940021', 'PAULA DANIELE DE OLIVEIRA MOREIRA');
@@ -2092,13 +2230,13 @@ INSERT INTO public.egresso_valido VALUES (997, 'adrianne.veras@outlook.com', NUL
 INSERT INTO public.egresso_valido VALUES (998, 'alencv@gmail.com', NULL, 'Alen Costa Vieira');
 INSERT INTO public.egresso_valido VALUES (999, 'allandoug@gmail.com', NULL, 'Allan Douglas Bento da Costa');
 INSERT INTO public.egresso_valido VALUES (1000, 'larissa.engcomp@gmail.com', NULL, 'Ana Larissa da Silva Dias');
-INSERT INTO public.egresso_valido VALUES (1001, 'andersonsoares@ufra.edu.br', NULL, 'Anderson Gregório Marques Soares');
-INSERT INTO public.egresso_valido VALUES (1002, 'anderson.gmarques@gmail.com', NULL, 'Anderson Gregório Marques Soares');
+INSERT INTO public.egresso_valido VALUES (1001, 'andersonsoares@ufra.edu.br', NULL, 'Anderson GregÃ³rio Marques Soares');
+INSERT INTO public.egresso_valido VALUES (1002, 'anderson.gmarques@gmail.com', NULL, 'Anderson GregÃ³rio Marques Soares');
 INSERT INTO public.egresso_valido VALUES (1003, 'anderson_detran@hotmail.com', NULL, 'Anderson Trindade Maia');
-INSERT INTO public.egresso_valido VALUES (1004, 'andre.rammos7@gmail.com', NULL, 'André de Jesus Araújo Ramos');
-INSERT INTO public.egresso_valido VALUES (1005, 'andre.riker@gmail.com', NULL, 'André Figueira Riker');
+INSERT INTO public.egresso_valido VALUES (1004, 'andre.rammos7@gmail.com', NULL, 'AndrÃ© de Jesus AraÃºjo Ramos');
+INSERT INTO public.egresso_valido VALUES (1005, 'andre.riker@gmail.com', NULL, 'AndrÃ© Figueira Riker');
 INSERT INTO public.egresso_valido VALUES (1006, 'ditoneto@gmail.com', NULL, 'Benedito de Souza Ribeiro Neto');
-INSERT INTO public.egresso_valido VALUES (1007, 'bfranca@unicamp.br', NULL, 'Breno Bernard Nicolau de França');
+INSERT INTO public.egresso_valido VALUES (1007, 'bfranca@unicamp.br', NULL, 'Breno Bernard Nicolau de FranÃ§a');
 INSERT INTO public.egresso_valido VALUES (1008, 'upbrunogc@gmail.com', NULL, 'Bruno Garcia da Costa');
 INSERT INTO public.egresso_valido VALUES (1009, 'britodi@gmail.com', NULL, 'Bruno Pereira Brito');
 INSERT INTO public.egresso_valido VALUES (1010, 'gustavo.cbcc@gmail.com', NULL, 'Carlos Gustavo Resque dos Santos');
@@ -2108,15 +2246,15 @@ INSERT INTO public.egresso_valido VALUES (1013, 'avcesar@gmail.com', NULL, 'Cesa
 INSERT INTO public.egresso_valido VALUES (1014, 'claudomir.junior@ifma.edu.br', NULL, 'Claudomir Cardoso de Carvalho Junior');
 INSERT INTO public.egresso_valido VALUES (1015, 'dom.clay@yahoo.com.br', NULL, 'Clay Palmeira da Silva');
 INSERT INTO public.egresso_valido VALUES (1016, 'cleytondim@ufpa.br', NULL, 'Cleyton Aparecido Dim');
-INSERT INTO public.egresso_valido VALUES (1017, 'cynthya.telles@gmail.com', NULL, 'Cynthya Letícia Teles De Oliveira');
+INSERT INTO public.egresso_valido VALUES (1017, 'cynthya.telles@gmail.com', NULL, 'Cynthya LetÃ­cia Teles De Oliveira');
 INSERT INTO public.egresso_valido VALUES (1018, 'daniel.leal.souza@gmail.com', NULL, 'Daniel Leal Souza');
 INSERT INTO public.egresso_valido VALUES (1019, 'lenomeireles@gmail.com', NULL, 'Danileno Meireles do Rosario');
 INSERT INTO public.egresso_valido VALUES (1020, 'diegoaires@gmail.com', NULL, 'Diego Bento Aires Teixeira');
-INSERT INTO public.egresso_valido VALUES (1021, 'hortencio1983@gmail.com', NULL, 'Diego Hortêncio dos Santos');
+INSERT INTO public.egresso_valido VALUES (1021, 'hortencio1983@gmail.com', NULL, 'Diego HortÃªncio dos Santos');
 INSERT INTO public.egresso_valido VALUES (1022, 'diegoabreuengcomp@gmail.com', NULL, 'Diego Oliveira Abreu');
 INSERT INTO public.egresso_valido VALUES (1023, 'eddasjbertrand@gmail.com', NULL, 'Eddas Josue Bertrand Martinez');
 INSERT INTO public.egresso_valido VALUES (1024, 'edianfranklin@gmail.com', NULL, 'Edian Franklin Franco De Los Santos');
-INSERT INTO public.egresso_valido VALUES (1025, 'edinaldo.laroque@gmail.com', NULL, 'Edinaldo João Costa de La-roque');
+INSERT INTO public.egresso_valido VALUES (1025, 'edinaldo.laroque@gmail.com', NULL, 'Edinaldo JoÃ£o Costa de La-roque');
 INSERT INTO public.egresso_valido VALUES (1026, 'koitiyasojima@gmail.com', NULL, 'Edson Koiti Kudo Yasojima');
 INSERT INTO public.egresso_valido VALUES (1027, 'eduardolima.ufpa@gmail.com', NULL, 'Eduardo Gabriel Lima da Silva');
 INSERT INTO public.egresso_valido VALUES (1028, 'marquesraiol@gmail.com', NULL, 'Eduardo Paulo Marques Raiol');
@@ -2126,36 +2264,36 @@ INSERT INTO public.egresso_valido VALUES (1031, 'msoares.elziane@gmail.com', NUL
 INSERT INTO public.egresso_valido VALUES (1032, 'emanuel.montero.e@gmail.com', NULL, 'Emanuel Montero Espaillat');
 INSERT INTO public.egresso_valido VALUES (1033, 'erick.c.modesto@gmail.com', NULL, 'Erick Modesto Campos');
 INSERT INTO public.egresso_valido VALUES (1034, 'ericsonsarmento+ppgcc@gmail.com', NULL, 'Ericson Sarmento Costa');
-INSERT INTO public.egresso_valido VALUES (1035, 'estevaosantos265@gmail.com', NULL, 'Estêvão Damasceno Santos');
+INSERT INTO public.egresso_valido VALUES (1035, 'estevaosantos265@gmail.com', NULL, 'EstÃªvÃ£o Damasceno Santos');
 INSERT INTO public.egresso_valido VALUES (1036, 'fabiomm@ufmg.br', NULL, 'Fabio Malcher Miranda');
 INSERT INTO public.egresso_valido VALUES (1037, 'fabioaraujo289@gmail.com', NULL, 'Fabio Rocha de Araujo');
 INSERT INTO public.egresso_valido VALUES (1038, 'fabriciogarcia@ufpa.br', NULL, 'Fabricio wickey da silva garcia');
 INSERT INTO public.egresso_valido VALUES (1039, 'fabriciowsgarcia@gmail.com', NULL, 'Fabricio Wickey da Silva Garcia');
-INSERT INTO public.egresso_valido VALUES (1040, 'felipearaujo289@gmail.com', NULL, 'Felipe Rocha de Araújo');
+INSERT INTO public.egresso_valido VALUES (1040, 'felipearaujo289@gmail.com', NULL, 'Felipe Rocha de AraÃºjo');
 INSERT INTO public.egresso_valido VALUES (1041, 'fernnf@gmail.com', NULL, 'Fernando Nazareno Nascimento Farias');
 INSERT INTO public.egresso_valido VALUES (1042, 'gilsonrocha@gmail.com', NULL, 'Gilson Rocha Silva');
-INSERT INTO public.egresso_valido VALUES (1043, 'hernan.laguado@gmail.com', NULL, 'Hernan Dario Carreño Laguado');
+INSERT INTO public.egresso_valido VALUES (1043, 'hernan.laguado@gmail.com', NULL, 'Hernan Dario CarreÃ±o Laguado');
 INSERT INTO public.egresso_valido VALUES (1044, 'hilton.castro@ifap.edu.br', NULL, 'Hilton Prado de Castro Junior');
 INSERT INTO public.egresso_valido VALUES (1045, 'hugoblim@gmail.com', NULL, 'Hugo Brito Lima');
 INSERT INTO public.egresso_valido VALUES (1046, 'iagolmedeiros@gmail.com', NULL, 'Iago Lins de Medeiros');
 INSERT INTO public.egresso_valido VALUES (1047, 'igorpnatal@gmail.com', NULL, 'Igor da Penha Natal');
 INSERT INTO public.egresso_valido VALUES (1048, 'IGGOR16@GMAIL.COM', NULL, 'Igor Ernesto Ferreira Costa');
 INSERT INTO public.egresso_valido VALUES (1049, 'isadoramsantos@gmail.com', NULL, 'Isadora Mendes dos Santos');
-INSERT INTO public.egresso_valido VALUES (1050, 'ivoabreu94@gmail.com', NULL, 'Ivo de Abreu Araújo');
+INSERT INTO public.egresso_valido VALUES (1050, 'ivoabreu94@gmail.com', NULL, 'Ivo de Abreu AraÃºjo');
 INSERT INTO public.egresso_valido VALUES (1051, 'jadielly.oliveira@gmail.com', NULL, 'Jadielly Fernandes Oliveira Treccani');
 INSERT INTO public.egresso_valido VALUES (1052, 'jwagner28@gmail.com', NULL, 'Jailton Wagner Rodrigues Tavares');
 INSERT INTO public.egresso_valido VALUES (1053, 'jair.jr.j2@gmail.com', NULL, 'Jair da Silva Ferreira Junior');
 INSERT INTO public.egresso_valido VALUES (1054, 'jeanarouche@gmail.com', NULL, 'Jean Carlos Arouche Freire');
-INSERT INTO public.egresso_valido VALUES (1055, 'jeffersonmorais@gmail.com', NULL, 'Jefferson Magalhães de Morais');
+INSERT INTO public.egresso_valido VALUES (1055, 'jeffersonmorais@gmail.com', NULL, 'Jefferson MagalhÃ£es de Morais');
 INSERT INTO public.egresso_valido VALUES (1056, 'joahannes@gmail.com', NULL, 'Joahannes Bruno Dias da Costa');
-INSERT INTO public.egresso_valido VALUES (1057, 'salvatti@gmail.com', NULL, 'João Júlio Salvatti Neto');
+INSERT INTO public.egresso_valido VALUES (1057, 'salvatti@gmail.com', NULL, 'JoÃ£o JÃºlio Salvatti Neto');
 INSERT INTO public.egresso_valido VALUES (1058, 'jonathasp6@gmail.com', NULL, 'Jonathas Pinheiro Trindade');
-INSERT INTO public.egresso_valido VALUES (1059, 'jose.sousa.filho@gmail.com', NULL, 'José de Sousa Ribeiro Filho');
-INSERT INTO public.egresso_valido VALUES (1060, 'joseflaviojr@gmail.com', NULL, 'José Flávio de Souza Dias Júnior');
+INSERT INTO public.egresso_valido VALUES (1059, 'jose.sousa.filho@gmail.com', NULL, 'JosÃ© de Sousa Ribeiro Filho');
+INSERT INTO public.egresso_valido VALUES (1060, 'joseflaviojr@gmail.com', NULL, 'JosÃ© FlÃ¡vio de Souza Dias JÃºnior');
 INSERT INTO public.egresso_valido VALUES (1061, 'furtado@unifap.br', NULL, 'Julio Cezar Costa Furtado');
 INSERT INTO public.egresso_valido VALUES (1062, 'k_info_04@yahoo.com.br', NULL, 'Karla Suely Diniz da Costa');
 INSERT INTO public.egresso_valido VALUES (1063, 'larissamonteiropimentel@gmail.com', NULL, 'Larissa Monteiro Pimentel');
-INSERT INTO public.egresso_valido VALUES (1064, 'patricia.souza@ufra.edu.br', NULL, 'Lena Patrícia Souza Rodrigues');
+INSERT INTO public.egresso_valido VALUES (1064, 'patricia.souza@ufra.edu.br', NULL, 'Lena PatrÃ­cia Souza Rodrigues');
 INSERT INTO public.egresso_valido VALUES (1065, 'lennonsfurtado@gmail.com', NULL, 'Lennon Sales Furtado');
 INSERT INTO public.egresso_valido VALUES (1066, 'hamadaleonardo@gmail.com', NULL, 'Leonardo Hirokazu de Souza Hamada');
 INSERT INTO public.egresso_valido VALUES (1067, 'matakura@gmail.com', NULL, 'Leonardo Sarraff Nunes de Moraes');
@@ -2166,23 +2304,23 @@ INSERT INTO public.egresso_valido VALUES (1071, 'duartelucianoribeiro@gmail.com'
 INSERT INTO public.egresso_valido VALUES (1072, 'cellemota@gmail.com', NULL, 'Marcelle Pereira Mota');
 INSERT INTO public.egresso_valido VALUES (1073, 'marciapantoja13@gmail.com', NULL, 'Marcia Priscila Furtado Pantoja');
 INSERT INTO public.egresso_valido VALUES (1074, 'goes.nascimento@gmail.com', NULL, 'Marcio Goes do Nascimento');
-INSERT INTO public.egresso_valido VALUES (1075, 'mjmponte@gmail.com', NULL, 'Márcio José Moutinho da Ponte');
+INSERT INTO public.egresso_valido VALUES (1075, 'mjmponte@gmail.com', NULL, 'MÃ¡rcio JosÃ© Moutinho da Ponte');
 INSERT INTO public.egresso_valido VALUES (1076, 'ma.balieiro@gmail.com', NULL, 'Marco Antonio Balieiro Da Silva');
-INSERT INTO public.egresso_valido VALUES (1077, 'marcos.seruffo@gmail.com', NULL, 'Marcos César da Rocha Seruffo');
+INSERT INTO public.egresso_valido VALUES (1077, 'marcos.seruffo@gmail.com', NULL, 'Marcos CÃ©sar da Rocha Seruffo');
 INSERT INTO public.egresso_valido VALUES (1078, 'carvalhonazario@yahoo.com.br', NULL, 'Marcos Felipe Carvalho Nazario');
 INSERT INTO public.egresso_valido VALUES (1079, 'mm.marisamoreno@gmail.com', NULL, 'Marisa Cristina Moreno Alves de Andrade');
 INSERT INTO public.egresso_valido VALUES (1080, 'mauricio.ronny@gmail.com', NULL, 'Mauricio Ronny de Almeida Souza');
 INSERT INTO public.egresso_valido VALUES (1081, 'maurolarrat@ufpa.br', NULL, 'Mauro Rodrigo Larrat Frota e Silva');
 INSERT INTO public.egresso_valido VALUES (1082, 'mayfigueiredo@gmail.com', NULL, 'Mayara Costa Figueiredo');
 INSERT INTO public.egresso_valido VALUES (1083, 'mireillepm@gmail.com', NULL, 'Mireille Pinheiro Moreira Balieiro');
-INSERT INTO public.egresso_valido VALUES (1084, 'mulgsm@gmail.com', NULL, 'Müller Gabriel Da Silva Miranda');
-INSERT INTO public.egresso_valido VALUES (1085, 'nagila.ufpa@gmail.com', NULL, 'Nágila Natália Torres Vale');
-INSERT INTO public.egresso_valido VALUES (1086, 'engenilk@gmail.com', NULL, 'Nielsen Alves Gonçalves');
+INSERT INTO public.egresso_valido VALUES (1084, 'mulgsm@gmail.com', NULL, 'MÃ¼ller Gabriel Da Silva Miranda');
+INSERT INTO public.egresso_valido VALUES (1085, 'nagila.ufpa@gmail.com', NULL, 'NÃ¡gila NatÃ¡lia Torres Vale');
+INSERT INTO public.egresso_valido VALUES (1086, 'engenilk@gmail.com', NULL, 'Nielsen Alves GonÃ§alves');
 INSERT INTO public.egresso_valido VALUES (1087, 'olavo.nylander@gmail.com', NULL, 'Olavo Nylander Brito Neto');
 INSERT INTO public.egresso_valido VALUES (1088, 'piagodinho@gmail.com', NULL, 'Paulo Igor Alves Godinho');
 INSERT INTO public.egresso_valido VALUES (1089, 'paulo.cardoso12@gmail.com', NULL, 'Paulo Vitor Rodrigues Cardoso');
 INSERT INTO public.egresso_valido VALUES (1090, 'pedroabg@gmail.com', NULL, 'Pedro Alberto Bento Gomes');
-INSERT INTO public.egresso_valido VALUES (1091, 'pedro.cumino@gmail.com', NULL, 'Pedro Luiz Magalhães Cumino');
+INSERT INTO public.egresso_valido VALUES (1091, 'pedro.cumino@gmail.com', NULL, 'Pedro Luiz MagalhÃ£es Cumino');
 INSERT INTO public.egresso_valido VALUES (1092, 'pedro.montibeler@gmail.com', NULL, 'Pedro Montibeler Salvador');
 INSERT INTO public.egresso_valido VALUES (1093, 'phelipefeio09@gmail.com', NULL, 'Phelipe Luiz Dias Feio');
 INSERT INTO public.egresso_valido VALUES (1094, 'rafael.feito@gmail.com', NULL, 'Rafael Martins Feitosa');
@@ -2197,14 +2335,14 @@ INSERT INTO public.egresso_valido VALUES (1102, 'ricardorodrigomm@gmail.com', NU
 INSERT INTO public.egresso_valido VALUES (1103, 'roberto.yuri.franco@gmail.com', NULL, 'Roberto Yuri da Silva Franco');
 INSERT INTO public.egresso_valido VALUES (1104, 'rodrigo.sad.lima@gmail.com', NULL, 'Rodrigo Santos do Amor Divino Lima');
 INSERT INTO public.egresso_valido VALUES (1105, 'romulo.s.pinheiro@gmail.com', NULL, 'Romulo Silva Pinheiro');
-INSERT INTO public.egresso_valido VALUES (1106, 'sandrodpm@gmail.com', NULL, 'Sandro de Paula Mendonça ');
+INSERT INTO public.egresso_valido VALUES (1106, 'sandrodpm@gmail.com', NULL, 'Sandro de Paula MendonÃ§a ');
 INSERT INTO public.egresso_valido VALUES (1107, 'maru.merces18@gmail.com', NULL, 'Sara das Merces Silva');
 INSERT INTO public.egresso_valido VALUES (1108, 'saulberardo@gmail.com', NULL, 'Saul Campos Berardo');
-INSERT INTO public.egresso_valido VALUES (1109, 's.rodriguescn@gmail.com', NULL, 'sebastião rodrigues da costa neto');
-INSERT INTO public.egresso_valido VALUES (1110, 'silverio@ufpa.br', NULL, 'Silvério Sirotheau Corrêa Neto');
-INSERT INTO public.egresso_valido VALUES (1111, 'ssirotheau@gmail.com', NULL, 'Silvério Sirotheau Corrêa Neto');
-INSERT INTO public.egresso_valido VALUES (1112, 'suelene.correa@ifpa.edu.br', NULL, 'Suelene de Jesus do Carmo Corrêa ');
-INSERT INTO public.egresso_valido VALUES (1113, 'tcoqueiro@hotmail.com', NULL, 'Thiago Antônio Sidônio Coqueiro');
+INSERT INTO public.egresso_valido VALUES (1109, 's.rodriguescn@gmail.com', NULL, 'sebastiÃ£o rodrigues da costa neto');
+INSERT INTO public.egresso_valido VALUES (1110, 'silverio@ufpa.br', NULL, 'SilvÃ©rio Sirotheau CorrÃªa Neto');
+INSERT INTO public.egresso_valido VALUES (1111, 'ssirotheau@gmail.com', NULL, 'SilvÃ©rio Sirotheau CorrÃªa Neto');
+INSERT INTO public.egresso_valido VALUES (1112, 'suelene.correa@ifpa.edu.br', NULL, 'Suelene de Jesus do Carmo CorrÃªa ');
+INSERT INTO public.egresso_valido VALUES (1113, 'tcoqueiro@hotmail.com', NULL, 'Thiago AntÃ´nio SidÃ´nio Coqueiro');
 INSERT INTO public.egresso_valido VALUES (1114, 'vagner@ufpa.br', NULL, 'Vagner de Brito Nascimento');
 INSERT INTO public.egresso_valido VALUES (1115, 'vitor@unifesspa.edu.br', NULL, 'Vitor de Souza Castro');
 INSERT INTO public.egresso_valido VALUES (1116, 'walbertcm@gmail.com', NULL, 'Walbert Cunha Monteiro');
@@ -2215,124 +2353,152 @@ INSERT INTO public.egresso_valido VALUES (1120, 'yuri.nassar@gmail.com', NULL, '
 
 
 --
--- TOC entry 3677 (class 0 OID 16461)
--- Dependencies: 237
+-- TOC entry 3688 (class 0 OID 111792)
+-- Dependencies: 240
 -- Data for Name: empresa; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.empresa VALUES (1, true, '2023-06-06 14:52:47.432617', NULL, 'UNIVERSIDADE FEDERAL DO PARA', 1, NULL, NULL);
+INSERT INTO public.empresa VALUES (1, true, '2023-05-22 22:57:40.623754', NULL, 'UNIVERSIDADE FEDERAL DO PARA', 1, NULL, NULL);
+INSERT INTO public.empresa VALUES (4, true, '2023-05-22 23:34:13.611383', '2023-05-22 23:34:13.611383', 'UFPA', 11, 11, NULL);
+INSERT INTO public.empresa VALUES (5, true, '2023-05-22 23:34:13.647383', '2023-05-22 23:34:13.647383', 'google', 11, 11, 16);
+INSERT INTO public.empresa VALUES (19, true, '2023-05-22 23:51:36.602022', '2023-05-22 23:51:36.602022', 'UEPA', 51, 51, NULL);
+INSERT INTO public.empresa VALUES (20, true, '2023-05-22 23:51:36.631021', '2023-05-22 23:51:36.631021', 'DASSDD', 51, 51, 82);
 
 
 --
--- TOC entry 3679 (class 0 OID 16467)
--- Dependencies: 239
+-- TOC entry 3690 (class 0 OID 111801)
+-- Dependencies: 242
 -- Data for Name: endereco; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.endereco VALUES (1, true, '2023-06-06 14:52:47.440532', NULL, 'BARCARENA', 'PARÁ', 'BRASIL', 1, NULL);
-INSERT INTO public.endereco VALUES (2, true, '2023-06-06 14:52:47.44885', NULL, 'BELÉM', 'PARÁ', 'BRASIL', 1, NULL);
-INSERT INTO public.endereco VALUES (3, true, '2023-06-06 14:52:47.456196', NULL, 'CAPANEMA', 'PARÁ', 'BRASIL', 1, NULL);
-INSERT INTO public.endereco VALUES (4, true, '2023-06-06 14:52:47.463692', NULL, 'BRAGANÇA', 'PARÁ', 'BRASIL', 1, NULL);
-INSERT INTO public.endereco VALUES (5, true, '2023-06-06 14:52:47.471093', NULL, 'SÃO MIGUEL DO GUAMÁ', 'PARÁ', 'BRASIL', 1, NULL);
+INSERT INTO public.endereco VALUES (1, true, '2023-05-22 22:57:40.62527', NULL, 'BARCARENA', 'PARÃ�', 'BRASIL', 1, NULL);
+INSERT INTO public.endereco VALUES (2, true, '2023-05-22 22:57:40.626572', NULL, 'BELÃ‰M', 'PARÃ�', 'BRASIL', 1, NULL);
+INSERT INTO public.endereco VALUES (3, true, '2023-05-22 22:57:40.627066', NULL, 'CAPANEMA', 'PARÃ�', 'BRASIL', 1, NULL);
+INSERT INTO public.endereco VALUES (4, true, '2023-05-22 22:57:40.627467', NULL, 'BRAGANÃ‡A', 'PARÃ�', 'BRASIL', 1, NULL);
+INSERT INTO public.endereco VALUES (5, true, '2023-05-22 22:57:40.627872', NULL, 'SÃƒO MIGUEL DO GUAMÃ�', 'PARÃ�', 'BRASIL', 1, NULL);
+INSERT INTO public.endereco VALUES (16, true, '2023-05-22 23:34:13.636382', '2023-05-22 23:34:13.636382', 'Brussels', 'BRU', 'BE', 11, 11);
+INSERT INTO public.endereco VALUES (82, true, '2023-05-22 23:51:36.620022', '2023-05-22 23:51:36.620022', 'Apiacá', 'ES', 'BR', 51, 51);
 
 
 --
--- TOC entry 3681 (class 0 OID 16475)
--- Dependencies: 241
+-- TOC entry 3692 (class 0 OID 111812)
+-- Dependencies: 244
 -- Data for Name: faixa_salarial; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.faixa_salarial VALUES (1, true, '2023-06-06 14:52:47.48461', NULL, '1 salário mínimo', 1, NULL);
-INSERT INTO public.faixa_salarial VALUES (2, true, '2023-06-06 14:52:47.492271', NULL, 'de 2 a 4 salários mínimos', 1, NULL);
-INSERT INTO public.faixa_salarial VALUES (3, true, '2023-06-06 14:52:47.504468', NULL, '5 a 10 salários mínimos', 1, NULL);
-INSERT INTO public.faixa_salarial VALUES (4, true, '2023-06-06 14:52:47.511943', NULL, '11 ou mais salários mínimos', 1, NULL);
+INSERT INTO public.faixa_salarial VALUES (1, true, '2023-05-22 22:57:40.628217', NULL, '1 salÃ¡rio mÃ­nimo', 1, NULL);
+INSERT INTO public.faixa_salarial VALUES (2, true, '2023-05-22 22:57:40.629325', NULL, '1 a 2 salÃ¡rios mÃ­nimo', 1, NULL);
+INSERT INTO public.faixa_salarial VALUES (3, true, '2023-05-22 22:57:40.629782', NULL, '3 a 5 salÃ¡rios mÃ­nimo', 1, NULL);
+INSERT INTO public.faixa_salarial VALUES (4, true, '2023-05-22 22:57:40.630166', NULL, '6 ou mais salÃ¡rios mÃ­nimo', 1, NULL);
 
 
 --
--- TOC entry 3683 (class 0 OID 16481)
--- Dependencies: 243
+-- TOC entry 3694 (class 0 OID 111821)
+-- Dependencies: 246
 -- Data for Name: genero; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.genero VALUES (1, true, '2023-06-06 14:52:47.520038', NULL, 'Masculino', 1, NULL);
-INSERT INTO public.genero VALUES (2, true, '2023-06-06 14:52:47.527925', NULL, 'Feminino', 1, NULL);
-INSERT INTO public.genero VALUES (3, true, '2023-06-06 14:52:47.53537', NULL, 'Não-binário', 1, NULL);
-INSERT INTO public.genero VALUES (4, true, '2023-06-06 14:52:47.54255', NULL, 'Transsexual', 1, NULL);
-INSERT INTO public.genero VALUES (5, true, '2023-06-06 14:52:47.550286', NULL, 'Não quero declarar', 1, NULL);
-INSERT INTO public.genero VALUES (6, true, '2023-06-06 14:52:47.557769', NULL, 'Outros', 1, NULL);
+INSERT INTO public.genero VALUES (1, true, '2023-05-22 22:57:40.630551', NULL, 'MASCULINO', 1, NULL);
+INSERT INTO public.genero VALUES (2, true, '2023-05-22 22:57:40.63179', NULL, 'FEMININO', 1, NULL);
+INSERT INTO public.genero VALUES (3, true, '2023-05-22 22:57:40.632171', NULL, 'NÃƒO BINÃ�RIO', 1, NULL);
+INSERT INTO public.genero VALUES (4, true, '2023-05-22 22:57:40.632515', NULL, 'TRANSSEXUAL', 1, NULL);
+INSERT INTO public.genero VALUES (5, true, '2023-05-22 22:57:40.632897', NULL, 'NÃƒO QUERO DECLARAR', 1, NULL);
+INSERT INTO public.genero VALUES (6, true, '2023-05-22 22:57:40.633252', NULL, 'OUTROS', 1, NULL);
 
 
 --
--- TOC entry 3687 (class 0 OID 16493)
--- Dependencies: 247
+-- TOC entry 3696 (class 0 OID 111830)
+-- Dependencies: 248
+-- Data for Name: grupo; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.grupo VALUES (1, true, '2023-05-22 22:57:40.612618', NULL, 'ADMIN', 1, NULL);
+INSERT INTO public.grupo VALUES (2, true, '2023-05-22 22:57:40.614283', NULL, 'SECRETARIO', 1, NULL);
+INSERT INTO public.grupo VALUES (3, true, '2023-05-22 22:57:40.614836', NULL, 'EGRESSO', 1, NULL);
+
+
+--
+-- TOC entry 3698 (class 0 OID 111839)
+-- Dependencies: 250
 -- Data for Name: palestra; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 
 
 --
--- TOC entry 3689 (class 0 OID 16499)
--- Dependencies: 249
+-- TOC entry 3700 (class 0 OID 111848)
+-- Dependencies: 252
 -- Data for Name: setor_atuacao; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.setor_atuacao VALUES (1, true, '2023-06-06 14:52:47.348363', NULL, 'Empresarial', 1, NULL);
-INSERT INTO public.setor_atuacao VALUES (2, true, '2023-06-06 14:52:47.356587', NULL, 'Público', 1, NULL);
-INSERT INTO public.setor_atuacao VALUES (3, true, '2023-06-06 14:52:47.364122', NULL, 'Terceiro setor', 1, NULL);
-INSERT INTO public.setor_atuacao VALUES (4, true, '2023-06-06 14:52:47.371431', NULL, 'Magistério/Docência', 1, NULL);
-INSERT INTO public.setor_atuacao VALUES (5, true, '2023-06-06 14:52:47.378795', NULL, 'Outros', 1, NULL);
+INSERT INTO public.setor_atuacao VALUES (1, true, '2023-05-22 22:57:40.621573', NULL, 'DESENVOLVIMENTO', 1, NULL);
+INSERT INTO public.setor_atuacao VALUES (4, true, '2023-05-22 23:34:13.702378', '2023-05-22 23:34:13.702378', 'Terceiro Setor', 11, 11);
+INSERT INTO public.setor_atuacao VALUES (18, true, '2023-05-22 23:51:36.688022', '2023-05-22 23:51:36.688022', 'Outros', 51, 51);
 
 
 --
--- TOC entry 3691 (class 0 OID 16505)
--- Dependencies: 251
+-- TOC entry 3663 (class 0 OID 71974)
+-- Dependencies: 215
+-- Data for Name: setor_atuacao_empresa; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.setor_atuacao_empresa VALUES (3, 3);
+
+
+--
+-- TOC entry 3702 (class 0 OID 111857)
+-- Dependencies: 254
 -- Data for Name: tipo_bolsa; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.tipo_bolsa VALUES (1, true, '2023-06-06 14:52:47.565086', NULL, 'PIBIC', 1, NULL);
-INSERT INTO public.tipo_bolsa VALUES (2, true, '2023-06-06 14:52:47.579877', NULL, 'PROAD', 1, NULL);
-INSERT INTO public.tipo_bolsa VALUES (3, true, '2023-06-06 14:52:47.587784', NULL, 'PROEX', 1, NULL);
-INSERT INTO public.tipo_bolsa VALUES (4, true, '2023-06-06 14:52:47.595678', NULL, 'PROBAC', 1, NULL);
-INSERT INTO public.tipo_bolsa VALUES (5, true, '2023-06-06 14:52:47.603128', NULL, 'PERMANENCIA', 1, NULL);
-INSERT INTO public.tipo_bolsa VALUES (6, true, '2023-06-06 14:52:47.61059', NULL, 'CAPES/CNPQ', 1, NULL);
-INSERT INTO public.tipo_bolsa VALUES (7, true, '2023-06-06 14:52:47.618456', NULL, 'OUTROS', 1, NULL);
+INSERT INTO public.tipo_bolsa VALUES (1, true, '2023-05-22 22:57:40.633623', NULL, 'PIBIC', 1, NULL);
+INSERT INTO public.tipo_bolsa VALUES (2, true, '2023-05-22 22:57:40.635026', NULL, 'PROAD', 1, NULL);
+INSERT INTO public.tipo_bolsa VALUES (3, true, '2023-05-22 22:57:40.635435', NULL, 'PROEX', 1, NULL);
+INSERT INTO public.tipo_bolsa VALUES (4, true, '2023-05-22 22:57:40.635934', NULL, 'PERMANENCIA', 1, NULL);
+INSERT INTO public.tipo_bolsa VALUES (5, true, '2023-05-22 22:57:40.636386', NULL, 'OUTROS', 1, NULL);
 
 
 --
--- TOC entry 3693 (class 0 OID 16511)
--- Dependencies: 253
+-- TOC entry 3704 (class 0 OID 111866)
+-- Dependencies: 256
 -- Data for Name: titulacao; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.titulacao VALUES (1, true, '2023-06-06 14:52:47.625553', NULL, 'GRADUAÇÃO', 1, NULL);
-INSERT INTO public.titulacao VALUES (2, true, '2023-06-06 14:52:47.633142', NULL, 'PÓS-GRADUAÇÃO', 1, NULL);
+INSERT INTO public.titulacao VALUES (1, true, '2023-05-22 22:57:40.636936', NULL, 'GRADUAÃ‡ÃƒO', 1, NULL);
+INSERT INTO public.titulacao VALUES (2, true, '2023-05-22 22:57:40.638128', NULL, 'PÃ“S-GRADUAÃ‡ÃƒO', 1, NULL);
 
 
 --
--- TOC entry 3695 (class 0 OID 16517)
--- Dependencies: 255
+-- TOC entry 3706 (class 0 OID 111875)
+-- Dependencies: 258
 -- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.usuario VALUES (1, true, '2023-06-06 14:52:47.22416', NULL, 'admin@admin.com', 'ADMIN ADMIN', '{bcrypt}$2a$10$vh9/MkL4XQyd.fqkQdnWSelTUxPBpDb6qL5W2uWLxLUN0JR9vwRZm', 'ADMIN', NULL, NULL);
-INSERT INTO public.usuario VALUES (2, true, '2023-06-06 14:52:47.232891', NULL, 'secretario@secretario.com', 'SECRETARIO SECRETARIO', '{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy', 'SECRETARIO', NULL, NULL);
-INSERT INTO public.usuario VALUES (3, true, '2023-06-06 14:52:47.241565', NULL, 'egresso@egresso.com', 'EGRESSO EGRESSO', '{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO', 'EGRESSO', NULL, NULL);
+INSERT INTO public.usuario VALUES (1, true, '2023-05-22 22:57:40.61021', NULL, 'admin@admin.com', 'ADMIN ADMIN', '{bcrypt}$2a$10$vh9/MkL4XQyd.fqkQdnWSelTUxPBpDb6qL5W2uWLxLUN0JR9vwRZm', 'ADMIN', NULL, NULL);
+INSERT INTO public.usuario VALUES (2, true, '2023-05-22 22:57:40.611629', NULL, 'secretario@secretario.com', 'SECRETARIO SECRETARIO', '{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy', 'SECRETARIO', NULL, NULL);
+INSERT INTO public.usuario VALUES (3, true, '2023-05-22 22:57:40.612184', NULL, 'egresso@egresso.com', 'EGRESSO EGRESSO', '{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO', 'EGRESSO', NULL, NULL);
+INSERT INTO public.usuario VALUES (10, true, '2023-05-22 23:31:11.41963', '2023-05-22 23:31:11.41963', 'altisouza@gmail.com', 'ALTIERE COSTA DE SOUZA', '{bcrypt}$2a$10$L1ihWLqvgWzRVUPXVkRcfeJ2SDdu6/TyV8QPWDmZ.1y/7XtGnWZvS', 'altiere', NULL, NULL);
+INSERT INTO public.usuario VALUES (11, true, '2023-05-22 23:33:17.184501', '2023-05-22 23:33:17.184501', 'jessicadepaula.stm@gmail.com', 'JESSICA DE PAULA FIGUEIRA RIBEIRO', '{bcrypt}$2a$10$1jtwe5LdDodtMXMovpK8F.2xRZO8MHSBuvMH3gPwRaEsI73nEiMha', 'jessica', NULL, NULL);
+INSERT INTO public.usuario VALUES (51, true, '2023-05-22 23:49:29.072652', '2023-05-22 23:49:29.072652', 'ednssousa@yahoo.com.br', 'EDNELSON SILVA DE SOUSA', '{bcrypt}$2a$10$prkhfeqS0b.fKAf6IQaC6uyqFtN.Exrde7gudkYKHpMfU5/m7CLBi', 'ednelson', NULL, NULL);
 
 
 --
--- TOC entry 3696 (class 0 OID 16522)
--- Dependencies: 256
+-- TOC entry 3707 (class 0 OID 111883)
+-- Dependencies: 259
 -- Data for Name: usuario_grupo; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.usuario_grupo VALUES (1, 'ADMIN') ON CONFLICT DO NOTHING;
-INSERT INTO public.usuario_grupo VALUES (2, 'SECRETARIO') ON CONFLICT DO NOTHING;
-INSERT INTO public.usuario_grupo VALUES (3, 'EGRESSO') ON CONFLICT DO NOTHING;
+INSERT INTO public.usuario_grupo VALUES (1, 1);
+INSERT INTO public.usuario_grupo VALUES (2, 2);
+INSERT INTO public.usuario_grupo VALUES (3, 3);
+INSERT INTO public.usuario_grupo VALUES (10, 3);
+INSERT INTO public.usuario_grupo VALUES (11, 3);
+INSERT INTO public.usuario_grupo VALUES (51, 3);
 
 
 --
--- TOC entry 3724 (class 0 OID 0)
--- Dependencies: 215
+-- TOC entry 3734 (class 0 OID 0)
+-- Dependencies: 216
 -- Name: anuncio_id_anuncio_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
@@ -2340,26 +2506,26 @@ SELECT pg_catalog.setval('public.anuncio_id_anuncio_seq', 1, false);
 
 
 --
--- TOC entry 3725 (class 0 OID 0)
--- Dependencies: 217
+-- TOC entry 3735 (class 0 OID 0)
+-- Dependencies: 218
 -- Name: area_atuacao_id_area_atuacao_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.area_atuacao_id_area_atuacao_seq', 6, true);
+SELECT pg_catalog.setval('public.area_atuacao_id_area_atuacao_seq', 193, true);
 
 
 --
--- TOC entry 3726 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3736 (class 0 OID 0)
+-- Dependencies: 220
 -- Name: area_emprego_id_area_emprego_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.area_emprego_id_area_emprego_seq', 14, true);
+SELECT pg_catalog.setval('public.area_emprego_id_area_emprego_seq', 1337, true);
 
 
 --
--- TOC entry 3727 (class 0 OID 0)
--- Dependencies: 221
+-- TOC entry 3737 (class 0 OID 0)
+-- Dependencies: 222
 -- Name: comentario_id_comentario_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
@@ -2367,98 +2533,107 @@ SELECT pg_catalog.setval('public.comentario_id_comentario_seq', 1, false);
 
 
 --
--- TOC entry 3728 (class 0 OID 0)
--- Dependencies: 223
+-- TOC entry 3738 (class 0 OID 0)
+-- Dependencies: 224
 -- Name: contribuicao_id_contribuicao_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.contribuicao_id_contribuicao_seq', 1, false);
-
-
---
--- TOC entry 3729 (class 0 OID 0)
--- Dependencies: 225
--- Name: cota_id_cota_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.cota_id_cota_seq', 5, true);
-
-
---
--- TOC entry 3730 (class 0 OID 0)
--- Dependencies: 227
--- Name: curso_id_curso_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.curso_id_curso_seq', 1, true);
-
-
---
--- TOC entry 3731 (class 0 OID 0)
--- Dependencies: 229
--- Name: depoimento_id_depoimento_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.depoimento_id_depoimento_seq', 1, false);
-
-
---
--- TOC entry 3732 (class 0 OID 0)
--- Dependencies: 233
--- Name: egresso_id_egresso_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.egresso_id_egresso_seq', 1, false);
-
-
---
--- TOC entry 3733 (class 0 OID 0)
--- Dependencies: 236
--- Name: egresso_valido_id_egresso_valido_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.egresso_valido_id_egresso_valido_seq', 1120, true);
-
-
---
--- TOC entry 3734 (class 0 OID 0)
--- Dependencies: 238
--- Name: empresa_id_empresa_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.empresa_id_empresa_seq', 1, true);
-
-
---
--- TOC entry 3735 (class 0 OID 0)
--- Dependencies: 240
--- Name: endereco_id_endereco_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.endereco_id_endereco_seq', 5, true);
-
-
---
--- TOC entry 3736 (class 0 OID 0)
--- Dependencies: 242
--- Name: faixa_salarial_id_faixa_salarial_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.faixa_salarial_id_faixa_salarial_seq', 4, true);
-
-
---
--- TOC entry 3737 (class 0 OID 0)
--- Dependencies: 244
--- Name: genero_id_genero_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.genero_id_genero_seq', 6, true);
+SELECT pg_catalog.setval('public.contribuicao_id_contribuicao_seq', 3, true);
 
 
 --
 -- TOC entry 3739 (class 0 OID 0)
--- Dependencies: 248
+-- Dependencies: 226
+-- Name: cota_id_cota_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.cota_id_cota_seq', 764, true);
+
+
+--
+-- TOC entry 3740 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: curso_id_curso_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.curso_id_curso_seq', 193, true);
+
+
+--
+-- TOC entry 3741 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: depoimento_id_depoimento_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.depoimento_id_depoimento_seq', 3, true);
+
+
+--
+-- TOC entry 3742 (class 0 OID 0)
+-- Dependencies: 232
+-- Name: egresso_id_egresso_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.egresso_id_egresso_seq', 3, true);
+
+
+--
+-- TOC entry 3743 (class 0 OID 0)
+-- Dependencies: 237
+-- Name: egresso_valido_id_egresso_valido_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.egresso_valido_id_egresso_valido_seq', 213920, true);
+
+
+--
+-- TOC entry 3744 (class 0 OID 0)
+-- Dependencies: 239
+-- Name: empresa_id_empresa_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.empresa_id_empresa_seq', 195, true);
+
+
+--
+-- TOC entry 3745 (class 0 OID 0)
+-- Dependencies: 241
+-- Name: endereco_id_endereco_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.endereco_id_endereco_seq', 957, true);
+
+
+--
+-- TOC entry 3746 (class 0 OID 0)
+-- Dependencies: 243
+-- Name: faixa_salarial_id_faixa_salarial_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.faixa_salarial_id_faixa_salarial_seq', 764, true);
+
+
+--
+-- TOC entry 3747 (class 0 OID 0)
+-- Dependencies: 245
+-- Name: genero_id_genero_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.genero_id_genero_seq', 1146, true);
+
+
+--
+-- TOC entry 3748 (class 0 OID 0)
+-- Dependencies: 247
+-- Name: grupo_id_grupo_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.grupo_id_grupo_seq', 573, true);
+
+
+--
+-- TOC entry 3749 (class 0 OID 0)
+-- Dependencies: 249
 -- Name: palestra_id_palestra_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
@@ -2466,43 +2641,43 @@ SELECT pg_catalog.setval('public.palestra_id_palestra_seq', 1, false);
 
 
 --
--- TOC entry 3740 (class 0 OID 0)
--- Dependencies: 250
+-- TOC entry 3750 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: setor_atuacao_id_setor_atuacao_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.setor_atuacao_id_setor_atuacao_seq', 5, true);
+SELECT pg_catalog.setval('public.setor_atuacao_id_setor_atuacao_seq', 193, true);
 
 
 --
--- TOC entry 3741 (class 0 OID 0)
--- Dependencies: 252
+-- TOC entry 3751 (class 0 OID 0)
+-- Dependencies: 253
 -- Name: tipo_bolsa_id_tipo_bolsa_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.tipo_bolsa_id_tipo_bolsa_seq', 7, true);
+SELECT pg_catalog.setval('public.tipo_bolsa_id_tipo_bolsa_seq', 955, true);
 
 
 --
--- TOC entry 3742 (class 0 OID 0)
--- Dependencies: 254
+-- TOC entry 3752 (class 0 OID 0)
+-- Dependencies: 255
 -- Name: titulacao_id_titulacao_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.titulacao_id_titulacao_seq', 2, true);
+SELECT pg_catalog.setval('public.titulacao_id_titulacao_seq', 382, true);
 
 
 --
--- TOC entry 3743 (class 0 OID 0)
+-- TOC entry 3753 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: usuario_id_usuario_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.usuario_id_usuario_seq', 3, true);
+SELECT pg_catalog.setval('public.usuario_id_usuario_seq', 576, true);
 
 
 --
--- TOC entry 3351 (class 2606 OID 16547)
+-- TOC entry 3359 (class 2606 OID 111690)
 -- Name: anuncio anuncio_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2511,7 +2686,7 @@ ALTER TABLE ONLY public.anuncio
 
 
 --
--- TOC entry 3353 (class 2606 OID 16549)
+-- TOC entry 3361 (class 2606 OID 111699)
 -- Name: area_atuacao area_atuacao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2520,7 +2695,7 @@ ALTER TABLE ONLY public.area_atuacao
 
 
 --
--- TOC entry 3357 (class 2606 OID 16551)
+-- TOC entry 3365 (class 2606 OID 111708)
 -- Name: area_emprego area_emprego_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2529,7 +2704,7 @@ ALTER TABLE ONLY public.area_emprego
 
 
 --
--- TOC entry 3361 (class 2606 OID 16553)
+-- TOC entry 3369 (class 2606 OID 111717)
 -- Name: comentario comentario_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2538,7 +2713,7 @@ ALTER TABLE ONLY public.comentario
 
 
 --
--- TOC entry 3363 (class 2606 OID 16555)
+-- TOC entry 3371 (class 2606 OID 111726)
 -- Name: contribuicao contribuicao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2547,7 +2722,7 @@ ALTER TABLE ONLY public.contribuicao
 
 
 --
--- TOC entry 3367 (class 2606 OID 16557)
+-- TOC entry 3375 (class 2606 OID 111735)
 -- Name: cota cota_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2556,7 +2731,7 @@ ALTER TABLE ONLY public.cota
 
 
 --
--- TOC entry 3371 (class 2606 OID 16559)
+-- TOC entry 3379 (class 2606 OID 111744)
 -- Name: curso curso_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2565,7 +2740,7 @@ ALTER TABLE ONLY public.curso
 
 
 --
--- TOC entry 3375 (class 2606 OID 16561)
+-- TOC entry 3383 (class 2606 OID 111753)
 -- Name: depoimento depoimento_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2574,7 +2749,16 @@ ALTER TABLE ONLY public.depoimento
 
 
 --
--- TOC entry 3389 (class 2606 OID 16563)
+-- TOC entry 3355 (class 2606 OID 71882)
+-- Name: egresso_area_atuacao egresso_area_atuacao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.egresso_area_atuacao
+    ADD CONSTRAINT egresso_area_atuacao_pkey PRIMARY KEY (id_area_atuacao, id_egresso);
+
+
+--
+-- TOC entry 3397 (class 2606 OID 111769)
 -- Name: egresso_cota egresso_cota_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2583,7 +2767,7 @@ ALTER TABLE ONLY public.egresso_cota
 
 
 --
--- TOC entry 3391 (class 2606 OID 16565)
+-- TOC entry 3399 (class 2606 OID 111776)
 -- Name: egresso_empresa egresso_empresa_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2592,7 +2776,7 @@ ALTER TABLE ONLY public.egresso_empresa
 
 
 --
--- TOC entry 3379 (class 2606 OID 16567)
+-- TOC entry 3387 (class 2606 OID 111764)
 -- Name: egresso egresso_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2601,7 +2785,7 @@ ALTER TABLE ONLY public.egresso
 
 
 --
--- TOC entry 3395 (class 2606 OID 16569)
+-- TOC entry 3403 (class 2606 OID 111783)
 -- Name: egresso_titulacao egresso_titulacao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2610,7 +2794,7 @@ ALTER TABLE ONLY public.egresso_titulacao
 
 
 --
--- TOC entry 3399 (class 2606 OID 16571)
+-- TOC entry 3407 (class 2606 OID 111790)
 -- Name: egresso_valido egresso_valido_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2619,7 +2803,7 @@ ALTER TABLE ONLY public.egresso_valido
 
 
 --
--- TOC entry 3405 (class 2606 OID 16573)
+-- TOC entry 3413 (class 2606 OID 111799)
 -- Name: empresa empresa_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2628,7 +2812,7 @@ ALTER TABLE ONLY public.empresa
 
 
 --
--- TOC entry 3409 (class 2606 OID 16575)
+-- TOC entry 3417 (class 2606 OID 111810)
 -- Name: endereco endereco_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2637,7 +2821,7 @@ ALTER TABLE ONLY public.endereco
 
 
 --
--- TOC entry 3411 (class 2606 OID 16577)
+-- TOC entry 3419 (class 2606 OID 111919)
 -- Name: endereco enderecosunicos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2646,7 +2830,7 @@ ALTER TABLE ONLY public.endereco
 
 
 --
--- TOC entry 3413 (class 2606 OID 16579)
+-- TOC entry 3421 (class 2606 OID 111819)
 -- Name: faixa_salarial faixa_salarial_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2655,7 +2839,7 @@ ALTER TABLE ONLY public.faixa_salarial
 
 
 --
--- TOC entry 3417 (class 2606 OID 16581)
+-- TOC entry 3425 (class 2606 OID 111828)
 -- Name: genero genero_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2663,9 +2847,17 @@ ALTER TABLE ONLY public.genero
     ADD CONSTRAINT genero_pkey PRIMARY KEY (id_genero);
 
 
+--
+-- TOC entry 3429 (class 2606 OID 111837)
+-- Name: grupo grupo_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.grupo
+    ADD CONSTRAINT grupo_pkey PRIMARY KEY (id_grupo);
+
 
 --
--- TOC entry 3425 (class 2606 OID 16585)
+-- TOC entry 3433 (class 2606 OID 111846)
 -- Name: palestra palestra_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2674,7 +2866,16 @@ ALTER TABLE ONLY public.palestra
 
 
 --
--- TOC entry 3429 (class 2606 OID 16587)
+-- TOC entry 3357 (class 2606 OID 71978)
+-- Name: setor_atuacao_empresa setor_atuacao_empresa_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.setor_atuacao_empresa
+    ADD CONSTRAINT setor_atuacao_empresa_pkey PRIMARY KEY (id_setor_atuacao, id_empresa);
+
+
+--
+-- TOC entry 3437 (class 2606 OID 111855)
 -- Name: setor_atuacao setor_atuacao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2683,7 +2884,7 @@ ALTER TABLE ONLY public.setor_atuacao
 
 
 --
--- TOC entry 3433 (class 2606 OID 16589)
+-- TOC entry 3441 (class 2606 OID 111864)
 -- Name: tipo_bolsa tipo_bolsa_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2692,7 +2893,7 @@ ALTER TABLE ONLY public.tipo_bolsa
 
 
 --
--- TOC entry 3437 (class 2606 OID 16591)
+-- TOC entry 3445 (class 2606 OID 111873)
 -- Name: titulacao titulacao_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2701,7 +2902,7 @@ ALTER TABLE ONLY public.titulacao
 
 
 --
--- TOC entry 3415 (class 2606 OID 16593)
+-- TOC entry 3423 (class 2606 OID 111921)
 -- Name: faixa_salarial uk_2bn1lsqed44xqtrtq17s7tjue; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2710,7 +2911,7 @@ ALTER TABLE ONLY public.faixa_salarial
 
 
 --
--- TOC entry 3427 (class 2606 OID 16595)
+-- TOC entry 3435 (class 2606 OID 111927)
 -- Name: palestra uk_2h2mxjetrwvc8sg1wx5ttyq07; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2719,7 +2920,7 @@ ALTER TABLE ONLY public.palestra
 
 
 --
--- TOC entry 3401 (class 2606 OID 16597)
+-- TOC entry 3409 (class 2606 OID 111915)
 -- Name: egresso_valido uk_2jwojv1fccodf62r2wa6st1i1; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2728,7 +2929,7 @@ ALTER TABLE ONLY public.egresso_valido
 
 
 --
--- TOC entry 3381 (class 2606 OID 16599)
+-- TOC entry 3389 (class 2606 OID 111907)
 -- Name: egresso uk_3tmslc9ltmjdyy2mbstgpf1un; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2737,7 +2938,7 @@ ALTER TABLE ONLY public.egresso
 
 
 --
--- TOC entry 3383 (class 2606 OID 16601)
+-- TOC entry 3391 (class 2606 OID 111905)
 -- Name: egresso uk_4datilmpr40t15bnmxyve5t0y; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2746,7 +2947,7 @@ ALTER TABLE ONLY public.egresso
 
 
 --
--- TOC entry 3441 (class 2606 OID 16603)
+-- TOC entry 3449 (class 2606 OID 111935)
 -- Name: usuario uk_5171l57faosmj8myawaucatdw; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2755,7 +2956,7 @@ ALTER TABLE ONLY public.usuario
 
 
 --
--- TOC entry 3419 (class 2606 OID 16605)
+-- TOC entry 3427 (class 2606 OID 111923)
 -- Name: genero uk_6xfypuejpx9h55hdouj112ocw; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2764,7 +2965,7 @@ ALTER TABLE ONLY public.genero
 
 
 --
--- TOC entry 3385 (class 2606 OID 16607)
+-- TOC entry 3393 (class 2606 OID 111903)
 -- Name: egresso uk_7wtwbdgn55nu31nx24ib5revf; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2773,7 +2974,7 @@ ALTER TABLE ONLY public.egresso
 
 
 --
--- TOC entry 3443 (class 2606 OID 16609)
+-- TOC entry 3451 (class 2606 OID 111937)
 -- Name: usuario uk_8efax56av7vfdquauh0gyl9cx; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2782,7 +2983,7 @@ ALTER TABLE ONLY public.usuario
 
 
 --
--- TOC entry 3387 (class 2606 OID 16611)
+-- TOC entry 3395 (class 2606 OID 111901)
 -- Name: egresso uk_919oulldbx88ntvtrq5r6sdkt; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2791,7 +2992,7 @@ ALTER TABLE ONLY public.egresso
 
 
 --
--- TOC entry 3369 (class 2606 OID 16613)
+-- TOC entry 3377 (class 2606 OID 111895)
 -- Name: cota uk_9k3kf2b9f2mjv11ksekdha97k; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2800,7 +3001,7 @@ ALTER TABLE ONLY public.cota
 
 
 --
--- TOC entry 3407 (class 2606 OID 16615)
+-- TOC entry 3415 (class 2606 OID 111917)
 -- Name: empresa uk_bwgigp9epp6elsfohco9fetet; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2809,7 +3010,7 @@ ALTER TABLE ONLY public.empresa
 
 
 --
--- TOC entry 3397 (class 2606 OID 16617)
+-- TOC entry 3405 (class 2606 OID 111911)
 -- Name: egresso_titulacao uk_du19rk6x1k7pg5tmh7k2xphgd; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2818,7 +3019,7 @@ ALTER TABLE ONLY public.egresso_titulacao
 
 
 --
--- TOC entry 3359 (class 2606 OID 16619)
+-- TOC entry 3367 (class 2606 OID 111891)
 -- Name: area_emprego uk_hjp1enuotfpdwx9utf5n12iqc; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2827,7 +3028,7 @@ ALTER TABLE ONLY public.area_emprego
 
 
 --
--- TOC entry 3373 (class 2606 OID 16621)
+-- TOC entry 3381 (class 2606 OID 111897)
 -- Name: curso uk_i35k8uavr3s5cxr12aefe00e; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2835,9 +3036,17 @@ ALTER TABLE ONLY public.curso
     ADD CONSTRAINT uk_i35k8uavr3s5cxr12aefe00e UNIQUE (nome_curso);
 
 
+--
+-- TOC entry 3431 (class 2606 OID 111925)
+-- Name: grupo uk_is0kvc71ivi2o1nhe7h19m47p; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.grupo
+    ADD CONSTRAINT uk_is0kvc71ivi2o1nhe7h19m47p UNIQUE (nome_grupo);
+
 
 --
--- TOC entry 3431 (class 2606 OID 16625)
+-- TOC entry 3439 (class 2606 OID 111929)
 -- Name: setor_atuacao uk_j59f23omfkincud4bx0f8x3vp; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2846,7 +3055,7 @@ ALTER TABLE ONLY public.setor_atuacao
 
 
 --
--- TOC entry 3435 (class 2606 OID 16627)
+-- TOC entry 3443 (class 2606 OID 111931)
 -- Name: tipo_bolsa uk_j6yqoqsrpie5ipmlh6c5jbrx1; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2855,7 +3064,7 @@ ALTER TABLE ONLY public.tipo_bolsa
 
 
 --
--- TOC entry 3355 (class 2606 OID 16629)
+-- TOC entry 3363 (class 2606 OID 111889)
 -- Name: area_atuacao uk_mu4kvuf03rl6w7vpqgvtt78pk; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2864,7 +3073,7 @@ ALTER TABLE ONLY public.area_atuacao
 
 
 --
--- TOC entry 3393 (class 2606 OID 16631)
+-- TOC entry 3401 (class 2606 OID 111909)
 -- Name: egresso_empresa uk_r0sm8hpv921bqw3nrmnnjt99x; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2873,7 +3082,7 @@ ALTER TABLE ONLY public.egresso_empresa
 
 
 --
--- TOC entry 3377 (class 2606 OID 16633)
+-- TOC entry 3385 (class 2606 OID 111899)
 -- Name: depoimento uk_rpha5d7rfphcjvj0nbjb1nvxs; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2882,7 +3091,7 @@ ALTER TABLE ONLY public.depoimento
 
 
 --
--- TOC entry 3365 (class 2606 OID 16635)
+-- TOC entry 3373 (class 2606 OID 111893)
 -- Name: contribuicao uk_rpvny7ejlpmi3fk8mbwva6qjy; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2891,7 +3100,7 @@ ALTER TABLE ONLY public.contribuicao
 
 
 --
--- TOC entry 3439 (class 2606 OID 16637)
+-- TOC entry 3447 (class 2606 OID 111933)
 -- Name: titulacao uk_rvnwm2n5juoh0aj3qnssh52nm; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2900,7 +3109,7 @@ ALTER TABLE ONLY public.titulacao
 
 
 --
--- TOC entry 3403 (class 2606 OID 16639)
+-- TOC entry 3411 (class 2606 OID 111913)
 -- Name: egresso_valido uk_snrp717wd5d36lg78t56wefwt; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2909,16 +3118,16 @@ ALTER TABLE ONLY public.egresso_valido
 
 
 --
--- TOC entry 3447 (class 2606 OID 16641)
+-- TOC entry 3455 (class 2606 OID 111887)
 -- Name: usuario_grupo usuario_grupo_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.usuario_grupo
-    ADD CONSTRAINT usuario_grupo_pkey PRIMARY KEY (id_usuario, grupo);
+    ADD CONSTRAINT usuario_grupo_pkey PRIMARY KEY (id_usuario, id_grupo);
 
 
 --
--- TOC entry 3445 (class 2606 OID 16643)
+-- TOC entry 3453 (class 2606 OID 111882)
 -- Name: usuario usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2927,7 +3136,7 @@ ALTER TABLE ONLY public.usuario
 
 
 --
--- TOC entry 3488 (class 2606 OID 16644)
+-- TOC entry 3496 (class 2606 OID 112138)
 -- Name: empresa fk1252u5xj526ufsf5c3c9fcic2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2936,7 +3145,7 @@ ALTER TABLE ONLY public.empresa
 
 
 --
--- TOC entry 3493 (class 2606 OID 16649)
+-- TOC entry 3501 (class 2606 OID 112168)
 -- Name: faixa_salarial fk12fuee7y4kjstxd7xwk3fageo; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2945,7 +3154,7 @@ ALTER TABLE ONLY public.faixa_salarial
 
 
 --
--- TOC entry 3482 (class 2606 OID 16654)
+-- TOC entry 3490 (class 2606 OID 112118)
 -- Name: egresso_titulacao fk1bu3y46jwvfc24y707b8hr57s; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2954,7 +3163,7 @@ ALTER TABLE ONLY public.egresso_titulacao
 
 
 --
--- TOC entry 3461 (class 2606 OID 16659)
+-- TOC entry 3469 (class 2606 OID 112008)
 -- Name: cota fk1lve8o0jw4i8ksl2dxp0lm8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2963,7 +3172,7 @@ ALTER TABLE ONLY public.cota
 
 
 --
--- TOC entry 3458 (class 2606 OID 16664)
+-- TOC entry 3466 (class 2606 OID 111998)
 -- Name: contribuicao fk2ccawuj4bpvj1vk6mhrb6b0op; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2972,7 +3181,7 @@ ALTER TABLE ONLY public.contribuicao
 
 
 --
--- TOC entry 3483 (class 2606 OID 16669)
+-- TOC entry 3491 (class 2606 OID 112123)
 -- Name: egresso_titulacao fk2pj0kns83aqiewk5pf2wxj1n9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2981,7 +3190,7 @@ ALTER TABLE ONLY public.egresso_titulacao
 
 
 --
--- TOC entry 3473 (class 2606 OID 16674)
+-- TOC entry 3481 (class 2606 OID 112068)
 -- Name: egresso_cota fk2rs3m3oq3ujpj3nvgbyaqwata; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2990,7 +3199,7 @@ ALTER TABLE ONLY public.egresso_cota
 
 
 --
--- TOC entry 3504 (class 2606 OID 16679)
+-- TOC entry 3512 (class 2606 OID 112223)
 -- Name: tipo_bolsa fk3c5grr0qggvj0dw2fada2xhyv; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2999,7 +3208,7 @@ ALTER TABLE ONLY public.tipo_bolsa
 
 
 --
--- TOC entry 3468 (class 2606 OID 16684)
+-- TOC entry 3476 (class 2606 OID 112058)
 -- Name: egresso fk3lb1ai4t6bvvsu9jc9qm0fisi; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3008,7 +3217,7 @@ ALTER TABLE ONLY public.egresso
 
 
 --
--- TOC entry 3463 (class 2606 OID 16689)
+-- TOC entry 3471 (class 2606 OID 112013)
 -- Name: curso fk3tu6gxj4fe3b8vgyhhr17p5d1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3017,7 +3226,7 @@ ALTER TABLE ONLY public.curso
 
 
 --
--- TOC entry 3465 (class 2606 OID 16694)
+-- TOC entry 3473 (class 2606 OID 112028)
 -- Name: depoimento fk4282xxihuiq8nqknlkrlmn6k7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3026,7 +3235,7 @@ ALTER TABLE ONLY public.depoimento
 
 
 --
--- TOC entry 3495 (class 2606 OID 16699)
+-- TOC entry 3503 (class 2606 OID 112173)
 -- Name: genero fk4hmk8te4ct41ket6gewknyld3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3035,7 +3244,7 @@ ALTER TABLE ONLY public.genero
 
 
 --
--- TOC entry 3502 (class 2606 OID 16704)
+-- TOC entry 3510 (class 2606 OID 112208)
 -- Name: setor_atuacao fk4qba75lalso4wg21v2lldr81c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3044,7 +3253,16 @@ ALTER TABLE ONLY public.setor_atuacao
 
 
 --
--- TOC entry 3455 (class 2606 OID 16714)
+-- TOC entry 3505 (class 2606 OID 112188)
+-- Name: grupo fk4x87bpegbq5yd4awx0jpyl7rf; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.grupo
+    ADD CONSTRAINT fk4x87bpegbq5yd4awx0jpyl7rf FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
+
+
+--
+-- TOC entry 3463 (class 2606 OID 111978)
 -- Name: comentario fk5k6dqdx9kn983dj5jx5orhss0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3053,7 +3271,7 @@ ALTER TABLE ONLY public.comentario
 
 
 --
--- TOC entry 3451 (class 2606 OID 16719)
+-- TOC entry 3459 (class 2606 OID 111958)
 -- Name: area_atuacao fk5oqxk24ttn7xfiqojcd3hrxqp; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3062,7 +3280,7 @@ ALTER TABLE ONLY public.area_atuacao
 
 
 --
--- TOC entry 3453 (class 2606 OID 16724)
+-- TOC entry 3461 (class 2606 OID 111963)
 -- Name: area_emprego fk6dqvi2vb0skrayrqveq835gto; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3071,7 +3289,7 @@ ALTER TABLE ONLY public.area_emprego
 
 
 --
--- TOC entry 3459 (class 2606 OID 16729)
+-- TOC entry 3467 (class 2606 OID 111988)
 -- Name: contribuicao fk7x5ccymo3mvys7sdoar4w27jy; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3080,7 +3298,7 @@ ALTER TABLE ONLY public.contribuicao
 
 
 --
--- TOC entry 3494 (class 2606 OID 16734)
+-- TOC entry 3502 (class 2606 OID 112163)
 -- Name: faixa_salarial fk96o103aeo1xeuhgnn0hhs6bl0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3089,7 +3307,7 @@ ALTER TABLE ONLY public.faixa_salarial
 
 
 --
--- TOC entry 3499 (class 2606 OID 16739)
+-- TOC entry 3507 (class 2606 OID 112193)
 -- Name: palestra fk9anu4iufajm45jv11goj4swmd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3098,7 +3316,7 @@ ALTER TABLE ONLY public.palestra
 
 
 --
--- TOC entry 3505 (class 2606 OID 16744)
+-- TOC entry 3513 (class 2606 OID 112218)
 -- Name: tipo_bolsa fk9brd9pf3m513c4qwotx7j5l5f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3107,7 +3325,7 @@ ALTER TABLE ONLY public.tipo_bolsa
 
 
 --
--- TOC entry 3510 (class 2606 OID 16749)
+-- TOC entry 3518 (class 2606 OID 112253)
 -- Name: usuario_grupo fk9huj1upwjyabwkwnpnhnernnu; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3116,7 +3334,7 @@ ALTER TABLE ONLY public.usuario_grupo
 
 
 --
--- TOC entry 3489 (class 2606 OID 16754)
+-- TOC entry 3497 (class 2606 OID 112143)
 -- Name: empresa fka0nk763e7luto0itr7it6y5gr; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3125,7 +3343,7 @@ ALTER TABLE ONLY public.empresa
 
 
 --
--- TOC entry 3474 (class 2606 OID 16759)
+-- TOC entry 3482 (class 2606 OID 112063)
 -- Name: egresso_cota fka58rgwpq37hoof2640cw7j2l1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3134,7 +3352,7 @@ ALTER TABLE ONLY public.egresso_cota
 
 
 --
--- TOC entry 3456 (class 2606 OID 16764)
+-- TOC entry 3464 (class 2606 OID 111973)
 -- Name: comentario fkac7bpbirc6r6vcplb0fptftnx; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3143,7 +3361,7 @@ ALTER TABLE ONLY public.comentario
 
 
 --
--- TOC entry 3466 (class 2606 OID 16769)
+-- TOC entry 3474 (class 2606 OID 112023)
 -- Name: depoimento fkadydhxggbqc2ahkodd8du6s2t; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3152,7 +3370,7 @@ ALTER TABLE ONLY public.depoimento
 
 
 --
--- TOC entry 3484 (class 2606 OID 16774)
+-- TOC entry 3492 (class 2606 OID 112133)
 -- Name: egresso_titulacao fkb7ankaa93u5fr4nmbmyw46kmc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3161,7 +3379,7 @@ ALTER TABLE ONLY public.egresso_titulacao
 
 
 --
--- TOC entry 3503 (class 2606 OID 16779)
+-- TOC entry 3511 (class 2606 OID 112213)
 -- Name: setor_atuacao fkb7luqi69van4vdyylsmgv32hn; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3170,7 +3388,7 @@ ALTER TABLE ONLY public.setor_atuacao
 
 
 --
--- TOC entry 3485 (class 2606 OID 16784)
+-- TOC entry 3493 (class 2606 OID 112128)
 -- Name: egresso_titulacao fkbympkqdq4ugh9r707xwyxmx0i; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3179,7 +3397,7 @@ ALTER TABLE ONLY public.egresso_titulacao
 
 
 --
--- TOC entry 3486 (class 2606 OID 16789)
+-- TOC entry 3494 (class 2606 OID 112113)
 -- Name: egresso_titulacao fkc2t7d851vn3eko0rgmg8uonqj; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3188,7 +3406,7 @@ ALTER TABLE ONLY public.egresso_titulacao
 
 
 --
--- TOC entry 3462 (class 2606 OID 16794)
+-- TOC entry 3470 (class 2606 OID 112003)
 -- Name: cota fkcqjq3oy1bo82gon5venmvjw98; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3197,7 +3415,7 @@ ALTER TABLE ONLY public.cota
 
 
 --
--- TOC entry 3469 (class 2606 OID 16799)
+-- TOC entry 3477 (class 2606 OID 112048)
 -- Name: egresso fkcqqxhbp7hpudbb1dcyouyaq79; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3206,7 +3424,16 @@ ALTER TABLE ONLY public.egresso
 
 
 --
--- TOC entry 3475 (class 2606 OID 16809)
+-- TOC entry 3519 (class 2606 OID 112248)
+-- Name: usuario_grupo fkcu6om65mvqr6ct95ijgqgx7ww; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.usuario_grupo
+    ADD CONSTRAINT fkcu6om65mvqr6ct95ijgqgx7ww FOREIGN KEY (id_grupo) REFERENCES public.grupo(id_grupo);
+
+
+--
+-- TOC entry 3483 (class 2606 OID 112103)
 -- Name: egresso_empresa fkdsaknoo0x7tq0wfqdwtluix5n; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3215,7 +3442,7 @@ ALTER TABLE ONLY public.egresso_empresa
 
 
 --
--- TOC entry 3476 (class 2606 OID 16814)
+-- TOC entry 3484 (class 2606 OID 112098)
 -- Name: egresso_empresa fkdut9kbfj1c87myf42xmao3aja; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3224,7 +3451,7 @@ ALTER TABLE ONLY public.egresso_empresa
 
 
 --
--- TOC entry 3500 (class 2606 OID 16819)
+-- TOC entry 3508 (class 2606 OID 112198)
 -- Name: palestra fkenp70xvpnwmjo0k83k7g49xnq; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3233,7 +3460,7 @@ ALTER TABLE ONLY public.palestra
 
 
 --
--- TOC entry 3448 (class 2606 OID 16824)
+-- TOC entry 3456 (class 2606 OID 111943)
 -- Name: anuncio fkf2afyb5u9a2g5kv1wce78ur8t; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3242,7 +3469,7 @@ ALTER TABLE ONLY public.anuncio
 
 
 --
--- TOC entry 3470 (class 2606 OID 16829)
+-- TOC entry 3478 (class 2606 OID 112038)
 -- Name: egresso fkf322p240i2h2i9sgcn5wjfaot; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3251,7 +3478,7 @@ ALTER TABLE ONLY public.egresso
 
 
 --
--- TOC entry 3452 (class 2606 OID 16834)
+-- TOC entry 3460 (class 2606 OID 111953)
 -- Name: area_atuacao fkfhdbeqpt6ruvdwof7m4acwoup; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3260,7 +3487,7 @@ ALTER TABLE ONLY public.area_atuacao
 
 
 --
--- TOC entry 3449 (class 2606 OID 16839)
+-- TOC entry 3457 (class 2606 OID 111948)
 -- Name: anuncio fkgiwie4ydjwi1hi8a5rpwl8aop; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3269,7 +3496,7 @@ ALTER TABLE ONLY public.anuncio
 
 
 --
--- TOC entry 3477 (class 2606 OID 16844)
+-- TOC entry 3485 (class 2606 OID 112073)
 -- Name: egresso_empresa fkhytqndbt06s83doal9nmgcksj; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3278,7 +3505,7 @@ ALTER TABLE ONLY public.egresso_empresa
 
 
 --
--- TOC entry 3491 (class 2606 OID 16849)
+-- TOC entry 3499 (class 2606 OID 112158)
 -- Name: endereco fki98kyuu68rp4942s3r9vkko6x; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3287,7 +3514,7 @@ ALTER TABLE ONLY public.endereco
 
 
 --
--- TOC entry 3464 (class 2606 OID 16854)
+-- TOC entry 3472 (class 2606 OID 112018)
 -- Name: curso fkiiafe2qpikwi45ggt4p8a5mik; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3296,7 +3523,7 @@ ALTER TABLE ONLY public.curso
 
 
 --
--- TOC entry 3478 (class 2606 OID 16859)
+-- TOC entry 3486 (class 2606 OID 112083)
 -- Name: egresso_empresa fkjj09rwrjadvvdmkdo1ugyprxg; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3305,7 +3532,7 @@ ALTER TABLE ONLY public.egresso_empresa
 
 
 --
--- TOC entry 3450 (class 2606 OID 16864)
+-- TOC entry 3458 (class 2606 OID 111938)
 -- Name: anuncio fkjw0029cxurvkx45044e65h64x; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3314,7 +3541,7 @@ ALTER TABLE ONLY public.anuncio
 
 
 --
--- TOC entry 3471 (class 2606 OID 16869)
+-- TOC entry 3479 (class 2606 OID 112053)
 -- Name: egresso fkk0wr6p5gu54r773ttv5iira6f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3323,7 +3550,7 @@ ALTER TABLE ONLY public.egresso
 
 
 --
--- TOC entry 3508 (class 2606 OID 16874)
+-- TOC entry 3516 (class 2606 OID 112238)
 -- Name: usuario fkkkymwf8xy047tl0035rhlfpq5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3332,7 +3559,7 @@ ALTER TABLE ONLY public.usuario
 
 
 --
--- TOC entry 3501 (class 2606 OID 16879)
+-- TOC entry 3509 (class 2606 OID 112203)
 -- Name: palestra fkku18fu56mnqdkfwbukwah002; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3341,7 +3568,7 @@ ALTER TABLE ONLY public.palestra
 
 
 --
--- TOC entry 3509 (class 2606 OID 16884)
+-- TOC entry 3517 (class 2606 OID 112243)
 -- Name: usuario fkl4ghr4b3u1vycv960y09ss9a4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3350,7 +3577,7 @@ ALTER TABLE ONLY public.usuario
 
 
 --
--- TOC entry 3457 (class 2606 OID 16889)
+-- TOC entry 3465 (class 2606 OID 111983)
 -- Name: comentario fkm8q6r8t4jmqia3plcao1pih8r; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3359,7 +3586,16 @@ ALTER TABLE ONLY public.comentario
 
 
 --
--- TOC entry 3467 (class 2606 OID 16899)
+-- TOC entry 3506 (class 2606 OID 112183)
+-- Name: grupo fkmabbfeklclq6kit2wnnkgfak0; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.grupo
+    ADD CONSTRAINT fkmabbfeklclq6kit2wnnkgfak0 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
+
+
+--
+-- TOC entry 3475 (class 2606 OID 112033)
 -- Name: depoimento fkmh11nyrmuejhtnlbo1tdxp88v; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3368,7 +3604,7 @@ ALTER TABLE ONLY public.depoimento
 
 
 --
--- TOC entry 3472 (class 2606 OID 16904)
+-- TOC entry 3480 (class 2606 OID 112043)
 -- Name: egresso fkn1xoojso0x5qw602exgvv7v84; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3377,7 +3613,7 @@ ALTER TABLE ONLY public.egresso
 
 
 --
--- TOC entry 3506 (class 2606 OID 16909)
+-- TOC entry 3514 (class 2606 OID 112233)
 -- Name: titulacao fko1m66fdoqs86cucbvl928kes4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3386,7 +3622,7 @@ ALTER TABLE ONLY public.titulacao
 
 
 --
--- TOC entry 3487 (class 2606 OID 16914)
+-- TOC entry 3495 (class 2606 OID 112108)
 -- Name: egresso_titulacao fkp74iffsl9ivplq4gkuhyuvsh8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3395,7 +3631,7 @@ ALTER TABLE ONLY public.egresso_titulacao
 
 
 --
--- TOC entry 3460 (class 2606 OID 16919)
+-- TOC entry 3468 (class 2606 OID 111993)
 -- Name: contribuicao fkpm3k93anx938a8ab7bnw2ct0u; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3404,7 +3640,7 @@ ALTER TABLE ONLY public.contribuicao
 
 
 --
--- TOC entry 3479 (class 2606 OID 16924)
+-- TOC entry 3487 (class 2606 OID 112078)
 -- Name: egresso_empresa fkqdv2ixbxjn0jihxwra9tadgkb; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3413,7 +3649,7 @@ ALTER TABLE ONLY public.egresso_empresa
 
 
 --
--- TOC entry 3496 (class 2606 OID 16929)
+-- TOC entry 3504 (class 2606 OID 112178)
 -- Name: genero fkqpmjfeicduajada8ttfr6fvbn; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3422,7 +3658,7 @@ ALTER TABLE ONLY public.genero
 
 
 --
--- TOC entry 3480 (class 2606 OID 16934)
+-- TOC entry 3488 (class 2606 OID 112088)
 -- Name: egresso_empresa fkrrdwo5y0sss2aq6r989sngy0g; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3431,7 +3667,7 @@ ALTER TABLE ONLY public.egresso_empresa
 
 
 --
--- TOC entry 3481 (class 2606 OID 16939)
+-- TOC entry 3489 (class 2606 OID 112093)
 -- Name: egresso_empresa fks0wngwsneahqe1p80rh1olamu; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3440,7 +3676,7 @@ ALTER TABLE ONLY public.egresso_empresa
 
 
 --
--- TOC entry 3490 (class 2606 OID 16944)
+-- TOC entry 3498 (class 2606 OID 112148)
 -- Name: empresa fks5bj6jkkca1s0d3jgw4wioi9g; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3449,7 +3685,7 @@ ALTER TABLE ONLY public.empresa
 
 
 --
--- TOC entry 3492 (class 2606 OID 16949)
+-- TOC entry 3500 (class 2606 OID 112153)
 -- Name: endereco fkse5padocuj89r79jwdeif1l5i; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3458,7 +3694,7 @@ ALTER TABLE ONLY public.endereco
 
 
 --
--- TOC entry 3507 (class 2606 OID 16954)
+-- TOC entry 3515 (class 2606 OID 112228)
 -- Name: titulacao fkt7h0tods16trs2x26gd6fkmca; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3467,7 +3703,7 @@ ALTER TABLE ONLY public.titulacao
 
 
 --
--- TOC entry 3454 (class 2606 OID 16959)
+-- TOC entry 3462 (class 2606 OID 111968)
 -- Name: area_emprego fktujp3yxoocfmk1j3plgv3rqw; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3475,8 +3711,9 @@ ALTER TABLE ONLY public.area_emprego
     ADD CONSTRAINT fktujp3yxoocfmk1j3plgv3rqw FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 
 
--- Completed on 2023-06-06 14:56:54 -03
+-- Completed on 2023-06-11 23:48:06
 
 --
 -- PostgreSQL database dump complete
 --
+
