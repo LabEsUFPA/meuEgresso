@@ -40,7 +40,7 @@ public interface AnuncioService {
 	 * @return Lista de objetos da classe AnuncioModel.
 	 */
 
-	Page<AnuncioModel> findBySearch(String tituloAnuncio, Integer[] areaEmpregoIds, Integer page, Integer size,
+	public Page<AnuncioModel> findBySearch(String tituloAnuncio, Integer[] areaEmpregoIds, Integer page, Integer size,
 			Direction direction);
 
 	/**
@@ -73,9 +73,9 @@ public interface AnuncioService {
 	 * @param createdBy
 	 * @return
 	 */
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
-	Page<AnuncioModel> findByDataExpiracaoAfter(LocalDate dataExpiracao, Integer page, Integer size,
+	public Page<AnuncioModel> findByDataExpiracaoAfter(LocalDate dataExpiracao, Integer page, Integer size,
 			Direction direction);
 
 }

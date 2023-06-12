@@ -84,6 +84,7 @@
           :options="$store.tiposBolsa"
           :required="bools.bolsista"
           :disabled="!bools.bolsista"
+          :pre-filled="true"
         />
 
         <CustomInput
@@ -148,14 +149,12 @@ import { ref, watch, onMounted } from 'vue'
 import { mdiSchool } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
-import { propsToAttrMap } from '@vue/shared'
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 
-if(storage.has('loggedEgresso')){
+if (storage.has('loggedEgresso')) {
   $store.fetchAll()
 }
-
 
 const pais = ref('')
 const estado = ref('')

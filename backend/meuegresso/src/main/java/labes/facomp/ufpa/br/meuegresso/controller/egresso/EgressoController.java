@@ -163,6 +163,7 @@ public class EgressoController {
         depoimento.setEgresso(egresso);
         contribuicao.setEgresso(egresso);
 
+        egresso.getUsuario().setAtivo(egresso.getUsuario().getValido());
         egressoService.adicionarEgresso(egresso);
 
         return ResponseType.SUCCESS_SAVE.getMessage();

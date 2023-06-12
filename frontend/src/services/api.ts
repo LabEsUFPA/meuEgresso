@@ -18,14 +18,16 @@ Axios.interceptors.request.use((config) => {
 const request: API.Request = async ({
   method,
   route,
-  body
+  body,
+  params
 }) => {
   let statusError: any
   let message: any
   const response = await Axios({
     method,
     url: route,
-    data: body
+    data: body,
+    params: (params != null) ? new URLSearchParams(params) : undefined
   }).catch((error: AxiosError) => {
     statusError = (error.response != null) ? error.response.status : null
     message = (error.response != null) ? error.response.data : null
