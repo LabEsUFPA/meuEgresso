@@ -73,6 +73,7 @@ public class DashAdmController {
 			@RequestParam(name = "date_min", defaultValue = "2023-05-19") LocalDate dateMin,
 			@RequestParam(name = "date_max", defaultValue = "2023-06-19") LocalDate dateMax,
 			@RequestParam(name = "ativo", defaultValue = "true") Boolean ativo,
+			@RequestParam(name = "email", defaultValue = "@gmail") String email,
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
@@ -82,7 +83,7 @@ public class DashAdmController {
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
 		Page<UsuarioModel> usuariosDash = usuarioService.findBySearch(nomeUsuario, nomeEmpresa, dateMin, dateMax, ativo,
-				page, size, direction);
+				email, page, size, direction);
 
 		List<EgressoDashDTO> dtoLista = usuariosDash.getContent().stream().map(u -> {
 			EgressoDashDTO egressoDash = mapper.map(u, EgressoDashDTO.class);
@@ -114,9 +115,9 @@ public class DashAdmController {
 		Document document = new Document(PageSize.A4);
 		Font bold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 		Font normal = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
-        
+
 		PdfWriter.getInstance(document, outputStream);
-        
+
 		document.open();
 
 		GrupoModel grupoEgresso = grupoService.findByNomeGrupo("EGRESSO");
@@ -133,14 +134,14 @@ public class DashAdmController {
 
 		document.add(new Paragraph("UNIVERSIDADE FEDERAL DO PARÁ"));
 		document.add(new Paragraph("Listagem de Egressos", bold));
-		document.add(new Paragraph("Data: " + LocalDateTime.now().toLocalDate() + "\nHorário: " + LocalDateTime.now().toLocalTime(), bold));
+		document.add(new Paragraph(
+				"Data: " + LocalDateTime.now().toLocalDate() + "\nHorário: " + LocalDateTime.now().toLocalTime(),
+				bold));
 		document.add(new Paragraph("\n\n"));
-		
-        
-		PdfPTable table = new PdfPTable(6); 
-		float[] columnWidths = {1f, 2f, 2f, 2f, 2f, 2f};
-		table.setWidths(columnWidths);
 
+		PdfPTable table = new PdfPTable(6);
+		float[] columnWidths = { 1f, 2f, 2f, 2f, 2f, 2f };
+		table.setWidths(columnWidths);
 
 		table.addCell(new PdfPCell(new Paragraph("")));
 		table.addCell(new PdfPCell(new Paragraph("Nome", bold)));
@@ -148,13 +149,13 @@ public class DashAdmController {
 		table.addCell(new PdfPCell(new Paragraph("E-Mail", bold)));
 		table.addCell(new PdfPCell(new Paragraph("Data Cadastro", bold)));
 		table.addCell(new PdfPCell(new Paragraph("Situação", bold)));
-		
+
 		document.add(table);
 
-		for (int i = 0; i < egressos.size(); i++){
+		for (int i = 0; i < egressos.size(); i++) {
 			PdfPTable t = new PdfPTable(6);
 			t.setWidths(columnWidths);
-			t.addCell(new PdfPCell(new Paragraph((i+1)+"")));
+			t.addCell(new PdfPCell(new Paragraph((i + 1) + "")));
 			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getNome(), normal)));
 			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getNomeEmpresa(), normal)));
 			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getEmail(), normal)));
@@ -163,13 +164,14 @@ public class DashAdmController {
 			document.add(t);
 		}
 
-        document.close();
+		document.close();
 
 		byte[] pdfBytes = outputStream.toByteArray();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
-		headers.setContentDisposition(ContentDisposition.builder("attachment").filename("listagem-egresso-"+ LocalDateTime.now().toLocalDate().toString() +".pdf").build());
+		headers.setContentDisposition(ContentDisposition.builder("attachment")
+				.filename("listagem-egresso-" + LocalDateTime.now().toLocalDate().toString() + ".pdf").build());
 
 		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
 	}

@@ -85,6 +85,6 @@ public interface UsuarioService extends UserDetailsService {
 	 */
 
 	public Page<UsuarioModel> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate dateMin, LocalDate dateMax,
-			Boolean ativo,  Integer page, Integer size, Direction direction);
+			Boolean ativo, String email, Integer page, Integer size, Direction direction);
 
 }

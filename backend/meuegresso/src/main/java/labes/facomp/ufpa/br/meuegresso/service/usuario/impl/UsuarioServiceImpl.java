@@ -95,9 +95,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public Page<UsuarioModel> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate minDate, LocalDate maxDate,
-			Boolean ativo, Integer page, Integer size, Direction direction) {
+			Boolean ativo, String email, Integer page, Integer size, Direction direction) {
 		return usuarioRepository.findBySearch("%" + nomeUsuario + "%", "%" + nomeEmpresa + "%", minDate, maxDate, ativo,
-				PageRequest.of(page, size, Sort.by(direction, "createdDate")));
+				"%" + email + "%", PageRequest.of(page, size, Sort.by(direction, "createdDate")));
 	}
 
 }

@@ -32,13 +32,17 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 	@Query(value = """
 			select u
 			from
-			    usuario u
+				usuario u
+			join
+				u.grupos g
 			where
-			    u.createdDate >= :minDate and u.createdDate <= :maxDate
-			    and u.nome = :nomeUsuario
-			    and u.ativo = :ativo
-			    and u.id in (select e.usuario.id from egresso e where e.emprego.empresa.nome ilike :nomeEmpresa)
+				g.nomeGrupo = 'EGRESSO'
+				and u.createdDate >= :minDate and u.createdDate <= :maxDate
+				and u.nome = :nomeUsuario
+				and u.ativo = :ativo
+				and u.id in (select e.usuario.id from egresso e where e.emprego.empresa.nome ilike :nomeEmpresa)
+				and u.email ilike :email
 			""")
 	Page<UsuarioModel> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate minDate, LocalDate maxDate,
-			Boolean ativo, Pageable page);
+			Boolean ativo, String email, Pageable page);
 }
