@@ -333,7 +333,7 @@ CREATE TABLE public.egresso (
     linkedin_egresso character varying(255),
     matricula_egresso character varying(12),
     nascimento_egresso date NOT NULL,
-    pos_graducao_egresso boolean,
+    pos_graduacao_egresso boolean,
     remuneracao_bolsa_egresso double precision,
     created_by integer,
     last_modified_by integer,
