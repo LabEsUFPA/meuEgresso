@@ -101,6 +101,8 @@ public class EgressoController {
                     .body(ResponseType.FAIL_SAVE.getMessage());
         }
 
+        egressoModel.setUsuario(usuarioService.findById(jwtService.getIdUsuario(token)));
+
         egressoService.adicionarEgresso(egressoModel);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseType.SUCCESS_SAVE.getMessage());
