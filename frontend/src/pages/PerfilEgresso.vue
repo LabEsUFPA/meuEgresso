@@ -828,7 +828,6 @@ const profileImageSave = () => {
 }
 
 async function handleSubmitHeader (values: any) {
-  console.log('123')
   jsonResponse.usuario.nome = values.geral.nome
   if (values.geral.linkedin !== '' && values.geral.linkedin !== undefined) {
     jsonResponse.linkedin = values.geral.linkedin
@@ -1391,11 +1390,13 @@ onMounted(() => {
   estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
 
   cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
-  watch(() => dataEgresso.value.localizacao.pais, (newValue) => {
+  watch(pais, () => {
+    console.log('pais')
     formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
     formLocalizacao.value?.setFieldValue('localizacao.estado', '')
     if (formLocalizacao.value) {
       dataEgresso.value.localizacao.cidade = ''
+      dataEgresso.value.localizacao.estado = ''
     }
     setTimeout(() => {
       cidadeInput.value = ''
@@ -1403,7 +1404,7 @@ onMounted(() => {
     }, 10)
   })
 
-  watch(() => dataEgresso.value.localizacao.estado, (newValue) => {
+  watch(estado, () => {
     console.log('estado')
     console.log(formLocalizacao.value)
     formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
