@@ -32,6 +32,10 @@ public class EmpresaModel extends Auditable {
     @Column(name = "nome_empresa", unique = true, nullable = false, length = 130)
     private String nome;
 
+    @Builder.Default
+    @Column(name = "empresa_is_emprego", unique = false, nullable = false)
+    private Boolean isEmprego = true;
+
     @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     @JoinColumn(name = "endereco_empresa", unique = false, nullable = true)
     private EnderecoModel endereco;
