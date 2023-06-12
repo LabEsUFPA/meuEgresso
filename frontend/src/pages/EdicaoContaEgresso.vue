@@ -131,9 +131,7 @@ let dataUserUpdate = {
   username: '',
   email: '',
   nome: '',
-  password: '',
-  idGrupo: 0,
-  nomeGrupo: ''
+  password: ''
 }
 
 const error = ref(false)
@@ -165,9 +163,7 @@ const handleSubmit = async (submitData: any) => {
     username: usuario?.username,
     email: submitData?.email,
     nome: submitData?.name,
-    password: submitData?.password,
-    idGrupo: usuario?.grupos[0].id,
-    nomeGrupo: usuario?.grupos[0].nomeGrupo
+    password: submitData?.password
   }
 
   const responseValidation = await useEditaContaUsuarioStore().updateContaUsuario(
@@ -175,9 +171,7 @@ const handleSubmit = async (submitData: any) => {
     dataUserUpdate.username,
     dataUserUpdate.email,
     dataUserUpdate.nome,
-    dataUserUpdate.password,
-    dataUserUpdate.idGrupo,
-    dataUserUpdate.nomeGrupo
+    dataUserUpdate.password
   )
 
   if (responseValidation.status === 201) {

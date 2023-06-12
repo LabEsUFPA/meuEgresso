@@ -50,7 +50,7 @@ public class UsuarioAdmController {
 	 * @since 18/04/2023
 	 */
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
 	public List<UsuarioAuthDTO> consultarUsuarios() {
 		return mapper.map(usuarioService.findAll(), new TypeToken<List<UsuarioAuthDTO>>() {
 		}.getType());

@@ -5,6 +5,7 @@ export namespace API {
     method: string
     route: string
     body?: Record<string, any>
+    params?: Record<string, any>
   }
 
   export interface Response {
@@ -39,6 +40,7 @@ export namespace models {
     password: string
     email: string
     nome: string
+    registration?: string
     egresso?: {
       id: number
       matricula: number
@@ -264,22 +266,70 @@ export namespace models {
     }
 
     export interface AllChartSeries {
-      company: PieChartModel | null
-      postGraduateCourse: PieChartModel | null
-      postGraduateLocal: PieChartModel | null
-      scholarshipType: PieChartModel | null
-      remuneration: BarChartModel | null
-      interestInPost: PieChartModel | null
-      acting: PieChartModel | null
-      scholar: PieChartModel | null
-      quotas: PieChartModel | null
-      shareHolder: PieChartModel | null
-      postGraduate: PieChartModel | null
-      student: PieChartModel | null
-      wage: PieChartModel | null
-      sector: PieChartModel | null
-      gender: PieChartModel | null
-      age: BarChartModel | null
+      company: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      postGraduateCourse: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      postGraduateLocal: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      scholarshipType: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      remuneration: {
+        series: BarChartModel
+        error: boolean
+      } | null
+      interestInPost: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      acting: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      scholar: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      quotas: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      shareHolder: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      postGraduate: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      student: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      wage: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      sector: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      gender: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      age: {
+        series: BarChartModel
+        error: boolean
+      } | null
     }
   }
 

@@ -81,7 +81,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getPostGraduateCourseData () {
@@ -100,7 +103,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getPostGraduateLocalData () {
@@ -119,7 +125,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getScholarshipTypeData () {
@@ -138,7 +147,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getRemunerationData () {
@@ -157,7 +169,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return x.length > 0 && y.length > 0 ? { x, y } : null
+      return {
+        series: { x, y },
+        error: response?.status !== 200
+      }
     },
 
     async getInterestInPostData () {
@@ -176,7 +191,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getActingData () {
@@ -195,7 +213,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getScholarData () {
@@ -214,7 +235,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getQuotasData () {
@@ -233,7 +257,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getShareHolderData () {
@@ -252,7 +279,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getPostGraduateData () {
@@ -271,7 +301,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getStudentData () {
@@ -290,7 +323,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getWageData () {
@@ -309,7 +345,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getSectorData () {
@@ -328,7 +367,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getGenderData () {
@@ -347,7 +389,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return values.length > 0 && legend.length > 0 ? { values, legend } : null
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
+      }
     },
 
     async getAgeData () {
@@ -366,7 +411,10 @@ export const useGraficoStore = defineStore('GraficoStore', {
         })
       }
 
-      return x.length > 0 && y.length > 0 ? { x, y } : null
+      return {
+        series: { x, y },
+        error: response?.status !== 200
+      }
     }
   }
 })

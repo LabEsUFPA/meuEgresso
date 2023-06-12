@@ -20,12 +20,15 @@ export default [
         path: '/cadastro-admin',
         component: async () => await import('src/pages/CadastroAdmin.vue'),
         meta: {
-          requiresAuth: true
+          requiresAuthAdmin: true
         }
       },
       {
         path: '/cadastro-anuncio',
-        component: async () => await import('src/pages/CadastroAnuncio.vue')
+        component: async () => await import('src/pages/CadastroAnuncio.vue'),
+        meta: {
+          requiresAuth: true
+        }
       },
       {
         path: '/egresso',
