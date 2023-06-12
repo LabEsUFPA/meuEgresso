@@ -96,12 +96,10 @@ public class EgressoController {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .body(ResponseType.FAIL_SAVE.getMessage());
         }
-        if (!validaCursoPos(egressoModel)) {
+        if (!validaCursoPos(egressoModel, egressoCadastroDTO)) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .body(ResponseType.FAIL_SAVE.getMessage());
         }
-
-        egressoModel.setUsuario(usuarioService.findById(jwtService.getIdUsuario(token)));
 
         egressoService.adicionarEgresso(egressoModel);
 
@@ -311,4 +309,28 @@ public class EgressoController {
         }
         return true;
     }
+
+    private boolean validaCursoPos(EgressoModel egressoModel, EgressoCadastroDTO egressoCadastroDTO) {
+        if (egressoModel.getTitulacao() != null) {
+            CursoModel cursoModelNoBanco = cursoService.findById(egressoCadastroDTO.getTitulacao().getCurso());
+            if (cursoModelNoBanco != null) {
+                egressoModel.getTitulacao().setCurso(cursoModelNoBanco);
+            } else {
+                return false;
+            }
+
+            EmpresaModel instituicaoModelNoBanco = empresaService
+                    .findById(egressoCadastroDTO.getTitulacao().getInstituicao());
+
+            if (instituicaoModelNoBanco != null) {
+                egressoModel.getTitulacao().setEmpresa(instituicaoModelNoBanco);
+            } else {
+                return false;
+            }
+            egressoModel.getTitulacao().setEgresso(egressoModel);
+
+        }
+        return true;
+    }
+
 }
