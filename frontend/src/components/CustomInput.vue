@@ -63,6 +63,7 @@
             :required="required"
             :step="step"
             :maxlength="maxLength"
+            v-model="inputValue"
             @update:model-value="handleInput"
             @focus="() => {
               focused = true

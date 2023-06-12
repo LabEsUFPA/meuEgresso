@@ -62,8 +62,7 @@
 import FolderSection from 'src/components/FolderSection.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { Form } from 'vee-validate'
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { Country, State, City } from 'country-state-city'
 import { mdiMapMarker } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
@@ -77,7 +76,6 @@ if (storage.has('loggedEgresso')) {
 
 const pais = ref('')
 const estado = ref('')
-const form = ref<typeof Form | null>(null)
 
   interface Props {
     isInput?: boolean

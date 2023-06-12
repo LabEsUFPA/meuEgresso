@@ -102,7 +102,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { OUpload, section, OField, OButton } from '@oruga-ui/oruga-next'
+import { OUpload, OField, OButton } from '@oruga-ui/oruga-next'
 import ButtonActionIcon from '../components/ButtonActionIcon.vue'
 import { usePerfilEgressoStore } from '../store/PerfilEgressoStore'
 import classNames from 'classnames'

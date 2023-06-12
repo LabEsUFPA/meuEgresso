@@ -42,7 +42,7 @@
             >
               <ProfileImage
                 ref="profileImageRef"
-                @imageUploadBack="profileImageSave"
+                @image-upload-back="profileImageSave"
                 @remove="softRemoveImageEgresso"
                 :img-url="dataEgresso.profileHead.image"
                 img-default="/src/assets/profile-pic.png"
@@ -231,7 +231,7 @@
                   name="geral.genero"
                   :placeholder="dataEgresso.geral.genero"
                   label="Gênero"
-                  :options="$store.generos"
+                  :options="$storeCadastro.generos"
                   required
                   :pre-filled="true"
                 />
@@ -266,6 +266,8 @@
             :is-input="dataEgresso.academico.isInput"
             :bools="bools"
             :bolsa-holder="placeHolders.bolsaNome"
+            :instituicao-holder="dataEgresso.academico.posGrad.local"
+            :curso-holder="dataEgresso.academico.posGrad.curso"
           >
             <template #EditButton>
               <h1 class="relative">
@@ -651,9 +653,9 @@ import CustomPerfilData from 'src/components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import { Country, State, City } from 'country-state-city'
-
 import { computed, ref, watch, onMounted } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
+import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import { Form } from 'vee-validate'
 import { object, string, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
@@ -661,7 +663,6 @@ import { useLoginStore } from 'src/store/LoginStore'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import FolderAcademico from 'src/components/FolderAcademico.vue'
 import FolderCarreira from 'src/components/FolderCarreira.vue'
-// import FolderLocalizacao from 'src/components/FolderLocalizacao.vue'
 import FolderAdicionais from 'src/components/FolderAdicionais.vue'
 import ProfileImage from 'src/components/ProfileImage.vue'
 import {
@@ -681,9 +682,8 @@ import { useRoute } from 'vue-router'
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const $route = useRoute()
-const $store = usePerfilEgressoStore()
+const $storeCadastro = useCadastroEgressoStore()
 const egressoStore = usePerfilEgressoStore()
-
 const storage = new LocalStorage()
 const formHeader = ref<typeof Form | null>(null)
 const formGeral = ref<typeof Form | null>(null)
@@ -728,7 +728,6 @@ const cities = computed(() => {
   return filteredCities
 })
 
-//
 const stagedChanges = ref({
   profileHead: {
     removedImage: false
@@ -736,7 +735,7 @@ const stagedChanges = ref({
 })
 
 if (storage.has('loggedEgresso')) {
-  $store.fetchAll()
+  $storeCadastro.fetchAll()
 }
 
 const isPublic = computed(() => {
@@ -762,6 +761,7 @@ const profileImageRef = ref<typeof ProfileImage | null>(null)
 const profileImageSave = () => {
   return profileImageRef?.value?.imageUploadBack()
 }
+
 async function handleSubmitHeader (values: any) {
   jsonResponse.usuario.nome = values.geral.nome
   if (values.geral.linkedin !== '' && values.geral.linkedin !== undefined) {
@@ -815,6 +815,7 @@ async function handleSubmitGeral (values: any) {
 }
 
 async function handleSubmitAcademico (values: any) {
+  console.log(values)
   const cotas: Array<{ id: number }> | null = []
   if (values.academico.cotista.value) {
     if (values.academico.cotista.tipos.escola) {
@@ -853,12 +854,10 @@ async function handleSubmitAcademico (values: any) {
           titulacaoId: 2
         },
         curso: {
-          id: 1,
-          nome: values.academico.posGrad.curso
+          id: values.academico.posGrad.curso
         },
         empresa: {
-          id: 1,
-          nome: values.academico.posGrad.local
+          id: values.academico.posGrad.local
 
         },
         titulacao: {
@@ -867,8 +866,16 @@ async function handleSubmitAcademico (values: any) {
       }
       jsonResponse.titulacao = titulacao
     } else {
-      jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
-      jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
+      const curso = {
+        id: values.academico.posGrad.curso
+      }
+      const empresa = {
+        id: values.academico.posGrad.local
+
+      }
+      jsonResponse.titulacao.empresa = empresa
+
+      jsonResponse.titulacao.curso = curso
     }
   }
 
@@ -885,7 +892,6 @@ async function handleSubmitAcademico (values: any) {
   }
   if (values.academico.bolsista.value) {
     jsonResponse.bolsa = bolsa
-    // jsonResponse.bolsa.id = values.academico.bolsista.tipo
     jsonResponse.remuneracaoBolsa = values.academico.bolsista.remuneracao
   } else {
     jsonResponse.bolsa = null
@@ -1039,6 +1045,8 @@ const dataEgresso = ref({
   bolsaId: 0,
   areaAtuacaoId: 0,
   faixaSalarialId: 0,
+  cursoId: 0,
+  localPosId: 0,
   grupos: [''],
 
   geral: {
@@ -1072,7 +1080,7 @@ const dataEgresso = ref({
     bolsista: {
       value: false,
       tipo: '',
-      remuneracao: ''
+      remuneracao: '0'
     },
     posGrad: {
       value: false,
@@ -1116,6 +1124,7 @@ const bools = ref({
 
 const placeHolders = ref({
   bolsaNome: dataEgresso.value.academico.bolsista.tipo,
+
   areaAtuacao: dataEgresso.value.carreira.area,
   setorAtuacao: dataEgresso.value.carreira.setor,
   faixaSalarial: dataEgresso.value.carreira.faixaSalarial
@@ -1173,6 +1182,8 @@ async function fetchUpdateEgresso () {
     bolsaId: json.bolsa?.id,
     areaAtuacaoId: json.emprego?.areaAtuacao?.id,
     faixaSalarialId: json.emprego?.faixaSalarial?.id,
+    localPosId: json.titulacao?.empresa?.id,
+    cursoId: json.titulacao?.curso?.id,
     grupos: [''],
 
     geral:
@@ -1288,7 +1299,9 @@ async function fetchUpdateEgresso () {
   })
   formAcademico.value?.setValues({
     academico: dataEgresso.value.academico,
-    'academico.bolsista.tipo': dataEgresso.value.bolsaId
+    'academico.bolsista.tipo': dataEgresso.value.bolsaId,
+    'academico.posGrad.curso': dataEgresso.value.cursoId,
+    'academico.posGrad.local': dataEgresso.value.localPosId
   })
   formCarreira.value?.setValues({
     carreira: dataEgresso.value.carreira,
@@ -1339,7 +1352,6 @@ onMounted(() => {
 function fetchPublicEgresso (id: number) {
   return egressoStore.fetchPublicEgresso(id)
 }
-
 const schemaHeader = object().shape({
   geral: object({
     nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
@@ -1420,6 +1432,7 @@ const schemaAcademico = object().shape({
     desejaPos: boolean()
   })
 })
+
 const schemaCarreira = object().shape({
   carreira: object({
     area: string().required('Campo obrigatório'),

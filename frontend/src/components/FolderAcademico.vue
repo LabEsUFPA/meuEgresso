@@ -45,13 +45,16 @@
             class="mb-5"
             name="academico.cotista.tipos.renda"
             label="Cota Renda"
+            :required="bools.cotista"
             :disabled="!bools.cotista"
+            :pre-filled="true"
           />
 
           <CustomCheckbox
             class="mb-5"
             name="academico.cotista.tipos.escola"
             label="Cota Escola"
+            :required="bools.cotista"
             :disabled="!bools.cotista"
           />
 
@@ -59,12 +62,14 @@
             class="mb-5"
             name="academico.cotista.tipos.raca"
             label="Autodeclaração de Raça"
+            :required="bools.cotista"
             :disabled="!bools.cotista"
           />
 
           <CustomCheckbox
             name="academico.cotista.tipos.quilombolaIndigena"
             label="Quilombola/Indigena"
+            :required="bools.cotista"
             :disabled="!bools.cotista"
           />
         </div>
@@ -80,8 +85,8 @@
           class="mb-5"
           name="academico.bolsista.tipo"
           label="Tipo de Bolsa"
-          :placeholder="bolsaHolder.placeholder"
-          :options="$store.tiposBolsa"
+          :placeholder="placeHolders.bolsaHolder"
+          :options="$storeCadastro.tiposBolsa"
           :required="bools.bolsista"
           :disabled="!bools.bolsista"
           :pre-filled="true"
@@ -93,8 +98,10 @@
           label="Remuneração da bolsa"
           type="number"
           step="0.01"
+          placeholder="R$ 0,00"
           :required="bools.bolsista"
           :disabled="!bools.bolsista"
+          money
         />
 
         <CustomCheckbox
@@ -104,21 +111,50 @@
           label="Pós-graduação"
         />
 
-        <CustomInput
-          class="mb-5"
+        <CustomSelect
+          class="mb-1"
           name="academico.posGrad.local"
           label="Instituição da pós-graduação"
+          :placeholder="placeHolders.instituicaoHolder"
+          :options="$storeCadastro.instituicoes"
           :required="bools.posGrad"
           :disabled="!bools.posGrad"
+          :is-fetching="$storeCadastro.isFetchingUniversidades"
+          @typing="$storeCadastro.fetchUniversidadesAsync($event, true)"
+          @infinite-scroll="$storeCadastro.fetchMoreUniversidadesAsync"
+          infinite
+          id="posGradLocal"
+          :pre-filled="true"
         />
 
-        <CustomInput
-          class="mb-5"
+        <button
+          type="button"
+          class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
+          :disabled="!bools.posGrad"
+          @click="dialogInstituicao = true"
+        >
+          Não encontrou sua instituição? Clique aqui
+        </button>
+
+        <CustomSelect
+          class="mb-1"
           name="academico.posGrad.curso"
           label="Curso de pós-graduação"
+          :placeholder="placeHolders.cursoHolder"
+          :options="$storeCadastro.cursos"
           :required="bools.posGrad"
           :disabled="!bools.posGrad"
+          :pre-filled="true"
         />
+
+        <button
+          type="button"
+          class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
+          :disabled="!bools.posGrad"
+          @click="dialogCurso = true"
+        >
+          Não encontrou seu curso? Clique aqui
+        </button>
 
         <CustomCheckbox
           name="academico.posGrad.desejaPos"
@@ -136,6 +172,52 @@
       <slot name="EditButton" />
     </template>
   </FolderSection>
+  <CustomDialog v-model="dialogInstituicao">
+    <div class="h-full flex justify-center gap-10 flex-col items-center">
+      <div class="text-2xl font-semibold text-cyan-800">
+        Cadastrar instituição
+      </div>
+
+      <Form
+        :validation-schema="instituicaoSchema"
+        @submit="handleNewInstituicao"
+        class="flex flex-col items-center gap-4"
+      >
+        <CustomInput
+          name="nome"
+          label="Nome da instituição de ensino"
+          placeholder="Universidade Federal do Pará (UFPA)"
+        />
+
+        <CustomButton type="submit">
+          Cadastrar
+        </CustomButton>
+      </Form>
+    </div>
+  </CustomDialog>
+  <CustomDialog v-model="dialogCurso">
+    <div class="h-full flex justify-center gap-10 flex-col items-center">
+      <div class="text-2xl font-semibold text-cyan-800">
+        Cadastrar curso
+      </div>
+
+      <Form
+        :validation-schema="cursoSchema"
+        @submit="handleNewCurso"
+        class="flex flex-col items-center gap-4"
+      >
+        <CustomInput
+          name="nome"
+          label="Nome da curso"
+          placeholder="Engenharia de software"
+        />
+
+        <CustomButton type="submit">
+          Cadastrar
+        </CustomButton>
+      </Form>
+    </div>
+  </CustomDialog>
 </template>
 
 <script lang="ts" setup>
@@ -143,30 +225,32 @@ import FolderSection from 'src/components/FolderSection.vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
+import CustomButton from 'src/components/CustomButton.vue'
+import CustomDialog from 'src/components/CustomDialog.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 import { mdiSchool } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
-import { propsToAttrMap } from '@vue/shared'
-const $store = useCadastroEgressoStore()
+import { object, string } from 'yup'
+
+const $storeCadastro = useCadastroEgressoStore()
 const storage = new LocalStorage()
 
 if (storage.has('loggedEgresso')) {
-  $store.fetchAll()
+  $storeCadastro.fetchAll()
 }
 
-const pais = ref('')
-const estado = ref('')
-const form = ref<typeof Form | null>(null)
 const missingDigits = ref(0)
-
+const dialogInstituicao = ref(false)
+const dialogCurso = ref(false)
 interface Props {
   isInput?: boolean
   bools?: any
   bolsaHolder?: string
-
+  instituicaoHolder: string,
+  cursoHolder: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -177,7 +261,9 @@ const props = withDefaults(defineProps<Props>(), {
     posGrad: false,
     palestras: false
   },
-  bolsaHolder: 'Selecione'
+  bolsaHolder: 'Selecione',
+  instituicaoHolder: 'Selecione',
+  cursoHolder: 'Selecione'
 
 })
 const bools = ref({
@@ -186,32 +272,39 @@ const bools = ref({
   posGrad: props.bools?.posGrad,
   palestras: props.bools?.palestras
 })
-const bolsaHolder = ref({
-  placeholder: props.bolsaHolder
+const placeHolders = ref({
+  bolsaHolder: props.bolsaHolder,
+  instituicaoHolder: props.instituicaoHolder,
+  cursoHolder: props.cursoHolder
 })
 
 const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
 }
 
-onMounted(() => {
-  watch(pais, () => {
-    form.value?.setFieldValue('localizacao.cidade', '')
-    form.value?.setFieldValue('localizacao.estado', '')
-  })
+async function handleNewInstituicao (event: any) {
+  const response = await $storeCadastro.cadastrarInstituicao(event.nome)
 
-  watch(estado, () => {
-    form.value?.setFieldValue('localizacao.cidade', '')
-  })
-
-  if (storage.has('loggedUser')) {
-    const userData = JSON.parse(storage.get('loggedUser'))
-
-    form.value?.setFieldValue('geral.email', userData.email)
-    form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
-      return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
-    }).join(' '))
+  if (response?.status === 201) {
+    alert('Instituição cadastrada com sucesso.')
+    dialogInstituicao.value = false
   }
+}
+
+async function handleNewCurso (event: any) {
+  const response = await $storeCadastro.cadastrarCurso(event.nome)
+
+  if (response?.status === 201) {
+    alert('Instituição cadastrada com sucesso.')
+    dialogCurso.value = false
+  }
+}
+const instituicaoSchema = object().shape({
+  nome: string().required('Insira o nome da instituição')
+})
+
+const cursoSchema = object().shape({
+  nome: string().required('Insira o nome do curso')
 })
 watch(() => props.bools.cotista, (newValue) => {
   bools.value.cotista = newValue
@@ -230,7 +323,13 @@ watch(() => props.bools.palestras, (newValue) => {
 })
 
 watch(() => props.bolsaHolder, (newValue) => {
-  bolsaHolder.value.placeholder = newValue
+  placeHolders.value.bolsaHolder = newValue
+})
+watch(() => props.instituicaoHolder, (newValue) => {
+  placeHolders.value.instituicaoHolder = newValue
+})
+watch(() => props.cursoHolder, (newValue) => {
+  placeHolders.value.cursoHolder = newValue
 })
 
 </script>

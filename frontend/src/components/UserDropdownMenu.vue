@@ -74,10 +74,9 @@ const pinia = createPinia()
 const app = createApp({})
 app.use(pinia)
 
-const { userLogged } = props
 const store = useLoginStore()
-const userLoggedName = ref(userLogged ? store.getLoggedUser()?.username : '')
-const userLoggedGroupID = ref(userLogged ? store.getLoggedUser()?.grupos[0].id : '')
+const userLoggedName = ref(props.userLogged ? store.getLoggedUser()?.username : '')
+const userLoggedGroupID = ref(props.userLogged ? store.getLoggedUser()?.grupos[0].id : '')
 
 const userMenuIsOpen = ref(false)
 const toggleUserMenu = () => {
