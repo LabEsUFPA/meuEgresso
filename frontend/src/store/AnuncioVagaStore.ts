@@ -73,7 +73,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
     async fetchBusca (page: number, size: number) {
       const response = await Api.request({
         method: 'get',
-        route: '/anuncio',
+        route: '/anuncio/busca',
         params: { page, size }
       })
 
@@ -103,7 +103,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       const areaEmprego = areasEmpregos.join()
       const response = await Api.request({
         method: 'get',
-        route: '/anuncio',
+        route: '/anuncio/busca',
         params: { titulo, areaEmprego, page, size }
       })
       if (response?.status === 200) {
@@ -131,7 +131,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
     async fetchBuscaAnuncioTitulo (titulo: string, page: number, size: number) {
       const response = await Api.request({
         method: 'get',
-        route: '/anuncio',
+        route: '/anuncio/busca',
         params: { titulo, page, size }
       })
       if (response?.status === 200) {
@@ -160,9 +160,10 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       const areaEmprego = areasEmpregos.join()
       const response = await Api.request({
         method: 'get',
-        route: '/anuncio',
+        route: '/anuncio/busca',
         params: { areaEmprego, page, size }
       })
+      console.log()
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
         console.log('data:', response.data)
