@@ -103,28 +103,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 				"%" + email + "%", PageRequest.of(page, size, Sort.by(direction, "createdDate")));
 	}
 
-	public Map<String, LocalDate> findByCompleto(){
-		Map<String, LocalDate> completos = new HashMap<>();
-		usuarioRepository.findByCompleto().forEach(e -> {
-			completos.put(e.get(0, String.class), e.get(1, LocalDate.class));
-		});
-		return completos;
-	}
+	
+	public Map<String, Map<String, LocalDate>> setStatus() {
+		Map<String, Map<String, LocalDate>> usuarioStatusMap = new HashMap<>();
+		usuarioRepository.setStatus().forEach(e -> usuarioStatusMap.put(
+				e.get(0, String.class),
+				Map.of(e.get(1, String.class), e.get(2, LocalDate.class))));
 
-	public Map<String, LocalDate> findByIncompleto(){
-		Map<String, LocalDate> incompletos = new HashMap<>();
-		usuarioRepository.findByCompleto().forEach(e -> {
-			incompletos.put(e.get(0, String.class), e.get(1, LocalDate.class));
-		});
-		return incompletos;
-	}
-
-	public Map<String, LocalDate> findByPendente(){
-		Map<String, LocalDate> pendentes = new HashMap<>();
-		usuarioRepository.findByCompleto().forEach(e -> {
-			pendentes.put(e.get(0, String.class), e.get(1, LocalDate.class));
-		});
-		return pendentes;
+		return usuarioStatusMap;
 	}
 
 }

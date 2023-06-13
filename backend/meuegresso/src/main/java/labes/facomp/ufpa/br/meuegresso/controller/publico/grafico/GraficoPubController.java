@@ -1,8 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.publico.grafico;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

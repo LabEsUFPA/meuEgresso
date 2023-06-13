@@ -1,6 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.controller.administrador.usuario;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioNotificacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
@@ -92,6 +95,22 @@ public class UsuarioAdmController {
 			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
 		return ResponseType.FAIL_DELETE.getMessage();
+	}
+
+
+	/**
+	 * Endpoint responsável por notificar situação do cadastro do usuário
+	 * 
+	 * @return Uma instância de UsuarioNotificacaoDTO contendo as informações de status dos usuários.
+	 * @author Eude Monteiro
+	 * @since 12/06/2023
+	 */
+	@GetMapping(value = "/tipoStatus")
+	@ResponseStatus(code = HttpStatus.OK)
+	public UsuarioNotificacaoDTO setStatus() {
+		Map<String, Map<String, LocalDate>> usuarioStatus = usuarioService.setStatus();
+
+		return new UsuarioNotificacaoDTO(usuarioStatus);
 	}
 
 }
