@@ -24,7 +24,7 @@
             class="ml-2"
           />
 
-          <h1 class="text-2xl sm:text-3xl font-bold ml-2 ">
+          <h1 class="text-[32px] sm:text-3xl font-bold ml-2 ">
             E-mail de atualização
           </h1>
         </div>
@@ -41,50 +41,81 @@
           <div class="flex flex-col w-[960px] bg-white rounded-bl-2xl rounded-br-2xl overflow-hidden mx-4 sm:mx-6">
             <div class="p-6 sm:p-8 container mx-auto items-start border-b ml-4 ">
               <h1 class=" w-[193%]">
-                <h2 class="text-2xl font-semibold text-neutral-900">
-                  Assunto
-                </h2>
-                <CustomInput
-                  class="mt-1.5"
-                  type="textarea"
-                  name="assunto"
-                />
-
-                <div class="mt-10 mb-10">
-                  <h2 class="text-2xl font-semibold text-neutral-900">
-                    Conteúdo
-                  </h2>
-
+                <h3 class="gap-[10px]">
                   <CustomInput
-                    class="mt-1.5"
+                    class="mt-1.5 "
+                    placeholder="Assunto do E-mail"
+                    type="text"
+                    name="assunto"
+                    input-class="w-[25%] h-[40px]"
+                    custom-label
+                    required
+                  >
+                    <template #label>
+                      <h2 class="text-2xl font-semibold text-neutral-900 inline">
+                        Assunto
+                      </h2>
+                    </template>
+                  </CustomInput>
+                </h3>
+
+                <div class="mt-7 mb-10">
+                  <CustomInput
+                    class="mt-1"
+                    placeholder="Conteúdo do E-mail"
                     type="textarea"
                     name="conteudo"
-                  />
+                    :input-class="classNames(['flex w-full'])"
+                    height="560px"
+                    :max-length="2000"
+                    custom-label
+                    required
+                  >
+                    <template #label>
+                      <h2 class="text-2xl font-semibold text-neutral-900 inline ">
+                        Conteúdo
+                      </h2>
+                    </template>
+                  </CustomInput>
                 </div>
               </h1>
-              <div class="mt-10 mb-10 ">
-                <h1 class="text-lg font-medium text-neutral-900 ml-1">
-                  Data do próximo envio
-                </h1>
-
+              <div class="mt-7 mb-5 ">
                 <CustomInput
-                  class="mb-5 mt-1.5"
+                  class="mb-5 mt-1.5 "
                   name="dataEnvio"
                   type="date"
+                  custom-label
                   required
-                />
+                >
+                  <template #label>
+                    <div class="text-lg font-medium text-neutral-900 inline">
+                      Data do próximo envio
+                    </div>
+                  </template>
+                </CustomInput>
               </div>
             </div>
-            <div class="flex flex-col items-start sm:flex-row justify-end gap-4 p-4 mt-10">
-              <CustomButton variant="flat">
-                Cancelar
+            <div class="flex flex-col items-start sm:flex-row justify-end gap-4 p-4 m-1 mr-5 mb-5">
+              <CustomButton
+                variant="flat"
+                color="gray"
+                tag="button"
+                @click="handleCancel"
+              >
+                <h1 class=" text-gray-400 px-10 py-1.5">
+                  Cancelar
+                </h1>
               </CustomButton>
 
               <CustomButton
+                class=""
                 color="emerald"
                 type="submit"
+                tag="button"
               >
-                Salvar
+                <h1 class="px-10 py-1.5">
+                  Salvar
+                </h1>
               </CustomButton>
             </div>
           </div>
@@ -95,6 +126,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import {
   mdiEmail,
@@ -103,8 +135,10 @@ import {
 } from '@mdi/js'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomInput from 'src/components/CustomInput.vue'
-// import { ref } from 'vue'
+import classNames from 'classnames'
 import { object, string } from 'yup'
+import { Form } from 'vee-validate'
+const form = ref<typeof Form | null>(null)
 
 async function handleSubmit (values: any) {
   console.log('sub')
@@ -126,5 +160,31 @@ const schema = object().shape({
     }
     return true
   })
+})
+
+async function handleCancel (values: any) {
+  console.log('cancelar')
+}
+onMounted(() => {
+  form.value?.setFieldValue('assunto', 'Atualização Cadastral - Meu Egresso')
+  const message = `Prezado(a) [nome do aluno],
+
+Espero que esta mensagem o encontre bem. Gostaríamos de lembrá-lo(a) da importância de manter seu cadastro atualizado em nosso portal Meu Egresso.
+
+Para garantir que possamos manter contato com você e fornecer informações importantes sobre eventos, oportunidades de emprego, cursos e outros assuntos relevantes, solicitamos que atualize suas informações pessoais e profissionais.
+
+Pedimos que acesse o portal Meu Egresso (link) e faça login com suas credenciais. Em seguida, atualize suas informações no seu perfil.
+
+Caso tenha alguma dificuldade para acessar o portal ou atualizar suas informações, entre em contato conosco pelo e-mail (e-mail) ou telefone (número). Teremos o maior prazer em ajudá-lo(a).
+
+Agradecemos antecipadamente pela sua colaboração em manter suas informações atualizadas. Isso nos ajuda a manter contato com você e oferecer um serviço mais eficiente e personalizado.
+
+Atenciosamente,
+
+[Seu nome]
+
+[Assinatura]`
+
+  form.value?.setFieldValue('conteudo', message)
 })
 </script>

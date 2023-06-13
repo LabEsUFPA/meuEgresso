@@ -9,17 +9,26 @@
       })"
     >
       <template
-        v-if="label"
         #label
       >
-        {{ label }}
-        <sup
-          class="text-red-500"
-          v-if="required"
-        >
-          *
-        </sup>
+        <div v-if="label">
+          {{ label }}
+          <sup
+            class="text-red-500"
+            v-if="required"
+          >*</sup>
+        </div>
+        <div v-if="customLabel">
+          <div class="mb-1.5">
+            <slot name="label" />
+            <sup
+              class="text-red-500"
+              v-if="required"
+            >*</sup>
+          </div>
+        </div>
       </template>
+
       <template #default>
         <div
           :class="classNames({
@@ -82,7 +91,7 @@
             :root-class="classNames({
               ['col-span-7']: iconPath,
               ['col-span-8']: !iconPath,
-              ['w-full md:w-1/2 h-32']: true
+              ['w-full md:w-1/2']: true
             })"
             :input-class="classNames({
               ['bg-gray-100 cursor-not-allowed']: disabled,
@@ -97,6 +106,7 @@
             :data-maska="mask"
             :step="step"
             :maxlength="maxLength"
+            :style="{ height: height || '128px' }"
             v-model="inputValue"
             @update:model-value="handleInput"
             @focus="focused = true"
@@ -110,7 +120,7 @@
           v-if="meta.validated"
           class="text-red-500"
         >
-          {{ meta.valid ? null : customErrorMessage? props.errorMessage : errorMessage }}
+          {{ meta.valid ? null : customErrorMessage ? props.errorMessage : errorMessage }}
         </div>
         <div :class="classHelperText">
           {{ helperText }}
@@ -144,11 +154,13 @@ interface Props {
   maxLength?: number | string
   imgIcon?: boolean
   step?: number | string
-  disabled?: boolean,
-  classHelperText?: string,
-  errorMessage?: string,
-  customErrorMessage?: boolean,
+  disabled?: boolean
+  classHelperText?: string
+  errorMessage?: string
+  customErrorMessage?: boolean
   withoutValidation?: boolean
+  height?: string | number,
+  customLabel?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -166,7 +178,9 @@ const props = withDefaults(defineProps<Props>(), {
   classHelperText: '',
   errorMessage: '',
   customErrorMessage: false,
-  withoutValidation: false
+  withoutValidation: false,
+  height: '128px',
+  customLabel: false
 })
 
 const focused = ref(false)
