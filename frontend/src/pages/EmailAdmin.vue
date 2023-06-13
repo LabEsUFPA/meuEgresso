@@ -123,6 +123,42 @@
       </Form>
     </div>
   </div>
+  <CustomDialog v-model="dialogSucesso">
+    <div class="h-full flex justify-center items-center">
+      <div class="w-1/2">
+        <div class="text-green-500 text-center mb-3">
+          <SvgIcon
+            type="mdi"
+            size="100"
+            class="inline"
+            :path="mdiCheckCircle"
+          />
+        </div>
+        <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+          E-mail atualizado com sucesso!
+        </h1>
+      </div>
+    </div>
+  </CustomDialog>
+  <CustomDialog
+    v-model="dialogFalha"
+  >
+    <div class="h-full flex justify-center items-center">
+      <div class="w-1/2">
+        <div class="text-red-600 text-center mb-3">
+          <SvgIcon
+            type="mdi"
+            size="100"
+            class="inline"
+            :path="mdiAlertCircle"
+          />
+        </div>
+        <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+          Falha ao atualizar o E-mail
+        </h1>
+      </div>
+    </div>
+  </CustomDialog>
 </template>
 
 <script setup lang="ts">
@@ -130,7 +166,9 @@ import { ref, onMounted } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import {
   mdiEmail,
-  mdiChevronLeft
+  mdiChevronLeft,
+  mdiCheckCircle,
+  mdiAlertCircle
 
 } from '@mdi/js'
 import CustomButton from 'src/components/CustomButton.vue'
@@ -138,10 +176,20 @@ import CustomInput from 'src/components/CustomInput.vue'
 import classNames from 'classnames'
 import { object, string } from 'yup'
 import { Form } from 'vee-validate'
+import CustomDialog from 'src/components/CustomDialog.vue'
+
+const dialogSucesso = ref(false)
+const dialogFalha = ref(false)
 const form = ref<typeof Form | null>(null)
 
 async function handleSubmit (values: any) {
   console.log('sub')
+  const status = 201
+  if (status !== 201) {
+    dialogFalha.value = true
+  } else {
+    dialogSucesso.value = true
+  }
 }
 async function handleFail (values: any) {
   console.log('fail')
