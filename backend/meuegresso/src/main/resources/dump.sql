@@ -780,6 +780,7 @@ CREATE TABLE public.usuario (
     nome_usuario character varying(100) NOT NULL,
     senha_usuario character varying(80) NOT NULL,
     login_usuario character varying(50) NOT NULL,
+    valido_usuario boolean DEFAULT true NOT NULL,
     created_by integer,
     last_modified_by integer
 );
@@ -792,7 +793,7 @@ CREATE TABLE public.usuario (
 
 CREATE TABLE public.usuario_grupo (
     id_usuario integer NOT NULL,
-    grupo haracter varying(10) NOT NULL
+    grupo character varying(10) NOT NULL
 );
 
 
@@ -2314,9 +2315,9 @@ INSERT INTO public.titulacao VALUES (2, true, '2023-06-06 14:52:47.633142', NULL
 -- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.usuario VALUES (1, true, '2023-06-06 14:52:47.22416', NULL, 'admin@admin.com', 'ADMIN ADMIN', '{bcrypt}$2a$10$vh9/MkL4XQyd.fqkQdnWSelTUxPBpDb6qL5W2uWLxLUN0JR9vwRZm', 'ADMIN', NULL, NULL);
-INSERT INTO public.usuario VALUES (2, true, '2023-06-06 14:52:47.232891', NULL, 'secretario@secretario.com', 'SECRETARIO SECRETARIO', '{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy', 'SECRETARIO', NULL, NULL);
-INSERT INTO public.usuario VALUES (3, true, '2023-06-06 14:52:47.241565', NULL, 'egresso@egresso.com', 'EGRESSO EGRESSO', '{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO', 'EGRESSO', NULL, NULL);
+INSERT INTO public.usuario VALUES (1, true, '2023-06-06 14:52:47.22416', NULL, 'admin@admin.com', 'ADMIN ADMIN', '{bcrypt}$2a$10$vh9/MkL4XQyd.fqkQdnWSelTUxPBpDb6qL5W2uWLxLUN0JR9vwRZm', 'ADMIN', true, NULL, NULL);
+INSERT INTO public.usuario VALUES (2, true, '2023-06-06 14:52:47.232891', NULL, 'secretario@secretario.com', 'SECRETARIO SECRETARIO', '{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy', 'SECRETARIO', true, NULL, NULL);
+INSERT INTO public.usuario VALUES (3, true, '2023-06-06 14:52:47.241565', NULL, 'egresso@egresso.com', 'EGRESSO EGRESSO', '{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO', 'EGRESSO', true, NULL, NULL);
 
 
 --

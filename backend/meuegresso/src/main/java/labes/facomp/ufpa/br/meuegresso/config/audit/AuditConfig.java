@@ -37,7 +37,8 @@ public class AuditConfig {
 							: null;
 
 			if (authToken != null) {
-				Integer userId = Integer.parseInt(authToken.getTokenAttributes().get(JwtUtils.USER_ID.getPropriedade()).toString());
+				Integer userId = Integer
+						.parseInt(authToken.getTokenAttributes().get(JwtUtils.USER_ID.getPropriedade()).toString());
 				return Optional.of(userRepository.findById(userId).orElse(null));
 			} else
 				return Optional.ofNullable(null);
