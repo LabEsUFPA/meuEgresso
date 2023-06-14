@@ -30,8 +30,7 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	boolean existsByUsernameIgnoreCase(String username);
 
-
-		@Query(value = """
+	@Query(value = """
 			SELECT u.id_usuario, u.nome_usuario, empr.nome_empresa, u.email, u.created_date,
 			CASE
 				WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL then
