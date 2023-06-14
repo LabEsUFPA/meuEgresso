@@ -5,6 +5,7 @@ export namespace API {
     method: string
     route: string
     body?: Record<string, any>
+    params?: Record<string, any>
   }
 
   export interface Response {
@@ -39,7 +40,7 @@ export namespace models {
     password: string
     email: string
     nome: string
-    registration: string
+    registration?: string
     egresso?: {
       id: number
       matricula: number

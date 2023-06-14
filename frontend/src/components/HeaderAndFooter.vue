@@ -184,7 +184,6 @@ import CustomButton from '../components/CustomButton.vue'
 import UserDropdownMenu from './UserDropdownMenu.vue'
 import CustomDialog from './CustomDialog.vue'
 import LocalStorage from 'src/services/localStorage'
-import { parseToken } from 'src/store/LoginStore'
 
 const store = useLoginStore()
 const userLogged = ref(store.userLogged)
@@ -202,10 +201,15 @@ watch(() => store.userLogged, () => {
 })
 
 const checkEgressRegistration = () => {
-  const loggedUser = JSON.parse(localStorage.getItem('loggedUser') ?? '{}')
-  const userData = parseToken(storage.getToken())
-  if (userData !== null && !userData.isEgresso && loggedUser.grupos[0].nomeGrupo === 'EGRESSO') {
-    egressNotRegistered.value = true
+  try {
+    const loggedUser = JSON.parse(storage.get('loggedUser'))
+    if (loggedUser.scope === 'EGRESSO' && !loggedUser.isEgresso) {
+      egressNotRegistered.value = true
+      return
+    }
+    egressNotRegistered.value = false
+  } catch {
+    egressNotRegistered.value = false
   }
 }
 

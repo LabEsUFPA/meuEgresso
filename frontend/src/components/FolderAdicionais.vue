@@ -134,9 +134,7 @@ onMounted(() => {
     const userData = JSON.parse(storage.get('loggedUser'))
 
     form.value?.setFieldValue('geral.email', userData.email)
-    form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
-      return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
-    }).join(' '))
+    form.value?.setFieldValue('geral.nome', userData.nome)
   }
 })
 watch(() => props.bools.cotista, (newValue) => {

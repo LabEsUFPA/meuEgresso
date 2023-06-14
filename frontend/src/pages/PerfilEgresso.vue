@@ -657,7 +657,6 @@ import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import { Form } from 'vee-validate'
 import { object, string, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
-import { useLoginStore } from 'src/store/LoginStore'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import FolderAcademico from 'src/components/FolderAcademico.vue'
 import FolderCarreira from 'src/components/FolderCarreira.vue'
@@ -790,7 +789,6 @@ async function handleSubmitHeader (values: any) {
 
   if (status === 201 && (responseImage === 201 || responseImage === 200 || responseImage === 204)) {
     dialogSucesso.value = true
-    await useLoginStore().saveUser()
 
     toggleIsInput('profileHead')
     fetchUpdateEgresso()
@@ -807,7 +805,6 @@ async function handleSubmitGeral (values: any) {
   jsonResponse.nascimento = values.geral.nascimento
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
-    await useLoginStore().saveUser()
     toggleIsInput('geral')
   }
 

@@ -333,7 +333,7 @@ CREATE TABLE public.egresso (
     linkedin_egresso character varying(255),
     matricula_egresso character varying(12),
     nascimento_egresso date NOT NULL,
-    pos_graducao_egresso boolean,
+    pos_graduacao_egresso boolean,
     remuneracao_bolsa_egresso double precision,
     created_by integer,
     last_modified_by integer,
@@ -792,7 +792,7 @@ CREATE TABLE public.usuario (
 
 CREATE TABLE public.usuario_grupo (
     id_usuario integer NOT NULL,
-    grupo haracter varying(10) NOT NULL
+    grupo character varying(10) NOT NULL
 );
 
 
