@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.Year;
@@ -275,38 +276,50 @@ public class EgressoServiceImpl implements EgressoService {
 	@Override
 	public Map<LocalDate, Long> countEgressoPorData() {
 		List<Tuple> cadastros = egressoRepository.countEgressoData();
-
-		return cadastros.stream()
-				.collect(Collectors.groupingBy(
-						tuple -> tuple.get(0, java.sql.Date.class)
-								.toLocalDate(),
-						Collectors.counting()));
+	
+		Map<LocalDate, Long> cadastrosPorData = cadastros.stream()
+			.collect(Collectors.groupingBy(
+				tuple -> {
+					LocalDate data = tuple.get(0, java.sql.Date.class)
+						.toLocalDate();
+					return data;
+				},
+				Collectors.counting()
+			));
+	
+		return cadastrosPorData;
 	}
-
+	
 	@Override
 	public Map<Integer, Long> countEgressoPorAno() {
 		List<Tuple> cadastros = egressoRepository.countEgressoData();
 
-		return cadastros.stream()
-				.collect(Collectors.groupingBy(
-						tuple -> Year.of(
-								tuple.get(0, java.sql.Date.class)
-										.toLocalDate()
-										.getYear())
-								.getValue(),
-						Collectors.counting()));
+		Map<Integer, Long> cadastrosPorAno = cadastros.stream()
+            .collect(Collectors.groupingBy(
+                    tuple -> Year.of(
+                            tuple.get(0, java.sql.Date.class)
+                                    .toLocalDate()
+                                    .getYear()
+                    ).getValue(),
+                    Collectors.counting()
+            ));
+				
+		return cadastrosPorAno;
 	}
 
 	@Override
 	public Map<LocalDate, Long> countEgressoPorMesEAno() {
 		List<Tuple> cadastros = egressoRepository.countEgressoData();
-
-		return cadastros.stream()
+	
+		Map<LocalDate, Long> cadastrosPorMesAno = cadastros.stream()
 				.collect(Collectors.groupingBy(
 						tuple -> tuple.get(0, java.sql.Date.class)
 								.toLocalDate()
 								.withDayOfMonth(1),
-						Collectors.counting()));
+						Collectors.counting()
+				));
+	
+		return cadastrosPorMesAno;
 	}
 
 }
