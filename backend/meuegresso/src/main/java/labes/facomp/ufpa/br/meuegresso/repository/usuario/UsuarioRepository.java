@@ -29,7 +29,8 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	boolean existsByUsernameIgnoreCase(String username);
 
-	@Query(value = """
+
+		@Query(value = """
 			SELECT u.id_usuario, u.nome_usuario, empr.nome_empresa, u.email, u.created_date,
 			CASE
 				WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL then
@@ -50,10 +51,7 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 				and u.nome_usuario ilike :nomeUsuario
 				and empr.nome_empresa ilike :nomeEmpresa
 				and u.email ilike :email
-				and u.status = :status
-				and u.created_date >= :minDate::date and u.created_date <= :maxDate::date
-				AND (ug.GRUPO= 'EGRESSO' AND e.usuario_id IS NOT NULL OR u.valido_usuario = FALSE);
-			""", nativeQuery = true)
+			""")
 	Page<UsuarioModel> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate minDate, LocalDate maxDate,
 			Boolean ativo, String email, Pageable page);
 }

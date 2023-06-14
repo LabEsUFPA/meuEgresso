@@ -25,10 +25,5 @@ public class EgressoDashDTO {
 
     private LocalDateTime createdDate;
 
-    private Boolean ativo; // equivalente a aprovado ou pendente
-
-    // Equivalente a usuário com egresso, ou a usuários admin/secretario
-    // Falso caso contrário
-    private Boolean completo;
-
+    private String status; // equivalente a aprovado ou pendente
 }
