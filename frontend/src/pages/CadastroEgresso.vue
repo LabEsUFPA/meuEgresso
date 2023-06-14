@@ -320,7 +320,7 @@
               label="País"
               :options="countries"
               v-model:value="pais"
-              @change="pais.id = $event"
+              @change="handleChangeLocal('pais', $event)"
               :is-fetching="pais.isFetching"
               @typing="fetchCountries($event, true)"
               @infinite-scroll="fetchMoreCounties"
@@ -334,7 +334,7 @@
               label="Estado"
               :options="states"
               v-model:value="estado"
-              @change="estado.id = $event"
+              @change="handleChangeLocal('estado', $event)"
               :is-fetching="pais.isFetching"
               @typing="fetchStates($event, true)"
               @infinite-scroll="fetchMoreStates"
@@ -624,6 +624,8 @@ const dialogInstituicao = ref(false)
 const dialogCurso = ref(false)
 const camposFaltosos = ref(false)
 const missingDigits = ref(0)
+const paisChange = ref(false)
+const estadoChange = ref(false)
 
 const pais = ref({
   id: 0,
@@ -732,6 +734,18 @@ const selectOpts = ref({
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
 })
 
+async function handleChangeLocal (name: string, event: any) {
+  switch (name) {
+    case 'pais':
+      paisChange.value = !paisChange.value
+      pais.value.id = event
+      break
+    case 'estado':
+      estadoChange.value = !estadoChange.value
+      estado.value.id = event
+      break
+  }
+}
 async function handleSubmit (values: any) {
   camposFaltosos.value = false
   let cotas: Array<{ id: number }> | null = []
@@ -964,7 +978,7 @@ const schema = object().shape({
 onMounted(() => {
   const estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
   const cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
-  watch(pais, () => {
+  watch(paisChange, () => {
     form.value?.setFieldValue('localizacao.cidade', '')
     form.value?.setFieldValue('localizacao.estado', '')
     setTimeout(() => {
@@ -973,7 +987,7 @@ onMounted(() => {
     }, 10)
   })
 
-  watch(estado, () => {
+  watch(estadoChange, () => {
     form.value?.setFieldValue('localizacao.cidade', '')
     setTimeout(() => {
       cidadeInput.value = ''
