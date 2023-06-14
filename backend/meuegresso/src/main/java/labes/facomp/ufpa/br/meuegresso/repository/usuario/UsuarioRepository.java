@@ -44,7 +44,7 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			FROM usuario_grupo ug
 			LEFT JOIN egresso e ON ug.id_usuario = e.usuario_id
 			JOIN usuario u ON ug.id_usuario = u.id_usuario
-			JOIN egresso_empresa ee ON ee.egresso_id_egresso  = e.id_egresso
+			JOIN egresso_empresa ee ON ee.egresso_id_egresso = e.id_egresso
 			JOIN empresa empr ON ee.empresa_id_empresa  = empr.id_empresa
 			WHERE
 				ug.grupo = 'EGRESSO'
