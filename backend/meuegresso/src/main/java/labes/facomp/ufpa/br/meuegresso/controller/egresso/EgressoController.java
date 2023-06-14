@@ -287,6 +287,8 @@ public class EgressoController {
             } else {
                 return false;
             }
+            egressoModel.getEmprego().setEgresso(egressoModel);
+
         }
         return true;
     }
@@ -308,6 +310,7 @@ public class EgressoController {
             } else {
                 return false;
             }
+            egressoModel.getTitulacao().setEgresso(egressoModel);
         }
         return true;
     }
