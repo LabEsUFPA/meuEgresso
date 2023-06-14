@@ -359,6 +359,7 @@
             :area-atuacao-holder="placeHolders.areaAtuacao"
             :setor-atuacao-holder="placeHolders.setorAtuacao"
             :faixa-salarial-holder="placeHolders.faixaSalarial"
+            :empresa-nome-holder="dataEgresso.carreira.empresa"
           >
             <template #EditButton>
               <h1 class="relative">
@@ -1034,9 +1035,9 @@ async function handleSubmitCarreira (values: any) {
     }
   }
   if (values.carreira.area !== 'Desempregado') {
-    jsonResponse.emprego.empresa.nome = values.carreira.empresa
-    jsonResponse.emprego.empresa.id = 6
-    jsonResponse.emprego.id.empresaId = 6
+    // jsonResponse.emprego.empresa.nome = values.carreira.empresa
+    jsonResponse.emprego.empresa.id = values.carreira.empresa
+    jsonResponse.emprego.id.empresaId = values.carreira.empresa
 
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
@@ -1279,9 +1280,9 @@ async function fetchUpdateEgresso () {
     },
     localizacao: {
       cep: '',
-      pais: json.emprego?.empresa.endereco.pais || '',
-      estado: json.emprego?.empresa.endereco.estado || '',
-      cidade: json.emprego?.empresa.endereco.cidade || '',
+      pais: json.emprego?.empresa.endereco?.pais || '',
+      estado: json.emprego?.empresa.endereco?.estado || '',
+      cidade: json.emprego?.empresa.endereco?.cidade || '',
       isInput: false
     },
     academico: {

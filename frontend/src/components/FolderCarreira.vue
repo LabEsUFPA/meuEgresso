@@ -37,15 +37,37 @@
           :pre-filled="true"
         />
 
-        <CustomInput
+        <!-- <CustomInput
           class="mb-5"
           name="carreira.empresa"
           label="Empresa"
           placeholder="Ex: Google"
           :required="area !== 'Desempregado'"
           :disabled="area === 'Desempregado'"
+        /> -->
+        <CustomSelect
+          class="mb-1"
+          name="carreira.empresa"
+          label="Empresa"
+          :placeholder="placeHolders.empresaNomeHolder"
+          :options="$store.instituicoes"
+          :required="area !== 'Desempregado'"
+          :disabled="area === 'Desempregado'"
+          :is-fetching="$store.isFetchingUniversidades"
+          @typing="$store.fetchUniversidadesAsync($event, true)"
+          @infinite-scroll="$store.fetchMoreUniversidadesAsync"
+          infinite
+          id="posGradLocal"
+          :pre-filled="true"
         />
-
+        <button
+          type="button"
+          class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
+          :disabled="area === 'Desempregado'"
+          @click="dialogInstituicao = true"
+        >
+          Não encontrou sua empresa? Clique aqui
+        </button>
         <CustomSelect
           class="mb-5"
           name="carreira.faixaSalarial"
@@ -73,7 +95,7 @@
 
       <Form
         :validation-schema="instituicaoSchema"
-        @submit="handleNewInstituicao"
+        @submit="handleNewEmpresa"
         class="flex flex-col items-center gap-4"
       >
         <CustomInput
@@ -121,32 +143,37 @@ const selectOpts = ref({
 })
 interface Props {
   isInput?: boolean
-  areaAtuacaoHolder: string
-  setorAtuacaoHolder: string
-  faixaSalarialHolder: string
+  areaAtuacaoHolder?: string
+  setorAtuacaoHolder?: string
+  faixaSalarialHolder?: string
+  empresaNomeHolder?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isInput: true,
   areaAtuacaoHolder: 'Selecione',
   setorAtuacaoHolder: 'Selecione',
-  faixaSalarialHolder: 'Selecione'
+  faixaSalarialHolder: 'Selecione',
+  empresaNomeHolder: 'Selecione'
+
 })
-async function handleNewInstituicao (event: any) {
-  const response = await $store.cadastrarInstituicao(event.nome)
+async function handleNewEmpresa (event: any) {
+  const response = await $store.cadastrarEmpresa(event.nome)
 
   if (response?.status === 201) {
-    alert('Instituição cadastrada com sucesso.')
+    alert('Empresa cadastrada com sucesso.')
     dialogInstituicao.value = false
   }
 }
+
 const instituicaoSchema = object().shape({
   nome: string().required('Insira o nome da instituição')
 })
 const placeHolders = ref({
   areaAtuacaoHolder: props.areaAtuacaoHolder,
   setorAtuacaoHolder: props.setorAtuacaoHolder,
-  faixaSalarialHolder: props.faixaSalarialHolder
+  faixaSalarialHolder: props.faixaSalarialHolder,
+  empresaNomeHolder: props.empresaNomeHolder
 })
 
 watch(() => props.areaAtuacaoHolder, (newValue) => {
@@ -159,6 +186,9 @@ watch(() => props.setorAtuacaoHolder, (newValue) => {
 
 watch(() => props.faixaSalarialHolder, (newValue) => {
   placeHolders.value.faixaSalarialHolder = newValue
+})
+watch(() => props.empresaNomeHolder, (newValue) => {
+  placeHolders.value.empresaNomeHolder = newValue
 })
 
 </script>
