@@ -851,7 +851,7 @@ CREATE TABLE public.usuario (
 
 CREATE TABLE public.usuario_grupo (
     id_usuario integer NOT NULL,
-    id_grupo integer NOT NULL
+    grupo character varying(10) NOT NULL
 );
 
 
@@ -3670,4 +3670,3 @@ ALTER TABLE ONLY public.area_emprego
 --
 -- PostgreSQL database dump complete
 --
-
