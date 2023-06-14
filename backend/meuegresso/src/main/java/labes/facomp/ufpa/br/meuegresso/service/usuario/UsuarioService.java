@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,9 +88,14 @@ public interface UsuarioService extends UserDetailsService {
 	public Page<UsuarioModel> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate dateMin, LocalDate dateMax,
 			Boolean ativo, String email, Integer page, Integer size, Direction direction);
 
-	public Map<String, LocalDate> findByCompleto();
-
-	public Map<String, LocalDate> findByIncompleto();
-
-	public Map<String, LocalDate> findByPendente();
+	/**
+	 * Método responsável por retornar um mapa com informações
+	 * sobre status do cadastro dos usuários
+	 * 
+	 * @author Eude Monteiro
+	 * @return Um objeto map com informações sobre o nome do usuário,
+	 *         seu status de cadastro e data de modificação.
+	 * @since 12/06/2023	 
+	 */
+	public Map<String, Map<String, LocalDate>> setStatus();
 }
