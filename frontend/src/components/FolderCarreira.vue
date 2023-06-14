@@ -65,17 +65,45 @@
       <slot name="EditButton" />
     </template>
   </FolderSection>
+  <CustomDialog v-model="dialogInstituicao">
+    <div class="h-full flex justify-center gap-10 flex-col items-center">
+      <div class="text-2xl font-semibold text-cyan-800">
+        Cadastrar Empresa
+      </div>
+
+      <Form
+        :validation-schema="instituicaoSchema"
+        @submit="handleNewInstituicao"
+        class="flex flex-col items-center gap-4"
+      >
+        <CustomInput
+          name="nome"
+          label="Nome da instituição de ensino"
+          placeholder="Universidade Federal do Pará (UFPA)"
+        />
+
+        <CustomButton type="submit">
+          Cadastrar
+        </CustomButton>
+      </Form>
+    </div>
+  </CustomDialog>
 </template>
 <script lang="ts" setup>
 import FolderSection from 'src/components/FolderSection.vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
+import CustomButton from 'src/components/CustomButton.vue'
+
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
-import { ref, watch, onMounted } from 'vue'
+import { object, string } from 'yup'
+import { ref, watch } from 'vue'
 import { mdiBriefcase } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
+import CustomDialog from 'src/components/CustomDialog.vue'
+
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 
@@ -83,10 +111,8 @@ if (storage.has('loggedEgresso')) {
   $store.fetchAll()
 }
 
-const pais = ref('')
-const estado = ref('')
 const area = ref('')
-const form = ref<typeof Form | null>(null)
+const dialogInstituicao = ref(false)
 
 const selectOpts = ref({
   tipoAluno: ['Graduação', 'Pós-graduação'],
@@ -106,31 +132,21 @@ const props = withDefaults(defineProps<Props>(), {
   setorAtuacaoHolder: 'Selecione',
   faixaSalarialHolder: 'Selecione'
 })
+async function handleNewInstituicao (event: any) {
+  const response = await $store.cadastrarInstituicao(event.nome)
 
+  if (response?.status === 201) {
+    alert('Instituição cadastrada com sucesso.')
+    dialogInstituicao.value = false
+  }
+}
+const instituicaoSchema = object().shape({
+  nome: string().required('Insira o nome da instituição')
+})
 const placeHolders = ref({
   areaAtuacaoHolder: props.areaAtuacaoHolder,
   setorAtuacaoHolder: props.setorAtuacaoHolder,
   faixaSalarialHolder: props.faixaSalarialHolder
-})
-
-onMounted(() => {
-  watch(pais, () => {
-    form.value?.setFieldValue('localizacao.cidade', '')
-    form.value?.setFieldValue('localizacao.estado', '')
-  })
-
-  watch(estado, () => {
-    form.value?.setFieldValue('localizacao.cidade', '')
-  })
-
-  if (storage.has('loggedUser')) {
-    const userData = JSON.parse(storage.get('loggedUser'))
-
-    form.value?.setFieldValue('geral.email', userData.email)
-    form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
-      return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
-    }).join(' '))
-  }
 })
 
 watch(() => props.areaAtuacaoHolder, (newValue) => {

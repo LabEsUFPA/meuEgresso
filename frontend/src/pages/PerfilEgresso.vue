@@ -986,8 +986,10 @@ async function handleSubmitAcademico (values: any) {
 }
 async function handleSubmitLocalizacao (values: any) {
   console.log(values)
+  // !Mantem o mesmo id por enquanto!
+  const id = jsonResponse.emprego.empresa.endereco.id
   jsonResponse.emprego.empresa.endereco = values.localizacao
-  // delete jsonResponse.emprego.empresa.endereco.id
+  jsonResponse.emprego.empresa.endereco.id = id
 
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
@@ -1016,7 +1018,6 @@ async function handleSubmitCarreira (values: any) {
 
       },
       empresa: {
-        id: 1,
         nome: '',
         endereco: {
           id: 6,
@@ -1034,6 +1035,9 @@ async function handleSubmitCarreira (values: any) {
   }
   if (values.carreira.area !== 'Desempregado') {
     jsonResponse.emprego.empresa.nome = values.carreira.empresa
+    jsonResponse.emprego.empresa.id = 6
+    jsonResponse.emprego.id.empresaId = 6
+
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
