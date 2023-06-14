@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.repository.usuario;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
@@ -29,11 +30,12 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	boolean existsByUsernameIgnoreCase(String username);
 
+	
 	@Query(value = """
-			SELECT u.nome_usuario, u.email
+			SELECT u.email
 			FROM usuario u
 			JOIN egresso e ON u.id_usuario = e.usuario_id
-			WHERE e.created_date < NOW() - INTERVAL '1 year';
+			WHERE e.ativo = true;
 			""")
-	List<String> sendEmail();
+	List<String> findByEmailAndData();
 }

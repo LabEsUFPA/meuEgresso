@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -69,5 +70,7 @@ public interface UsuarioService extends UserDetailsService {
 	 */
     public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
-    public boolean existsByUsername(String username);
+	public boolean existsByUsername(String username);
+	
+	public List<String>findByAtivo();
 }

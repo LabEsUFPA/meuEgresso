@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.administrador.usuario;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -21,7 +22,9 @@ import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
+import labes.facomp.ufpa.br.meuegresso.model.MensagemModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +43,8 @@ public class UsuarioAdmController {
 	private final UsuarioService usuarioService;
 
 	private final ModelMapper mapper;
+
+	private final MailService mailService;
 
 	/**
 	 * Endpoint responsável por retornar a lista de usuários cadastrados no banco de
@@ -92,6 +97,16 @@ public class UsuarioAdmController {
 			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
 		return ResponseType.FAIL_DELETE.getMessage();
+	}
+
+	@PutMapping(value = "/email")
+	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
+	public void sendEmail(@RequestBody @Valid MensagemModel mensagemModel,LocalDate period) {
+		List<String> emailList = usuarioService.findByAtivo();
+		for (String email : emailList) {
+			mailService.sendEmail(email, mensagemModel.getEscopo(), mensagemModel.getMensagem());
+		}
 	}
 
 }
