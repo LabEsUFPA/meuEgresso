@@ -31,14 +31,14 @@ public class UsuarioDTO extends AuditableDTO {
 
 	private Integer id;
 
-	@NotBlank(message = "Informe um usuário.")
+	@NotBlank(message = "Infome um usuário.")
 	private String username;
 
 	@Email
-	@NotBlank(message = "Informe um email.")
+	@NotBlank(message = "Infome um email.")
 	private String email;
 
-	@NotBlank(message = "Informe um nome.")
+	@NotBlank(message = "Infome um nome.")
 	private String nome;
 
 	@NotNull(message = "Informe uma data de nascimento.")

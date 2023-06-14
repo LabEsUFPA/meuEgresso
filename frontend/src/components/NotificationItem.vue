@@ -39,8 +39,7 @@
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiCheck, mdiClock, mdiChevronRight, mdiAlertCircle, mdiClose } from '@mdi/js'
 
-defineProps<
-{
+defineProps<{
   id: Number,
   idUsuario: Number,
   status: String,
