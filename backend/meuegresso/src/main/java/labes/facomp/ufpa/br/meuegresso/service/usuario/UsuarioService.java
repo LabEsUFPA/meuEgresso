@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.service.usuario;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
@@ -88,4 +89,14 @@ public interface UsuarioService extends UserDetailsService {
 	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate dateMin,
 			LocalDate dateMax, String status, String email, Integer page, Integer size, Direction direction);
 
+	/**
+	 * Método responsável por retornar um mapa com informações
+	 * sobre status do cadastro dos usuários
+	 * 
+	 * @author Eude Monteiro
+	 * @return Um objeto map com informações sobre o nome do usuário,
+	 *         seu status de cadastro e data de modificação.
+	 * @since 12/06/2023	 
+	 */
+	public Map<String, Map<String, LocalDate>> setStatus();
 }
