@@ -1,7 +1,9 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.data.domain.Page;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -98,6 +101,30 @@ public class UsuarioServiceImpl implements UsuarioService {
 			Boolean ativo, String email, Integer page, Integer size, Direction direction) {
 		return usuarioRepository.findBySearch("%" + nomeUsuario + "%", "%" + nomeEmpresa + "%", minDate, maxDate, ativo,
 				"%" + email + "%", PageRequest.of(page, size, Sort.by(direction, "createdDate")));
+	}
+
+	public Map<String, LocalDate> findByCompleto(){
+		Map<String, LocalDate> completos = new HashMap<>();
+		usuarioRepository.findByCompleto().forEach(e -> {
+			completos.put(e.get(0, String.class), e.get(1, LocalDate.class));
+		});
+		return completos;
+	}
+
+	public Map<String, LocalDate> findByIncompleto(){
+		Map<String, LocalDate> incompletos = new HashMap<>();
+		usuarioRepository.findByCompleto().forEach(e -> {
+			incompletos.put(e.get(0, String.class), e.get(1, LocalDate.class));
+		});
+		return incompletos;
+	}
+
+	public Map<String, LocalDate> findByPendente(){
+		Map<String, LocalDate> pendentes = new HashMap<>();
+		usuarioRepository.findByCompleto().forEach(e -> {
+			pendentes.put(e.get(0, String.class), e.get(1, LocalDate.class));
+		});
+		return pendentes;
 	}
 
 }
