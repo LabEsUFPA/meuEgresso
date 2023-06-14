@@ -792,7 +792,7 @@ CREATE TABLE public.usuario (
 
 CREATE TABLE public.usuario_grupo (
     id_usuario integer NOT NULL,
-    grupo haracter varying(10) NOT NULL
+    grupo character varying(10) NOT NULL
 );
 
 
