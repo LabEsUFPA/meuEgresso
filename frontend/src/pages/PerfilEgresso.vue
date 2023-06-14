@@ -514,7 +514,7 @@
                       label="País"
                       :options="countries"
                       v-model:value="pais"
-                      @change="pais.id = $event"
+                      @change="handleChangeLocal('pais', $event)"
                       :is-fetching="pais.isFetching"
                       @typing="fetchCountries($event, true)"
                       @infinite-scroll="fetchMoreCounties"
@@ -529,7 +529,7 @@
                       label="Estado"
                       :options="states"
                       v-model:value="estado"
-                      @change="estado.id = $event"
+                      @change="handleChangeLocal('estado', $event)"
                       :is-fetching="pais.isFetching"
                       @typing="fetchStates($event, true)"
                       @infinite-scroll="fetchMoreStates"
@@ -703,6 +703,8 @@ const formAcademico = ref<typeof Form | null>(null)
 const formCarreira = ref<typeof Form | null>(null)
 const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
+const paisChange = ref(false)
+const estadoChange = ref(false)
 
 const pais = ref({
   id: 0,
@@ -826,7 +828,18 @@ const profileImageRef = ref<typeof ProfileImage | null>(null)
 const profileImageSave = () => {
   return profileImageRef?.value?.imageUploadBack()
 }
-
+async function handleChangeLocal (name: string, event: any) {
+  switch (name) {
+    case 'pais':
+      paisChange.value = !paisChange.value
+      pais.value.id = event
+      break
+    case 'estado':
+      estadoChange.value = !estadoChange.value
+      estado.value.id = event
+      break
+  }
+}
 async function handleSubmitHeader (values: any) {
   jsonResponse.usuario.nome = values.geral.nome
   if (values.geral.linkedin !== '' && values.geral.linkedin !== undefined) {
@@ -1390,7 +1403,7 @@ onMounted(() => {
   estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
 
   cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
-  watch(pais, () => {
+  watch(paisChange, () => {
     console.log('pais')
     formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
     formLocalizacao.value?.setFieldValue('localizacao.estado', '')
@@ -1404,7 +1417,7 @@ onMounted(() => {
     }, 10)
   })
 
-  watch(estado, () => {
+  watch(estadoChange, () => {
     console.log('estado')
     console.log(formLocalizacao.value)
     formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
