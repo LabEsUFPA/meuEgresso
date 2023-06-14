@@ -9,26 +9,17 @@
       })"
     >
       <template
+        v-if="label"
         #label
       >
-        <div v-if="label">
-          {{ label }}
-          <sup
-            class="text-red-500"
-            v-if="required"
-          >*</sup>
-        </div>
-        <div v-if="customLabel">
-          <div class="mb-1.5">
-            <slot name="label" />
-            <sup
-              class="text-red-500"
-              v-if="required"
-            >*</sup>
-          </div>
-        </div>
+        {{ label }}
+        <sup
+          class="text-red-500"
+          v-if="required"
+        >
+          *
+        </sup>
       </template>
-
       <template #default>
         <div
           :class="classNames({
@@ -60,7 +51,27 @@
               v-else-if="iconPath"
             />
           </div>
+          <money3
+            v-if="money"
+            class="col-span-6 focus:outline-none bg-transparent"
+            :class="iconPath ? 'col-span-7' : 'col-span-8'"
+            v-bind="config"
+            :placeholder="placeholder"
+            :disabled="disabled"
+            :type="type"
+            :name="name"
+            :required="required"
+            :step="step"
+            :maxlength="maxLength"
+            @update:model-value="handleInput"
+            @focus="() => {
+              focused = true
+              config.allowBlank = false
+            }"
+            @blur="focused = false; handleBlur()"
+          />
           <OInput
+            v-else
             :root-class="classNames({
               ['col-span-7']: iconPath,
               ['col-span-8']: !iconPath
@@ -91,7 +102,7 @@
             :root-class="classNames({
               ['col-span-7']: iconPath,
               ['col-span-8']: !iconPath,
-              ['w-full md:w-1/2']: true
+              ['w-full md:w-1/2 h-32']: true
             })"
             :input-class="classNames({
               ['bg-gray-100 cursor-not-allowed']: disabled,
@@ -106,7 +117,6 @@
             :data-maska="mask"
             :step="step"
             :maxlength="maxLength"
-            :style="{ height: height || '128px' }"
             v-model="inputValue"
             @update:model-value="handleInput"
             @focus="focused = true"
@@ -120,7 +130,7 @@
           v-if="meta.validated"
           class="text-red-500"
         >
-          {{ meta.valid ? null : customErrorMessage ? props.errorMessage : errorMessage }}
+          {{ meta.valid ? null : customErrorMessage? props.errorMessage : errorMessage }}
         </div>
         <div :class="classHelperText">
           {{ helperText }}
@@ -154,13 +164,12 @@ interface Props {
   maxLength?: number | string
   imgIcon?: boolean
   step?: number | string
-  disabled?: boolean
-  classHelperText?: string
-  errorMessage?: string
-  customErrorMessage?: boolean
+  disabled?: boolean,
+  classHelperText?: string,
+  errorMessage?: string,
+  customErrorMessage?: boolean,
   withoutValidation?: boolean
-  height?: string | number,
-  customLabel?: boolean
+  money?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -179,12 +188,27 @@ const props = withDefaults(defineProps<Props>(), {
   errorMessage: '',
   customErrorMessage: false,
   withoutValidation: false,
-  height: '128px',
-  customLabel: false
+  money: false
 })
 
 const focused = ref(false)
 const name = toRef(props, 'name')
+const config = ref({
+  prefix: 'R$ ',
+  suffix: '',
+  masked: false,
+  thousands: '.',
+  decimal: ',',
+  precision: 2,
+  allowBlank: true,
+  disableNegative: true,
+  disabled: false,
+  min: null,
+  max: null,
+  minimumNumberOfCharacters: 0,
+  shouldRound: true,
+  focusOnRight: false
+})
 
 const {
   value: inputValue,
@@ -196,6 +220,9 @@ const {
 
 function handleInput (e: Event) {
   $emit('update:value', e)
+  if (String(e) === '' && props.money) {
+    return
+  }
   handleChange(e)
 }
 </script>

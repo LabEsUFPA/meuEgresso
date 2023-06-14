@@ -20,7 +20,7 @@ export default [
         path: '/cadastro-admin',
         component: async () => await import('src/pages/CadastroAdmin.vue'),
         meta: {
-          requiresAuth: true
+          requiresAuthAdmin: true
         }
       },
       {
@@ -57,10 +57,6 @@ export default [
       {
         path: '/vagas/:id',
         component: async () => await import('src/pages/AnuncioVaga.vue')
-      },
-      {
-        path: '/email',
-        component: async () => await import('src/pages/EmailAdmin.vue')
       }
     ]
   },

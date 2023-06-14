@@ -9,6 +9,7 @@
       :src="iconPath2"
       :width="30"
       :height="30"
+      alt="Ícone de Salvar"
     >
     <h1
       class="ml-[7px] mr-3"
@@ -29,6 +30,7 @@
       :src="iconPath"
       :width="iconSize"
       :height="iconSize"
+      alt="Ícone de Edição"
     >
     <h1
       class="ml-3 mr-2"

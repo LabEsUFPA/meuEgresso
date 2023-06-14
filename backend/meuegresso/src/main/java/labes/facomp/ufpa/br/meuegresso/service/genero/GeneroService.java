@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.genero;
 
 import java.util.List;
+import java.util.Map;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
@@ -59,5 +60,7 @@ public interface GeneroService {
 	 * @param createdBy
 	 * @return
 	 */
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+
+	public Map<String, Integer> countEgressoByGenero();
 }

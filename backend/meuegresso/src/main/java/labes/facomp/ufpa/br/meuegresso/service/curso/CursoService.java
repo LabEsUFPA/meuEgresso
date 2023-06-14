@@ -2,7 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.service.curso;
 
 import java.util.List;
 
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.CursosGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.CursosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 

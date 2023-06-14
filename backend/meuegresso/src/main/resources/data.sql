@@ -4,25 +4,20 @@ INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario) VALUES ('ad
 INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario) VALUES ('secretario@secretario.com','SECRETARIO SECRETARIO','{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy','SECRETARIO') ON CONFLICT DO NOTHING;
 INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario) VALUES ('egresso@egresso.com','EGRESSO EGRESSO','{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO','EGRESSO') ON CONFLICT DO NOTHING;
 
--- Grupos Padrões
-
-INSERT INTO grupo (nome_grupo, created_by) values ('ADMIN', 1) ON CONFLICT DO NOTHING;
-INSERT INTO grupo (nome_grupo, created_by) values ('SECRETARIO', 1) ON CONFLICT DO NOTHING;
-INSERT INTO grupo (nome_grupo, created_by) values ('EGRESSO', 1) ON CONFLICT DO NOTHING;
-
-
 -- Usuarios por Grupo
 
-INSERT INTO public.usuario_grupo VALUES (1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.usuario_grupo VALUES (2, 2) ON CONFLICT DO NOTHING;
-INSERT INTO public.usuario_grupo VALUES (3, 3) ON CONFLICT DO NOTHING;
+INSERT INTO public.usuario_grupo VALUES (1, 'ADMIN') ON CONFLICT DO NOTHING;
+INSERT INTO public.usuario_grupo VALUES (2, 'SECRETARIO') ON CONFLICT DO NOTHING;
+INSERT INTO public.usuario_grupo VALUES (3, 'EGRESSO') ON CONFLICT DO NOTHING;
 
 --- Tipos de Cota
 
-INSERT INTO public.cota (nome_cota, created_by) VALUES ('ESCOLA', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.cota (nome_cota, created_by) VALUES ('RENDA', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.cota (nome_cota, created_by) VALUES ('AUTODECLARAÇÃO DE RAÇA', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.cota (nome_cota, created_by) VALUES ('QUILOMBOLAS/INDÍGENAS', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.cota (nome_cota, created_by) VALUES ('Escola', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.cota (nome_cota, created_by) VALUES ('Renda', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.cota (nome_cota, created_by) VALUES ('Autodeclaração de Raça', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.cota (nome_cota, created_by) VALUES ('Quilombolas/Indígenas', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.cota (nome_cota, created_by) VALUES ('PCD', 1) ON CONFLICT DO NOTHING;
+
 
 --- Cursos
 
@@ -30,11 +25,21 @@ INSERT INTO public.curso (nome_curso, created_by) VALUES ('CIÊNCIA DA COMPUTAÇ
 
 --- Setor Atuação
 
-INSERT INTO public.setor_atuacao (nome_setor_atuacao, created_by) VALUES ('DESENVOLVIMENTO', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.setor_atuacao (nome_setor_atuacao, created_by) VALUES ('Empresarial', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.setor_atuacao (nome_setor_atuacao, created_by) VALUES ('Público', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.setor_atuacao (nome_setor_atuacao, created_by) VALUES ('Terceiro setor', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.setor_atuacao (nome_setor_atuacao, created_by) VALUES ('Magistério/Docência', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.setor_atuacao (nome_setor_atuacao, created_by) VALUES ('Outros', 1) ON CONFLICT DO NOTHING;
+
 
 -- Area Atuação
+INSERT INTO public.area_atuacao (nome_area_atuacao, created_by) VALUES ('Computação', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_atuacao (nome_area_atuacao, created_by) VALUES ('Pesquisa', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_atuacao (nome_area_atuacao, created_by) VALUES ('Desempregado', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_atuacao (nome_area_atuacao, created_by) VALUES ('Programador', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_atuacao (nome_area_atuacao, created_by) VALUES ('Analista', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.area_atuacao (nome_area_atuacao, created_by) VALUES ('Outros', 1) ON CONFLICT DO NOTHING;
 
-INSERT INTO public.area_atuacao (nome_area_atuacao, created_by) VALUES ('DESENVOLVIMENTO', 1) ON CONFLICT DO NOTHING;
 
 --- Empresa/Instituição
 
@@ -51,25 +56,27 @@ INSERT INTO public.endereco (cidade_endereco, estado_endereco, pais_endereco, cr
 --- Faixa Salarial
 
 INSERT INTO public.faixa_salarial (faixa_faixa_salarial, created_by) VALUES ('1 salário mínimo', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.faixa_salarial (faixa_faixa_salarial, created_by) VALUES ('1 a 2 salários mínimo', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.faixa_salarial (faixa_faixa_salarial, created_by) VALUES ('3 a 5 salários mínimo', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.faixa_salarial (faixa_faixa_salarial, created_by) VALUES ('6 ou mais salários mínimo', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.faixa_salarial (faixa_faixa_salarial, created_by) VALUES ('de 2 a 4 salários mínimos', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.faixa_salarial (faixa_faixa_salarial, created_by) VALUES ('5 a 10 salários mínimos', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.faixa_salarial (faixa_faixa_salarial, created_by) VALUES ('11 ou mais salários mínimos', 1) ON CONFLICT DO NOTHING;
 
 --- Genero
 
-INSERT INTO public.genero (nome_genero, created_by) VALUES ('MASCULINO', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.genero (nome_genero, created_by) VALUES ('FEMININO', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.genero (nome_genero, created_by) VALUES ('NÃO BINÁRIO', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.genero (nome_genero, created_by) VALUES ('TRANSSEXUAL', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.genero (nome_genero, created_by) VALUES ('NÃO QUERO DECLARAR', 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.genero (nome_genero, created_by) VALUES ('OUTROS', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.genero (nome_genero, created_by) VALUES ('Masculino', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.genero (nome_genero, created_by) VALUES ('Feminino', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.genero (nome_genero, created_by) VALUES ('Não-binário', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.genero (nome_genero, created_by) VALUES ('Transsexual', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.genero (nome_genero, created_by) VALUES ('Não quero declarar', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.genero (nome_genero, created_by) VALUES ('Outros', 1) ON CONFLICT DO NOTHING;
 
 --- Tipo de Bolsa
 
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PIBIC', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PROAD', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PROEX', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PROBAC', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('PERMANENCIA', 1) ON CONFLICT DO NOTHING;
+INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('CAPES/CNPQ', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by) VALUES ('OUTROS', 1) ON CONFLICT DO NOTHING;
 
 --- Titulação

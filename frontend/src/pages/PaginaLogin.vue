@@ -4,7 +4,7 @@
     @invalid-submit="onInvalid"
     :validation-schema="schema"
   >
-    <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
+    <div class="w-full flex items-center justify-center bg-neutral-100 my-4 sm:my-12 ">
       <div
         class="flex flex-col items-center justify-center bg-white w-[960px] py-10 mx-6 rounded-2xl shadow-md"
       >
@@ -88,7 +88,6 @@ app.use(pinia)
 const error = ref(false)
 const storeLogin = useLoginStore()
 
-
 const schema = object().shape({
   username: string().required('Informe o seu usuário'),
   password: string().required('Informe a sua senha')
@@ -107,7 +106,7 @@ const handleSubmit = async (submitData: any) => {
 
     if (response === 200) {
       error.value = false
-      router.push('/')
+      await router.push('/')
     } else {
       error.value = true
     }

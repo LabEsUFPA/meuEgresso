@@ -92,7 +92,7 @@ public class CursoController {
 	public String cadastrarCurso(@RequestBody @Valid CursoDTO cursoDTO) {
 		CursoModel cursoModel = mapper.map(cursoDTO, CursoModel.class);
 		cursoService.save(cursoModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -108,11 +108,12 @@ public class CursoController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String atualizarCurso(@RequestBody @Valid CursoDTO cursoDTO, JwtAuthenticationToken token) throws UnauthorizedRequestException {
+	public String atualizarCurso(@RequestBody @Valid CursoDTO cursoDTO, JwtAuthenticationToken token)
+			throws UnauthorizedRequestException {
 		if (cursoService.existsByIdAndCreatedById(cursoDTO.getId(), jwtService.getIdUsuario(token))) {
 			CursoModel cursoModel = mapper.map(cursoDTO, CursoModel.class);
 			cursoService.save(cursoModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}

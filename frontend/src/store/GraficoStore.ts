@@ -2,360 +2,418 @@ import { defineStore } from 'pinia'
 import Api from 'src/services/api'
 import { type models } from 'src/@types'
 interface PieChartSeries extends models.Graphics.PieChartSeries {}
+interface AllChartSeries extends models.Graphics.AllChartSeries {}
 
 export const useGraficoStore = defineStore('GraficoStore', {
   actions: {
+    async fetchAll () {
+      const [
+        company,
+        postGraduateCourse,
+        postGraduateLocal,
+        scholarshipType,
+        remuneration,
+        interestInPost,
+        acting,
+        scholar,
+        quotas,
+        shareHolder,
+        postGraduate,
+        student,
+        wage,
+        sector,
+        gender,
+        age
+      ] = await Promise.all([
+        this.getCompanyData(),
+        this.getPostGraduateCourseData(),
+        this.getPostGraduateLocalData(),
+        this.getScholarshipTypeData(),
+        this.getRemunerationData(),
+        this.getInterestInPostData(),
+        this.getActingData(),
+        this.getScholarData(),
+        this.getQuotasData(),
+        this.getShareHolderData(),
+        this.getPostGraduateData(),
+        this.getStudentData(),
+        this.getWageData(),
+        this.getSectorData(),
+        this.getGenderData(),
+        this.getAgeData()
+      ])
+
+      const response: AllChartSeries = {
+        company,
+        postGraduateCourse,
+        postGraduateLocal,
+        scholarshipType,
+        remuneration,
+        interestInPost,
+        acting,
+        scholar,
+        quotas,
+        shareHolder,
+        postGraduate,
+        student,
+        wage,
+        sector,
+        gender,
+        age
+      }
+
+      return response
+    },
+
     async getCompanyData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/empresas'
+        route: '/publico/grafico/empresas'
       })
 
-      if ((response?.data) != null) {
-        const companyData: PieChartSeries[] = []
-        const companyLegend: string[] = []
-        response.data.forEach((item: { empresa: string, quantidade: number }) => {
-          companyData.push({ value: Math.floor(Math.random() * 100), name: item.empresa })
-          companyLegend.push(item.empresa)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          companyData,
-          companyLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
+      if ((response?.status) === 200) {
+        response.data?.forEach((item: { empresa: string, quantidade: number }) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item.empresa })
+          legend.push(item.empresa)
+        })
+      }
+
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
       }
     },
 
     async getPostGraduateCourseData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/cursos'
+        route: '/publico/grafico/cursos'
       })
 
-      if ((response?.data) != null) {
-        const postGraduateCourseData: PieChartSeries[] = []
-        const postGraduateCourseLegend: string[] = []
-        response.data.forEach((item: { curso: string, quantidade: number }) => {
-          postGraduateCourseData.push({ value: Math.floor(Math.random() * 100), name: item.curso })
-          postGraduateCourseLegend.push(item.curso)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          postGraduateCourseData,
-          postGraduateCourseLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
+      if ((response?.status) === 200) {
+        response.data?.forEach((item: { curso: string, quantidade: number }) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item.curso })
+          legend.push(item.curso)
+        })
+      }
+
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
       }
     },
 
     async getPostGraduateLocalData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/localPos'
+        route: '/publico/grafico/localPos'
       })
 
-      if ((response?.data) != null) {
-        const postGraduateLocalData: PieChartSeries[] = []
-        const postGraduateLocalLegend: string[] = []
-        response.data.forEach((item: { instituicao: string, quantidade: number }) => {
-          postGraduateLocalData.push({ value: Math.floor(Math.random() * 100), name: item.instituicao })
-          postGraduateLocalLegend.push(item.instituicao)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          postGraduateLocalData,
-          postGraduateLocalLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
+      if ((response?.status) === 200) {
+        response.data?.forEach((item: { instituicao: string, quantidade: number }) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item.instituicao })
+          legend.push(item.instituicao)
+        })
+      }
+
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
       }
     },
 
     async getScholarshipTypeData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/tipoBolsa'
+        route: '/publico/grafico/tipoBolsa'
       })
 
-      if ((response?.data?.tipoBolsas) != null) {
-        const scholarshipTypeData: PieChartSeries[] = []
-        const scholarshipTypeLegend: string[] = []
-        Object.keys(response?.data?.tipoBolsas).forEach((item) => {
-          scholarshipTypeData.push({ value: Math.floor(Math.random() * 100), name: item })
-          scholarshipTypeLegend.push(item)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          scholarshipTypeData,
-          scholarshipTypeLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
-      }
-    },
-
-    async getRemunerationData () {
-      const remunerationDataX: string[] = []
-      const remunerationDataY: number[] = []
-
-      const response = await Api.request({
-        method: 'get',
-        route: '/grafico/remuneracao'
-      })
-
-      if ((response?.data?.remuneracaoContagem) != null) {
-        Object.keys(response?.data.remuneracaoContagem).forEach((item: string) => {
-          remunerationDataX.push(item)
-          remunerationDataY.push(response?.data?.remuneracaoContagem[item])
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.tipoBolsas).forEach((item) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
         })
       }
 
       return {
-        remunerationDataX,
-        remunerationDataY,
-        status: (response?.status) !== undefined ? response.status : 500
+        series: { values, legend },
+        error: response?.status !== 200
+      }
+    },
+
+    async getRemunerationData () {
+      const response = await Api.request({
+        method: 'get',
+        route: '/publico/grafico/remuneracao'
+      })
+
+      const x: string[] = []
+      const y: number[] = []
+
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.remuneracaoContagem).forEach((item: string) => {
+          x.push(`R$${item}`)
+          y.push(response.data?.remuneracaoContagem[item])
+        })
+      }
+
+      return {
+        series: { x, y },
+        error: response?.status !== 200
       }
     },
 
     async getInterestInPostData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/interesseEmPos'
+        route: '/publico/grafico/interesseEmPos'
       })
 
-      if ((response?.data?.interesseContagem) != null) {
-        const interestInPostData: PieChartSeries[] = []
-        const interestInPostLegend: string[] = []
-        Object.keys(response?.data?.interesseContagem).forEach((item) => {
-          interestInPostData.push({ value: Math.floor(Math.random() * 100), name: item })
-          interestInPostLegend.push(item)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          interestInPostData,
-          interestInPostLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.interesseContagem).forEach((item) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
+        })
+      }
+
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
       }
     },
 
     async getActingData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/atuacao'
+        route: '/publico/grafico/atuacao'
       })
 
-      if ((response?.data?.areaAtuacao) != null) {
-        const actingData: PieChartSeries[] = []
-        const actingLegend: string[] = []
-        Object.keys(response?.data?.areaAtuacao).forEach((item) => {
-          actingData.push({ value: Math.floor(Math.random() * 100), name: item })
-          actingLegend.push(item)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          actingData,
-          actingLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.areaAtuacao).forEach((item) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
+        })
+      }
+
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
       }
     },
 
     async getScholarData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/bolsistas'
+        route: '/publico/grafico/bolsistas'
       })
 
-      if ((response?.data?.bolsistasContagem) != null) {
-        const scholarData: PieChartSeries[] = []
-        const scholarLegend: string[] = []
-        Object.keys(response?.data?.bolsistasContagem).forEach((item) => {
-          scholarData.push({ value: Math.floor(Math.random() * 100), name: item })
-          scholarLegend.push(item)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          scholarData,
-          scholarLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.bolsistasContagem).forEach((item) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
+        })
+      }
+
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
       }
     },
 
     async getQuotasData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/cotas'
+        route: '/publico/grafico/cotas'
       })
 
-      if ((response?.data?.cotaAtuacao) != null) {
-        const quotasData: PieChartSeries[] = []
-        const quotasLegend: string[] = []
-        Object.keys(response?.data?.cotaAtuacao).forEach((item) => {
-          quotasData.push({ value: Math.floor(Math.random() * 100), name: item })
-          quotasLegend.push(item)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          quotasData,
-          quotasLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.cotaAtuacao).forEach((item) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
+        })
+      }
+
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
       }
     },
 
     async getShareHolderData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/cotista'
+        route: '/publico/grafico/cotista'
       })
 
-      if ((response?.data?.cotistasEnumerados) != null) {
-        const shareHolderData: PieChartSeries[] = []
-        const shareHolderLegend: string[] = []
-        Object.keys(response?.data?.cotistasEnumerados).forEach((item) => {
-          shareHolderData.push({ value: Math.floor(Math.random() * 100), name: item })
-          shareHolderLegend.push(item)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          shareHolderData,
-          shareHolderLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.cotistasEnumerados).forEach((item) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
+        })
+      }
+
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
       }
     },
 
     async getPostGraduateData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/pos'
+        route: '/publico/grafico/pos'
       })
 
-      if ((response?.data?.posGraduacaoContagem) != null) {
-        const postGraduateData: PieChartSeries[] = []
-        const postGraduateLegend: string[] = []
-        Object.keys(response?.data?.posGraduacaoContagem).forEach((item) => {
-          postGraduateData.push({ value: Math.floor(Math.random() * 100), name: item })
-          postGraduateLegend.push(item)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          postGraduateData,
-          postGraduateLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.posGraduacaoContagem).forEach((item) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
+        })
+      }
+
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
       }
     },
 
     async getStudentData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/tipoAlunos'
+        route: '/publico/grafico/tipoAlunos'
       })
 
-      if ((response?.data?.tipoAlunos) != null) {
-        const studentData: PieChartSeries[] = []
-        const studentLegend: string[] = []
-        Object.keys(response?.data?.tipoAlunos).forEach((item) => {
-          studentData.push({ value: Math.floor(Math.random() * 100), name: item })
-          studentLegend.push(item)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          studentData,
-          studentLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.tipoAlunos).forEach((item) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
+        })
+      }
+
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
       }
     },
 
     async getWageData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/salarios'
+        route: '/publico/grafico/salarios'
       })
 
-      if ((response?.data?.salarios) != null) {
-        const wageData: PieChartSeries[] = []
-        const wageLegend: string[] = []
-        Object.keys(response?.data?.salarios).forEach((item) => {
-          wageData.push({ value: Math.floor(Math.random() * 100), name: item })
-          wageLegend.push(item)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          wageData,
-          wageLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.salarios).forEach((item) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
+        })
+      }
+
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
       }
     },
 
     async getSectorData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/setor'
+        route: '/publico/grafico/setor'
       })
 
-      if ((response?.data?.setorAtuacao) != null) {
-        const activitySectorData: PieChartSeries[] = []
-        const activitySectorLegend: string[] = []
-        Object.keys(response?.data?.setorAtuacao).forEach((item) => {
-          activitySectorData.push({ value: Math.floor(Math.random() * 100), name: item })
-          activitySectorLegend.push(item)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          activitySectorData,
-          activitySectorLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.setorAtuacao).forEach((item) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
+        })
+      }
+
+      return {
+        series: { values, legend },
+        error: response?.status !== 200
       }
     },
 
     async getGenderData () {
       const response = await Api.request({
         method: 'get',
-        route: '/grafico/generos'
+        route: '/publico/grafico/generos'
       })
 
-      if ((response?.data?.generos) != null) {
-        const genderData: PieChartSeries[] = []
-        const genderDataLegend: string[] = []
-        Object.keys(response?.data?.generos).forEach((item) => {
-          genderData.push({ value: Math.floor(Math.random() * 100), name: item })
-          genderDataLegend.push(item)
-        })
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-        return {
-          genderData,
-          genderDataLegend,
-          status: (response?.status) !== undefined ? response.status : 500
-        }
-      }
-    },
-
-    async getAgeData () {
-      const ageDataX: string[] = []
-      const ageDataY: number[] = []
-
-      const response = await Api.request({
-        method: 'get',
-        route: '/grafico/idades'
-      })
-
-      if ((response?.data?.idadesEgressos) != null) {
-        Object.keys(response?.data.idadesEgressos).forEach((item: string) => {
-          ageDataX.push(item)
-          ageDataY.push(response?.data?.idadesEgressos[item])
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.generos).forEach((item) => {
+          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          legend.push(item)
         })
       }
 
       return {
-        ageDataX,
-        ageDataY,
-        status: (response?.status) !== undefined ? response.status : 500
+        series: { values, legend },
+        error: response?.status !== 200
+      }
+    },
+
+    async getAgeData () {
+      const response = await Api.request({
+        method: 'get',
+        route: '/publico/grafico/idades'
+      })
+
+      const x: string[] = []
+      const y: number[] = []
+
+      if ((response?.status) === 200) {
+        Object.keys(response.data?.idadesEgressos).forEach((item: string) => {
+          x.push(`${item} anos`)
+          y.push(response.data?.idadesEgressos[item])
+        })
+      }
+
+      return {
+        series: { x, y },
+        error: response?.status !== 200
       }
     }
   }

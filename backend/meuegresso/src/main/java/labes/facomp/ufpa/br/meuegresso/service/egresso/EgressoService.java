@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,16 +48,6 @@ public interface EgressoService {
 	 * @since 16/04/2023
 	 */
 	public EgressoModel updateEgresso(EgressoModel egresso);
-
-	/**
-	 * Metodo responsavel por deletar informacoes do egresso no banco de dados.
-	 *
-	 * @param egresso Dados do egresso
-	 * @return Mensagem de confirmacao
-	 * @author Bruno Eiki
-	 * @since 17/04/2023
-	 */
-	public boolean deletarEgresso(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por verificar se egresso existe no banco de dados.
@@ -120,5 +111,19 @@ public interface EgressoService {
 	 * @since 07/05/2023
 	 */
 	public void saveFoto(String nomeAnexo, MultipartFile arquivo) throws IOException;
+
+	public Map<Integer, Integer> countAgeFromEgressos();
+
+	public Map<String, Integer> countFezPos();
+
+	public Map<String, Integer> countTipoAluno();
+
+	public Map<String, Integer> countBolsista();
+
+	public Map<Double, Integer> countRemuneracaoBolsa();
+
+	public Map<String, Integer> countCotista();
+
+	public Map<String, Integer> countInteressePos();
 
 }

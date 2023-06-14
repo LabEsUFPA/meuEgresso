@@ -76,10 +76,8 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
-import { ref, computed, watch, onMounted } from 'vue'
-import { Country, State, City } from 'country-state-city'
+import { ref, watch, onMounted } from 'vue'
 import svgPath from 'src/assets/svgPaths.json'
-import { object, string, boolean } from 'yup'
 import {
   mdiAccount,
   mdiEmail
@@ -90,7 +88,9 @@ import LocalStorage from 'src/services/localStorage'
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 
-$store.fetchAll()
+if (storage.has('loggedEgresso')) {
+  $store.fetchAll()
+}
 
 const pais = ref('')
 const estado = ref('')
@@ -101,9 +101,8 @@ const form = ref<typeof Form | null>(null)
 
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   isInput: true
-
 })
 const geral = ref({
   email: ''

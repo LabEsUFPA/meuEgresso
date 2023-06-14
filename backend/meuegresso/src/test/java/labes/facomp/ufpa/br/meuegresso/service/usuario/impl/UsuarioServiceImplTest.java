@@ -185,14 +185,14 @@ class UsuarioServiceImplTest {
 		UsuarioModel mockUser = new UsuarioModel();
 		mockUser.setId(10);
 
-		Mockito.when(usuarioRepository.save(new UsuarioModel(10, null, null, null, null, null, null)))
+		Mockito.when(usuarioRepository.save(new UsuarioModel(10, null, null, null, null, null, null, true)))
 				.thenReturn(user);
 		UsuarioModel usertest = usuarioService.update(mockUser);
 
 		MatcherAssert.assertThat(usertest.getId(), Matchers.greaterThan(0));
 		assertNotNull(usertest);
 		assertEquals(user, usertest);
-		Mockito.verify(usuarioRepository).save(new UsuarioModel(10, null, null, null, null, null, null));
+		Mockito.verify(usuarioRepository).save(new UsuarioModel(10, null, null, null, null, null, null, true));
 	}
 
 	@Test
