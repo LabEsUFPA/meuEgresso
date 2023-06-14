@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,8 +30,14 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDashDTO;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
+import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -47,7 +54,9 @@ import lombok.RequiredArgsConstructor;
 public class DashAdmController {
 
 	private final UsuarioService usuarioService;
-
+	private final EgressoService egressoService;
+	private final EmpresaService empresaService;
+	
 	private final ModelMapper mapper;
 
 	/**
@@ -151,5 +160,25 @@ public class DashAdmController {
 				.filename("listagem-egresso-" + LocalDateTime.now().toLocalDate().toString() + ".pdf").build());
 
 		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+	}
+	
+	/**
+	 * Endpoint responsável por deletar todos os dados da tabela egressos e associados
+	 * @return ResponseEntity<String> confirmação de retorno
+	 * @author Lucas Cantão
+	 * @since 12/06/2023
+	 */
+	@DeleteMapping("/deleteall")
+	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public ResponseEntity<String> deleteAll() {
+		egressoService.deleteAll();
+		empresaService.deleteAll();
+		if(egressoService.findAll().isEmpty() && empresaService.findAll().isEmpty()){
+			return new ResponseEntity<>("Todos os dados deletados com sucesso", null, HttpStatus.OK);
+		}else{
+			return new ResponseEntity<>("Dados não deletados", null, HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 }

@@ -322,4 +322,9 @@ public class EgressoServiceImpl implements EgressoService {
 		return cadastrosPorMesAno;
 	}
 
+	@Override
+	public void deleteAll(){
+		egressoRepository.deleteAll();
+	}
+
 }
