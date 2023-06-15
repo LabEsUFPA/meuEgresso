@@ -138,7 +138,7 @@ public class DashAdmController {
 			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getNomeEmpresa(), normal)));
 			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getEmail(), normal)));
 			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getCreatedDate().toLocalDate().toString(), normal)));
-			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getStatus().toString(), normal)));
+			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getStatus(), normal)));
 			document.add(t);
 		}
 
