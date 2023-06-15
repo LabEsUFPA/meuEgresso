@@ -3,12 +3,10 @@ package labes.facomp.ufpa.br.meuegresso.controller.administrador.dashboard;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,10 +30,11 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDashDTO;
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
-import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.service.grupo.GrupoService;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
+import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -50,10 +50,9 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/administrador/dashboard")
 public class DashAdmController {
 
-	private final GrupoService grupoService;
 	private final UsuarioService usuarioService;
-
-	private final ModelMapper mapper;
+	private final EgressoService egressoService;
+	private final EmpresaService empresaService;
 
 	/**
 	 * Endpoint responsável por retornar uma lista de egressoDashDTO para
@@ -70,31 +69,16 @@ public class DashAdmController {
 	public Page<EgressoDashDTO> consultarEgressoDash(
 			@RequestParam(name = "nome_usuario", defaultValue = "") String nomeUsuario,
 			@RequestParam(name = "nome_empresa", defaultValue = "") String nomeEmpresa,
-			@RequestParam(name = "date_min", defaultValue = "2023-05-19") LocalDate dateMin,
-			@RequestParam(name = "date_max", defaultValue = "2023-06-19") LocalDate dateMax,
-			@RequestParam(name = "ativo", defaultValue = "true") Boolean ativo,
+			@RequestParam(name = "date_min", defaultValue = "2020-01-01") LocalDate dateMin,
+			@RequestParam(name = "date_max", defaultValue = "2099-12-30") LocalDate dateMax,
+			@RequestParam(name = "status", defaultValue = "") String status,
 			@RequestParam(name = "email", defaultValue = "@gmail") String email,
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
 
-		GrupoModel grupoEgresso = grupoService.findByNomeGrupo("EGRESSO");
-
-		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
-		Page<UsuarioModel> usuariosDash = usuarioService.findBySearch(nomeUsuario, nomeEmpresa, dateMin, dateMax, ativo,
-				email, page, size, direction);
-
-		List<EgressoDashDTO> dtoLista = usuariosDash.getContent().stream().map(u -> {
-			EgressoDashDTO egressoDash = mapper.map(u, EgressoDashDTO.class);
-			egressoDash.setNomeEmpresa(
-					u.getEgresso() != null ? u.getEgresso().getEmprego().getEmpresa().getNome() : "Pendente");
-			egressoDash.setCompleto(u.getGrupos().contains(grupoEgresso) && u.getEgresso() != null);
-			return egressoDash;
-		}).toList();
-
-		return new PageImpl<>(dtoLista, usuariosDash.getPageable(),
-				usuariosDash.getTotalElements());
+		return usuarioService.findBySearch(nomeUsuario, nomeEmpresa, dateMin,
+				dateMax, status, email, page, size, direction);
 	}
 
 	/**
@@ -106,7 +90,7 @@ public class DashAdmController {
 	 * @since 11/06/2023
 	 */
 	@GetMapping("/export")
-	// @PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
 	public ResponseEntity<byte[]> exportarPDF() throws DocumentException {
 
@@ -120,17 +104,11 @@ public class DashAdmController {
 
 		document.open();
 
-		GrupoModel grupoEgresso = grupoService.findByNomeGrupo("EGRESSO");
+		LocalDate dateMin = LocalDate.of(2023, Month.JANUARY, 01);
+		LocalDate dateMax = LocalDate.of(2099, Month.DECEMBER, 30);
 
-		List<UsuarioModel> usuarios = usuarioService.findAll();
-
-		List<EgressoDashDTO> egressos = usuarios.stream().map(u -> {
-			EgressoDashDTO egressoDash = mapper.map(u, EgressoDashDTO.class);
-			egressoDash.setNomeEmpresa(
-					u.getEgresso() != null ? u.getEgresso().getEmprego().getEmpresa().getNome() : "Pendente");
-			egressoDash.setCompleto(u.getGrupos().contains(grupoEgresso) && u.getEgresso() != null);
-			return egressoDash;
-		}).toList();
+		List<EgressoDashDTO> egressos = usuarioService.findBySearch("", "", dateMin,
+				dateMax, "", "", 0, 20, Direction.ASC).toList();
 
 		document.add(new Paragraph("UNIVERSIDADE FEDERAL DO PARÁ"));
 		document.add(new Paragraph("Listagem de Egressos", bold));
@@ -160,7 +138,7 @@ public class DashAdmController {
 			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getNomeEmpresa(), normal)));
 			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getEmail(), normal)));
 			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getCreatedDate().toLocalDate().toString(), normal)));
-			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getAtivo().toString(), normal)));
+			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getStatus().toString(), normal)));
 			document.add(t);
 		}
 
@@ -174,5 +152,27 @@ public class DashAdmController {
 				.filename("listagem-egresso-" + LocalDateTime.now().toLocalDate().toString() + ".pdf").build());
 
 		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+	}
+
+	/**
+	 * Endpoint responsável por deletar todos os dados da tabela egressos e
+	 * associados
+	 * 
+	 * @return ResponseEntity<String> confirmação de retorno
+	 * @author Lucas Cantão
+	 * @since 12/06/2023
+	 */
+	@DeleteMapping("/deleteall")
+	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public ResponseEntity<String> deleteAll() {
+		egressoService.deleteAll();
+		empresaService.deleteAll();
+		if (egressoService.findAll().isEmpty() && empresaService.findAll().isEmpty()) {
+			return new ResponseEntity<>("Todos os dados deletados com sucesso", null, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Dados não deletados", null, HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 }

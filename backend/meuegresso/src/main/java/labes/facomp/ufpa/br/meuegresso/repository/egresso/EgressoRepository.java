@@ -45,4 +45,6 @@ public interface EgressoRepository extends CrudRepository<EgressoModel, Integer>
 
     @Query(value = "select e.remuneracaoBolsa, count(e) from egresso e where e.remuneracaoBolsa is not null group by e.remuneracaoBolsa ")
     List<Tuple> countRemuneracaoBolsa();
+
+    void deleteAll();
 }

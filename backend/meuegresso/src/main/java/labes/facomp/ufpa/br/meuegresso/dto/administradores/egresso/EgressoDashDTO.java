@@ -19,16 +19,12 @@ public class EgressoDashDTO {
 
     private String nome;
 
-    private String email; // linha pra retornar email no pdf
-
     private String nomeEmpresa; // usuários sem egresso terão valor "Pendente"
+
+    private String email; // linha pra retornar email no pdf
 
     private LocalDateTime createdDate;
 
-    private Boolean ativo; // equivalente a aprovado ou pendente
-
-    // Equivalente a usuário com egresso, ou a usuários admin/secretario
-    // Falso caso contrário
-    private Boolean completo;
+    private String status;
 
 }

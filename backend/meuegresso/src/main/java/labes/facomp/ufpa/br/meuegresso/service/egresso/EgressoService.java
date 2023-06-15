@@ -145,4 +145,9 @@ public interface EgressoService {
 
 	public Map<String, Integer> countInteressePos();
 
+	/**
+	 * Método responsável por deletar todos os dados da tabela egresso
+	 */
+	public void deleteAll();
+
 }

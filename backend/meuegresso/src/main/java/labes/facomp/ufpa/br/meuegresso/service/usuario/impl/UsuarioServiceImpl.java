@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +15,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDashDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -97,13 +98,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public Page<UsuarioModel> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate minDate, LocalDate maxDate,
-			Boolean ativo, String email, Integer page, Integer size, Direction direction) {
-		return usuarioRepository.findBySearch("%" + nomeUsuario + "%", "%" + nomeEmpresa + "%", minDate, maxDate, ativo,
-				"%" + email + "%", PageRequest.of(page, size, Sort.by(direction, "createdDate")));
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate dateMin,
+			LocalDate dateMax, String status, String email, Integer page, Integer size, Direction direction) {
+		return usuarioRepository.findBySearch(nomeUsuario, nomeEmpresa, dateMin.atStartOfDay(),
+				dateMax.atTime(LocalTime.MAX), status, email,
+				PageRequest.of(page, size, Sort.by(direction, "u.created_date")));
 	}
 
-	
 	public Map<String, Map<String, LocalDate>> setStatus() {
 		Map<String, Map<String, LocalDate>> usuarioStatusMap = new HashMap<>();
 		usuarioRepository.setStatus().forEach(e -> usuarioStatusMap.put(

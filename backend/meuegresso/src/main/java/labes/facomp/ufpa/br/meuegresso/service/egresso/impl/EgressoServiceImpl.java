@@ -309,4 +309,9 @@ public class EgressoServiceImpl implements EgressoService {
 						Collectors.counting()));
 	}
 
+	@Override
+	public void deleteAll(){
+		egressoRepository.deleteAll();
+	}
+
 }
