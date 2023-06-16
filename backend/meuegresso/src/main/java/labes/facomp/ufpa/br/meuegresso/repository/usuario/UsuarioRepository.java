@@ -31,7 +31,7 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 	boolean existsByUsernameIgnoreCase(String username);
 
 	
-	@Query(value = """
+	@Query(nativeQuery = true,value = """
 			SELECT u.email
 			FROM usuario u
 			JOIN egresso e ON u.id_usuario = e.usuario_id
