@@ -1,8 +1,10 @@
 package labes.facomp.ufpa.br.meuegresso.service.mail.impl;
 
 import java.time.LocalDateTime;
-import  java.util.List;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
@@ -28,6 +30,8 @@ public class MailServiceImpl implements MailService, Runnable {
 
     private final MensagemRepository mensagemRepository;
     
+    private Map<Integer, ScheduledFuture<?>> taskList = new HashMap<>();
+
     @Autowired
     private TaskScheduler taskScheduler;
 
@@ -94,13 +98,15 @@ public class MailServiceImpl implements MailService, Runnable {
     public void scheduledSendEmail() {
 		Map<String, LocalDateTime> emailList = usuarioService.findByAtivo();
         List<MensagemModel> mensagemModel = mensagemRepository.findAll();
-        for (String email : emailList.keySet()) {
-            sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+        for(int i=0; i<mensagemModel.size(); i++){
+            if(mensagemModel.get(i).getData().getDayOfMonth() == LocalDateTime.now().getDayOfMonth()){
+                for (String email : emailList.keySet()) {
+                    sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                }
+            }
         }
-        if(!(mensagemModel.isEmpty()) && (mensagemModel.get(0).getData().equals(LocalDateTime.now()))){
-            
-        }
-	}
+    }
+	
 
     @Override
     public void run() {
@@ -110,7 +116,8 @@ public class MailServiceImpl implements MailService, Runnable {
     public static String toCron(final String mins, final String hrs, final String dayOfMonth, final String month, final String dayOfWeek, final String year) {
         return String.format("%s %s %s %s %s %s", mins, hrs, dayOfMonth, month, dayOfWeek, year);
     }
-
+    
+    @Override
     public void setScheduleATask(Runnable tasklet, LocalDateTime dateTime) {
         String cronExpression = toCron(String.valueOf(dateTime.getMinute()), 
                                         String.valueOf(dateTime.getHour()),
@@ -118,8 +125,20 @@ public class MailServiceImpl implements MailService, Runnable {
                                         String.valueOf(dateTime.getMonth()),
                                         String.valueOf(dateTime.getDayOfWeek()), 
                                         String.valueOf(dateTime.getYear()));
-        taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
+        ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
+        Integer jobId = taskList.size();
+        taskList.put(jobId, scheduledTask);
     }
 
+    public void removeScheduledTask(Integer jobId) {
+        ScheduledFuture<?> scheduledTask = taskList.get(jobId);
+        if(scheduledTask != null) {
+            scheduledTask.cancel(true);
+            taskList.remove(jobId, scheduledTask);
+        }
+    }
 
+    public Map<Integer, ScheduledFuture<?>> getTasks(){
+        return taskList;
+    }
 }

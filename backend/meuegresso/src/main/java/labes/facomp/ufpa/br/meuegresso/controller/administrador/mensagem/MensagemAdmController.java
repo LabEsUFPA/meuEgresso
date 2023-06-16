@@ -70,6 +70,9 @@ public class MensagemAdmController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public String atualizarEmail(@RequestBody @Valid MensagemDTO mensagemDTO) {
+		if(!mailServiceImpl.getTasks().isEmpty()){
+			mailServiceImpl.removeScheduledTask(mensagemDTO.getId());
+		}
 		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
 		mensagemModel = mailService.update(mensagemModel);
 		return ResponseType.SUCCESS_UPDATE.getMessage();
