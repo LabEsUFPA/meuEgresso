@@ -27,6 +27,13 @@ import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.titulacao.TitulacaoService;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Responsável por fornecer end-points para tipo bolsa.
+ *
+ * @author Bruno Eiki
+ * @since 21/04/2023
+ * @version 1.0
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/titulacao")
@@ -38,6 +45,13 @@ public class TitulacaoController {
 
     private final JwtService jwtService;
 
+    /**
+     * Endpoint responsavel por buscar todas as Titulacao do banco.
+     *
+     * @return {@link List<TitulacaoDTO>} Retorna uma lista com todos os Titulacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     public List<TitulacaoDTO> buscarTitulacaos() {
@@ -46,6 +60,16 @@ public class TitulacaoController {
         }.getType());
     }
 
+    /**
+     * Endpoint responsavel por adicionar um Titulacao no banco.
+     *
+     * @param titulacaoDTO Estrutura de dados contendo as informações necessárias
+     *                     para
+     *                     adicionar um titulacao.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
@@ -56,6 +80,17 @@ public class TitulacaoController {
         return ResponseType.SUCCESS_SAVE.getMessage();
     }
 
+    /**
+     * Endpoint responsavel por atualizar uma Titulacao no banco.
+     *
+     * @param titulacaoDTO Estrutura de dados contendo as informações necessárias
+     *                     para
+     *                     atualizar uma Titulacao.
+     * @param token login para ter a permissão para atualizar a titulacao
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
@@ -69,6 +104,16 @@ public class TitulacaoController {
         throw new UnauthorizedRequestException();
     }
 
+    /**
+     * Endpoint responsavel por deletar uma Titulacao no banco.
+     *
+     * @param titulacaoDTO Estrutura de dados contendo as informações necessárias
+     *                     para
+     *                     deletar um Titulacao.
+     * @return {@link String} Mensagem de confirmacao.
+     * @author Bruno Eiki
+     * @since 21/04/2023
+     */
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })

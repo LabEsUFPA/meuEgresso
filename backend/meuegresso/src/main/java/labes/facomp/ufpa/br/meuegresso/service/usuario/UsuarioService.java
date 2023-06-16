@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
