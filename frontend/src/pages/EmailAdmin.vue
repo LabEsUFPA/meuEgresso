@@ -44,9 +44,9 @@
                 <h3 class="gap-[10px]">
                   <CustomInput
                     class="mt-1.5 "
-                    placeholder="Assunto do E-mail"
+                    placeholder="Escopo do E-mail"
                     type="text"
-                    name="assunto"
+                    name="escopo"
                     input-class="w-[25%] h-[40px]"
                     custom-label
                     required
@@ -64,7 +64,7 @@
                     class="mt-1"
                     placeholder="Conteúdo do E-mail"
                     type="textarea"
-                    name="conteudo"
+                    name="corpo"
                     :input-class="classNames(['flex w-full'])"
                     height="560px"
                     :max-length="2000"
@@ -177,6 +177,9 @@ import classNames from 'classnames'
 import { object, string } from 'yup'
 import { Form } from 'vee-validate'
 import CustomDialog from 'src/components/CustomDialog.vue'
+import { useEmailStore } from 'src/store/EmailStore'
+
+const emailStore = useEmailStore()
 
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
@@ -184,26 +187,26 @@ const form = ref<typeof Form | null>(null)
 
 async function handleSubmit (values: any) {
   console.log('sub')
-  const status = 201
+  const status = await emailStore.updateEmail(values)
   if (status !== 201) {
     dialogFalha.value = true
   } else {
     dialogSucesso.value = true
   }
+  fetchUpdateEmail()
 }
 async function handleFail (values: any) {
   console.log('fail')
 }
 // botar data no futuro
 const schema = object().shape({
-  assunto: string().required('Insira o Assunto do email'),
-  conteudo: string().required('Insira o Conteudo do email'),
+  escopo: string().required('Insira o escopo do email'),
+  corpo: string().required('Insira o corpo do email'),
   dataEnvio: string().required('Insira no valida futuro para o envio do email').test('Data', 'Data inválida', (value) => {
     if (value) {
       const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
       const inputDate = new Date(date)
       const minDate = new Date() // Use the current date as the minimum date
-
       return inputDate >= minDate
     }
     return true
@@ -212,28 +215,48 @@ const schema = object().shape({
 
 async function handleCancel (values: any) {
   console.log('cancelar')
+  fetchUpdateEmail()
 }
 
+let jsonResponse : any
+console.log(jsonResponse)
+async function fetchUpdateEmail () {
+  const responseBack = await emailStore.fetchEmail()
+  const jsonEmail = JSON.parse(responseBack)
+  jsonResponse = jsonEmail
+
+  console.log('jsonResponse')
+  console.log(jsonResponse)
+
+  // const message = jsonEmail.corpo
+  if (jsonEmail.length > 1) {
+    form.value?.setFieldValue('corpo', jsonEmail[0].corpo)
+    form.value?.setFieldValue('escopo', jsonEmail[0].escopo)
+  } else {
+    form.value?.setFieldValue('corpo', jsonEmail.corpo)
+    form.value?.setFieldValue('escopo', jsonEmail.escopo)
+  }
+
+  //   form.value?.setFieldValue('escopo', 'Atualização Cadastral - Meu Egresso')
+  //   const message = `Prezado(a) [nome do aluno],
+
+  // Espero que esta mensagem o encontre bem. Gostaríamos de lembrá-lo(a) da importância de manter seu cadastro atualizado em nosso portal Meu Egresso.
+
+  // Para garantir que possamos manter contato com você e fornecer informações importantes sobre eventos, oportunidades de emprego, cursos e outros escopos relevantes, solicitamos que atualize suas informações pessoais e profissionais.
+
+  // Pedimos que acesse o portal Meu Egresso (link) e faça login com suas credenciais. Em seguida, atualize suas informações no seu perfil.
+
+  // Caso tenha alguma dificuldade para acessar o portal ou atualizar suas informações, entre em contato conosco pelo e-mail (e-mail) ou telefone (número). Teremos o maior prazer em ajudá-lo(a).
+
+  // Agradecemos antecipadamente pela sua colaboração em manter suas informações atualizadas. Isso nos ajuda a manter contato com você e oferecer um serviço mais eficiente e personalizado.
+
+  // Atenciosamente,
+
+  // [Seu nome]
+
+  // [Assinatura]`
+}
 onMounted(() => {
-  form.value?.setFieldValue('assunto', 'Atualização Cadastral - Meu Egresso')
-  const message = `Prezado(a) [nome do aluno],
-
-Espero que esta mensagem o encontre bem. Gostaríamos de lembrá-lo(a) da importância de manter seu cadastro atualizado em nosso portal Meu Egresso.
-
-Para garantir que possamos manter contato com você e fornecer informações importantes sobre eventos, oportunidades de emprego, cursos e outros assuntos relevantes, solicitamos que atualize suas informações pessoais e profissionais.
-
-Pedimos que acesse o portal Meu Egresso (link) e faça login com suas credenciais. Em seguida, atualize suas informações no seu perfil.
-
-Caso tenha alguma dificuldade para acessar o portal ou atualizar suas informações, entre em contato conosco pelo e-mail (e-mail) ou telefone (número). Teremos o maior prazer em ajudá-lo(a).
-
-Agradecemos antecipadamente pela sua colaboração em manter suas informações atualizadas. Isso nos ajuda a manter contato com você e oferecer um serviço mais eficiente e personalizado.
-
-Atenciosamente,
-
-[Seu nome]
-
-[Assinatura]`
-
-  form.value?.setFieldValue('conteudo', message)
+  fetchUpdateEmail()
 })
 </script>
