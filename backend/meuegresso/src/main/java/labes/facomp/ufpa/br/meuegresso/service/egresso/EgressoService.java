@@ -3,9 +3,7 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.Year;
 import java.util.List;
 import java.util.Map;
 

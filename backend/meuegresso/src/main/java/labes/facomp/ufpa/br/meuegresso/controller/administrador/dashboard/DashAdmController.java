@@ -33,6 +33,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDashDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.notificacao.NotificacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
@@ -64,7 +65,7 @@ public class DashAdmController {
 	 * @since 06/06/2023
 	 */
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN')")
+	// @PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
 	public Page<EgressoDashDTO> consultarEgressoDash(
 			@RequestParam(name = "nome_usuario", defaultValue = "") String nomeUsuario,
@@ -175,4 +176,21 @@ public class DashAdmController {
 			return new ResponseEntity<>("Dados não deletados", null, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
+
+	/**
+	 * Endpoint responsável por notificar situação do cadastro do usuário
+	 * 
+	 * @return Uma instância de NotificacaoDTO contendo as informações de
+	 *         status dos usuários.
+	 * @author Eude Monteiro
+	 * @since 12/06/2023
+	 */
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping(value = "/tipoStatus")
+	@ResponseStatus(code = HttpStatus.OK)
+	public List<NotificacaoDTO> getStatus() {
+		return usuarioService.getStatus();
+
+	}
+
 }

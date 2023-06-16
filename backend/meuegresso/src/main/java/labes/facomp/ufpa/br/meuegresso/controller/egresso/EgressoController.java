@@ -162,7 +162,6 @@ public class EgressoController {
         ContribuicaoModel contribuicao = egresso.getContribuicao();
         depoimento.setEgresso(egresso);
         contribuicao.setEgresso(egresso);
-
         egresso.getUsuario().setAtivo(egresso.getUsuario().getValido());
         egressoService.adicionarEgresso(egresso);
 

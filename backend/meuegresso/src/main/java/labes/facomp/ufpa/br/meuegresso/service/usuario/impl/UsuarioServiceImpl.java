@@ -1,21 +1,26 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.Tuple;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDashDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.notificacao.NotificacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
@@ -97,21 +102,44 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return usuarioRepository.existsByIdAndCreatedById(id, createdBy);
 	}
 
+	// PageRequest.of(page, size, Sort.by(direction, "u.created_date")
 	@Override
 	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate dateMin,
 			LocalDate dateMax, String status, String email, Integer page, Integer size, Direction direction) {
-		return usuarioRepository.findBySearch(nomeUsuario, nomeEmpresa, dateMin.atStartOfDay(),
-				dateMax.atTime(LocalTime.MAX), status, email,
-				PageRequest.of(page, size, Sort.by(direction, "u.created_date")));
+
+		List<Tuple> tupla = usuarioRepository.findBySearch(nomeUsuario, nomeEmpresa, dateMin.atStartOfDay(),
+				dateMax.atTime(LocalTime.MAX), status, email);
+
+		List<EgressoDashDTO> dashDtos = tupla.stream()
+				.map(t -> new EgressoDashDTO(
+						t.get(0, Integer.class), // id
+						t.get(1, String.class), // nome
+						t.get(2, String.class), // nomeEmpresa
+						t.get(3, String.class), // email
+						t.get(4, Timestamp.class).toLocalDateTime(), // createdDate
+						t.get(5, String.class), // foto
+						t.get(6, String.class))) // status
+				.collect(Collectors.toList());
+
+		Pageable paging = PageRequest.of(page, size, Sort.by(direction, "u.created_date"));
+		int start = Math.min((int) paging.getOffset(), dashDtos.size());
+		int end = Math.min((start + paging.getPageSize()), dashDtos.size());
+
+		return new PageImpl<>(dashDtos.subList(start, end), paging, dashDtos.size());
 	}
 
-	public Map<String, Map<String, LocalDate>> setStatus() {
-		Map<String, Map<String, LocalDate>> usuarioStatusMap = new HashMap<>();
-		usuarioRepository.setStatus().forEach(e -> usuarioStatusMap.put(
-				e.get(0, String.class),
-				Map.of(e.get(1, String.class), e.get(2, LocalDate.class))));
+	public List<NotificacaoDTO> getStatus() {
+		List<NotificacaoDTO> notificacoes = new ArrayList<>();
 
-		return usuarioStatusMap;
+		usuarioRepository.getStatus().forEach(e -> notificacoes.add(
+				NotificacaoDTO.builder()
+						.nome(e.get(0, String.class))
+						.usuarioId(e.get(1, Integer.class))
+						.status(e.get(2, String.class))
+						.data(e.get(3, LocalDate.class))
+						.build()));
+
+		return notificacoes;
 	}
 
 }

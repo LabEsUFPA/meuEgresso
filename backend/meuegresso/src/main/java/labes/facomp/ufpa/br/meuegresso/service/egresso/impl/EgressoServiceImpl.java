@@ -310,7 +310,7 @@ public class EgressoServiceImpl implements EgressoService {
 	}
 
 	@Override
-	public void deleteAll(){
+	public void deleteAll() {
 		egressoRepository.deleteAll();
 	}
 

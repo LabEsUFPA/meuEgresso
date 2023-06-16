@@ -2,7 +2,10 @@ package labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso;
 
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Representa os dados do egresso a serem representados no
@@ -13,6 +16,9 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EgressoDashDTO {
 
     private Integer id;
@@ -25,8 +31,8 @@ public class EgressoDashDTO {
 
     private LocalDateTime createdDate;
 
-    private String status;
-
     private String foto;
+
+    private String status;
 
 }
