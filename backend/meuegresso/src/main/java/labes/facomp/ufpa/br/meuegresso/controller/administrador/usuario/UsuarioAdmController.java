@@ -97,20 +97,4 @@ public class UsuarioAdmController {
 		return ResponseType.FAIL_DELETE.getMessage();
 	}
 
-
-	/**
-	 * Endpoint responsável por notificar situação do cadastro do usuário
-	 * 
-	 * @return Uma instância de UsuarioNotificacaoDTO contendo as informações de status dos usuários.
-	 * @author Eude Monteiro
-	 * @since 12/06/2023
-	 */
-	@GetMapping(value = "/tipoStatus")
-	@ResponseStatus(code = HttpStatus.OK)
-	public UsuarioNotificacaoDTO setStatus() {
-		Map<String, Map<String, LocalDate>> usuarioStatus = usuarioService.setStatus();
-
-		return new UsuarioNotificacaoDTO(usuarioStatus);
-	}
-
 }

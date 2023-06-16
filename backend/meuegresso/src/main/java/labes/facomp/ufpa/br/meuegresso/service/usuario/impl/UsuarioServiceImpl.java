@@ -2,9 +2,8 @@ package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.data.domain.Page;
@@ -16,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDashDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.notificacao.NotificacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
@@ -105,13 +105,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 				PageRequest.of(page, size, Sort.by(direction, "u.created_date")));
 	}
 
-	public Map<String, Map<String, LocalDate>> setStatus() {
-		Map<String, Map<String, LocalDate>> usuarioStatusMap = new HashMap<>();
-		usuarioRepository.setStatus().forEach(e -> usuarioStatusMap.put(
-				e.get(0, String.class),
-				Map.of(e.get(1, String.class), e.get(2, LocalDate.class))));
+	public List<NotificacaoDTO> getStatus() {
+		List<NotificacaoDTO> notificacoes = new ArrayList<>();
 
-		return usuarioStatusMap;
+		usuarioRepository.getStatus().forEach(e -> notificacoes.add(
+				NotificacaoDTO.builder()
+						.nome(e.get(0, String.class))
+						.usuarioId(e.get(1, Integer.class))
+						.status(e.get(2, String.class))
+						.data(e.get(3, LocalDate.class))
+						.build()));
+
+		return notificacoes;
 	}
 
 }
