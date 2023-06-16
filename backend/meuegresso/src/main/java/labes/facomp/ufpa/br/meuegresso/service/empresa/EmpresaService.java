@@ -2,7 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.service.empresa;
 
 import java.util.List;
 
-import labes.facomp.ufpa.br.meuegresso.dto.grafico.LocalPosGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 
@@ -73,4 +73,9 @@ public interface EmpresaService {
 	 *         egresso por pós.
 	 */
 	public List<LocalPosGraficoDTO> countEgressoByPos();
+	
+	/**
+	 * Método responsável por deletar todos os dados da tabela empresa
+	 */
+	public void deleteAll();
 }

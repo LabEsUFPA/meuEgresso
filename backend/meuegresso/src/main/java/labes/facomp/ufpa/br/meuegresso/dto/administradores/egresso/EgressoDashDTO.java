@@ -1,8 +1,11 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Representa os dados do egresso a serem representados no
@@ -13,6 +16,9 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EgressoDashDTO {
 
     private Integer id;
@@ -21,12 +27,12 @@ public class EgressoDashDTO {
 
     private String nomeEmpresa; // usuários sem egresso terão valor "Pendente"
 
-    private LocalDateTime createdDate;
+    private String email; // linha pra retornar email no pdf
 
-    private Boolean ativo; // equivalente a aprovado ou pendente
+    private LocalDate createdDate;
 
-    // Equivalente a usuário com egresso, ou a usuários admin/secretario
-    // Falso caso contrário
-    private Boolean completo;
+    private String foto;
+
+    private String status;
 
 }

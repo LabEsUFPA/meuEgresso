@@ -333,7 +333,7 @@ CREATE TABLE public.egresso (
     linkedin_egresso character varying(255),
     matricula_egresso character varying(12),
     nascimento_egresso date NOT NULL,
-    pos_graducao_egresso boolean,
+    pos_graduacao_egresso boolean,
     remuneracao_bolsa_egresso double precision,
     created_by integer,
     last_modified_by integer,
@@ -609,46 +609,6 @@ CREATE SEQUENCE public.genero_id_genero_seq
 
 ALTER SEQUENCE public.genero_id_genero_seq OWNED BY public.genero.id_genero;
 
-
---
--- TOC entry 245 (class 1259 OID 16487)
--- Name: grupo; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.grupo (
-    id_grupo integer NOT NULL,
-    ativo boolean DEFAULT true NOT NULL,
-    created_date timestamp(6) without time zone DEFAULT now(),
-    last_modified_date timestamp(6) without time zone,
-    nome_grupo character varying(50) NOT NULL,
-    created_by integer,
-    last_modified_by integer
-);
-
-
---
--- TOC entry 246 (class 1259 OID 16492)
--- Name: grupo_id_grupo_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.grupo_id_grupo_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- TOC entry 3718 (class 0 OID 0)
--- Dependencies: 246
--- Name: grupo_id_grupo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.grupo_id_grupo_seq OWNED BY public.grupo.id_grupo;
-
-
 --
 -- TOC entry 247 (class 1259 OID 16493)
 -- Name: palestra; Type: TABLE; Schema: public; Owner: -
@@ -820,6 +780,7 @@ CREATE TABLE public.usuario (
     nome_usuario character varying(100) NOT NULL,
     senha_usuario character varying(80) NOT NULL,
     login_usuario character varying(50) NOT NULL,
+    valido_usuario boolean DEFAULT true NOT NULL,
     created_by integer,
     last_modified_by integer
 );
@@ -832,7 +793,7 @@ CREATE TABLE public.usuario (
 
 CREATE TABLE public.usuario_grupo (
     id_usuario integer NOT NULL,
-    id_grupo integer NOT NULL
+    grupo character varying(10) NOT NULL
 );
 
 
@@ -969,14 +930,6 @@ ALTER TABLE ONLY public.faixa_salarial ALTER COLUMN id_faixa_salarial SET DEFAUL
 --
 
 ALTER TABLE ONLY public.genero ALTER COLUMN id_genero SET DEFAULT nextval('public.genero_id_genero_seq'::regclass);
-
-
---
--- TOC entry 3331 (class 2604 OID 16540)
--- Name: grupo id_grupo; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.grupo ALTER COLUMN id_grupo SET DEFAULT nextval('public.grupo_id_grupo_seq'::regclass);
 
 
 --
@@ -2311,17 +2264,6 @@ INSERT INTO public.genero VALUES (6, true, '2023-06-06 14:52:47.557769', NULL, '
 
 
 --
--- TOC entry 3685 (class 0 OID 16487)
--- Dependencies: 245
--- Data for Name: grupo; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.grupo VALUES (1, true, '2023-06-06 14:52:47.250477', NULL, 'ADMIN', 1, NULL);
-INSERT INTO public.grupo VALUES (2, true, '2023-06-06 14:52:47.258373', NULL, 'SECRETARIO', 1, NULL);
-INSERT INTO public.grupo VALUES (3, true, '2023-06-06 14:52:47.266401', NULL, 'EGRESSO', 1, NULL);
-
-
---
 -- TOC entry 3687 (class 0 OID 16493)
 -- Dependencies: 247
 -- Data for Name: palestra; Type: TABLE DATA; Schema: public; Owner: -
@@ -2373,9 +2315,9 @@ INSERT INTO public.titulacao VALUES (2, true, '2023-06-06 14:52:47.633142', NULL
 -- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.usuario VALUES (1, true, '2023-06-06 14:52:47.22416', NULL, 'admin@admin.com', 'ADMIN ADMIN', '{bcrypt}$2a$10$vh9/MkL4XQyd.fqkQdnWSelTUxPBpDb6qL5W2uWLxLUN0JR9vwRZm', 'ADMIN', NULL, NULL);
-INSERT INTO public.usuario VALUES (2, true, '2023-06-06 14:52:47.232891', NULL, 'secretario@secretario.com', 'SECRETARIO SECRETARIO', '{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy', 'SECRETARIO', NULL, NULL);
-INSERT INTO public.usuario VALUES (3, true, '2023-06-06 14:52:47.241565', NULL, 'egresso@egresso.com', 'EGRESSO EGRESSO', '{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO', 'EGRESSO', NULL, NULL);
+INSERT INTO public.usuario VALUES (1, true, '2023-06-06 14:52:47.22416', NULL, 'admin@admin.com', 'ADMIN ADMIN', '{bcrypt}$2a$10$vh9/MkL4XQyd.fqkQdnWSelTUxPBpDb6qL5W2uWLxLUN0JR9vwRZm', 'ADMIN', true, NULL, NULL);
+INSERT INTO public.usuario VALUES (2, true, '2023-06-06 14:52:47.232891', NULL, 'secretario@secretario.com', 'SECRETARIO SECRETARIO', '{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy', 'SECRETARIO', true, NULL, NULL);
+INSERT INTO public.usuario VALUES (3, true, '2023-06-06 14:52:47.241565', NULL, 'egresso@egresso.com', 'EGRESSO EGRESSO', '{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO', 'EGRESSO', true, NULL, NULL);
 
 
 --
@@ -2384,9 +2326,9 @@ INSERT INTO public.usuario VALUES (3, true, '2023-06-06 14:52:47.241565', NULL, 
 -- Data for Name: usuario_grupo; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.usuario_grupo VALUES (1, 1);
-INSERT INTO public.usuario_grupo VALUES (2, 2);
-INSERT INTO public.usuario_grupo VALUES (3, 3);
+INSERT INTO public.usuario_grupo VALUES (1, 'ADMIN') ON CONFLICT DO NOTHING;
+INSERT INTO public.usuario_grupo VALUES (2, 'SECRETARIO') ON CONFLICT DO NOTHING;
+INSERT INTO public.usuario_grupo VALUES (3, 'EGRESSO') ON CONFLICT DO NOTHING;
 
 
 --
@@ -2513,15 +2455,6 @@ SELECT pg_catalog.setval('public.faixa_salarial_id_faixa_salarial_seq', 4, true)
 --
 
 SELECT pg_catalog.setval('public.genero_id_genero_seq', 6, true);
-
-
---
--- TOC entry 3738 (class 0 OID 0)
--- Dependencies: 246
--- Name: grupo_id_grupo_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.grupo_id_grupo_seq', 3, true);
 
 
 --
@@ -2731,14 +2664,6 @@ ALTER TABLE ONLY public.genero
     ADD CONSTRAINT genero_pkey PRIMARY KEY (id_genero);
 
 
---
--- TOC entry 3421 (class 2606 OID 16583)
--- Name: grupo grupo_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.grupo
-    ADD CONSTRAINT grupo_pkey PRIMARY KEY (id_grupo);
-
 
 --
 -- TOC entry 3425 (class 2606 OID 16585)
@@ -2911,14 +2836,6 @@ ALTER TABLE ONLY public.curso
     ADD CONSTRAINT uk_i35k8uavr3s5cxr12aefe00e UNIQUE (nome_curso);
 
 
---
--- TOC entry 3423 (class 2606 OID 16623)
--- Name: grupo uk_is0kvc71ivi2o1nhe7h19m47p; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.grupo
-    ADD CONSTRAINT uk_is0kvc71ivi2o1nhe7h19m47p UNIQUE (nome_grupo);
-
 
 --
 -- TOC entry 3431 (class 2606 OID 16625)
@@ -2998,7 +2915,7 @@ ALTER TABLE ONLY public.egresso_valido
 --
 
 ALTER TABLE ONLY public.usuario_grupo
-    ADD CONSTRAINT usuario_grupo_pkey PRIMARY KEY (id_usuario, id_grupo);
+    ADD CONSTRAINT usuario_grupo_pkey PRIMARY KEY (id_usuario, grupo);
 
 
 --
@@ -3125,15 +3042,6 @@ ALTER TABLE ONLY public.genero
 
 ALTER TABLE ONLY public.setor_atuacao
     ADD CONSTRAINT fk4qba75lalso4wg21v2lldr81c FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
---
--- TOC entry 3497 (class 2606 OID 16709)
--- Name: grupo fk4x87bpegbq5yd4awx0jpyl7rf; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.grupo
-    ADD CONSTRAINT fk4x87bpegbq5yd4awx0jpyl7rf FOREIGN KEY (last_modified_by) REFERENCES public.usuario(id_usuario);
 
 
 --
@@ -3299,15 +3207,6 @@ ALTER TABLE ONLY public.egresso
 
 
 --
--- TOC entry 3511 (class 2606 OID 16804)
--- Name: usuario_grupo fkcu6om65mvqr6ct95ijgqgx7ww; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.usuario_grupo
-    ADD CONSTRAINT fkcu6om65mvqr6ct95ijgqgx7ww FOREIGN KEY (id_grupo) REFERENCES public.grupo(id_grupo);
-
-
---
 -- TOC entry 3475 (class 2606 OID 16809)
 -- Name: egresso_empresa fkdsaknoo0x7tq0wfqdwtluix5n; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
@@ -3461,15 +3360,6 @@ ALTER TABLE ONLY public.comentario
 
 
 --
--- TOC entry 3498 (class 2606 OID 16894)
--- Name: grupo fkmabbfeklclq6kit2wnnkgfak0; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.grupo
-    ADD CONSTRAINT fkmabbfeklclq6kit2wnnkgfak0 FOREIGN KEY (created_by) REFERENCES public.usuario(id_usuario);
-
-
---
 -- TOC entry 3467 (class 2606 OID 16899)
 -- Name: depoimento fkmh11nyrmuejhtnlbo1tdxp88v; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
@@ -3591,4 +3481,3 @@ ALTER TABLE ONLY public.area_emprego
 --
 -- PostgreSQL database dump complete
 --
-

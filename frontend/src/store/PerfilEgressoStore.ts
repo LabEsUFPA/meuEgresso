@@ -175,18 +175,8 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         return (response?.status) !== undefined ? response.status : 500
       }
     },
-    //   response = await this.uploadImageEgresso(foto.foto);
-    //   async uploadImageEgresso (foto: FormData) {
-    //     const response = await Api.request({
-    //       method: 'post',
-    //       route: '/egresso/foto',
-    //       body: foto
-    //     })
-    //     return response
-
-    // },
     async fetchImageEgresso (egressoId: string) {
-      const route = '/egresso/foto/' + egressoId
+      const route = '/publico/egresso/foto/' + egressoId
       // const url = ''
       let response: any
       await Axios.get(route, {
@@ -198,7 +188,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
     },
 
     async fetchImageEgressoUrl (egressoId: string) {
-      const route = '/egresso/foto/' + egressoId
+      const route = '/publico/egresso/foto/' + egressoId
       let url = ''
       let response = ''
       await Axios.get(route, {

@@ -43,14 +43,12 @@
                 name="registration"
                 type="text"
                 label="Matrícula"
+                mask="############"
                 helper-text="Informe a sua matrícula da faculdade"
                 class-helper-text="text-gray-600"
                 :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
                 custom-error-message
                 :icon-path="mdiSchool"
-                :max-length="12"
-                :min-length="12"
-                :min="0"
                 @update:value="checkRegistrationLength"
               />
               <CustomInput
@@ -141,21 +139,18 @@ import { useLoginStore } from 'src/store/LoginStore'
 interface ProfileRegisterModel extends models.ProfileRegisterModel { }
 
 const error = ref(false)
-const errorMessages = ref({
-  errorRequest: 'Requisição não aceita',
-  userNotFound: 'Usuario não cadastrado pela faculdade'
-})
 const errorText = ref('')
 const submitSuccess = ref(false)
 const storeLogin = useLoginStore()
 const missingDigits = ref(0)
 const showPassword = ref(false)
+const $store = useCadastroPerfilStore()
 
 const schema = object().shape({
   name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/, 'Informe nome e sobrenome'),
-  username: string().required('Informe um nome de usuário').trim().matches(/^[a-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
+  username: string().required('Informe um nome de usuário').trim().matches(/^[A-Za-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
   registration: string().max(12).matches(/^(\d{12})?$/),
-  email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))?$/, 'Email inválido'),
+  email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.[a-zA-Z]{2,}))?$/, 'Email inválido'),
   password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
   confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida')
 })
@@ -171,38 +166,23 @@ const toggleShowPassword = () => {
 const handleSubmit = async (submitData: any) => {
   const profileData: ProfileRegisterModel = submitData
 
-  const responseValidation = await useCadastroPerfilStore().egressValidation(
+  const response = await $store.userProfileRegister(
+    profileData.username,
+    profileData.password,
+    profileData.email,
     profileData.name,
-    profileData.registration,
-    profileData.email
+    profileData.registration
   )
 
-  if (responseValidation === 200) {
-    error.value = false
-    const responseRegister = await useCadastroPerfilStore().userProfileRegister(
-      profileData.username,
-      profileData.password,
-      profileData.email,
-      profileData.name,
-      [{
-        id: 3
-      }]
-    )
-
-    if (responseRegister.status === 201) {
-      submitSuccess.value = true
-      await storeLogin.userLogin(profileData.username, profileData.password)
-      await storeLogin.saveUser()
-      router.push({ path: '/cadastro' })
-    } else if (responseRegister.status === 400) {
-      errorText.value = responseRegister.data?.message
-      error.value = true
-    } else {
-      errorText.value = errorMessages.value.errorRequest
-      error.value = true
-    }
+  if (response.status === 201) {
+    submitSuccess.value = true
+    await storeLogin.userLogin(profileData.username, profileData.password)
+    await router.push({ path: '/cadastro' })
+  } else if (response.status === 400) {
+    errorText.value = response.data?.technicalMessage
+    error.value = true
   } else {
-    errorText.value = errorMessages.value.userNotFound
+    errorText.value = 'Requisição não aceita'
     error.value = true
   }
 }

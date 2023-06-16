@@ -176,10 +176,10 @@ const handleSubmit = async (submitData: any) => {
     profileData.username,
     profileData.password,
     profileData.email,
-    profileData.name,
-    [{
+    profileData.name
+    /* [{ //QUEBROU, AGURANDO AS ROTAS DE ADMIN
       id: submitData.idAccessLevel
-    }]
+    }] */
   )
 
   if (response.status === 201) {

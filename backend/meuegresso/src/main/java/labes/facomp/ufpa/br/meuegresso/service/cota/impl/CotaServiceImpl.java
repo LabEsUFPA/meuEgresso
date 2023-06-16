@@ -1,6 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.service.cota.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -59,6 +61,14 @@ public class CotaServiceImpl implements CotaService {
     @Override
     public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
         return cotaRepository.existsByIdAndCreatedById(id, createdBy);
+    }
+
+    @Override
+    public Map<String, Integer> countEgressoByCota() {
+        Map<String, Integer> contagem = new HashMap<>(9);
+        cotaRepository.countEgressoByCota().stream()
+                .forEach(e -> contagem.put(e.get(0, String.class), e.get(1, Long.class).intValue()));
+        return contagem;
     }
 
 

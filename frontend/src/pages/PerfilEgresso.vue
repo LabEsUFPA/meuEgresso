@@ -1,10 +1,10 @@
 <template>
   <div
     v-if="loading"
-    class="flex items-center justify-center text-center"
+    class="flex h-[70vh] items-center justify-center text-center"
   >
     <img
-      class="animate-spin mr-3 max-w-[100px]"
+      class="animate-spin mr-3 w-[100px]"
       src="../assets/loading.svg"
       alt="Loading"
     >
@@ -24,7 +24,7 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
         >
-          <h1 class="absolute ml-[220px] sm:ml-[270px] md:ml-[300px] mr-1 ">
+          <h1 class=" absolute flex flex-auto top-[15px] right-[10px] sm:right-[20%]">
             <ButtonEdit
               label="Editar"
               icon-path="/src/assets/edit.svg"
@@ -42,8 +42,8 @@
             >
               <ProfileImage
                 ref="profileImageRef"
-                @imageUploadBack="profileImageSave"
-                @remove="removeImageEgresso"
+                @image-upload-back="profileImageSave"
+                @remove="softRemoveImageEgresso"
                 :img-url="dataEgresso.profileHead.image"
                 img-default="/src/assets/profile-pic.png"
                 :is-input="dataEgresso.profileHead.isInput"
@@ -233,6 +233,7 @@
                   label="Gênero"
                   :options="$store.generos"
                   required
+                  :pre-filled="true"
                 />
 
                 <CustomInput
@@ -403,6 +404,21 @@
                 placeholder="Empresa"
                 icon-path=""
               />
+              <div v-if="dataEgresso.carreira.area === '' ">
+                <div>
+                  <div class="text-gray-400 text-center mb-6 mt-12">
+                    <SvgIcon
+                      type="mdi"
+                      size="30"
+                      class="inline"
+                      :path="mdiAlertCircleOutline"
+                    />
+                    <div class="mt-4">
+                      Sem dados cadastrados
+                    </div>
+                  </div>
+                </div>
+              </div>
             </template>
           </FolderCarreira>
 
@@ -412,12 +428,7 @@
             @invalid-submit="onInvalid"
             :validation-schema="schemaLocalizacao"
           >
-            <FolderLocalizacao
-              :is-input="dataEgresso.localizacao.isInput"
-              :pais-holder="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
-              :estado-holder="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
-              :cidade-holder="dataEgresso.localizacao.cidade"
-            >
+            <FolderSection class="mt-6">
               <template #EditButton>
                 <h1 class="relative">
                   <ButtonEdit
@@ -434,38 +445,104 @@
                   />
                 </h1>
               </template>
-              <template #NonInputData>
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
-                  name="localizacao.pais"
-                  placeholder="Brasil"
-                  label="País"
-                  :icon-path="mdiWeb"
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
-                  name="localizacao.estado"
-                  label="Estado"
-                  placeholder="Pará"
-                  :icon-path="mdiMapOutline"
-                />
-
-                <CustomPerfilData
-                  type="text"
-                  class="mb-1"
-                  :vmodel="dataEgresso.localizacao.cidade"
-                  name="localizacao.cidade"
-                  label="Cidade"
-                  placeholder="Belém"
-                  :icon-path="mdiMapMarkerRadius"
-                />
+              <template #title>
+                <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
+                  <SvgIcon
+                    type="mdi"
+                    size="20"
+                    class="inline mr-2"
+                    :path="mdiMapMarker"
+                  />
+                  Localização
+                </h1>
               </template>
-            </FolderLocalizacao>
+
+              <template #default>
+                <div v-if="!dataEgresso.localizacao.isInput">
+                  <CustomPerfilData
+                    type="text"
+                    class="mb-5"
+                    :vmodel="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
+                    name="localizacao.pais"
+                    placeholder="Brasil"
+                    label="País"
+                    :icon-path="mdiWeb"
+                  />
+
+                  <CustomPerfilData
+                    type="text"
+                    class="mb-5"
+                    :vmodel="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
+                    name="localizacao.estado"
+                    label="Estado"
+                    placeholder="Pará"
+                    :icon-path="mdiMapOutline"
+                  />
+
+                  <CustomPerfilData
+                    type="text"
+                    class="mb-1"
+                    :vmodel="dataEgresso.localizacao.cidade"
+                    name="localizacao.cidade"
+                    label="Cidade"
+                    placeholder="Belém"
+                    :icon-path="mdiMapMarkerRadius"
+                  />
+                  <div v-if="dataEgresso.localizacao.pais === '' ">
+                    <div>
+                      <div class="text-gray-400 text-center mb-6 mt-12">
+                        <SvgIcon
+                          type="mdi"
+                          size="30"
+                          class="inline"
+                          :path="mdiAlertCircleOutline"
+                        />
+                        <div class="mt-4">
+                          Sem dados cadastrados
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div v-show="dataEgresso.localizacao.isInput">
+                  <div>
+                    <CustomSelect
+                      class="mb-5"
+                      name="localizacao.pais"
+                      label="País"
+                      :options="countries"
+                      v-model:value="dataEgresso.localizacao.pais"
+                      @change="dataEgresso.localizacao.pais = $event"
+                      required
+                      :placeholder="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
+                      :pre-filled="true"
+                    />
+
+                    <CustomSelect
+                      class="mb-5"
+                      name="localizacao.estado"
+                      label="Estado"
+                      :options="states"
+                      v-model:value="dataEgresso.localizacao.estado"
+                      @change="dataEgresso.localizacao.estado = $event"
+                      required
+                      :placeholder="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
+                      :pre-filled="true"
+                    />
+
+                    <CustomSelect
+                      name="localizacao.cidade"
+                      label="Cidade"
+                      :options="cities"
+                      v-model:value="dataEgresso.localizacao.cidade"
+                      required
+                      :pre-filled="true"
+                      :placeholder="dataEgresso.localizacao.cidade"
+                    />
+                  </div>
+                </div>
+              </template>
+            </FolderSection>
           </Form>
           <Form
             ref="formAdicionais"
@@ -573,17 +650,17 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomPerfilData from 'src/components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
-import { Country, State} from 'country-state-city'
+import { Country, State, City } from 'country-state-city'
+
 import { computed, ref, watch, onMounted } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import { Form } from 'vee-validate'
 import { object, string, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
-import { useLoginStore } from 'src/store/LoginStore'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import FolderAcademico from 'src/components/FolderAcademico.vue'
 import FolderCarreira from 'src/components/FolderCarreira.vue'
-import FolderLocalizacao from 'src/components/FolderLocalizacao.vue'
+// import FolderLocalizacao from 'src/components/FolderLocalizacao.vue'
 import FolderAdicionais from 'src/components/FolderAdicionais.vue'
 import ProfileImage from 'src/components/ProfileImage.vue'
 import {
@@ -595,7 +672,9 @@ import {
   mdiMapMarkerRadius,
   mdiLinkVariant,
   mdiCheckCircle,
-  mdiAlertCircle
+  mdiAlertCircle,
+  mdiMapMarker,
+  mdiAlertCircleOutline
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
 const dialogSucesso = ref(false)
@@ -603,7 +682,6 @@ const dialogFalha = ref(false)
 const $route = useRoute()
 const $store = usePerfilEgressoStore()
 const egressoStore = usePerfilEgressoStore()
-
 
 const storage = new LocalStorage()
 const formHeader = ref<typeof Form | null>(null)
@@ -613,23 +691,61 @@ const formCarreira = ref<typeof Form | null>(null)
 const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 
+const countries = computed(() => {
+  const countries = Country.getAllCountries()
+  const filteredCountries = []
+  for (const country of countries) {
+    filteredCountries.push({
+      label: country.name,
+      value: country.isoCode
+    })
+  }
 
-if(storage.has('loggedEgresso')){
+  return filteredCountries
+})
+
+const states = computed(() => {
+  const states = State.getStatesOfCountry(dataEgresso.value.localizacao.pais)
+  const filteredStates = []
+
+  for (const state of states) {
+    filteredStates.push({
+      label: state.name,
+      value: state.isoCode
+    })
+  }
+  return filteredStates
+})
+
+const cities = computed(() => {
+  const cities = City.getCitiesOfState(dataEgresso.value.localizacao.pais, dataEgresso.value.localizacao.estado)
+  const filteredCities = []
+
+  for (const city of cities) {
+    filteredCities.push(city.name)
+  }
+  return filteredCities
+})
+
+//
+const stagedChanges = ref({
+  profileHead: {
+    removedImage: false
+  }
+})
+
+if (storage.has('loggedEgresso')) {
   $store.fetchAll()
 }
-
 
 const isPublic = computed(() => {
   if (storage.has('loggedUser') && storage.has('loggedEgresso')) {
     const logEgresso = JSON.parse(storage.get('loggedEgresso'))
-    console.log(logEgresso);
-    return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id)) 
+    console.log(logEgresso)
+    return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id))
+  } else {
+    return (Object.keys($route.params).length === 1)
   }
-  else{
-    return (Object.keys($route.params).length === 1) 
-
-  }
-
 })
 
 function handleStatus (status: any) {
@@ -647,28 +763,32 @@ const profileImageSave = () => {
 }
 async function handleSubmitHeader (values: any) {
   jsonResponse.usuario.nome = values.geral.nome
-  if(values.geral.linkedin !== '' && values.geral.linkedin !== undefined){
+  if (values.geral.linkedin !== '' && values.geral.linkedin !== undefined) {
     jsonResponse.linkedin = values.geral.linkedin
-  }
-  else{
+  } else {
     jsonResponse.linkedin = null
   }
-  if(values.geral.lattes !== '' && values.geral.lattes !== undefined){
-    console.log(jsonResponse.lattes);
+  if (values.geral.lattes !== '' && values.geral.lattes !== undefined) {
+    console.log(jsonResponse.lattes)
     jsonResponse.lattes = values.geral.lattes
-  }
-  else{
+  } else {
     jsonResponse.lattes = null
   }
-  
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
-  const responseImage = await profileImageSave()
-  // console.log(status)
-  // console.log(responseImage)
 
-  if (status === 201 && responseImage === 201) {
+  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  let responseImage: any
+  if (stagedChanges.value.profileHead.removedImage) {
+    responseImage = await removeImageEgresso()
+    stagedChanges.value.profileHead.removedImage = false
+  } else {
+    responseImage = await profileImageSave()
+  }
+
+  // console.log(status)
+  console.log(responseImage)
+
+  if (status === 201 && (responseImage === 201 || responseImage === 200 || responseImage === 204)) {
     dialogSucesso.value = true
-    await useLoginStore().saveUser()
 
     toggleIsInput('profileHead')
     fetchUpdateEgresso()
@@ -685,7 +805,6 @@ async function handleSubmitGeral (values: any) {
   jsonResponse.nascimento = values.geral.nascimento
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
-    await useLoginStore().saveUser()
     toggleIsInput('geral')
   }
 
@@ -779,9 +898,8 @@ async function handleSubmitAcademico (values: any) {
   fetchUpdateEgresso()
 }
 async function handleSubmitLocalizacao (values: any) {
-  jsonResponse.emprego.empresa.endereco.pais = values.localizacao.pais
-  jsonResponse.emprego.empresa.endereco.estado = values.localizacao.estado
-  jsonResponse.emprego.empresa.endereco.cidade = values.localizacao.cidade
+  console.log(values)
+  jsonResponse.emprego.empresa.endereco = values.localizacao
   // delete jsonResponse.emprego.empresa.endereco.id
 
   const status = await egressoStore.atualizarEgresso(jsonResponse)
@@ -832,7 +950,6 @@ async function handleSubmitCarreira (values: any) {
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
-
   } else {
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego = null
@@ -849,11 +966,17 @@ async function handleSubmitAdicionais (values: any) {
   jsonResponse.depoimento.descricao = values.adicionais.experiencias
   jsonResponse.contribuicao.descricao = values.adicionais.contribuicoes
   if (values.adicionais.palestras) {
-    jsonResponse.palestras.descricao = values.adicionais.assuntosPalestras
+    if (jsonResponse.palestras) {
+      jsonResponse.palestras.descricao = values.adicionais.assuntosPalestras
+    } else {
+      const palestras = {
+        descricao: values.adicionais.assuntosPalestras
+      }
+      jsonResponse.palestras = palestras
+    }
   } else {
-    jsonResponse.palestras.descricao = ''
+    jsonResponse.palestras = null
   }
-  egressoStore.atualizarEgresso(jsonResponse)
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('adicionais')
@@ -873,6 +996,11 @@ function toggleIsInput (FolderLabel: string) {
       break
     case 'localizacao':
       dataEgresso.value.localizacao.isInput = !dataEgresso.value.localizacao.isInput
+      setTimeout(() => {
+        estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
+        cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
+      }, 10)
+
       break
     case 'academico':
       dataEgresso.value.academico.isInput = !dataEgresso.value.academico.isInput
@@ -899,7 +1027,7 @@ const selectOpts = ref({
 })
 function onInvalid (e: any) {
   // updateEgressoDataModel(e)
-  // console.log(e)
+  console.log(e)
 }
 
 const dataEgresso = ref({
@@ -936,7 +1064,6 @@ const dataEgresso = ref({
         renda: false,
         raca: false,
         quilombolaIndigena: false
-
       }
     },
     bolsista: {
@@ -983,6 +1110,7 @@ const bools = ref({
   posGrad: true,
   palestras: true
 })
+
 const placeHolders = ref({
   bolsaNome: dataEgresso.value.academico.bolsista.tipo,
   areaAtuacao: dataEgresso.value.carreira.area,
@@ -999,7 +1127,6 @@ watch(() => dataEgresso.value.egressoId, () => {
 })
 
 let jsonResponse: any
-let userData: any
 let egressoResponseBack: any
 
 let egressoImageResponse : any
@@ -1008,8 +1135,6 @@ imageEgressoUrl = ''
 async function handleEgressoImage (id : string) {
   egressoImageResponse = await egressoStore.fetchImageEgressoUrl(id)
   imageEgressoUrl = egressoImageResponse
-  // console.log('URL:')
-  // console.log(imageEgressoUrl)
   if (imageEgressoUrl === '') {
     return ''
   } else {
@@ -1018,19 +1143,15 @@ async function handleEgressoImage (id : string) {
 }
 
 async function fetchUpdateEgresso () {
-  if (storage.has('loggedUser')) {
-    userData = JSON.parse(storage.get('loggedUser'))
-  }
   // getEgresso
   if (isPublic.value) {
     egressoResponseBack = fetchPublicEgresso(Number($route.params?.id))
   } else {
     egressoResponseBack = egressoStore.fetchEgresso()
   }
-  
 
   const ResponseBack = await egressoResponseBack
-  
+
   const json = JSON.parse(ResponseBack)
 
   jsonResponse = json
@@ -1146,7 +1267,6 @@ async function fetchUpdateEgresso () {
     setorAtuacao: dataEgresso.value.carreira.setor,
     faixaSalarial: dataEgresso.value.carreira.faixaSalarial
   }
-  formHeader.value?.setFieldValue('geral.nome', dataEgresso.value.profileHead.nome)
   formHeader.value?.setValues({
     'geral.nome': dataEgresso.value.profileHead.nome,
     'geral.linkedin': dataEgresso.value.profileHead.linkedin,
@@ -1161,47 +1281,56 @@ async function fetchUpdateEgresso () {
   // passa o nome para o placeholder
   // dataEgresso.value.geral.genero
   formLocalizacao.value?.setValues({
-    'localizacao.pais': dataEgresso.value.localizacao.pais,
-    'localizacao.estado': dataEgresso.value.localizacao.estado,
-    'localizacao.cidade': dataEgresso.value.localizacao.cidade
+    localizacao: dataEgresso.value.localizacao
   })
-  // dataEgresso.value.academico.cotista.value
   formAcademico.value?.setValues({
-    'academico.matricula': dataEgresso.value.academico.matricula,
-    'academico.cotista.value': dataEgresso.value.academico.cotista.value,
-    'academico.cotista.tipos.renda': dataEgresso.value.academico.cotista.tipos.renda,
-    'academico.cotista.tipos.escola': dataEgresso.value.academico.cotista.tipos.escola,
-    'academico.cotista.tipos.raca': dataEgresso.value.academico.cotista.tipos.raca,
-    'academico.cotista.tipos.quilombolaIndigena': dataEgresso.value.academico.cotista.tipos.quilombolaIndigena,
-    'academico.bolsista.value': dataEgresso.value.academico.bolsista.value,
-    // id
-    // nome dataEgresso.value.academico.bolsista.tipo,
-    'academico.bolsista.tipo': dataEgresso.value.bolsaId,
-
-    'academico.bolsista.remuneracao': dataEgresso.value.academico.bolsista.remuneracao,
-    'academico.posGrad.value': dataEgresso.value.academico.posGrad.value,
-    'academico.posGrad.local': dataEgresso.value.academico.posGrad.local,
-    'academico.posGrad.curso': dataEgresso.value.academico.posGrad.curso,
-    'academico.posGrad.desejaPos': dataEgresso.value.academico.posGrad.desejaPos
+    academico: dataEgresso.value.academico,
+    'academico.bolsista.tipo': dataEgresso.value.bolsaId
   })
   formCarreira.value?.setValues({
-    'carreira.area': dataEgresso.value.carreira.area,
-    'carreira.setor': dataEgresso.value.carreira.setor,
-    'carreira.empresa': dataEgresso.value.carreira.empresa,
-    // id
+    carreira: dataEgresso.value.carreira,
     'carreira.faixaSalarial': dataEgresso.value.faixaSalarialId
   })
   formAdicionais.value?.setValues({
-    'adicionais.palestras': dataEgresso.value.adicionais.palestras,
-    'adicionais.assuntosPalestras': dataEgresso.value.adicionais.assuntosPalestras,
-    'adicionais.experiencias': dataEgresso.value.adicionais.experiencias,
-    'adicionais.contribuicoes': dataEgresso.value.adicionais.contribuicoes
+    adicionais: dataEgresso.value.adicionais
   })
-  return json;
+  return json
 }
+let estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
+let cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
+
 onMounted(() => {
   window.scrollTo(0, 0)
   fetchUpdateEgresso()
+})
+
+onMounted(() => {
+  estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
+
+  cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
+  watch(() => dataEgresso.value.localizacao.pais, (newValue) => {
+    formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
+    formLocalizacao.value?.setFieldValue('localizacao.estado', '')
+    if (formLocalizacao.value) {
+      dataEgresso.value.localizacao.cidade = ''
+    }
+    setTimeout(() => {
+      cidadeInput.value = ''
+      estadoInput.value = ''
+    }, 10)
+  })
+
+  watch(() => dataEgresso.value.localizacao.estado, (newValue) => {
+    console.log('estado')
+    console.log(formLocalizacao.value)
+    formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
+    if (formLocalizacao.value) {
+      dataEgresso.value.localizacao.cidade = ''
+    }
+    setTimeout(() => {
+      cidadeInput.value = ''
+    }, 10)
+  })
 })
 
 function fetchPublicEgresso (id: number) {
@@ -1270,19 +1399,19 @@ const schemaAcademico = object().shape({
     bolsista: object({
       value: boolean(),
       tipo: string().when('value', ([value], schemaAcademico) => {
-        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
+        return value ? schemaAcademico.required('Campo obrigatório') : schemaAcademico.notRequired()
       }),
       remuneracao: string().when('value', ([value], schemaAcademico) => {
-        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
+        return value ? schemaAcademico.required('Campo obrigatório') : schemaAcademico.notRequired()
       })
     }),
     posGrad: object({
       value: boolean(),
       local: string().when('value', ([value], schemaAcademico) => {
-        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
+        return value ? schemaAcademico.required('Campo obrigatório') : schemaAcademico.notRequired()
       }),
       curso: string().when('value', ([value], schemaAcademico) => {
-        return value ? schemaAcademico.required() : schemaAcademico.notRequired()
+        return value ? schemaAcademico.required('Campo obrigatório') : schemaAcademico.notRequired()
       })
     }),
     desejaPos: boolean()
@@ -1313,16 +1442,20 @@ const schemaAdicionais = object().shape({
   adicionais: object({
     palestras: boolean(),
     assuntosPalestras: string().when('palestras', ([palestras], schemaAdicionais) => {
-      return palestras ? schemaAdicionais.required() : schemaAdicionais.notRequired()
+      return palestras ? schemaAdicionais.required('Campo obrigatório') : schemaAdicionais.notRequired()
     }),
-    experiencias: string().required(),
-    contribuicoes: string().required()
+    experiencias: string().required('Campo obrigatório'),
+    contribuicoes: string().required('Campo obrigatório')
   })
 })
 async function removeImageEgresso () {
   const removeResp = await egressoStore.removeImageEgresso()
   dataEgresso.value.profileHead.image = '0'
-  console.log(removeResp)
+  return removeResp
+}
+async function softRemoveImageEgresso () {
+  stagedChanges.value.profileHead.removedImage = true
+  dataEgresso.value.profileHead.image = '0'
 }
 
 watch(() => dataEgresso.value.profileHead.image, (newValue) => {

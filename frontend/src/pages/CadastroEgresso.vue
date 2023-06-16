@@ -127,6 +127,7 @@
                 class="mb-5"
                 name="academico.cotista.tipos.renda"
                 label="Cota Renda"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -134,6 +135,7 @@
                 class="mb-5"
                 name="academico.cotista.tipos.escola"
                 label="Cota Escola"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -141,12 +143,14 @@
                 class="mb-5"
                 name="academico.cotista.tipos.raca"
                 label="Autodeclaração de Raça"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
               <CustomCheckbox
                 name="academico.cotista.tipos.quilombolaIndigena"
                 label="Quilombola/Indigena"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
             </div>
@@ -174,8 +178,10 @@
               label="Remuneração da bolsa"
               type="number"
               step="0.01"
+              placeholder="R$ 0,00"
               :required="bools.bolsista"
               :disabled="!bools.bolsista"
+              money
             />
 
             <CustomCheckbox
@@ -191,6 +197,7 @@
               label="Instituição da pós-graduação"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
+              id="posGradLocal"
             />
 
             <CustomInput
@@ -334,10 +341,13 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Descreva abaixo os assuntos nos quais você se sente mais confiante para apresentar palestras. <sup
-                v-if="bools.palestras"
-                class="text-red-500"
-              >*</sup>
+              <p>
+                Descreva abaixo os assuntos nos quais você se sente mais confiante para apresentar palestras.<sup
+                  v-if="bools.palestras"
+                  class="text-red-500"
+                >*</sup>
+              </p>
+              <span>(max. 300 caracteres)</span>
             </div>
 
             <CustomInput
@@ -349,7 +359,12 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Compartilhe abaixo, de forma simples e resumida, suas experiências positivas ao realizar o curso. <sup class="text-red-500">*</sup>
+              <p>
+                Compartilhe abaixo, de forma simples e resumida, suas experiências positivas ao realizar o curso.<sup
+                  class="text-red-500"
+                >*</sup>
+              </p>
+              <span>(max. 300 caracteres)</span>
             </div>
 
             <CustomInput
@@ -359,7 +374,11 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes, pois tudo tem impacto. <sup class="text-red-500">*</sup>
+              <p>
+                Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes,
+                pois tudo tem impacto.<sup class="text-red-500">*</sup>
+              </p>
+              <span>(max. 300 caracteres)</span>
             </div>
 
             <CustomInput
@@ -446,6 +465,7 @@
                 <img
                   src="src/assets/telegram.svg"
                   width="20"
+                  alt="Ícone do Telegram"
                 >
               </div>
             </CustomButton>
@@ -454,9 +474,7 @@
       </div>
     </CustomDialog>
 
-    <CustomDialog
-      v-model="dialogFalha"
-    >
+    <CustomDialog v-model="dialogFalha">
       <div class="h-full flex justify-center items-center">
         <div class="w-1/2">
           <div class="text-red-600 text-center mb-3">
@@ -477,45 +495,44 @@
 </template>
 
 <script lang="ts" setup>
-import FolderSection from 'src/components/FolderSection.vue'
-import CustomInput from 'src/components/CustomInput.vue'
-import CustomCheckbox from 'src/components/CustomCheckbox.vue'
-import CustomButton from 'src/components/CustomButton.vue'
-import CustomSelect from 'src/components/CustomSelect.vue'
-import CustomDialog from 'src/components/CustomDialog.vue'
-import FotoInput from 'src/components/FotoInput.vue'
-import InvalidInsert from 'src/components/InvalidInsert.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { Form } from 'vee-validate'
-import { ref, computed, watch, onMounted } from 'vue'
-import { Country, State, City } from 'country-state-city'
-import svgPath from 'src/assets/svgPaths.json'
-import { object, string, boolean, mixed } from 'yup'
 import {
   mdiAccount,
+  mdiAlertCircle,
   mdiBriefcase,
   mdiEmail,
+  mdiLinkedin,
   mdiMapMarker,
   mdiMessage,
   mdiSchool,
-  mdiCheckCircle,
-  mdiAlertCircle,
-  mdiLinkedin,
-  mdiWhatsapp,
-  mdiTwitter
+  mdiTwitter,
+  mdiWhatsapp
 } from '@mdi/js'
-import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
+import { City, Country, State } from 'country-state-city'
+import svgPath from 'src/assets/svgPaths.json'
+import CustomButton from 'src/components/CustomButton.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
+import CustomDialog from 'src/components/CustomDialog.vue'
+import CustomInput from 'src/components/CustomInput.vue'
+import CustomSelect from 'src/components/CustomSelect.vue'
+import FolderSection from 'src/components/FolderSection.vue'
+import FotoInput from 'src/components/FotoInput.vue'
+import InvalidInsert from 'src/components/InvalidInsert.vue'
 import LocalStorage from 'src/services/localStorage'
+import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import { useLoginStore } from 'src/store/LoginStore'
+import { Form } from 'vee-validate'
+import { computed, onMounted, ref, watch } from 'vue'
+import { boolean, mixed, object, string } from 'yup'
+const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
 const $storeCadastro = useCadastroEgressoStore()
-const $storeLogin = useLoginStore()
+useLoginStore()
 const storage = new LocalStorage()
 
 $storeCadastro.fetchAll()
 
-const urlShare = 'https://meuegresso.alverad.com.br'
-const mensagemShare = '🎉%20Acabei%20de%20me%20cadastrar%20na%20plataforma%20Meu%20Egresso,%20se%20cadastre%20também:%0D%0A➡️ https://meuegresso.alverad.com.br'
+const mensagemShare = `🎉%20Acabei%20de%20me%20cadastrar%20na%20plataforma%20Meu%20Egresso,%20se%20cadastre%20também:%0D%0A➡️ ${baseURL}`
 
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
@@ -692,12 +709,11 @@ const schema = object().shape({
     }),
     nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
       if (value) {
-        const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
+        const date = value.split('/').reverse().join('-')
         const minDate = new Date('1940-01-01')
         const maxDate = new Date('2023-12-31')
         const inputDate = new Date(date)
 
-        // Check if the person is at least 18 years old
         const eighteenYearsAgo = new Date()
         eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
 
@@ -804,9 +820,7 @@ onMounted(() => {
     const userData = JSON.parse(storage.get('loggedUser'))
 
     form.value?.setFieldValue('geral.email', userData.email)
-    form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
-      return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
-    }).join(' '))
+    form.value?.setFieldValue('geral.nome', userData.nomeCompleto)
   }
 })
 

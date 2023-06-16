@@ -106,7 +106,7 @@ public class AnuncioController {
 	public String cadastrarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO) {
 		AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
 		anuncioService.save(anuncioModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class AnuncioController {
 		if (anuncioService.existsByIdAndCreatedById(anuncioDTO.getId(), jwtService.getIdUsuario(token))) {
 			AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
 			anuncioService.update(anuncioModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}

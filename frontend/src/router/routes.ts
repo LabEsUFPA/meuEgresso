@@ -20,26 +20,15 @@ export default [
         path: '/cadastro-admin',
         component: async () => await import('src/pages/CadastroAdmin.vue'),
         meta: {
-          requiresAuth: true
-        }
-      },
-      {
-        path: '/painel-admin',
-        component: async () => await import('src/pages/PainelAdmin.vue'),
-        meta: {
-          requiresAuth: true
-        }
-      },
-      {
-        path: '/notificacoes-admin',
-        component: async () => await import('src/pages/NotificacoesAdmin.vue'),
-        meta: {
-          requiresAuth: true
+          requiresAuthAdmin: true
         }
       },
       {
         path: '/cadastro-anuncio',
-        component: async () => await import('src/pages/CadastroAnuncio.vue')
+        component: async () => await import('src/pages/CadastroAnuncio.vue'),
+        meta: {
+          requiresAuth: true
+        }
       },
       {
         path: '/egresso',
@@ -68,13 +57,6 @@ export default [
       {
         path: '/vagas/:id',
         component: async () => await import('src/pages/AnuncioVaga.vue')
-      },
-      {
-        path: '/registro-egressos',
-        component: async () => await import('src/pages/RegistroEgressos.vue'),
-        meta: {
-          requiresAuth: true
-        }
       }
     ]
   },

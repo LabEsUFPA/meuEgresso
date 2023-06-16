@@ -1,6 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.controller.auth;
 
 import java.time.Duration;
+import java.util.Optional;
+import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
@@ -25,13 +27,18 @@ import labes.facomp.ufpa.br.meuegresso.config.properties.TokenProperties;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioRegistro;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoValidoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoValidoService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -49,15 +56,17 @@ public class AuthenticationController {
 
 	private final ModelMapper mapper;
 
+	private final JwtService jwtService;
+
 	private final AuthService authService;
 
 	private final UsuarioService usuarioService;
 
 	private final TokenProperties tokenProperties;
 
-	private final AuthenticationManager authenticationManager;
+	private final EgressoValidoService egressosValidosService;
 
-	private final JwtService jwtService;
+	private final AuthenticationManager authenticationManager;
 
 	/**
 	 * Endpoint responsavel por autentica um determinado usuário.
@@ -124,21 +133,36 @@ public class AuthenticationController {
 	 * @author Alfredo Gabriel
 	 * @throws NotFoundException
 	 * @throws NameAlreadyExistsException
+	 * @throws NotValidEgressoException
 	 * @see {@link UsuarioDTO}
 	 * @since 26/03/2023
 	 */
 	@PostMapping(value = "/register")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) throws NameAlreadyExistsException {
+	public String cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO)
+			throws NameAlreadyExistsException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
 			throw new NameAlreadyExistsException(
 					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),
 					ErrorType.USER_001.getInternalCode());
 		}
+		mapper.getConfiguration().setSkipNullEnabled(true);
+
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
+
+		EgressoValidoModel egressoValido;
+		try {
+			egressoValido = egressosValidosService.validarEgresso(Optional.ofNullable(usuarioDTO.getRegistration()),
+					Optional.ofNullable(usuarioDTO.getNome()), Optional.ofNullable(usuarioDTO.getEmail()));
+			mapper.map(egressoValido, usuarioModel);
+		} catch (NotValidEgressoException e) {
+			usuarioModel.setValido(false);
+		}
+
+		usuarioModel.setGrupos(Set.of(Grupos.EGRESSO));
 		usuarioService.save(usuarioModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 }

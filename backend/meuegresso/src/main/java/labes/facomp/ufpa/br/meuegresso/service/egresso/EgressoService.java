@@ -3,7 +3,9 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
@@ -120,5 +122,30 @@ public interface EgressoService {
 	 * @since 07/05/2023
 	 */
 	public void saveFoto(String nomeAnexo, MultipartFile arquivo) throws IOException;
+
+	public Map<Integer, Integer> countAgeFromEgressos();
+
+	public Map<String, Integer> countFezPos();
+
+	public Map<String, Integer> countTipoAluno();
+
+	public Map<String, Integer> countBolsista();
+
+	public Map<Double, Integer> countRemuneracaoBolsa();
+
+	public Map<LocalDate, Long> countEgressoPorData();
+		
+	public Map<LocalDate, Long> countEgressoPorMesEAno();
+	
+	public Map<Integer, Long> countEgressoPorAno();
+
+	public Map<String, Integer> countCotista();
+
+	public Map<String, Integer> countInteressePos();
+
+	/**
+	 * Método responsável por deletar todos os dados da tabela egresso
+	 */
+	public void deleteAll();
 
 }
