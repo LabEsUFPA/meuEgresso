@@ -25,8 +25,10 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
+import labes.facomp.ufpa.br.meuegresso.service.endereco.EnderecoService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -42,6 +44,8 @@ import lombok.RequiredArgsConstructor;
 public class EmpresaController {
 
 	private final EmpresaService empresaService;
+
+	private final EnderecoService enderecoService;
 
 	private final ModelMapper mapper;
 
@@ -117,6 +121,17 @@ public class EmpresaController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarEmpresa(@RequestBody @Valid EmpresaBasicDTO empresaDTO) {
 		EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);
+		if (empresaDTO.getEndereco() != null) {
+			EnderecoModel enderecoEmpresa = enderecoService.findByCidadeAndEstadoAndPais(
+					empresaDTO.getEndereco().getCidade(),
+					empresaDTO.getEndereco().getEstado(),
+					empresaDTO.getEndereco().getPais());
+			if (enderecoEmpresa == null) {
+				enderecoEmpresa = mapper.map(empresaModel.getEndereco(), EnderecoModel.class);
+				enderecoEmpresa = enderecoService.save(enderecoEmpresa);
+			}
+			empresaModel.setEndereco(enderecoEmpresa);
+		}
 		empresaService.save(empresaModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
