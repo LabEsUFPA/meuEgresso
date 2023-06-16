@@ -80,21 +80,6 @@ public class MailServiceImpl implements MailService, Runnable {
 		return false;
     }
 
-    //TODO retirar cron e substituir por uma scheduled de acordo com a data de envio do email salva ao invés de checar a todo instante se já é pra mandar o email
-    /*@Override
-    @Async
-    @Scheduled(cron = "0 * * * * *")
-	public void scheduledSendEmail() {
-		Map<String, LocalDateTime> emailList = usuarioService.findByAtivo();
-        List<MensagemModel> mensagemModel = mensagemRepository.findAll();
-        if(!(mensagemModel.isEmpty()) && (mensagemModel.get(0).getData().equals(LocalDateTime.now()))){
-                for (String email : emailList.keySet()) {
-                    sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
-                }
-            
-        }
-	}*/
-
     public void scheduledSendEmail() {
 		Map<String, LocalDateTime> emailList = usuarioService.findByAtivo();
         List<MensagemModel> mensagemModel = mensagemRepository.findAll();
@@ -130,6 +115,7 @@ public class MailServiceImpl implements MailService, Runnable {
         taskList.put(jobId, scheduledTask);
     }
 
+    @Override
     public void removeScheduledTask(Integer jobId) {
         ScheduledFuture<?> scheduledTask = taskList.get(jobId);
         if(scheduledTask != null) {
@@ -138,6 +124,7 @@ public class MailServiceImpl implements MailService, Runnable {
         }
     }
 
+    @Override
     public Map<Integer, ScheduledFuture<?>> getTasks(){
         return taskList;
     }

@@ -70,11 +70,12 @@ public class MensagemAdmController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public String atualizarEmail(@RequestBody @Valid MensagemDTO mensagemDTO) {
-		if(!mailServiceImpl.getTasks().isEmpty()){
-			mailServiceImpl.removeScheduledTask(mensagemDTO.getId());
+		if(!mailService.getTasks().isEmpty()){
+			mailService.removeScheduledTask(mensagemDTO.getId());
 		}
 		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
 		mensagemModel = mailService.update(mensagemModel);
+		mailService.setScheduleATask(mailServiceImpl, mensagemModel.getData());
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
@@ -113,14 +114,8 @@ public class MensagemAdmController {
 			mailService.deleteById(mailService.findAll().get(0).getId());
 		}
 		mailService.save(mapper.map(mensagemDTO, MensagemModel.class));
-		return ResponseType.SUCCESS_UPDATE.getMessage();
-	}
-
-	@PostMapping
-	@PreAuthorize("hasRole('ADMIN')")
-	@ResponseStatus(code = HttpStatus.CREATED)
-	public String setScheduleEmail(@RequestBody @Valid MensagemDTO mensagemDTO) {
 		mailService.setScheduleATask(mailServiceImpl, mensagemDTO.getDataEnvio());
+
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 

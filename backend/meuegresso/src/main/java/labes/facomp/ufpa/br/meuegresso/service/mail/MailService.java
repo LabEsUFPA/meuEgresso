@@ -2,6 +2,8 @@ package labes.facomp.ufpa.br.meuegresso.service.mail;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
 
 import labes.facomp.ufpa.br.meuegresso.model.MensagemModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
@@ -23,4 +25,8 @@ public interface MailService {
     public void scheduledSendEmail();
 
     public void setScheduleATask(Runnable tasklet, LocalDateTime dateTime);
+
+    public void removeScheduledTask(Integer jobId);
+
+    public Map<Integer, ScheduledFuture<?>> getTasks();
 }
