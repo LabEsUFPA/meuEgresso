@@ -433,13 +433,50 @@
               </div>
             </template>
             <template #Localizacao>
-              <LocalizacaoSelect
-                :pais-holder="dataEgresso.localizacao.pais"
-                :estado-holder="dataEgresso.localizacao.estado"
-                :cidade-holder="dataEgresso.localizacao.cidade"
-                @pais-change="handleChangeLocal('pais', $event)"
-                @estado-change="handleChangeLocal('estado', $event)"
-              />
+              <div>
+                <CustomSelect
+                  class="mb-2"
+                  name="localizacao.pais"
+                  label="País"
+                  :options="countries"
+                  v-model:value="pais"
+                  @change="handleChangeLocal('pais', $event)"
+                  :is-fetching="pais.isFetching"
+                  @typing="fetchCountries($event, true)"
+                  @infinite-scroll="fetchMoreCounties"
+                  infinite
+                  required
+                  :placeholder="dataEgresso.localizacao.pais"
+                  :pre-filled="true"
+                />
+                <CustomSelect
+                  class="mb-2"
+                  name="localizacao.estado"
+                  label="Estado"
+                  :options="states"
+                  v-model:value="estado"
+                  @change="handleChangeLocal('estado', $event)"
+                  :is-fetching="pais.isFetching"
+                  @typing="fetchStates($event, true)"
+                  @infinite-scroll="fetchMoreStates"
+                  infinite
+                  required
+                  :placeholder="dataEgresso.localizacao.estado"
+                  :pre-filled="true"
+                />
+                <CustomSelect
+                  name="localizacao.cidade"
+                  label="Cidade"
+                  :options="cities"
+                  :is-fetching="pais.isFetching"
+                  @typing="fetchCities($event, true)"
+                  @infinite-scroll="fetchMoreCities"
+                  infinite
+                  required
+                  :pre-filled="true"
+                  :placeholder="dataEgresso.localizacao.cidade"
+                />
+              </div>
             </template>
           </FolderCarreira>
 
