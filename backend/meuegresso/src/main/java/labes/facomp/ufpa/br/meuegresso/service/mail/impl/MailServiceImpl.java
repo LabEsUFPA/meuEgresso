@@ -75,13 +75,15 @@ public class MailServiceImpl implements MailService {
     //TODO retirar cron e substituir por uma scheduled de acordo com a data de envio do email salva ao invés de checar a todo instante se já é pra mandar o email
     @Override
     @Async
-    @Scheduled(cron = "* * * * *")
+    @Scheduled(cron = "0 * * * * *")
 	public void scheduledSendEmail() {
 		Map<String, LocalDateTime> emailList = usuarioService.findByAtivo();
         List<MensagemModel> mensagemModel = mensagemRepository.findAll();
-        if(mensagemModel.get(0).getData().equals(LocalDateTime.now())){
-            for (String email : emailList.keySet()) {
-                sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+        if(!mensagemModel.isEmpty()){
+            if(mensagemModel.get(0).getData().equals(LocalDateTime.now())){
+                for (String email : emailList.keySet()) {
+                    sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                }
             }
         }
 	}
