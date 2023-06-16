@@ -24,6 +24,7 @@
 
     <div class="flex justify-between">
       <div
+        id="status"
         class="flex w-24 py-1 justify-center items-center text-white text-sm font-normal rounded-2xl"
         :class="statusColor[status]"
       >
