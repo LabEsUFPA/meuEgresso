@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +29,7 @@ public class EgressoDashDTO {
 
     private String email; // linha pra retornar email no pdf
 
-    private LocalDateTime createdDate;
+    private LocalDate createdDate;
 
     private String foto;
 

@@ -116,7 +116,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 						t.get(1, String.class), // nome
 						t.get(2, String.class), // nomeEmpresa
 						t.get(3, String.class), // email
-						t.get(4, Timestamp.class).toLocalDateTime(), // createdDate
+						t.get(4, Timestamp.class).toLocalDateTime().toLocalDate(), // createdDate
 						t.get(5, String.class), // foto
 						t.get(6, String.class))) // status
 				.collect(Collectors.toList());
@@ -136,7 +136,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 						.nome(e.get(0, String.class))
 						.usuarioId(e.get(1, Integer.class))
 						.status(e.get(2, String.class))
-						.data(e.get(3, LocalDate.class))
+						.data(e.get(3, Timestamp.class).toLocalDateTime().toLocalDate())
 						.build()));
 
 		return notificacoes;

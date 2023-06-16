@@ -65,7 +65,7 @@ public class DashAdmController {
 	 * @since 06/06/2023
 	 */
 	@GetMapping
-	// @PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
 	public Page<EgressoDashDTO> consultarEgressoDash(
 			@RequestParam(name = "nome_usuario", defaultValue = "") String nomeUsuario,
@@ -138,7 +138,7 @@ public class DashAdmController {
 			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getNome(), normal)));
 			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getNomeEmpresa(), normal)));
 			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getEmail(), normal)));
-			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getCreatedDate().toLocalDate().toString(), normal)));
+			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getCreatedDate().toString(), normal)));
 			t.addCell(new PdfPCell(new Paragraph(egressos.get(i).getStatus(), normal)));
 			document.add(t);
 		}
@@ -185,8 +185,8 @@ public class DashAdmController {
 	 * @author Eude Monteiro
 	 * @since 12/06/2023
 	 */
-	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = "/tipoStatus")
+	@PreAuthorize("hasRole('admin')")
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<NotificacaoDTO> getStatus() {
 		return usuarioService.getStatus();
