@@ -36,15 +36,6 @@
           :disabled="area === 'Desempregado'"
           :pre-filled="true"
         />
-
-        <!-- <CustomInput
-          class="mb-5"
-          name="carreira.empresa"
-          label="Empresa"
-          placeholder="Ex: Google"
-          :required="area !== 'Desempregado'"
-          :disabled="area === 'Desempregado'"
-        /> -->
         <CustomSelect
           class="mb-1"
           name="carreira.empresa"
@@ -88,7 +79,7 @@
     </template>
   </FolderSection>
   <CustomDialog v-model="dialogInstituicao">
-    <div class="h-full flex justify-center gap-10 flex-col items-center">
+    <div class="h-full flex justify-center flex-col items-center">
       <div class="text-2xl font-semibold text-cyan-800">
         Cadastrar Empresa
       </div>
@@ -96,15 +87,20 @@
       <Form
         :validation-schema="instituicaoSchema"
         @submit="handleNewEmpresa"
-        class="flex flex-col items-center gap-4"
+        class="flex flex-col items-center gap-1"
       >
         <CustomInput
+          class="mt-[-1px]"
           name="nome"
           label="Nome da instituição de ensino"
           placeholder="Universidade Federal do Pará (UFPA)"
         />
 
-        <CustomButton type="submit">
+        <slot name="Localizacao" />
+        <CustomButton
+          class="mt-2"
+          type="submit"
+        >
           Cadastrar
         </CustomButton>
       </Form>
@@ -116,7 +112,6 @@ import FolderSection from 'src/components/FolderSection.vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomButton from 'src/components/CustomButton.vue'
-
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
 import { object, string } from 'yup'
@@ -158,7 +153,11 @@ const props = withDefaults(defineProps<Props>(), {
 
 })
 async function handleNewEmpresa (event: any) {
-  const response = await $store.cadastrarEmpresa(event.nome)
+  console.log(event)
+  const response = await $store.cadastrarEmpresa(event.nome,
+    event.localizacao.pais,
+    event.localizacao.estado,
+    event.localizacao.cidade)
 
   if (response?.status === 201) {
     alert('Empresa cadastrada com sucesso.')

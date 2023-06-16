@@ -346,6 +346,15 @@
                 icon-path=""
               />
             </template>
+            <template #Localizacao>
+              <LocalizacaoSelect
+                :pais-holder="dataEgresso.localizacao.pais"
+                :estado-holder="dataEgresso.localizacao.estado"
+                :cidade-holder="dataEgresso.localizacao.cidade"
+                @pais-change="handleChangeLocal('pais', $event)"
+                @estado-change="handleChangeLocal('estado', $event)"
+              />
+            </template>
           </FolderAcademico>
         </Form>
         <Form
@@ -422,6 +431,15 @@
                   </div>
                 </div>
               </div>
+            </template>
+            <template #Localizacao>
+              <LocalizacaoSelect
+                :pais-holder="dataEgresso.localizacao.pais"
+                :estado-holder="dataEgresso.localizacao.estado"
+                :cidade-holder="dataEgresso.localizacao.cidade"
+                @pais-change="handleChangeLocal('pais', $event)"
+                @estado-change="handleChangeLocal('estado', $event)"
+              />
             </template>
           </FolderCarreira>
 
@@ -551,6 +569,13 @@
                       :pre-filled="true"
                       :placeholder="dataEgresso.localizacao.cidade"
                     />
+                    <!-- <LocalizacaoSelect
+                      :pais-holder="dataEgresso.localizacao.pais"
+                      :estado-holder="dataEgresso.localizacao.estado"
+                      :cidade-holder="dataEgresso.localizacao.cidade"
+                      @pais-change="handleChangeLocal('pais', $event)"
+                      @estado-change="handleChangeLocal('estado', $event)"
+                    /> -->
                   </div>
                 </div>
               </template>
@@ -690,6 +715,7 @@ import {
 import { useRoute } from 'vue-router'
 import apiEnderecos from 'src/services/apiEnderecos'
 import { type models } from 'src/@types'
+import LocalizacaoSelect from 'src/components/LocalizacaoSelect.vue'
 
 interface ComplexOpts extends models.ComplexOpts {}
 const dialogSucesso = ref(false)

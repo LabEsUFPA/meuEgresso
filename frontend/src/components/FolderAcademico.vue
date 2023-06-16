@@ -173,7 +173,7 @@
     </template>
   </FolderSection>
   <CustomDialog v-model="dialogInstituicao">
-    <div class="h-full flex justify-center gap-10 flex-col items-center">
+    <div class="h-full flex justify-center flex-col items-center">
       <div class="text-2xl font-semibold text-cyan-800">
         Cadastrar instituição
       </div>
@@ -181,22 +181,26 @@
       <Form
         :validation-schema="instituicaoSchema"
         @submit="handleNewInstituicao"
-        class="flex flex-col items-center gap-4"
+        class="flex flex-col items-center gap-1"
       >
         <CustomInput
+          class="mt-[-1px]"
           name="nome"
           label="Nome da instituição de ensino"
           placeholder="Universidade Federal do Pará (UFPA)"
         />
 
-        <CustomButton type="submit">
+        <CustomButton
+          class="mt-3"
+          type="submit"
+        >
           Cadastrar
         </CustomButton>
       </Form>
     </div>
   </CustomDialog>
   <CustomDialog v-model="dialogCurso">
-    <div class="h-full flex justify-center gap-10 flex-col items-center">
+    <div class="h-full flex justify-center flex-col items-center">
       <div class="text-2xl font-semibold text-cyan-800">
         Cadastrar curso
       </div>
@@ -204,15 +208,18 @@
       <Form
         :validation-schema="cursoSchema"
         @submit="handleNewCurso"
-        class="flex flex-col items-center gap-4"
+        class="flex flex-col items-center gap-1"
       >
         <CustomInput
+          class="mt-[-1px]"
           name="nome"
           label="Nome da curso"
           placeholder="Engenharia de software"
         />
-
-        <CustomButton type="submit">
+        <CustomButton
+          class="mt-3"
+          type="submit"
+        >
           Cadastrar
         </CustomButton>
       </Form>

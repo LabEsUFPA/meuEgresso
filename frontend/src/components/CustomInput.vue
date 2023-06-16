@@ -9,16 +9,24 @@
       })"
     >
       <template
-        v-if="label"
         #label
       >
-        {{ label }}
-        <sup
-          class="text-red-500"
-          v-if="required"
-        >
-          *
-        </sup>
+        <div v-if="label">
+          {{ label }}
+          <sup
+            class="text-red-500"
+            v-if="required"
+          >*</sup>
+        </div>
+        <div v-if="customLabel">
+          <div class="mb-1.5">
+            <slot name="label" />
+            <sup
+              class="text-red-500"
+              v-if="required"
+            >*</sup>
+          </div>
+        </div>
       </template>
       <template #default>
         <div
@@ -63,7 +71,6 @@
             :required="required"
             :step="step"
             :maxlength="maxLength"
-            v-model="inputValue"
             @update:model-value="handleInput"
             @focus="() => {
               focused = true
@@ -171,6 +178,8 @@ interface Props {
   customErrorMessage?: boolean,
   withoutValidation?: boolean
   money?: boolean
+  height?: string | number,
+  customLabel?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -189,7 +198,10 @@ const props = withDefaults(defineProps<Props>(), {
   errorMessage: '',
   customErrorMessage: false,
   withoutValidation: false,
-  money: false
+  money: false,
+  height: '128px',
+  customLabel: false
+
 })
 
 const focused = ref(false)
