@@ -69,7 +69,7 @@ public class MensagemAdmController {
 	 * @throws UnauthorizedRequestException
 	 * @since 16/04/2023
 	 */
-	@PutMapping(value = "/{id}")
+	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public String atualizarEmail(@RequestBody @Valid MensagemDTO mensagemDTO) {
@@ -85,7 +85,7 @@ public class MensagemAdmController {
 	 * @author Camilo Santos
 	 * @since 19/04/2023
 	 */
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
 	public String deleteById(@PathVariable(name = "id") Integer id) {
@@ -95,11 +95,13 @@ public class MensagemAdmController {
 		return ResponseType.FAIL_DELETE.getMessage();
 	}
 
-	@PostMapping(value = "/email")
+	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	@ResponseStatus(code = HttpStatus.OK)
+	@ResponseStatus(code = HttpStatus.CREATED)
 	public String saveEmail(@RequestBody @Valid MensagemDTO mensagemDTO) {
-		mailService.deleteById(mailService.findAll().get(0).getId());
+		if(!mailService.findAll().isEmpty()){
+			mailService.deleteById(mailService.findAll().get(0).getId());
+		}
 		mailService.save(mapper.map(mensagemDTO, MensagemModel.class));
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
