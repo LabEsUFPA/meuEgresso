@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col gap-4 sm:gap-8 mb-5">
+    <div class="flex flex-col gap-4 sm:gap-8 mb-5 ">
       <Form
         ref="form"
         @submit="handleSubmit"
@@ -38,8 +38,8 @@
         :validation-schema="schema"
       >
         <div class="flex justify-center">
-          <div class="flex flex-col w-[960px] bg-white rounded-bl-2xl rounded-br-2xl overflow-hidden mx-4 sm:mx-6">
-            <div class="p-6 sm:p-8 container mx-auto items-start border-b ml-4 ">
+          <div class="flex flex-col w-[960px] bg-white rounded-bl-2xl rounded-br-2xl overflow-hidden mx-4 sm:mx-6 ">
+            <div class="p-6 sm:p-8 container mx-auto items-start border-b ml-4 mt-[-25px]">
               <h1 class=" w-[193%]">
                 <h3 class="gap-[10px]">
                   <CustomInput
@@ -213,6 +213,7 @@ const schema = object().shape({
 async function handleCancel (values: any) {
   console.log('cancelar')
 }
+
 onMounted(() => {
   form.value?.setFieldValue('assunto', 'Atualização Cadastral - Meu Egresso')
   const message = `Prezado(a) [nome do aluno],

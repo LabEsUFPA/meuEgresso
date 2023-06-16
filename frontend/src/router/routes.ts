@@ -55,6 +55,10 @@ export default [
         component: async () => await import('src/pages/FeedVagas.vue')
       },
       {
+        path: '/email',
+        component: async () => await import('src/pages/EmailAdmin.vue')
+      },
+      {
         path: '/vagas/:id',
         component: async () => await import('src/pages/AnuncioVaga.vue')
       }
