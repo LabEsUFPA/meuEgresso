@@ -21,8 +21,8 @@ public class MensagemModel {
     @Column(name = "id_mensagem", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "mensagem_mensagem", unique = false, nullable = false)
-    private String mensagem;
+    @Column(name = "corpo_mensagem", unique = false, nullable = false)
+    private String corpo;
 
     @Column(name = "escopo_mensagem", unique = false, nullable = false)
     private String escopo;

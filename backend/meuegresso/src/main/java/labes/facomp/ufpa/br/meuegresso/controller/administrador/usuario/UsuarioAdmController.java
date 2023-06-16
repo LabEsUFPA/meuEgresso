@@ -1,15 +1,19 @@
 package labes.facomp.ufpa.br.meuegresso.controller.administrador.usuario;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.concurrent.ScheduledFuture;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +49,8 @@ public class UsuarioAdmController {
 	private final ModelMapper mapper;
 
 	private final MailService mailService;
+
+	private TaskScheduler taskScheduler;
 
 	/**
 	 * Endpoint responsável por retornar a lista de usuários cadastrados no banco de
@@ -99,13 +105,13 @@ public class UsuarioAdmController {
 		return ResponseType.FAIL_DELETE.getMessage();
 	}
 
-	@PutMapping(value = "/email")
+	@PostMapping(value = "/email")
 	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
-	public void sendEmail(@RequestBody @Valid MensagemModel mensagemModel,LocalDate period) {
+	public void sendEmail(@RequestBody @Valid MensagemModel mensagemModel, String cronExpression) {
 		List<String> emailList = usuarioService.findByAtivo();
 		for (String email : emailList) {
-			mailService.sendEmail(email, mensagemModel.getEscopo(), mensagemModel.getMensagem());
+			mailService.sendEmail(email, mensagemModel.getEscopo(), mensagemModel.getCorpo());
 		}
 	}
 

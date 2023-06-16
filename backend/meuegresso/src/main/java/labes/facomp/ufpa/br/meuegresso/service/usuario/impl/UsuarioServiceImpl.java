@@ -91,10 +91,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public List<String> findByAtivo() {
 		return usuarioRepository.findByEmailAndData();
-		//Map<String, String> emailList = usuarioRepository.findByEmailAndData();
-		//for (Map.Entry<String, String> entry : emailList.entrySet()) {
-		//	mailService.sendEmail(entry.getKey(),"",entry.getValue());
-		//}
 	}
 
 }
