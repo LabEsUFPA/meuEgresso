@@ -1,8 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.administrador.usuario;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioNotificacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;

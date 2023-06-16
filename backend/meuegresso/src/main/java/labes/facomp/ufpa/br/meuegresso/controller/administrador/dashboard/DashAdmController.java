@@ -180,14 +180,15 @@ public class DashAdmController {
 	/**
 	 * Endpoint responsável por notificar situação do cadastro do usuário
 	 * 
-	 * @return Uma instância de UsuarioNotificacaoDTO contendo as informações de
+	 * @return Uma instância de NotificacaoDTO contendo as informações de
 	 *         status dos usuários.
 	 * @author Eude Monteiro
 	 * @since 12/06/2023
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = "/tipoStatus")
 	@ResponseStatus(code = HttpStatus.OK)
-	public List<NotificacaoDTO> setStatus() {
+	public List<NotificacaoDTO> getStatus() {
 		return usuarioService.getStatus();
 
 	}
