@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.mensagem;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,5 +25,7 @@ public class MensagemDTO {
     private String corpo;
 
     private String escopo;
+
+    private LocalDateTime dataEnvio;
     
 }

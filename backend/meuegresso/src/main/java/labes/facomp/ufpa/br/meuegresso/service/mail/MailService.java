@@ -18,4 +18,6 @@ public interface MailService {
     public List<MensagemModel> findAll();
 
     public boolean deleteById(Integer idMensagem);
+
+    public void scheduledSendEmail();
 }

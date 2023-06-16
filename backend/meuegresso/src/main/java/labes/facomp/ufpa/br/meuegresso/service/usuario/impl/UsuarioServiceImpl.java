@@ -1,6 +1,9 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -89,8 +92,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public List<String> findByAtivo() {
-		return usuarioRepository.findByEmailAndData();
+	public Map<String, LocalDateTime> findByAtivo() {
+		Map<String, LocalDateTime> emailData = new HashMap<>(2);
+		usuarioRepository.findByEmailAndData().forEach(e -> emailData.put(e.get(0, String.class), e.get(1, LocalDateTime.class)));
+		return emailData;
 	}
 
 }

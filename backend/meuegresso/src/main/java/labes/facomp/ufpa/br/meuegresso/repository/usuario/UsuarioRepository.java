@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.projections.usuario.RecoveryPasswordProjection;
+import jakarta.persistence.Tuple;
 
 /**
  * Interface utilizada para realizar a comunicação entre a aplicação é o banco
@@ -31,10 +32,10 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	
 	@Query(nativeQuery = true,value = """
-			SELECT u.email
+			SELECT u.email, u.last_modified_date
 			FROM usuario u
 			JOIN egresso e ON u.id_usuario = e.usuario_id
 			WHERE e.ativo = true;
 			""")
-	List<String> findByEmailAndData();
+	List<Tuple> findByEmailAndData();
 }

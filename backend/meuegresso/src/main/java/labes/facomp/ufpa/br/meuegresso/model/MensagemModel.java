@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,5 +28,8 @@ public class MensagemModel {
 
     @Column(name = "escopo_mensagem", unique = false, nullable = false)
     private String escopo;
+
+    @Column(name = "data_mensagem", unique = false, nullable = false)
+    private LocalDateTime data;
 
 }
