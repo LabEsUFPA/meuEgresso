@@ -19,17 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.mensagem.MensagemDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
-import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
-import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.MensagemModel;
 import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
+import labes.facomp.ufpa.br.meuegresso.service.mail.impl.MailServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Responsável por fornecer um end-point para criar um novo usuário.
+ * Responsável por fornecer um end-point para criar um novo email.
  *
- * @author Alfredo Gabriel
- * @since 26/03/2023
+ * @author Camilo Santos, Pedro Inácio
+ * @since 16/06/2023
  * @version 1.0.1
  */
 @RestController
@@ -39,17 +38,17 @@ public class MensagemAdmController {
 
 	private final MailService mailService;
 
+	private final MailServiceImpl mailServiceImpl;
+
 	private final ModelMapper mapper;
 
-	//private TaskScheduler taskScheduler;
-
 	/**
-	 * Endpoint responsável por retornar a lista de usuários cadastrados no banco de
+	 * Endpoint responsável por retornar a lista de emails salvos no banco de
 	 * dados.
 	 *
-	 * @return {@link MailAuthDTO} Lista de usuários cadastrados
-	 * @author Alfredo Gabriel, Camilo Santos
-	 * @since 18/04/2023
+	 * @return {@link MensagemDTO} Lista de emails salvos
+	 * @author Pedro Inácio
+	 * @since 15/06/2023
 	 */
 	@GetMapping
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
@@ -59,31 +58,30 @@ public class MensagemAdmController {
 	}
 
 	/**
-	 * Endpoint responsavel por atualizar o usuário.
+	 * Endpoint responsavel por atualizar o email.
 	 *
 	 * @param MailDTO Estrutura de dados contendo as informações necessárias para
-	 *                   atualizar o Usuário.
-	 * @return {@link MailAuthDTO} Dados gravados no banco com a Id atualizada.
-	 * @author Camilo Santos
-	 * @throws InvalidRequestException
-	 * @throws UnauthorizedRequestException
-	 * @since 16/04/2023
+	 *                   atualizar o emails.
+	 * @return {@link MensagemDTO} Dados gravados no banco com a Id atualizada.
+	 * @author Pedro Inácio
+	 * @since 15/06/2023
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public String atualizarEmail(@RequestBody @Valid MensagemDTO mensagemDTO) {
-		mailService.update(mapper.map(mensagemDTO, MensagemModel.class));
+		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
+		mensagemModel = mailService.update(mensagemModel);
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 	/**
 	 * Endpoint responsável por deletar usuário por sua ID>
 	 *
-	 * @param id Integer
+	 * @param id Integer do id do email
 	 * @return Boolean
-	 * @author Camilo Santos
-	 * @since 19/04/2023
+	 * @author Pedro Inácio
+	 * @since 15/06/2023
 	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
@@ -95,14 +93,31 @@ public class MensagemAdmController {
 		return ResponseType.FAIL_DELETE.getMessage();
 	}
 
+	/**
+	 * Endpoint responsavel por salvar o email.
+	 *
+	 * @param mensagemDTO Estrutura de dados contendo as informações necessárias para
+	 *                   salvar o email.
+	 * @return {@link MensagemDTO} Dados gravados no banco com a Id atualizada.
+	 * @author Pedro Inácio
+	 * @since 15/06/2023
+	 */
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public String saveEmail(@RequestBody @Valid MensagemDTO mensagemDTO) {
-		if(!mailService.findAll().isEmpty()){
+	public String save(@RequestBody @Valid MensagemDTO mensagemDTO) {
+		if(!(mailService.findAll().isEmpty())){
 			mailService.deleteById(mailService.findAll().get(0).getId());
 		}
 		mailService.save(mapper.map(mensagemDTO, MensagemModel.class));
+		return ResponseType.SUCCESS_UPDATE.getMessage();
+	}
+
+	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public String setScheduleEmail(@RequestBody @Valid MensagemDTO mensagemDTO) {
+		mailService.setScheduleATask(mailServiceImpl, mensagemDTO.getDataEnvio());
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 

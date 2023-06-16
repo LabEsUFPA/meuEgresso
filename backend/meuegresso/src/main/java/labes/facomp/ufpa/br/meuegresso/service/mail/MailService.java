@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.service.mail;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import labes.facomp.ufpa.br.meuegresso.model.MensagemModel;
@@ -20,4 +21,6 @@ public interface MailService {
     public boolean deleteById(Integer idMensagem);
 
     public void scheduledSendEmail();
+
+    public void setScheduleATask(Runnable tasklet, LocalDateTime dateTime);
 }
