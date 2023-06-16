@@ -15,7 +15,7 @@ public interface MailService {
 
     public MensagemModel update(MensagemModel mensagemModel);
 
-    public List<MensagemModel>  findAll();
+    public List<MensagemModel> findAll();
 
     public boolean deleteById(Integer idMensagem);
 }

@@ -11,4 +11,6 @@ public interface MensagemRepository extends CrudRepository<MensagemModel, Intege
     List<MensagemModel> findAll();
 
     Optional<MensagemModel> findById(Integer id);
+
+    void deleteById(Integer id);
 }

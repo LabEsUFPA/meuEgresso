@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.Mail.MailAuthDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.administradores.Mail.MailDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.mensagem.MensagemDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
@@ -58,8 +57,8 @@ public class MensagemAdmController {
 	 */
 	@GetMapping
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
-	public List<MailAuthDTO> consultarEmails() {
-		return mapper.map(mailService.findAll(), new TypeToken<List<MailAuthDTO>>() {
+	public List<MensagemDTO> consultarEmails() {
+		return mapper.map(mailService.findAll(), new TypeToken<List<MensagemDTO>>() {
 		}.getType());
 	}
 
@@ -77,10 +76,9 @@ public class MensagemAdmController {
 	@PutMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
-	public MailAuthDTO atualizarEmail(@RequestBody @Valid MailDTO MailDTO) throws InvalidRequestException {
-		MensagemModel mailModel = mapper.map(MailDTO, MensagemModel.class);
-		mailModel = mailService.update(mailModel);
-		return mapper.map(mailModel, MailAuthDTO.class);
+	public String atualizarEmail(@RequestBody @Valid MensagemDTO mensagemDTO) {
+		mailService.update(mapper.map(mensagemDTO, MensagemModel.class));
+		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 	/**
