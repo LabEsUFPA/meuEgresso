@@ -124,6 +124,7 @@
           v-if="showEgressNotRegisteredModal"
           v-model="showEgressNotRegisteredModal"
           :button-botton="true"
+          :hide-close-button="true"
           @close="$router.push({ path: '/cadastro' })"
         >
           <div class="flex flex-col items-center">
