@@ -86,6 +86,7 @@ import { useRouter } from 'vue-router'
 
 import CustomDialog from './CustomDialog.vue'
 import CustomButton from './CustomButton.vue'
+import { usePainelStore } from 'src/store/PainelStore'
 
 const props = defineProps<{
     id: number
@@ -94,6 +95,8 @@ const props = defineProps<{
     status: string
     }
 >()
+
+const $store = usePainelStore()
 
 const $router = useRouter()
 const isConfirmationOpen = ref(false)
@@ -119,6 +122,7 @@ const editaCadastro = () => {
 
 const excluiCadastro = () => {
   console.log('exclui')
+  $store.deleteUsuario(props.id)
 }
 
 const enviaEmail = () => {

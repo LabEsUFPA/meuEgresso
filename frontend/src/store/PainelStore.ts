@@ -36,8 +36,6 @@ export const usePainelStore = defineStore('Painel', {
         }
       })
 
-      console.log(response?.data)
-
       if (response?.status === 200 && (response.data != null)) {
         this.egressos = response?.data.content.map((egresso: any) => ({
           cadastro: egresso.createdDate,
@@ -94,6 +92,15 @@ export const usePainelStore = defineStore('Painel', {
         link.click()
         link.remove()
       }
+    },
+
+    async deleteUsuario (id: number) {
+      const response = await Api.request({
+        method: 'delete',
+        route: `/administrador/usuario/${id}`
+      })
+
+      console.log(response)
     }
   }
 })

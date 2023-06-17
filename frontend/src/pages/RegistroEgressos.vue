@@ -104,34 +104,40 @@
 
     <div
       v-else
-      class="flex flex-col gap-4 justify-center items-center text-gray-400"
+      class="flex justify-center"
     >
-      <SvgIcon
-        type="mdi"
-        size="48"
-        :path="mdiEmoticonSadOutline"
-      />
-      <h1 class="text-xl sm:text-2xl font-medium">
-        Nenhuma vaga encontrada
-      </h1>
+      <div class="flex flex-col w-[960px] bg-white mx-4 sm:mx-6">
+        <div
+          class="flex flex-col gap-4 py-8 justify-center items-center text-gray-400"
+        >
+          <SvgIcon
+            type="mdi"
+            size="48"
+            :path="mdiEmoticonSadOutline"
+          />
+          <h1 class="text-xl sm:text-2xl font-medium">
+            Nenhuma vaga encontrada
+          </h1>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="flex justify-center sm:mb-8 mb-6">
-    <div class="flex w-[960px] bg-white rounded-b-2xl p-6 sm:p-8 mx-4 sm:mx-6 justify-center">
-      <PageSelector
-        v-model:current-page="currentPage"
-        :total-pages="$store.totalPages"
-      />
+    <div class="flex justify-center sm:mb-8 mb-6">
+      <div class="flex w-[960px] bg-white rounded-b-2xl p-6 sm:p-8 mx-4 sm:mx-6 justify-center">
+        <PageSelector
+          v-model:current-page="currentPage"
+          :total-pages="$store.totalPages"
+        />
+      </div>
     </div>
-  </div>
 
-  <ModalFilters
-    v-if="loading"
-    v-model="isModalFiltersOpen"
-    :filters="filtersMock"
-    @apply-filters="applyFilters"
-  />
+    <ModalFilters
+      v-if="loading"
+      v-model="isModalFiltersOpen"
+      :filters="filtersMock"
+      @apply-filters="applyFilters"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
