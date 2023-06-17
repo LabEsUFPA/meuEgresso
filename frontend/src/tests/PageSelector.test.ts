@@ -23,7 +23,7 @@ describe('PageSelector', () => {
         totalPages: 5
       }
     })
- 
+
     const buttons = wrapper.findAll('button')
     await buttons[2].trigger('click') // Click the third button
 
