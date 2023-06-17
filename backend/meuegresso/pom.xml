@@ -150,7 +150,7 @@
 		</dependency>
 		<!-- END  -->
 		<!-- PDF -->
-		
+
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
@@ -162,6 +162,13 @@
 			<version>2.0.26</version>
 		</dependency>
 		<!-- END  -->
+		<!-- Auditoria -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-envers</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

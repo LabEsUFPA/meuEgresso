@@ -3,6 +3,9 @@ package labes.facomp.ufpa.br.meuegresso.model;
 import java.time.LocalDate;
 import java.util.Set;
 
+import org.hibernate.envers.AuditOverride;
+import org.hibernate.envers.Audited;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,10 +31,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@Audited
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "egresso")
 @EqualsAndHashCode(callSuper = false)
+@AuditOverride(forClass = Auditable.class)
 public class EgressoModel extends Auditable {
 
 	@Id
@@ -104,7 +109,7 @@ public class EgressoModel extends Auditable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "tipo_bolsa_id", unique = false, nullable = true)
 	private TipoBolsaModel bolsa;
-	
+
 	@Min(value = 0L, message = "O valor deve ser positivo")
 	@Column(name = "remuneracao_bolsa_egresso", unique = false, nullable = true)
 	private Double remuneracaoBolsa;
