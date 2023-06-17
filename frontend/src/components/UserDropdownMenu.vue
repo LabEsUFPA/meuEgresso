@@ -32,6 +32,19 @@
             Perfil
           </div>
         </RouterLink>
+
+        <RouterLink
+          to="/painel-admin"
+          v-show="!isEgress"
+        >
+          <div
+            class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900"
+            @click="toggleUserMenu()"
+          >
+            Painel
+          </div>
+        </RouterLink>
+
         <RouterLink :to="isEgress ? '/conta-egresso' : '/conta-admin'">
           <div
             class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900"

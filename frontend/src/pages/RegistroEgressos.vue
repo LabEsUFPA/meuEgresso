@@ -64,42 +64,65 @@
       </div>
     </div>
 
-    <div class="flex justify-center">
-      <div class="grid grid-cols-4 w-[960px] bg-white px-6 sm:px-8 py-2 sm:py-3 mx-4 sm:mx-6 border-gray-200 border-b-[1px] text-sm text-gray-400 font-normal">
-        <h1 class="col-span-2">
-          Nome
-        </h1>
+    <div
+      v-if="$store.egressos.length > 0"
+    >
+      <div class="flex justify-center">
+        <div class="grid grid-cols-4 w-[960px] bg-white px-6 sm:px-8 py-2 sm:py-3 mx-4 sm:mx-6 border-gray-200 border-b-[1px] text-sm text-gray-400 font-normal">
+          <h1 class="col-span-2">
+            Nome
+          </h1>
 
-        <h1>
-          Data de cadastro
-        </h1>
+          <h1>
+            Data de cadastro
+          </h1>
 
-        <h1>
-          Status
-        </h1>
+          <h1>
+            Status
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex justify-center">
+        <div class="flex flex-col w-[960px] bg-white mx-4 sm:mx-6">
+          <div
+            v-for="egresso in $store.egressos"
+            :key="egresso.id"
+            class="flex justify-center"
+          >
+            <ItemEgresso
+              :id="egresso.id"
+              :nome="egresso.name"
+              :data-cadastro="egresso.cadastro"
+              :status="egresso.status"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="flex justify-center">
-      <div class="flex flex-col w-[960px] bg-white mx-4 sm:mx-6">
-        <div
-          v-for="egresso in egressosMock"
-          :key="egresso.id"
-          class="flex justify-center"
-        >
-          <ItemEgresso
-            :id="egresso.id"
-            :nome="egresso.nome"
-            :data-cadastro="egresso.dataCadastro"
-            :status="egresso.status"
-          />
-        </div>
-      </div>
+    <div
+      v-else
+      class="flex flex-col gap-4 justify-center items-center text-gray-400"
+    >
+      <SvgIcon
+        type="mdi"
+        size="48"
+        :path="mdiEmoticonSadOutline"
+      />
+      <h1 class="text-xl sm:text-2xl font-medium">
+        Nenhuma vaga encontrada
+      </h1>
     </div>
   </div>
 
   <div class="flex justify-center sm:mb-8 mb-6">
-    <div class="flex w-[960px] bg-white rounded-b-2xl p-6 sm:p-8 mx-4 sm:mx-6" />
+    <div class="flex w-[960px] bg-white rounded-b-2xl p-6 sm:p-8 mx-4 sm:mx-6 justify-center">
+      <PageSelector
+        v-model:current-page="currentPage"
+        :total-pages="$store.totalPages"
+      />
+    </div>
   </div>
 
   <ModalFilters
@@ -114,25 +137,28 @@
 
 import { onMounted, ref } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiAccountSearch, mdiFilterVariant, mdiPlus } from '@mdi/js'
+import { mdiAccountSearch, mdiFilterVariant, mdiPlus, mdiEmoticonSadOutline } from '@mdi/js'
 
 import PageHeader from 'src/components/PageHeader.vue'
 import ItemEgresso from 'src/components/ItemEgresso.vue'
 import SearchBar from 'src/components/SearchBar.vue'
 import FilterChip from 'src/components/FilterChip.vue'
 import ModalFilters from 'src/components/ModalFilters.vue'
-// import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
+import PageSelector from 'src/components/PageSelector.vue'
+import { usePainelStore } from 'src/store/PainelStore'
 
-// const $store = useAnuncioVagaStore()
 const pesquisaValue = ref('')
 const loading = ref(false)
 const filtersById = ref([])
 
+const currentPage = ref(0)
+
 const isModalFiltersOpen = ref(false)
+const $store = usePainelStore()
+$store.fetchEgressos()
+console.log($store.egressos)
 
 onMounted(async () => {
-  // await $store.fetchAreasEmprego()
-
   loading.value = true
 })
 
@@ -158,7 +184,7 @@ const applyFilters = (filters:any) => {
 const filtersMock = [
   {
     id: 1,
-    name: 'Ativo',
+    name: 'Completo',
     selected: false,
     selectable: true
   },
@@ -173,27 +199,6 @@ const filtersMock = [
     name: 'Incompleto',
     selected: false,
     selectable: true
-  }
-]
-
-const egressosMock = [
-  {
-    id: 1,
-    nome: 'Victor Hugo Machado da Silva',
-    dataCadastro: '2023-06-10',
-    status: 'Ativo'
-  },
-  {
-    id: 2,
-    nome: 'Marcus Huriel Lira Loureiro',
-    dataCadastro: '2023-06-10',
-    status: 'Pendente'
-  },
-  {
-    id: 3,
-    nome: 'Vitória Nauanda Braz Rodrigues',
-    dataCadastro: '2023-06-10',
-    status: 'Incompleto'
   }
 ]
 

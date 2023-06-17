@@ -115,49 +115,6 @@
         </h1>
       </div>
 
-      <!--
-      <div
-        class="flex gap-2 sm:gap-4 justify-center items-center"
-      >
-        <button
-          class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-lg"
-          v-show="currentPage>0"
-          @click="decrementaPage()"
-        >
-          <SvgIcon
-            type="mdi"
-            size="32"
-            :path="mdiChevronLeft"
-          />
-          <div>Anterior</div>
-        </button>
-
-        <CustomButton
-          variant="flat"
-          type="button"
-          color="sky"
-          v-for="pageNumber in $store.totalPages"
-          :key="pageNumber"
-          :class="{['bg-sky-400/30 text-sky-400 h-fit rounded-md']: currentPage + 1 === pageNumber}"
-          @click="navigateToPage(pageNumber - 1)"
-        >
-          {{ pageNumber }}
-        </CustomButton>
-
-        <button
-          class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-md"
-          v-show="currentPage<$store.totalPages-1"
-          @click="incrementaPage()"
-        >
-          <div>Próximo</div>
-          <SvgIcon
-            type="mdi"
-            size="32"
-            :path="mdiChevronRight"
-          />
-        </button>
-      </div>
-      -->
       <PageSelector
         v-model:current-page="currentPage"
         :total-pages="$store.totalPages"

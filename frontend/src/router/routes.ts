@@ -67,7 +67,17 @@ export default [
       },
       {
         path: '/painel-admin',
-        component: async () => await import('src/pages/PainelAdmin.vue')
+        component: async () => await import('src/pages/PainelAdmin.vue'),
+        meta: {
+          requiresAuthAdmin: true
+        }
+      },
+      {
+        path: '/registro-egressos',
+        component: async () => await import('src/pages/RegistroEgressos.vue'),
+        meta: {
+          requiresAuthAdmin: true
+        }
       }
     ]
   },

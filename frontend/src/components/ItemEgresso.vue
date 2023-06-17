@@ -28,10 +28,11 @@
         class="flex w-24 py-1 justify-center items-center text-white text-sm font-normal rounded-2xl"
         :class="statusColor[status]"
       >
-        {{ status }}
+        {{ capitalize(status) }}
       </div>
       <AdminOptionsDropdown
         :id="id"
+        :nome="nome"
         :status="status"
       />
     </div>
@@ -40,13 +41,14 @@
 
 <script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon'
+import { capitalize } from 'vue'
 import { mdiAccount } from '@mdi/js'
 import AdminOptionsDropdown from './AdminOptionsDropdown.vue'
 
 const statusColor: any = {
-  Ativo: 'bg-emerald-500',
-  Pendente: 'bg-amber-500',
-  Incompleto: 'bg-indigo-800'
+  completo: 'bg-emerald-500',
+  pendente: 'bg-amber-500',
+  incompleto: 'bg-indigo-800'
 }
 
 defineProps<{

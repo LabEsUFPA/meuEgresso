@@ -5,6 +5,7 @@ import { type EgressoPainel } from 'src/@types/EgressoPainel'
 
 interface State {
   egressos: EgressoPainel[]
+  totalPages: number
   graficos: {
     dia: any[]
     mes: any[]
@@ -15,6 +16,7 @@ interface State {
 export const usePainelStore = defineStore('Painel', {
   state: (): State => ({
     egressos: [],
+    totalPages: 0,
     graficos: {
       dia: [],
       mes: [],
@@ -34,6 +36,8 @@ export const usePainelStore = defineStore('Painel', {
         }
       })
 
+      console.log(response?.data)
+
       if (response?.status === 200 && (response.data != null)) {
         this.egressos = response?.data.content.map((egresso: any) => ({
           cadastro: egresso.createdDate,
@@ -41,6 +45,7 @@ export const usePainelStore = defineStore('Painel', {
           name: egresso.nome,
           status: egresso.status
         }))
+        this.totalPages = response.data?.totalPages
       }
 
       return response?.status != null ? response.status : 500
