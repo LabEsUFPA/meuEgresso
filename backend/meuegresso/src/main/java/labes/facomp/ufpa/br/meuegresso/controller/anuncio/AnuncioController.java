@@ -23,12 +23,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.anuncio.AnuncioDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.service.anuncio.AnuncioService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
+import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -44,6 +46,8 @@ import lombok.RequiredArgsConstructor;
 public class AnuncioController {
 
 	private final AnuncioService anuncioService;
+
+	private final UsuarioService usuarioService;
 
 	private final ModelMapper mapper;
 
@@ -134,21 +138,6 @@ public class AnuncioController {
 		throw new UnauthorizedRequestException();
 	}
 
-	/**
-	 * Endpoint responsavel por deletar 
-	 * qualquer anuncio do egresso pelo administrador.
-	 *
-	 * @param id id do anuncio a ser deletado          
-	 * @return {@link boolean} Mensagem de confirmacao.
-	 * @author Bruno Eiki
-	 * @since 17/04/2023
-	 */
-	@DeleteMapping(value = "/administrador/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean admDeleteById(@PathVariable Integer id) {
-		return anuncioService.deleteById(id);
-	}
 
 	/**
 	 * Endpoint responsavel por deletar o 
@@ -161,10 +150,11 @@ public class AnuncioController {
 	 * @since 17/06/2023
 	 */
 	@DeleteMapping(value = "/{id}")
-	@PreAuthorize("hasRole('EGRESSO')")
+	@PreAuthorize("hasRole('EGRESSO') or hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(@PathVariable Integer id, JwtAuthenticationToken token) {
-		if(anuncioService.existsByIdAndCreatedById(id, jwtService.getIdUsuario(token))){
+		Integer idUser = jwtService.getIdUsuario(token);
+		if(anuncioService.existsByIdAndCreatedById(id, idUser) || usuarioService.findById(idUser).getGrupos().contains(Grupos.ADMIN)){
 			return anuncioService.deleteById(id);
 		}
 		return false;
