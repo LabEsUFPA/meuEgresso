@@ -7,6 +7,7 @@ export namespace API {
     body?: Record<string, any>
     params?: Record<string, any>
     headers?: Record<string, any>
+    responseType?: any
   }
 
   export interface Response {
