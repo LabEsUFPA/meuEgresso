@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.controller.auth;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -35,7 +36,9 @@ import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioRegistro;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.ExpireRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoValidoModel;
@@ -180,11 +183,16 @@ public class AuthenticationController {
 	@PostMapping(value = "/recoveryPassword/{token}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void recuperarSenha(@PathVariable String token, @RequestBody AuthNewPasswordRequest authNewPassReq)
-			throws UnauthorizedRequestException {
+			throws UnauthorizedRequestException, ExpireRequestException {
 		RecuperacaoSenhaModel recuperacaoSenha = recuperacaoSenhaService.tokenValido(UUID.fromString(token));
+		if (recuperacaoSenha.getPasswordChange().booleanValue() || recuperacaoSenha.getPrazoFinal().isBefore(LocalDateTime.now())) {
+			throw new ExpireRequestException();
+		}
 		UsuarioModel usuarioModel = recuperacaoSenha.getUsuario();
 		usuarioModel.setPassword(authNewPassReq.getNovaSenha());
 		usuarioService.save(usuarioModel);
+		recuperacaoSenha.setPasswordChange(true);
+		recuperacaoSenhaService.save(recuperacaoSenha);
 	}
 
 	@PostMapping(value = "/recoveryPassword")

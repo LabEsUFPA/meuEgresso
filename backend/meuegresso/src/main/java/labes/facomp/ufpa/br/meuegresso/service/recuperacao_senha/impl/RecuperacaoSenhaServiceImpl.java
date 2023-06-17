@@ -34,23 +34,32 @@ public class RecuperacaoSenhaServiceImpl implements RecuperacaoSenhaService {
 
     @Override
     public boolean cadastrarSolicitacaoRecuperacao(String email, String redirect) {
+        Optional<RecuperacaoSenhaModel> anterior = recuperacaoSenhaRepository
+                .findTopByUsuarioEmailAndPasswordChangeIsFalse(email);
+        anterior.ifPresent(e -> {
+            e.setPasswordChange(true);
+            recuperacaoSenhaRepository.save(e);
+        });
         Optional<RecoveryPasswordProjection> projectionOptional = usuarioRepository.findByEmailIgnoreCase(email);
         if (projectionOptional.isPresent()) {
             RecoveryPasswordProjection projection = projectionOptional.get();
             RecuperacaoSenhaModel recuperacaoSenha = RecuperacaoSenhaModel.builder().token(UUID.randomUUID())
                     .usuario(UsuarioModel.builder().id(projection.getId()).build())
-                    .passwordChange(Boolean.TRUE).prazoFinal(LocalDateTime.now().plusMinutes(3)).build();
+                    .passwordChange(Boolean.FALSE).prazoFinal(LocalDateTime.now().plusMinutes(3)).build();
             recuperacaoSenha = recuperacaoSenhaRepository.save(recuperacaoSenha);
             URI location = UriComponentsBuilder.fromHttpUrl(redirect)
                     .queryParam("tokenAuth", recuperacaoSenha.getToken()).build().toUri();
             mailService.sendEmail(email, TITULO_REDEFINICAO_SENHA,
                     String.format(MENSAGEM_REDEFINICAO, projection.getNome(), location.toString()));
             return true;
-
         } else {
             return false;
         }
 
+    }
+
+    public RecuperacaoSenhaModel save(RecuperacaoSenhaModel recuperacaoSenha) {
+        return save(recuperacaoSenha);
     }
 
     @Override
