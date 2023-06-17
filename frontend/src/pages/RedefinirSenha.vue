@@ -25,35 +25,44 @@
         class="flex flex-col gap-4 sm:gap-8 mb-10"
       >
         <div class="flex justify-center">
-          <div class="flex flex-col items-center justify-center w-[960px] bg-white min-h-[400px] rounded-bl-2xl rounded-br-2xl gap-y-6 mx-4 sm:mx-6">
+          <div class="flex flex-col items-center justify-center w-[960px] bg-white min-h-[500px] rounded-bl-2xl rounded-br-2xl gap-y-6 mx-4 sm:mx-6">
             <p>
               Crie uma nova senha para entrar na sua conta
             </p>
 
             <div class="flex flex-col w-full items-center gap-y-8">
-              <div>
-                <p class="font-medium text-lg">
-                  Senha
-                </p>
-                <CustomInput
-                  name="password"
-                  type="text"
-                  placeholder="Digite uma nova senha"
-                  :icon-path="mdiLock"
-                  input-class="flex w-80 sm:w-96"
-                />
-              </div>
-              <div>
-                <p class="font-medium text-lg">
-                  Confirmar Senha
-                </p>
-                <CustomInput
-                  name="confirmationPassword"
-                  type="text"
-                  placeholder="Confirme a senha"
-                  :icon-path="mdiLock"
-                  input-class="flex w-80 sm:w-96"
-                />
+              <div class="flex flex-col gap-y-6">
+                <div>
+                  <p class="font-medium text-lg">
+                    Senha
+                  </p>
+                  <CustomInput
+                    name="password"
+                    :type="showPassword? 'text' : 'password'"
+                    placeholder="Digite uma nova senha"
+                    :icon-path="mdiLock"
+                    input-class="flex w-80 sm:w-96"
+                  />
+                </div>
+                <div>
+                  <p class="font-medium text-lg">
+                    Confirmar Senha
+                  </p>
+                  <CustomInput
+                    name="confirmationPassword"
+                    :type="showPassword? 'text' : 'password'"
+                    placeholder="Confirme a senha"
+                    :icon-path="mdiLock"
+                    input-class="flex w-80 sm:w-96"
+                  />
+                </div>
+                <div>
+                  <CustomCheckbox
+                    label="Visualizar senhas"
+                    name="showPassword"
+                    @update:value="toggleShowPassword"
+                  />
+                </div>
               </div>
               <hr class="w-full">
               <div class="flex flex-col justify-center items-center gap-x-8 gap-y-2 rounded sm:flex-row sm:gap-y-0">
@@ -150,7 +159,7 @@
         class="flex flex-col gap-4 sm:gap-8 mb-10"
       >
         <div class="flex justify-center w-full">
-          <div class="flex flex-col items-center justify-center w-[960px] bg-white min-h-[300px] rounded-bl-2xl rounded-br-2xl mx-4 sm:mx-6">
+          <div class="flex flex-col items-center justify-center w-[960px] bg-white min-h-[325px] rounded-bl-2xl rounded-br-2xl mx-4 sm:mx-6">
             <div
               v-if="loading"
               class="w-full h-full flex items-center justify-center"
@@ -261,6 +270,7 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Form } from 'vee-validate'
 import { object, string, ref as refYup } from 'yup'
 import Api from 'src/services/api'
@@ -273,6 +283,7 @@ const loading = ref(false)
 const userEmail = ref('')
 const error = ref(false)
 const errorText = ref('Ocorreu algum erro :(')
+const showPassword = ref(false)
 
 const schemeForgotPassword = {
   email: string().required('Informe o seu e-mail').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.[a-zA-Z]{2,}))?$/, 'Email inválido')
@@ -284,6 +295,10 @@ const passwordResetScheme = {
 }
 
 const schema = object().shape(tokenAuth.value ? passwordResetScheme : schemeForgotPassword)
+
+const toggleShowPassword = () => {
+  showPassword.value = !showPassword.value
+}
 
 const handleSubmit = async (data: any) => {
   if (tokenAuth.value) {
@@ -324,3 +339,10 @@ const onInvalid = (e: any) => {
   console.log(e)
 }
 </script>
+
+<style>
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
+</style>
