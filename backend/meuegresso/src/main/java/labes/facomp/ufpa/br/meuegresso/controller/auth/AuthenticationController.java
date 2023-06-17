@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -180,7 +179,8 @@ public class AuthenticationController {
 
 	@PostMapping(value = "/recoveryPassword/{token}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void recuperarSenha(@PathVariable String token, @RequestBody AuthNewPasswordRequest authNewPassReq) throws UnauthorizedRequestException {
+	public void recuperarSenha(@PathVariable String token, @RequestBody AuthNewPasswordRequest authNewPassReq)
+			throws UnauthorizedRequestException {
 		RecuperacaoSenhaModel recuperacaoSenha = recuperacaoSenhaService.tokenValido(UUID.fromString(token));
 		UsuarioModel usuarioModel = recuperacaoSenha.getUsuario();
 		usuarioModel.setPassword(authNewPassReq.getNovaSenha());
@@ -189,8 +189,10 @@ public class AuthenticationController {
 
 	@PostMapping(value = "/recoveryPassword")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public ResponseType solicitacaoRecuperarSenha(@RequestBody AuthRecoveryPasswordRequest authPassReq, @RequestHeader("Host") String header) {
-		recuperacaoSenhaService.cadastrarSolicitacaoRecuperacao(authPassReq.getEmail(), authPassReq.getRedirect().orElse("https://" + header));
+	public ResponseType solicitacaoRecuperarSenha(@RequestBody AuthRecoveryPasswordRequest authPassReq,
+			@RequestHeader("Host") String header) {
+		recuperacaoSenhaService.cadastrarSolicitacaoRecuperacao(authPassReq.getEmail(),
+				authPassReq.getRedirect().orElse("https://" + header));
 		return ResponseType.SOLICITACAO_REALIZADA_SUCESSO;
 	}
 
