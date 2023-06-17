@@ -1,6 +1,4 @@
 <template>
-  <!-- Ftre selecionar visivel ou desabilitado pela prop por nivel de acesso -->
-
   <div
     v-if="vmodel || visible"
     :class="{
@@ -24,14 +22,11 @@
           :path="iconPath"
           current="sky-900"
         />
-        <!-- v-if="iconPath" -->
         <h1 class="font-semibold absolute top-0 ml-8 mt-[1px]">
           {{ label }}
         </h1>
 
         <h1 class="flex-auto ml-[33px] mt-1 font-regular inline-flex">
-          <!-- :icon-path="iconPath" -->
-
           <CustomInput
             v-if="isinput"
             :name="name"
@@ -43,8 +38,6 @@
             helper-text=""
             :placeholder="placeholder"
           />
-          <!-- <slot name="title" />
-          <slot -->
           <div v-else>
             <div v-if="vmodel">
               <div class="whitespace-pre-wrap">

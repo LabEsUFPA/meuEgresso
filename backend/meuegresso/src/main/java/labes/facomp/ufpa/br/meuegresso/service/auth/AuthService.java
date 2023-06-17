@@ -16,7 +16,7 @@ public class AuthService {
 
     public String authenticate(UsuarioModel usuarioModel) {
         String scope = usuarioModel.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
+                .map(GrantedAuthority::toString)
                 .collect(Collectors.joining(" "));
         return tokenService.generateToken(usuarioModel, scope);
     }

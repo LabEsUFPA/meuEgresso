@@ -185,7 +185,7 @@ import { useGraficoStore } from 'src/store/GraficoStore'
 import { models } from 'src/@types'
 interface AllChartSeries extends models.Graphics.AllChartSeries {}
 
-const store = useGraficoStore()
+const $store = useGraficoStore()
 
 const loadedData = ref<AllChartSeries>({
   company: null,
@@ -207,7 +207,7 @@ const loadedData = ref<AllChartSeries>({
 })
 
 onMounted(async () => {
-  loadedData.value = await store.fetchAll()
+  loadedData.value = await $store.fetchAll()
 })
 
 interface Filters {
@@ -216,6 +216,7 @@ interface Filters {
   academic: boolean
   career: boolean
 }
+
 const filters = ref<Filters>({
   all: true,
   general: false,
