@@ -25,7 +25,7 @@
         class="flex flex-col gap-4 sm:gap-8 mb-10"
       >
         <div class="flex justify-center">
-          <div class="flex flex-col gap-4 sm:gap-6 w-[960px] bg-white rounded-bl-2xl rounded-br-2xl py-6   items-center">
+          <div class="flex flex-col items-center justify-center w-[960px] bg-white min-h-[400px] rounded-bl-2xl rounded-br-2xl gap-y-6 mx-4 sm:mx-6">
             <p>
               Crie uma nova senha para entrar na sua conta
             </p>
@@ -40,7 +40,7 @@
                   type="text"
                   placeholder="Digite uma nova senha"
                   :icon-path="mdiLock"
-                  input-class="flex w-96"
+                  input-class="flex w-80 sm:w-96"
                 />
               </div>
               <div>
@@ -52,17 +52,17 @@
                   type="text"
                   placeholder="Confirme a senha"
                   :icon-path="mdiLock"
-                  input-class="flex w-96"
+                  input-class="flex w-80 sm:w-96"
                 />
               </div>
               <hr class="w-full">
-              <div class="flex justify-center items-center gap-x-8 rounded">
+              <div class="flex flex-col justify-center items-center gap-x-8 gap-y-2 rounded sm:flex-row sm:gap-y-0">
                 <div class="flex items-center">
                   <SvgIcon
                     type="mdi"
                     size="32"
                     :path="mdiChevronLeft"
-                    class="text-gray-400"
+                    class="text-gray-400 hidden sm:block"
                   />
                   <p class="hover:underline">
                     <RouterLink
@@ -76,7 +76,7 @@
                 <CustomButton
                   type="submit"
                   color="emerald"
-                  text-class="text-white font-bold text-lg p-20 w-56 py-6"
+                  text-class="text-white font-bold text-lg p-20 w-40 sm:w-56 py-6"
                 >
                   Redefinir senha
                 </CustomButton>
@@ -97,7 +97,7 @@
       v-model="showResetDoneModal"
       :hide-close-button="true"
     >
-      <div class="flex flex-col h-full justify-center items-center text-center gap-y-10">
+      <div class="flex flex-col h-full justify-center items-center text-center gap-y-6 sm:gap-y-10">
         <div class="flex flex-col justify-center items-center gap-y-4">
           <SvgIcon
             type="mdi"
@@ -149,8 +149,8 @@
       <div
         class="flex flex-col gap-4 sm:gap-8 mb-10"
       >
-        <div class="flex justify-center">
-          <div class="flex flex-col gap-4 sm:gap-6 w-[960px] min-h-[300px] bg-white rounded-bl-2xl rounded-br-2xl py-6 justify-center items-center">
+        <div class="flex justify-center w-full">
+          <div class="flex flex-col items-center justify-center w-[960px] bg-white min-h-[300px] rounded-bl-2xl rounded-br-2xl mx-4 sm:mx-6">
             <div
               v-if="loading"
               class="w-full h-full flex items-center justify-center"
@@ -163,10 +163,10 @@
               />
             </div>
             <div
-              class="flex flex-col gap-y-6"
+              class="flex flex-col w-full gap-y-6"
               v-else
             >
-              <p>
+              <p class="text-center">
                 Enviaremos para o seu e-mail instruções para criar uma nova senha
               </p>
               <div class="flex flex-col w-full items-center gap-y-8">
@@ -179,17 +179,17 @@
                     type="text"
                     placeholder="Informe seu e-mail"
                     :icon-path="mdiEmail"
-                    input-class="flex w-96"
+                    input-class="flex w-80 sm:w-96"
                   />
                 </div>
                 <hr class="w-full">
-                <div class="flex justify-center items-center gap-x-8 rounded">
+                <div class="flex flex-col justify-center items-center gap-x-8 gap-y-2 rounded sm:flex-row sm:gap-y-0">
                   <div class="flex items-center">
                     <SvgIcon
                       type="mdi"
                       size="32"
                       :path="mdiChevronLeft"
-                      class="text-gray-400"
+                      class="text-gray-400 hidden sm:block"
                     />
                     <p class="hover:underline">
                       <RouterLink
@@ -203,7 +203,7 @@
                   <CustomButton
                     type="submit"
                     color="emerald"
-                    text-class="text-white font-bold text-lg p-20 w-56 py-6"
+                    text-class="text-white font-bold text-lg p-20 w-40 sm:w-56 py-6"
                   >
                     Enviar e-mail
                   </CustomButton>
@@ -219,8 +219,8 @@
       v-model="showSentEmailModal"
       :hide-close-button="true"
     >
-      <div class="flex flex-col h-full justify-center items-center text-center gap-y-10">
-        <div class="flex flex-col justify-center items-center gap-y-4">
+      <div class="flex flex-col h-full justify-center items-center text-center gap-y-2 sm:gap-y-10">
+        <div class="flex flex-col justify-center items-center gap-y-0 sm:gap-y-4">
           <SvgIcon
             type="mdi"
             size="50"
@@ -232,7 +232,7 @@
           </p>
         </div>
         <div class="flex flex-col gap-y-2">
-          <p class="font-medium text-lg">
+          <p class="font-medium text-md px-8 sm:text-lg sm:px-0">
             Enviamos um link para resetar a senha para
           </p>
           <p class="font-bold text-lg">
