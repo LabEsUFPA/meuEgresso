@@ -112,13 +112,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 		List<EgressoDashDTO> dashDtos = tupla.stream()
 				.map(t -> new EgressoDashDTO(
-						t.get(0, Integer.class), // id
-						t.get(1, String.class), // nome
-						t.get(2, String.class), // nomeEmpresa
-						t.get(3, String.class), // email
-						t.get(4, Timestamp.class).toLocalDateTime().toLocalDate(), // createdDate
-						t.get(5, String.class), // foto
-						t.get(6, String.class))) // status
+						t.get(0, Integer.class), // id usuario
+						t.get(1, Integer.class), // id egresso
+						t.get(2, String.class), // nome
+						t.get(3, String.class), // nomeEmpresa
+						t.get(4, String.class), // email
+						t.get(5, Timestamp.class).toLocalDateTime().toLocalDate(), // createdDate
+						t.get(6, String.class), // foto
+						t.get(7, String.class))) // status
 				.collect(Collectors.toList());
 
 		Pageable paging = PageRequest.of(page, size, Sort.by(direction, "u.created_date"));

@@ -136,7 +136,7 @@
             </RouterLink>
           </div>
           <div class="border-b text-cyan-600 p-4 font-semibold text-left">
-            <button>
+            <button @click="$store.getPdf()">
               <SvgIcon
                 type="mdi"
                 size="20"

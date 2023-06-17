@@ -68,6 +68,31 @@ export const usePainelStore = defineStore('Painel', {
       }
 
       return response?.status != null ? response.status : 500
+    },
+
+    async getPdf () {
+      const response = await Api.request({
+        method: 'get',
+        route: '/administrador/dashboard/export'
+      })
+
+      if (response?.status === 200 && response.data != null) {
+        const blobFile = new Blob([response.data], {
+          type: 'application/pdf;charset=UTF-8;base64'
+        })
+
+        const fileUrl = URL.createObjectURL(blobFile)
+        console.log(response.data)
+
+        const link = document.createElement('a')
+
+        link.href = fileUrl
+        link.setAttribute('download', 'listagem-egresso-2023-06-17.pdf') // set custom file name
+        document.body.appendChild(link)
+
+        link.click()
+        link.remove()
+      }
     }
   }
 })
