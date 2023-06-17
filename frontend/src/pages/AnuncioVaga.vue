@@ -121,7 +121,7 @@
               Vaga disponível até {{ $store.anuncio.dataExpiracao.split('-').reverse().join('/') }}
             </p>
             <CustomButton
-              v-show="groupUserId === 1 || userEmail === $store.anuncio.createdBy.email"
+              v-show="tipoUsuario === 'ADMIN' || userEmail === $store.anuncio.createdBy.email"
               type="button"
               color="red"
               variant="flat"
@@ -197,24 +197,26 @@ const $route = useRoute()
 const $router = useRouter()
 const { id } = $route.params
 $store.getAnuncioId(parseInt(id.toString()))
-console.log($store.anuncio)
-
 const $loginStore = useLoginStore()
-const groupUserId = ref(0)
+const tipoUsuario = ref('')
 const userEmail = ref('')
 
 onMounted(() => {
   if ($loginStore.userLogged) {
-    groupUserId.value = $loginStore.getLoggedUser()?.grupos[0].id
+    tipoUsuario.value = $loginStore.getLoggedUser().scope
   }
-  if (groupUserId.value !== 1) {
+  if (tipoUsuario.value !== 'ADMIN') {
     userEmail.value = $loginStore.getLoggedUser()?.email
   }
 })
 
 const openDeleteConfirmation = ref(false)
 const onDeleteAnuncio = () => {
-  console.log('Deleta anúncio')
+  if (tipoUsuario.value === 'ADMIN') {
+    $store.deleteAnuncioAdmin($store.anuncio.id)
+  } else {
+    $store.deleteAnuncioEgresso($store.anuncio.id)
+  }
 
   openDeleteConfirmation.value = false
   $router.push('/vagas')

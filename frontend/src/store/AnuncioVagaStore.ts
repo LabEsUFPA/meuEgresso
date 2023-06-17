@@ -70,6 +70,32 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       }
     },
 
+    async deleteAnuncioAdmin (id: number) {
+      const response = await Api.request({
+        method: 'get',
+        route: '/anuncio/administrador/' + id.toString()
+      })
+
+      if (response?.status === 200) {
+        return true
+      } else {
+        return false
+      }
+    },
+
+    async deleteAnuncioEgresso (id: number) {
+      const response = await Api.request({
+        method: 'get',
+        route: '/anuncio/' + id.toString()
+      })
+
+      if (response?.status === 200) {
+        return true
+      } else {
+        return false
+      }
+    },
+
     async fetchBusca (page: number, size: number) {
       const response = await Api.request({
         method: 'get',
