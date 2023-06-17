@@ -57,6 +57,10 @@ export default [
       {
         path: '/vagas/:id',
         component: async () => await import('src/pages/AnuncioVaga.vue')
+      },
+      {
+        path: 'redefinir-senha',
+        component: async () => await import('src/pages/RedefinirSenha.vue')
       }
     ]
   },
