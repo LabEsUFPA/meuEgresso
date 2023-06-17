@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.anuncio.AnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -54,6 +56,7 @@ public class AnuncioAdmController {
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<AnuncioDTO> buscarAnuncios(
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
@@ -75,6 +78,7 @@ public class AnuncioAdmController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO) {
 		AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
 		anuncioService.save(anuncioModel);
@@ -95,6 +99,7 @@ public class AnuncioAdmController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO)
 			throws InvalidRequestException {
 		AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
@@ -114,6 +119,7 @@ public class AnuncioAdmController {
 	 */
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String deleteById(Integer id) throws DataNotDeletedException {
 		if (anuncioService.deleteById(id)) {
 			return ResponseType.SUCCESS_DELETE.getMessage();

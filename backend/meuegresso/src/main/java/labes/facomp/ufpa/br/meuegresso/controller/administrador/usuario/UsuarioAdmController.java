@@ -53,10 +53,10 @@ public class UsuarioAdmController {
 	 * @since 18/04/2023
 	 */
 	@GetMapping
+	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
-	public List<UsuarioDTO> consultarUsuarios() {
-		return mapper.map(usuarioService.findAll(), new TypeToken<List<UsuarioDTO>>() {
+	public List<UsuarioAuthDTO> consultarUsuarios() {
+		return mapper.map(usuarioService.findAll(), new TypeToken<List<UsuarioAuthDTO>>() {
 		}.getType());
 	}
 
@@ -72,8 +72,8 @@ public class UsuarioAdmController {
 	 * @since 16/04/2023
 	 */
 	@PutMapping(value = "/{id}")
-	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
+	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public UsuarioAuthDTO atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) throws InvalidRequestException {
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
