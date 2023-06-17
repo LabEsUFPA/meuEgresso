@@ -115,8 +115,9 @@
         </h1>
       </div>
 
+      <!--
       <div
-        class="flex gap-16 sm:gap-32 justify-center"
+        class="flex gap-2 sm:gap-4 justify-center items-center"
       >
         <button
           class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-lg"
@@ -130,6 +131,19 @@
           />
           <div>Anterior</div>
         </button>
+
+        <CustomButton
+          variant="flat"
+          type="button"
+          color="sky"
+          v-for="pageNumber in $store.totalPages"
+          :key="pageNumber"
+          :class="{['bg-sky-400/30 text-sky-400 h-fit rounded-md']: currentPage + 1 === pageNumber}"
+          @click="navigateToPage(pageNumber - 1)"
+        >
+          {{ pageNumber }}
+        </CustomButton>
+
         <button
           class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-md"
           v-show="currentPage<$store.totalPages-1"
@@ -143,6 +157,11 @@
           />
         </button>
       </div>
+      -->
+      <PageSelector
+        v-model:current-page="currentPage"
+        :total-pages="$store.totalPages"
+      />
     </div>
   </div>
 
@@ -158,7 +177,7 @@
 
 import { ref, onMounted, watch } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiBullhorn, mdiFilterVariant, mdiPlus, mdiChevronRight, mdiChevronLeft, mdiEmoticonSadOutline } from '@mdi/js'
+import { mdiBullhorn, mdiFilterVariant, mdiPlus, mdiChevronRight, mdiEmoticonSadOutline } from '@mdi/js'
 import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
 import { useLoginStore } from 'src/store/LoginStore'
 import CustomButton from 'src/components/CustomButton.vue'
@@ -166,6 +185,7 @@ import ShortPost from 'src/components/ShortPost.vue'
 import SearchBar from 'src/components/SearchBar.vue'
 import FilterChip from 'src/components/FilterChip.vue'
 import ModalFilters from 'src/components/ModalFilters.vue'
+import PageSelector from 'src/components/PageSelector.vue'
 
 const logado = ref(useLoginStore().userLogged)
 
@@ -179,14 +199,6 @@ const currentPage = ref(0)
 
 const size = ref(3)
 
-const incrementaPage = () => {
-  currentPage.value++
-}
-
-const decrementaPage = () => {
-  currentPage.value--
-}
-
 onMounted(async () => {
   await $store.fetchAreasEmprego()
   await $store.fetchBusca(currentPage.value, size.value)
@@ -194,6 +206,7 @@ onMounted(async () => {
   loading.value = true
   watch(currentPage, () => {
     $store.fetchBusca(currentPage.value, size.value)
+    window.scrollTo(0, 0)
   })
   watch(pesquisaValue, () => {
     $store.fetchBuscaAnuncioTitulo(pesquisaValue.value, currentPage.value, size.value)
