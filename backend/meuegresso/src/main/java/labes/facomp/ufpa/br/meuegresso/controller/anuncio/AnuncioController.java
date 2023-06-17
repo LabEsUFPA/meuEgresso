@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -134,7 +135,8 @@ public class AnuncioController {
 	}
 
 	/**
-	 * Endpoint responsavel por deletar o anuncio do egresso.
+	 * Endpoint responsavel por deletar 
+	 * qualquer anuncio do egresso pelo administrador.
 	 *
 	 * @param anuncio Estrutura de dados contendo as informações
 	 *                necessárias para deletar o anuncio.
@@ -142,11 +144,31 @@ public class AnuncioController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping
+	@DeleteMapping(value = "/administrador/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(Integer id) {
+	public boolean admDeleteById(@PathVariable Integer id) {
 		return anuncioService.deleteById(id);
+	}
+
+	/**
+	 * Endpoint responsavel por deletar o 
+	 * anuncio do egresso apenas por quem o criou.
+	 *
+	 * @param anuncio Estrutura de dados contendo as informações
+	 *                necessárias para deletar o anuncio.
+	 * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
+	 * @author Bruno Eiki, Lucas Cantão
+	 * @since 17/06/2023
+	 */
+	@DeleteMapping(value = "/{id}")
+	@PreAuthorize("hasRole('EGRESSO')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public boolean deleteById(@PathVariable Integer id, JwtAuthenticationToken token) {
+		if(anuncioService.existsByIdAndCreatedById(id, jwtService.getIdUsuario(token))){
+			return anuncioService.deleteById(id);
+		}
+		return false;
 	}
 
 }
