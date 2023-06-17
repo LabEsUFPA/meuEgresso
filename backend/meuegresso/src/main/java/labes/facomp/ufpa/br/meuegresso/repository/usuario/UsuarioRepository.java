@@ -48,22 +48,33 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			@Param("status") String status,
 			@Param("email") String email);
 
-	@Query(value = """
-			    SELECT u.nome_usuario, u.id_usuario,
-			    CASE
-			        WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
-			        CASE
-			            WHEN e.ativo = FALSE THEN 'excluido'
-			            WHEN u.valido_usuario = TRUE THEN 'completo'
-			            WHEN u.valido_usuario = FALSE THEN 'pendente'
-			        END
-			        ELSE 'incompleto'
-			    END AS status, u.last_modified_date
-			    FROM usuario_grupo ug
-			    LEFT JOIN egresso e ON ug.id_usuario = e.usuario_id
-			    JOIN usuario u ON ug.id_usuario = u.id_usuario
-			    WHERE ug.grupo = 'EGRESSO'
-			    AND (ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL OR u.valido_usuario = FALSE)
-			""", nativeQuery = true)
-	List<Tuple> getStatus();
+	@Query(value = "SELECT u.nome_usuario, u.id_usuario,\n" +
+        "    CASE\n" +
+        "        WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN\n" +
+        "            CASE\n" +
+        "                WHEN e.ativo = FALSE THEN 'excluido'\n" +
+        "                WHEN u.valido_usuario = TRUE THEN 'completo'\n" +
+        "                WHEN u.valido_usuario = FALSE THEN 'pendente'\n" +
+        "            END\n" +
+        "        ELSE 'incompleto'\n" +
+        "    END AS status, u.last_modified_date\n" +
+        "FROM usuario_grupo ug\n" +
+        "LEFT JOIN egresso e ON ug.id_usuario = e.usuario_id\n" +
+        "JOIN usuario u ON ug.id_usuario = u.id_usuario\n" +
+        "WHERE ug.grupo = 'EGRESSO'\n" +
+        "    AND u.nome_usuario ilike %:nome%\n" +
+        "    AND CASE\n" +
+        "        WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN\n" +
+        "            CASE\n" +
+        "                WHEN e.ativo = FALSE THEN 'excluido'\n" +
+        "                WHEN u.valido_usuario = TRUE THEN 'completo'\n" +
+        "                WHEN u.valido_usuario = FALSE THEN 'pendente'\n" +
+        "            END\n" +
+        "        ELSE 'incompleto'\n" +
+        "    END ilike %:status%\n" +
+        "    AND (ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL OR u.valido_usuario = false)", nativeQuery = true)
+
+	List<Tuple> getStatus(
+			@Param("nome") String nome,
+			@Param("status") String status);
 }

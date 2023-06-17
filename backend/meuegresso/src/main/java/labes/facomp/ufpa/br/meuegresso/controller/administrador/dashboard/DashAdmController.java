@@ -69,7 +69,7 @@ public class DashAdmController {
 	 * @since 06/06/2023
 	 */
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN')")
+	// @PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
 	public Page<EgressoDashDTO> consultarEgressoDash(
 			@RequestParam(name = "nome_usuario", defaultValue = "") String nomeUsuario,
@@ -77,7 +77,7 @@ public class DashAdmController {
 			@RequestParam(name = "date_min", defaultValue = "2020-01-01") LocalDate dateMin,
 			@RequestParam(name = "date_max", defaultValue = "2099-12-30") LocalDate dateMax,
 			@RequestParam(name = "status", defaultValue = "") String status,
-			@RequestParam(name = "email", defaultValue = "@gmail") String email,
+			@RequestParam(name = "email", defaultValue = "@") String email,
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
@@ -190,10 +190,16 @@ public class DashAdmController {
 	 * @since 12/06/2023
 	 */
 	@GetMapping(value = "/tipoStatus")
-	@PreAuthorize("hasRole('admin')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
-	public List<NotificacaoDTO> getStatus() {
-		return usuarioService.getStatus();
+	public Page<NotificacaoDTO> getStatus(
+			@RequestParam(name = "nome", defaultValue = "", required = false) String nome,
+			@RequestParam(name = "status", defaultValue = "", required = false) String status,					
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "20", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
+
+		return usuarioService.getStatus(nome, status, page, size, direction);
 
 	}
 
