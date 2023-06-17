@@ -92,6 +92,7 @@
           >
             <ItemEgresso
               :id="egresso.id"
+              :id-egresso="egresso.idEgresso"
               :nome="egresso.name"
               :data-cadastro="egresso.cadastro"
               :status="egresso.status"

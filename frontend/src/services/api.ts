@@ -19,7 +19,9 @@ const request: API.Request = async ({
   method,
   route,
   body,
-  params
+  params,
+  headers,
+  responseType
 }) => {
   let statusError: any
   let message: any
@@ -27,7 +29,9 @@ const request: API.Request = async ({
     method,
     url: route,
     data: body,
-    params: (params != null) ? new URLSearchParams(params) : undefined
+    params: (params != null) ? new URLSearchParams(params) : undefined,
+    headers,
+    responseType
   }).catch((error: AxiosError) => {
     statusError = (error.response != null) ? error.response.status : null
     message = (error.response != null) ? error.response.data : null

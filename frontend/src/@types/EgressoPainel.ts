@@ -6,6 +6,7 @@ export enum EgressoStatus {
 
 export interface EgressoPainel {
   id: number
+  idEgresso: number
   name: string
   cadastro: string
   status: EgressoStatus

@@ -26,7 +26,7 @@
       :item-class="classNames('text-sm text-cyan-600 p-2 hover:bg-sky-300/30 rounded')"
     >
       <button
-        @click="() => {action = opcao.titulo; isConfirmationOpen = true}"
+        @click="() => escolheAcao(opcao.titulo)"
       >
         {{ opcao.titulo }}
       </button>
@@ -79,7 +79,7 @@
 
 import { ref } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiCheckCircleOutline, mdiDeleteForever, mdiDotsVertical, mdiEmail, mdiPencil } from '@mdi/js'
+import { mdiCheckCircleOutline, mdiDeleteForever, mdiDotsVertical } from '@mdi/js'
 import { ODropdown, ODropdownItem, OButton } from '@oruga-ui/oruga-next'
 import classNames from 'classnames'
 import { useRouter } from 'vue-router'
@@ -89,6 +89,7 @@ import CustomButton from './CustomButton.vue'
 
 const props = defineProps<{
     id: number
+    idEgresso: number
     nome?: string
     status: string
     }
@@ -98,12 +99,22 @@ const $router = useRouter()
 const isConfirmationOpen = ref(false)
 const action = ref('')
 
+const escolheAcao = (acao:string) => {
+  action.value = acao
+  if (acao === 'Aprovar cadastro' || acao === 'Excluir cadastro') {
+    isConfirmationOpen.value = true
+  } else {
+    const aplicarAcao = opcoesAdmin.filter(opcao => opcao.titulo === acao)[0]
+    aplicarAcao.click()
+  }
+}
+
 const aprovaCadastro = () => {
   console.log('aprova')
 }
 
 const editaCadastro = () => {
-  $router.push(`/egresso/${props.id}`)
+  $router.push(`/egresso/${props.idEgresso}`)
 }
 
 const excluiCadastro = () => {
@@ -123,9 +134,7 @@ const opcoesAdmin = [
 
 const mensagemDialog: any = {
   'Aprovar cadastro': { text: 'Aprovar o cadastro de', click: aprovaCadastro, icon: mdiCheckCircleOutline },
-  'Editar cadastro': { text: 'Editar o cadastro de', click: editaCadastro, icon: mdiPencil },
-  'Excluir cadastro': { text: 'Excluir o cadastro de', click: excluiCadastro, icon: mdiDeleteForever },
-  'Enviar e-mail': { text: 'Enviar e-mail para', click: enviaEmail, icon: mdiEmail }
+  'Excluir cadastro': { text: 'Excluir o cadastro de', click: excluiCadastro, icon: mdiDeleteForever }
 }
 
 </script>
