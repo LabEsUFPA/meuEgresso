@@ -2,15 +2,20 @@ package labes.facomp.ufpa.br.meuegresso.controller.administrador.egresso;
 
 import java.io.IOException;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
@@ -30,6 +35,30 @@ import lombok.RequiredArgsConstructor;
 public class EgressoAdmController {
 
     private final EgressoService egressoService;
+
+    private final ModelMapper mapper;
+
+    /**
+     * Endpoint responsavel por deletar o egresso.
+     *
+     * @param egressoPublicDTO Estrutura de dados contendo as informações
+     *                         necessárias para deletar o egresso.
+     * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
+     * @author Bruno Eiki, Marcus Maciel Oliveira
+     * @since 05/06/2023
+     */
+    @DeleteMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(code = HttpStatus.OK)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public String deletarEgresso(@RequestBody @Valid EgressoPublicDTO egressoPublicDTO) {
+        EgressoModel egressoModel = mapper.map(egressoPublicDTO, EgressoModel.class);
+        if (egressoService.existsById(egressoModel.getId())) {
+            egressoService.deleteById(egressoModel.getId());
+            return ResponseType.SUCCESS_DELETE.getMessage();
+        }
+        return ResponseType.FAIL_DELETE.getMessage();
+    }
 
     @ResponseStatus(code = HttpStatus.OK)
     @DeleteMapping(value = "/foto/{id}")
