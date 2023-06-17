@@ -36,8 +36,6 @@ public class EgressoAdmController {
 
     private final EgressoService egressoService;
 
-    private final ModelMapper mapper;
-
     /**
      * Endpoint responsavel por deletar o egresso.
      *
@@ -47,21 +45,21 @@ public class EgressoAdmController {
      * @author Bruno Eiki, Marcus Maciel Oliveira
      * @since 05/06/2023
      */
-    @DeleteMapping
+    @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public String deletarEgresso(@RequestBody @Valid EgressoPublicDTO egressoPublicDTO) {
-        EgressoModel egressoModel = mapper.map(egressoPublicDTO, EgressoModel.class);
-        if (egressoService.existsById(egressoModel.getId())) {
-            egressoService.deleteById(egressoModel.getId());
+    public String deletarEgresso(@PathVariable Integer id) {
+        if (egressoService.existsById(id)) {
+            egressoService.deleteById(id);
             return ResponseType.SUCCESS_DELETE.getMessage();
         }
         return ResponseType.FAIL_DELETE.getMessage();
     }
 
-    @ResponseStatus(code = HttpStatus.OK)
     @DeleteMapping(value = "/foto/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deleteFotoEgresso(@PathVariable Integer id) throws IOException {
         EgressoModel egressoModel = egressoService.findById(id);
