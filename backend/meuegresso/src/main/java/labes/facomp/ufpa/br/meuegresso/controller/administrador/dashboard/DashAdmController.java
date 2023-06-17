@@ -3,7 +3,6 @@ package labes.facomp.ufpa.br.meuegresso.controller.administrador.dashboard;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.List;
 import java.util.Map;
 
@@ -74,17 +73,12 @@ public class DashAdmController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<EgressoDashDTO> consultarEgressoDash(
 			@RequestParam(name = "nome_usuario", defaultValue = "") String nomeUsuario,
-			@RequestParam(name = "nome_empresa", defaultValue = "") String nomeEmpresa,
-			@RequestParam(name = "date_min", defaultValue = "2020-01-01") LocalDate dateMin,
-			@RequestParam(name = "date_max", defaultValue = "2099-12-30") LocalDate dateMax,
 			@RequestParam(name = "status", defaultValue = "") String status,
-			@RequestParam(name = "email", defaultValue = "@") String email,
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
 
-		return usuarioService.findBySearch(nomeUsuario, nomeEmpresa, dateMin,
-				dateMax, status, email, page, size, direction);
+		return usuarioService.findBySearch(nomeUsuario, status, page, size, direction);
 	}
 
 	/**
@@ -111,11 +105,7 @@ public class DashAdmController {
 
 		document.open();
 
-		LocalDate dateMin = LocalDate.of(2023, Month.JANUARY, 01);
-		LocalDate dateMax = LocalDate.of(2099, Month.DECEMBER, 30);
-
-		List<EgressoDashDTO> egressos = usuarioService.findBySearch("", "", dateMin,
-				dateMax, "", "", 0, 20, Direction.ASC).toList();
+		List<EgressoDashDTO> egressos = usuarioService.findBySearch("", "", 0, 20, Direction.ASC).toList();
 
 		document.add(new Paragraph("UNIVERSIDADE FEDERAL DO PARÁ"));
 		document.add(new Paragraph("Listagem de Egressos", bold));

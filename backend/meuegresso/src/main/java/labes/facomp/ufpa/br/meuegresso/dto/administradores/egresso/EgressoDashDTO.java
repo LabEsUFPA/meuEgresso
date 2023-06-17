@@ -27,9 +27,9 @@ public class EgressoDashDTO {
 
     private String nome;
 
-    private String nomeEmpresa; // usuários sem egresso terão valor "Pendente"
+    private String nomeEmpresa;
 
-    private String email; // linha pra retornar email no pdf
+    private String email;
 
     private LocalDate createdDate;
 

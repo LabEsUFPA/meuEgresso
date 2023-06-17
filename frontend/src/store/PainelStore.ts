@@ -72,21 +72,19 @@ export const usePainelStore = defineStore('Painel', {
     async getPdf () {
       const response = await Api.request({
         method: 'get',
-        route: '/administrador/dashboard/export'
+        route: '/administrador/dashboard/export',
+        responseType: 'blob'
       })
 
       if (response?.status === 200 && response.data != null) {
-        const blobFile = new Blob([response.data], {
-          type: 'application/pdf;charset=UTF-8;base64'
-        })
-
-        const fileUrl = URL.createObjectURL(blobFile)
+        const blobData = response.data
+        const fileUrl = URL.createObjectURL(blobData)
         console.log(response.data)
 
         const link = document.createElement('a')
 
         link.href = fileUrl
-        link.setAttribute('download', 'listagem-egresso-2023-06-17.pdf') // set custom file name
+        link.setAttribute('download', `Export Egressos ${(new Date()).toLocaleDateString().replaceAll('_', '/')}`) // set custom file name
         document.body.appendChild(link)
 
         link.click()

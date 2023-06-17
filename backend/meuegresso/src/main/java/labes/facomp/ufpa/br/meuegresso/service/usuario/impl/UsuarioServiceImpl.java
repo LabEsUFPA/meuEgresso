@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,16 +103,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	// PageRequest.of(page, size, Sort.by(direction, "u.created_date")
 	@Override
-	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate dateMin,
-			LocalDate dateMax, String status, String email, Integer page, Integer size, Direction direction) {
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String status, Integer page, Integer size,
+			Direction direction) {
 
-		List<Tuple> tupla = usuarioRepository.findBySearch(nomeUsuario, nomeEmpresa, dateMin.atStartOfDay(),
-				dateMax.atTime(LocalTime.MAX), status, email);
+		List<Tuple> tupla = usuarioRepository.findBySearch(nomeUsuario, status);
 
 		List<EgressoDashDTO> dashDtos = tupla.stream()
 				.map(t -> new EgressoDashDTO(
-						t.get(0, Integer.class), // id usuario
-						t.get(1, Integer.class), // id egresso
+						t.get(0, Integer.class), // id
+						t.get(1, Integer.class), // id do egresso
 						t.get(2, String.class), // nome
 						t.get(3, String.class), // nomeEmpresa
 						t.get(4, String.class), // email

@@ -250,28 +250,6 @@ public class EgressoController {
     }
 
     /**
-     * Endpoint responsavel por deletar o egresso.
-     *
-     * @param egressoPublicDTO Estrutura de dados contendo as informações
-     *                         necessárias para deletar o egresso.
-     * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
-     * @author Bruno Eiki, Marcus Maciel Oliveira
-     * @since 05/06/2023
-     */
-    @DeleteMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    @ResponseStatus(code = HttpStatus.OK)
-    @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public String deletarEgresso(@RequestBody @Valid EgressoPublicDTO egressoPublicDTO) {
-        EgressoModel egressoModel = mapper.map(egressoPublicDTO, EgressoModel.class);
-        if (egressoService.existsById(egressoModel.getId())) {
-            egressoService.deleteById(egressoModel.getId());
-            return ResponseType.SUCCESS_DELETE.getMessage();
-        }
-        return ResponseType.FAIL_DELETE.getMessage();
-    }
-
-    /**
      * Endpoint responsável pela deleção local do arquivo da foto do egresso
      *
      * @author Camilo Santos, Eude Monteiro
