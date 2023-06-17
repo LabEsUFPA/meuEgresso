@@ -5,11 +5,21 @@ import { type EgressoPainel } from 'src/@types/EgressoPainel'
 
 interface State {
   egressos: EgressoPainel[]
+  graficos: {
+    dia: any[]
+    mes: any[]
+    ano: any[]
+  }
 }
 
 export const usePainelStore = defineStore('Painel', {
   state: (): State => ({
-    egressos: []
+    egressos: [],
+    graficos: {
+      dia: [],
+      mes: [],
+      ano: []
+    }
   }),
 
   actions: {
@@ -31,6 +41,25 @@ export const usePainelStore = defineStore('Painel', {
           name: egresso.nome,
           status: egresso.status
         }))
+      }
+
+      return response?.status != null ? response.status : 500
+    },
+
+    async fetchGrafico (periodo: 'ano' | 'mes' | 'dia') {
+      const periodoToName = {
+        ano: 'egressosCadastradosPorAno',
+        mes: 'egressosCadastradosPorMesAno',
+        dia: 'egressosCadastradosPorDia'
+      }
+
+      const response = await Api.request({
+        method: 'get',
+        route: `/administrador/dashboard/cadastro/${periodo}`
+      })
+
+      if (response?.status === 200 && (response.data != null)) {
+        this.graficos[periodo] = response.data[periodoToName[periodo]]
       }
 
       return response?.status != null ? response.status : 500

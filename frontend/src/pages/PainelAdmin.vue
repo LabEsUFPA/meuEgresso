@@ -82,7 +82,7 @@
 
     <div class="flex justify-center">
       <div class="flex flex-col md:grid grid-cols-2 grid-rows-6 grid-flow-col gap-5 mb-5 w-[960px] mx-4 sm:mx-6">
-        <div class="row-span-3 col-span-1 bg-white rounded-lg">
+        <div class="row-span-2 col-span-1 bg-white rounded-lg">
           <div class="text-xl font-semibold text-cyan-800 border-b p-4">
             Ações
           </div>
@@ -160,14 +160,14 @@
           </div>
         </div>
 
-        <div class="row-span-3 col-span-1 bg-white rounded-lg">
+        <div class="row-span-4 col-span-1 bg-white rounded-lg">
           <div class="text-xl font-semibold text-cyan-800 border-b p-4">
             Análise de Cadastros
           </div>
 
-          <div class="flex flex-col p-4">
-            <div class="text-cyan-800 flex flex-col sm:flex-row md:flex-col lg:flex-row justify-between gap-2">
-              <div class="flex items-center font-semibold">
+          <div class="flex flex-col">
+            <div class="text-cyan-800 flex justify-center flex-col">
+              <div class="flex items-center font-semibold border-b px-4 py-2">
                 <SvgIcon
                   type="mdi"
                   class="inline mr-2"
@@ -175,32 +175,38 @@
                 />
 
                 Periodos
+
+                <div class="flex-1" />
+
+                <div class="overflow-x-auto flex flex-row gap-x-1 md:gap-x-3">
+                  <FilterChip
+                    selectable
+                    :selected="selected.ano"
+                    @click="handleSelect('ano')"
+                    title="Ano"
+                  />
+                  <FilterChip
+                    selectable
+                    :selected="selected.mes"
+                    @click="handleSelect('mes')"
+                    title="Mês"
+                  />
+                  <FilterChip
+                    selectable
+                    :selected="selected.dia"
+                    @click="handleSelect('dia')"
+                    title="Dia"
+                  />
+                </div>
               </div>
 
-              <div class="overflow-x-auto flex flex-row gap-x-1 md:gap-x-3">
-                <FilterChip
-                  selectable
-                  :selected="selected.anos"
-                  @click="handleSelect('anos')"
-                  title="Anos"
-                />
-                <FilterChip
-                  selectable
-                  :selected="selected.meses"
-                  @click="handleSelect('meses')"
-                  title="Meses"
-                />
-                <FilterChip
-                  selectable
-                  :selected="selected.semanas"
-                  @click="handleSelect('semanas')"
-                  title="Semanas"
-                />
-                <FilterChip
-                  selectable
-                  :selected="selected.dias"
-                  @click="handleSelect('dias')"
-                  title="Dias"
+              <div>
+                <CustomBarGraph
+                  legend="Cadastros"
+                  info="Egressos cadastrados por periodo"
+                  :loading="graphData.series.x.length === 0"
+                  :data="graphData"
+                  shadowless
                 />
               </div>
             </div>
@@ -324,23 +330,43 @@ import CustomButton from 'src/components/CustomButton.vue'
 import eagle from 'src/assets/eagle.svg'
 import FilterChip from 'src/components/FilterChip.vue'
 import AdminOptionsDropdown from 'src/components/AdminOptionsDropdown.vue'
-import { capitalize, ref } from 'vue'
+import { capitalize, ref, watch, computed } from 'vue'
 import { usePainelStore } from 'src/store/PainelStore'
+import CustomBarGraph from 'src/components/CustomBarGraph.vue'
 
 const selected = ref({
-  anos: true,
-  meses: false,
-  semanas: false,
-  dias: false
+  ano: true,
+  mes: false,
+  dia: false
 })
+
+type periodos = 'ano' | 'mes' | 'dia'
+const selectedString = ref<periodos>('ano')
 
 const $store = usePainelStore()
 $store.fetchEgressos()
+$store.fetchGrafico(selectedString.value)
+
+watch(selectedString, () => {
+  $store.fetchGrafico(selectedString.value)
+})
+
+const graphData = computed(() => ({
+  series: {
+    x: Object.keys($store.graficos[selectedString.value]),
+    y: Object.keys($store.graficos[selectedString.value]).map((key: any) => $store.graficos[selectedString.value][key])
+  },
+  error: false
+}))
 
 type clickedTypes = keyof typeof selected.value
 function handleSelect (clicked: string) {
   Object.keys(selected.value).forEach(key => {
     selected.value[key as clickedTypes] = key === clicked
+
+    if (key === clicked) {
+      selectedString.value = key as periodos
+    }
   })
 }
 
