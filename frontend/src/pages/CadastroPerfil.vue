@@ -134,8 +134,8 @@ import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 import router from 'src/router'
-import { models } from 'src/@types'
 import { useLoginStore } from 'src/store/LoginStore'
+import { models } from 'src/@types'
 interface ProfileRegisterModel extends models.ProfileRegisterModel { }
 
 const error = ref(false)
@@ -176,7 +176,7 @@ const handleSubmit = async (submitData: any) => {
 
   if (response.status === 201) {
     submitSuccess.value = true
-    await storeLogin.userLogin(profileData.username, profileData.password)
+    await storeLogin.userLogin(profileData.username, profileData.password, true)
     await router.push({ path: '/cadastro' })
   } else if (response.status === 400) {
     errorText.value = response.data?.technicalMessage
