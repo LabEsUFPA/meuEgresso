@@ -32,7 +32,7 @@ public class EgressoPublicDTO {
     private String matricula;
 
     @Email
-    @NotBlank(message = "Infome um email.")
+    @NotBlank(message = "Informe um email.")
     private String email;
 
     @Valid

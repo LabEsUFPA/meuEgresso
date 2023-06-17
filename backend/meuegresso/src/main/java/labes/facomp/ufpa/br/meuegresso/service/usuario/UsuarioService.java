@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDashDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.notificacao.NotificacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 
 /**
@@ -91,7 +92,7 @@ public interface UsuarioService extends UserDetailsService {
 	/**
 	 * Método responsável por retornar um mapa com informações
 	 * sobre status do cadastro dos usuários
-	 * 
+	 *
 	 * @author Eude Monteiro
 	 * @return Uma lista de DTOs de notificação com informações sobre o nome do
 	 *         usuário,
@@ -100,4 +101,9 @@ public interface UsuarioService extends UserDetailsService {
 	 */
 	public Page<NotificacaoDTO> getStatus(String nome, String status, Integer page, Integer size,
 			Direction direction);
+
+	public boolean toggleValido(Integer id) throws NotFoundException;
+
+	public boolean toggleAtivo(Integer id) throws NotFoundException;
+
 }

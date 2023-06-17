@@ -68,7 +68,7 @@ public class DashAdmController {
 	 * @since 06/06/2023
 	 */
 	@GetMapping
-	// @PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<EgressoDashDTO> consultarEgressoDash(
@@ -181,9 +181,10 @@ public class DashAdmController {
 	 * @author Eude Monteiro
 	 * @since 12/06/2023
 	 */
-	@GetMapping(value = "/tipoStatus")
 	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping(value = "/tipoStatus")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<NotificacaoDTO> getStatus(
 			@RequestParam(name = "nome", defaultValue = "", required = false) String nome,
 			@RequestParam(name = "status", defaultValue = "", required = false) String status,

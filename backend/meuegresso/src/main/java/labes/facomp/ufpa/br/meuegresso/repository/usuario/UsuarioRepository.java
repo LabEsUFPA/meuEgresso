@@ -3,6 +3,7 @@ package labes.facomp.ufpa.br.meuegresso.repository.usuario;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -78,31 +79,60 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			@Param("nomeUsuario") String nomeUsuario,
 			@Param("status") String status);
 
-	@Query(value = "SELECT u.nome_usuario, u.id_usuario,\n" +
-			"    CASE\n" +
-			"        WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN\n" +
-			"            CASE\n" +
-			"                WHEN e.ativo = FALSE THEN 'excluido'\n" +
-			"                WHEN u.valido_usuario = TRUE THEN 'completo'\n" +
-			"                WHEN u.valido_usuario = FALSE THEN 'pendente'\n" +
-			"            END\n" +
-			"        ELSE 'incompleto'\n" +
-			"    END AS status, u.last_modified_date\n" +
-			"FROM usuario_grupo ug\n" +
-			"LEFT JOIN egresso e ON ug.id_usuario = e.usuario_id\n" +
-			"JOIN usuario u ON ug.id_usuario = u.id_usuario\n" +
-			"WHERE ug.grupo = 'EGRESSO'\n" +
-			"    AND u.nome_usuario ilike %:nome%\n" +
-			"    AND CASE\n" +
-			"        WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN\n" +
-			"            CASE\n" +
-			"                WHEN e.ativo = FALSE THEN 'excluido'\n" +
-			"                WHEN u.valido_usuario = TRUE THEN 'completo'\n" +
-			"                WHEN u.valido_usuario = FALSE THEN 'pendente'\n" +
-			"            END\n" +
-			"        ELSE 'incompleto'\n" +
-			"    END ilike %:status%\n" +
-			"    AND (ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL OR u.valido_usuario = false)", nativeQuery = true)
+	@Query(value = """
+			WITH usuario_status AS (
+			SELECT
+			upper(u.nome_usuario) AS nome_usuario,
+			u.id_usuario,
+			CASE
+			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
+			case
+			when u.revtype = 2 then 'excluido'
+			WHEN e.ativo = FALSE THEN 'inativo'
+			WHEN u.valido_usuario = TRUE THEN 'completo'
+			WHEN u.valido_usuario = FALSE THEN 'pendente'
+			END
+			ELSE 'incompleto'
+			END AS status,
+			u.last_modified_date
+			FROM
+			usuario_grupo_aud ug
+			LEFT JOIN egresso_aud e ON ug.id_usuario = e.usuario_id
+			JOIN usuario_aud u ON ug.id_usuario = u.id_usuario
+			WHERE
+			ug.grupo = 'EGRESSO'
+			AND u.nome_usuario ILIKE %:nome%
+			and case
+			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
+			case
+			when u.revtype = 2 then 'excluido'
+			WHEN e.ativo = FALSE THEN 'inativo'
+			WHEN u.valido_usuario = TRUE THEN 'completo'
+			WHEN u.valido_usuario = FALSE THEN 'pendente'
+			END
+			ELSE 'incompleto'
+			end ilike %:status%
+			AND (ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL OR u.valido_usuario = FALSE)
+			)
+			SELECT
+			nome_usuario,
+			id_usuario,
+			status,
+			last_modified_date
+			FROM
+			(
+			SELECT
+			nome_usuario,
+			id_usuario,
+			status,
+			last_modified_date,
+			lag(status) OVER (ORDER BY last_modified_date) AS prev_status
+			FROM
+			usuario_status
+			) t
+			WHERE
+			status <> prev_status OR prev_status IS NULL
+			""", nativeQuery = true)
 
 	List<Tuple> getStatus(
 			@Param("nome") String nome,

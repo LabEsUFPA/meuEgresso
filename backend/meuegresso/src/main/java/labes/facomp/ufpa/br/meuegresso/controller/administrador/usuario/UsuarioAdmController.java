@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
@@ -50,9 +53,10 @@ public class UsuarioAdmController {
 	 * @since 18/04/2023
 	 */
 	@GetMapping
-	// @PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
-	public List<UsuarioAuthDTO> consultarUsuarios() {
-		return mapper.map(usuarioService.findAll(), new TypeToken<List<UsuarioAuthDTO>>() {
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
+	public List<UsuarioDTO> consultarUsuarios() {
+		return mapper.map(usuarioService.findAll(), new TypeToken<List<UsuarioDTO>>() {
 		}.getType());
 	}
 
@@ -70,10 +74,29 @@ public class UsuarioAdmController {
 	@PutMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public UsuarioAuthDTO atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) throws InvalidRequestException {
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 		usuarioModel = usuarioService.update(usuarioModel);
 		return mapper.map(usuarioModel, UsuarioAuthDTO.class);
+	}
+
+	@PutMapping(value = "/{id}/ativo")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public ResponseType toggleAtivoUsuario(@PathVariable Integer id) throws NotFoundException {
+		usuarioService.toggleAtivo(id);
+		return ResponseType.SUCCESS_UPDATE;
+	}
+
+	@PutMapping(value = "/{id}/valido")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public ResponseType toggleValidoUsuario(@PathVariable Integer id) throws NotFoundException {
+		usuarioService.toggleValido(id);
+		return ResponseType.SUCCESS_UPDATE;
 	}
 
 	/**
@@ -87,6 +110,7 @@ public class UsuarioAdmController {
 	@DeleteMapping(value = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String deleteById(@PathVariable(name = "id") Integer id) {
 		if (usuarioService.deleteById(id)) {
 			return ResponseType.SUCCESS_DELETE.getMessage();

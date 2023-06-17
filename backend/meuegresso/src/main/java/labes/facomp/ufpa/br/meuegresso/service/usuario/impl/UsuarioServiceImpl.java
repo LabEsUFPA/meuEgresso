@@ -18,9 +18,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.Tuple;
+import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDashDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.notificacao.NotificacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
@@ -143,6 +145,28 @@ public class UsuarioServiceImpl implements UsuarioService {
 		int end = Math.min((start + paging.getPageSize()), notificacoes.size());
 
 		return new PageImpl<>(notificacoes.subList(start, end), paging, notificacoes.size());
+	}
+
+	@Override
+	public boolean toggleAtivo(Integer id) throws NotFoundException {
+		if (!usuarioRepository.existsById(id)) {
+			throw new NotFoundException();
+		}
+		UsuarioModel usuario = usuarioRepository.findById(id).orElseThrow();
+		usuario.setAtivo(!usuario.getAtivo());
+		usuarioRepository.save(usuario);
+		return true;
+	}
+
+	@Override
+	public boolean toggleValido(Integer id) throws NotFoundException {
+		if (!usuarioRepository.existsById(id)) {
+			throw new NotFoundException();
+		}
+		UsuarioModel usuario = usuarioRepository.findById(id).orElseThrow();
+		usuario.setValido(!usuario.getValido());
+		usuarioRepository.save(usuario);
+		return true;
 	}
 
 }
