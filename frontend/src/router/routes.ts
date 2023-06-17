@@ -64,6 +64,10 @@ export default [
       {
         path: '/vagas/:id',
         component: async () => await import('src/pages/AnuncioVaga.vue')
+      },
+      {
+        path: '/painel-admin',
+        component: async () => await import('src/pages/PainelAdmin.vue')
       }
     ]
   },

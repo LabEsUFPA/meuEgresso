@@ -1,7 +1,7 @@
 export enum EgressoStatus {
-  ativo = 'Ativo',
-  pendente = 'Pendente',
-  incompleto = 'Incompleto'
+  ativo = 'completo',
+  pendente = 'pendente',
+  incompleto = 'incompleto'
 }
 
 export interface EgressoPainel {

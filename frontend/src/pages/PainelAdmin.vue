@@ -81,8 +81,8 @@
     </div>
 
     <div class="flex justify-center">
-      <div class="flex flex-col md:grid grid-cols-2 grid-rows-5 gap-5 mb-5 w-[960px] mx-4 sm:mx-6">
-        <div class="row-start-1 row-end-3 col-start-1 col-end-2 bg-white rounded-lg">
+      <div class="flex flex-col md:grid grid-cols-2 grid-rows-6 grid-flow-col gap-5 mb-5 w-[960px] mx-4 sm:mx-6">
+        <div class="row-span-3 col-span-1 bg-white rounded-lg">
           <div class="text-xl font-semibold text-cyan-800 border-b p-4">
             Ações
           </div>
@@ -160,7 +160,7 @@
           </div>
         </div>
 
-        <div class="row-start-3 row-end-6 col-start-1 col-end-2 bg-white rounded-lg">
+        <div class="row-span-3 col-span-1 bg-white rounded-lg">
           <div class="text-xl font-semibold text-cyan-800 border-b p-4">
             Análise de Cadastros
           </div>
@@ -207,7 +207,7 @@
           </div>
         </div>
 
-        <div class="row-start-1 row-end-6 col-start-2 col-end-3 bg-white rounded-lg">
+        <div class="col-span-1 row-span-6 bg-white rounded-lg flex flex-col">
           <div class="text-xl font-semibold text-cyan-800 border-b p-4">
             Registro de egressos
           </div>
@@ -224,38 +224,64 @@
           </div>
 
           <div
-            v-for="egresso in egressos"
-            :key="egresso.id"
-            class="px-4 py-3 border-b flex items-center gap-3"
+            class="flex-1 border-b flex items-center justify-center"
+            v-if="$store.egressos.length === 0"
           >
-            <div class="w-10 h-10 rounded-full bg-cyan-900">
-              foto
-            </div>
-
-            <div flex="flex items-center">
-              <div class="font-semibold text-cyan-800">
-                {{ egresso.name }}
-              </div>
-
-              <div
-                class="text-xs text-white font-semibold text-center rounded-xl w-20 py-[1px]"
-                :class="{
-                  ['bg-emerald-500']: egresso.status === 'Ativo',
-                  ['bg-amber-500']: egresso.status === 'Pendente',
-                  ['bg-indigo-800']: egresso.status === 'Incompleto'
-                }"
-              >
-                {{ egresso.status }}
-              </div>
-            </div>
-
-            <div class="flex-1" />
-
-            <div>
-              <AdminOptionsDropdown
-                :id="egresso.id"
-                :status="egresso.status"
+            <div class="animate-spin">
+              <SvgIcon
+                type="mdi"
+                size="120"
+                class="text-cyan-800"
+                :path="mdiLoading"
               />
+            </div>
+          </div>
+
+          <div
+            class="flex-1 border-b"
+            v-else
+          >
+            <div
+              v-for="(egresso, index) in $store.egressos"
+              :key="egresso.id"
+              class="px-4 py-3 flex items-center gap-3"
+              :class="{
+                ['border-b']: index !== $store.egressos.length - 1
+              }"
+            >
+              <div class="w-10 h-10 rounded-full flex items-center justify-center bg-cyan-900">
+                <SvgIcon
+                  type="mdi"
+                  :path="mdiAccount"
+                  class="text-white"
+                />
+              </div>
+
+              <div flex="flex items-center">
+                <div class="font-semibold text-cyan-800">
+                  {{ egresso.name }}
+                </div>
+
+                <div
+                  class="text-xs text-white font-semibold text-center rounded-xl w-20 py-[1px]"
+                  :class="{
+                    ['bg-emerald-500']: egresso.status === 'completo',
+                    ['bg-amber-500']: egresso.status === 'pendente',
+                    ['bg-indigo-800']: egresso.status === 'incompleto'
+                  }"
+                >
+                  {{ capitalize(egresso.status) }}
+                </div>
+              </div>
+
+              <div class="flex-1" />
+
+              <div>
+                <AdminOptionsDropdown
+                  :id="egresso.id"
+                  :status="egresso.status"
+                />
+              </div>
             </div>
           </div>
 
@@ -290,14 +316,16 @@ import {
   mdiFileDocument,
   mdiTrashCan,
   mdiCalendar,
-  mdiClock
+  mdiClock,
+  mdiAccount,
+  mdiLoading
 } from '@mdi/js'
 import CustomButton from 'src/components/CustomButton.vue'
 import eagle from 'src/assets/eagle.svg'
 import FilterChip from 'src/components/FilterChip.vue'
-import { getRandomEgressoList } from 'src/mock/EgressosPainel'
 import AdminOptionsDropdown from 'src/components/AdminOptionsDropdown.vue'
-import { ref } from 'vue'
+import { capitalize, ref } from 'vue'
+import { usePainelStore } from 'src/store/PainelStore'
 
 const selected = ref({
   anos: true,
@@ -306,7 +334,8 @@ const selected = ref({
   dias: false
 })
 
-const egressos = ref(getRandomEgressoList(10))
+const $store = usePainelStore()
+$store.fetchEgressos()
 
 type clickedTypes = keyof typeof selected.value
 function handleSelect (clicked: string) {
@@ -314,4 +343,5 @@ function handleSelect (clicked: string) {
     selected.value[key as clickedTypes] = key === clicked
   })
 }
+
 </script>
