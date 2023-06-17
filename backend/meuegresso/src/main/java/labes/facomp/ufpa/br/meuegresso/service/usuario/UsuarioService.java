@@ -94,9 +94,11 @@ public interface UsuarioService extends UserDetailsService {
 	 * sobre status do cadastro dos usuários
 	 * 
 	 * @author Eude Monteiro
-	 * @return Uma lista de DTOs de notificação com informações sobre o nome do usuário,
+	 * @return Uma lista de DTOs de notificação com informações sobre o nome do
+	 *         usuário,
 	 *         seu status de cadastro e data de modificação.
 	 * @since 12/06/2023
 	 */
-	public List<NotificacaoDTO> getStatus();
+	public Page<NotificacaoDTO> getStatus(String nome, String status, Integer page, Integer size,
+			Direction direction);
 }

@@ -128,18 +128,22 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return new PageImpl<>(dashDtos.subList(start, end), paging, dashDtos.size());
 	}
 
-	public List<NotificacaoDTO> getStatus() {
+	public Page<NotificacaoDTO> getStatus(String nome, String status, Integer page, Integer size, Direction direction) {
 		List<NotificacaoDTO> notificacoes = new ArrayList<>();
 
-		usuarioRepository.getStatus().forEach(e -> notificacoes.add(
+		usuarioRepository.getStatus(nome, status).forEach(e -> notificacoes.add(
 				NotificacaoDTO.builder()
 						.nome(e.get(0, String.class))
 						.usuarioId(e.get(1, Integer.class))
 						.status(e.get(2, String.class))
-						.data(e.get(3, Timestamp.class).toLocalDateTime().toLocalDate())
+						.dataModificacao(e.get(3, Timestamp.class).toLocalDateTime().toLocalDate())
 						.build()));
 
-		return notificacoes;
+		Pageable paging = PageRequest.of(page, size, Sort.by(direction, "u.last_modified_date"));
+		int start = Math.min((int) paging.getOffset(), notificacoes.size());
+		int end = Math.min((start + paging.getPageSize()), notificacoes.size());
+
+		return new PageImpl<>(notificacoes.subList(start, end), paging, notificacoes.size());
 	}
 
 }

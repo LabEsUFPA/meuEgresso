@@ -12,8 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotificacaoDTO {
+    
     private String nome;
+
     private Integer usuarioId;
+    
     private String status;
-    private LocalDate data;
+    
+    private LocalDate dataModificacao;
 }

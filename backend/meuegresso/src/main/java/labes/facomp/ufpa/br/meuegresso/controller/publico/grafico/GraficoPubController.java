@@ -1,6 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.controller.publico.grafico;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +16,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.BolsistasGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.CotaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.CotistaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.CursosGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroAnualGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroDiaGraficoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroMensalGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EmpresaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EnderecoEmpresasGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.GenerosGraficoDTO;
@@ -358,29 +354,5 @@ public class GraficoPubController {
 		Map<String, Integer> posGradContagens = egressoService.countFezPos();
 
 		return new PosGraduacaoGraficoDTO(posGradContagens);
-	}
-
-	@GetMapping(value = "/cadastro/dia")
-	@ResponseStatus(code = HttpStatus.OK)
-	public EgressoCadastroDiaGraficoDTO getCadastroEgressoDiario() {
-		Map<LocalDate, Long> egressoCadDia = egressoService.countEgressoPorData();
-
-		return new EgressoCadastroDiaGraficoDTO(egressoCadDia);
-	}
-
-	@GetMapping(value = "/cadastro/mes")
-	@ResponseStatus(code = HttpStatus.OK)
-	public EgressoCadastroMensalGraficoDTO getCadastroEgressoMensal() {
-		Map<LocalDate, Long> egressoCadMes = egressoService.countEgressoPorMesEAno();
-
-		return new EgressoCadastroMensalGraficoDTO(egressoCadMes);
-	}
-
-	@GetMapping(value = "/cadastro/ano")
-	@ResponseStatus(code = HttpStatus.OK)
-	public EgressoCadastroAnualGraficoDTO getCadastroEgressoAno() {
-		Map<Integer, Long> egressoCadAno = egressoService.countEgressoPorAno();
-
-		return new EgressoCadastroAnualGraficoDTO(egressoCadAno);
 	}
 }

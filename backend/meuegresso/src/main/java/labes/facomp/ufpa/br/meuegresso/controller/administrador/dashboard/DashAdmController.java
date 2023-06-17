@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
@@ -34,6 +35,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDashDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.notificacao.NotificacaoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroAnualGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroDiaGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroMensalGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
@@ -65,7 +69,7 @@ public class DashAdmController {
 	 * @since 06/06/2023
 	 */
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN')")
+	// @PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
 	public Page<EgressoDashDTO> consultarEgressoDash(
 			@RequestParam(name = "nome_usuario", defaultValue = "") String nomeUsuario,
@@ -73,7 +77,7 @@ public class DashAdmController {
 			@RequestParam(name = "date_min", defaultValue = "2020-01-01") LocalDate dateMin,
 			@RequestParam(name = "date_max", defaultValue = "2099-12-30") LocalDate dateMax,
 			@RequestParam(name = "status", defaultValue = "") String status,
-			@RequestParam(name = "email", defaultValue = "@gmail") String email,
+			@RequestParam(name = "email", defaultValue = "@") String email,
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
@@ -186,11 +190,44 @@ public class DashAdmController {
 	 * @since 12/06/2023
 	 */
 	@GetMapping(value = "/tipoStatus")
-	@PreAuthorize("hasRole('admin')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
-	public List<NotificacaoDTO> getStatus() {
-		return usuarioService.getStatus();
+	public Page<NotificacaoDTO> getStatus(
+			@RequestParam(name = "nome", defaultValue = "", required = false) String nome,
+			@RequestParam(name = "status", defaultValue = "", required = false) String status,					
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "20", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
 
+		return usuarioService.getStatus(nome, status, page, size, direction);
+
+	}
+
+	@GetMapping(value = "/cadastro/dia")
+	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
+	public EgressoCadastroDiaGraficoDTO getCadastroEgressoDiario() {
+		Map<LocalDate, Long> egressoCadDia = egressoService.countEgressoPorData();
+
+		return new EgressoCadastroDiaGraficoDTO(egressoCadDia);
+	}
+
+	@GetMapping(value = "/cadastro/mes")
+	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
+	public EgressoCadastroMensalGraficoDTO getCadastroEgressoMensal() {
+		Map<LocalDate, Long> egressoCadMes = egressoService.countEgressoPorMesEAno();
+
+		return new EgressoCadastroMensalGraficoDTO(egressoCadMes);
+	}
+
+	@GetMapping(value = "/cadastro/ano")
+	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
+	public EgressoCadastroAnualGraficoDTO getCadastroEgressoAno() {
+		Map<Integer, Long> egressoCadAno = egressoService.countEgressoPorAno();
+
+		return new EgressoCadastroAnualGraficoDTO(egressoCadAno);
 	}
 
 }
