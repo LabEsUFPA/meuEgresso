@@ -30,12 +30,7 @@ export const useLoginStore = defineStore('LoginStore', {
         this.userLogged = true
         storage.setLoggedUser(response.data?.token)
 
-        if (isFirstAccess ?? false) {
-          cookieService.set('isFirstAccess', 'yes', 1)
-          return
-        }
-
-        cookieService.set('isFirstAccess', 'no', 1)
+        isFirstAccess ?? false ? cookieService.set('isFirstAccess', 'yes', 1) : cookieService.set('isFirstAccess', 'no', 1)
       }
 
       return {
