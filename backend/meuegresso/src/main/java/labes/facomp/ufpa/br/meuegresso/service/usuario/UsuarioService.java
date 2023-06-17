@@ -86,8 +86,7 @@ public interface UsuarioService extends UserDetailsService {
 	 * @author Bruno Eiki
 	 */
 
-	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String nomeEmpresa, LocalDate dateMin,
-			LocalDate dateMax, String status, String email, Integer page, Integer size, Direction direction);
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String status, Integer page, Integer size, Direction direction);
 
 	/**
 	 * Método responsável por retornar um mapa com informações
