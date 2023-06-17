@@ -18,10 +18,11 @@ export const useNotificacaoStore = defineStore('Notificacao', {
   }),
 
   actions: {
-    async fetchNotificacoes () {
+    async fetchNotificacoes (status: string, page: number, size: number) {
       const response = await Api.request({
         method: 'get',
-        route: '/administrador/dashboard/tipoStatus'
+        route: '/administrador/dashboard/tipoStatus',
+        params: { status, page, size }
       })
 
       if (response?.status === 200) {
@@ -30,7 +31,7 @@ export const useNotificacaoStore = defineStore('Notificacao', {
           nome: elem.nome,
           usuarioId: elem.usuarioId,
           status: elem.status,
-          data: elem.data
+          dataModificacao: elem.dataModificacao
         }))
       }
     }

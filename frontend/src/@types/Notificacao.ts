@@ -1,12 +1,13 @@
 export enum NotificacaoStatus {
-  ativo = 'ativo',
+  completo = 'completo',
   pendente = 'pendente',
-  incompleto = 'incompleto'
+  incompleto = 'incompleto',
+  excluido = 'excluido'
 }
 
 export interface Notificacao {
   nome: string
   usuarioId: number
   status: NotificacaoStatus
-  data: string
+  dataModificacao: string
 }
