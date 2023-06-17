@@ -31,6 +31,13 @@ export default [
         }
       },
       {
+        path: '/notificacoes-admin',
+        component: async () => await import('src/pages/NotificacoesAdmin.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
         path: '/egresso',
         component: async () => await import('src/pages/PerfilEgresso.vue')
       },
