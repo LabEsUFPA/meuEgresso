@@ -21,7 +21,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EgressoDashDTO {
 
-    private Integer id;
+    private Integer idUsuario;
+
+    private Integer idEgresso;
 
     private String nome;
 
