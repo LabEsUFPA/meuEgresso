@@ -72,8 +72,8 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
 
     async deleteAnuncioAdmin (id: number) {
       const response = await Api.request({
-        method: 'get',
-        route: '/anuncio/administrador/' + id.toString()
+        method: 'delete',
+        route: '/administrador/anuncio/' + id.toString()
       })
 
       if (response?.status === 200) {
@@ -85,7 +85,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
 
     async deleteAnuncioEgresso (id: number) {
       const response = await Api.request({
-        method: 'get',
+        method: 'delete',
         route: '/anuncio/' + id.toString()
       })
 
