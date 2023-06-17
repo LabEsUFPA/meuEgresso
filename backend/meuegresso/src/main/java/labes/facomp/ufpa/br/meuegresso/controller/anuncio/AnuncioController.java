@@ -138,9 +138,8 @@ public class AnuncioController {
 	 * Endpoint responsavel por deletar 
 	 * qualquer anuncio do egresso pelo administrador.
 	 *
-	 * @param anuncio Estrutura de dados contendo as informações
-	 *                necessárias para deletar o anuncio.
-	 * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
+	 * @param id id do anuncio a ser deletado          
+	 * @return {@link boolean} Mensagem de confirmacao.
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
@@ -155,9 +154,9 @@ public class AnuncioController {
 	 * Endpoint responsavel por deletar o 
 	 * anuncio do egresso apenas por quem o criou.
 	 *
-	 * @param anuncio Estrutura de dados contendo as informações
-	 *                necessárias para deletar o anuncio.
-	 * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
+	 * @param id id do anuncio a ser deletado
+	 * @param token autenticação para deletar anúncio por quem o criou
+	 * @return {@link boolean} Mensagem de confirmacao.
 	 * @author Bruno Eiki, Lucas Cantão
 	 * @since 17/06/2023
 	 */
