@@ -104,16 +104,18 @@
 
         <div
           v-else
-          class="flex flex-col gap-4 justify-center items-center text-gray-400"
+          class="flex justify-center"
         >
-          <SvgIcon
-            type="mdi"
-            size="48"
-            :path="mdiEmoticonSadOutline"
-          />
-          <h1 class="text-xl sm:text-2xl font-medium">
-            Parere que não há notificações
-          </h1>
+          <div class="w-[960px] flex flex-col gap-4 justify-center items-center text-gray-400 bg-white">
+            <SvgIcon
+              type="mdi"
+              size="48"
+              :path="mdiEmoticonSadOutline"
+            />
+            <h1 class="text-xl sm:text-2xl font-medium">
+              Parere que não há notificações
+            </h1>
+          </div>
         </div>
         <div class="flex flex-col gap-4 sm:gap-8 mb-10">
           <div class="flex justify-center">
@@ -154,25 +156,25 @@ import PageSelector from 'src/components/PageSelector.vue'
 const filtroStatus = [
   {
     id: 1,
-    name: 'completo',
+    name: 'Completo',
     selected: false,
     selectable: false
   },
   {
     id: 2,
-    name: 'pendente',
+    name: 'Pendente',
     selected: false,
     selectable: false
   },
   {
     id: 3,
-    name: 'imcompleto',
+    name: 'Incompleto',
     selected: false,
     selectable: false
   },
   {
     id: 4,
-    name: 'excluido',
+    name: 'Excluido',
     selected: false,
     selectable: false
   }
@@ -200,7 +202,7 @@ onMounted(async () => {
   watch(filtersById, () => {
     console.log('novo filtro de status:', filtersById.value)
     if (filtersById.value.length > 0) {
-      $store.fetchNotificacoes(filtersById.value.toString(), currentPage.value, size.value)
+      $store.fetchNotificacoes(filtersById.value[0], currentPage.value, size.value)
     } else {
       $store.fetchNotificacoes('', currentPage.value, size.value)
     }
@@ -217,12 +219,12 @@ const toggleFilterApplied = (id:number) => {
   const filtro = filtroStatus.find(f => f.id === id)
   if (filtro) {
     filtro.selected = !filtro.selected
-    applyFilters(filtersById.value.filter(f => f === filtro.id))
+    applyFilters(filtersById.value.filter(f => f === filtro.name))
   }
 }
 
 const applyFilters = (filters:any) => {
-  filtersById.value = filters.map((elem: any) => (elem.id))
+  filtersById.value = filters.map((elem: any) => (elem.name))
 }
 
 </script>
