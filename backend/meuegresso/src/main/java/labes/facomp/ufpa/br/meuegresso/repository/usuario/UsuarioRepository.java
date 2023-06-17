@@ -31,7 +31,7 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	/**
 	 * Método responsável por retornar dados para o EgressoDashDTO
-	 * 
+	 *
 	 * @author Eude Monteiro
 	 * @return Um objeto map com informações sobre o nome do usuário,
 	 *         seu status de cadastro e data de modificação.

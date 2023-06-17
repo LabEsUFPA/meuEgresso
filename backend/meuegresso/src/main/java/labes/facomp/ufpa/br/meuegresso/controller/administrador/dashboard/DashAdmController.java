@@ -71,6 +71,7 @@ public class DashAdmController {
 	@GetMapping
 	// @PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<EgressoDashDTO> consultarEgressoDash(
 			@RequestParam(name = "nome_usuario", defaultValue = "") String nomeUsuario,
 			@RequestParam(name = "nome_empresa", defaultValue = "") String nomeEmpresa,
@@ -97,6 +98,7 @@ public class DashAdmController {
 	@GetMapping("/export")
 	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public ResponseEntity<byte[]> exportarPDF() throws DocumentException {
 
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -162,7 +164,7 @@ public class DashAdmController {
 	/**
 	 * Endpoint responsável por deletar todos os dados da tabela egressos e
 	 * associados
-	 * 
+	 *
 	 * @return ResponseEntity<String> confirmação de retorno
 	 * @author Lucas Cantão
 	 * @since 12/06/2023
@@ -183,7 +185,7 @@ public class DashAdmController {
 
 	/**
 	 * Endpoint responsável por notificar situação do cadastro do usuário
-	 * 
+	 *
 	 * @return Uma instância de NotificacaoDTO contendo as informações de
 	 *         status dos usuários.
 	 * @author Eude Monteiro
@@ -194,7 +196,7 @@ public class DashAdmController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public Page<NotificacaoDTO> getStatus(
 			@RequestParam(name = "nome", defaultValue = "", required = false) String nome,
-			@RequestParam(name = "status", defaultValue = "", required = false) String status,					
+			@RequestParam(name = "status", defaultValue = "", required = false) String status,
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
@@ -203,27 +205,30 @@ public class DashAdmController {
 
 	}
 
-	@GetMapping(value = "/cadastro/dia")
 	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping(value = "/cadastro/dia")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoCadastroDiaGraficoDTO getCadastroEgressoDiario() {
 		Map<LocalDate, Long> egressoCadDia = egressoService.countEgressoPorData();
 
 		return new EgressoCadastroDiaGraficoDTO(egressoCadDia);
 	}
 
-	@GetMapping(value = "/cadastro/mes")
 	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping(value = "/cadastro/mes")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoCadastroMensalGraficoDTO getCadastroEgressoMensal() {
 		Map<LocalDate, Long> egressoCadMes = egressoService.countEgressoPorMesEAno();
 
 		return new EgressoCadastroMensalGraficoDTO(egressoCadMes);
 	}
 
-	@GetMapping(value = "/cadastro/ano")
 	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping(value = "/cadastro/ano")
 	@ResponseStatus(code = HttpStatus.OK)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoCadastroAnualGraficoDTO getCadastroEgressoAno() {
 		Map<Integer, Long> egressoCadAno = egressoService.countEgressoPorAno();
 
