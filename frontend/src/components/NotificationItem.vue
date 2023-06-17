@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiCheck, mdiClock, mdiChevronRight, mdiAlertCircle, mdiClose } from '@mdi/js'
+import { mdiCheck, mdiClock, mdiAlertCircle, mdiClose } from '@mdi/js'
 
 defineProps<
 {
