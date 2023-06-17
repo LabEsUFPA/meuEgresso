@@ -131,7 +131,7 @@ public class MailServiceImpl implements MailService, Runnable {
     }
 
     public Integer semesterMessage(LocalDateTime dateTime, LocalDateTime nowDateTime){
-        if(dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue() % 6 == 0){
+        if((dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue()) % 6 == 0){
             return dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
         }
         else{
@@ -240,14 +240,14 @@ public class MailServiceImpl implements MailService, Runnable {
         String cronExpression = toCron(String.valueOf(dateTime.getMinute()), 
                                         String.valueOf(dateTime.getHour()),
                                         String.valueOf(dateTime.getDayOfMonth()),
-                                        String.valueOf(dateTime.getMonth()), 
+                                        String.valueOf(dateTime.getMonth()).substring(0,4), 
                                         String.valueOf(dateTime.getYear()));
         if(frequente){
             if(anual){
                 cronExpression = toCron(String.valueOf(dateTime.getMinute()), 
                                             String.valueOf(dateTime.getHour()),
                                             String.valueOf(dateTime.getDayOfMonth()),
-                                            String.valueOf(dateTime.getMonth()), 
+                                            String.valueOf(dateTime.getMonth()).substring(0,4), 
                                             "*");
                 ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
                 String jobId = String.valueOf(mensagemModel.getId());
@@ -292,10 +292,10 @@ public class MailServiceImpl implements MailService, Runnable {
     }
 
     @Override
-    public void setEmailAnualCadastro(Runnable tasklet) {
+    public void setEmailAnualCadastro(Runnable tasklet, MensagemModel mensagemModel) {
         if(taskList.size() == 0){
             ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger("0 9 * * * *"));
-            taskList.put("cad", scheduledTask);
+            taskList.put(String.valueOf(mensagemModel.getId()), scheduledTask);
         }
     }
 

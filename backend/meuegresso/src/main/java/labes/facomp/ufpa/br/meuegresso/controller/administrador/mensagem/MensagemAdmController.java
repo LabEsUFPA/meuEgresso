@@ -61,13 +61,13 @@ public class MensagemAdmController {
 	 * Endpoint responsável por retornar a lista com as mensagens no banco de
 	 * dados.
 	 *
-	 * @return {@link MensagemDTO} Lista de emails salvos.
+	 * @return {@link List<MensagemDTO>} Lista de emails salvos.
 	 * @author Pedro Inácio
 	 * @since 15/06/2023
 	 */
 	@GetMapping(value = "/consultarMensagens")
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
-	public MensagemDTO consultarMensagens() {
+	public List<MensagemDTO> consultarMensagens() {
 		return mapper.map(mailService.findAll(), new TypeToken<List<MensagemDTO>>() {
 		}.getType());
 	}
@@ -128,9 +128,11 @@ public class MensagemAdmController {
 		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
 		mailService.save(mensagemModel);
 		if(mailService.findAll().size() == 1){
-			mailService.setEmailAnualCadastro(mailServiceImpl);
+			mailService.setEmailAnualCadastro(mailServiceImpl, mensagemModel);
 		}
-		mailService.setScheduleATask(mailServiceImpl, mensagemDTO.getDataEnvio(), mensagemDTO.getFrequente(), mensagemDTO.getAnual(), mensagemModel);
+		if(mailService.findAll().size() > 1){
+			mailService.setScheduleATask(mailServiceImpl, mensagemDTO.getDataEnvio(), mensagemDTO.getFrequente(), mensagemDTO.getAnual(), mensagemModel);
+		}
 
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}

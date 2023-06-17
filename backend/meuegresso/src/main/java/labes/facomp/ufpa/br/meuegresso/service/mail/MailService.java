@@ -132,7 +132,7 @@ public interface MailService {
     * @author Pedro Inácio
     * @since 16/06/2023
     */
-    public void setEmailAnualCadastro(Runnable tasklet);
+    public void setEmailAnualCadastro(Runnable tasklet, MensagemModel mensagemModel);
 
     /**
     * metodo para buscar os agendamentos de mensagens de email pelo id.
