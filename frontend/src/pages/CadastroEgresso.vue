@@ -197,7 +197,6 @@
               label="Instituição da pós-graduação"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
-              id="posGradLocal"
             />
 
             <CustomInput
@@ -693,6 +692,9 @@ async function handleSubmit (values: any) {
 function handleFail (e: any) {
   console.log(e)
   camposFaltosos.value = true
+  const incorrectElements = Object.keys(e.errors)
+  const el = document.querySelector(`#${incorrectElements[0].replaceAll('.', '-')}`)
+  el?.scrollIntoView()
 }
 
 const schema = object().shape({
@@ -738,11 +740,6 @@ const schema = object().shape({
       return (typeof value).constructor(true)
     })
   }),
-  localizacao: object({
-    pais: string().required('Campo obrigatório'),
-    estado: string().required('Campo obrigatório'),
-    cidade: string().required('Campo obrigatório')
-  }),
   academico: object({
     matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres').matches(/^(\d{12})?$/),
     tipoAluno: string(),
@@ -786,6 +783,11 @@ const schema = object().shape({
     faixaSalarial: string().when('area', ([area], schema) => {
       return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     })
+  }),
+  localizacao: object({
+    pais: string().required('Campo obrigatório'),
+    estado: string().required('Campo obrigatório'),
+    cidade: string().required('Campo obrigatório')
   }),
   adicionais: object({
     palestras: boolean(),

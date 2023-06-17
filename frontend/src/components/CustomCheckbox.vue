@@ -1,6 +1,6 @@
 
 <template>
-  <div>
+  <div :id="name.replaceAll('.', '-')">
     <button
       class="flex flex-row pr-1 items-center w-fit focus-visible:rounded-sm mb-4"
       role="checkbox"
