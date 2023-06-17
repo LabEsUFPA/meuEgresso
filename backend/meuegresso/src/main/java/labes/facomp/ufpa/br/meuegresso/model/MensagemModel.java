@@ -29,7 +29,18 @@ public class MensagemModel {
     @Column(name = "escopo_mensagem", unique = false, nullable = false)
     private String escopo;
 
+    @Column(name = "email", unique = false, nullable = true, length = 50)
+	private String email;
+
     @Column(name = "data_mensagem", unique = false, nullable = false)
     private LocalDateTime data;
+
+    @Builder.Default
+	@Column(name = "frequente_mensagem", unique = false, nullable = false)
+	private Boolean frequente = false;
+
+    @Builder.Default
+	@Column(name = "anual_mensagem", unique = false, nullable = true)
+	private Boolean anual = true;
 
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.mensagem.MensagemDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.mensagem.MensagemStatusDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.MensagemModel;
 import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
@@ -43,7 +44,7 @@ public class MensagemAdmController {
 	private final ModelMapper mapper;
 
 	/**
-	 * Endpoint responsável por retornar a lista de emails salvos no banco de
+	 * Endpoint responsável por retornar a lista com o status das mensagens no banco de
 	 * dados.
 	 *
 	 * @return {@link MensagemDTO} Lista de emails salvos
@@ -52,7 +53,13 @@ public class MensagemAdmController {
 	 */
 	@GetMapping
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
-	public List<MensagemDTO> consultarEmails() {
+	public MensagemStatusDTO consultarStatusMensagens() {
+		return mailService.getMensagensStatus();
+	}
+
+	@GetMapping(value = "/consultarMensagens")
+	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
+	public MensagemStatusDTO consultarMensagens() {
 		return mapper.map(mailService.findAll(), new TypeToken<List<MensagemDTO>>() {
 		}.getType());
 	}
@@ -69,13 +76,13 @@ public class MensagemAdmController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
-	public String atualizarEmail(@RequestBody @Valid MensagemDTO mensagemDTO) {
+	public String atualizarMensagem(@RequestBody @Valid MensagemDTO mensagemDTO) {
 		if(!mailService.getTasks().isEmpty()){
 			mailService.removeScheduledTask(mensagemDTO.getId());
 		}
 		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
 		mensagemModel = mailService.update(mensagemModel);
-		mailService.setScheduleATask(mailServiceImpl, mensagemModel.getData());
+		mailService.setScheduleATask(mailServiceImpl, mensagemModel.getData(), mensagemModel.getFrequente(), mensagemModel.getAnual());
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
@@ -114,7 +121,7 @@ public class MensagemAdmController {
 		if(mailService.findAll().size() == 1){
 			mailService.setEmailAnualCadastro(mailServiceImpl);
 		}
-		mailService.setScheduleATask(mailServiceImpl, mensagemDTO.getDataEnvio());
+		mailService.setScheduleATask(mailServiceImpl, mensagemDTO.getDataEnvio(), mensagemDTO.getFrequente(), mensagemDTO.getAnual());
 
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}

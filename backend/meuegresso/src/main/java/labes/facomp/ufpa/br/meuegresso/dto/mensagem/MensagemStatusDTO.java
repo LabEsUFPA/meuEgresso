@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.dto.mensagem;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,30 +11,16 @@ import lombok.NoArgsConstructor;
 /**
  * Encapsulamento dos dados de uma mensagem a ser retornada a aplicação
  *
- * @author Camilo Santos
- * @since 16/06/2023
+ * @author Pedro Inácio
+ * @since 17/06/2023
  * @version 1.0
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MensagemDTO {
+public class MensagemStatusDTO {
 
-    private Integer id;
-
-    private String corpo;
-
-    private String escopo;
-
-    private String email;
-    
-    private LocalDateTime dataEnvio;
-    
-    @Builder.Default
-    private Boolean frequente = false;
-
-    @Builder.Default
-    private Boolean anual = true;
+    private Map<String, Map<LocalDateTime, String>> mensagensStatus;
     
 }

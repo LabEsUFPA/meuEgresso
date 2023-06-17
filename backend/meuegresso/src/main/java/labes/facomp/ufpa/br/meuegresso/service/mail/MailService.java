@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 
+import labes.facomp.ufpa.br.meuegresso.dto.mensagem.MensagemStatusDTO;
 import labes.facomp.ufpa.br.meuegresso.model.MensagemModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 
@@ -22,13 +23,16 @@ public interface MailService {
 
     public boolean deleteById(Integer idMensagem);
 
+    public MensagemStatusDTO getMensagensStatus();
+    
     public void scheduledSendEmail();
 
-    public void setScheduleATask(Runnable tasklet, LocalDateTime dateTime);
+    public void setScheduleATask(Runnable tasklet, LocalDateTime dateTime, boolean frequente, boolean anual);
 
     public void removeScheduledTask(Integer jobId);
 
     public void setEmailAnualCadastro(Runnable tasklet);
 
     public Map<Integer, ScheduledFuture<?>> getTasks();
+
 }

@@ -13,6 +13,7 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 
+import labes.facomp.ufpa.br.meuegresso.dto.mensagem.MensagemStatusDTO;
 import labes.facomp.ufpa.br.meuegresso.model.MensagemModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.mensagem.MensagemRepository;
@@ -80,24 +81,102 @@ public class MailServiceImpl implements MailService, Runnable {
 		return false;
     }
 
-    public Integer oneYearDifference(LocalDateTime dateTime, LocalDateTime nowDateTime){
+    public Integer checkData(LocalDateTime dateTime, LocalDateTime nowDateTime){
         return dateTime.getDayOfMonth() - dateTime.getMonth().getValue() - dateTime.getYear() - nowDateTime.getDayOfMonth() - nowDateTime.getMonth().getValue() - nowDateTime.getYear();
+    }
+
+    public Integer yearlyMessage(LocalDateTime dateTime, LocalDateTime nowDateTime){
+        return dateTime.getDayOfMonth() - dateTime.getMonth().getValue() - nowDateTime.getDayOfMonth() - nowDateTime.getMonth().getValue();
+    }
+
+    public Integer semesterMessage(LocalDateTime dateTime, LocalDateTime nowDateTime){
+        if(dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue() % 6 == 0){
+            return dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
+        }
+        else{
+            return dateTime.getDayOfMonth() - dateTime.getMonth().getValue() - nowDateTime.getDayOfMonth() - nowDateTime.getMonth().getValue();
+        }
+    }
+
+    public Integer statusData(LocalDateTime dateTime, LocalDateTime nowDateTime){
+        Integer year= dateTime.getYear() - nowDateTime.getYear();
+        Integer month = dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue();
+        Integer day = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
+
+        if(year < 0){
+            return 0;
+        }
+        else if (year==0){
+            if(month < 0){
+                return 0;
+            }
+            else if(month == 0){
+                if(day <= 0){
+                    return 0;
+                }
+                else{
+                    return 1;
+                }
+            }
+            else{
+                return 1;
+            }
+        }
+        else{
+            return 1;
+        }
+    }
+
+    @Override
+    public MensagemStatusDTO getMensagensStatus() {
+        List<MensagemModel> lista= mensagemRepository.findAll();
+        Map<String, Map<LocalDateTime, String>> mensagemStatus= new HashMap<>();
+       
+        for (MensagemModel email : lista){
+            if(statusData(email.getData(), LocalDateTime.now()) == 0){
+                final String status = "Enviado";
+                Map<LocalDateTime, String> mensagemDataStatus = new HashMap<>();
+                mensagemDataStatus.computeIfAbsent(email.getData(), k -> status);
+                mensagemStatus.put(email.getEmail(), mensagemDataStatus);
+            }
+            else{
+                final String status = "Pendente";
+                Map<LocalDateTime, String> mensagemDataStatus = new HashMap<>();
+                mensagemDataStatus.computeIfAbsent(email.getData(), k -> status);
+                mensagemStatus.put(email.getEmail(), mensagemDataStatus);
+            }
+        }
+        return MensagemStatusDTO.builder().mensagensStatus(mensagemStatus).build();
     }
 
     public void scheduledSendEmail() {
 		Map<String, LocalDateTime> emailList = usuarioService.findByAtivo();
         List<MensagemModel> mensagemModel = mensagemRepository.findAll();
         for(int i=0; i<mensagemModel.size(); i++){
-            if(mensagemModel.get(i).getId() == 1){
-                for (String email : emailList.keySet()) {
-                    if(oneYearDifference(emailList.get(email), LocalDateTime.now()) == 0){
-                        sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+            if(mensagemModel.get(i).getEmail() != null && checkData(emailList.get(mensagemModel.get(i).getEmail()), LocalDateTime.now()) == 0){
+                sendEmail(mensagemModel.get(i).getEmail(), mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+            }
+            else{
+                if(Boolean.TRUE.equals(mensagemModel.get(i).getFrequente())){
+                    if(Boolean.TRUE.equals(mensagemModel.get(i).getAnual())){
+                        for (String email : emailList.keySet()) {
+                        if(yearlyMessage(emailList.get(email), LocalDateTime.now()) == 0){
+                            sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                        }
+                    }
+                    }
+                    else{
+                        for (String email : emailList.keySet()) {
+                        if(semesterMessage(emailList.get(email), LocalDateTime.now()) == 0){
+                            sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                        }
+                    }
                     }
                 }
-            }
-            if(mensagemModel.get(i).getId() != 1 && oneYearDifference(mensagemModel.get(i).getData(),LocalDateTime.now()) == 0){
-                for (String email : emailList.keySet()) {
-                    sendEmail(email, mensagemModel.get(i).getEscopo(), mensagemModel.get(i).getCorpo());
+                else if(checkData(mensagemModel.get(i).getData(),LocalDateTime.now()) == 0){
+                    for (String email : emailList.keySet()) {
+                        sendEmail(email, mensagemModel.get(i).getEscopo(), mensagemModel.get(i).getCorpo());
+                    }
                 }
             }
         }
@@ -114,15 +193,39 @@ public class MailServiceImpl implements MailService, Runnable {
     }
     
     @Override
-    public void setScheduleATask(Runnable tasklet, LocalDateTime dateTime) {
+    public void setScheduleATask(Runnable tasklet, LocalDateTime dateTime, boolean frequente, boolean anual) {
         String cronExpression = toCron(String.valueOf(dateTime.getMinute()), 
                                         String.valueOf(dateTime.getHour()),
                                         String.valueOf(dateTime.getDayOfMonth()),
                                         String.valueOf(dateTime.getMonth()), 
                                         String.valueOf(dateTime.getYear()));
-        ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
-        Integer jobId = taskList.size();
-        taskList.put(jobId, scheduledTask);
+        if(frequente){
+            if(anual){
+                cronExpression = toCron(String.valueOf(dateTime.getMinute()), 
+                                            String.valueOf(dateTime.getHour()),
+                                            String.valueOf(dateTime.getDayOfMonth()),
+                                            String.valueOf(dateTime.getMonth()), 
+                                            "*");
+                ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
+                Integer jobId = taskList.size();
+                taskList.put(jobId, scheduledTask);
+            }
+            else{
+                cronExpression = toCron(String.valueOf(dateTime.getMinute()), 
+                                            String.valueOf(dateTime.getHour()),
+                                            String.valueOf(dateTime.getDayOfMonth()),
+                                            "1/6",
+                                            "*");
+                ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
+                Integer jobId = taskList.size();
+                taskList.put(jobId, scheduledTask);
+            }
+        }
+        else{
+            ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
+            Integer jobId = taskList.size();
+            taskList.put(jobId, scheduledTask);
+        }
     }
 
     @Override
