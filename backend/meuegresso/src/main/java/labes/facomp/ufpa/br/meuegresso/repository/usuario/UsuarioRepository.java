@@ -32,7 +32,7 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	
 	@Query(nativeQuery = true,value = """
-			SELECT u.email, u.last_modified_date
+			SELECT u.email, u.created_date
 			FROM usuario u
 			JOIN egresso e ON u.id_usuario = e.usuario_id
 			WHERE e.ativo = true;

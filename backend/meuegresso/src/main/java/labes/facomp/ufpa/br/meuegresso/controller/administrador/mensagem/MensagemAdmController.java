@@ -110,10 +110,10 @@ public class MensagemAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public String save(@RequestBody @Valid MensagemDTO mensagemDTO) {
-		if(!(mailService.findAll().isEmpty())){
-			mailService.deleteById(mailService.findAll().get(0).getId());
-		}
 		mailService.save(mapper.map(mensagemDTO, MensagemModel.class));
+		if(mailService.findAll().size() == 1){
+			mailService.setEmailAnualCadastro(mailServiceImpl);
+		}
 		mailService.setScheduleATask(mailServiceImpl, mensagemDTO.getDataEnvio());
 
 		return ResponseType.SUCCESS_UPDATE.getMessage();

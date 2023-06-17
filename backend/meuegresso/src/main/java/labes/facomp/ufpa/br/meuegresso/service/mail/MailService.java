@@ -28,5 +28,7 @@ public interface MailService {
 
     public void removeScheduledTask(Integer jobId);
 
+    public void setEmailAnualCadastro(Runnable tasklet);
+
     public Map<Integer, ScheduledFuture<?>> getTasks();
 }

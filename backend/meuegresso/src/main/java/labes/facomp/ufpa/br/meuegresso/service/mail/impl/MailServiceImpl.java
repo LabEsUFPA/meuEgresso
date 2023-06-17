@@ -80,13 +80,24 @@ public class MailServiceImpl implements MailService, Runnable {
 		return false;
     }
 
+    public Integer oneYearDifference(LocalDateTime dateTime, LocalDateTime nowDateTime){
+        return dateTime.getDayOfMonth() - dateTime.getMonth().getValue() - dateTime.getYear() - nowDateTime.getDayOfMonth() - nowDateTime.getMonth().getValue() - nowDateTime.getYear();
+    }
+
     public void scheduledSendEmail() {
 		Map<String, LocalDateTime> emailList = usuarioService.findByAtivo();
         List<MensagemModel> mensagemModel = mensagemRepository.findAll();
         for(int i=0; i<mensagemModel.size(); i++){
-            if(mensagemModel.get(i).getData().getDayOfMonth() == LocalDateTime.now().getDayOfMonth()){
+            if(mensagemModel.get(i).getId() == 1){
                 for (String email : emailList.keySet()) {
-                    sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                    if(oneYearDifference(emailList.get(email), LocalDateTime.now()) == 0){
+                        sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                    }
+                }
+            }
+            if(mensagemModel.get(i).getId() != 1 && oneYearDifference(mensagemModel.get(i).getData(),LocalDateTime.now()) == 0){
+                for (String email : emailList.keySet()) {
+                    sendEmail(email, mensagemModel.get(i).getEscopo(), mensagemModel.get(i).getCorpo());
                 }
             }
         }
@@ -98,8 +109,8 @@ public class MailServiceImpl implements MailService, Runnable {
         scheduledSendEmail();
     }
     
-    public static String toCron(final String mins, final String hrs, final String dayOfMonth, final String month, final String dayOfWeek, final String year) {
-        return String.format("%s %s %s %s %s %s", mins, hrs, dayOfMonth, month, dayOfWeek, year);
+    public static String toCron(final String mins, final String hrs, final String dayOfMonth, final String month, final String year) {
+        return String.format("%s %s %s %s * %s", mins, hrs, dayOfMonth, month, year);
     }
     
     @Override
@@ -107,8 +118,7 @@ public class MailServiceImpl implements MailService, Runnable {
         String cronExpression = toCron(String.valueOf(dateTime.getMinute()), 
                                         String.valueOf(dateTime.getHour()),
                                         String.valueOf(dateTime.getDayOfMonth()),
-                                        String.valueOf(dateTime.getMonth()),
-                                        String.valueOf(dateTime.getDayOfWeek()), 
+                                        String.valueOf(dateTime.getMonth()), 
                                         String.valueOf(dateTime.getYear()));
         ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
         Integer jobId = taskList.size();
@@ -121,6 +131,14 @@ public class MailServiceImpl implements MailService, Runnable {
         if(scheduledTask != null) {
             scheduledTask.cancel(true);
             taskList.remove(jobId, scheduledTask);
+        }
+    }
+
+    @Override
+    public void setEmailAnualCadastro(Runnable tasklet) {
+        if(taskList.size() == 0){
+            ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger("0 10 * * * *"));
+            taskList.put(1, scheduledTask);
         }
     }
 
