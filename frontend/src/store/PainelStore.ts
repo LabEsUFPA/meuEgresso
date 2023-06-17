@@ -41,7 +41,8 @@ export const usePainelStore = defineStore('Painel', {
       if (response?.status === 200 && (response.data != null)) {
         this.egressos = response?.data.content.map((egresso: any) => ({
           cadastro: egresso.createdDate,
-          id: egresso.id,
+          id: egresso.idUsuario,
+          idEgresso: egresso.idEgresso,
           name: egresso.nome,
           status: egresso.status
         }))

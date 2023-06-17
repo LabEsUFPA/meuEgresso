@@ -32,6 +32,7 @@
       </div>
       <AdminOptionsDropdown
         :id="id"
+        :id-egresso="idEgresso"
         :nome="nome"
         :status="status"
       />
@@ -53,6 +54,7 @@ const statusColor: any = {
 
 defineProps<{
     id: number,
+    idEgresso: number,
     nome: string,
     dataCadastro: string,
     status: string
