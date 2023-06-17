@@ -182,7 +182,7 @@ public class DashAdmController {
 	 * @since 12/06/2023
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping(value = "/tipoStatus")
+	@GetMapping(value = "/notificacaoStatus")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<NotificacaoDTO> getStatus(
