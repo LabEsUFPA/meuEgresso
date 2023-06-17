@@ -13,12 +13,12 @@
     <OField :root-class="classNames(['flex h-full w-full'])">
       <OInput
         override
-        :v-model="props.modelValue"
+        :v-model="searchValue"
         expanded
         placeholder="Pesquisar vaga"
         :root-class="classNames(['flex h-full w-full'])"
         :input-class="classNames(['flex w-full h-full focus:outline-0 text-zinc-700'])"
-        @change=" $emit('update:modelValue', $event.target.value)"
+        @change="searchValue = $event.target.value"
         @focus="toggleSearchbarFocus()"
         @blur="toggleSearchbarFocus()"
       />
@@ -28,7 +28,7 @@
       type="button"
       color="sky"
       text-class="text-sm sm:text-lg text-white"
-      @click="$emit('update:modelValue', $event.target.value)"
+      @click="$emit('update:modelValue', searchValue)"
     >
       Buscar
     </CustomButton>
@@ -50,6 +50,7 @@ const props = defineProps<{
   modelValue:string
 }>()
 
+const searchValue = ref(props.modelValue)
 const searchbarFocused = ref(false)
 
 const toggleSearchbarFocus = () => {

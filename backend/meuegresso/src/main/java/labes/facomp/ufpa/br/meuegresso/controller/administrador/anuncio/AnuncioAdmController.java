@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.anuncio.AnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -112,9 +115,11 @@ public class AnuncioAdmController {
 	 * @see {@link ResponseType}
 	 * @since 22/04/2023
 	 */
-	@DeleteMapping
+	@DeleteMapping(value = "/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
-	public String deleteById(Integer id) throws DataNotDeletedException {
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public String deleteById(@PathVariable Integer id) throws DataNotDeletedException {
 		if (anuncioService.deleteById(id)) {
 			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
