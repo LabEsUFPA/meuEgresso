@@ -54,7 +54,7 @@ const statusColor: any = {
 
 defineProps<{
     id: number,
-    idEgresso: number,
+    idEgresso?: number,
     nome: string,
     dataCadastro: string,
     status: string

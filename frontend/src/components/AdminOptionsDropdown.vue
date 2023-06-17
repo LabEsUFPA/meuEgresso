@@ -19,11 +19,15 @@
     </template>
 
     <ODropdownItem
-      v-for="(opcao, index) in opcoesAdmin.filter(o => o.status === 'todos' || o.status === status)"
+      v-for="(opcao, index) in opcoesAdmin.filter(op => op.status.includes(status))"
       :key="index"
       aria-role="listitem"
       override
-      :item-class="classNames('text-sm text-cyan-600 p-2 hover:bg-sky-300/30 rounded')"
+      :item-class="classNames({
+        ['text-sm text-cyan-600 p-2 hover:bg-sky-300/30 rounded']: true,
+        ['text-red-500 hover:bg-red-300/30 rounded'] : opcao.titulo === 'Excluir cadastro',
+        ['text-emerald-500 hover:bg-red-emerald/30 rounded'] : opcao.titulo === 'Aprovar cadastro',
+      })"
     >
       <button
         @click="() => escolheAcao(opcao.titulo)"
@@ -90,7 +94,7 @@ import { usePainelStore } from 'src/store/PainelStore'
 
 const props = defineProps<{
     id: number
-    idEgresso: number
+    idEgresso?: number
     nome?: string
     status: string
     }
@@ -113,7 +117,8 @@ const escolheAcao = (acao:string) => {
 }
 
 const aprovaCadastro = () => {
-  console.log('aprova')
+  $store.ativaUsuario(props.id)
+  $store.validaUsuario(props.id)
 }
 
 const editaCadastro = () => {
@@ -121,8 +126,9 @@ const editaCadastro = () => {
 }
 
 const excluiCadastro = () => {
-  console.log('exclui')
-  $store.deleteUsuario(props.id)
+  if (props.idEgresso) {
+    $store.deleteUsuario(props.idEgresso)
+  }
 }
 
 const enviaEmail = () => {
@@ -130,10 +136,10 @@ const enviaEmail = () => {
 }
 
 const opcoesAdmin = [
-  { titulo: 'Aprovar cadastro', status: 'pendente', click: aprovaCadastro },
-  { titulo: 'Editar cadastro', status: 'completo', click: editaCadastro },
-  { titulo: 'Excluir cadastro', status: 'todos', click: excluiCadastro },
-  { titulo: 'Enviar e-mail', status: 'todos', click: enviaEmail }
+  { titulo: 'Aprovar cadastro', status: ['completo', 'pendente'], click: aprovaCadastro },
+  { titulo: 'Editar cadastro', status: ['completo', 'pendente'], click: editaCadastro },
+  { titulo: 'Enviar e-mail', status: ['incompleto', 'completo', 'pendente'], click: enviaEmail },
+  { titulo: 'Excluir cadastro', status: ['completo', 'pendente'], click: excluiCadastro }
 ]
 
 const mensagemDialog: any = {

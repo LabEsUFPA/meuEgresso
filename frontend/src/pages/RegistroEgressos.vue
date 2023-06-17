@@ -142,7 +142,7 @@
 
 <script setup lang="ts">
 
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiAccountSearch, mdiFilterVariant, mdiPlus, mdiEmoticonSadOutline } from '@mdi/js'
 
@@ -167,6 +167,10 @@ console.log($store.egressos)
 
 onMounted(async () => {
   loading.value = true
+
+  watch($store, () => {
+    $store.fetchEgressos()
+  })
 })
 
 const openModalFilters = () => {

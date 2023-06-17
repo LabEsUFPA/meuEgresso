@@ -95,7 +95,25 @@ export const usePainelStore = defineStore('Painel', {
     async deleteUsuario (id: number) {
       const response = await Api.request({
         method: 'delete',
-        route: `/administrador/usuario/${id}`
+        route: `/administrador/egresso/${id}`
+      })
+
+      console.log(response)
+    },
+
+    async ativaUsuario (id: number) {
+      const response = await Api.request({
+        method: 'put',
+        route: `/administrador/usuario/${id}/ativo`
+      })
+
+      console.log(response)
+    },
+
+    async validaUsuario (id: number) {
+      const response = await Api.request({
+        method: 'put',
+        route: `/administrador/usuario/${id}/valido`
       })
 
       console.log(response)
