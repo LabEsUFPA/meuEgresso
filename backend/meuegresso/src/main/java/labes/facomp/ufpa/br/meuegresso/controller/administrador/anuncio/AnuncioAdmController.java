@@ -55,7 +55,7 @@ public class AnuncioAdmController {
 	 */
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<AnuncioDTO> buscarAnuncios(
 			@RequestParam(defaultValue = "0", required = false) Integer page,
@@ -77,7 +77,7 @@ public class AnuncioAdmController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO) {
 		AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
@@ -98,7 +98,7 @@ public class AnuncioAdmController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO)
 			throws InvalidRequestException {
