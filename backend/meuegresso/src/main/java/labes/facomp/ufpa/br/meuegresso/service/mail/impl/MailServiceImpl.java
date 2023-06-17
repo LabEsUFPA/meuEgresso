@@ -87,11 +87,47 @@ public class MailServiceImpl implements MailService, Runnable {
     }
 
     public Integer checkData(LocalDateTime dateTime, LocalDateTime nowDateTime){
-        return dateTime.getDayOfMonth() - dateTime.getMonth().getValue() - dateTime.getYear() - nowDateTime.getDayOfMonth() - nowDateTime.getMonth().getValue() - nowDateTime.getYear();
+        Integer year= dateTime.getYear() - nowDateTime.getYear();
+        Integer month = dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue();
+        Integer day = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
+        if(year == 0){
+            if(month == 0){
+                if(day == 0){
+                    return 0;
+                }
+                else{
+                    return 1;
+                }
+            }
+            else{
+                return 1;
+            }
+        }
+        else{
+            return 1;
+        }
     }
 
     public Integer yearlyMessage(LocalDateTime dateTime, LocalDateTime nowDateTime){
-        return dateTime.getDayOfMonth() - dateTime.getMonth().getValue() - nowDateTime.getDayOfMonth() - nowDateTime.getMonth().getValue();
+        Integer month = dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue();
+        Integer day = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
+        Integer hour = dateTime.getHour() - nowDateTime.getHour();
+        if(month == 0){
+            if(day == 0){
+                if(hour == 0){
+                    return 0;
+                }
+                else{
+                    return 1;
+                }
+            }
+            else{
+                return 1;
+            }
+        }
+        else{
+            return 1;
+        }
     }
 
     public Integer semesterMessage(LocalDateTime dateTime, LocalDateTime nowDateTime){
@@ -99,7 +135,7 @@ public class MailServiceImpl implements MailService, Runnable {
             return dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
         }
         else{
-            return dateTime.getDayOfMonth() - dateTime.getMonth().getValue() - nowDateTime.getDayOfMonth() - nowDateTime.getMonth().getValue();
+            return 1;
         }
     }
 
@@ -107,7 +143,6 @@ public class MailServiceImpl implements MailService, Runnable {
         Integer year= dateTime.getYear() - nowDateTime.getYear();
         Integer month = dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue();
         Integer day = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
-
         if(year < 0){
             return 0;
         }
@@ -259,7 +294,7 @@ public class MailServiceImpl implements MailService, Runnable {
     @Override
     public void setEmailAnualCadastro(Runnable tasklet) {
         if(taskList.size() == 0){
-            ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger("0 10 * * * *"));
+            ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger("0 9 * * * *"));
             taskList.put("cad", scheduledTask);
         }
     }
