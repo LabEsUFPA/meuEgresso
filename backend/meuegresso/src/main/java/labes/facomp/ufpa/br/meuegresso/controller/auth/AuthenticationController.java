@@ -28,6 +28,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.config.properties.TokenProperties;
+import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthNewPasswordRequest;
+import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthRecoveryPasswordRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioRegistro;
@@ -178,18 +180,17 @@ public class AuthenticationController {
 
 	@PostMapping(value = "/recoveryPassword/{token}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void recuperarSenha(@PathVariable String token, @RequestBody String password) throws UnauthorizedRequestException {
+	public void recuperarSenha(@PathVariable String token, @RequestBody AuthNewPasswordRequest authNewPassReq) throws UnauthorizedRequestException {
 		RecuperacaoSenhaModel recuperacaoSenha = recuperacaoSenhaService.tokenValido(UUID.fromString(token));
 		UsuarioModel usuarioModel = recuperacaoSenha.getUsuario();
-		usuarioModel.setPassword(password);
+		usuarioModel.setPassword(authNewPassReq.getNovaSenha());
 		usuarioService.save(usuarioModel);
 	}
 
 	@PostMapping(value = "/recoveryPassword")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public ResponseType solicitacaoRecuperarSenha(@RequestBody String email,
-			@RequestParam(required = false) Optional<String> redirect, @RequestHeader("Host") String header) {
-		recuperacaoSenhaService.cadastrarSolicitacaoRecuperacao(email, redirect.orElse("https://" + header));
+	public ResponseType solicitacaoRecuperarSenha(@RequestBody AuthRecoveryPasswordRequest authPassReq, @RequestHeader("Host") String header) {
+		recuperacaoSenhaService.cadastrarSolicitacaoRecuperacao(authPassReq.getEmail(), authPassReq.getRedirect().orElse("https://" + header));
 		return ResponseType.SOLICITACAO_REALIZADA_SUCESSO;
 	}
 
