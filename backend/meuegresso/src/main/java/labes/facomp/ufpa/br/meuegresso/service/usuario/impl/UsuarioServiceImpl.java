@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
 import java.sql.Timestamp;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -18,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.Tuple;
-import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDashDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.notificacao.NotificacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;

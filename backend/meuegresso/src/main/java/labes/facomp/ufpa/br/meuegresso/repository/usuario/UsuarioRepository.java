@@ -3,7 +3,6 @@ package labes.facomp.ufpa.br.meuegresso.repository.usuario;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -39,39 +38,39 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 	 */
 	@Query(nativeQuery = true, value = """
 			SELECT
-			    u.id_usuario,
-				e.id_egresso,
-			    u.nome_usuario,
-			    empr.nome_empresa,
-			    u.email,
-			    u.created_date,
-			    e.foto_egresso,
+			u.id_usuario,
+			e.id_egresso,
+			u.nome_usuario,
+			empr.nome_empresa,
+			u.email,
+			u.created_date,
+			e.foto_egresso,
 			CASE
-			    WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
-			        CASE
-			            WHEN e.ativo = FALSE THEN 'inativo'
-			            WHEN u.valido_usuario = FALSE THEN 'pendente'
-			            WHEN u.valido_usuario = TRUE THEN 'completo'
-			        END
-			    ELSE 'incompleto'
+			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
+			CASE
+			WHEN e.ativo = FALSE THEN 'inativo'
+			WHEN u.valido_usuario = FALSE THEN 'pendente'
+			WHEN u.valido_usuario = TRUE THEN 'completo'
+			END
+			ELSE 'incompleto'
 			END AS status
 			FROM
-			    usuario_grupo ug
+			usuario_grupo ug
 			LEFT JOIN egresso e ON ug.id_usuario = e.usuario_id
 			JOIN usuario u ON ug.id_usuario = u.id_usuario
 			LEFT JOIN egresso_empresa ee ON ee.egresso_id_egresso = e.id_egresso
 			LEFT JOIN empresa empr ON ee.empresa_id_empresa = empr.id_empresa
 			WHERE
-			    ug.grupo = 'EGRESSO'
-				AND (
-				CASE
-			    WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
-			        CASE
-			            WHEN e.ativo = FALSE THEN 'inativo'
-			            WHEN u.valido_usuario = TRUE THEN 'completo'
-			            WHEN u.valido_usuario = FALSE THEN 'pendente'
-			        END
-			    ELSE 'incompleto'
+			ug.grupo = 'EGRESSO'
+			AND (
+			CASE
+			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
+			CASE
+			WHEN e.ativo = FALSE THEN 'inativo'
+			WHEN u.valido_usuario = TRUE THEN 'completo'
+			WHEN u.valido_usuario = FALSE THEN 'pendente'
+			END
+			ELSE 'incompleto'
 			END) ilike %:status%
 			AND u.nome_usuario ilike %:nomeUsuario%
 			""")

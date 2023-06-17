@@ -1,6 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -87,7 +86,8 @@ public interface UsuarioService extends UserDetailsService {
 	 * @author Bruno Eiki
 	 */
 
-	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String status, Integer page, Integer size, Direction direction);
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String status, Integer page, Integer size,
+			Direction direction);
 
 	/**
 	 * Método responsável por retornar um mapa com informações

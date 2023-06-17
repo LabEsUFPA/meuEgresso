@@ -2,20 +2,16 @@ package labes.facomp.ufpa.br.meuegresso.controller.administrador.egresso;
 
 import java.io.IOException;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
@@ -24,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * Responsável por fornecer um endpoint ao administrador para deletar foto de
  * Egresso.
- * 
+ *
  * @author Camilo Santos
  * @since 13/05/2023
  * @version 1.0
