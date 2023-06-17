@@ -79,7 +79,6 @@ export const usePainelStore = defineStore('Painel', {
       if (response?.status === 200 && response.data != null) {
         const blobData = response.data
         const fileUrl = URL.createObjectURL(blobData)
-        console.log(response.data)
 
         const link = document.createElement('a')
 
@@ -99,6 +98,15 @@ export const usePainelStore = defineStore('Painel', {
       })
 
       console.log(response)
+    },
+
+    async deleteAll () {
+      const response = await Api.request({
+        method: 'delete',
+        route: '/administrador/dashboard/deleteall'
+      })
+
+      return response?.status != null ? response.status : 500
     }
   }
 })
