@@ -47,7 +47,7 @@ public class MensagemAdmController {
 	 * Endpoint responsável por retornar a lista com o status das mensagens no banco de
 	 * dados.
 	 *
-	 * @return {@link MensagemDTO} Lista de emails salvos
+	 * @return {@link MensagemStatusDTO} Lista de emails salvos com seus status;
 	 * @author Pedro Inácio
 	 * @since 15/06/2023
 	 */
@@ -57,9 +57,17 @@ public class MensagemAdmController {
 		return mailService.getMensagensStatus();
 	}
 
+	/**
+	 * Endpoint responsável por retornar a lista com as mensagens no banco de
+	 * dados.
+	 *
+	 * @return {@link MensagemDTO} Lista de emails salvos.
+	 * @author Pedro Inácio
+	 * @since 15/06/2023
+	 */
 	@GetMapping(value = "/consultarMensagens")
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
-	public MensagemStatusDTO consultarMensagens() {
+	public MensagemDTO consultarMensagens() {
 		return mapper.map(mailService.findAll(), new TypeToken<List<MensagemDTO>>() {
 		}.getType());
 	}
@@ -67,9 +75,9 @@ public class MensagemAdmController {
 	/**
 	 * Endpoint responsavel por atualizar o email.
 	 *
-	 * @param MailDTO Estrutura de dados contendo as informações necessárias para
+	 * @param mensagemDTO Estrutura de dados contendo as informações necessárias para
 	 *                   atualizar o emails.
-	 * @return {@link MensagemDTO} Dados gravados no banco com a Id atualizada.
+	 * @return {@link String} mensagem de confirmação de atualização.
 	 * @author Pedro Inácio
 	 * @since 15/06/2023
 	 */
@@ -88,7 +96,7 @@ public class MensagemAdmController {
 	 * Endpoint responsável por deletar usuário por sua ID>
 	 *
 	 * @param id Integer do id do email
-	 * @return Boolean
+	 * @return {@link String} mensagem de confirmação de deleção.
 	 * @author Pedro Inácio
 	 * @since 15/06/2023
 	 */
@@ -109,7 +117,7 @@ public class MensagemAdmController {
 	 *
 	 * @param mensagemDTO Estrutura de dados contendo as informações necessárias para
 	 *                   salvar o email.
-	 * @return {@link MensagemDTO} Dados gravados no banco com a Id atualizada.
+	 * @return {@link String} mensagem de confirmação de salvamento.
 	 * @author Pedro Inácio
 	 * @since 15/06/2023
 	 */

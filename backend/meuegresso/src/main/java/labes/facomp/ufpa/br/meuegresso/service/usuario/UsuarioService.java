@@ -22,7 +22,7 @@ public interface UsuarioService extends UserDetailsService {
 	 * Método responsável por persistir determinado usuário no banco de dados.
 	 *
 	 * @param usuarioModel Dados do usuário
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link UsuarioModel}  Dados após serem gravados no banco de dados.
 	 */
 	public UsuarioModel save(UsuarioModel usuarioModel);
 
@@ -30,14 +30,14 @@ public interface UsuarioService extends UserDetailsService {
 	 * Método responsável por encontrar um determinado usuário por sua ID.
 	 *
 	 * @param idUsuario ID de um usuário
-	 * @return
+	 * @return {@link UsuarioModel} 
 	 */
 	public UsuarioModel findById(Integer idUsuario);
 
 	/**
 	 * Método responsável por encontrar todos os usuários cadastrados.
 	 *
-	 * @return Lista de objetos da classe UsuarioModel.
+	 * @return {@link List<UsuarioModel>} Lista de objetos da classe UsuarioModel.
 	 */
 	public List<UsuarioModel> findAll();
 
@@ -45,7 +45,7 @@ public interface UsuarioService extends UserDetailsService {
 	 * Método responsável por atualizar dados de um usuário cadastrado.
 	 *
 	 * @param usuario objeto usuário
-	 * @return
+	 * @return {@link UsuarioModel} 
 	 */
 	public UsuarioModel update(UsuarioModel usuario) throws InvalidRequestException;
 
@@ -53,12 +53,14 @@ public interface UsuarioService extends UserDetailsService {
 	 * Método responsável por deletar um usuário cadastrado por sua ID.
 	 *
 	 * @param idUsuario ID de um usuário
+	 * @return {@link boolean} 
 	 */
 	public boolean deleteById(Integer idUsuario);
 
 	/**
 	 * Método responsável por encontrar um determinado usuário por seu username.
-	 *
+	 * @param username
+	 * @return {@link UsuarioModel} 
 	 */
 	public UsuarioModel loadUserByUsername(String username);
 
@@ -67,7 +69,7 @@ public interface UsuarioService extends UserDetailsService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return {@link boolean} 
 	 */
     public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
