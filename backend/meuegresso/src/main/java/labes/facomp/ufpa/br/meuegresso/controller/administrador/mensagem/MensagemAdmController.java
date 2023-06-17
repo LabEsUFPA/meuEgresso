@@ -77,12 +77,10 @@ public class MensagemAdmController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public String atualizarMensagem(@RequestBody @Valid MensagemDTO mensagemDTO) {
-		if(!mailService.getTasks().isEmpty()){
-			mailService.removeScheduledTask(mensagemDTO.getId());
-		}
 		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
+		mailService.removeScheduledTask(mensagemModel);
 		mensagemModel = mailService.update(mensagemModel);
-		mailService.setScheduleATask(mailServiceImpl, mensagemModel.getData(), mensagemModel.getFrequente(), mensagemModel.getAnual());
+		mailService.setScheduleATask(mailServiceImpl, mensagemModel.getData(), mensagemModel.getFrequente(), mensagemModel.getAnual(), mensagemModel);
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
@@ -98,6 +96,8 @@ public class MensagemAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
 	public String deleteById(@PathVariable(name = "id") Integer id) {
+		MensagemModel mensagemModel = mailService.findbyId(id);
+		mailService.removeScheduledTask(mensagemModel);
 		if (mailService.deleteById(id)) {
 			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
@@ -117,11 +117,12 @@ public class MensagemAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public String save(@RequestBody @Valid MensagemDTO mensagemDTO) {
-		mailService.save(mapper.map(mensagemDTO, MensagemModel.class));
+		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
+		mailService.save(mensagemModel);
 		if(mailService.findAll().size() == 1){
 			mailService.setEmailAnualCadastro(mailServiceImpl);
 		}
-		mailService.setScheduleATask(mailServiceImpl, mensagemDTO.getDataEnvio(), mensagemDTO.getFrequente(), mensagemDTO.getAnual());
+		mailService.setScheduleATask(mailServiceImpl, mensagemDTO.getDataEnvio(), mensagemDTO.getFrequente(), mensagemDTO.getAnual(), mensagemModel);
 
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}

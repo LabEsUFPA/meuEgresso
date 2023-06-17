@@ -21,18 +21,20 @@ public interface MailService {
 
     public List<MensagemModel> findAll();
 
+    public MensagemModel findbyId(Integer id);
+
     public boolean deleteById(Integer idMensagem);
 
     public MensagemStatusDTO getMensagensStatus();
     
     public void scheduledSendEmail();
 
-    public void setScheduleATask(Runnable tasklet, LocalDateTime dateTime, boolean frequente, boolean anual);
+    public void setScheduleATask(Runnable tasklet, LocalDateTime dateTime, boolean frequente, boolean anual, MensagemModel mensagemModel);
 
-    public void removeScheduledTask(Integer jobId);
+    public void removeScheduledTask(MensagemModel mensagemModel);
 
     public void setEmailAnualCadastro(Runnable tasklet);
 
-    public Map<Integer, ScheduledFuture<?>> getTasks();
+    public Map<String, ScheduledFuture<?>> getTasks();
 
 }

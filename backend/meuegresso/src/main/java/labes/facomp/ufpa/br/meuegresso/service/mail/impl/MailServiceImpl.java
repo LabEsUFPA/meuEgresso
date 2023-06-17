@@ -31,7 +31,7 @@ public class MailServiceImpl implements MailService, Runnable {
 
     private final MensagemRepository mensagemRepository;
     
-    private Map<Integer, ScheduledFuture<?>> taskList = new HashMap<>();
+    private Map<String, ScheduledFuture<?>> taskList = new HashMap<>();
 
     @Autowired
     private TaskScheduler taskScheduler;
@@ -70,6 +70,11 @@ public class MailServiceImpl implements MailService, Runnable {
     @Override
     public List<MensagemModel> findAll() {
         return mensagemRepository.findAll();
+    }
+    
+    @Override
+    public MensagemModel findbyId(Integer id){
+        return mensagemRepository.findById(id).orElseThrow();
     }
 
     @Override
@@ -160,16 +165,19 @@ public class MailServiceImpl implements MailService, Runnable {
                 if(Boolean.TRUE.equals(mensagemModel.get(i).getFrequente())){
                     if(Boolean.TRUE.equals(mensagemModel.get(i).getAnual())){
                         for (String email : emailList.keySet()) {
-                        if(yearlyMessage(emailList.get(email), LocalDateTime.now()) == 0){
-                            sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
-                        }
+                            if(yearlyMessage(mensagemModel.get(i).getData(), LocalDateTime.now()) == 0){
+                                sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                            }
+                            if(yearlyMessage(emailList.get(email), LocalDateTime.now()) == 0){
+                                sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                            }
                     }
                     }
                     else{
                         for (String email : emailList.keySet()) {
-                        if(semesterMessage(emailList.get(email), LocalDateTime.now()) == 0){
-                            sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
-                        }
+                            if(semesterMessage(mensagemModel.get(i).getData(), LocalDateTime.now()) == 0){
+                                sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                            }
                     }
                     }
                 }
@@ -193,7 +201,7 @@ public class MailServiceImpl implements MailService, Runnable {
     }
     
     @Override
-    public void setScheduleATask(Runnable tasklet, LocalDateTime dateTime, boolean frequente, boolean anual) {
+    public void setScheduleATask(Runnable tasklet, LocalDateTime dateTime, boolean frequente, boolean anual, MensagemModel mensagemModel) {
         String cronExpression = toCron(String.valueOf(dateTime.getMinute()), 
                                         String.valueOf(dateTime.getHour()),
                                         String.valueOf(dateTime.getDayOfMonth()),
@@ -207,7 +215,7 @@ public class MailServiceImpl implements MailService, Runnable {
                                             String.valueOf(dateTime.getMonth()), 
                                             "*");
                 ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
-                Integer jobId = taskList.size();
+                String jobId = String.valueOf(mensagemModel.getId());
                 taskList.put(jobId, scheduledTask);
             }
             else{
@@ -217,23 +225,34 @@ public class MailServiceImpl implements MailService, Runnable {
                                             "1/6",
                                             "*");
                 ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
-                Integer jobId = taskList.size();
+                String jobId = String.valueOf(mensagemModel.getId());
                 taskList.put(jobId, scheduledTask);
             }
         }
         else{
             ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
-            Integer jobId = taskList.size();
+            String jobId = String.valueOf(mensagemModel.getEmail());
             taskList.put(jobId, scheduledTask);
         }
     }
 
     @Override
-    public void removeScheduledTask(Integer jobId) {
-        ScheduledFuture<?> scheduledTask = taskList.get(jobId);
-        if(scheduledTask != null) {
-            scheduledTask.cancel(true);
-            taskList.remove(jobId, scheduledTask);
+    public void removeScheduledTask(MensagemModel mensagemModel) {
+        if(mensagemModel.getEmail()!=null){
+            String mensagemEmail = mensagemModel.getEmail();
+            ScheduledFuture<?> scheduledTask = taskList.get(mensagemEmail);
+            if(scheduledTask != null) {
+                scheduledTask.cancel(true);
+                taskList.remove(mensagemEmail, scheduledTask);
+            }
+        }
+        else{
+            String mensagemId = String.valueOf(mensagemModel.getId());
+            ScheduledFuture<?> scheduledTask = taskList.get(mensagemId);
+            if(scheduledTask != null) {
+                scheduledTask.cancel(true);
+                taskList.remove(mensagemId, scheduledTask);
+            }
         }
     }
 
@@ -241,12 +260,12 @@ public class MailServiceImpl implements MailService, Runnable {
     public void setEmailAnualCadastro(Runnable tasklet) {
         if(taskList.size() == 0){
             ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger("0 10 * * * *"));
-            taskList.put(1, scheduledTask);
+            taskList.put("cad", scheduledTask);
         }
     }
 
     @Override
-    public Map<Integer, ScheduledFuture<?>> getTasks(){
+    public Map<String, ScheduledFuture<?>> getTasks(){
         return taskList;
     }
 }
