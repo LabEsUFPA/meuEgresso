@@ -197,31 +197,31 @@ public class DashAdmController {
 
 	}
 
-	// @GetMapping(value = "/cadastro/dia")
-	// @PreAuthorize("hasRole('ADMIN')")
-	// @ResponseStatus(code = HttpStatus.OK)
-	// public EgressoCadastroDiaGraficoDTO getCadastroEgressoDiario() {
-	// 	Map<LocalDate, Long> egressoCadDia = egressoService.countEgressoPorData();
+	@GetMapping(value = "/cadastro/dia")
+	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
+	public EgressoCadastroDiaGraficoDTO getCadastroEgressoDiario() {
+		Map<LocalDate, Long> egressoCadDia = egressoService.countEgressoPorData();
 
-	// 	return new EgressoCadastroDiaGraficoDTO(egressoCadDia);
-	// }
+		return new EgressoCadastroDiaGraficoDTO(egressoCadDia);
+	}
 
-	// @GetMapping(value = "/cadastro/mes")
-	// @PreAuthorize("hasRole('ADMIN')")
-	// @ResponseStatus(code = HttpStatus.OK)
-	// public EgressoCadastroMensalGraficoDTO getCadastroEgressoMensal() {
-	// 	Map<LocalDate, Long> egressoCadMes = egressoService.countEgressoPorMesEAno();
+	@GetMapping(value = "/cadastro/mes")
+	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
+	public EgressoCadastroMensalGraficoDTO getCadastroEgressoMensal() {
+		Map<LocalDate, Long> egressoCadMes = egressoService.countEgressoPorMesEAno();
 
-	// 	return new EgressoCadastroMensalGraficoDTO(egressoCadMes);
-	// }
+		return new EgressoCadastroMensalGraficoDTO(egressoCadMes);
+	}
 
-	// @GetMapping(value = "/cadastro/ano")
-	// @PreAuthorize("hasRole('ADMIN')")
-	// @ResponseStatus(code = HttpStatus.OK)
-	// public EgressoCadastroAnualGraficoDTO getCadastroEgressoAno() {
-	// 	Map<Integer, Long> egressoCadAno = egressoService.countEgressoPorAno();
+	@GetMapping(value = "/cadastro/ano")
+	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
+	public EgressoCadastroAnualGraficoDTO getCadastroEgressoAno() {
+		Map<Integer, Long> egressoCadAno = egressoService.countEgressoPorAno();
 
-	// 	return new EgressoCadastroAnualGraficoDTO(egressoCadAno);
-	// }
+		return new EgressoCadastroAnualGraficoDTO(egressoCadAno);
+	}
 
 }
