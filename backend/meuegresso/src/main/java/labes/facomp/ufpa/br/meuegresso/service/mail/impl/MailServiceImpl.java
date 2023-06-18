@@ -90,10 +90,22 @@ public class MailServiceImpl implements MailService, Runnable {
         Integer year= dateTime.getYear() - nowDateTime.getYear();
         Integer month = dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue();
         Integer day = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
+        Integer hour = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
+        Integer minute = dateTime.getMinute() - nowDateTime.getMinute();
         if(year == 0){
             if(month == 0){
                 if(day == 0){
-                    return 0;
+                    if(hour == 0){
+                        if(minute == 0){
+                            return 0;
+                        }
+                        else{
+                            return 1;
+                        }
+                    }
+                    else{
+                        return 1;
+                    }
                 }
                 else{
                     return 1;
@@ -112,10 +124,16 @@ public class MailServiceImpl implements MailService, Runnable {
         Integer month = dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue();
         Integer day = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
         Integer hour = dateTime.getHour() - nowDateTime.getHour();
+        Integer minute = dateTime.getMinute() - nowDateTime.getMinute();
         if(month == 0){
             if(day == 0){
                 if(hour == 0){
-                    return 0;
+                    if(minute == 0){
+                        return 0;
+                    }
+                    else{
+                        return 1;
+                    }
                 }
                 else{
                     return 1;
@@ -204,7 +222,7 @@ public class MailServiceImpl implements MailService, Runnable {
                             if(yearlyMessage(mensagemModel.get(i).getData(), LocalDateTime.now()) == 0){
                                 sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
                             }
-                            if(yearlyMessage(emailList.get(email), LocalDateTime.now()) == 0){
+                            if(yearlyMessage(emailList.get(email), LocalDateTime.now()) == 0 && mensagemModel.get(i).getId() == 1){
                                 sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
                             }
                     }

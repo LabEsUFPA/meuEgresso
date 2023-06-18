@@ -144,6 +144,8 @@ public class MensagemAdmController {
 		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
 		mailService.save(mensagemModel);
 		if(mailService.findAll().size() == 1){
+			mensagemModel.setFrequente(true);
+			mensagemModel.setAnual(true);
 			mailService.setEmailAnualCadastro(mailServiceImpl, mensagemModel);
 		}
 		if(mailService.findAll().size() > 1){
