@@ -156,7 +156,7 @@ import classNames from 'classnames'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { OField, OInput } from '@oruga-ui/oruga-next'
 
-type inputs = 'date' | 'text' | 'email' | 'number' | 'password' | 'textarea'
+type inputs = 'date' | 'text' | 'email' | 'number' | 'password' | 'textarea' | 'datetime-local'
 
 const $emit = defineEmits(['update:value'])
 

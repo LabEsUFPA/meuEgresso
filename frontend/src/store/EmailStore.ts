@@ -15,12 +15,21 @@ export const useEmailStore = defineStore('emailStore', {
     returnResponse (response: any) {
       return response
     },
+    async createEmail (dataEmail: any) {
+      const response = await Api.request({
+        method: 'post',
+        route: 'administrador/mensagem',
+        body: dataEmail
+      })
+
+      return (response?.status) !== undefined ? response.status : 500
+    },
+
     async updateEmail (dataEmail: any) {
       const response = await Api.request({
         method: 'put',
         route: 'administrador/mensagem',
         body: dataEmail
-
       })
 
       return (response?.status) !== undefined ? response.status : 500

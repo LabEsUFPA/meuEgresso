@@ -32,7 +32,6 @@
     </div>
     <div class="flex flex-col gap-4 sm:gap-8 mb-5 ">
       <Form
-        ref="form"
         @submit="handleSubmit"
         @invalid-submit="handleFail"
         :validation-schema="schema"
@@ -81,15 +80,27 @@
               </h1>
               <div class="mt-7 mb-5 ">
                 <CustomInput
-                  class="mb-5 mt-1.5 "
+                  class="mb-5 mt-1.5"
                   name="dataEnvio"
-                  type="date"
+                  type="datetime-local"
                   custom-label
                   required
                 >
                   <template #label>
                     <div class="text-lg font-medium text-neutral-900 inline">
                       Data do próximo envio
+                    </div>
+                  </template>
+                </CustomInput>
+                <CustomInput
+                  class="mb-5 mt-1.5"
+                  name="email"
+                  type="text"
+                  custom-label
+                >
+                  <template #label>
+                    <div class="text-lg font-medium text-neutral-900 inline">
+                      Email
                     </div>
                   </template>
                 </CustomInput>
@@ -123,7 +134,9 @@
       </Form>
     </div>
   </div>
-  <CustomDialog v-model="dialogSucesso">
+  <CustomDialog
+    v-model="dialogSucesso"
+  >
     <div class="h-full flex justify-center items-center">
       <div class="w-1/2">
         <div class="text-green-500 text-center mb-3">
@@ -187,7 +200,7 @@ const form = ref<typeof Form | null>(null)
 
 async function handleSubmit (values: any) {
   console.log('sub')
-  const status = await emailStore.updateEmail(values)
+  const status = await emailStore.createEmail(values)
   if (status !== 201) {
     dialogFalha.value = true
   } else {
@@ -195,8 +208,8 @@ async function handleSubmit (values: any) {
   }
   fetchUpdateEmail()
 }
-async function handleFail (values: any) {
-  console.log('fail')
+async function handleFail (e: any) {
+  console.log(e)
 }
 // botar data no futuro
 const schema = object().shape({
@@ -210,11 +223,12 @@ const schema = object().shape({
       return inputDate >= minDate
     }
     return true
-  })
+  }),
+  email: string().optional().email('Insira um e-mail válido')
 })
 
-async function handleCancel (values: any) {
-  console.log('cancelar')
+async function handleCancel (e: any) {
+  console.log(e)
   fetchUpdateEmail()
 }
 
