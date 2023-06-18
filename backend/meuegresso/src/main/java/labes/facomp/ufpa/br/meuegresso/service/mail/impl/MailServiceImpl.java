@@ -189,6 +189,7 @@ public class MailServiceImpl implements MailService, Runnable {
         return MensagemStatusDTO.builder().mensagensStatus(mensagemStatus).build();
     }
 
+    @Override
     public void scheduledSendEmail() {
 		Map<String, LocalDateTime> emailList = usuarioService.findByAtivo();
         List<MensagemModel> mensagemModel = mensagemRepository.findAll();
@@ -231,34 +232,34 @@ public class MailServiceImpl implements MailService, Runnable {
         scheduledSendEmail();
     }
     
-    public static String toCron(final String mins, final String hrs, final String dayOfMonth, final String month, final String year) {
-        return String.format("%s %s %s %s * %s", mins, hrs, dayOfMonth, month, year);
+    public static String toCron(final String seg,final String mins, final String hrs, final String dayOfMonth, final String month) {
+        return String.format("%s %s %s %s %s *", seg, mins, hrs, dayOfMonth, month);
     }
     
     @Override
     public void setScheduleATask(Runnable tasklet, LocalDateTime dateTime, boolean frequente, boolean anual, MensagemModel mensagemModel) {
-        String cronExpression = toCron(String.valueOf(dateTime.getMinute()), 
+        String cronExpression = toCron(String.valueOf(0),
+                                        String.valueOf(dateTime.getMinute()), 
                                         String.valueOf(dateTime.getHour()),
                                         String.valueOf(dateTime.getDayOfMonth()),
-                                        String.valueOf(dateTime.getMonth()).substring(0,4), 
-                                        String.valueOf(dateTime.getYear()));
+                                        String.valueOf(dateTime.getMonth().getValue()));
         if(frequente){
             if(anual){
-                cronExpression = toCron(String.valueOf(dateTime.getMinute()), 
+                cronExpression = toCron(String.valueOf(0),
+                                            String.valueOf(dateTime.getMinute()), 
                                             String.valueOf(dateTime.getHour()),
                                             String.valueOf(dateTime.getDayOfMonth()),
-                                            String.valueOf(dateTime.getMonth()).substring(0,4), 
-                                            "*");
+                                            String.valueOf(dateTime.getMonth().getValue()));
                 ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
                 String jobId = String.valueOf(mensagemModel.getId());
                 taskList.put(jobId, scheduledTask);
             }
             else{
-                cronExpression = toCron(String.valueOf(dateTime.getMinute()), 
+                cronExpression = toCron(String.valueOf(0),
+                                            String.valueOf(dateTime.getMinute()), 
                                             String.valueOf(dateTime.getHour()),
                                             String.valueOf(dateTime.getDayOfMonth()),
-                                            "1/6",
-                                            "*");
+                                            "1/6");
                 ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
                 String jobId = String.valueOf(mensagemModel.getId());
                 taskList.put(jobId, scheduledTask);
@@ -294,7 +295,7 @@ public class MailServiceImpl implements MailService, Runnable {
     @Override
     public void setEmailAnualCadastro(Runnable tasklet, MensagemModel mensagemModel) {
         if(taskList.size() == 0){
-            ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger("0 9 * * * *"));
+            ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger("0 0 9 * * *"));
             taskList.put(String.valueOf(mensagemModel.getId()), scheduledTask);
         }
     }
