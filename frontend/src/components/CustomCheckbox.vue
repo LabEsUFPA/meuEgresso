@@ -46,12 +46,6 @@
         *
       </sup>
     </button>
-    <p
-      class="text-red-500 text-sm mt-1 position-absolute display-none "
-      v-if="required"
-    >
-      Por favor, marque pelo menos uma das opções abaixo:
-    </p>
   </div>
 </template>
 
