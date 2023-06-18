@@ -277,6 +277,7 @@ async function handleCancel (e: any) {
 
 // let jsonResponse : any
 // console.log(jsonResponse)
+
 async function fetchUpdateEmail () {
   // const responseBack = await emailStore.fetchEmail()
   // const jsonEmail = JSON.parse(responseBack)
@@ -310,7 +311,7 @@ async function fetchUpdateEmail () {
   [Assinatura]`
   form.value?.setFieldValue('escopo', 'Atualização Cadastral - Meu Egresso')
   form.value?.setFieldValue('corpo', message)
-  if (Object.keys($route.params.destino).length === 1) {
+  if ($route.params.destino) {
     form.value?.setFieldValue('email', $route.params.destino)
   }
 }
