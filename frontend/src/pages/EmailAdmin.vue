@@ -98,7 +98,8 @@
                   class="mb-[-20px] mt-16"
                   name="emailMulti"
                   label="E-mail para destinatário único"
-                  v-model:value="bools.multiDestinatario"
+                  v-model:value="bools.multiDestinatario "
+                  :disabled="bools.frequente"
                 />
 
                 <CustomInput
@@ -107,7 +108,7 @@
                   type="text"
                   custom-label
                   :required="bools.multiDestinatario"
-                  :disabled="!bools.multiDestinatario"
+                  :disabled="!bools.multiDestinatario || bools.frequente"
                 >
                   <template #label>
                     <div class="text-lg font-medium text-neutral-900 inline">
@@ -242,7 +243,7 @@ const bools = ref({
 })
 async function handleSubmit (values: any) {
   console.log('sub')
-  if (!values.emailMulti) {
+  if (!values.emailMulti || values.frequente) {
     values.email = null
   }
   const status = await emailStore.createEmail(values)
@@ -271,13 +272,16 @@ const schema = object().shape({
   }),
   email: string()
     .email('Email inválido')
-    .when('multiDestinatario', (multiDestinatario, schema) =>
-      multiDestinatario
-        ? schema.required('Campo obrigatório').matches(
-          /^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/,
-          'Email inválido'
-        )
-        : schema.notRequired()
+    .test('required', 'Campo obrigatório', function (value) {
+      const { multiDestinatario, frequente } = this.parent
+      if (!multiDestinatario && !frequente) {
+        return !!value
+      }
+      return true
+    })
+    .matches(
+      /^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/,
+      'Email inválido'
     ),
   frequente: boolean(),
   anual: boolean()
