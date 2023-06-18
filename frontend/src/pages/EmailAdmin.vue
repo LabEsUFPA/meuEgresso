@@ -310,8 +310,8 @@ async function fetchUpdateEmail () {
   [Assinatura]`
   form.value?.setFieldValue('escopo', 'Atualização Cadastral - Meu Egresso')
   form.value?.setFieldValue('corpo', message)
-  if (Object.keys($route.params.destino)) {
-    form.value?.setFieldValue('email', Object.keys($route.params.destino))
+  if (Object.keys($route.params.destino).length === 1) {
+    form.value?.setFieldValue('email', $route.params.destino)
   }
 }
 onMounted(() => {
