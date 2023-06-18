@@ -155,11 +155,13 @@
               />
 
               <CustomCheckbox
+                class="mb-5"
                 name="academico.cotista.tipos.quilombolaIndigena"
                 label="Quilombola/Indigena"
                 :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
+
               <p
                 v-if="bools.cotista &&
                   !values.academico?.cotista?.tipos?.renda &&
@@ -170,6 +172,7 @@
               >
                 Marque pelo menos uma das opções acima!
               </p>
+              
             </div>
 
             <CustomCheckbox
@@ -571,8 +574,12 @@ const bools = ref({
 
 const selectOpts = ref({
   tipoAluno: ['Graduação', 'Pós-graduação'],
-  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Outros'],
+  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Programador', 'Analísta', 'Outros'],
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
+})
+
+const compCotista = computed(() => {
+  return bools.value.cotista
 })
 
 const countries = computed(() => {
@@ -636,6 +643,12 @@ async function handleSubmit (values: any) {
   if (values.academico.cotista.tipos.quilombolaIndigena) {
     cotas.push({
       id: 4
+    })
+  }
+
+  if (values.academico.cotista.tipos.pcd) {
+    cotas.push({
+      id: 5
     })
   }
 
@@ -763,7 +776,8 @@ const schema = object().shape({
         renda: boolean(),
         escola: boolean(),
         raca: boolean(),
-        quilombolaIndigena: boolean()
+        quilombolaIndigena: boolean(),
+        pcd: boolean()
       })
     }),
     bolsista: object({
@@ -830,6 +844,14 @@ onMounted(() => {
     setTimeout(() => {
       cidadeInput.value = ''
     }, 10)
+  })
+
+  watch(compCotista, (_, oldVal) => {
+    if (oldVal) {
+      ['renda', 'escola', 'raca', 'quilombolaIndigena', 'pcd'].forEach(field => {
+        form.value?.setFieldValue(`academico.cotista.tipos.${field}`, false)
+      })
+    }
   })
 
   if (storage.has('loggedUser')) {
