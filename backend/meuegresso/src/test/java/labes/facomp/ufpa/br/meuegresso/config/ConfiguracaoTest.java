@@ -16,10 +16,4 @@ public class ConfiguracaoTest {
             .withConfiguration(GreenMailConfiguration.aConfig().withUser("user", "admin"))
             .withPerMethodLifecycle(false);
 
-    @Test
-    void naoTeste() {
-        long a = 5 * 5;
-        assertEquals("Tudo certo", 25, a);
-    }
-
 }
