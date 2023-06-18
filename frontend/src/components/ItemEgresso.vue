@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-4 w-full px-6 sm:px-8 py-2 sm:py-3 border-gray-200 border-b-[1px] items-center">
+  <div class="flex sm:grid flex-col gap-2 sm:gap-0  sm:grid-cols-4 w-full px-6 sm:px-8 py-3 border-gray-200 border-b-[1px] items-start sm:items-center">
     <div class="flex gap-4 col-span-2 items-center">
       <RouterLink :to="`/egresso/${idEgresso}`">
         <div
@@ -32,7 +32,7 @@
       {{ dataCadastro.split('-').reverse().join('/') }}
     </h1>
 
-    <div class="flex justify-between">
+    <div class="flex w-full justify-between">
       <div
         id="status"
         class="flex w-24 py-1 justify-center items-center text-white text-sm font-normal rounded-2xl"

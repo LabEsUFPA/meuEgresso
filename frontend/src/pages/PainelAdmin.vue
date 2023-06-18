@@ -328,7 +328,7 @@
                   :id-egresso="egresso.idEgresso"
                   :nome="egresso.name"
                   :status="egresso.status"
-                  @update-dialog="$painelStore.fetchEgressos()"
+                  @update-data="$painelStore.fetchEgressos()"
                 />
               </div>
             </div>
