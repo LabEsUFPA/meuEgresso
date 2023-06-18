@@ -189,7 +189,7 @@ const toggleFilterApplied = (id:number) => {
   const filtro = $store.areasEmpregoFiltros.find(f => f.id === id)
   if (filtro) {
     filtro.selected = !filtro.selected
-    applyFilters(filtersById.value.filter(f => f === filtro.id))
+    applyFilters($store.areasEmpregoFiltros.filter(f => f.selected))
   }
 }
 
