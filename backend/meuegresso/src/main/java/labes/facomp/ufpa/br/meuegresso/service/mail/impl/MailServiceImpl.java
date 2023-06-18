@@ -212,7 +212,7 @@ public class MailServiceImpl implements MailService, Runnable {
 		Map<String, LocalDateTime> emailList = usuarioService.findByAtivo();
         List<MensagemModel> mensagemModel = mensagemRepository.findAll();
         for(int i=0; i<mensagemModel.size(); i++){
-            if(mensagemModel.get(i).getEmail() != null && checkData(emailList.get(mensagemModel.get(i).getEmail()), LocalDateTime.now()) == 0){
+            if(mensagemModel.get(i).getEmail() != null && checkData(mensagemModel.get(i).getData(), LocalDateTime.now()) == 0){
                 sendEmail(mensagemModel.get(i).getEmail(), mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
             }
             else{
