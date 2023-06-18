@@ -220,12 +220,14 @@ import { object, string, boolean } from 'yup'
 import { Form } from 'vee-validate'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import { useEmailStore } from 'src/store/EmailStore'
+import { useRoute } from 'vue-router'
 
 const emailStore = useEmailStore()
 
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const form = ref<typeof Form | null>(null)
+const $route = useRoute()
 
 const bools = ref({
   multiDestinatario: false,
@@ -308,6 +310,9 @@ async function fetchUpdateEmail () {
   [Assinatura]`
   form.value?.setFieldValue('escopo', 'Atualização Cadastral - Meu Egresso')
   form.value?.setFieldValue('corpo', message)
+  if (Object.keys($route.params.destino)) {
+    form.value?.setFieldValue('email', Object.keys($route.params.destino))
+  }
 }
 onMounted(() => {
   fetchUpdateEmail()
