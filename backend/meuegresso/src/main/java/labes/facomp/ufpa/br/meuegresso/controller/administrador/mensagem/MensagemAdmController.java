@@ -1,6 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.controller.administrador.mensagem;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -55,6 +57,20 @@ public class MensagemAdmController {
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
 	public MensagemStatusDTO consultarStatusMensagens() {
 		return mailService.getMensagensStatus();
+	}
+
+	/**
+	 * Endpoint responsável por retornar a lista com o agendamento de tarefas das mensagens no banco de
+	 * dados.
+	 *
+	 * @return {@link Map<String, ScheduledFuture<?>>} Lista de tarefas agendadas de mensagens salvos com seus status;
+	 * @author Pedro Inácio
+	 * @since 18/06/2023
+	 */
+	@GetMapping(value = "/tarefasMensagens")
+	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
+	public Map<String, ScheduledFuture<?>> consultarTarefasMensagens() {
+		return mailService.getTasks();
 	}
 
 	/**

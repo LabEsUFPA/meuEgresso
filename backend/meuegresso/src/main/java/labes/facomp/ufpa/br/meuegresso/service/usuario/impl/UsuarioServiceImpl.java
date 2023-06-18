@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
@@ -96,7 +96,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public Map<String, LocalDateTime> findByAtivo() {
 		Map<String, LocalDateTime> emailData = new HashMap<>(2);
-		usuarioRepository.findByEmailAndData().forEach(e -> emailData.put(e.get(0, String.class), LocalDateTime.ofInstant(e.get(1, Timestamp.class).getTimestamp().toInstant(), ZoneId.systemDefault())));
+		usuarioRepository.findByEmailAndData().forEach(e -> emailData.put(e.get(0, String.class), LocalDateTime.ofInstant(e.get(1, Timestamp.class).toInstant(), ZoneId.systemDefault())));
 		return emailData;
 	}
 
