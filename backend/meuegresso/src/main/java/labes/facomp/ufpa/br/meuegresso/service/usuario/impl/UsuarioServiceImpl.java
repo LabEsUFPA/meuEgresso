@@ -103,7 +103,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	// PageRequest.of(page, size, Sort.by(direction, "u.created_date")
 	@Override
-	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String status, Integer page, Integer size,
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size,
 			Direction direction) {
 
 		List<Tuple> tupla = usuarioRepository.findBySearch(nomeUsuario, status);

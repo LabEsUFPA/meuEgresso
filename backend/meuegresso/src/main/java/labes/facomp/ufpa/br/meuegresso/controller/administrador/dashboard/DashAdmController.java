@@ -69,16 +69,16 @@ public class DashAdmController {
 	 *
 	 * @param void
 	 * @return List<EgressoDashDTO>
-	 * @author Bruno Eiki
+	 * @author Bruno Eiki, Alfredo Gabriel
 	 * @since 06/06/2023
 	 */
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
+	// @PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<EgressoDashDTO> consultarEgressoDash(
 			@RequestParam(name = "nome_usuario", defaultValue = "") String nomeUsuario,
-			@RequestParam(name = "status", defaultValue = "") String status,
+			@RequestParam(name = "status", defaultValue = "incompleto") String[] status,
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
@@ -123,7 +123,8 @@ public class DashAdmController {
 
 		document.open();
 
-		List<EgressoDashDTO> egressos = usuarioService.findBySearch("", "", 0, 20, Direction.ASC).toList();
+		List<EgressoDashDTO> egressos = usuarioService.findBySearch("",
+				new String[] { "pendente", "inativo", "completo", "incompleto" }, 0, 20, Direction.ASC).toList();
 
 		document.add(new Paragraph("UNIVERSIDADE FEDERAL DO PARÁ"));
 		document.add(new Paragraph("Listagem de Egressos", bold));
