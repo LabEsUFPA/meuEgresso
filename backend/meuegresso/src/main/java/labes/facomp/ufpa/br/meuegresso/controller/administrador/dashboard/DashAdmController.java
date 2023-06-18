@@ -1,5 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.controller.administrador.dashboard;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -43,8 +46,6 @@ import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * Responsável por fornecer um end-point para o dashboard do administrador.
@@ -83,14 +84,16 @@ public class DashAdmController {
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
 		Page<EgressoDashDTO> egressos = usuarioService.findBySearch(nomeUsuario, status, page, size, direction);
 		egressos.forEach(e -> {
-			try {
-				e.setFoto(linkTo(methodOn(
-						EgressoPubController.class).getFotoEgresso(
-								e.getIdEgresso()))
-						.toUri()
-						.toString());
-			} catch (NotFoundFotoEgressoException e1) {
-				e1.printStackTrace();
+			if (e.getIdEgresso() != null) {
+				try {
+					e.setFoto(linkTo(methodOn(
+							EgressoPubController.class).getFotoEgresso(
+									e.getIdEgresso()))
+							.toUri()
+							.toString());
+				} catch (NotFoundFotoEgressoException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		return egressos;
