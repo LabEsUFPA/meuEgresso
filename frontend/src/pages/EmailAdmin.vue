@@ -35,6 +35,7 @@
         @submit="handleSubmit"
         @invalid-submit="handleFail"
         :validation-schema="schema"
+        ref="form"
       >
         <div class="flex justify-center">
           <div class="flex flex-col w-[960px] bg-white rounded-bl-2xl rounded-br-2xl overflow-hidden mx-4 sm:mx-6 ">
@@ -278,9 +279,6 @@ async function fetchUpdateEmail () {
   // const responseBack = await emailStore.fetchEmail()
   // const jsonEmail = JSON.parse(responseBack)
   // jsonResponse = jsonEmail
-
-  // console.log('jsonResponse')
-  // console.log(jsonResponse)
 
   // // const message = jsonEmail.corpo
   // if (jsonEmail.length > 1) {
