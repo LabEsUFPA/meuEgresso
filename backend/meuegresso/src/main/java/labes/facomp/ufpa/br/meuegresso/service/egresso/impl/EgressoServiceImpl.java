@@ -135,7 +135,11 @@ public class EgressoServiceImpl implements EgressoService {
 
 		Path file = Paths.get(String.format("%s/%s", uploadDirectory, fotoNomeString));
 		try {
-			return new UrlResource(file.toUri());
+			UrlResource url = new UrlResource(file.toUri());
+			if (!url.exists()) {
+				throw new NotFoundFotoEgressoException();
+			}
+			return url;
 		} catch (MalformedURLException e) {
 			throw new NotFoundFotoEgressoException();
 		}
