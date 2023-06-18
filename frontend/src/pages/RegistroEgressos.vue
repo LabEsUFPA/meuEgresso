@@ -27,17 +27,18 @@
 
           <div class="flex flex-wrap gap-4">
             <div
-              v-for="filtro in filtersMock.filter(f => f.selected)"
+              v-for="filtro in filtrosStatus"
               :key="filtro.id"
             >
               <FilterChip
                 :title="filtro.name"
                 :selected="filtro.selected"
-                :selectable="filtro.selectable"
-                @click="toggleFilterApplied(filtro.id)"
+                selectable
+                @click="toggleFilterApplied(filtro.name)"
               />
             </div>
 
+            <!--
             <button
               class="flex gap-3 px-4 py-2 rounded-3xl items-center text-cyan-800 bg-gray-200 font-medium"
               @click="openModalFilters()"
@@ -51,6 +52,7 @@
                 Adicionar filtro
               </p>
             </button>
+            -->
           </div>
         </div>
       </div>
@@ -117,7 +119,7 @@
             :path="mdiEmoticonSadOutline"
           />
           <h1 class="text-xl sm:text-2xl font-medium">
-            Nenhuma vaga encontrada
+            Nenhum egresso encontrado
           </h1>
         </div>
       </div>
@@ -132,86 +134,90 @@
       </div>
     </div>
 
+    <!--
     <ModalFilters
       v-if="loading"
       v-model="isModalFiltersOpen"
       :filters="filtersMock"
       @apply-filters="applyFilters"
     />
+    -->
   </div>
 </template>
 
 <script setup lang="ts">
 
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiAccountSearch, mdiFilterVariant, mdiPlus, mdiEmoticonSadOutline } from '@mdi/js'
+import { mdiAccountSearch, mdiFilterVariant, mdiEmoticonSadOutline } from '@mdi/js'
 
 import PageHeader from 'src/components/PageHeader.vue'
 import ItemEgresso from 'src/components/ItemEgresso.vue'
 import SearchBar from 'src/components/SearchBar.vue'
 import FilterChip from 'src/components/FilterChip.vue'
-import ModalFilters from 'src/components/ModalFilters.vue'
 import PageSelector from 'src/components/PageSelector.vue'
 import { usePainelStore } from 'src/store/PainelStore'
 
 const pesquisaValue = ref('')
-const loading = ref(false)
-const filtersById = ref([])
-
+const filtroStatusSelecionado = ref('')
 const currentPage = ref(0)
 
-const isModalFiltersOpen = ref(false)
+const loading = ref(false)
+
 const $store = usePainelStore()
 $store.fetchEgressos()
 console.log($store.egressos)
 
 onMounted(async () => {
   loading.value = true
+
+  watch(pesquisaValue, () => {
+    $store.fetchEgressos(pesquisaValue.value, filtroStatusSelecionado.value, currentPage.value)
+  })
+  watch(filtroStatusSelecionado, () => {
+    $store.fetchEgressos(pesquisaValue.value, filtroStatusSelecionado.value, currentPage.value)
+  })
+  watch(currentPage, () => {
+    $store.fetchEgressos(pesquisaValue.value, filtroStatusSelecionado.value, currentPage.value)
+  })
 })
 
 const updateData = () => {
   $store.fetchEgressos()
 }
 
-const openModalFilters = () => {
-  isModalFiltersOpen.value = true
-}
+const toggleFilterApplied = (name:string) => {
+  for (let i = 0; i < filtrosStatus.value.length; i++) {
+    filtrosStatus.value[i].selected = false
+  }
 
-const toggleFilterApplied = (id:number) => {
-  // const filtro = $store.areasEmpregoFiltros.find(f => f.id === id)
-
-  const filtro = filtersMock.find(f => f.id === id)
-
-  if (filtro) {
-    filtro.selected = !filtro.selected
-    applyFilters(filtersById.value.filter(f => f === filtro.id))
+  if (filtroStatusSelecionado.value === name) {
+    filtroStatusSelecionado.value = ''
+  } else {
+    filtroStatusSelecionado.value = name
+    const filtro = filtrosStatus.value.find(f => f.name === name)
+    if (filtro) {
+      filtro.selected = true
+    }
   }
 }
 
-const applyFilters = (filters:any) => {
-  filtersById.value = filters.map((elem: any) => (elem.id))
-}
-
-const filtersMock = [
+const filtrosStatus = ref([
   {
     id: 1,
     name: 'Completo',
-    selected: false,
-    selectable: true
+    selected: false
   },
   {
     id: 2,
     name: 'Pendente',
-    selected: false,
-    selectable: true
+    selected: false
   },
   {
     id: 3,
     name: 'Incompleto',
-    selected: false,
-    selectable: true
+    selected: false
   }
-]
+])
 
 </script>

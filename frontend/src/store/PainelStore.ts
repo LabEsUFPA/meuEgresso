@@ -25,14 +25,16 @@ export const usePainelStore = defineStore('Painel', {
   }),
 
   actions: {
-    async fetchEgressos () {
+    async fetchEgressos (nomeUsuario: string = '', status: string = '', page: number = 0) {
       const response = await Api.request({
         method: 'get',
         route: '/administrador/dashboard',
         params: {
+          nome_usuario: nomeUsuario,
+          status,
           direction: 'ASC',
           size: 10,
-          page: 0
+          page
         }
       })
 
