@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -117,10 +118,12 @@ public class AnuncioAdmController {
 	 * @see {@link ResponseType}
 	 * @since 22/04/2023
 	 */
-	@DeleteMapping
+	@DeleteMapping(value = "/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String deleteById(Integer id) throws DataNotDeletedException {
+
+	public String deleteById(@PathVariable Integer id) throws DataNotDeletedException {
 		if (anuncioService.deleteById(id)) {
 			return ResponseType.SUCCESS_DELETE.getMessage();
 		}

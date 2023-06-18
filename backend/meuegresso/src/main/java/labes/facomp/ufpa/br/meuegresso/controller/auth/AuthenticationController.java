@@ -1,8 +1,10 @@
 package labes.facomp.ufpa.br.meuegresso.controller.auth;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
@@ -13,8 +15,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,21 +28,27 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.config.properties.TokenProperties;
+import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthNewPasswordRequest;
+import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthRecoveryPasswordRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
-import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioRegistro;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.ExpireRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoValidoModel;
+import labes.facomp.ufpa.br.meuegresso.model.RecuperacaoSenhaModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoValidoService;
+import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
+import labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha.RecuperacaoSenhaService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -58,6 +68,8 @@ public class AuthenticationController {
 
 	private final JwtService jwtService;
 
+	private final MailService mailService;
+
 	private final AuthService authService;
 
 	private final UsuarioService usuarioService;
@@ -67,6 +79,8 @@ public class AuthenticationController {
 	private final EgressoValidoService egressosValidosService;
 
 	private final AuthenticationManager authenticationManager;
+
+	private final RecuperacaoSenhaService recuperacaoSenhaService;
 
 	/**
 	 * Endpoint responsavel por autentica um determinado usuário.
@@ -161,8 +175,33 @@ public class AuthenticationController {
 		}
 
 		usuarioModel.setGrupos(Set.of(Grupos.EGRESSO));
-		usuarioService.save(usuarioModel);
+		usuarioModel = usuarioService.save(usuarioModel);
+		mailService.usuarioCadastrado(usuarioModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
+	}
+
+	@PostMapping(value = "/recoveryPassword/{token}")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void recuperarSenha(@PathVariable String token, @RequestBody AuthNewPasswordRequest authNewPassReq)
+			throws UnauthorizedRequestException, ExpireRequestException {
+		RecuperacaoSenhaModel recuperacaoSenha = recuperacaoSenhaService.tokenValido(UUID.fromString(token));
+		if (recuperacaoSenha.getPasswordChange().booleanValue() || recuperacaoSenha.getPrazoFinal().isBefore(LocalDateTime.now())) {
+			throw new ExpireRequestException();
+		}
+		UsuarioModel usuarioModel = recuperacaoSenha.getUsuario();
+		usuarioModel.setPassword(authNewPassReq.getNovaSenha());
+		usuarioService.save(usuarioModel);
+		recuperacaoSenha.setPasswordChange(true);
+		recuperacaoSenhaService.save(recuperacaoSenha);
+	}
+
+	@PostMapping(value = "/recoveryPassword")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public ResponseType solicitacaoRecuperarSenha(@RequestBody AuthRecoveryPasswordRequest authPassReq,
+			@RequestHeader("Host") String header) {
+		recuperacaoSenhaService.cadastrarSolicitacaoRecuperacao(authPassReq.getEmail(),
+				authPassReq.getRedirect().orElse("https://" + header));
+		return ResponseType.SOLICITACAO_REALIZADA_SUCESSO;
 	}
 
 }

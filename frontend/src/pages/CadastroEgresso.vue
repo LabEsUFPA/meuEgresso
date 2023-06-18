@@ -197,7 +197,6 @@
               label="Instituição da pós-graduação"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
-              id="posGradLocal"
             />
 
             <CustomInput
@@ -524,6 +523,7 @@ import { useLoginStore } from 'src/store/LoginStore'
 import { Form } from 'vee-validate'
 import { computed, onMounted, ref, watch } from 'vue'
 import { boolean, mixed, object, string } from 'yup'
+import VueScrollTo from 'vue-scrollto'
 const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
 const $storeCadastro = useCadastroEgressoStore()
@@ -688,8 +688,10 @@ async function handleSubmit (values: any) {
 }
 
 function handleFail (e: any) {
-  console.log(e)
   camposFaltosos.value = true
+  const incorrectElements = Object.keys(e.errors)
+  const el = document.querySelector(`#${incorrectElements[0].replaceAll('.', '-')}`)
+  VueScrollTo.scrollTo(el, 800, { offset: -300 })
 }
 
 const schema = object().shape({
@@ -735,11 +737,6 @@ const schema = object().shape({
       return (typeof value).constructor(true)
     })
   }),
-  localizacao: object({
-    pais: string().required('Campo obrigatório'),
-    estado: string().required('Campo obrigatório'),
-    cidade: string().required('Campo obrigatório')
-  }),
   academico: object({
     matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres').matches(/^(\d{12})?$/),
     tipoAluno: string(),
@@ -783,6 +780,11 @@ const schema = object().shape({
     faixaSalarial: string().when('area', ([area], schema) => {
       return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     })
+  }),
+  localizacao: object({
+    pais: string().required('Campo obrigatório'),
+    estado: string().required('Campo obrigatório'),
+    cidade: string().required('Campo obrigatório')
   }),
   adicionais: object({
     palestras: boolean(),

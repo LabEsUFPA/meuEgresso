@@ -121,9 +121,10 @@
     <main class="flex-1 bg-neutral-100">
       <div class="h-fit">
         <CustomDialog
-          v-if="egressNotRegistered"
-          v-model="egressNotRegistered"
+          v-if="showEgressNotRegisteredModal"
+          v-model="showEgressNotRegisteredModal"
           :button-botton="true"
+          :hide-close-button="true"
           @close="$router.push({ path: '/cadastro' })"
         >
           <div class="flex flex-col items-center">
@@ -134,18 +135,24 @@
               :path="mdiAlertCircle"
             />
           </div>
-          <div class="flex flex-col w-full h-full justify-center text-center gap-y-8">
-            <h1 class="font-bold text-amber-500 text-3xl sm:text-5xl">
-              Cadastro pendente!
-            </h1>
-            <p class="text-gray-500 px-4 text-lg sm:px-32 sm:text-2xl">
-              É necessário realizar o cadastro completo para usar o sistema.
-            </p>
+          <div class="flex flex-col w-full h-full items-center justify-center">
+            <div class="flex flex-col h-full items-center justify-center text-center gap-y-8">
+              <h1 class="font-bold text-amber-500 text-3xl sm:text-5xl">
+                Cadastro pendente!
+              </h1>
+              <p class="text-gray-500 px-4 text-lg sm:px-32 sm:text-2xl">
+                É necessário realizar o cadastro completo para usar o sistema.
+              </p>
+            </div>
+            <CustomButton
+              class="mb-2"
+              @click="() => {showEgressNotRegisteredModal = false}"
+            >
+              Finalizar Cadastro
+            </CustomButton>
           </div>
         </CustomDialog>
-        <RouterView
-          v-else
-        />
+        <RouterView />
       </div>
     </main>
     <footer>
@@ -184,33 +191,36 @@ import CustomButton from '../components/CustomButton.vue'
 import UserDropdownMenu from './UserDropdownMenu.vue'
 import CustomDialog from './CustomDialog.vue'
 import LocalStorage from 'src/services/localStorage'
+import CookieService from 'src/services/cookieService'
 
-const store = useLoginStore()
-const userLogged = ref(store.userLogged)
+const $store = useLoginStore()
+const userLogged = ref($store.userLogged)
 const $router = useRouter()
-const egressNotRegistered = ref(false)
+const showEgressNotRegisteredModal = ref(false)
 const storage = new LocalStorage()
+const cookieService = new CookieService()
 
 onMounted(() => {
   checkEgressRegistration()
 })
 
-watch(() => store.userLogged, () => {
-  userLogged.value = store.userLogged
-  checkEgressRegistration()
+watch(() => $store.userLogged, () => {
+  userLogged.value = $store.userLogged
+
+  if (userLogged.value) {
+    checkEgressRegistration()
+  }
 })
 
 const checkEgressRegistration = () => {
-  try {
-    const loggedUser = JSON.parse(storage.get('loggedUser'))
-    if (loggedUser.scope === 'EGRESSO' && !loggedUser.isEgresso) {
-      egressNotRegistered.value = true
-      return
-    }
-    egressNotRegistered.value = false
-  } catch {
-    egressNotRegistered.value = false
-  }
+  const loggedUser = storage.getLoggedUser()
+  const isFirstAccess = cookieService.get('isFirstAccess')
+
+  if (
+    loggedUser?.scope === 'EGRESSO' &&
+    !loggedUser?.isEgresso &&
+    isFirstAccess !== 'yes'
+  ) showEgressNotRegisteredModal.value = true
 }
 
 </script>

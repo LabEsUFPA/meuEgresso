@@ -84,6 +84,10 @@ export default [
           requiresAuthAdmin: true,
           allowedScopes: ['ADMIN', 'SECRETARIO']
         }
+      },
+      {
+        path: 'redefinir-senha',
+        component: async () => await import('src/pages/RedefinirSenha.vue')
       }
     ]
   },
