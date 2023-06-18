@@ -179,7 +179,7 @@ public class MailServiceImpl implements MailService, Runnable {
         Integer sizes = mensagemModel.size();
         for(int i=0; i<sizes; i++){
             if(mensagemModel.get(i).getEmail() != null && checkData(mensagemModel.get(i).getData(), LocalDateTime.now()) == 0){
-                sendEmail(mensagemModel.get(i).getEmail(), mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                sendEmail(mensagemModel.get(i).getEmail(), mensagemModel.get(i).getEscopo(), mensagemModel.get(i).getCorpo());
                 removeScheduledTask(mensagemModel.get(i));
                 deleteById(mensagemModel.get(i).getId());
             }
@@ -188,17 +188,17 @@ public class MailServiceImpl implements MailService, Runnable {
                     if(Boolean.TRUE.equals(mensagemModel.get(i).getAnual())){
                         for (String email : emailList.keySet()) {
                             if(yearlyMessage(mensagemModel.get(i).getData(), LocalDateTime.now()) == 0){
-                                sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                                sendEmail(email, mensagemModel.get(i).getEscopo(), mensagemModel.get(i).getCorpo());
                             }
                             if(yearlyMessage(emailList.get(email), LocalDateTime.now()) == 0 && mensagemModel.get(i).getId() == 1){
-                                sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                                sendEmail(email, mensagemModel.get(i).getEscopo(), mensagemModel.get(i).getCorpo());
                             }
                     }
                     }
                     else{
                         for (String email : emailList.keySet()) {
                             if(semesterMessage(mensagemModel.get(i).getData(), LocalDateTime.now()) == 0){
-                                sendEmail(email, mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                                sendEmail(email, mensagemModel.get(i).getEscopo(), mensagemModel.get(i).getCorpo());
                             }
                     }
                     }
