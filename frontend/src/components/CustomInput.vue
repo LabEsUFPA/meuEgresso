@@ -51,7 +51,28 @@
               v-else-if="iconPath"
             />
           </div>
+          <money3
+            v-if="money"
+            class="col-span-6 focus:outline-none bg-transparent"
+            :class="iconPath ? 'col-span-7' : 'col-span-8'"
+            v-bind="config"
+            :placeholder="placeholder"
+            :disabled="disabled"
+            :type="type"
+            :name="name"
+            :required="required"
+            :step="step"
+            :maxlength="maxLength"
+            @update:model-value="handleInput"
+            v-model="config.currentValue"
+            @focus="() => {
+              focused = true
+              config.allowBlank = false
+            }"
+            @blur="focused = false; handleBlur()"
+          />
           <OInput
+            v-else
             :root-class="classNames({
               ['col-span-7']: iconPath,
               ['col-span-8']: !iconPath
@@ -149,6 +170,7 @@ interface Props {
   errorMessage?: string,
   customErrorMessage?: boolean,
   withoutValidation?: boolean
+  money?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -166,11 +188,29 @@ const props = withDefaults(defineProps<Props>(), {
   classHelperText: '',
   errorMessage: '',
   customErrorMessage: false,
-  withoutValidation: false
+  withoutValidation: false,
+  money: false
 })
 
 const focused = ref(false)
 const name = toRef(props, 'name')
+const config = ref({
+  prefix: 'R$ ',
+  suffix: '',
+  masked: false,
+  thousands: '.',
+  decimal: ',',
+  precision: 2,
+  allowBlank: true,
+  disableNegative: true,
+  disabled: false,
+  min: null,
+  max: null,
+  minimumNumberOfCharacters: 0,
+  shouldRound: true,
+  focusOnRight: true,
+  currentValue: 'null'
+})
 
 const {
   value: inputValue,
@@ -181,6 +221,9 @@ const {
 } = useField(name, undefined)
 
 function handleInput (e: Event) {
+  if (props.money && config.value.currentValue === 'null') {
+    return
+  }
   $emit('update:value', e)
   handleChange(e)
 }

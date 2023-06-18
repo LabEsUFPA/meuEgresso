@@ -8,7 +8,7 @@
       <template #default>
         <o-upload
           v-model="file"
-          accept="image/png, image/jpg, image/gif"
+          accept="image/png, image/jpg, image/jpeg, image/gif"
           @update:model-value="handleUpload"
           drag-drop
         >

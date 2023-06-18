@@ -1,6 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.service.setoratuacao.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -64,6 +66,14 @@ public class SetorAtuacaoServiceImpl implements SetorAtuacaoService {
     @Override
     public boolean existByNome(String nome) {
         return setorAtuacaoRepository.existsByNomeIgnoreCase(nome);
+    }
+
+    @Override
+    public Map<String, Integer> countEgressoBySetorAtuacao() {
+        Map<String, Integer> contagem = new HashMap<>(6);
+        setorAtuacaoRepository.countEgressoBySetorAtuacao().stream()
+                .forEach(e -> contagem.put(e.get(0, String.class), e.get(1, Long.class).intValue()));
+        return contagem;
     }
 
 }

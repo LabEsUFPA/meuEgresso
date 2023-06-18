@@ -1,7 +1,7 @@
 
 <template>
   <button
-    class="flex flex-row pr-1 items-center w-fit focus-visible:rounded-sm"
+    class="flex flex-row pr-1 items-center w-fit focus-visible:rounded-sm mb-4"
     role="checkbox"
     :class="{
       ['cursor-not-allowed opacity-80']: disabled,
@@ -41,7 +41,19 @@
     >
       {{ label }}
     </label>
+    <sup
+      class="text-red-500"
+      v-if="value"
+    >
+      *
+    </sup>
   </button>
+  <p
+    class="text-red-500 text-sm mt-1 position-absolute display-none "
+    v-if="required"
+  >
+    Por favor, marque pelo menos uma das opções abaixo:
+  </p>
 </template>
 
 <script lang="ts" setup>
@@ -54,6 +66,7 @@ const props = defineProps<{
   label: string
   name: string
   disabled?: boolean
+  required?: boolean
 }>()
 type Booleanish = 'true' | 'false'
 const $emit = defineEmits(['update:value'])

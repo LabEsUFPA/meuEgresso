@@ -8,9 +8,9 @@ describe('ModalFilters', () => {
       props: {
         modelValue: false,
         filters: [
-          { id: 1, name: 'Filtro 1', applied: false },
-          { id: 2, name: 'Filtro 2', applied: false },
-          { id: 3, name: 'Filtro 3', applied: false }
+          { id: 1, name: 'Filtro 1', selected: false, selectable: true },
+          { id: 2, name: 'Filtro 2', selected: false, selectable: true },
+          { id: 3, name: 'Filtro 3', selected: false, selectable: true }
         ]
       }
     })
@@ -25,9 +25,9 @@ describe('ModalFilters', () => {
       props: {
         modelValue: false,
         filters: [
-          { id: 1, name: 'Filtro 1', applied: false },
-          { id: 2, name: 'Filtro 2', applied: false },
-          { id: 3, name: 'Filtro 3', applied: false }
+          { id: 1, name: 'Filtro 1', selected: false, selectable: true },
+          { id: 2, name: 'Filtro 2', selected: false, selectable: true },
+          { id: 3, name: 'Filtro 3', selected: false, selectable: true }
         ]
       }
     })

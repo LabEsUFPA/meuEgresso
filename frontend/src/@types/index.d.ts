@@ -5,6 +5,7 @@ export namespace API {
     method: string
     route: string
     body?: Record<string, any>
+    params?: Record<string, any>
   }
 
   export interface Response {
@@ -39,6 +40,7 @@ export namespace models {
     password: string
     email: string
     nome: string
+    registration?: string
     egresso?: {
       id: number
       matricula: number
@@ -252,6 +254,83 @@ export namespace models {
       value: number
       name: string
     }
+
+    export interface PieChartModel {
+      values: PieChartSeries[]
+      legend: string[]
+    }
+
+    export interface BarChartModel {
+      x: string[]
+      y: number[]
+    }
+
+    export interface AllChartSeries {
+      company: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      postGraduateCourse: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      postGraduateLocal: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      scholarshipType: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      remuneration: {
+        series: BarChartModel
+        error: boolean
+      } | null
+      interestInPost: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      acting: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      scholar: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      quotas: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      shareHolder: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      postGraduate: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      student: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      wage: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      sector: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      gender: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      age: {
+        series: BarChartModel
+        error: boolean
+      } | null
+    }
   }
 
   export interface AnuncioModel {
@@ -285,48 +364,8 @@ export namespace models {
   export interface areasEmpregoFiltro {
     id: number
     name: string
-    applied: boolean
+    selected: boolean
+    selectable: boolean
   }
 
 }
-
-// export interface EgressoModelUpdate {
-//   nascimento: string
-//   generoId: id
-//   matricula: string | null
-//   cotista: boolean
-//   bolsista: boolean
-//   interesseEmPos: boolean
-//   lattes?: string | null
-//   linkedin?: string | null
-//   posGraduacao: boolean
-//   cotas: Array<{
-//     id: id
-//   }> | null
-//   nome: string
-//   palestras?: {
-//     descricao?: string
-//   } | null
-//   contribuicao: {
-//     descricao: string
-//   }
-//   depoimento: {
-//     descricao: string
-//   }
-//   bolsaId?: id | null
-//   remuneracaoBolsa?: number
-//   empresa: {
-//     faixaSalarialId?: id | null
-//     setorAtuacao?: string
-//     nome?: string
-//     endereco?: {
-//       pais: string
-//       estado: string
-//       cidade: string
-//     }
-//   } | null
-//   titulacao?: {
-//     instituicao?: string
-//     curso?: string
-//   } | null
-// }

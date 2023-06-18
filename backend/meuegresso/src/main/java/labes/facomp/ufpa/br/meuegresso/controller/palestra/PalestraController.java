@@ -24,7 +24,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.palestra.PalestraDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.PalestraModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.palestra.PalestraService;
@@ -82,7 +81,7 @@ public class PalestraController {
 	 * Endpoint responsavel por cadastrar o palestra.
 	 *
 	 * @param palestraDTO Estrutura de dados contendo as informações necessárias
-	 *                        para persistir o palestra.
+	 *                    para persistir o palestra.
 	 * @return String confirmando a transação.
 	 * @author Alfredo Gabriel
 	 * @see {@link PalestraDTO}
@@ -91,11 +90,10 @@ public class PalestraController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarPalestra(@RequestBody @Valid PalestraDTO palestraDTO, JwtAuthenticationToken token) {
+	public String cadastrarPalestra(@RequestBody @Valid PalestraDTO palestraDTO) {
 		PalestraModel palestraModel = mapper.map(palestraDTO, PalestraModel.class);
-		palestraModel.setEgresso(EgressoModel.builder().id(jwtService.getIdUsuario(token)).build());
 		palestraService.save(palestraModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -116,10 +114,10 @@ public class PalestraController {
 	public String atualizarPalestra(@RequestBody @Valid PalestraDTO palestraDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (palestraService.existsByIdAndCreatedById(palestraDTO.getId(), jwtService.getIdUsuario(token))) {
-			PalestraModel palestraModel = palestraService.findByEgressoId(jwtService.getIdUsuario(token));
+			PalestraModel palestraModel = palestraService.findByEgressoUsuarioId(jwtService.getIdUsuario(token));
 			palestraModel.setDescricao(palestraDTO.getDescricao());
 			palestraService.update(palestraModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}
@@ -128,21 +126,16 @@ public class PalestraController {
 	 * Endpoint responsavel por deletar a palestra do egresso.
 	 *
 	 * @param palestra Estrutura de dados contendo as informações
-	 *                     necessárias para deletar a palestra.
+	 *                 necessárias para deletar a palestra.
 	 * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String deleteById(@PathVariable(name = "id") Integer id) {
-		if (palestraService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
-		} else {
-			return ResponseType.FAIL_DELETE.getMessage();
-		}
+	public boolean deleteById(Integer id) {
+		return palestraService.deleteById(id);
 	}
 
 }

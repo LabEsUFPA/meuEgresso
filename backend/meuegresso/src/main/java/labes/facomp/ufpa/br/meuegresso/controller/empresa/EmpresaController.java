@@ -93,7 +93,7 @@ public class EmpresaController {
 	public String cadastrarEmpresa(@RequestBody @Valid EmpresaBasicDTO empresaDTO) {
 		EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);
 		empresaService.save(empresaModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -112,10 +112,10 @@ public class EmpresaController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarEmpresa(@RequestBody @Valid EmpresaBasicDTO empresaDTO,
 			JwtAuthenticationToken token) throws InvalidRequestException, UnauthorizedRequestException {
-		if (jwtService.getIdUsuario(token).equals(empresaDTO.getId())) {
+		if (empresaService.existsByIdAndCreatedById(empresaDTO.getId(), jwtService.getIdUsuario(token))) {
 			EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);
 			empresaService.update(empresaModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}
@@ -128,16 +128,11 @@ public class EmpresaController {
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
 	 */
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String deleteById(@PathVariable(name = "id") Integer id) {
-		if (empresaService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
-		} else {
-			return ResponseType.FAIL_DELETE.getMessage();
-		}
+	public boolean deleteById(Integer id) {
+		return empresaService.deleteById(id);
 	}
 
 }

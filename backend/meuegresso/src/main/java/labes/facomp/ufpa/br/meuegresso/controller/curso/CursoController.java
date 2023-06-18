@@ -3,6 +3,7 @@ package labes.facomp.ufpa.br.meuegresso.controller.curso;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -56,10 +55,9 @@ public class CursoController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
-	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<CursoDTO> consultarCursos() {
-		return mapper.map(cursoService.findAll(), new TypeReference<List<CursoDTO>>() {
+		return mapper.map(cursoService.findAll(), new TypeToken<List<CursoDTO>>() {
 		}.getType());
 	}
 
@@ -94,7 +92,7 @@ public class CursoController {
 	public String cadastrarCurso(@RequestBody @Valid CursoDTO cursoDTO) {
 		CursoModel cursoModel = mapper.map(cursoDTO, CursoModel.class);
 		cursoService.save(cursoModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -110,13 +108,12 @@ public class CursoController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	@PreAuthorize("hasRole('EGRESSO') or hasRole('SECRETARIA') or hasRole('ADMIN')")
 	public String atualizarCurso(@RequestBody @Valid CursoDTO cursoDTO, JwtAuthenticationToken token)
 			throws UnauthorizedRequestException {
-		if (jwtService.getIdUsuario(token).equals(cursoDTO.getId())) {
+		if (cursoService.existsByIdAndCreatedById(cursoDTO.getId(), jwtService.getIdUsuario(token))) {
 			CursoModel cursoModel = mapper.map(cursoDTO, CursoModel.class);
 			cursoService.save(cursoModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}
@@ -130,16 +127,11 @@ public class CursoController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String deleteById(@PathVariable(name = "id") Integer id) {
-		if (cursoService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
-		} else {
-			return ResponseType.FAIL_DELETE.getMessage();
-		}
+	public boolean deleteById(Integer id) {
+		return cursoService.deleteById(id);
 	}
 
 }

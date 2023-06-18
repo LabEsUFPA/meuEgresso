@@ -1,5 +1,5 @@
 <template>
-  <MapaSociodemografico
+  <SociodemographicMap
     v-if="!loading"
     :egress-list="markers"
   />
@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useHomeStore } from 'src/store/HomeStore'
-import MapaSociodemografico from 'src/components/MapaSociodemografico.vue'
+import SociodemographicMap from 'src/components/SociodemographicMap.vue'
 import { City } from 'country-state-city'
 import { type models } from 'src/@types'
 interface EgressoMapa extends models.EgressoMapa {}
@@ -16,9 +16,9 @@ interface EgressoMapa extends models.EgressoMapa {}
 const loading = ref(true)
 const markers = ref<any>([])
 
-onMounted(() => {
+onMounted(async () => {
   window.scrollTo(0, 0)
-  getEgresso()
+  await getEgresso()
 })
 
 const getEgresso = async () => {
@@ -45,6 +45,4 @@ const getEgresso = async () => {
   markers.value = filtered
   loading.value = false
 }
-
-
 </script>

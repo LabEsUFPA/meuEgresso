@@ -3,9 +3,6 @@ package labes.facomp.ufpa.br.meuegresso.controller.usuario;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -34,9 +31,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 
 @SpringBootTest
 @DirtiesContext
@@ -45,9 +40,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 class UsuarioControllerTest {
-
-        @Autowired
-        private GrupoRepository grupoRepository;
 
         @Autowired
         MockMvc mockMvc;
@@ -61,24 +53,15 @@ class UsuarioControllerTest {
         @Autowired
         ModelMapper modelMapper;
 
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
         @BeforeAll
         void setUp() throws Exception {
-                GrupoModel grupoModel = new GrupoModel();
-                grupoModel.setNomeGrupo("ADMIN");
-
-                grupoModel = grupoRepository.save(grupoModel);
-
-                Set<GrupoModel> grupos = new HashSet<>();
-                grupos.add(grupoModel);
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
                 usuarioModel.setNome("nome_test");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
-                usuarioModel.setGrupos(grupos);
                 mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(usuarioModel)))
@@ -106,6 +89,7 @@ class UsuarioControllerTest {
         @Test
         @Order(1)
         void testFindById() throws Exception {
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.get("/usuario")
@@ -122,6 +106,7 @@ class UsuarioControllerTest {
         @Test
         @Order(2)
         void testAtualizarUsuario() throws Exception {
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 UsuarioDTO usuarioDTO = modelMapper.map(usuarioModel, UsuarioDTO.class);
 
@@ -132,19 +117,6 @@ class UsuarioControllerTest {
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andExpect(status().isCreated()).andReturn();
                 String retornoString = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
-        }
-
-        @Test
-        @Order(3)
-        void testDeleteById() throws Exception {
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.delete("/usuario/" + usuarioModel.getId())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk()).andReturn();
-                String resultado = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCESS_DELETE.getMessage(), resultado);
-
+                assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
         }
 }

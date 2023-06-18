@@ -58,11 +58,11 @@ public class EgressoEmpresaController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
-    @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public List<EgressoMapaDTO> consultarEgressoEmpresas() {
-        return mapper.map(egressoEmpresaService.findAll(), new TypeToken<List<EgressoEmpresaDTO>>() {
-        }.getType());
-    }
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public List<EgressoMapaDTO> consultarEgressoEmpresas() {
+		return mapper.map(egressoEmpresaService.findAll(), new TypeToken<List<EgressoEmpresaDTO>>() {
+		}.getType());
+	}
 
 	/**
 	 * Endpoint responsável por retornar um egressoEmpresa por sua ID.
@@ -99,7 +99,7 @@ public class EgressoEmpresaController {
 	public String cadastrarEgressoEmpresa(@RequestBody @Valid EgressoEmpresaDTO egressoEmpresaDTO) {
 		EgressoEmpresaModel egressoEmpresaModel = mapper.map(egressoEmpresaDTO, EgressoEmpresaModel.class);
 		egressoEmpresaService.save(egressoEmpresaModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class EgressoEmpresaController {
 		if (egressoEmpresaService.existsByIdAndCreatedById(egressoEmpresaDTO.getId(), jwtService.getIdUsuario(token))) {
 			EgressoEmpresaModel egressoEmpresaModel = mapper.map(egressoEmpresaDTO, EgressoEmpresaModel.class);
 			egressoEmpresaService.update(egressoEmpresaModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}
@@ -139,12 +139,10 @@ public class EgressoEmpresaController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(params = { "egressoId", "empresaId" })
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String deleteById(@RequestParam(required = false) Integer egressoId, @RequestParam(required = false) Integer empresaId) {
-		if (egressoEmpresaService.deleteById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).build())) {
-			return ResponseType.SUCESS_DELETE.getMessage();
-		} else {
-			return ResponseType.FAIL_DELETE.getMessage();
-		}
+	public boolean deleteById(@RequestParam(required = false) Integer egressoId,
+			@RequestParam(required = false) Integer empresaId) {
+		return egressoEmpresaService
+				.deleteById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).build());
 	}
 
 }

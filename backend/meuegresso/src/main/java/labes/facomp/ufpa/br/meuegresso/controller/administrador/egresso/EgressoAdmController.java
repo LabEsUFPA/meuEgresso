@@ -16,9 +16,9 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
 
-
 /**
- * Responsável por fornecer um endpoint ao administrador para deletar foto de Egresso.
+ * Responsável por fornecer um endpoint ao administrador para deletar foto de
+ * Egresso.
  * 
  * @author Camilo Santos
  * @since 13/05/2023
@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/administrador/egresso")
 public class EgressoAdmController {
-    
+
     private final EgressoService egressoService;
 
     @ResponseStatus(code = HttpStatus.OK)
@@ -40,7 +40,7 @@ public class EgressoAdmController {
             egressoService.deleteFile(egressoModel.getFotoNome());
             egressoModel.setFotoNome(null);
             egressoService.update(egressoModel);
-            return ResponseType.SUCESS_IMAGE_DELETE.getMessage();
+            return ResponseType.SUCCESS_IMAGE_DELETE.getMessage();
         }
         return ResponseType.FAIL_IMAGE_DELETE.getMessage();
     }

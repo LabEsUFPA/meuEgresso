@@ -25,7 +25,6 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.depoimento.DepoimentoService;
 import lombok.RequiredArgsConstructor;
@@ -91,11 +90,10 @@ public class DepoimentoController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarDepoimento(@RequestBody @Valid DepoimentoDTO depoimentoDTO, JwtAuthenticationToken token) {
+	public String cadastrarDepoimento(@RequestBody @Valid DepoimentoDTO depoimentoDTO) {
 		DepoimentoModel depoimentoModel = mapper.map(depoimentoDTO, DepoimentoModel.class);
-		depoimentoModel.setEgresso(EgressoModel.builder().id(jwtService.getIdUsuario(token)).build());
 		depoimentoService.save(depoimentoModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -115,11 +113,10 @@ public class DepoimentoController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarDepoimento(@RequestBody @Valid DepoimentoDTO depoimentoDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (jwtService.getIdUsuario(token).equals(depoimentoDTO.getId())) {
+		if (depoimentoService.existsByIdAndCreatedById(depoimentoDTO.getId(), jwtService.getIdUsuario(token))) {
 			DepoimentoModel depoimentoModel = mapper.map(depoimentoDTO, DepoimentoModel.class);
-			depoimentoModel.setEgresso(EgressoModel.builder().id(jwtService.getIdUsuario(token)).build());
 			depoimentoService.update(depoimentoModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}
@@ -133,16 +130,11 @@ public class DepoimentoController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String deleteById(@PathVariable(name = "id") Integer id) {
-		if (depoimentoService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
-		} else {
-			return ResponseType.FAIL_DELETE.getMessage();
-		}
+	public boolean deleteById(Integer id) {
+		return depoimentoService.deleteById(id);
 	}
 
 }

@@ -103,10 +103,10 @@ public class AnuncioController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO, JwtAuthenticationToken token) {
+	public String cadastrarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO) {
 		AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
 		anuncioService.save(anuncioModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class AnuncioController {
 		if (anuncioService.existsByIdAndCreatedById(anuncioDTO.getId(), jwtService.getIdUsuario(token))) {
 			AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
 			anuncioService.update(anuncioModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}
@@ -145,11 +145,8 @@ public class AnuncioController {
 	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String deletarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO) {
-
-        AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
-        anuncioService.deleteById(anuncioModel.getId());
-        return ResponseType.SUCESS_DELETE.getMessage();
-    }
+	public boolean deleteById(Integer id) {
+		return anuncioService.deleteById(id);
+	}
 
 }

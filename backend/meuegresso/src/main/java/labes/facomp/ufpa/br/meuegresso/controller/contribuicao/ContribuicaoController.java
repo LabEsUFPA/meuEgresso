@@ -25,7 +25,6 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.contribuicao.ContribuicaoService;
 import lombok.RequiredArgsConstructor;
@@ -91,12 +90,10 @@ public class ContribuicaoController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO,
-			JwtAuthenticationToken token) {
+	public String cadastrarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO) {
 		ContribuicaoModel contribuicaoModel = mapper.map(contribuicaoDTO, ContribuicaoModel.class);
-		contribuicaoModel.setEgresso(EgressoModel.builder().id(contribuicaoDTO.getEgressoId()).build());
 		contribuicaoService.save(contribuicaoModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
@@ -117,10 +114,11 @@ public class ContribuicaoController {
 	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (contribuicaoService.existsByIdAndCreatedById(contribuicaoDTO.getId(), jwtService.getIdUsuario(token))) {
-			ContribuicaoModel contribuicaoModel = contribuicaoService.findById(contribuicaoDTO.getId());
+			ContribuicaoModel contribuicaoModel = contribuicaoService
+					.findByEgressoUsuarioId(jwtService.getIdUsuario(token));
 			contribuicaoModel.setDescricao(contribuicaoDTO.getDescricao());
 			contribuicaoService.update(contribuicaoModel);
-			return ResponseType.SUCESS_UPDATE.getMessage();
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
 	}
@@ -134,16 +132,11 @@ public class ContribuicaoController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String deleteById(@PathVariable(name = "id") Integer id) {
-		if (contribuicaoService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
-		} else {
-			return ResponseType.FAIL_DELETE.getMessage();
-		}
+	public boolean deleteById(Integer id) {
+		return contribuicaoService.deleteById(id);
 	}
 
 }

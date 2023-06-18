@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "anuncio")
 @EqualsAndHashCode(callSuper = false)
+
 @Builder
 public class AnuncioModel extends Auditable {
 

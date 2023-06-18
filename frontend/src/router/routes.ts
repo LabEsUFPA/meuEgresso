@@ -20,7 +20,7 @@ export default [
         path: '/cadastro-admin',
         component: async () => await import('src/pages/CadastroAdmin.vue'),
         meta: {
-          requiresAuth: true
+          requiresAuthAdmin: true
         }
       },
       {
