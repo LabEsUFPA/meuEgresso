@@ -55,7 +55,7 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@GetMapping
-	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public MensagemStatusDTO consultarStatusMensagens() {
 		return mailService.getMensagensStatus();
 	}
@@ -71,7 +71,7 @@ public class MensagemAdmController {
 	 * @since 18/06/2023
 	 */
 	@GetMapping(value = "/tarefasMensagens")
-	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public Map<String, ScheduledFuture<?>> consultarTarefasMensagens() {
 		return mailService.getTasks();
 	}
@@ -85,7 +85,7 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@GetMapping(value = "/consultarMensagens")
-	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public List<MensagemDTO> consultarMensagens() {
 		return mapper.map(mailService.findAll(), new TypeToken<List<MensagemDTO>>() {
 		}.getType());
@@ -144,7 +144,7 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@PostMapping
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public String save(@RequestBody @Valid MensagemDTO mensagemDTO) {
 		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
