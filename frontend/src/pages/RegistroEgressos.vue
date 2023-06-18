@@ -98,6 +98,7 @@
               :nome="egresso.name"
               :data-cadastro="egresso.cadastro"
               :status="egresso.status"
+              :foto="egresso.foto"
               @update-data="() => updateData()"
             />
           </div>
@@ -165,11 +166,10 @@ const currentPage = ref(0)
 const loading = ref(false)
 
 const $store = usePainelStore()
-$store.fetchEgressos()
-console.log($store.egressos)
 
 onMounted(async () => {
   loading.value = true
+  $store.fetchEgressos()
 
   watch(pesquisaValue, () => {
     $store.fetchEgressos(pesquisaValue.value, filtroStatusSelecionado.value, currentPage.value)

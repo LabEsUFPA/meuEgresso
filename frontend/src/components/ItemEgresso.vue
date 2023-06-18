@@ -2,8 +2,18 @@
   <div class="grid grid-cols-4 w-full px-6 sm:px-8 py-2 sm:py-3 border-gray-200 border-b-[1px] items-center">
     <div class="flex gap-4 col-span-2 items-center">
       <RouterLink :to="`/egresso/${idEgresso}`">
-        <div class="flex w-8 h-8 justify-center items-center rounded-3xl bg-cyan-800">
+        <div
+          class="flex w-8 h-8 justify-center items-center rounded-full bg-cyan-800 overflow-hidden"
+        >
+          <img
+            v-if="fotoUsuario !== '' && foto"
+            @error="fotoUsuario = ''"
+            :src="fotoUsuario"
+          >
+
           <SvgIcon
+            v-else
+
             type="mdi"
             size="16"
             :path="mdiAccount"
@@ -43,7 +53,7 @@
 
 <script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon'
-import { capitalize } from 'vue'
+import { ref, capitalize } from 'vue'
 import { mdiAccount } from '@mdi/js'
 import AdminOptionsDropdown from './AdminOptionsDropdown.vue'
 
@@ -53,13 +63,16 @@ const statusColor: any = {
   incompleto: 'bg-indigo-800'
 }
 
-defineProps<{
+const props = defineProps<{
     id: number,
     idEgresso?: number,
     nome: string,
     dataCadastro: string,
     status: string
+    foto: string
 }>()
+
+const fotoUsuario = ref(props.foto)
 
 defineEmits(['updateData'])
 

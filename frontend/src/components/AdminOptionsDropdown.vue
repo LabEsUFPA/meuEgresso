@@ -19,7 +19,7 @@
     </template>
 
     <ODropdownItem
-      v-for="(opcao, index) in opcoesAdmin.filter(op => op.status.includes(status))"
+      v-for="(opcao, index) in opcoesAdmin.filter(op => op.status.includes(status) && op.habilitado)"
       :key="index"
       aria-role="listitem"
       override
@@ -151,6 +151,7 @@ import { useRouter } from 'vue-router'
 import CustomDialog from './CustomDialog.vue'
 import CustomButton from './CustomButton.vue'
 import { usePainelStore } from 'src/store/PainelStore'
+import { useLoginStore } from 'src/store/LoginStore'
 
 const props = defineProps<{
     id: number
@@ -163,8 +164,10 @@ const props = defineProps<{
 const $emits = defineEmits(['updateData'])
 
 const $store = usePainelStore()
-
 const $router = useRouter()
+const $login = useLoginStore()
+
+const userScope = ref($login.getLoggedUser().scope)
 const isConfirmationOpen = ref<true | false>(false)
 const isLoadingAction = ref<true | false | null>(null)
 const action = ref('')
@@ -212,10 +215,10 @@ function enviaEmail () {
 }
 
 const opcoesAdmin = [
-  { titulo: 'Aprovar cadastro', status: ['pendente'], click: aprovaCadastro },
-  { titulo: 'Editar cadastro', status: ['completo', 'pendente'], click: editaCadastro },
-  { titulo: 'Enviar e-mail', status: ['incompleto', 'completo', 'pendente'], click: enviaEmail },
-  { titulo: 'Excluir cadastro', status: ['completo', 'pendente'], click: excluiCadastro }
+  { titulo: 'Aprovar cadastro', status: ['pendente'], click: aprovaCadastro, habilitado: true },
+  { titulo: 'Editar cadastro', status: ['completo', 'pendente'], click: editaCadastro, habilitado: true },
+  { titulo: 'Enviar e-mail', status: ['incompleto', 'completo', 'pendente'], click: enviaEmail, habilitado: true },
+  { titulo: 'Excluir cadastro', status: ['completo', 'pendente'], click: excluiCadastro, habilitado: userScope.value === 'ADMIN' }
 ]
 
 const mensagemDialog: any = {
