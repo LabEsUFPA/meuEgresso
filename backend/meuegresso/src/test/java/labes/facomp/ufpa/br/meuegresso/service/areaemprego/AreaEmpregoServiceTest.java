@@ -102,18 +102,7 @@ public class AreaEmpregoServiceTest {
         BDDMockito.given(areaEmpregoRepository.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
 
-        UsuarioModel usuarioModel = new UsuarioModel();
-                usuarioModel.setUsername("username");
-                usuarioModel.setNome("nome_test");
-                usuarioModel.setEmail("teste@gmail.com");
-                usuarioModel.setPassword("teste123");
-                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
-        AreaEmpregoModel emprego = getMockAreaEmprego();
-        emprego.setCreatedBy(usuarioModel);
-
-        Boolean response = areaEmpregoService.existsByIdAndCreatedById(
-                emprego.getId(),
-                emprego.getCreatedBy().getId());
+        Boolean response = areaEmpregoService.existsByIdAndCreatedById(1,1);
         assertTrue(response);
     }
 
