@@ -203,10 +203,10 @@ const userEmail = ref('')
 
 onMounted(() => {
   if ($loginStore.userLogged) {
-    tipoUsuario.value = $loginStore.getLoggedUser().scope
+    tipoUsuario.value = $loginStore.getLoggedUser()?.scope ?? ''
   }
   if (tipoUsuario.value !== 'ADMIN') {
-    userEmail.value = $loginStore.getLoggedUser()?.email
+    userEmail.value = ($loginStore.getLoggedUser() as any)?.email ?? ''
   }
 })
 
