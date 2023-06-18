@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import labes.facomp.ufpa.br.meuegresso.dto.publico.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
 

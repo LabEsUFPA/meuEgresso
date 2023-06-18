@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,6 +24,7 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Implementação do Serviço responsável pelas rotinas internas da aplicação
@@ -34,6 +34,7 @@ import lombok.RequiredArgsConstructor;
  * @since 26/03/2023
  * @version 1.0
  */
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class UsuarioServiceImpl implements UsuarioService {
@@ -55,6 +56,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		try {
 			return usuarioRepository.findByUsernameIgnoreCase(login).orElseThrow();
 		} catch (NoSuchElementException e) {
+			log.error("User not found", e);
 			throw new UsernameNotFoundException("User not found", e);
 		}
 	}
@@ -118,7 +120,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 						t.get(5, Timestamp.class).toLocalDateTime().toLocalDate(), // createdDate
 						t.get(6, String.class), // foto
 						t.get(7, String.class))) // status
-				.collect(Collectors.toList());
+				.toList();
 
 		Pageable paging = PageRequest.of(page, size, Sort.by(direction, "u.created_date"));
 		int start = Math.min((int) paging.getOffset(), dashDtos.size());

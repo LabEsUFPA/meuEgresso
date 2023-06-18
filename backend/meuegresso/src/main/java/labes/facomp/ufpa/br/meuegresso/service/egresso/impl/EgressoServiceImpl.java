@@ -30,6 +30,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Implementação do Serviço responsável pelas rotinas internas da aplicação
@@ -39,6 +40,7 @@ import lombok.RequiredArgsConstructor;
  * @since 16/04/2023
  * @version 1.0
  */
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class EgressoServiceImpl implements EgressoService {
@@ -141,6 +143,7 @@ public class EgressoServiceImpl implements EgressoService {
 			}
 			return url;
 		} catch (MalformedURLException e) {
+			log.error("URL: " + file.getFileName(), e);
 			throw new NotFoundFotoEgressoException();
 		}
 
@@ -164,6 +167,7 @@ public class EgressoServiceImpl implements EgressoService {
 			Path filePath = uploadPath.resolve(nomeFoto);
 			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException ioe) {
+			log.error("Could not save file: " + arquivo.getOriginalFilename(), ioe);
 			throw new IOException("Could not save file: " + arquivo.getOriginalFilename(), ioe);
 		}
 	}

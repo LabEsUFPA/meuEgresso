@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ContentDisposition;
@@ -59,6 +61,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/administrador/dashboard")
 public class DashAdmController {
 
+	private static final Logger logger = LoggerFactory.getLogger(DashAdmController.class);
+
 	private final UsuarioService usuarioService;
 	private final EgressoService egressoService;
 	private final EmpresaService empresaService;
@@ -92,7 +96,7 @@ public class DashAdmController {
 							.toUri()
 							.toString());
 				} catch (NotFoundFotoEgressoException e1) {
-					e1.printStackTrace();
+					logger.info("Usuario sem foto", e1);
 				}
 			}
 		});
