@@ -92,28 +92,8 @@ public class MailServiceImpl implements MailService, Runnable {
         Integer day = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
         Integer hour = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
         Integer minute = dateTime.getMinute() - nowDateTime.getMinute();
-        if(year == 0){
-            if(month == 0){
-                if(day == 0){
-                    if(hour == 0){
-                        if(minute == 0){
-                            return 0;
-                        }
-                        else{
-                            return 1;
-                        }
-                    }
-                    else{
-                        return 1;
-                    }
-                }
-                else{
-                    return 1;
-                }
-            }
-            else{
-                return 1;
-            }
+        if(year == 0 && month == 0 && day == 0 && hour == 0 && minute == 0){
+            return 0;
         }
         else{
             return 1;
@@ -125,23 +105,8 @@ public class MailServiceImpl implements MailService, Runnable {
         Integer day = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
         Integer hour = dateTime.getHour() - nowDateTime.getHour();
         Integer minute = dateTime.getMinute() - nowDateTime.getMinute();
-        if(month == 0){
-            if(day == 0){
-                if(hour == 0){
-                    if(minute == 0){
-                        return 0;
-                    }
-                    else{
-                        return 1;
-                    }
-                }
-                else{
-                    return 1;
-                }
-            }
-            else{
-                return 1;
-            }
+        if(month == 0 && day == 0 && hour == 0 && minute == 0){
+            return 0;
         }
         else{
             return 1;
