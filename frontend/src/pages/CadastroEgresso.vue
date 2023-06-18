@@ -172,7 +172,6 @@
               >
                 Marque pelo menos uma das opções acima!
               </p>
-              
             </div>
 
             <CustomCheckbox
@@ -771,7 +770,13 @@ const schema = object().shape({
     matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres').matches(/^(\d{12})?$/),
     tipoAluno: string(),
     cotista: object({
-      value: boolean(),
+      value: boolean().test('Cotas', 'Marque pelo menos uma das opções acima', (value: any, cotas) => {
+        if (value) {
+          if (cotas.parent.tipos.renda || cotas.parent.tipos.escola || cotas.parent.tipos.raca || cotas.parent.tipos.quilombolaIndigena) return true
+          return false
+        }
+        return true
+      }),
       tipos: object({
         renda: boolean(),
         escola: boolean(),
