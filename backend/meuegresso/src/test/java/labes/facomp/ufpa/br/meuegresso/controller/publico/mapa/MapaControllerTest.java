@@ -32,7 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import labes.facomp.ufpa.br.meuegresso.config.ConfiguracaoTest;
+import labes.facomp.ufpa.br.meuegresso.config.Configuracao;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
@@ -71,7 +71,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class MapaControllerTest extends ConfiguracaoTest {
+class MapaControllerTest extends Configuracao {
 
         static final Integer EMPRESA_ID = 1;
         static final String NOME = "EmpresaTeste";

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import labes.facomp.ufpa.br.meuegresso.config.ConfiguracaoTest;
+import labes.facomp.ufpa.br.meuegresso.config.Configuracao;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
@@ -40,7 +40,7 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class UsuarioControllerTest extends ConfiguracaoTest {
+class UsuarioControllerTest extends Configuracao {
 
         @Autowired
         MockMvc mockMvc;
