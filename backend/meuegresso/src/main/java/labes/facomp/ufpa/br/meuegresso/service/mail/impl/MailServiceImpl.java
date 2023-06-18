@@ -256,7 +256,7 @@ public class MailServiceImpl implements MailService, Runnable {
         }
         else{
             ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
-            String jobId = String.valueOf(mensagemModel.getEmail());
+            String jobId = String.valueOf(mensagemModel.getEscopo());
             taskList.put(jobId, scheduledTask);
         }
     }
@@ -264,7 +264,7 @@ public class MailServiceImpl implements MailService, Runnable {
     @Override
     public void removeScheduledTask(MensagemModel mensagemModel) {
         if(mensagemModel.getEmail()!=null){
-            String mensagemEmail = mensagemModel.getEmail();
+            String mensagemEmail = mensagemModel.getEscopo();
             ScheduledFuture<?> scheduledTask = taskList.get(mensagemEmail);
             if(scheduledTask != null) {
                 scheduledTask.cancel(true);
