@@ -119,16 +119,21 @@
                   <CustomCheckbox
                     class="mt-12"
                     name="frequente"
+                    label="Frequente"
+                    v-model:value="bools.frequente"
+                  />
+                  <CustomCheckbox
+                    name="semanal"
                     label="Envio Semanal"
                     v-model:value="bools.semanal"
-                    :disabled="bools.anual"
+                    :disabled="bools.anual || !bools.frequente"
                   />
                   <CustomCheckbox
                     class="mb-15"
                     name="anual"
                     label="Envio Anual"
                     v-model:value="bools.anual"
-                    :disabled="bools.semanal"
+                    :disabled="bools.semanal || !bools.frequente"
                   />
                 </div>
               </div>
@@ -264,7 +269,16 @@ const schema = object().shape({
     }
     return true
   }),
-  email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/, 'Email inválido'),
+  email: string()
+    .email('Email inválido')
+    .when('multiDestinatario', (multiDestinatario, schema) =>
+      multiDestinatario
+        ? schema.required('Campo obrigatório').matches(
+          /^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/,
+          'Email inválido'
+        )
+        : schema.notRequired()
+    ),
   frequente: boolean(),
   anual: boolean()
 
@@ -316,6 +330,7 @@ async function fetchUpdateEmail () {
   }
 }
 onMounted(() => {
+  // router.push({ name: 'email', params: { destino: 'kalilsaldanha@gmail.com' } })
   fetchUpdateEmail()
 })
 </script>
