@@ -172,18 +172,18 @@ public class MailServiceImpl implements MailService, Runnable {
         List<MensagemModel> lista= mensagemRepository.findAll();
         Map<String, Map<LocalDateTime, String>> mensagemStatus= new HashMap<>();
        
-        for (MensagemModel email : lista){
-            if(statusData(email.getData(), LocalDateTime.now()) == 0){
+        for (MensagemModel mensagem : lista){
+            if(statusData(mensagem.getData(), LocalDateTime.now()) == 0){
                 final String status = "Enviado";
                 Map<LocalDateTime, String> mensagemDataStatus = new HashMap<>();
-                mensagemDataStatus.computeIfAbsent(email.getData(), k -> status);
-                mensagemStatus.put(email.getEmail(), mensagemDataStatus);
+                mensagemDataStatus.computeIfAbsent(mensagem.getData(), k -> status);
+                mensagemStatus.put(mensagem.getEscopo(), mensagemDataStatus);
             }
             else{
                 final String status = "Pendente";
                 Map<LocalDateTime, String> mensagemDataStatus = new HashMap<>();
-                mensagemDataStatus.computeIfAbsent(email.getData(), k -> status);
-                mensagemStatus.put(email.getEmail(), mensagemDataStatus);
+                mensagemDataStatus.computeIfAbsent(mensagem.getData(), k -> status);
+                mensagemStatus.put(mensagem.getEscopo(), mensagemDataStatus);
             }
         }
         return MensagemStatusDTO.builder().mensagensStatus(mensagemStatus).build();
