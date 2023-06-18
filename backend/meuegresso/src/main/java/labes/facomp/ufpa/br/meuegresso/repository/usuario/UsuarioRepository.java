@@ -71,12 +71,12 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			WHEN u.valido_usuario = FALSE THEN 'pendente'
 			END
 			ELSE 'incompleto'
-			END) ilike %:status%
+			END) in (:status)
 			AND u.nome_usuario ilike %:nomeUsuario%
 			""")
 	List<Tuple> findBySearch(
 			@Param("nomeUsuario") String nomeUsuario,
-			@Param("status") String status);
+			@Param("status") String[] status);
 
 	@Query(value = """
 			WITH usuario_status AS (
