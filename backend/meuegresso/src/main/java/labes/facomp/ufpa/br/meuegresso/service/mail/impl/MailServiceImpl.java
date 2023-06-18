@@ -182,7 +182,6 @@ public class MailServiceImpl implements MailService, Runnable {
                 sendEmail(mensagemModel.get(i).getEmail(), mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
                 removeScheduledTask(mensagemModel.get(i));
                 deleteById(mensagemModel.get(i).getId());
-
             }
             else{
                 if(Boolean.TRUE.equals(mensagemModel.get(i).getFrequente())){
@@ -207,9 +206,9 @@ public class MailServiceImpl implements MailService, Runnable {
                 else if(checkData(mensagemModel.get(i).getData(),LocalDateTime.now()) == 0){
                     for (String email : emailList.keySet()) {
                         sendEmail(email, mensagemModel.get(i).getEscopo(), mensagemModel.get(i).getCorpo());
-                        removeScheduledTask(mensagemModel.get(i));
-                        deleteById(mensagemModel.get(i).getId());
                     }
+                    removeScheduledTask(mensagemModel.get(i));
+                    deleteById(mensagemModel.get(i).getId());
                 }
             }
         }
