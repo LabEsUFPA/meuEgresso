@@ -234,6 +234,9 @@ const bools = ref({
 })
 async function handleSubmit (values: any) {
   console.log('sub')
+  if (!values.emailMulti) {
+    values.email = null
+  }
   const status = await emailStore.createEmail(values)
   if (status !== 201) {
     dialogFalha.value = true
@@ -258,7 +261,7 @@ const schema = object().shape({
     }
     return true
   }),
-  email: string().optional().email('Insira um e-mail válido'),
+  email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/, 'Email inválido'),
   frequente: boolean(),
   anual: boolean()
 
@@ -269,43 +272,44 @@ async function handleCancel (e: any) {
   fetchUpdateEmail()
 }
 
-let jsonResponse : any
-console.log(jsonResponse)
+// let jsonResponse : any
+// console.log(jsonResponse)
 async function fetchUpdateEmail () {
-  const responseBack = await emailStore.fetchEmail()
-  const jsonEmail = JSON.parse(responseBack)
-  jsonResponse = jsonEmail
+  // const responseBack = await emailStore.fetchEmail()
+  // const jsonEmail = JSON.parse(responseBack)
+  // jsonResponse = jsonEmail
 
-  console.log('jsonResponse')
-  console.log(jsonResponse)
+  // console.log('jsonResponse')
+  // console.log(jsonResponse)
 
-  // const message = jsonEmail.corpo
-  if (jsonEmail.length > 1) {
-    form.value?.setFieldValue('corpo', jsonEmail[0].corpo)
-    form.value?.setFieldValue('escopo', jsonEmail[0].escopo)
-  } else {
-    form.value?.setFieldValue('corpo', jsonEmail.corpo)
-    form.value?.setFieldValue('escopo', jsonEmail.escopo)
-  }
+  // // const message = jsonEmail.corpo
+  // if (jsonEmail.length > 1) {
+  //   form.value?.setFieldValue('corpo', jsonEmail[0].corpo)
+  //   form.value?.setFieldValue('escopo', jsonEmail[0].escopo)
+  // } else {
+  //   form.value?.setFieldValue('corpo', jsonEmail.corpo)
+  //   form.value?.setFieldValue('escopo', jsonEmail.escopo)
+  // }
 
-  //   form.value?.setFieldValue('escopo', 'Atualização Cadastral - Meu Egresso')
-  //   const message = `Prezado(a) [nome do aluno],
+  const message = `Prezado(a) [nome do aluno],
 
-  // Espero que esta mensagem o encontre bem. Gostaríamos de lembrá-lo(a) da importância de manter seu cadastro atualizado em nosso portal Meu Egresso.
+  Espero que esta mensagem o encontre bem. Gostaríamos de lembrá-lo(a) da importância de manter seu cadastro atualizado em nosso portal Meu Egresso.
 
-  // Para garantir que possamos manter contato com você e fornecer informações importantes sobre eventos, oportunidades de emprego, cursos e outros escopos relevantes, solicitamos que atualize suas informações pessoais e profissionais.
+  Para garantir que possamos manter contato com você e fornecer informações importantes sobre eventos, oportunidades de emprego, cursos e outros escopos relevantes, solicitamos que atualize suas informações pessoais e profissionais.
 
-  // Pedimos que acesse o portal Meu Egresso (link) e faça login com suas credenciais. Em seguida, atualize suas informações no seu perfil.
+  Pedimos que acesse o portal Meu Egresso (link) e faça login com suas credenciais. Em seguida, atualize suas informações no seu perfil.
 
-  // Caso tenha alguma dificuldade para acessar o portal ou atualizar suas informações, entre em contato conosco pelo e-mail (e-mail) ou telefone (número). Teremos o maior prazer em ajudá-lo(a).
+  Caso tenha alguma dificuldade para acessar o portal ou atualizar suas informações, entre em contato conosco pelo e-mail (e-mail) ou telefone (número). Teremos o maior prazer em ajudá-lo(a).
 
-  // Agradecemos antecipadamente pela sua colaboração em manter suas informações atualizadas. Isso nos ajuda a manter contato com você e oferecer um serviço mais eficiente e personalizado.
+  Agradecemos antecipadamente pela sua colaboração em manter suas informações atualizadas. Isso nos ajuda a manter contato com você e oferecer um serviço mais eficiente e personalizado.
 
-  // Atenciosamente,
+  Atenciosamente,
 
-  // [Seu nome]
+  [Seu nome]
 
-  // [Assinatura]`
+  [Assinatura]`
+  form.value?.setFieldValue('escopo', 'Atualização Cadastral - Meu Egresso')
+  form.value?.setFieldValue('corpo', message)
 }
 onMounted(() => {
   fetchUpdateEmail()
