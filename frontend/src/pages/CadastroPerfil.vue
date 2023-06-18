@@ -134,8 +134,8 @@ import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 import router from 'src/router'
-import { models } from 'src/@types'
 import { useLoginStore } from 'src/store/LoginStore'
+import { models } from 'src/@types'
 interface ProfileRegisterModel extends models.ProfileRegisterModel { }
 
 const error = ref(false)
@@ -147,12 +147,12 @@ const showPassword = ref(false)
 const $store = useCadastroPerfilStore()
 
 const schema = object().shape({
-  name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/, 'Informe nome e sobrenome'),
+  name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
   username: string().required('Informe um nome de usuário').trim().matches(/^[A-Za-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
   registration: string().max(12).matches(/^(\d{12})?$/),
   email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.[a-zA-Z]{2,}))?$/, 'Email inválido'),
-  password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
-  confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida')
+  password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida'),
+  confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida')
 })
 
 const checkRegistrationLength = ($event: Event) => {
@@ -176,11 +176,10 @@ const handleSubmit = async (submitData: any) => {
 
   if (response.status === 201) {
     submitSuccess.value = true
-    await storeLogin.userLogin(profileData.username, profileData.password)
-    await storeLogin.saveUser()
+    await storeLogin.userLogin(profileData.username, profileData.password, true)
     await router.push({ path: '/cadastro' })
   } else if (response.status === 400) {
-    errorText.value = response.data?.message
+    errorText.value = response.data?.technicalMessage
     error.value = true
   } else {
     errorText.value = 'Requisição não aceita'

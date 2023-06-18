@@ -2,6 +2,9 @@ package labes.facomp.ufpa.br.meuegresso.model;
 
 import java.util.Set;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,6 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "tipo_bolsa")
 @EqualsAndHashCode(callSuper = false, exclude = "egressos")
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class TipoBolsaModel extends Auditable {
 
     @Id

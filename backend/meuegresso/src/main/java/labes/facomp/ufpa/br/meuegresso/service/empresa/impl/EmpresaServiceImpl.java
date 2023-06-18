@@ -72,4 +72,9 @@ public class EmpresaServiceImpl implements EmpresaService {
         return empresaRepository.countEgressoByPos();
     }
 
+    @Override
+    public void deleteAll(){
+        empresaRepository.deleteAll();
+    }
+
 }

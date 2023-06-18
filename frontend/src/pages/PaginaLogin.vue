@@ -9,7 +9,7 @@
         class="flex flex-col items-center justify-center bg-white w-[960px] py-10 mx-6 rounded-2xl shadow-md"
       >
         <InvalidInsert
-          text="Nome de usuário ou senha incorretos."
+          :text="errorText"
           :show-alert="error"
         />
         <h1 class="text-blue-900 text-4xl font-bold mb-12">
@@ -42,10 +42,12 @@
         </div>
         <p class="mb-14">
           Esqueceu a senha?
-          <a
-            href="./"
+          <RouterLink
+            to="/redefinir-senha"
             class="text-sky-600"
-          > Recupere aqui </a>
+          >
+            Recupere aqui
+          </RouterLink>
         </p>
         <CustomButton
           label="Entrar"
@@ -87,6 +89,7 @@ const app = createApp({})
 app.use(pinia)
 const error = ref(false)
 const storeLogin = useLoginStore()
+const errorText = ref('Nome de usuário ou senha incorretos.')
 
 const schema = object().shape({
   username: string().required('Informe o seu usuário'),
@@ -104,10 +107,11 @@ const handleSubmit = async (submitData: any) => {
   if (loginData.username || loginData.password) {
     const response = await storeLogin.userLogin(loginData.username, loginData.password)
 
-    if (response === 200) {
+    if (response.status === 200) {
       error.value = false
       await router.push('/')
-    } else {
+    } else if (response.status !== 200) {
+      errorText.value = response.data?.technicalMessage
       error.value = true
     }
   } else {

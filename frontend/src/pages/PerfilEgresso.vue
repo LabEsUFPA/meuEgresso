@@ -790,7 +790,6 @@ async function handleSubmitHeader (values: any) {
 
   if (status === 201 && (responseImage === 201 || responseImage === 200 || responseImage === 204)) {
     dialogSucesso.value = true
-    await useLoginStore().saveUser()
 
     toggleIsInput('profileHead')
     fetchUpdateEgresso()
@@ -807,7 +806,6 @@ async function handleSubmitGeral (values: any) {
   jsonResponse.nascimento = values.geral.nascimento
   const status = await egressoStore.atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
-    await useLoginStore().saveUser()
     toggleIsInput('geral')
   }
 

@@ -197,7 +197,6 @@
               label="Instituição da pós-graduação"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
-              id="posGradLocal"
             />
 
             <CustomInput
@@ -359,7 +358,11 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              <p>Compartilhe abaixo, de forma simples e resumida, suas experiências positivas ao realizar o curso.<sup class="text-red-500">*</sup></p>
+              <p>
+                Compartilhe abaixo, de forma simples e resumida, suas experiências positivas ao realizar o curso.<sup
+                  class="text-red-500"
+                >*</sup>
+              </p>
               <span>(max. 300 caracteres)</span>
             </div>
 
@@ -370,7 +373,10 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              <p>Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes, pois tudo tem impacto.<sup class="text-red-500">*</sup></p>
+              <p>
+                Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes,
+                pois tudo tem impacto.<sup class="text-red-500">*</sup>
+              </p>
               <span>(max. 300 caracteres)</span>
             </div>
 
@@ -467,9 +473,7 @@
       </div>
     </CustomDialog>
 
-    <CustomDialog
-      v-model="dialogFalha"
-    >
+    <CustomDialog v-model="dialogFalha">
       <div class="h-full flex justify-center items-center">
         <div class="w-1/2">
           <div class="text-red-600 text-center mb-3">
@@ -490,35 +494,36 @@
 </template>
 
 <script lang="ts" setup>
-import FolderSection from 'src/components/FolderSection.vue'
-import CustomInput from 'src/components/CustomInput.vue'
-import CustomCheckbox from 'src/components/CustomCheckbox.vue'
-import CustomButton from 'src/components/CustomButton.vue'
-import CustomSelect from 'src/components/CustomSelect.vue'
-import CustomDialog from 'src/components/CustomDialog.vue'
-import FotoInput from 'src/components/FotoInput.vue'
-import InvalidInsert from 'src/components/InvalidInsert.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { Form } from 'vee-validate'
-import { ref, computed, watch, onMounted } from 'vue'
-import { Country, State, City } from 'country-state-city'
-import svgPath from 'src/assets/svgPaths.json'
-import { object, string, boolean, mixed } from 'yup'
 import {
   mdiAccount,
+  mdiAlertCircle,
   mdiBriefcase,
   mdiEmail,
+  mdiLinkedin,
   mdiMapMarker,
   mdiMessage,
   mdiSchool,
-  mdiAlertCircle,
-  mdiLinkedin,
-  mdiWhatsapp,
-  mdiTwitter
+  mdiTwitter,
+  mdiWhatsapp
 } from '@mdi/js'
-import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
+import { City, Country, State } from 'country-state-city'
+import svgPath from 'src/assets/svgPaths.json'
+import CustomButton from 'src/components/CustomButton.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
+import CustomDialog from 'src/components/CustomDialog.vue'
+import CustomInput from 'src/components/CustomInput.vue'
+import CustomSelect from 'src/components/CustomSelect.vue'
+import FolderSection from 'src/components/FolderSection.vue'
+import FotoInput from 'src/components/FotoInput.vue'
+import InvalidInsert from 'src/components/InvalidInsert.vue'
 import LocalStorage from 'src/services/localStorage'
+import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import { useLoginStore } from 'src/store/LoginStore'
+import { Form } from 'vee-validate'
+import { computed, onMounted, ref, watch } from 'vue'
+import { boolean, mixed, object, string } from 'yup'
+import VueScrollTo from 'vue-scrollto'
 const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
 const $storeCadastro = useCadastroEgressoStore()
@@ -621,7 +626,6 @@ async function handleSubmit (values: any) {
     cotas = null
   }
 
-  console.log(values.carreira.area !== 'Desempregado')
   const empresa = values.carreira.area !== 'Desempregado'
     ? {
         areaAtuacao: values.carreira.area,
@@ -675,8 +679,6 @@ async function handleSubmit (values: any) {
     empresa,
     titulacao
   })
-  console.log('Staus: ')
-  console.log(status)
 
   if (status !== 201) {
     dialogFalha.value = true
@@ -686,8 +688,10 @@ async function handleSubmit (values: any) {
 }
 
 function handleFail (e: any) {
-  console.log(e)
   camposFaltosos.value = true
+  const incorrectElements = Object.keys(e.errors)
+  const el = document.querySelector(`#${incorrectElements[0].replaceAll('.', '-')}`)
+  VueScrollTo.scrollTo(el, 800, { offset: -300 })
 }
 
 const schema = object().shape({
@@ -733,11 +737,6 @@ const schema = object().shape({
       return (typeof value).constructor(true)
     })
   }),
-  localizacao: object({
-    pais: string().required('Campo obrigatório'),
-    estado: string().required('Campo obrigatório'),
-    cidade: string().required('Campo obrigatório')
-  }),
   academico: object({
     matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres').matches(/^(\d{12})?$/),
     tipoAluno: string(),
@@ -782,6 +781,11 @@ const schema = object().shape({
       return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     })
   }),
+  localizacao: object({
+    pais: string().required('Campo obrigatório'),
+    estado: string().required('Campo obrigatório'),
+    cidade: string().required('Campo obrigatório')
+  }),
   adicionais: object({
     palestras: boolean(),
     assuntosPalestras: string().when('palestras', ([palestras], schema) => {
@@ -815,9 +819,7 @@ onMounted(() => {
     const userData = JSON.parse(storage.get('loggedUser'))
 
     form.value?.setFieldValue('geral.email', userData.email)
-    form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
-      return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
-    }).join(' '))
+    form.value?.setFieldValue('geral.nome', userData.nomeCompleto)
   }
 })
 

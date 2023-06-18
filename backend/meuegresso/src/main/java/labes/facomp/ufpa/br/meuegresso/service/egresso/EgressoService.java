@@ -3,6 +3,7 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +49,16 @@ public interface EgressoService {
 	 * @since 16/04/2023
 	 */
 	public EgressoModel updateEgresso(EgressoModel egresso);
+
+	/**
+	 * Metodo responsavel por deletar informacoes do egresso no banco de dados.
+	 *
+	 * @param egresso Dados do egresso
+	 * @return Mensagem de confirmacao
+	 * @author Bruno Eiki
+	 * @since 17/04/2023
+	 */
+	public boolean deletarEgresso(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por verificar se egresso existe no banco de dados.
@@ -122,8 +133,19 @@ public interface EgressoService {
 
 	public Map<Double, Integer> countRemuneracaoBolsa();
 
+	public Map<LocalDate, Long> countEgressoPorData();
+
+	public Map<LocalDate, Long> countEgressoPorMesEAno();
+
+	public Map<Integer, Long> countEgressoPorAno();
+
 	public Map<String, Integer> countCotista();
 
 	public Map<String, Integer> countInteressePos();
+
+	/**
+	 * Método responsável por deletar todos os dados da tabela egresso
+	 */
+	public void deleteAll();
 
 }

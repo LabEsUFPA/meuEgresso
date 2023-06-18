@@ -5,17 +5,33 @@ export namespace API {
     method: string
     route: string
     body?: Record<string, any>
+    params?: Record<string, any>
+    headers?: Record<string, any>
+    responseType?: any
   }
 
   export interface Response {
     status: number
-    data?: Record<string, any> | null
+    data?: Record<string, any> | null | any
   }
   export type Request = (params: RequestParams) => Promise<API.Response | null>
 
 }
 
 export namespace models {
+  export interface UserData {
+    exp: number
+    iat: number
+    idUsuario: number
+    isEgresso: boolean
+    iss: string
+    nomeCompleto: string
+    nome: string
+    scope: string
+    sobrenome: string
+    sub: string
+  }
+
   export interface LoginModel {
     username: string
     password: string
@@ -39,7 +55,7 @@ export namespace models {
     password: string
     email: string
     nome: string
-    registration: string
+    registration?: string
     egresso?: {
       id: number
       matricula: number

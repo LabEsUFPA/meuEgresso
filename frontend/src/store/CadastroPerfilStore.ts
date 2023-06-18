@@ -36,7 +36,7 @@ export const useCadastroPerfilStore = defineStore('CadastroPerfilStore', {
       password: string,
       email: string,
       nome: string,
-      registration: string
+      registration?: string
     ) {
       const data: UserModel = {
         username,

@@ -31,6 +31,9 @@ public enum ErrorType {
 
     EGRESSO_NAO_VALIDO("Usuario não cadastrado pela faculdade", "EV-001"),
 
+    SOLICITACAO_EXPIRADA("Solicitação Expirada", "SE-001"),
+
+
     FOTO_NAO_ENCONTRADA("Egresso não possui foto","E-001");
 
     private String message;

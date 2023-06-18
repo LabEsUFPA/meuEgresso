@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.service.recuperacao_senha;
+package labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha;
 
 import java.util.UUID;
 
@@ -10,4 +10,6 @@ public interface RecuperacaoSenhaService {
     public boolean cadastrarSolicitacaoRecuperacao(String email, String redirect);
 
     public RecuperacaoSenhaModel tokenValido(UUID token) throws UnauthorizedRequestException;
+
+    public RecuperacaoSenhaModel save(RecuperacaoSenhaModel recuperacaoSenha);
 }

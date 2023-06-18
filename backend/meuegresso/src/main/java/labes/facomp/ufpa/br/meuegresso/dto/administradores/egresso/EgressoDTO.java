@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.depoimento.DepoimentoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.administradores.endereco.EnderecoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.genero.GeneroDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,9 +44,6 @@ public class EgressoDTO {
 
     @Pattern(regexp = "^https?://(www\\.)?linkedin\\.com/in/([a-zA-Z0-9_-]+)$", message = "Informe um linkedin válido. Ex: https://www.linkedin.com/in/alfredo-gabriel-de-sousa-oliveia/")
     private String linkedin;
-
-    @Valid
-    private EnderecoDTO endereco;
 
     @Valid
     @NotNull(message = "Informe um depoimento.")

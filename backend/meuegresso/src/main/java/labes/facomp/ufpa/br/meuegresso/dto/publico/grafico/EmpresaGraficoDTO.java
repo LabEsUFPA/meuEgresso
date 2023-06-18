@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmpresaGraficoDTO {
-
     private String empresa;
 
     private Long quantidade;

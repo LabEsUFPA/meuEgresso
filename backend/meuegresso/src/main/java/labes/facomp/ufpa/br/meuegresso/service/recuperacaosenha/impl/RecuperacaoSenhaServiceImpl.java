@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.service.recuperacao_senha.impl;
+package labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha.impl;
 
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -12,10 +12,10 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.RecuperacaoSenhaModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.projections.usuario.RecoveryPasswordProjection;
-import labes.facomp.ufpa.br.meuegresso.repository.recuperacao_senha.RecuperacaoSenhaRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.recuperacaosenha.RecuperacaoSenhaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
-import labes.facomp.ufpa.br.meuegresso.service.recuperacao_senha.RecuperacaoSenhaService;
+import labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha.RecuperacaoSenhaService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -34,23 +34,32 @@ public class RecuperacaoSenhaServiceImpl implements RecuperacaoSenhaService {
 
     @Override
     public boolean cadastrarSolicitacaoRecuperacao(String email, String redirect) {
+        Optional<RecuperacaoSenhaModel> anterior = recuperacaoSenhaRepository
+                .findTopByUsuarioEmailAndPasswordChangeIsFalse(email);
+        anterior.ifPresent(e -> {
+            e.setPasswordChange(true);
+            recuperacaoSenhaRepository.save(e);
+        });
         Optional<RecoveryPasswordProjection> projectionOptional = usuarioRepository.findByEmailIgnoreCase(email);
         if (projectionOptional.isPresent()) {
             RecoveryPasswordProjection projection = projectionOptional.get();
             RecuperacaoSenhaModel recuperacaoSenha = RecuperacaoSenhaModel.builder().token(UUID.randomUUID())
                     .usuario(UsuarioModel.builder().id(projection.getId()).build())
-                    .passwordChange(Boolean.TRUE).prazoFinal(LocalDateTime.now().plusMinutes(3)).build();
+                    .passwordChange(Boolean.FALSE).prazoFinal(LocalDateTime.now().plusMinutes(3)).build();
             recuperacaoSenha = recuperacaoSenhaRepository.save(recuperacaoSenha);
             URI location = UriComponentsBuilder.fromHttpUrl(redirect)
                     .queryParam("tokenAuth", recuperacaoSenha.getToken()).build().toUri();
             mailService.sendEmail(email, TITULO_REDEFINICAO_SENHA,
                     String.format(MENSAGEM_REDEFINICAO, projection.getNome(), location.toString()));
             return true;
-
         } else {
             return false;
         }
 
+    }
+
+    public RecuperacaoSenhaModel save(RecuperacaoSenhaModel recuperacaoSenha) {
+        return recuperacaoSenhaRepository.save(recuperacaoSenha);
     }
 
     @Override

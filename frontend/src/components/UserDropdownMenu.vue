@@ -23,7 +23,7 @@
       >
         <RouterLink
           to="/egresso"
-          v-show="userLoggedGroupID === 3"
+          v-show="isEgress"
         >
           <div
             class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900"
@@ -33,7 +33,19 @@
           </div>
         </RouterLink>
 
-        <RouterLink :to="userLoggedGroupID === 3 ? '/conta-egresso' : '/conta-admin'">
+        <RouterLink
+          to="/painel-admin"
+          v-show="!isEgress"
+        >
+          <div
+            class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900"
+            @click="toggleUserMenu()"
+          >
+            Painel
+          </div>
+        </RouterLink>
+
+        <RouterLink :to="isEgress ? '/conta-egresso' : '/conta-admin'">
           <div
             class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900"
             @click="toggleUserMenu()"
@@ -62,6 +74,7 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiMenuDown, mdiMenuUp } from '@mdi/js'
 import { createPinia } from 'pinia'
 import { useLoginStore } from 'src/store/LoginStore'
+import LocalStorage from 'src/services/localStorage'
 
 interface Props {
   userLogged: boolean
@@ -75,8 +88,9 @@ const app = createApp({})
 app.use(pinia)
 
 const store = useLoginStore()
-const userLoggedName = ref(props.userLogged ? store.getLoggedUser()?.username : '')
-const userLoggedGroupID = ref(props.userLogged ? store.getLoggedUser()?.grupos[0].id : '')
+const storage = new LocalStorage()
+const userLoggedName = ref(props.userLogged ? storage.getLoggedUser()?.sub : '')
+const isEgress = ref(props.userLogged ? storage.getLoggedUser()?.scope === 'EGRESSO' : false)
 
 const userMenuIsOpen = ref(false)
 const toggleUserMenu = () => {
