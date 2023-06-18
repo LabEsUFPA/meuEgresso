@@ -125,7 +125,7 @@
                   />
                   <CustomCheckbox
                     name="semanal"
-                    label="Envio Semanal"
+                    label="Envio Semestral"
                     v-model:value="bools.semanal"
                     :disabled="bools.anual || !bools.frequente"
                   />
