@@ -50,7 +50,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.areaemprego.AreaEmpregoReposit
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class AnuncioControllerTest extends ConfiguracaoTest {
+class AnuncioControllerTest extends ConfiguracaoTest {
 
         final String USERNAME = "username_test";
 
