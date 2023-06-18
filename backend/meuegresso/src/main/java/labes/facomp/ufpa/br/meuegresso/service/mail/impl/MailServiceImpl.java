@@ -176,9 +176,13 @@ public class MailServiceImpl implements MailService, Runnable {
     public void scheduledSendEmail() {
 		Map<String, LocalDateTime> emailList = usuarioService.findByAtivo();
         List<MensagemModel> mensagemModel = mensagemRepository.findAll();
-        for(int i=0; i<mensagemModel.size(); i++){
+        Integer sizes = mensagemModel.size();
+        for(int i=0; i<sizes; i++){
             if(mensagemModel.get(i).getEmail() != null && checkData(mensagemModel.get(i).getData(), LocalDateTime.now()) == 0){
                 sendEmail(mensagemModel.get(i).getEmail(), mensagemModel.get(0).getEscopo(), mensagemModel.get(0).getCorpo());
+                removeScheduledTask(mensagemModel.get(i));
+                deleteById(mensagemModel.get(i).getId());
+
             }
             else{
                 if(Boolean.TRUE.equals(mensagemModel.get(i).getFrequente())){
@@ -203,6 +207,8 @@ public class MailServiceImpl implements MailService, Runnable {
                 else if(checkData(mensagemModel.get(i).getData(),LocalDateTime.now()) == 0){
                     for (String email : emailList.keySet()) {
                         sendEmail(email, mensagemModel.get(i).getEscopo(), mensagemModel.get(i).getCorpo());
+                        removeScheduledTask(mensagemModel.get(i));
+                        deleteById(mensagemModel.get(i).getId());
                     }
                 }
             }
