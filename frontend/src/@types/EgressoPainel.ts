@@ -10,4 +10,5 @@ export interface EgressoPainel {
   name: string
   cadastro: string
   status: EgressoStatus
+  foto: string
 }

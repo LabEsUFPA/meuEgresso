@@ -119,7 +119,7 @@
 
           <div class="border-b text-cyan-600 p-4 font-semibold text-left">
             <RouterLink
-              to="/"
+              to="/cadastro-admin"
               class="flex items-center"
             >
               <SvgIcon
@@ -207,7 +207,7 @@
                   :path="mdiCalendar"
                 />
 
-                Periodos
+                Períodos
 
                 <div class="flex-1" />
 
@@ -236,7 +236,7 @@
               <div>
                 <CustomBarGraph
                   legend="Cadastros"
-                  info="Egressos cadastrados por periodo"
+                  info="Egressos cadastrados por período"
                   :loading="graphData.series.x.length === 0"
                   :data="graphData"
                   shadowless
@@ -289,7 +289,18 @@
               }"
             >
               <div class="w-10 h-10 rounded-full flex items-center overflow-hidden justify-center bg-cyan-900">
-                <img src="https://picsum.photos/200">
+                <img
+                  v-if="imageFlags.get(egresso.id)"
+                  @error="imageFlags.set(egresso.id, false)"
+                  :src="egresso.foto"
+                >
+
+                <SvgIcon
+                  v-else
+                  type="mdi"
+                  class="inline text-white"
+                  :path="mdiAccount"
+                />
               </div>
 
               <div flex="flex items-center">
@@ -314,7 +325,10 @@
               <div>
                 <AdminOptionsDropdown
                   :id="egresso.id"
+                  :id-egresso="egresso.idEgresso"
+                  :nome="egresso.name"
                   :status="egresso.status"
+                  @update-dialog="$painelStore.fetchEgressos()"
                 />
               </div>
             </div>
@@ -323,7 +337,7 @@
           <div class="flex p-4 justify-end">
             <CustomButton
               tag="router"
-              link="/registro-egreso"
+              link="/registro-egressos"
               variant="flat"
             >
               Ver lista completa
@@ -474,7 +488,8 @@ import {
   mdiClock,
   mdiLoading,
   mdiDeleteForever,
-  mdiCheckCircle
+  mdiCheckCircle,
+  mdiAccount
 } from '@mdi/js'
 import CustomButton from 'src/components/CustomButton.vue'
 import eagle from 'src/assets/eagle.svg'
@@ -512,9 +527,6 @@ const user = ref({
   scope: 'EGRESSO'
 })
 
-$painelStore.fetchEgressos()
-$painelStore.fetchGrafico(selectedString.value)
-
 watch(selectedString, () => {
   $painelStore.fetchGrafico(selectedString.value)
 })
@@ -526,6 +538,8 @@ const graphData = computed(() => ({
   },
   error: false
 }))
+
+const imageFlags = ref(new Map())
 
 function deleteDialog () {
   modalOpen.value = true
@@ -560,8 +574,12 @@ const schema = object().shape({
   passphrase: string()
 })
 
-onMounted(() => {
+onMounted(async () => {
   user.value = JSON.parse((new LocalStorage()).get('loggedUser'))
-  console.log(user.value)
+  await $painelStore.fetchEgressos()
+  await $painelStore.fetchGrafico(selectedString.value)
+  $painelStore.egressos.forEach(egresso => {
+    imageFlags.value.set(egresso.id, egresso.foto !== undefined)
+  })
 })
 </script>
