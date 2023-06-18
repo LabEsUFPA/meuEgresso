@@ -46,7 +46,8 @@ public class MensagemAdmController {
 	private final ModelMapper mapper;
 
 	/**
-	 * Endpoint responsável por retornar a lista com o status das mensagens no banco de
+	 * Endpoint responsável por retornar a lista com o status das mensagens no banco
+	 * de
 	 * dados.
 	 *
 	 * @return {@link MensagemStatusDTO} Lista de emails salvos com seus status;
@@ -60,10 +61,12 @@ public class MensagemAdmController {
 	}
 
 	/**
-	 * Endpoint responsável por retornar a lista com o agendamento de tarefas das mensagens no banco de
+	 * Endpoint responsável por retornar a lista com o agendamento de tarefas das
+	 * mensagens no banco de
 	 * dados.
 	 *
-	 * @return {@link Map<String, ScheduledFuture<?>>} Lista de tarefas agendadas de mensagens salvos com seus status;
+	 * @return {@link Map<String, ScheduledFuture<?>>} Lista de tarefas agendadas de
+	 *         mensagens salvos com seus status;
 	 * @author Pedro Inácio
 	 * @since 18/06/2023
 	 */
@@ -91,8 +94,9 @@ public class MensagemAdmController {
 	/**
 	 * Endpoint responsavel por atualizar o email.
 	 *
-	 * @param mensagemDTO Estrutura de dados contendo as informações necessárias para
-	 *                   atualizar o emails.
+	 * @param mensagemDTO Estrutura de dados contendo as informações necessárias
+	 *                    para
+	 *                    atualizar o emails.
 	 * @return {@link String} mensagem de confirmação de atualização.
 	 * @author Pedro Inácio
 	 * @since 15/06/2023
@@ -104,7 +108,8 @@ public class MensagemAdmController {
 		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
 		mailService.removeScheduledTask(mensagemModel);
 		mensagemModel = mailService.update(mensagemModel);
-		mailService.setScheduleATask(mailServiceImpl, mensagemModel.getData(), mensagemModel.getFrequente(), mensagemModel.getAnual(), mensagemModel);
+		mailService.setScheduleATask(mailServiceImpl, mensagemModel.getDataEnvio(), mensagemModel.getFrequente(),
+				mensagemModel.getAnual(), mensagemModel);
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
@@ -131,8 +136,9 @@ public class MensagemAdmController {
 	/**
 	 * Endpoint responsavel por salvar o email.
 	 *
-	 * @param mensagemDTO Estrutura de dados contendo as informações necessárias para
-	 *                   salvar o email.
+	 * @param mensagemDTO Estrutura de dados contendo as informações necessárias
+	 *                    para
+	 *                    salvar o email.
 	 * @return {@link String} mensagem de confirmação de salvamento.
 	 * @author Pedro Inácio
 	 * @since 15/06/2023
@@ -143,13 +149,14 @@ public class MensagemAdmController {
 	public String save(@RequestBody @Valid MensagemDTO mensagemDTO) {
 		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
 		mailService.save(mensagemModel);
-		if(mailService.findAll().size() == 1){
+		if (mailService.findAll().size() == 1) {
 			mensagemModel.setFrequente(true);
 			mensagemModel.setAnual(true);
 			mailService.setEmailAnualCadastro(mailServiceImpl, mensagemModel);
 		}
-		if(mailService.findAll().size() > 1){
-			mailService.setScheduleATask(mailServiceImpl, mensagemDTO.getDataEnvio(), mensagemDTO.getFrequente(), mensagemDTO.getAnual(), mensagemModel);
+		if (mailService.findAll().size() > 1) {
+			mailService.setScheduleATask(mailServiceImpl, mensagemDTO.getDataEnvio(), mensagemDTO.getFrequente(),
+					mensagemDTO.getAnual(), mensagemModel);
 		}
 
 		return ResponseType.SUCCESS_UPDATE.getMessage();

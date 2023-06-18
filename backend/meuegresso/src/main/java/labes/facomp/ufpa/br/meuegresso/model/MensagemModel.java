@@ -30,17 +30,17 @@ public class MensagemModel {
     private String escopo;
 
     @Column(name = "email_mensagem", unique = false, nullable = true, length = 50)
-	private String email;
+    private String email;
 
     @Column(name = "data_mensagem", unique = false, nullable = false)
-    private LocalDateTime data;
+    private LocalDateTime dataEnvio;
 
     @Builder.Default
-	@Column(name = "frequente_mensagem", unique = false, nullable = true)
-	private Boolean frequente = false;
+    @Column(name = "frequente_mensagem", unique = false, nullable = true)
+    private Boolean frequente = false;
 
     @Builder.Default
-	@Column(name = "anual_mensagem", unique = false, nullable = true)
-	private Boolean anual = true;
+    @Column(name = "anual_mensagem", unique = false, nullable = true)
+    private Boolean anual = true;
 
 }
