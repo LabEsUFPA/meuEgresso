@@ -41,7 +41,7 @@
       </label>
       <sup
         class="text-red-500"
-        v-if="value"
+        v-if="!value"
       >
         *
       </sup>

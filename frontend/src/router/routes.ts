@@ -67,7 +67,11 @@ export default [
       },
       {
         path: '/email',
-        component: async () => await import('src/pages/EmailAdmin.vue')
+        component: async () => await import('src/pages/EmailAdmin.vue'),
+        meta: {
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
+        }
       },
       {
         path: '/vagas/:id',

@@ -92,11 +92,21 @@
                     </div>
                   </template>
                 </CustomInput>
+
+                <CustomCheckbox
+                  class="mb-[-20px] mt-16"
+                  name="emailMulti"
+                  label="E-mail para destinatário único"
+                  v-model:value="bools.multiDestinatario"
+                />
+
                 <CustomInput
-                  class="mb-5 mt-1.5"
+                  class="mb-5"
                   name="email"
                   type="text"
                   custom-label
+                  :required="bools.multiDestinatario"
+                  :disabled="!bools.multiDestinatario"
                 >
                   <template #label>
                     <div class="text-lg font-medium text-neutral-900 inline">
@@ -104,6 +114,22 @@
                     </div>
                   </template>
                 </CustomInput>
+                <div>
+                  <CustomCheckbox
+                    class="mt-12"
+                    name="frequente"
+                    label="Envio Semanal"
+                    v-model:value="bools.semanal"
+                    :disabled="bools.anual"
+                  />
+                  <CustomCheckbox
+                    class="mb-15"
+                    name="anual"
+                    label="Envio Anual"
+                    v-model:value="bools.anual"
+                    :disabled="bools.semanal"
+                  />
+                </div>
               </div>
             </div>
             <div class="flex flex-col items-start sm:flex-row justify-end gap-4 p-4 m-1 mr-5 mb-5">
@@ -184,10 +210,12 @@ import {
   mdiAlertCircle
 
 } from '@mdi/js'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
+
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import classNames from 'classnames'
-import { object, string } from 'yup'
+import { object, string, boolean } from 'yup'
 import { Form } from 'vee-validate'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import { useEmailStore } from 'src/store/EmailStore'
@@ -198,6 +226,12 @@ const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const form = ref<typeof Form | null>(null)
 
+const bools = ref({
+  multiDestinatario: false,
+  frequente: false,
+  semanal: false,
+  anual: false
+})
 async function handleSubmit (values: any) {
   console.log('sub')
   const status = await emailStore.createEmail(values)
@@ -215,7 +249,7 @@ async function handleFail (e: any) {
 const schema = object().shape({
   escopo: string().required('Insira o escopo do email'),
   corpo: string().required('Insira o corpo do email'),
-  dataEnvio: string().required('Insira no valida futuro para o envio do email').test('Data', 'Data inválida', (value) => {
+  dataEnvio: string().required('Insira uma data valida no futuro').test('Data', 'Data inválida', (value) => {
     if (value) {
       const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
       const inputDate = new Date(date)
@@ -224,7 +258,10 @@ const schema = object().shape({
     }
     return true
   }),
-  email: string().optional().email('Insira um e-mail válido')
+  email: string().optional().email('Insira um e-mail válido'),
+  frequente: boolean(),
+  anual: boolean()
+
 })
 
 async function handleCancel (e: any) {
