@@ -48,7 +48,7 @@ import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoValidoService;
 import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
-import labes.facomp.ufpa.br.meuegresso.service.recuperacao_senha.RecuperacaoSenhaService;
+import labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha.RecuperacaoSenhaService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 

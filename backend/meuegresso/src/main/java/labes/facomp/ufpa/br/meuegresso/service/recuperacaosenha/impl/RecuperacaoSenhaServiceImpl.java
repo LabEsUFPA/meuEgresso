@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.service.recuperacao_senha.impl;
+package labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha.impl;
 
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -12,10 +12,10 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.RecuperacaoSenhaModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.projections.usuario.RecoveryPasswordProjection;
-import labes.facomp.ufpa.br.meuegresso.repository.recuperacao_senha.RecuperacaoSenhaRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.recuperacaosenha.RecuperacaoSenhaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
-import labes.facomp.ufpa.br.meuegresso.service.recuperacao_senha.RecuperacaoSenhaService;
+import labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha.RecuperacaoSenhaService;
 import lombok.RequiredArgsConstructor;
 
 @Service

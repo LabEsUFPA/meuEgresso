@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.service.recuperacao_senha;
+package labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha;
 
 import java.util.UUID;
 
