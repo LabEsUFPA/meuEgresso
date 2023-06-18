@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -24,6 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.PalestraModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
@@ -156,11 +158,16 @@ class PalestraServiceTest {
         BDDMockito.given(palestraRepository.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
 
-        UsuarioModel usuario = new UsuarioModel(1, "username", "password", "email@gmail.com", "nome", null, null);
+        UsuarioModel usuarioModel = new UsuarioModel();
+                usuarioModel.setUsername("username");
+                usuarioModel.setNome("nome_test");
+                usuarioModel.setEmail("teste@gmail.com");
+                usuarioModel.setPassword("teste123");
+                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
         PalestraModel curso = getMockPalestra();
-        curso.setCreatedBy(usuario);
+        curso.setCreatedBy(usuarioModel);
 
-        usuarioService.save(usuario);
+        usuarioService.save(usuarioModel);
         palestraService.save(curso);
 
         Boolean response = palestraService.existsByIdAndCreatedById(

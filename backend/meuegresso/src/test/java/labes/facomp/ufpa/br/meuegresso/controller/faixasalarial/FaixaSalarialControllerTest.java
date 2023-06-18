@@ -3,7 +3,6 @@ package labes.facomp.ufpa.br.meuegresso.controller.faixasalarial;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,11 +32,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 import labes.facomp.ufpa.br.meuegresso.service.faixasalarial.FaixaSalarialService;
 
 @SpringBootTest
@@ -50,9 +48,6 @@ class FaixaSalarialControllerTest {
 
         static final String FAIXA = "2000-3000";
         final String USERNAME = "username_test";
-
-        @Autowired
-        private GrupoRepository grupoRepository;
 
         @Autowired
         private FaixaSalarialService faixaSalarialService;
@@ -77,13 +72,6 @@ class FaixaSalarialControllerTest {
 
         @BeforeAll
         void setUp() throws Exception {
-                GrupoModel grupoModel = new GrupoModel();
-                grupoModel.setNomeGrupo("ADMIN");
-
-                grupoModel = grupoRepository.save(grupoModel);
-
-                Set<GrupoModel> grupos = new HashSet<>();
-                grupos.add(grupoModel);
 
                 faixaSalarialModel = FaixaSalarialModel.builder()
                                 .faixa(FAIXA)
@@ -94,7 +82,7 @@ class FaixaSalarialControllerTest {
                 usuarioModel.setNome("nome_test");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
-                usuarioModel.setGrupos(grupos);
+                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
                 mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -134,7 +122,7 @@ class FaixaSalarialControllerTest {
                                 .andReturn();
 
                 String retornoString = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString);
+                assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
         }
 
 
@@ -172,7 +160,7 @@ class FaixaSalarialControllerTest {
                                 .andExpect(status().isCreated())
                                 .andReturn();
                 String retornoString = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
+                assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
         }
 
         @Test
@@ -186,7 +174,7 @@ class FaixaSalarialControllerTest {
                                 .andExpect(status().isOk())
                                 .andReturn();
                 String resultado = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCESS_DELETE.getMessage(), resultado);
+                assertEquals(ResponseType.SUCCESS_DELETE.getMessage(), resultado);
 
         }
 }

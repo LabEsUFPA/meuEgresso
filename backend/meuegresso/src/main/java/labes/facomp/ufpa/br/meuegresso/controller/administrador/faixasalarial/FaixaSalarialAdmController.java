@@ -70,7 +70,7 @@ public class FaixaSalarialAdmController {
 	public String atualizarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO) throws InvalidRequestException {
 		FaixaSalarialModel faixaSalarialModel = mapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
 		faixaSalarialService.update(faixaSalarialModel);
-		return ResponseType.SUCESS_UPDATE.getMessage();
+		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class FaixaSalarialAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteById(Integer id) throws DataNotDeletedException {
 		if (faixaSalarialService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
+			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
 		throw new DataNotDeletedException();
 	}

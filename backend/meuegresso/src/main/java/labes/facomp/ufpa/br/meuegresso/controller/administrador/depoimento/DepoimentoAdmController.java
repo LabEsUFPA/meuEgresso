@@ -70,7 +70,7 @@ public class DepoimentoAdmController {
 	public String atualizarDepoimento(@RequestBody @Valid DepoimentoDTO depoimentoDTO) throws InvalidRequestException {
 		DepoimentoModel depoimentoModel = mapper.map(depoimentoDTO, DepoimentoModel.class);
 		depoimentoService.update(depoimentoModel);
-		return ResponseType.SUCESS_UPDATE.getMessage();
+		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class DepoimentoAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteById(Integer id) throws DataNotDeletedException {
 		if (depoimentoService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
+			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
 		throw new DataNotDeletedException();
 	}

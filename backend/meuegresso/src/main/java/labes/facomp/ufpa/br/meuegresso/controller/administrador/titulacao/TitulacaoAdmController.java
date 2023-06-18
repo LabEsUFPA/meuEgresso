@@ -70,7 +70,7 @@ public class TitulacaoAdmController {
 	public String atualizarTitulacao(@RequestBody @Valid TitulacaoDTO titulacaoDTO) throws InvalidRequestException {
 		TitulacaoModel titulacaoModel = mapper.map(titulacaoDTO, TitulacaoModel.class);
 		titulacaoService.update(titulacaoModel);
-		return ResponseType.SUCESS_UPDATE.getMessage();
+		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class TitulacaoAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteById(Integer id) throws DataNotDeletedException {
 		if (titulacaoService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
+			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
 		throw new DataNotDeletedException();
 	}

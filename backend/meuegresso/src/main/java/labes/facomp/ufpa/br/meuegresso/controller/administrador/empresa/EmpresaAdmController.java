@@ -70,7 +70,7 @@ public class EmpresaAdmController {
 	public String atualizarEmpresa(@RequestBody @Valid EmpresaDTO empresaDTO) throws InvalidRequestException {
 		EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);
 		empresaService.update(empresaModel);
-		return ResponseType.SUCESS_UPDATE.getMessage();
+		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class EmpresaAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteById(Integer id) throws DataNotDeletedException {
 		if (empresaService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
+			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
 		throw new DataNotDeletedException();
 	}

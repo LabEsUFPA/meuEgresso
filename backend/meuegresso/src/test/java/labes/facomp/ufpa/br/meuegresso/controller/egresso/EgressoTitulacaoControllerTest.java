@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -41,20 +40,19 @@ import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.curso.CursoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
 //TODO consertar teste
 @SpringBootTest
@@ -91,9 +89,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
 
     @Autowired
     private CursoRepository cursoRepository;
-
-    @Autowired
-    private GrupoRepository grupoRepository;
 
     @Autowired
     private EgressoRepository egressoRepository;
@@ -176,19 +171,12 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
                     .curso(cursoDTO)
                     .titulacao(titulacaoDTO).build();
 
-        GrupoModel grupoModel = new GrupoModel();
-        grupoModel.setNomeGrupo("ADMIN");
-        grupoModel = grupoRepository.save(grupoModel);
-
-        Set<GrupoModel> grupos = new HashSet<>();
-        grupos.add(grupoModel);
-
         usuarioModel = new UsuarioModel();
         usuarioModel.setUsername(USERNAME);
         usuarioModel.setNome("nome_test");
         usuarioModel.setEmail("teste@gmail.com");
         usuarioModel.setPassword("teste123");
-        usuarioModel.setGrupos(grupos);
+        usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -240,7 +228,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
                     .andReturn();
 
         String retornoString = resposta.getResponse().getContentAsString();
-        assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString);
+        assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
 
     }
 
@@ -279,7 +267,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
                     .andReturn();
 
         String retornoString = resposta.getResponse().getContentAsString();
-        assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
+        assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
 
     }
 
@@ -296,7 +284,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
                                 .andExpect(status().isOk())
                                 .andReturn();
         String resultado = resposta.getResponse().getContentAsString();
-        assertEquals(ResponseType.SUCESS_DELETE.getMessage(), resultado);
+        assertEquals(ResponseType.SUCCESS_DELETE.getMessage(), resultado);
 
     }
 }

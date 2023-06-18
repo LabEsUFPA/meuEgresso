@@ -3,7 +3,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -20,10 +19,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 @DirtiesContext
@@ -40,32 +38,22 @@ public class TitulacaoRepositoryTest {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private GrupoRepository grupoRepository;
-
     private TitulacaoModel titulacaoModel;
 
     private UsuarioModel usuarioModel;
-
-    private GrupoModel grupoModel;
 
     private final static String NOME = "Titulação1";
     
     @BeforeAll
     void setUp() {
-        grupoModel = GrupoModel.builder()
-                .nomeGrupo("ADMIN").build();
-        grupoModel = grupoRepository.save(grupoModel);
-        Set<GrupoModel> grupos = new HashSet<>();
-        grupos.add(grupoModel);
 
         usuarioModel = UsuarioModel.builder()
                 .nome("John")
                 .username("john123")
                 .email("john@example.com")
                 .password("password123")
-                .grupos(grupos)
                 .build();
+        usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
         usuarioModel = usuarioRepository.save(usuarioModel);
 
         titulacaoModel = TitulacaoModel.builder()

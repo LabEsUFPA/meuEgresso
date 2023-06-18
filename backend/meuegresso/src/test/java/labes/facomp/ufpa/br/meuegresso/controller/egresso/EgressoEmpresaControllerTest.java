@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -44,6 +43,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.setoratuacao.SetorAtuacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
@@ -51,7 +51,6 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.areaatuacao.AreaAtuacaoRepository;
@@ -59,7 +58,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.setoratuacao.SetorAtuacaoRepository;
 //TODO consertar teste
 @SpringBootTest
@@ -82,9 +80,6 @@ class EgressoEmpresaControllerTest {
 
     static final Integer FAIXASALARIAL_ID = 1;
     static final String FAIXASALARIAL = "5000 - 15000";
-
-    @Autowired
-    private GrupoRepository grupoRepository;
 
     @Autowired
     private EgressoRepository egressoRepository;
@@ -168,19 +163,12 @@ class EgressoEmpresaControllerTest {
         egressoEmpresaDTO = EgressoEmpresaDTO.builder().id(egressoEmpresaModelId).egresso(egressoPublicDTO)
                 .empresa(empresaBasicDTO).areaAtuacao("AreaTesteEE").faixaSalarial(faixaSalarialDTO).build();
 
-        GrupoModel grupoModel = new GrupoModel();
-        grupoModel.setNomeGrupo("ADMIN");
-        grupoModel = grupoRepository.save(grupoModel);
-
-        Set<GrupoModel> grupos = new HashSet<>();
-        grupos.add(grupoModel);
-
         usuarioModel = new UsuarioModel();
         usuarioModel.setUsername(USERNAME);
         usuarioModel.setNome("nome_test");
         usuarioModel.setEmail("teste@gmail.com");
         usuarioModel.setPassword("teste123");
-        usuarioModel.setGrupos(grupos);
+        usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -233,7 +221,7 @@ class EgressoEmpresaControllerTest {
                 .andReturn();
 
         String retornoString = resposta.getResponse().getContentAsString();
-        assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString);
+        assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
     }
 
     @Test
@@ -272,7 +260,7 @@ class EgressoEmpresaControllerTest {
                 .andReturn();
 
         String retornoString = resposta.getResponse().getContentAsString();
-        assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
+        assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
 
     }
 
@@ -310,7 +298,7 @@ class EgressoEmpresaControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String resultado = resposta.getResponse().getContentAsString();
-        assertEquals(ResponseType.SUCESS_DELETE.getMessage(), resultado);
+        assertEquals(ResponseType.SUCCESS_DELETE.getMessage(), resultado);
     }
 
 }

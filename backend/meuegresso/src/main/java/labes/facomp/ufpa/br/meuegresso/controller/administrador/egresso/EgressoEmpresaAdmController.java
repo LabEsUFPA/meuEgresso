@@ -71,7 +71,7 @@ public class EgressoEmpresaAdmController {
 	public String atualizarEgressoEmpresa(@RequestBody @Valid EgressoEmpresaDTO egressoEmpresaDTO) throws InvalidRequestException {
 		EgressoEmpresaModel egressoEmpresaModel = mapper.map(egressoEmpresaDTO, EgressoEmpresaModel.class);
 		egressoEmpresaService.update(egressoEmpresaModel);
-		return ResponseType.SUCESS_UPDATE.getMessage();
+		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class EgressoEmpresaAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteById(EgressoEmpresaModelId egressoEmpresaModelId) throws DataNotDeletedException {
 		if (egressoEmpresaService.deleteById(egressoEmpresaModelId)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
+			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
 		throw new DataNotDeletedException();
 	}

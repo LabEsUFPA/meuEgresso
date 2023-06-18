@@ -70,7 +70,7 @@ public class EnderecoAdmController {
 	public String atualizarcurso(@RequestBody @Valid EnderecoDTO enderecoDTO) throws InvalidRequestException {
 		EnderecoModel enderecoModel = mapper.map(enderecoDTO, EnderecoModel.class);
 		enderecoService.update(enderecoModel);
-		return ResponseType.SUCESS_UPDATE.getMessage();
+		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class EnderecoAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteById(Integer id) throws DataNotDeletedException {
 		if (enderecoService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
+			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
 		throw new DataNotDeletedException();
 	}

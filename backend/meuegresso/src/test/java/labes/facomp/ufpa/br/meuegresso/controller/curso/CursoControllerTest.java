@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,10 +35,9 @@ import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 
 @SpringBootTest
 @DirtiesContext
@@ -51,9 +49,6 @@ class CursoControllerTest {
 
         static final String NOME = "CursoTeste";
         final String USERNAME = "username_test";
-
-        @Autowired
-        private GrupoRepository grupoRepository;
 
         @Autowired
         MockMvc mockMvc;
@@ -71,20 +66,12 @@ class CursoControllerTest {
 
         @BeforeAll
         void setUp() throws Exception {
-                GrupoModel grupoModel = new GrupoModel();
-                grupoModel.setNomeGrupo("ADMIN");
-
-                grupoModel = grupoRepository.save(grupoModel);
-
-                Set<GrupoModel> grupos = new HashSet<>();
-                grupos.add(grupoModel);
-
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
                 usuarioModel.setNome("nome_test");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
-                usuarioModel.setGrupos(grupos);
+                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
                 mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -140,7 +127,7 @@ class CursoControllerTest {
                                 .andReturn();
 
                 String retornoString = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCESS_SAVE.getMessage(), retornoString);
+                assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
         }
 
         @Test
@@ -191,7 +178,7 @@ class CursoControllerTest {
                                 .andExpect(status().isCreated())
                                 .andReturn();
                 String retornoString = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), retornoString);
+                assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
         }
 
         @Test
@@ -206,7 +193,7 @@ class CursoControllerTest {
                                 .andExpect(status().isOk())
                                 .andReturn();
                 String resultado = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCESS_DELETE.getMessage(), resultado);
+                assertEquals(ResponseType.SUCCESS_DELETE.getMessage(), resultado);
 
         }
 }

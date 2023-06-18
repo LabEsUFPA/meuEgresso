@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -35,10 +34,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 
 @SpringBootTest
 @DirtiesContext
@@ -47,9 +45,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 class GeneroControllerTest {
-
-	@Autowired
-	private GrupoRepository grupoRepository;
 
 	@Autowired
 	MockMvc mockMvc;
@@ -65,20 +60,13 @@ class GeneroControllerTest {
 
 	@BeforeAll
 	void setUp() throws Exception {
-		GrupoModel grupoModel = new GrupoModel();
-		grupoModel.setNomeGrupo("ADMIN");
-
-		grupoModel = grupoRepository.save(grupoModel);
-
-		Set<GrupoModel> grupos = new HashSet<>();
-		grupos.add(grupoModel);
 
 		UsuarioModel usuarioModel = new UsuarioModel();
 		usuarioModel.setUsername("username");
 		usuarioModel.setNome("nome_test");
 		usuarioModel.setEmail("teste@gmail.com");
 		usuarioModel.setPassword("teste123");
-		usuarioModel.setGrupos(grupos);
+		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 		mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(usuarioModel)))
@@ -117,7 +105,7 @@ class GeneroControllerTest {
 				.andExpect(status().isCreated()).andReturn();
 
 		String resp = resposta.getResponse().getContentAsString();
-		assertEquals(ResponseType.SUCESS_SAVE.getMessage(), resp);
+		assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), resp);
 	}
 
 	@Test
@@ -153,7 +141,7 @@ class GeneroControllerTest {
 				.andExpect(status().isAccepted()).andReturn();
 
 		String resp = resposta.getResponse().getContentAsString();
-		assertEquals(ResponseType.SUCESS_UPDATE.getMessage(), resp);
+		assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), resp);
 
 	}
 
@@ -170,7 +158,7 @@ class GeneroControllerTest {
 				.andExpect(status().isOk()).andReturn();
 
 		String res = resposta.getResponse().getContentAsString();
-		assertEquals(res, ResponseType.SUCESS_DELETE.getMessage());
+		assertEquals(res, ResponseType.SUCCESS_DELETE.getMessage());
 
 	}
 

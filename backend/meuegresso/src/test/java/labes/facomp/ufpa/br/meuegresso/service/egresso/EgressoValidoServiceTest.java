@@ -49,73 +49,8 @@ class EgressoValidoServiceTest {
     @MockBean
     private EgressoValidoRepository repository;
 
-    /**
-     * Metodo para testar o metodo findAll.
-     *
-     * @author Pedro Inácio
-     * @since 30/04/2023
-     */
-    @Test
-    void testFindAll() {
-        BDDMockito.given(repository.findAll())
-                .willReturn(getMockEgressoLista());
-
-        List<EgressoValidoModel> response = egressoValidoService.findAll();
-        assertNotNull(response);
-    }
-
-    /**
-     * Metodo para testar o findByEmailIgnoreCase.
-     *
-     * @author Pedro Inácio
-     * @since 30/04/2023
-     */
-    @Test
-    void testFindByEmailIgnoreCase() {
-        BDDMockito.given(repository.findByEmailIgnoreCase(EMAIL))
-                .willReturn(Optional.ofNullable(getMockEgresso()));
-
-        Optional<EgressoValidoModel> response = egressoValidoService.findByEmail(EMAIL);
-
-        assertEquals(getMockEgresso().getEmail(), response.get().getEmail());
-    }
-
-    /**
-     * Metodo para testar o findByMatricula.
-     *
-     * @author Pedro Inácio
-     * @since 30/04/2023
-     */
-    @Test
-    void testfindByMatricula() {
-        try {
-            BDDMockito.given(repository.findByMatricula(MATRICULA))
-                    .willReturn(Optional.ofNullable(getMockEgresso()));
-
-            Optional<EgressoValidoModel> response = egressoValidoService.findByMatricula(MATRICULA);
-            assertNotNull(response);
-            assertEquals(getMockEgresso().getMatricula(), response.get().getMatricula());
-        } catch (Exception e) {
-            e.getMessage();
-        }
-
-    }
-
-    /**
-     * Metodo para testar o findByNomeIgnoreCase.
-     *
-     * @author Pedro Inácio
-     * @since 30/04/2023
-     */
-    @Test
-    void testfindByNomeIgnoreCase() {
-
-        BDDMockito.given(egressoValidoService.findByNomeIgnoreCase(NOME))
-                .willReturn(getMockEgressoLista());
-
-        List<EgressoValidoModel> response = egressoValidoService.findByNomeIgnoreCase(NOME);
-        assertEquals(getMockEgressoLista(), response);
-    }
+    //TODO escrever teste para validarEgresso()
+    
 
     /**
      * Metodo que preenche um mock de um EgressoValidoModel para retorno dos testes

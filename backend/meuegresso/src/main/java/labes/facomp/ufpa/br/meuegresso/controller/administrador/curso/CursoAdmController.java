@@ -70,7 +70,7 @@ public class CursoAdmController {
 	public String atualizarcurso(@RequestBody @Valid CursoDTO cursoDTO) throws InvalidRequestException {
 		CursoModel cursoModel = mapper.map(cursoDTO, CursoModel.class);
 		cursoService.update(cursoModel);
-		return ResponseType.SUCESS_UPDATE.getMessage();
+		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class CursoAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteById(Integer id) throws DataNotDeletedException {
 		if (cursoService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
+			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
 		throw new DataNotDeletedException();
 	}

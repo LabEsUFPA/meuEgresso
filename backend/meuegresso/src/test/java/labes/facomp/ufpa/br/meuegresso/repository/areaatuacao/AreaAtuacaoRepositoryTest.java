@@ -2,7 +2,6 @@ package labes.facomp.ufpa.br.meuegresso.repository.areaatuacao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -19,10 +18,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 @DirtiesContext
@@ -39,12 +37,7 @@ public class AreaAtuacaoRepositoryTest {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private GrupoRepository grupoRepository;
-
     private AreaAtuacaoModel areaAtuacaoModel;
-
-    private GrupoModel grupoModel;
 
     private UsuarioModel usuarioModel;
 
@@ -52,19 +45,14 @@ public class AreaAtuacaoRepositoryTest {
 
     @BeforeAll
     void setUp() {
-        grupoModel = GrupoModel.builder()
-        .nomeGrupo("ADMIN").build();
-        grupoModel = grupoRepository.save(grupoModel);
-        Set<GrupoModel> grupos = new HashSet<>();
-        grupos.add(grupoModel);
-
+        
         usuarioModel = UsuarioModel.builder()
                 .nome("John")
                 .username("john123")
                 .email("john@example.com")
                 .password("password123")
-                .grupos(grupos)
                 .build();
+        usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
         usuarioModel = usuarioRepository.save(usuarioModel);
 
         areaAtuacaoModel = AreaAtuacaoModel.builder()

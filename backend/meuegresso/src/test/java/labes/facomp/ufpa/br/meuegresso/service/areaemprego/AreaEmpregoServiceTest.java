@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaEmpregoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
@@ -100,9 +102,14 @@ public class AreaEmpregoServiceTest {
         BDDMockito.given(areaEmpregoRepository.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
 
-        UsuarioModel usuario = new UsuarioModel(1, "username", "password", "email@gmail.com", "nome", null, null);
+        UsuarioModel usuarioModel = new UsuarioModel();
+                usuarioModel.setUsername("username");
+                usuarioModel.setNome("nome_test");
+                usuarioModel.setEmail("teste@gmail.com");
+                usuarioModel.setPassword("teste123");
+                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
         AreaEmpregoModel emprego = getMockAreaEmprego();
-        emprego.setCreatedBy(usuario);
+        emprego.setCreatedBy(usuarioModel);
 
         Boolean response = areaEmpregoService.existsByIdAndCreatedById(
                 emprego.getId(),

@@ -70,7 +70,7 @@ public class TipoBolsaAdmController {
 	public String atualizarTipoBolsa(@RequestBody @Valid TipoBolsaDTO tipoBolsaDTO) throws InvalidRequestException {
 		TipoBolsaModel tipoBolsaModel = mapper.map(tipoBolsaDTO, TipoBolsaModel.class);
 		tipoBolsaService.update(tipoBolsaModel);
-		return ResponseType.SUCESS_UPDATE.getMessage();
+		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class TipoBolsaAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteById(Integer id) throws DataNotDeletedException {
 		if (tipoBolsaService.deleteById(id)) {
-			return ResponseType.SUCESS_DELETE.getMessage();
+			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
 		throw new DataNotDeletedException();
 	}
