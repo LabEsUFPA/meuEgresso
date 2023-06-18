@@ -15,24 +15,24 @@ describe('ItemEgresso', () => {
         idEgresso: 1,
         nome: 'Nome',
         dataCadastro: '2023-05-01',
-        status: 'Ativo',
+        status: 'Completo',
         foto: 'urlFoto',
         email: 'email@teste.com'
       }
     })
-    expect(wrapper.html()).toContain(wrapper.vm.nome)
-    expect(wrapper.html()).toContain(wrapper.vm.dataCadastro.split('-').reverse().join('/'))
-    expect(wrapper.html()).toContain(wrapper.vm.status)
+    expect(wrapper.text()).toContain(wrapper.vm.nome)
+    expect(wrapper.text()).toContain(wrapper.vm.dataCadastro.split('-').reverse().join('/'))
+    expect(wrapper.text()).toContain(wrapper.vm.status)
   })
 
-  it('should render options for Ativo status', async () => {
+  it('should render options for completo status', async () => {
     const wrapper = mount(ItemEgresso, {
       props: {
         id: 1,
         idEgresso: 1,
         nome: 'Nome',
         dataCadastro: '2023-05-01',
-        status: 'Ativo',
+        status: 'completo',
         foto: 'urlFoto',
         email: 'email@teste.com'
       }
@@ -40,14 +40,14 @@ describe('ItemEgresso', () => {
     expect(wrapper.find('#status').classes()).toContain('bg-emerald-500')
   })
 
-  it('should render options for Pendente status', async () => {
+  it('should render options for pendente status', async () => {
     const wrapper = mount(ItemEgresso, {
       props: {
         id: 1,
         idEgresso: 1,
         nome: 'Nome',
         dataCadastro: '2023-05-01',
-        status: 'Pendente',
+        status: 'pendente',
         foto: 'urlFoto',
         email: 'email@teste.com'
       }
@@ -55,14 +55,14 @@ describe('ItemEgresso', () => {
     expect(wrapper.find('#status').classes()).toContain('bg-amber-500')
   })
 
-  it('should render options for Incompleto status', async () => {
+  it('should render options for incompleto status', async () => {
     const wrapper = mount(ItemEgresso, {
       props: {
         id: 1,
         idEgresso: 1,
         nome: 'Nome',
         dataCadastro: '2023-05-01',
-        status: 'Incompleto',
+        status: 'incompleto',
         foto: 'urlFoto',
         email: 'email@teste.com'
       }

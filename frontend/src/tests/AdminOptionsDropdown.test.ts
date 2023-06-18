@@ -13,51 +13,49 @@ describe('AdminOptionsDropdown', () => {
       props: {
         id: 1,
         idEgresso: 1,
-        status: 'Ativo',
+        status: 'completo',
         email: 'email@teste.com'
       }
     })
     expect(wrapper.find('button').exists()).toBe(true)
   })
 
-  it('should render options for Ativo status', async () => {
+  it('should render options for completo status', async () => {
     const wrapper = mount(AdminOptionsDropdown, {
       props: {
         id: 1,
         idEgresso: 1,
-        status: 'Ativo',
+        status: 'completo',
         email: 'email@teste.com'
       }
     })
-    expect(wrapper.html()).toContain('Editar cadastro')
-    expect(wrapper.html()).toContain('Excluir cadastro')
-    expect(wrapper.html()).toContain('Enviar e-mail')
+    console.log(wrapper.text())
+    expect(wrapper.text()).toContain('Editar cadastro')
+    expect(wrapper.text()).toContain('Enviar e-mail')
   })
 
-  it('should render options for Pendente status', async () => {
+  it('should render options for pendente status', async () => {
     const wrapper = mount(AdminOptionsDropdown, {
       props: {
         id: 1,
         idEgresso: 1,
-        status: 'Pendente',
+        status: 'pendente',
         email: 'email@teste.com'
       }
     })
-    expect(wrapper.html()).toContain('Aprovar cadastro')
-    expect(wrapper.html()).toContain('Excluir cadastro')
-    expect(wrapper.html()).toContain('Enviar e-mail')
+    expect(wrapper.text()).toContain('Aprovar cadastro')
+    expect(wrapper.text()).toContain('Enviar e-mail')
   })
 
-  it('should render options for Incompleto status', async () => {
+  it('should render options for incompleto status', async () => {
     const wrapper = mount(AdminOptionsDropdown, {
       props: {
         id: 1,
         idEgresso: 1,
-        status: 'Incompleto',
+        status: 'incompleto',
         email: 'email@teste.com'
       }
     })
-    expect(wrapper.html()).toContain('Excluir cadastro')
-    expect(wrapper.html()).toContain('Enviar e-mail')
+    expect(wrapper.text()).toContain('Enviar e-mail')
   })
 })

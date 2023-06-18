@@ -21,12 +21,12 @@ router.beforeEach((to, from) => {
     }
   }
 
-  if (to.path !== '/cadastro' && loggedUser !== null && loggedUser.isEgresso === false && (to.meta?.shouldNotForce !== true) && loggedUser.scope === 'EGRESSO') {
+  if (to.path !== '/cadastro' && loggedUser !== null && !loggedUser.isEgresso && (to.meta?.shouldNotForce !== true) && loggedUser.scope === 'EGRESSO') {
     return {
       path: '/cadastro'
     }
   } else if (!unauthenticatedUser) {
-    if (to.path === '/cadastro' && loggedUser !== null && loggedUser.scope === 'EGRESSO' && loggedUser.isEgresso === true) {
+    if (to.path === '/cadastro' && loggedUser !== null && loggedUser.scope === 'EGRESSO' && loggedUser.isEgresso) {
       return {
         path: from.path
       }
