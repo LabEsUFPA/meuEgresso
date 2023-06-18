@@ -1,13 +1,26 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.Tuple;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDashDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.notificacao.NotificacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
@@ -86,6 +99,72 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
 		return usuarioRepository.existsByIdAndCreatedById(id, createdBy);
+	}
+
+	// PageRequest.of(page, size, Sort.by(direction, "u.created_date")
+	@Override
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size,
+			Direction direction) {
+
+		List<Tuple> tupla = usuarioRepository.findBySearch(nomeUsuario, status);
+
+		List<EgressoDashDTO> dashDtos = tupla.stream()
+				.map(t -> new EgressoDashDTO(
+						t.get(0, Integer.class), // id
+						t.get(1, Integer.class), // id do egresso
+						t.get(2, String.class), // nome
+						t.get(3, String.class), // nomeEmpresa
+						t.get(4, String.class), // email
+						t.get(5, Timestamp.class).toLocalDateTime().toLocalDate(), // createdDate
+						t.get(6, String.class), // foto
+						t.get(7, String.class))) // status
+				.collect(Collectors.toList());
+
+		Pageable paging = PageRequest.of(page, size, Sort.by(direction, "u.created_date"));
+		int start = Math.min((int) paging.getOffset(), dashDtos.size());
+		int end = Math.min((start + paging.getPageSize()), dashDtos.size());
+
+		return new PageImpl<>(dashDtos.subList(start, end), paging, dashDtos.size());
+	}
+
+	public Page<NotificacaoDTO> getStatus(String nome, String status, Integer page, Integer size, Direction direction) {
+		List<NotificacaoDTO> notificacoes = new ArrayList<>();
+
+		usuarioRepository.getStatus(nome, status).forEach(e -> notificacoes.add(
+				NotificacaoDTO.builder()
+						.nome(e.get(0, String.class))
+						.usuarioId(e.get(1, Integer.class))
+						.status(e.get(2, String.class))
+						.dataModificacao(e.get(3, Timestamp.class).toLocalDateTime().toLocalDate())
+						.build()));
+
+		Pageable paging = PageRequest.of(page, size, Sort.by(direction, "u.last_modified_date"));
+		int start = Math.min((int) paging.getOffset(), notificacoes.size());
+		int end = Math.min((start + paging.getPageSize()), notificacoes.size());
+
+		return new PageImpl<>(notificacoes.subList(start, end), paging, notificacoes.size());
+	}
+
+	@Override
+	public boolean toggleAtivo(Integer id) throws NotFoundException {
+		if (!usuarioRepository.existsById(id)) {
+			throw new NotFoundException();
+		}
+		UsuarioModel usuario = usuarioRepository.findById(id).orElseThrow();
+		usuario.setAtivo(!usuario.getAtivo());
+		usuarioRepository.save(usuario);
+		return true;
+	}
+
+	@Override
+	public boolean toggleValido(Integer id) throws NotFoundException {
+		if (!usuarioRepository.existsById(id)) {
+			throw new NotFoundException();
+		}
+		UsuarioModel usuario = usuarioRepository.findById(id).orElseThrow();
+		usuario.setValido(!usuario.getValido());
+		usuarioRepository.save(usuario);
+		return true;
 	}
 
 }

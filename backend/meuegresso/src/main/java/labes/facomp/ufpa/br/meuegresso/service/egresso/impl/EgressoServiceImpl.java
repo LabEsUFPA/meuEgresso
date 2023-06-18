@@ -10,10 +10,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -21,6 +23,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
@@ -108,6 +111,16 @@ public class EgressoServiceImpl implements EgressoService {
 	}
 
 	@Override
+	public boolean deletarEgresso(EgressoModel egresso) {
+		if (egressoRepository.existsById(egresso.getId())) {
+			egressoRepository.deleteById(egresso.getId());
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public boolean existsById(Integer id) {
 		return egressoRepository.existsById(id);
 	}
@@ -120,9 +133,13 @@ public class EgressoServiceImpl implements EgressoService {
 	@Override
 	public Resource getFileAsResource(String fotoNomeString) throws NotFoundFotoEgressoException {
 
-		Path file = Paths.get(String.format("%s%s", uploadDirectory + "/", fotoNomeString));
+		Path file = Paths.get(String.format("%s/%s", uploadDirectory, fotoNomeString));
 		try {
-			return new UrlResource(file.toUri());
+			UrlResource url = new UrlResource(file.toUri());
+			if (!url.exists()) {
+				throw new NotFoundFotoEgressoException();
+			}
+			return url;
 		} catch (MalformedURLException e) {
 			throw new NotFoundFotoEgressoException();
 		}
@@ -258,4 +275,47 @@ public class EgressoServiceImpl implements EgressoService {
 		contagem.computeIfAbsent(posGraduacao, k -> 0);
 		return contagem;
 	}
+
+	@Override
+	public Map<LocalDate, Long> countEgressoPorData() {
+		List<Tuple> cadastros = egressoRepository.countEgressoData();
+
+		return cadastros.stream()
+				.collect(Collectors.groupingBy(
+						tuple -> tuple.get(0, java.sql.Date.class)
+								.toLocalDate(),
+						Collectors.counting()));
+	}
+
+	@Override
+	public Map<Integer, Long> countEgressoPorAno() {
+		List<Tuple> cadastros = egressoRepository.countEgressoData();
+
+		return cadastros.stream()
+				.collect(Collectors.groupingBy(
+						tuple -> Year.of(
+								tuple.get(0, java.sql.Date.class)
+										.toLocalDate()
+										.getYear())
+								.getValue(),
+						Collectors.counting()));
+	}
+
+	@Override
+	public Map<LocalDate, Long> countEgressoPorMesEAno() {
+		List<Tuple> cadastros = egressoRepository.countEgressoData();
+
+		return cadastros.stream()
+				.collect(Collectors.groupingBy(
+						tuple -> tuple.get(0, java.sql.Date.class)
+								.toLocalDate()
+								.withDayOfMonth(1),
+						Collectors.counting()));
+	}
+
+	@Override
+	public void deleteAll() {
+		egressoRepository.deleteAll();
+	}
+
 }

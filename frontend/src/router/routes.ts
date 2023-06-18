@@ -9,7 +9,9 @@ export default [
         path: '/cadastro',
         component: async () => await import('src/pages/CadastroEgresso.vue'),
         meta: {
-          shouldNotForce: true
+          shouldNotForce: true,
+          requiresAuthAdmin: true,
+          allowedScopes: ['EGRESSO']
         }
       },
       {
@@ -20,7 +22,8 @@ export default [
         path: '/cadastro-admin',
         component: async () => await import('src/pages/CadastroAdmin.vue'),
         meta: {
-          requiresAuthAdmin: true
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
         }
       },
       {
@@ -28,6 +31,14 @@ export default [
         component: async () => await import('src/pages/CadastroAnuncio.vue'),
         meta: {
           requiresAuth: true
+        }
+      },
+      {
+        path: '/notificacoes-admin',
+        component: async () => await import('src/pages/NotificacoesAdmin.vue'),
+        meta: {
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
         }
       },
       {
@@ -57,6 +68,22 @@ export default [
       {
         path: '/vagas/:id',
         component: async () => await import('src/pages/AnuncioVaga.vue')
+      },
+      {
+        path: '/painel-admin',
+        component: async () => await import('src/pages/PainelAdmin.vue'),
+        meta: {
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
+        }
+      },
+      {
+        path: '/registro-egressos',
+        component: async () => await import('src/pages/RegistroEgressos.vue'),
+        meta: {
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
+        }
       },
       {
         path: 'redefinir-senha',

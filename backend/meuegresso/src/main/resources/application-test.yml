@@ -49,5 +49,4 @@ server:
 token:
   domain: teste.com
   expiresHours: 3
-
 fotosDir: test/fotosTeste/

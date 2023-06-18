@@ -626,7 +626,6 @@ async function handleSubmit (values: any) {
     cotas = null
   }
 
-  console.log(values.carreira.area !== 'Desempregado')
   const empresa = values.carreira.area !== 'Desempregado'
     ? {
         areaAtuacao: values.carreira.area,
@@ -680,8 +679,6 @@ async function handleSubmit (values: any) {
     empresa,
     titulacao
   })
-  console.log('Staus: ')
-  console.log(status)
 
   if (status !== 201) {
     dialogFalha.value = true
@@ -691,7 +688,6 @@ async function handleSubmit (values: any) {
 }
 
 function handleFail (e: any) {
-  console.log(e)
   camposFaltosos.value = true
   const incorrectElements = Object.keys(e.errors)
   const el = document.querySelector(`#${incorrectElements[0].replaceAll('.', '-')}`)

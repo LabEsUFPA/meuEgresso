@@ -34,9 +34,16 @@ router.beforeEach((to, from) => {
   }
 
   try {
-    if (to.meta.requiresAuthAdmin === true && loggedUser?.scope !== 'ADMIN') {
-      return {
-        path: '/'
+    if (to.meta.requiresAuthAdmin === true) {
+      const allowedScopes = to.meta.allowedScopes
+      if (allowedScopes !== null && allowedScopes !== undefined) {
+        const permission = (allowedScopes as any[]).reduce((accumulator: boolean, scope: any) => {
+          return accumulator || scope === loggedUser?.scope
+        }, false)
+
+        if (!permission) {
+          return '/'
+        }
       }
     }
   } catch {

@@ -115,34 +115,10 @@
         </h1>
       </div>
 
-      <div
-        class="flex gap-16 sm:gap-32 justify-center"
-      >
-        <button
-          class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-lg"
-          v-show="currentPage>0"
-          @click="decrementaPage()"
-        >
-          <SvgIcon
-            type="mdi"
-            size="32"
-            :path="mdiChevronLeft"
-          />
-          <div>Anterior</div>
-        </button>
-        <button
-          class="flex gap-2 hover:bg-sky-200 text-sky-600 font-medium items-center py-2 px-4 rounded-md"
-          v-show="currentPage<$store.totalPages-1"
-          @click="incrementaPage()"
-        >
-          <div>Próximo</div>
-          <SvgIcon
-            type="mdi"
-            size="32"
-            :path="mdiChevronRight"
-          />
-        </button>
-      </div>
+      <PageSelector
+        v-model:current-page="currentPage"
+        :total-pages="$store.totalPages"
+      />
     </div>
   </div>
 
@@ -158,7 +134,7 @@
 
 import { ref, onMounted, watch } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiBullhorn, mdiFilterVariant, mdiPlus, mdiChevronRight, mdiChevronLeft, mdiEmoticonSadOutline } from '@mdi/js'
+import { mdiBullhorn, mdiFilterVariant, mdiPlus, mdiChevronRight, mdiEmoticonSadOutline } from '@mdi/js'
 import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
 import { useLoginStore } from 'src/store/LoginStore'
 import CustomButton from 'src/components/CustomButton.vue'
@@ -166,6 +142,7 @@ import ShortPost from 'src/components/ShortPost.vue'
 import SearchBar from 'src/components/SearchBar.vue'
 import FilterChip from 'src/components/FilterChip.vue'
 import ModalFilters from 'src/components/ModalFilters.vue'
+import PageSelector from 'src/components/PageSelector.vue'
 
 const logado = ref(useLoginStore().userLogged)
 
@@ -179,14 +156,6 @@ const currentPage = ref(0)
 
 const size = ref(3)
 
-const incrementaPage = () => {
-  currentPage.value++
-}
-
-const decrementaPage = () => {
-  currentPage.value--
-}
-
 onMounted(async () => {
   await $store.fetchAreasEmprego()
   await $store.fetchBusca(currentPage.value, size.value)
@@ -194,6 +163,7 @@ onMounted(async () => {
   loading.value = true
   watch(currentPage, () => {
     $store.fetchBusca(currentPage.value, size.value)
+    window.scrollTo(0, 0)
   })
   watch(pesquisaValue, () => {
     $store.fetchBuscaAnuncioTitulo(pesquisaValue.value, currentPage.value, size.value)
@@ -219,7 +189,7 @@ const toggleFilterApplied = (id:number) => {
   const filtro = $store.areasEmpregoFiltros.find(f => f.id === id)
   if (filtro) {
     filtro.selected = !filtro.selected
-    applyFilters(filtersById.value.filter(f => f === filtro.id))
+    applyFilters($store.areasEmpregoFiltros.filter(f => f.selected))
   }
 }
 

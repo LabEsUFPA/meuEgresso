@@ -13,7 +13,7 @@
     <OField :root-class="classNames(['flex h-full w-full'])">
       <OInput
         override
-        :v-model="searchValue"
+        v-model="searchValue"
         expanded
         placeholder="Pesquisar vaga"
         :root-class="classNames(['flex h-full w-full'])"
@@ -50,8 +50,8 @@ const props = defineProps<{
   modelValue:string
 }>()
 
-const searchValue = ref(props.modelValue)
 const searchbarFocused = ref(false)
+const searchValue = ref(props.modelValue)
 
 const toggleSearchbarFocus = () => {
   searchbarFocused.value = !searchbarFocused.value

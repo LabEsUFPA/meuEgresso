@@ -7,7 +7,6 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +24,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -162,7 +160,6 @@ public class EgressoController {
         ContribuicaoModel contribuicao = egresso.getContribuicao();
         depoimento.setEgresso(egresso);
         contribuicao.setEgresso(egresso);
-
         egresso.getUsuario().setAtivo(egresso.getUsuario().getValido());
         egressoService.adicionarEgresso(egresso);
 
@@ -248,28 +245,6 @@ public class EgressoController {
             return ResponseType.SUCCESS_UPDATE.getMessage();
         }
         throw new UnauthorizedRequestException();
-    }
-
-    /**
-     * Endpoint responsavel por deletar o egresso.
-     *
-     * @param egressoPublicDTO Estrutura de dados contendo as informações
-     *                         necessárias para deletar o egresso.
-     * @return {@link ResponseEntity<String>} Mensagem de confirmacao.
-     * @author Bruno Eiki, Marcus Maciel Oliveira
-     * @since 05/06/2023
-     */
-    @DeleteMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    @ResponseStatus(code = HttpStatus.OK)
-    @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public String deletarEgresso(@RequestBody @Valid EgressoPublicDTO egressoPublicDTO) {
-        EgressoModel egressoModel = mapper.map(egressoPublicDTO, EgressoModel.class);
-        if (egressoService.existsById(egressoModel.getId())) {
-            egressoService.deleteById(egressoModel.getId());
-            return ResponseType.SUCCESS_DELETE.getMessage();
-        }
-        return ResponseType.FAIL_DELETE.getMessage();
     }
 
     /**

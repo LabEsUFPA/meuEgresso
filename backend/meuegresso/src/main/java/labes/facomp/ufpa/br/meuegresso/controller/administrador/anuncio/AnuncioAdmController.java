@@ -56,7 +56,8 @@ public class AnuncioAdmController {
 	 */
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<AnuncioDTO> buscarAnuncios(
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
@@ -77,7 +78,8 @@ public class AnuncioAdmController {
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO) {
 		AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
 		anuncioService.save(anuncioModel);
@@ -97,7 +99,8 @@ public class AnuncioAdmController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO)
 			throws InvalidRequestException {
 		AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
@@ -119,6 +122,7 @@ public class AnuncioAdmController {
 	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+
 	public String deleteById(@PathVariable Integer id) throws DataNotDeletedException {
 		if (anuncioService.deleteById(id)) {
 			return ResponseType.SUCCESS_DELETE.getMessage();

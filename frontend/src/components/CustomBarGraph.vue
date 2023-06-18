@@ -1,6 +1,9 @@
 <template>
   <div
-    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 shadow-md sm:h-96"
+    class="flex flex-col h-[400px] w-full bg-white rounded-xl p-4 text-gray-600 sm:h-96"
+    :class="{
+      ['shadow-md']: !shadowless
+    }"
   >
     <div
       v-if="loading"
@@ -81,6 +84,7 @@ use([
 interface Props {
     legend?: string,
     info?: string
+    shadowless?: boolean
     loading: boolean
     data: {
       series: BarChartModel

@@ -6,11 +6,13 @@ export namespace API {
     route: string
     body?: Record<string, any>
     params?: Record<string, any>
+    headers?: Record<string, any>
+    responseType?: any
   }
 
   export interface Response {
     status: number
-    data?: Record<string, any> | null
+    data?: Record<string, any> | null | any
   }
   export type Request = (params: RequestParams) => Promise<API.Response | null>
 

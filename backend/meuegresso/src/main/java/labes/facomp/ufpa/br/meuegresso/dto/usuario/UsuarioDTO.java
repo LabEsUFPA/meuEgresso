@@ -28,17 +28,17 @@ public class UsuarioDTO {
 
 	private Integer id;
 
-	@NotBlank(message = "Infome um usuário.")
+	@NotBlank(message = "Informe um usuário.")
 	private String username;
 
-	@NotBlank(message = "Infome uma senha.")
+	@NotBlank(message = "Informe uma senha.")
 	private String password;
 
 	@Email(message = "Informe um e-mail valido.")
-	@NotBlank(message = "Infome um email.")
+	@NotBlank(message = "Informe um email.")
 	private String email;
 
-	@NotBlank(message = "Infome um nome.")
+	@NotBlank(message = "Informe um nome.")
 	private String nome;
 
 	@Valid

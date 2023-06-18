@@ -2,7 +2,7 @@
   <div v-if="modelValue">
     <div class="inset-0 fixed top-0 left-0 bg-black/75 flex items-center justify-center z-10">
       <div
-        class="bg-white rounded-xl w-80 h-64 sm:w-10/12 sm:h-96 max-w-2xl relative"
+        class="bg-white rounded-xl w-80 h-fit min-h-[16rem] sm:w-10/12 sm:h-96 max-w-2xl relative"
         :class="{
           ['scale-0']: !modelValue
         }"
