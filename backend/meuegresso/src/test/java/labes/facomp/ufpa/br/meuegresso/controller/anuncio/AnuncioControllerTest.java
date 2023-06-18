@@ -32,6 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import labes.facomp.ufpa.br.meuegresso.config.ConfiguracaoTest;
 import labes.facomp.ufpa.br.meuegresso.dto.anuncio.AnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
@@ -49,7 +50,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.areaemprego.AreaEmpregoReposit
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class AnuncioControllerTest {
+public class AnuncioControllerTest extends ConfiguracaoTest {
 
         final String USERNAME = "username_test";
 
@@ -82,6 +83,7 @@ public class AnuncioControllerTest {
 
         @BeforeAll
         void setUp() throws Exception {
+
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 /* Usuario */

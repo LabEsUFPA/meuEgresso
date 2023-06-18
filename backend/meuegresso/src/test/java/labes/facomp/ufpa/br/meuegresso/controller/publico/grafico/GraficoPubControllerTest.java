@@ -34,6 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import labes.facomp.ufpa.br.meuegresso.config.ConfiguracaoTest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
@@ -103,7 +104,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class GraficoPubControllerTest {
+class GraficoPubControllerTest extends ConfiguracaoTest {
 
         static final String ENDERECO_CIDADE = "Barcarena";
         static final String ENDERECO_ESTADO = "Para";
