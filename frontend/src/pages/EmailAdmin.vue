@@ -147,7 +147,7 @@
                 @click="handleCancel"
               >
                 <h1 class=" text-gray-400 px-10 py-1.5">
-                  Resetar conteúdo
+                  Resetar
                 </h1>
               </CustomButton>
 
@@ -329,6 +329,7 @@ async function fetchUpdateEmail () {
   [Assinatura]`
   form.value?.setFieldValue('escopo', 'Atualização Cadastral - Meu Egresso')
   form.value?.setFieldValue('corpo', message)
+  form.value?.setFieldValue('dataEnvio', '')
 
   if ($painelStore.getEgressoEmail()) {
     form.value?.setFieldValue('emailMulti', true)
