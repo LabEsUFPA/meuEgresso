@@ -59,7 +59,7 @@ public class RecuperacaoSenhaServiceImpl implements RecuperacaoSenhaService {
     }
 
     public RecuperacaoSenhaModel save(RecuperacaoSenhaModel recuperacaoSenha) {
-        return save(recuperacaoSenha);
+        return recuperacaoSenhaRepository.save(recuperacaoSenha);
     }
 
     @Override
