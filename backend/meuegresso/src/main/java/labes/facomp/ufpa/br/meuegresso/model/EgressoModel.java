@@ -3,6 +3,9 @@ package labes.facomp.ufpa.br.meuegresso.model;
 import java.time.LocalDate;
 import java.util.Set;
 
+import org.hibernate.envers.AuditOverride;
+import org.hibernate.envers.Audited;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,10 +31,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@Audited
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "egresso")
 @EqualsAndHashCode(callSuper = false)
+@AuditOverride(forClass = Auditable.class)
 public class EgressoModel extends Auditable {
 
 	@Id

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import labes.facomp.ufpa.br.meuegresso.dto.publico.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
 
@@ -82,11 +81,7 @@ public class EgressoPubController {
 	@GetMapping(value = "/foto/{id}", produces = "image/png")
 	@ResponseStatus(code = HttpStatus.OK)
 	public Resource getFotoEgresso(@PathVariable Integer id) throws NotFoundFotoEgressoException {
-		EgressoModel egressoModel = egressoService.findById(id);
-		if (egressoModel.getFotoNome() != null) {
-			return egressoService.getFileAsResource(egressoModel.getFotoNome());
-		}
-		throw new NotFoundFotoEgressoException();
+		return egressoService.getFileAsResource(String.format("%d.png", id));
 	}
 
 }

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,17 +32,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import labes.facomp.ufpa.br.meuegresso.config.Configuracao;
 import labes.facomp.ufpa.br.meuegresso.dto.anuncio.AnuncioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.page.PageDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.model.AreaEmpregoModel;
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.areaemprego.AreaEmpregoRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 
 @SpringBootTest
 @DirtiesContext
@@ -51,7 +50,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class AnuncioControllerTest {
+class AnuncioControllerTest extends Configuracao {
 
         final String USERNAME = "username_test";
 
@@ -63,9 +62,6 @@ public class AnuncioControllerTest {
 
         final Integer AREA_EMPREGO_ID = 1;
         final String AREA_EMPREGO_NOME = "Engenharia de Software";
-
-        @Autowired
-        private GrupoRepository grupoRepository;
 
         @Autowired
         private AreaEmpregoRepository areaEmpregoRepository;
@@ -87,16 +83,8 @@ public class AnuncioControllerTest {
 
         @BeforeAll
         void setUp() throws Exception {
+
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-
-                /* Grupo */
-                GrupoModel grupoModel = new GrupoModel();
-                grupoModel.setNomeGrupo("EGRESSO");
-
-                grupoModel = grupoRepository.save(grupoModel);
-
-                Set<GrupoModel> grupos = new HashSet<>();
-                grupos.add(grupoModel);
 
                 /* Usuario */
                 usuarioModel = new UsuarioModel();
@@ -104,7 +92,7 @@ public class AnuncioControllerTest {
                 usuarioModel.setNome("nome_test");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
-                usuarioModel.setGrupos(grupos);
+                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
                 mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(usuarioModel)))

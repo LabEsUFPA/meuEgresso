@@ -8,7 +8,6 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -25,9 +24,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 
 /**
  * Responsável por realizar os testes unitários referentes ao
@@ -49,24 +47,16 @@ class UsuarioRepositoryTest {
     @Mock
     private UsuarioRepository usuarioRepository;
 
-    @Mock
-    private GrupoRepository grupoRepository;
-
     private UsuarioModel usuario = new UsuarioModel();
 
     private List<UsuarioModel> usuarios = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        GrupoModel grupoModel = GrupoModel.builder().nomeGrupo("ADMINNN").build();
-        grupoModel = grupoRepository.save(grupoModel);
-
-        Set<GrupoModel> grupos = new HashSet<>();
-        grupos.add(grupoModel);
 
         usuario = UsuarioModel.builder().nome("John").username("john123").email("john@example.com")
                 .password("password123")
-                .grupos(grupos)
+                .grupos(Set.of(Grupos.ADMIN))
                 .build();
         usuarioRepository.save(usuario);
 
@@ -75,7 +65,7 @@ class UsuarioRepositoryTest {
         usuario2.setUsername("jocke123");
         usuario2.setEmail("jocke@example.com");
         usuario2.setPassword("password124");
-        usuario2.setGrupos(grupos);
+        usuario2.setGrupos(Set.of(Grupos.ADMIN));
         usuario2.setCreatedBy(usuario);
         usuarioRepository.save(usuario2);
 
@@ -140,7 +130,6 @@ class UsuarioRepositoryTest {
     @AfterEach
     void tearDown() {
         usuarioRepository.deleteAll();
-        grupoRepository.deleteAll();
         usuario = null;
     }
 }

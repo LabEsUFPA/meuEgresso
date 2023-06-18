@@ -49,6 +49,7 @@ public class CotaAdmController {
 	 */
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public List<CotaDTO> buscarCotas() {
 		return mapper.map(cotaService.findAll(), new TypeToken<List<CotaDTO>>() {
 		}.getType());
@@ -66,7 +67,7 @@ public class CotaAdmController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public String atualizarCota(@RequestBody @Valid CotaDTO cotaDTO) throws InvalidRequestException {
 		CotaModel cotaModel = mapper.map(cotaDTO, CotaModel.class);
 		cotaService.update(cotaModel);

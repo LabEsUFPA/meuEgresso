@@ -2,9 +2,14 @@ package labes.facomp.ufpa.br.meuegresso.service.usuario;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDashDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.notificacao.NotificacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 
 /**
@@ -67,7 +72,38 @@ public interface UsuarioService extends UserDetailsService {
 	 * @param createdBy
 	 * @return
 	 */
-    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
-    public boolean existsByUsername(String username);
+	public boolean existsByUsername(String username);
+
+	/**
+	 * Método responsável por encontrar todos os usuários com
+	 * cadastro de egresso incompleto, ou seja, com EgressoModel vazio.
+	 * A exceção são os usuários de grupo ADMIN e SECRETARIO, pois
+	 * não são egressos.
+	 *
+	 * @return Lista de objetos da classe UsuarioModel.
+	 * @author Bruno Eiki
+	 */
+
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size,
+			Direction direction);
+
+	/**
+	 * Método responsável por retornar um mapa com informações
+	 * sobre status do cadastro dos usuários
+	 *
+	 * @author Eude Monteiro
+	 * @return Uma lista de DTOs de notificação com informações sobre o nome do
+	 *         usuário,
+	 *         seu status de cadastro e data de modificação.
+	 * @since 12/06/2023
+	 */
+	public Page<NotificacaoDTO> getStatus(String nome, String status, Integer page, Integer size,
+			Direction direction);
+
+	public boolean toggleValido(Integer id) throws NotFoundException;
+
+	public boolean toggleAtivo(Integer id) throws NotFoundException;
+
 }

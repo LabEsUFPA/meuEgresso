@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.mail.MailException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -124,6 +125,16 @@ public class ControllerAdvise {
 				.message(ErrorType.USER_002.getMessage())
 				.technicalMessage(ex.getLocalizedMessage())
 				.internalCode(ErrorType.USER_002.getInternalCode())
+				.build();
+	}
+
+	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(DisabledException.class)
+	public ErrorResponse handleDisabledException(DisabledException ex) {
+		return ErrorResponse.builder()
+				.message(ErrorType.USER_003.getMessage())
+				.technicalMessage(ex.getLocalizedMessage())
+				.internalCode(ErrorType.USER_003.getInternalCode())
 				.build();
 	}
 

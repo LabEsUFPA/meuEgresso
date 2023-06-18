@@ -27,7 +27,12 @@ public enum ErrorType {
 
     USER_002("Usuario ou Senha inválida.", "US-002"),
 
+    USER_003("Usuario desabilitado.", "US-003"),
+
     EGRESSO_NAO_VALIDO("Usuario não cadastrado pela faculdade", "EV-001"),
+
+    SOLICITACAO_EXPIRADA("Solicitação Expirada", "SE-001"),
+
 
     FOTO_NAO_ENCONTRADA("Egresso não possui foto","E-001");
 

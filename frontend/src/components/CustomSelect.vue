@@ -1,5 +1,8 @@
 <template>
-  <div class="select">
+  <div
+    class="select"
+    :id="name.replaceAll('.', '-')"
+  >
     <OField
       override
       message-class="text-xs mt-1 max-w-[250px]"

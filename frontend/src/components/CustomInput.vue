@@ -1,5 +1,8 @@
 <template>
-  <div class="input">
+  <div
+    class="input"
+    :id="name.replaceAll('.', '-')"
+  >
     <OField
       override
       message-class="text-xs mt-1 max-w-[250px]"
@@ -64,6 +67,7 @@
             :step="step"
             :maxlength="maxLength"
             @update:model-value="handleInput"
+            v-model="config.currentValue"
             @focus="() => {
               focused = true
               config.allowBlank = false
@@ -207,7 +211,8 @@ const config = ref({
   max: null,
   minimumNumberOfCharacters: 0,
   shouldRound: true,
-  focusOnRight: false
+  focusOnRight: true,
+  currentValue: 'null'
 })
 
 const {
@@ -219,10 +224,10 @@ const {
 } = useField(name, undefined)
 
 function handleInput (e: Event) {
-  $emit('update:value', e)
-  if (String(e) === '' && props.money) {
+  if (props.money && config.value.currentValue === 'null') {
     return
   }
+  $emit('update:value', e)
   handleChange(e)
 }
 </script>
