@@ -69,7 +69,7 @@
     <div
       v-if="$store.egressos.length > 0"
     >
-      <div class="flex justify-center">
+      <div class="hidden sm:flex justify-center">
         <div class="grid grid-cols-4 w-[960px] bg-white px-6 sm:px-8 py-2 sm:py-3 mx-4 sm:mx-6 border-gray-200 border-b-[1px] text-sm text-gray-400 font-normal">
           <h1 class="col-span-2">
             Nome
