@@ -23,7 +23,10 @@
             Ir para o cadastro
           </CustomButton>
         </div>
-        <div class="h-full">
+        <div
+          v-else
+          class="h-full"
+        >
           <CustomButton
             class="absolute right-0"
             color="blue"
