@@ -32,15 +32,19 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import labes.facomp.ufpa.br.meuegresso.controller.publico.egresso.EgressoPubController;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoDashDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.notificacao.NotificacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroAnualGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroDiaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroMensalGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * Responsável por fornecer um end-point para o dashboard do administrador.
@@ -68,7 +72,7 @@ public class DashAdmController {
 	 * @since 06/06/2023
 	 */
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<EgressoDashDTO> consultarEgressoDash(
@@ -77,8 +81,19 @@ public class DashAdmController {
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
-
-		return usuarioService.findBySearch(nomeUsuario, status, page, size, direction);
+		Page<EgressoDashDTO> egressos = usuarioService.findBySearch(nomeUsuario, status, page, size, direction);
+		egressos.forEach(e -> {
+			try {
+				e.setFoto(linkTo(methodOn(
+						EgressoPubController.class).getFotoEgresso(
+								e.getIdEgresso()))
+						.toUri()
+						.toString());
+			} catch (NotFoundFotoEgressoException e1) {
+				e1.printStackTrace();
+			}
+		});
+		return egressos;
 	}
 
 	/**
@@ -90,7 +105,7 @@ public class DashAdmController {
 	 * @since 11/06/2023
 	 */
 	@GetMapping("/export")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public ResponseEntity<byte[]> exportarPDF() throws DocumentException {
@@ -159,7 +174,7 @@ public class DashAdmController {
 	 * @author Eude Monteiro
 	 * @since 12/06/2023
 	 */
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@GetMapping(value = "/notificacaoStatus")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
@@ -175,7 +190,7 @@ public class DashAdmController {
 	}
 
 	@GetMapping(value = "/cadastro/dia")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoCadastroDiaGraficoDTO getCadastroEgressoDiario() {
@@ -185,7 +200,7 @@ public class DashAdmController {
 	}
 
 	@GetMapping(value = "/cadastro/mes")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoCadastroMensalGraficoDTO getCadastroEgressoMensal() {
@@ -195,7 +210,7 @@ public class DashAdmController {
 	}
 
 	@GetMapping(value = "/cadastro/ano")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoCadastroAnualGraficoDTO getCadastroEgressoAno() {

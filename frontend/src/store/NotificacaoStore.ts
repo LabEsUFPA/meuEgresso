@@ -21,7 +21,7 @@ export const useNotificacaoStore = defineStore('Notificacao', {
     async fetchNotificacoes (status: string, page: number, size: number) {
       const response = await Api.request({
         method: 'get',
-        route: '/administrador/dashboard/tipoStatus',
+        route: '/administrador/dashboard/notificacaoStatus',
         params: { status, page, size }
       })
 

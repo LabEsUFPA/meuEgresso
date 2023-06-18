@@ -133,7 +133,7 @@ public class EgressoServiceImpl implements EgressoService {
 	@Override
 	public Resource getFileAsResource(String fotoNomeString) throws NotFoundFotoEgressoException {
 
-		Path file = Paths.get(String.format("%s%s", uploadDirectory + "/", fotoNomeString));
+		Path file = Paths.get(String.format("%s/%s", uploadDirectory, fotoNomeString));
 		try {
 			return new UrlResource(file.toUri());
 		} catch (MalformedURLException e) {

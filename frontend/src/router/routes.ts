@@ -20,7 +20,8 @@ export default [
         path: '/cadastro-admin',
         component: async () => await import('src/pages/CadastroAdmin.vue'),
         meta: {
-          requiresAuthAdmin: true
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
         }
       },
       {
@@ -34,7 +35,8 @@ export default [
         path: '/notificacoes-admin',
         component: async () => await import('src/pages/NotificacoesAdmin.vue'),
         meta: {
-          requiresAuth: true
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
         }
       },
       {
@@ -69,14 +71,16 @@ export default [
         path: '/painel-admin',
         component: async () => await import('src/pages/PainelAdmin.vue'),
         meta: {
-          requiresAuthAdmin: true
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
         }
       },
       {
         path: '/registro-egressos',
         component: async () => await import('src/pages/RegistroEgressos.vue'),
         meta: {
-          requiresAuthAdmin: true
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
         }
       }
     ]

@@ -82,11 +82,7 @@ public class EgressoPubController {
 	@GetMapping(value = "/foto/{id}", produces = "image/png")
 	@ResponseStatus(code = HttpStatus.OK)
 	public Resource getFotoEgresso(@PathVariable Integer id) throws NotFoundFotoEgressoException {
-		EgressoModel egressoModel = egressoService.findById(id);
-		if (egressoModel.getFotoNome() != null) {
-			return egressoService.getFileAsResource(egressoModel.getFotoNome());
-		}
-		throw new NotFoundFotoEgressoException();
+		return egressoService.getFileAsResource(String.format("%d.png", id));
 	}
 
 }
