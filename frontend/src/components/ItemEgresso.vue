@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-4 w-full px-6 sm:px-8 py-2 sm:py-3 border-gray-200 border-b-[1px] items-center">
     <div class="flex gap-4 col-span-2 items-center">
-      <RouterLink :to="`/egresso/${id}`">
+      <RouterLink :to="`/egresso/${idEgresso}`">
         <div class="flex w-8 h-8 justify-center items-center rounded-3xl bg-cyan-800">
           <SvgIcon
             type="mdi"
@@ -11,7 +11,7 @@
           />
         </div>
       </RouterLink>
-      <RouterLink :to="`/egresso/${id}`">
+      <RouterLink :to="`/egresso/${idEgresso}`">
         <h1 class="text-cyan-800 font-normal">
           {{ nome }}
         </h1>
@@ -35,6 +35,7 @@
         :id-egresso="idEgresso"
         :nome="nome"
         :status="status"
+        @update-data="$emit('updateData')"
       />
     </div>
   </div>
@@ -59,5 +60,7 @@ defineProps<{
     dataCadastro: string,
     status: string
 }>()
+
+defineEmits(['updateData'])
 
 </script>

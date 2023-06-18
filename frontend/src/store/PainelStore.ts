@@ -97,7 +97,7 @@ export const usePainelStore = defineStore('Painel', {
         route: `/administrador/egresso/${id}`
       })
 
-      console.log(response)
+      return response?.status != null ? response.status : 500
     },
 
     async ativaUsuario (id: number) {
@@ -106,7 +106,7 @@ export const usePainelStore = defineStore('Painel', {
         route: `/administrador/usuario/${id}/ativo`
       })
 
-      console.log(response)
+      return response?.status != null ? response.status : 500
     },
 
     async validaUsuario (id: number) {
@@ -115,7 +115,7 @@ export const usePainelStore = defineStore('Painel', {
         route: `/administrador/usuario/${id}/valido`
       })
 
-      console.log(response)
+      return response?.status != null ? response.status : 500
     },
 
     async deleteAll () {

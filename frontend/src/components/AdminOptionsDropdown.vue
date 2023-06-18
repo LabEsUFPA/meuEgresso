@@ -38,15 +38,31 @@
   </ODropdown>
 
   <div class="absolute z-10">
-    <CustomDialog v-model="isConfirmationOpen">
-      <div class="flex flex-col h-full text-lg text-cyan-800 justify-center items-center p-6">
-        <div class="flex flex-col gap-4 h-full justify-center items-center">
+    <CustomDialog
+      @close="isLoadingAction = null"
+      v-model="isConfirmationOpen"
+    >
+      <div
+        v-if="isLoadingAction === null"
+        class="flex flex-col h-full text-lg text-cyan-800 justify-center items-center p-6"
+      >
+        <div
+          class="flex flex-col gap-4 h-full justify-center items-center"
+        >
           <SvgIcon
             type="mdi"
             size="32"
             :path="mensagemDialog[action]?.icon"
-            class="text-cyan-800 rounded-md"
+            class="inline md:hidden text-cyan-800 rounded-md"
           />
+
+          <SvgIcon
+            type="mdi"
+            size="64"
+            :path="mensagemDialog[action]?.icon"
+            class="hidden md:inline text-cyan-800 rounded-md"
+          />
+
           <div class="flex flex-col items-center">
             <h1 class="font-medium">
               {{ mensagemDialog[action]?.text }}
@@ -69,10 +85,54 @@
           <CustomButton
             type="button"
             color="emerald"
-            @click="() => { isConfirmationOpen = false; mensagemDialog[action]?.click() }"
+            @click="() => mensagemDialog[action]?.click()"
           >
             Confirmar
           </CustomButton>
+        </div>
+      </div>
+
+      <div
+        v-else-if="isLoadingAction === true"
+        class="flex flex-col gap-4 h-full justify-center items-center p-6"
+      >
+        <SvgIcon
+          type="mdi"
+          size="64"
+          :path="mdiLoading"
+          class="inline text-gray-400 animate-spin md:hidden"
+        />
+
+        <SvgIcon
+          type="mdi"
+          size="96"
+          :path="mdiLoading"
+          class="hidden text-gray-400 animate-spin md:inline"
+        />
+        <div class="text-cyan-800 text-xl md:text-2xl font-medium">
+          {{ mensagemDialog[action]?.loading }}
+        </div>
+      </div>
+
+      <div
+        v-else
+        class="flex flex-col gap-4 h-full justify-center items-center p-6"
+      >
+        <SvgIcon
+          type="mdi"
+          size="64"
+          :path="mdiCheckCircle"
+          class="inline text-green-500 md:hidden"
+        />
+
+        <SvgIcon
+          type="mdi"
+          size="96"
+          :path="mdiCheckCircle"
+          class="hidden text-green-500 md:inline"
+        />
+        <div class="text-cyan-800 text-xl md:text-2xl font-medium">
+          {{ mensagemDialog[action]?.success }}
         </div>
       </div>
     </CustomDialog>
@@ -83,7 +143,7 @@
 
 import { ref } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiCheckCircleOutline, mdiDeleteForever, mdiDotsVertical } from '@mdi/js'
+import { mdiCheckCircleOutline, mdiDeleteForever, mdiDotsVertical, mdiLoading, mdiCheckCircle } from '@mdi/js'
 import { ODropdown, ODropdownItem, OButton } from '@oruga-ui/oruga-next'
 import classNames from 'classnames'
 import { useRouter } from 'vue-router'
@@ -100,10 +160,13 @@ const props = defineProps<{
     }
 >()
 
+const $emits = defineEmits(['updateData'])
+
 const $store = usePainelStore()
 
 const $router = useRouter()
-const isConfirmationOpen = ref(false)
+const isConfirmationOpen = ref<true | false>(false)
+const isLoadingAction = ref<true | false | null>(null)
 const action = ref('')
 
 const escolheAcao = (acao:string) => {
@@ -116,35 +179,48 @@ const escolheAcao = (acao:string) => {
   }
 }
 
-const aprovaCadastro = () => {
-  $store.ativaUsuario(props.id)
-  $store.validaUsuario(props.id)
-}
+async function aprovaCadastro () {
+  isLoadingAction.value = true
 
-const editaCadastro = () => {
-  $router.push(`/egresso/${props.idEgresso}`)
-}
+  const codeAtiva = await $store.ativaUsuario(props.id)
+  const codeValida = await $store.validaUsuario(props.id)
 
-const excluiCadastro = () => {
-  if (props.idEgresso) {
-    $store.deleteUsuario(props.idEgresso)
+  if (codeAtiva === 201 && codeValida === 201) {
+    $emits('updateData')
+    isLoadingAction.value = false
   }
 }
 
-const enviaEmail = () => {
+function editaCadastro () {
+  $router.push(`/egresso/${props.idEgresso}`)
+}
+
+async function excluiCadastro () {
+  isLoadingAction.value = true
+
+  if (props.idEgresso) {
+    const codeDelete = await $store.deleteUsuario(props.idEgresso)
+    if (codeDelete === 200) {
+      $emits('updateData')
+      isLoadingAction.value = false
+    }
+  }
+}
+
+function enviaEmail () {
   console.log('email')
 }
 
 const opcoesAdmin = [
-  { titulo: 'Aprovar cadastro', status: ['completo', 'pendente'], click: aprovaCadastro },
+  { titulo: 'Aprovar cadastro', status: ['pendente'], click: aprovaCadastro },
   { titulo: 'Editar cadastro', status: ['completo', 'pendente'], click: editaCadastro },
   { titulo: 'Enviar e-mail', status: ['incompleto', 'completo', 'pendente'], click: enviaEmail },
   { titulo: 'Excluir cadastro', status: ['completo', 'pendente'], click: excluiCadastro }
 ]
 
 const mensagemDialog: any = {
-  'Aprovar cadastro': { text: 'Aprovar o cadastro de', click: aprovaCadastro, icon: mdiCheckCircleOutline },
-  'Excluir cadastro': { text: 'Excluir o cadastro de', click: excluiCadastro, icon: mdiDeleteForever }
+  'Aprovar cadastro': { text: 'Aprovar o cadastro de', loading: 'Aprovando cadastro', success: 'Cadastro aprovado', click: aprovaCadastro, icon: mdiCheckCircleOutline },
+  'Excluir cadastro': { text: 'Excluir o cadastro de', loading: 'Excluindo cadastro', success: 'Cadastro excluído', click: excluiCadastro, icon: mdiDeleteForever }
 }
 
 </script>

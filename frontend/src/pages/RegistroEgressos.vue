@@ -96,6 +96,7 @@
               :nome="egresso.name"
               :data-cadastro="egresso.cadastro"
               :status="egresso.status"
+              @update-data="() => updateData()"
             />
           </div>
         </div>
@@ -142,7 +143,7 @@
 
 <script setup lang="ts">
 
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiAccountSearch, mdiFilterVariant, mdiPlus, mdiEmoticonSadOutline } from '@mdi/js'
 
@@ -167,11 +168,11 @@ console.log($store.egressos)
 
 onMounted(async () => {
   loading.value = true
-
-  watch($store, () => {
-    $store.fetchEgressos()
-  })
 })
+
+const updateData = () => {
+  $store.fetchEgressos()
+}
 
 const openModalFilters = () => {
   isModalFiltersOpen.value = true
