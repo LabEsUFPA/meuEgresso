@@ -12,7 +12,9 @@ describe('AdminOptionsDropdown', () => {
     const wrapper = mount(AdminOptionsDropdown, {
       props: {
         id: 1,
-        status: 'Ativo'
+        idEgresso: 1,
+        status: 'Ativo',
+        email: 'email@teste.com'
       }
     })
     expect(wrapper.find('button').exists()).toBe(true)
@@ -22,7 +24,9 @@ describe('AdminOptionsDropdown', () => {
     const wrapper = mount(AdminOptionsDropdown, {
       props: {
         id: 1,
-        status: 'Ativo'
+        idEgresso: 1,
+        status: 'Ativo',
+        email: 'email@teste.com'
       }
     })
     expect(wrapper.html()).toContain('Editar cadastro')
@@ -34,7 +38,9 @@ describe('AdminOptionsDropdown', () => {
     const wrapper = mount(AdminOptionsDropdown, {
       props: {
         id: 1,
-        status: 'Pendente'
+        idEgresso: 1,
+        status: 'Pendente',
+        email: 'email@teste.com'
       }
     })
     expect(wrapper.html()).toContain('Aprovar cadastro')
@@ -46,7 +52,9 @@ describe('AdminOptionsDropdown', () => {
     const wrapper = mount(AdminOptionsDropdown, {
       props: {
         id: 1,
-        status: 'Incompleto'
+        idEgresso: 1,
+        status: 'Incompleto',
+        email: 'email@teste.com'
       }
     })
     expect(wrapper.html()).toContain('Excluir cadastro')

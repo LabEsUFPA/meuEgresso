@@ -12,9 +12,12 @@ describe('ItemEgresso', () => {
     const wrapper = mount(ItemEgresso, {
       props: {
         id: 1,
+        idEgresso: 1,
         nome: 'Nome',
         dataCadastro: '2023-05-01',
-        status: 'Ativo'
+        status: 'Ativo',
+        foto: 'urlFoto',
+        email: 'email@teste.com'
       }
     })
     expect(wrapper.html()).toContain(wrapper.vm.nome)
@@ -26,9 +29,12 @@ describe('ItemEgresso', () => {
     const wrapper = mount(ItemEgresso, {
       props: {
         id: 1,
+        idEgresso: 1,
         nome: 'Nome',
         dataCadastro: '2023-05-01',
-        status: 'Ativo'
+        status: 'Ativo',
+        foto: 'urlFoto',
+        email: 'email@teste.com'
       }
     })
     expect(wrapper.find('#status').classes()).toContain('bg-emerald-500')
@@ -38,9 +44,12 @@ describe('ItemEgresso', () => {
     const wrapper = mount(ItemEgresso, {
       props: {
         id: 1,
+        idEgresso: 1,
         nome: 'Nome',
         dataCadastro: '2023-05-01',
-        status: 'Pendente'
+        status: 'Pendente',
+        foto: 'urlFoto',
+        email: 'email@teste.com'
       }
     })
     expect(wrapper.find('#status').classes()).toContain('bg-amber-500')
@@ -50,9 +59,12 @@ describe('ItemEgresso', () => {
     const wrapper = mount(ItemEgresso, {
       props: {
         id: 1,
+        idEgresso: 1,
         nome: 'Nome',
         dataCadastro: '2023-05-01',
-        status: 'Incompleto'
+        status: 'Incompleto',
+        foto: 'urlFoto',
+        email: 'email@teste.com'
       }
     })
     expect(wrapper.find('#status').classes()).toContain('bg-indigo-800')
