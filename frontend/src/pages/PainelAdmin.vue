@@ -328,6 +328,7 @@
                   :id-egresso="egresso.idEgresso"
                   :nome="egresso.name"
                   :status="egresso.status"
+                  :email="egresso.email"
                   @update-data="$painelStore.fetchEgressos()"
                 />
               </div>

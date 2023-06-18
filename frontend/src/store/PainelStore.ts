@@ -45,7 +45,8 @@ export const usePainelStore = defineStore('Painel', {
           idEgresso: egresso.idEgresso,
           name: egresso.nome,
           status: egresso.status,
-          foto: egresso.foto
+          foto: egresso.foto,
+          email: egresso.email
         }))
         this.totalPages = response.data?.totalPages
       }

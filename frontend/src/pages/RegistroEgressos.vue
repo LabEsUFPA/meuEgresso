@@ -99,6 +99,7 @@
               :data-cadastro="egresso.cadastro"
               :status="egresso.status"
               :foto="egresso.foto"
+              :email="egresso.email"
               @update-data="() => updateData()"
             />
           </div>

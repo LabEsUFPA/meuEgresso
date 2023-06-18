@@ -45,6 +45,7 @@
         :id-egresso="idEgresso"
         :nome="nome"
         :status="status"
+        :email="email"
         @update-data="$emit('updateData')"
       />
     </div>
@@ -70,6 +71,7 @@ const props = defineProps<{
     dataCadastro: string,
     status: string
     foto: string
+    email: string
 }>()
 
 const fotoUsuario = ref(props.foto)

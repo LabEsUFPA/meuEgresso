@@ -158,6 +158,7 @@ const props = defineProps<{
     idEgresso?: number
     nome?: string
     status: string
+    email: string
     }
 >()
 
@@ -211,7 +212,7 @@ async function excluiCadastro () {
 }
 
 function enviaEmail () {
-  console.log('email')
+  console.log('email:', props.email)
 }
 
 const opcoesAdmin = [
