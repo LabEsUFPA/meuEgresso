@@ -9,7 +9,9 @@ export default [
         path: '/cadastro',
         component: async () => await import('src/pages/CadastroEgresso.vue'),
         meta: {
-          shouldNotForce: true
+          shouldNotForce: true,
+          requiresAuthAdmin: true,
+          allowedScopes: ['EGRESSO']
         }
       },
       {

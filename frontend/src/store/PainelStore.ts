@@ -32,7 +32,7 @@ export const usePainelStore = defineStore('Painel', {
         params: {
           nome_usuario: nomeUsuario,
           status,
-          direction: 'ASC',
+          direction: 'DESC',
           size: 10,
           page
         }
