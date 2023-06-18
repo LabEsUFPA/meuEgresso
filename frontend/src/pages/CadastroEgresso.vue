@@ -523,6 +523,7 @@ import { useLoginStore } from 'src/store/LoginStore'
 import { Form } from 'vee-validate'
 import { computed, onMounted, ref, watch } from 'vue'
 import { boolean, mixed, object, string } from 'yup'
+import VueScrollTo from 'vue-scrollto'
 const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
 const $storeCadastro = useCadastroEgressoStore()
@@ -694,7 +695,7 @@ function handleFail (e: any) {
   camposFaltosos.value = true
   const incorrectElements = Object.keys(e.errors)
   const el = document.querySelector(`#${incorrectElements[0].replaceAll('.', '-')}`)
-  el?.scrollIntoView()
+  VueScrollTo.scrollTo(el, 800, { offset: -300 })
 }
 
 const schema = object().shape({
