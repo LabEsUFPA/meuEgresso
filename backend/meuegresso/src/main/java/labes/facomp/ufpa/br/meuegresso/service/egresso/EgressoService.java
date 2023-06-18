@@ -134,9 +134,9 @@ public interface EgressoService {
 	public Map<Double, Integer> countRemuneracaoBolsa();
 
 	public Map<LocalDate, Long> countEgressoPorData();
-		
+
 	public Map<LocalDate, Long> countEgressoPorMesEAno();
-	
+
 	public Map<Integer, Long> countEgressoPorAno();
 
 	public Map<String, Integer> countCotista();

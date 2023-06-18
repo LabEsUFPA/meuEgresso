@@ -136,7 +136,7 @@ public class AnuncioController {
 
 
 	/**
-	 * Endpoint responsavel por deletar o 
+	 * Endpoint responsavel por deletar o
 	 * anuncio do egresso apenas por quem o criou.
 	 *
 	 * @param id id do anuncio a ser deletado

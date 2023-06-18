@@ -31,6 +31,14 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	boolean existsByUsernameIgnoreCase(String username);
 
+	@Query(nativeQuery = true, value = """
+			SELECT u.email, u.created_date
+			FROM usuario u
+			JOIN egresso e ON u.id_usuario = e.usuario_id
+			WHERE e.ativo = true;
+			""")
+	List<Tuple> findByEmailAndData();
+
 	/**
 	 * Método responsável por retornar dados para o EgressoDashDTO
 	 *

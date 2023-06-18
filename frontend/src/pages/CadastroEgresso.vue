@@ -5,6 +5,7 @@
       @submit="handleSubmit"
       @invalid-submit="handleFail"
       :validation-schema="schema"
+      v-slot="{ values }"
     >
       <h1 class="text-cyan-800 text-2xl font-semibold">
         Cadastro de egresso
@@ -123,6 +124,12 @@
             </div>
 
             <div class="w-fit p-3 pr-5 rounded-xl bg-gray-100 mb-5">
+              <p
+                v-if="values.academico?.cotista.value"
+                class="text-sm mt-1 position-absolute display-none mb-5"
+              >
+                Por favor, marque pelo menos uma das opções abaixo:
+              </p>
               <CustomCheckbox
                 class="mb-5"
                 name="academico.cotista.tipos.renda"
@@ -155,12 +162,17 @@
                 :disabled="!bools.cotista"
               />
 
-              <CustomCheckbox
-                name="academico.cotista.tipos.pcd"
-                label="PcD"
-                :required="bools.cotista"
-                :disabled="!bools.cotista"
-              />
+              <p
+                v-if="bools.cotista &&
+                  !values.academico?.cotista?.tipos?.renda &&
+                  !values.academico?.cotista?.tipos?.escola &&
+                  !values.academico?.cotista?.tipos?.raca &&
+                  !values.academico?.cotista?.tipos?.quilombolaIndigena"
+                class="text-red-500 text-sm mt-1 position-absolute display-none"
+              >
+                Marque pelo menos uma das opções acima!
+              </p>
+              
             </div>
 
             <CustomCheckbox

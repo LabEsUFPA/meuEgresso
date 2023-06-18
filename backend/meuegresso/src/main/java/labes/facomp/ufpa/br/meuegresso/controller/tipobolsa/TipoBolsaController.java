@@ -48,8 +48,7 @@ public class TipoBolsaController {
     /**
      * Endpoint responsavel por buscar todas bolsas do banco.
      *
-     * @param void
-     * @return {@link List<TipoBolsaDTO} Retorna uma lista com todos os tipos de
+     * @return {@link List<TipoBolsaDTO>} Retorna uma lista com todos os tipos de
      *         bolsa.
      * @author Bruno Eiki
      * @since 21/04/2023
@@ -88,7 +87,7 @@ public class TipoBolsaController {
      *
      * @param tipoBolsaDTO Estrutura de dados contendo as informações necessárias
      *                     para
-     *                     atualizar uma cota.
+     *                     atualizar um tipo bolsa.
      * @return {@link String} Mensagem de confirmacao.
      * @author Bruno Eiki
      * @since 21/04/2023

@@ -12,16 +12,24 @@
       })"
     >
       <template
-        v-if="label"
         #label
       >
-        {{ label }}
-        <sup
-          class="text-red-500"
-          v-if="required"
-        >
-          *
-        </sup>
+        <div v-if="label">
+          {{ label }}
+          <sup
+            class="text-red-500"
+            v-if="required"
+          >*</sup>
+        </div>
+        <div v-if="customLabel">
+          <div class="mb-1.5">
+            <slot name="label" />
+            <sup
+              class="text-red-500"
+              v-if="required"
+            >*</sup>
+          </div>
+        </div>
       </template>
       <template #default>
         <div
@@ -106,7 +114,7 @@
             :root-class="classNames({
               ['col-span-7']: iconPath,
               ['col-span-8']: !iconPath,
-              ['w-full md:w-1/2 h-32']: true
+              ['w-full md:w-1/2']: true
             })"
             :input-class="classNames({
               ['bg-gray-100 cursor-not-allowed']: disabled,
@@ -121,6 +129,7 @@
             :data-maska="mask"
             :step="step"
             :maxlength="maxLength"
+            :style="{ height: height || '128px' }"
             v-model="inputValue"
             @update:model-value="handleInput"
             @focus="focused = true"
@@ -151,7 +160,7 @@ import classNames from 'classnames'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { OField, OInput } from '@oruga-ui/oruga-next'
 
-type inputs = 'date' | 'text' | 'email' | 'number' | 'password' | 'textarea'
+type inputs = 'date' | 'text' | 'email' | 'number' | 'password' | 'textarea' | 'datetime-local'
 
 const $emit = defineEmits(['update:value'])
 
@@ -174,6 +183,8 @@ interface Props {
   customErrorMessage?: boolean,
   withoutValidation?: boolean
   money?: boolean
+  height?: string | number,
+  customLabel?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -192,7 +203,10 @@ const props = withDefaults(defineProps<Props>(), {
   errorMessage: '',
   customErrorMessage: false,
   withoutValidation: false,
-  money: false
+  money: false,
+  height: '128px',
+  customLabel: false
+
 })
 
 const focused = ref(false)

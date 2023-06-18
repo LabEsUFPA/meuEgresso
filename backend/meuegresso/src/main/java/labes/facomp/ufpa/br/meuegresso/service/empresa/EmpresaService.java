@@ -73,7 +73,7 @@ public interface EmpresaService {
 	 *         egresso por pós.
 	 */
 	public List<LocalPosGraficoDTO> countEgressoByPos();
-	
+
 	/**
 	 * Método responsável por deletar todos os dados da tabela empresa
 	 */

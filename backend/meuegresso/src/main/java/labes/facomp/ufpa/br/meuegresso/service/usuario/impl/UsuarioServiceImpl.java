@@ -1,8 +1,12 @@
 package labes.facomp.ufpa.br.meuegresso.service.usuario.impl;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.data.domain.Page;
@@ -101,6 +105,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
 		return usuarioRepository.existsByIdAndCreatedById(id, createdBy);
+	}
+
+	@Override
+	public Map<String, LocalDateTime> findByAtivo() {
+		Map<String, LocalDateTime> emailData = new HashMap<>(2);
+		usuarioRepository.findByEmailAndData().forEach(e -> emailData.put(e.get(0, String.class),
+				LocalDateTime.ofInstant(e.get(1, Timestamp.class).toInstant(), ZoneId.systemDefault())));
+		return emailData;
 	}
 
 	// PageRequest.of(page, size, Sort.by(direction, "u.created_date")
