@@ -11,6 +11,7 @@ interface State {
     mes: any[]
     ano: any[]
   }
+  sendToEmail: string
 }
 
 export const usePainelStore = defineStore('Painel', {
@@ -21,7 +22,8 @@ export const usePainelStore = defineStore('Painel', {
       dia: [],
       mes: [],
       ano: []
-    }
+    },
+    sendToEmail: ''
   }),
 
   actions: {
@@ -129,6 +131,14 @@ export const usePainelStore = defineStore('Painel', {
       })
 
       return response?.status != null ? response.status : 500
+    },
+
+    setEgressoEmail (email: string) {
+      this.sendToEmail = email
+    },
+
+    getEgressoEmail () {
+      return this.sendToEmail
     }
   }
 })

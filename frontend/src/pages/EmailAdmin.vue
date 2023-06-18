@@ -4,7 +4,7 @@
       <div class="flex flex-col gap-4 sm:flex-row w-[960px] border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl p-6 sm:p-8 mt-10 mx-4 sm:mx-6 items-start sm:items-center justify-between">
         <div class="flex gap-6 text-cyan-800 items-center">
           <RouterLink
-            to="/"
+            to="/painel-admin"
             class="flex items-center hover:bg-sky-600/20 rounded-md"
           >
             <div class="flex-1" />
@@ -147,7 +147,7 @@
                 @click="handleCancel"
               >
                 <h1 class=" text-gray-400 px-10 py-1.5">
-                  Cancelar
+                  Resetar conteúdo
                 </h1>
               </CustomButton>
 
@@ -226,17 +226,17 @@ import { object, string, boolean } from 'yup'
 import { Form } from 'vee-validate'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import { useEmailStore } from 'src/store/EmailStore'
-import { useRoute } from 'vue-router'
+import { usePainelStore } from 'src/store/PainelStore'
 
 const emailStore = useEmailStore()
 
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const form = ref<typeof Form | null>(null)
-const $route = useRoute()
+const $painelStore = usePainelStore()
 
 const bools = ref({
-  multiDestinatario: false,
+  multiDestinatario: !!$painelStore.getEgressoEmail(),
   frequente: false,
   semanal: false,
   anual: false
@@ -329,8 +329,10 @@ async function fetchUpdateEmail () {
   [Assinatura]`
   form.value?.setFieldValue('escopo', 'Atualização Cadastral - Meu Egresso')
   form.value?.setFieldValue('corpo', message)
-  if ($route.params.destino) {
-    form.value?.setFieldValue('email', $route.params.destino)
+
+  if ($painelStore.getEgressoEmail()) {
+    form.value?.setFieldValue('emailMulti', true)
+    form.value?.setFieldValue('email', $painelStore.getEgressoEmail())
   }
 }
 onMounted(() => {
