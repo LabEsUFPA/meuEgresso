@@ -212,7 +212,7 @@ async function excluiCadastro () {
 }
 
 function enviaEmail () {
-  console.log('email:', props.email)
+  $router.push({ name: 'email', params: { destino: props.email } })
 }
 
 const opcoesAdmin = [

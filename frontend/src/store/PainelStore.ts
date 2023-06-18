@@ -25,7 +25,7 @@ export const usePainelStore = defineStore('Painel', {
   }),
 
   actions: {
-    async fetchEgressos (nomeUsuario: string = '', status: string = '', page: number = 0) {
+    async fetchEgressos (nomeUsuario: string = '', status: string[] = ['incompleto', 'completo', 'pendente'], page: number = 0) {
       const response = await Api.request({
         method: 'get',
         route: '/administrador/dashboard',
