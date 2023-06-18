@@ -236,6 +236,4 @@ function formatCurrency (value:number) {
   return formattedValue
 }
 
-console.log(formatCurrency(5000.00))
-
 </script>
