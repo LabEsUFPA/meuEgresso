@@ -1,33 +1,15 @@
 <template>
   <div v-if="modelValue">
-    <div class="inset-0 fixed top-0 left-0 bg-black/75 flex items-center justify-center">
+    <div class="inset-0 fixed top-0 left-0 bg-black/75 flex items-center justify-center z-10">
       <div
         class="bg-white rounded-xl w-80 h-64 sm:w-10/12 sm:h-96 max-w-2xl relative"
         :class="{
           ['scale-0']: !modelValue
         }"
       >
-        <div
-          v-if="buttonBotton"
-          class="flex flex-col h-full justify-center items-center"
-        >
-          <slot />
+        <div class="h-full">
           <CustomButton
-            v-if="buttonBotton"
-            color="sky"
-            @click="$emit('update:modelValue', false); $emit('close')"
-            variant="standard"
-            type="button"
-            class="mb-5"
-          >
-            Ir para o cadastro
-          </CustomButton>
-        </div>
-        <div
-          v-else
-          class="h-full"
-        >
-          <CustomButton
+            v-if="!hideCloseButton"
             class="absolute right-0"
             color="blue"
             @click="$emit('update:modelValue', false); $emit('close')"
@@ -55,10 +37,10 @@ defineEmits(['update:modelValue', 'close'])
 
 interface Props {
   modelValue: boolean,
-  buttonBotton?: boolean
+  hideCloseButton?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
-  buttonBotton: false
+  hideCloseButton: false
 })
 </script>

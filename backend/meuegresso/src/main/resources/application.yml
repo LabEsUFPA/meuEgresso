@@ -12,10 +12,7 @@ spring:
   jpa:
     defer-datasource-initialization: true
 
-
-
-
-# Email configuration
+  # Email configuration
   mail:
     host: smtp.gmail.com
     port: 587

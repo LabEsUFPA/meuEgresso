@@ -17,6 +17,19 @@ export namespace API {
 }
 
 export namespace models {
+  export interface UserData {
+    exp: number
+    iat: number
+    idUsuario: number
+    isEgresso: boolean
+    iss: string
+    nomeCompleto: string
+    nome: string
+    scope: string
+    sobrenome: string
+    sub: string
+  }
+
   export interface LoginModel {
     username: string
     password: string
