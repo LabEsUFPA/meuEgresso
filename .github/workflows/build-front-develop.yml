@@ -21,8 +21,8 @@ jobs:
 
       - name: Create .env
         working-directory: ./frontend/
-        run: echo VITE_API_URL_LOCAL=$VITE_API_URL_LOCAL >> .env
-        
+        run: echo VITE_API_URL_LOCAL=${{ vars.VITE_API_URL_LOCAL }} >> .env
+
       - name: Build the Docker image
         working-directory: ./frontend/
         run: docker build . --file docker/Dockerfile --tag alverad/meu-egresso-front:develop-latest
