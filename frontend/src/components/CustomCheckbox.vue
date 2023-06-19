@@ -1,47 +1,52 @@
 
 <template>
-  <button
-    class="flex flex-row pr-1 items-center w-fit focus-visible:rounded-sm"
-    role="checkbox"
-    :class="{
-      ['cursor-not-allowed opacity-80']: disabled,
-      ['cursor-pointer']: !disabled
-    }"
-    :aria-labelledby="name"
-
-    :aria-checked="inputValue"
-    @click="!disabled && handleChange(!inputValue); $emit('update:value', inputValue)"
-    @keydown.enter.space="!disabled && handleChange(!inputValue); $emit('update:value', inputValue)"
-    :id="`checkbox-${name}`"
-    type="button"
-  >
-    <div class="text-teal-600">
-      <SvgIcon
-        type="mdi"
-        class="inline"
-        :path="mdiCheckboxBlankOutline"
-        v-if="!inputValue"
-      />
-
-      <SvgIcon
-        type="mdi"
-        class="inline"
-        :path="mdiCheckboxMarked"
-        v-else
-      />
-    </div>
-
-    <label
-      class="ml-1"
+  <div :id="name.replaceAll('.', '-')">
+    <button
+      class="flex flex-row pr-1 items-center w-fit focus-visible:rounded-sm mb-4"
+      role="checkbox"
       :class="{
         ['cursor-not-allowed opacity-80']: disabled,
         ['cursor-pointer']: !disabled
       }"
-      :id="name"
+      :aria-labelledby="name"
+      :aria-checked="inputValue"
+      @click="!disabled && handleChange(!inputValue); $emit('update:value', inputValue)"
+      @keydown.enter.space="!disabled && handleChange(!inputValue); $emit('update:value', inputValue)"
+      :id="`checkbox-${name}`"
+      type="button"
     >
-      {{ label }}
-    </label>
-  </button>
+      <div class="text-teal-600">
+        <SvgIcon
+          type="mdi"
+          class="inline"
+          :path="mdiCheckboxBlankOutline"
+          v-if="!inputValue"
+        />
+        <SvgIcon
+          type="mdi"
+          class="inline"
+          :path="mdiCheckboxMarked"
+          v-else
+        />
+      </div>
+      <label
+        class="ml-1"
+        :class="{
+          ['cursor-not-allowed opacity-80']: disabled,
+          ['cursor-pointer']: !disabled
+        }"
+        :id="name"
+      >
+        {{ label }}
+      </label>
+      <sup
+        class="text-red-500"
+        v-if="!value"
+      >
+        *
+      </sup>
+    </button>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -54,6 +59,7 @@ const props = defineProps<{
   label: string
   name: string
   disabled?: boolean
+  required?: boolean
 }>()
 type Booleanish = 'true' | 'false'
 const $emit = defineEmits(['update:value'])

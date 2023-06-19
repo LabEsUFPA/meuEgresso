@@ -9,8 +9,7 @@ spring:
   # Database
   datasource:
     driver-class-name: org.h2.Driver
-    #url: jdbc:h2:file:./data/meuEgressoDBTest
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;BUILTIN_ALIAS_OVERRIDE=1
     username: meuEgressoTest
     password: meuEgressoTestPassword
   h2:
@@ -18,7 +17,17 @@ spring:
     console.path: /h2
   sql:
     init:
-      mode: never
+      mode: always
+      data-locations:
+      - classpath:h2alias/age.sql
+
+  # Email configuration
+  mail:
+    username: user
+    password: admin
+    host: 127.0.0.1
+    port: 3025
+    protocol: smtp
 
   jpa:
     database: h2
@@ -40,5 +49,4 @@ server:
 token:
   domain: teste.com
   expiresHours: 3
-  
 fotosDir: test/fotosTeste/

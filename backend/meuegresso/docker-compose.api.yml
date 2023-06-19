@@ -3,7 +3,7 @@ version: '3.9'
 services:
 
   egresso_api:
-    image: meu-egresso-api:latest
+    image: alverad/meu-egresso-api:develop-latest
     env_file:
       - .env
     ports:

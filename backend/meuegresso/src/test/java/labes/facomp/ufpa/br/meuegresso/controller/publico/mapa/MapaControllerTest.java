@@ -32,6 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import labes.facomp.ufpa.br.meuegresso.config.Configuracao;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
@@ -40,6 +41,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoMapaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
@@ -47,7 +49,6 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
-import labes.facomp.ufpa.br.meuegresso.model.GrupoModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.areaatuacao.AreaAtuacaoRepository;
@@ -56,7 +57,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 
 /**
  * Teste unitario para o mapa
@@ -71,7 +71,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.grupo.GrupoRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class MapaControllerTest {
+class MapaControllerTest extends Configuracao {
 
         static final Integer EMPRESA_ID = 1;
         static final String NOME = "EmpresaTeste";
@@ -85,9 +85,6 @@ class MapaControllerTest {
 
         static final Integer FAIXASALARIAL_ID = 1;
         static final String FAIXASALARIAL = "5000 - 15000";
-
-        @Autowired
-        private GrupoRepository grupoRepository;
 
         @Autowired
         private AreaAtuacaoRepository areaAtuacaoRepository;
@@ -135,19 +132,12 @@ class MapaControllerTest {
         @BeforeAll
         void setUp() throws Exception {
 
-                GrupoModel grupoModel = new GrupoModel();
-                grupoModel.setNomeGrupo("ADMIN");
-                grupoModel = grupoRepository.save(grupoModel);
-
-                Set<GrupoModel> grupos = new HashSet<>();
-                grupos.add(grupoModel);
-
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
                 usuarioModel.setNome("nome_test");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
-                usuarioModel.setGrupos(grupos);
+                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
                 mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                                 .contentType(MediaType.APPLICATION_JSON)

@@ -23,16 +23,17 @@
           @change="area = $event"
           :options="selectOpts.areaAtuacao"
           required
+          :pre-filled="true"
         />
 
         <CustomSelect
-          class="mb-5"
           name="carreira.setor"
           label="Setor de Atuação"
           :placeholder="placeHolders.setorAtuacaoHolder"
           :options="selectOpts.setorAtuacao"
           :required="area !== 'Desempregado'"
           :disabled="area === 'Desempregado'"
+          :pre-filled="true"
         />
 
         <CustomInput
@@ -52,6 +53,7 @@
           :options="$store.faixasSalariais"
           :required="area !== 'Desempregado'"
           :disabled="area === 'Desempregado'"
+          :pre-filled="true"
         />
       </div>
       <div v-else>
@@ -69,19 +71,16 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
-import { ref, computed, watch, onMounted } from 'vue'
-import { Country, State, City } from 'country-state-city'
-import { object, string, boolean } from 'yup'
+import { ref, watch, onMounted } from 'vue'
 import { mdiBriefcase } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
 const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 
-if(storage.has('loggedEgresso')){
+if (storage.has('loggedEgresso')) {
   $store.fetchAll()
 }
-
 
 const pais = ref('')
 const estado = ref('')
@@ -127,9 +126,7 @@ onMounted(() => {
     const userData = JSON.parse(storage.get('loggedUser'))
 
     form.value?.setFieldValue('geral.email', userData.email)
-    form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
-      return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
-    }).join(' '))
+    form.value?.setFieldValue('geral.nome', userData.nome)
   }
 })
 

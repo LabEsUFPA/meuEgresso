@@ -38,7 +38,7 @@ public class AnuncioDTO {
     @NotBlank(message = "Informe um link que descreva sobre a vaga.")
     private String link;
 
-    @Pattern(regexp = "\\b(?:[1-9]\\d*|0)\\b(?:,\\d{2})?\\b", message = "Informe um salário válido.")
+    @Pattern(regexp = "\\b(?:[1-9]\\d*|0)(?:\\.\\d{2})?\\b", message = "Informe um salário válido.")
     private String salario;
 
     private UsuarioDTO createdBy;

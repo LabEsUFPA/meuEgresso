@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.service.egresso.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,8 +10,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.Year;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -18,12 +23,14 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Implementação do Serviço responsável pelas rotinas internas da aplicação
@@ -33,6 +40,7 @@ import lombok.RequiredArgsConstructor;
  * @since 16/04/2023
  * @version 1.0
  */
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class EgressoServiceImpl implements EgressoService {
@@ -105,6 +113,16 @@ public class EgressoServiceImpl implements EgressoService {
 	}
 
 	@Override
+	public boolean deletarEgresso(EgressoModel egresso) {
+		if (egressoRepository.existsById(egresso.getId())) {
+			egressoRepository.deleteById(egresso.getId());
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public boolean existsById(Integer id) {
 		return egressoRepository.existsById(id);
 	}
@@ -117,10 +135,15 @@ public class EgressoServiceImpl implements EgressoService {
 	@Override
 	public Resource getFileAsResource(String fotoNomeString) throws NotFoundFotoEgressoException {
 
-		Path file = Paths.get(String.format("%s%s", uploadDirectory + "/", fotoNomeString));
+		Path file = Paths.get(String.format("%s/%s", uploadDirectory, fotoNomeString));
 		try {
-			return new UrlResource(file.toUri());
+			UrlResource url = new UrlResource(file.toUri());
+			if (!url.exists()) {
+				throw new NotFoundFotoEgressoException();
+			}
+			return url;
 		} catch (MalformedURLException e) {
+			log.error("URL: " + file.getFileName(), e);
 			throw new NotFoundFotoEgressoException();
 		}
 
@@ -144,8 +167,159 @@ public class EgressoServiceImpl implements EgressoService {
 			Path filePath = uploadPath.resolve(nomeFoto);
 			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException ioe) {
+			log.error("Could not save file: " + arquivo.getOriginalFilename(), ioe);
 			throw new IOException("Could not save file: " + arquivo.getOriginalFilename(), ioe);
 		}
+	}
+
+	@Override
+	public Map<Integer, Integer> countAgeFromEgressos() {
+		Map<Integer, Integer> countIdades = new HashMap<>();
+		egressoRepository.countAgeFromEgressos().stream()
+				.forEach(e -> {
+					if (e.get(0) instanceof BigDecimal && e.get(1) instanceof Long) {
+						countIdades.put(e.get(0, BigDecimal.class).intValue(), e.get(1, Long.class).intValue());
+					} else if (e.get(0) instanceof Integer && e.get(1) instanceof Long) {
+						countIdades.put(e.get(0, Integer.class), e.get(1, Long.class).intValue());
+					}
+
+				});
+		return countIdades;
+	}
+
+	@Override
+	public Map<String, Integer> countFezPos() {
+		Map<String, Integer> contagem = new HashMap<>(2);
+		final String fez = "Fez";
+		final String naoFez = "Não fez";
+		egressoRepository.countFezPos().forEach(e -> {
+			if (e.get(0, Boolean.class).booleanValue()) {
+				contagem.put(fez, e.get(1, Long.class).intValue());
+			} else {
+				contagem.put(naoFez, e.get(1, Long.class).intValue());
+			}
+		});
+		contagem.computeIfAbsent(fez, k -> 0);
+		contagem.computeIfAbsent(naoFez, k -> 0);
+		return contagem;
+	}
+
+	@Override
+	public Map<String, Integer> countBolsista() {
+		Map<String, Integer> contagem = new HashMap<>(2);
+		final String bolsistas = "Bolsistas";
+		final String naoBolsistas = "Não Bolsistas";
+		egressoRepository.countBolsista().forEach(e -> {
+			if (e.get(0, Boolean.class).booleanValue()) {
+				contagem.put(bolsistas, e.get(1, Long.class).intValue());
+			} else {
+				contagem.put(naoBolsistas, e.get(1, Long.class).intValue());
+			}
+		});
+		contagem.computeIfAbsent(bolsistas, k -> 0);
+		contagem.computeIfAbsent(naoBolsistas, k -> 0);
+		return contagem;
+	}
+
+	@Override
+	public Map<Double, Integer> countRemuneracaoBolsa() {
+		Map<Double, Integer> contagem = new HashMap<>(12);
+		egressoRepository.countRemuneracaoBolsa().stream()
+				.forEach(e -> contagem.put(e.get(0, Double.class), e.get(1, Long.class).intValue()));
+		return contagem;
+	}
+
+	@Override
+	public Map<String, Integer> countCotista() {
+		Map<String, Integer> contagem = new HashMap<>(2);
+		final String cotista = "Cotista";
+		final String naoCotista = "Não Cotista";
+		egressoRepository.countCotista().forEach(e -> {
+			if (e.get(0, Boolean.class).booleanValue()) {
+				contagem.put(cotista, e.get(1, Long.class).intValue());
+			} else {
+				contagem.put(naoCotista, e.get(1, Long.class).intValue());
+			}
+		});
+		contagem.computeIfAbsent(cotista, k -> 0);
+		contagem.computeIfAbsent(naoCotista, k -> 0);
+		return contagem;
+	}
+
+	@Override
+	public Map<String, Integer> countInteressePos() {
+		Map<String, Integer> contagem = new HashMap<>(2);
+		final String sim = "Sim";
+		final String nao = "Não";
+		egressoRepository.countInteressePos().forEach(e -> {
+			if (e.get(0, Boolean.class).booleanValue()) {
+				contagem.put(sim, e.get(1, Long.class).intValue());
+			} else {
+				contagem.put(nao, e.get(1, Long.class).intValue());
+			}
+		});
+		contagem.computeIfAbsent(sim, k -> 0);
+		contagem.computeIfAbsent(nao, k -> 0);
+		return contagem;
+	}
+
+	@Override
+	public Map<String, Integer> countTipoAluno() {
+		Map<String, Integer> contagem = new HashMap<>(2);
+		final String graduacao = "GRADUAÇÃO";
+		final String posGraduacao = "PÓS-GRADUAÇÃO";
+		egressoRepository.countFezPos().forEach(e -> {
+			if (e.get(0, Boolean.class).booleanValue()) {
+				contagem.put(posGraduacao, e.get(1, Long.class).intValue());
+			} else {
+				contagem.put(graduacao, e.get(1, Long.class).intValue());
+			}
+		});
+		contagem.computeIfAbsent(graduacao, k -> 0);
+		contagem.computeIfAbsent(posGraduacao, k -> 0);
+		return contagem;
+	}
+
+	@Override
+	public Map<LocalDate, Long> countEgressoPorData() {
+		List<Tuple> cadastros = egressoRepository.countEgressoData();
+
+		return cadastros.stream()
+				.collect(Collectors.groupingBy(
+						tuple -> tuple.get(0, java.sql.Date.class)
+								.toLocalDate(),
+						Collectors.counting()));
+	}
+
+	@Override
+	public Map<Integer, Long> countEgressoPorAno() {
+		List<Tuple> cadastros = egressoRepository.countEgressoData();
+
+		return cadastros.stream()
+				.collect(Collectors.groupingBy(
+						tuple -> Year.of(
+								tuple.get(0, java.sql.Date.class)
+										.toLocalDate()
+										.getYear())
+								.getValue(),
+						Collectors.counting()));
+	}
+
+	@Override
+	public Map<LocalDate, Long> countEgressoPorMesEAno() {
+		List<Tuple> cadastros = egressoRepository.countEgressoData();
+
+		return cadastros.stream()
+				.collect(Collectors.groupingBy(
+						tuple -> tuple.get(0, java.sql.Date.class)
+								.toLocalDate()
+								.withDayOfMonth(1),
+						Collectors.counting()));
+	}
+
+	@Override
+	public void deleteAll() {
+		egressoRepository.deleteAll();
 	}
 
 }

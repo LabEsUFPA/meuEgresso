@@ -1,5 +1,8 @@
 <template>
-  <div class="input">
+  <div
+    class="input"
+    :id="name.replaceAll('.', '-')"
+  >
     <OField
       override
       message-class="text-xs mt-1 max-w-[250px]"
@@ -9,16 +12,24 @@
       })"
     >
       <template
-        v-if="label"
         #label
       >
-        {{ label }}
-        <sup
-          class="text-red-500"
-          v-if="required"
-        >
-          *
-        </sup>
+        <div v-if="label">
+          {{ label }}
+          <sup
+            class="text-red-500"
+            v-if="required"
+          >*</sup>
+        </div>
+        <div v-if="customLabel">
+          <div class="mb-1.5">
+            <slot name="label" />
+            <sup
+              class="text-red-500"
+              v-if="required"
+            >*</sup>
+          </div>
+        </div>
       </template>
       <template #default>
         <div
@@ -51,7 +62,28 @@
               v-else-if="iconPath"
             />
           </div>
+          <money3
+            v-if="money"
+            class="col-span-6 focus:outline-none bg-transparent"
+            :class="iconPath ? 'col-span-7' : 'col-span-8'"
+            :model-value="inputValue"
+            v-bind="config"
+            :placeholder="placeholder"
+            :disabled="disabled"
+            :type="type"
+            :name="name"
+            :required="required"
+            :step="step"
+            :maxlength="maxLength"
+            @update:modelValue="handleInput"
+            @focus="() => {
+              focused = true
+              config.allowBlank = false
+            }"
+            @blur="focused = false; handleBlur()"
+          />
           <OInput
+            v-else
             :root-class="classNames({
               ['col-span-7']: iconPath,
               ['col-span-8']: !iconPath
@@ -82,7 +114,7 @@
             :root-class="classNames({
               ['col-span-7']: iconPath,
               ['col-span-8']: !iconPath,
-              ['w-full md:w-1/2 h-32']: true
+              ['w-full md:w-1/2']: true
             })"
             :input-class="classNames({
               ['bg-gray-100 cursor-not-allowed']: disabled,
@@ -97,6 +129,7 @@
             :data-maska="mask"
             :step="step"
             :maxlength="maxLength"
+            :style="{ height: height || '128px' }"
             v-model="inputValue"
             @update:model-value="handleInput"
             @focus="focused = true"
@@ -127,7 +160,7 @@ import classNames from 'classnames'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { OField, OInput } from '@oruga-ui/oruga-next'
 
-type inputs = 'date' | 'text' | 'email' | 'number' | 'password' | 'textarea'
+type inputs = 'date' | 'text' | 'email' | 'number' | 'password' | 'textarea' | 'datetime-local'
 
 const $emit = defineEmits(['update:value'])
 
@@ -149,6 +182,9 @@ interface Props {
   errorMessage?: string,
   customErrorMessage?: boolean,
   withoutValidation?: boolean
+  money?: boolean
+  height?: string | number,
+  customLabel?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -166,11 +202,32 @@ const props = withDefaults(defineProps<Props>(), {
   classHelperText: '',
   errorMessage: '',
   customErrorMessage: false,
-  withoutValidation: false
+  withoutValidation: false,
+  money: false,
+  height: '128px',
+  customLabel: false
+
 })
 
 const focused = ref(false)
 const name = toRef(props, 'name')
+const config = ref({
+  prefix: 'R$ ',
+  suffix: '',
+  masked: false,
+  thousands: '.',
+  decimal: ',',
+  precision: 2,
+  allowBlank: true,
+  disableNegative: true,
+  disabled: false,
+  min: null,
+  max: null,
+  minimumNumberOfCharacters: 0,
+  shouldRound: true,
+  focusOnRight: true,
+  currentValue: 'null'
+})
 
 const {
   value: inputValue,
@@ -181,6 +238,9 @@ const {
 } = useField(name, undefined)
 
 function handleInput (e: Event) {
+  if (props.money && config.value.currentValue === 'null') {
+    return
+  }
   $emit('update:value', e)
   handleChange(e)
 }

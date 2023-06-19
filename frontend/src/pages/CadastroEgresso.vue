@@ -5,6 +5,7 @@
       @submit="handleSubmit"
       @invalid-submit="handleFail"
       :validation-schema="schema"
+      v-slot="{ values }"
     >
       <h1 class="text-cyan-800 text-2xl font-semibold">
         Cadastro de egresso
@@ -123,10 +124,17 @@
             </div>
 
             <div class="w-fit p-3 pr-5 rounded-xl bg-gray-100 mb-5">
+              <p
+                v-if="values.academico?.cotista.value"
+                class="text-sm mt-1 position-absolute display-none mb-5"
+              >
+                Por favor, marque pelo menos uma das opções abaixo:
+              </p>
               <CustomCheckbox
                 class="mb-5"
                 name="academico.cotista.tipos.renda"
                 label="Cota Renda"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -134,6 +142,7 @@
                 class="mb-5"
                 name="academico.cotista.tipos.escola"
                 label="Cota Escola"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -141,14 +150,28 @@
                 class="mb-5"
                 name="academico.cotista.tipos.raca"
                 label="Autodeclaração de Raça"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
               <CustomCheckbox
+                class="mb-5"
                 name="academico.cotista.tipos.quilombolaIndigena"
                 label="Quilombola/Indigena"
+                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
+
+              <p
+                v-if="bools.cotista &&
+                  !values.academico?.cotista?.tipos?.renda &&
+                  !values.academico?.cotista?.tipos?.escola &&
+                  !values.academico?.cotista?.tipos?.raca &&
+                  !values.academico?.cotista?.tipos?.quilombolaIndigena"
+                class="text-red-500 text-sm mt-1 position-absolute display-none"
+              >
+                Marque pelo menos uma das opções acima!
+              </p>
             </div>
 
             <CustomCheckbox
@@ -174,8 +197,10 @@
               label="Remuneração da bolsa"
               type="number"
               step="0.01"
+              placeholder="R$ 0,00"
               :required="bools.bolsista"
               :disabled="!bools.bolsista"
+              money
             />
 
             <CustomCheckbox
@@ -334,10 +359,13 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Descreva abaixo os assuntos nos quais você se sente mais confiante para apresentar palestras. <sup
-                v-if="bools.palestras"
-                class="text-red-500"
-              >*</sup>
+              <p>
+                Descreva abaixo os assuntos nos quais você se sente mais confiante para apresentar palestras.<sup
+                  v-if="bools.palestras"
+                  class="text-red-500"
+                >*</sup>
+              </p>
+              <span>(max. 300 caracteres)</span>
             </div>
 
             <CustomInput
@@ -349,7 +377,12 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Compartilhe abaixo, de forma simples e resumida, suas experiências positivas ao realizar o curso. <sup class="text-red-500">*</sup>
+              <p>
+                Compartilhe abaixo, de forma simples e resumida, suas experiências positivas ao realizar o curso.<sup
+                  class="text-red-500"
+                >*</sup>
+              </p>
+              <span>(max. 300 caracteres)</span>
             </div>
 
             <CustomInput
@@ -359,7 +392,11 @@
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
-              Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes, pois tudo tem impacto. <sup class="text-red-500">*</sup>
+              <p>
+                Compartilhe no campo abaixo todas as suas contribuições para a sociedade, sejam elas pequenas ou grandes,
+                pois tudo tem impacto.<sup class="text-red-500">*</sup>
+              </p>
+              <span>(max. 300 caracteres)</span>
             </div>
 
             <CustomInput
@@ -446,6 +483,7 @@
                 <img
                   src="src/assets/telegram.svg"
                   width="20"
+                  alt="Ícone do Telegram"
                 >
               </div>
             </CustomButton>
@@ -454,9 +492,7 @@
       </div>
     </CustomDialog>
 
-    <CustomDialog
-      v-model="dialogFalha"
-    >
+    <CustomDialog v-model="dialogFalha">
       <div class="h-full flex justify-center items-center">
         <div class="w-1/2">
           <div class="text-red-600 text-center mb-3">
@@ -477,40 +513,40 @@
 </template>
 
 <script lang="ts" setup>
-import FolderSection from 'src/components/FolderSection.vue'
-import CustomInput from 'src/components/CustomInput.vue'
-import CustomCheckbox from 'src/components/CustomCheckbox.vue'
-import CustomButton from 'src/components/CustomButton.vue'
-import CustomSelect from 'src/components/CustomSelect.vue'
-import CustomDialog from 'src/components/CustomDialog.vue'
-import FotoInput from 'src/components/FotoInput.vue'
-import InvalidInsert from 'src/components/InvalidInsert.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { Form } from 'vee-validate'
-import { ref, computed, watch, onMounted } from 'vue'
-import { Country, State, City } from 'country-state-city'
-import svgPath from 'src/assets/svgPaths.json'
-import { object, string, boolean, mixed } from 'yup'
 import {
   mdiAccount,
+  mdiAlertCircle,
   mdiBriefcase,
   mdiEmail,
+  mdiLinkedin,
   mdiMapMarker,
   mdiMessage,
   mdiSchool,
-  mdiCheckCircle,
-  mdiAlertCircle,
-  mdiLinkedin,
-  mdiWhatsapp,
-  mdiTwitter
+  mdiTwitter,
+  mdiWhatsapp
 } from '@mdi/js'
-import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
+import { City, Country, State } from 'country-state-city'
+import svgPath from 'src/assets/svgPaths.json'
+import CustomButton from 'src/components/CustomButton.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
+import CustomDialog from 'src/components/CustomDialog.vue'
+import CustomInput from 'src/components/CustomInput.vue'
+import CustomSelect from 'src/components/CustomSelect.vue'
+import FolderSection from 'src/components/FolderSection.vue'
+import FotoInput from 'src/components/FotoInput.vue'
+import InvalidInsert from 'src/components/InvalidInsert.vue'
 import LocalStorage from 'src/services/localStorage'
+import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import { useLoginStore } from 'src/store/LoginStore'
+import { Form } from 'vee-validate'
+import { computed, onMounted, ref, watch } from 'vue'
+import { boolean, mixed, object, string } from 'yup'
+import VueScrollTo from 'vue-scrollto'
 const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
 const $storeCadastro = useCadastroEgressoStore()
-const $storeLogin = useLoginStore()
+useLoginStore()
 const storage = new LocalStorage()
 
 $storeCadastro.fetchAll()
@@ -537,8 +573,12 @@ const bools = ref({
 
 const selectOpts = ref({
   tipoAluno: ['Graduação', 'Pós-graduação'],
-  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Outros'],
+  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Programador', 'Analísta', 'Outros'],
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
+})
+
+const compCotista = computed(() => {
+  return bools.value.cotista
 })
 
 const countries = computed(() => {
@@ -605,11 +645,16 @@ async function handleSubmit (values: any) {
     })
   }
 
+  if (values.academico.cotista.tipos.pcd) {
+    cotas.push({
+      id: 5
+    })
+  }
+
   if (cotas.length === 0) {
     cotas = null
   }
 
-  console.log(values.carreira.area !== 'Desempregado')
   const empresa = values.carreira.area !== 'Desempregado'
     ? {
         areaAtuacao: values.carreira.area,
@@ -663,8 +708,6 @@ async function handleSubmit (values: any) {
     empresa,
     titulacao
   })
-  console.log('Staus: ')
-  console.log(status)
 
   if (status !== 201) {
     dialogFalha.value = true
@@ -674,8 +717,10 @@ async function handleSubmit (values: any) {
 }
 
 function handleFail (e: any) {
-  console.log(e)
   camposFaltosos.value = true
+  const incorrectElements = Object.keys(e.errors)
+  const el = document.querySelector(`#${incorrectElements[0].replaceAll('.', '-')}`)
+  VueScrollTo.scrollTo(el, 800, { offset: -300 })
 }
 
 const schema = object().shape({
@@ -692,12 +737,11 @@ const schema = object().shape({
     }),
     nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
       if (value) {
-        const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
+        const date = value.split('/').reverse().join('-')
         const minDate = new Date('1940-01-01')
         const maxDate = new Date('2023-12-31')
         const inputDate = new Date(date)
 
-        // Check if the person is at least 18 years old
         const eighteenYearsAgo = new Date()
         eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
 
@@ -722,21 +766,23 @@ const schema = object().shape({
       return (typeof value).constructor(true)
     })
   }),
-  localizacao: object({
-    pais: string().required('Campo obrigatório'),
-    estado: string().required('Campo obrigatório'),
-    cidade: string().required('Campo obrigatório')
-  }),
   academico: object({
     matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres').matches(/^(\d{12})?$/),
     tipoAluno: string(),
     cotista: object({
-      value: boolean(),
+      value: boolean().test('Cotas', 'Marque pelo menos uma das opções acima', (value: any, cotas) => {
+        if (value) {
+          if (cotas.parent.tipos.renda || cotas.parent.tipos.escola || cotas.parent.tipos.raca || cotas.parent.tipos.quilombolaIndigena) return true
+          return false
+        }
+        return true
+      }),
       tipos: object({
         renda: boolean(),
         escola: boolean(),
         raca: boolean(),
-        quilombolaIndigena: boolean()
+        quilombolaIndigena: boolean(),
+        pcd: boolean()
       })
     }),
     bolsista: object({
@@ -771,6 +817,11 @@ const schema = object().shape({
       return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     })
   }),
+  localizacao: object({
+    pais: string().required('Campo obrigatório'),
+    estado: string().required('Campo obrigatório'),
+    cidade: string().required('Campo obrigatório')
+  }),
   adicionais: object({
     palestras: boolean(),
     assuntosPalestras: string().when('palestras', ([palestras], schema) => {
@@ -800,13 +851,19 @@ onMounted(() => {
     }, 10)
   })
 
+  watch(compCotista, (_, oldVal) => {
+    if (oldVal) {
+      ['renda', 'escola', 'raca', 'quilombolaIndigena', 'pcd'].forEach(field => {
+        form.value?.setFieldValue(`academico.cotista.tipos.${field}`, false)
+      })
+    }
+  })
+
   if (storage.has('loggedUser')) {
     const userData = JSON.parse(storage.get('loggedUser'))
 
     form.value?.setFieldValue('geral.email', userData.email)
-    form.value?.setFieldValue('geral.nome', userData.nome.split(' ').map((str: string) => {
-      return str !== 'de' && str !== 'da' ? str[0].toUpperCase() + str.substring(1) : str
-    }).join(' '))
+    form.value?.setFieldValue('geral.nome', userData.nomeCompleto)
   }
 })
 

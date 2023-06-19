@@ -46,7 +46,7 @@
         v-show="salario"
         class="text-neutral-900 font-medium"
       >
-        R$ {{ salario }}
+        {{ salario }}
       </p>
     </div>
 

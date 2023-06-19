@@ -1,4 +1,3 @@
-
 <template>
   <Form
     ref="form"
@@ -63,6 +62,7 @@
                 :max-length="12"
                 :min-length="0"
                 :min="0"
+                money
               />
               <CustomInput
                 name="link"
@@ -120,6 +120,25 @@
       </div>
     </div>
   </CustomDialog>
+  <CustomDialog
+    v-model="submitError"
+  >
+    <div class="h-full flex justify-center items-center">
+      <div class="w-1/2">
+        <div class="text-red-500 text-center mb-3">
+          <SvgIcon
+            type="mdi"
+            size="100"
+            class="inline"
+            :path="mdiCloseCircle"
+          />
+        </div>
+        <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+          Erro no cadastro
+        </h1>
+      </div>
+    </div>
+  </CustomDialog>
 </template>
 
 <script setup lang="ts">
@@ -132,8 +151,8 @@ import CustomDialog from 'src/components/CustomDialog.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import { Form } from 'vee-validate'
-import { object, string, date } from 'yup'
-import { mdiCheckCircle, mdiBullhorn, mdiLink } from '@mdi/js'
+import { object, string } from 'yup'
+import { mdiCheckCircle, mdiBullhorn, mdiLink, mdiCloseCircle } from '@mdi/js'
 import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
 import classNames from 'classnames'
 import { useRouter } from 'vue-router'
@@ -144,6 +163,7 @@ const $store = useAnuncioVagaStore()
 const error = ref(false)
 const errorText = ref('')
 const submitSuccess = ref(false)
+const submitError = ref(false)
 
 const retornaFeed = () => {
   router.push({ path: '/vagas' })
@@ -152,9 +172,18 @@ const retornaFeed = () => {
 $store.fetchAreasEmprego()
 
 const schema = object().shape({
-  titulo: string().required('O título é um campo obrigatório').trim().matches(/^[a-zA-ZÀ-ÿ0-9]+$/, 'Somente letras e números.'),
+  titulo: string().required('O título é um campo obrigatório').trim().matches(/^[\w\s\d\SÀ-ÿ]+$/, 'Somente letras e números.'),
   areasEmprego: string().required('A área da emprego é um campo obrigatório.'),
-  dataExpiracao: date().required('A data de expiração é um campo obrigatório.'),
+  dataExpiracao: string().required('Campo obrigatório').test('Data', 'Data deve ser sempre no futuro', (value) => {
+    if (value) {
+      const date = value.split('/').reverse().join('-') // Converte data para (YYYY-MM-DD)
+      const minDate = new Date()
+      const maxDate = new Date((minDate.getFullYear() + 1).toString() + '-12-31')
+      const inputDate = new Date(date)
+      return inputDate >= minDate && inputDate <= maxDate
+    }
+    return true
+  }),
   salario: string().max(12),
   link: string().required('O link para contato é um campo obrigatório.').trim().matches(/^(http|https):\/\/[a-zA-Z0-9\-.]+\.[a-zA-Z]{2,}(\/\S*)?$/, 'Deve ser um formato de link válido em http ou https.'),
   descricao: string().required('A descrição é um campo obrigatório.')
@@ -162,7 +191,6 @@ const schema = object().shape({
 
 // Post Anuncio
 const handleSubmit = async (submitData: any) => {
-  console.log('submit:', submitData)
   const responseValidation = await $store.cadastraAnuncio({
     titulo: submitData.titulo,
     areaEmprego: {
@@ -177,8 +205,9 @@ const handleSubmit = async (submitData: any) => {
 
   if (responseValidation === 201) {
     error.value = false
-    console.log('Anúncio criado: ' + responseValidation)
     submitSuccess.value = true
+  } else {
+    submitError.value = true
   }
 }
 const onInvalid = (e: any) => {

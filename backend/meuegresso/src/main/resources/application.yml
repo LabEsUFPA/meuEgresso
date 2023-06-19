@@ -12,10 +12,7 @@ spring:
   jpa:
     defer-datasource-initialization: true
 
-
-
-
-# Email configuration
+  # Email configuration
   mail:
     host: smtp.gmail.com
     port: 587
@@ -59,6 +56,10 @@ rsa:
 server:
   port: ${APP_PORT}
   forward-headers-strategy: framework
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
   compression:
     enabled: true
     min-response-size: 2048

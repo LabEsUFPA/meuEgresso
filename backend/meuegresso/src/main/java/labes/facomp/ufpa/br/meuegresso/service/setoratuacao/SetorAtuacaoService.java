@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.setoratuacao;
 
 import java.util.List;
+import java.util.Map;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
@@ -55,5 +56,7 @@ public interface SetorAtuacaoService {
 	public SetorAtuacaoModel findByNome(String nome);
 
 	public boolean existByNome(String nome);
+
+ 	Map<String, Integer> countEgressoBySetorAtuacao();
 
 }
