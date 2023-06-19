@@ -261,12 +261,9 @@
           @submit="handleSubmitAcademico"
           @invalid-submit="onInvalid"
           :validation-schema="schemaAcademico"
+          v-slot="{ values }"
         >
-          <FolderAcademico
-            :is-input="dataEgresso.academico.isInput"
-            :bools="bools"
-            :bolsa-holder="placeHolders.bolsaNome"
-          >
+          <FolderSection>
             <template #EditButton>
               <h1 class="relative">
                 <ButtonEdit
@@ -283,145 +280,288 @@
                 />
               </h1>
             </template>
-            <template #NonInputData>
-              <CustomPerfilData
-                type="number"
-                class="mb-5"
-                :vmodel="dataEgresso.academico.matricula"
-                name="academico.matricula"
-                label="Matrícula"
-                placeholder="205004940001"
-                icon-path=""
-              />
-
-              <CustomPerfilData
-                type="text"
-                class="mb-5"
-                :vmodel="dataEgresso.academico.cotista.tipo"
-                name="academico.cotista.tipo"
-                label="Cotas"
-                placeholder="Tipo de cota"
-                icon-path=""
-              />
-
-              <CustomPerfilData
-                type="text"
-                class="mb-5"
-                :vmodel="dataEgresso.academico.tipoAluno"
-                name="academico.tipoAluno"
-                label="Formação"
-                placeholder="Selecione"
-                icon-path=""
-              />
-
-              <CustomPerfilData
-                type="text"
-                class="mb-5"
-                :vmodel="dataEgresso.academico.posGrad.curso"
-                name="academico.posGrad.curso"
-                label="Curso"
-                placeholder="Curso de pós-graduação"
-                icon-path=""
-              />
-
-              <CustomPerfilData
-                type="text"
-                class="mb-5"
-                :vmodel="dataEgresso.academico.posGrad.local"
-                name="academico.posGrad.local"
-                label="Local da pós-graduação"
-                placeholder="Local da pós-graduação"
-                icon-path=""
-              />
-
-              <CustomPerfilData
-                type="text"
-                class="mb-1"
-                :vmodel="dataEgresso.academico.bolsista.tipo"
-                name="academico.bolsista.tipo"
-                label="Bolsa"
-                placeholder="Bolsa"
-                icon-path=""
-              />
-            </template>
-          </FolderAcademico>
-        </Form>
-        <Form
-          ref="formCarreira"
-          @submit="handleSubmitCarreira"
-          @invalid-submit="onInvalid"
-          :validation-schema="schemaCarreira"
-        >
-          <FolderCarreira
-            :is-input="dataEgresso.carreira.isInput"
-            :area-atuacao-holder="placeHolders.areaAtuacao"
-            :setor-atuacao-holder="placeHolders.setorAtuacao"
-            :faixa-salarial-holder="placeHolders.faixaSalarial"
-          >
-            <template #EditButton>
-              <h1 class="relative">
-                <ButtonEdit
-                  label="Editar"
-                  icon-path="/src/assets/edit.svg"
-                  icon-path2="/src/assets/wcheck.svg"
-                  color="invisiblesky"
-                  color2="emerald"
-                  classimg="sky-600"
-                  :has-shadow="false"
-                  @toggle="toggleIsInput('carreira')"
-                  :is-input="dataEgresso.carreira.isInput"
-                  v-if="!isPublic"
+            <template #title>
+              <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
+                <SvgIcon
+                  type="mdi"
+                  size="20"
+                  class="inline mr-2"
+                  :path="mdiSchool"
                 />
+                Acadêmico
               </h1>
             </template>
-            <template #NonInputData>
-              <CustomPerfilData
-                type="text"
-                class="mb-10"
-                :vmodel="dataEgresso.carreira.area"
-                name="carreira.area"
-                label="Área de Atuação"
-                placeholder="Área"
-                icon-path=""
-              />
+            <template #default>
+              <div v-if="!dataEgresso.academico.isInput">
+                <CustomPerfilData
+                  type="number"
+                  class="mb-5"
+                  :vmodel="dataEgresso.academico.matricula"
+                  name="academico.matricula"
+                  label="Matrícula"
+                  placeholder="205004940001"
+                  icon-path=""
+                />
 
-              <CustomPerfilData
-                type="text"
-                class="mb-10"
-                :vmodel="dataEgresso.carreira.setor"
-                name="carreira.setor"
-                label="Setor de Atuação"
-                placeholder="Setor"
-                icon-path=""
-              />
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.academico.cotista.tipo"
+                  name="academico.cotista.tipo"
+                  label="Cotas"
+                  placeholder="Tipo de cota"
+                  icon-path=""
+                />
 
-              <CustomPerfilData
-                type="text"
-                class="mb-5"
-                :vmodel="dataEgresso.carreira.empresa"
-                name="carreira.empresa"
-                label="Empresa Atual"
-                placeholder="Empresa"
-                icon-path=""
-              />
-              <div v-if="dataEgresso.carreira.area === '' ">
-                <div>
-                  <div class="text-gray-400 text-center mb-6 mt-12">
-                    <SvgIcon
-                      type="mdi"
-                      size="30"
-                      class="inline"
-                      :path="mdiAlertCircleOutline"
-                    />
-                    <div class="mt-4">
-                      Sem dados cadastrados
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.academico.tipoAluno"
+                  name="academico.tipoAluno"
+                  label="Formação"
+                  placeholder="Selecione"
+                  icon-path=""
+                />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.academico.posGrad.curso"
+                  name="academico.posGrad.curso"
+                  label="Curso"
+                  placeholder="Curso de pós-graduação"
+                  icon-path=""
+                />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.academico.posGrad.local"
+                  name="academico.posGrad.local"
+                  label="Local da pós-graduação"
+                  placeholder="Local da pós-graduação"
+                  icon-path=""
+                />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-1"
+                  :vmodel="dataEgresso.academico.bolsista.tipo"
+                  name="academico.bolsista.tipo"
+                  label="Bolsa"
+                  placeholder="Bolsa"
+                  icon-path=""
+                />
+              </div>
+
+              <div v-else>
+                <CustomInput
+                  class="mb-5"
+                  name="academico.matricula"
+                  label="Matrícula"
+                  mask="############"
+                  placeholder="205004940001"
+                  :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
+                  custom-error-message
+                  @update:value="checkRegistrationLength"
+                />
+
+                <div class="mb-5 text-sm font-semibold text-cyan-600">
+                  Marque todos as opções que sejam verdadeiras abaixo:
+                </div>
+
+                <CustomCheckbox
+                  class="mb-5"
+                  name="academico.cotista.value"
+                  label="Cotista"
+                  v-model:value="bools.cotista"
+                />
+
+                <div class="mb-5 text-sm font-semibold text-cyan-600">
+                  Tipos de cota:
+                </div>
+
+                <div class="w-fit p-3 pr-5 rounded-xl bg-gray-100 mb-5">
+                  <p
+                    v-if="values.academico?.cotista.value"
+                    class="text-sm mt-1 position-absolute display-none mb-5"
+                  >
+                    Por favor, marque pelo menos uma das opções abaixo:
+                  </p>
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.renda"
+                    label="Cota Renda"
+                    :required="bools.cotista"
+                    :disabled="!bools.cotista"
+                  />
+
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.escola"
+                    label="Cota Escola"
+                    :required="bools.cotista"
+                    :disabled="!bools.cotista"
+                  />
+
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.raca"
+                    label="Autodeclaração de Raça"
+                    :required="bools.cotista"
+                    :disabled="!bools.cotista"
+                  />
+
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.quilombolaIndigena"
+                    label="Quilombola/Indigena"
+                    :required="bools.cotista"
+                    :disabled="!bools.cotista"
+                  />
+
+                  <p
+                    v-if="bools.cotista &&
+                      !values.academico?.cotista?.tipos?.renda &&
+                      !values.academico?.cotista?.tipos?.escola &&
+                      !values.academico?.cotista?.tipos?.raca &&
+                      !values.academico?.cotista?.tipos?.quilombolaIndigena"
+                    class="text-red-500 text-sm mt-1 position-absolute display-none"
+                  >
+                    Marque pelo menos uma das opções acima!
+                  </p>
+                </div>
+
+                <CustomSelect
+                  class="mb-5"
+                  name="academico.bolsista.tipo"
+                  label="Tipo de Bolsa"
+                  :placeholder="placeHolders.bolsaNome"
+                  :options="$store.tiposBolsa"
+                  :required="bools.bolsista"
+                  :disabled="!bools.bolsista"
+                  :pre-filled="true"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  name="academico.bolsista.remuneracao"
+                  label="Remuneração da bolsa"
+                  type="number"
+                  step="0.01"
+                  placeholder="R$ 0,00"
+                  :required="bools.bolsista"
+                  :disabled="!bools.bolsista"
+                  money
+                />
+
+                <CustomCheckbox
+                  class="mb-5"
+                  name="academico.posGrad.value"
+                  v-model:value="bools.posGrad"
+                  label="Pós-graduação"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  name="academico.posGrad.local"
+                  label="Instituição da pós-graduação"
+                  :required="bools.posGrad"
+                  :disabled="!bools.posGrad"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  name="academico.posGrad.curso"
+                  label="Curso de pós-graduação"
+                  :required="bools.posGrad"
+                  :disabled="!bools.posGrad"
+                />
+
+                <CustomCheckbox
+                  name="academico.posGrad.desejaPos"
+                  label="Desejo realizar pós graduação"
+                  v-if="!bools.posGrad"
+                />
+              </div>
+            </template>
+          </FolderSection>
+          <Form
+            ref="formCarreira"
+            @submit="handleSubmitCarreira"
+            @invalid-submit="onInvalid"
+            :validation-schema="schemaCarreira"
+          >
+            <FolderCarreira
+              :is-input="dataEgresso.carreira.isInput"
+              :area-atuacao-holder="placeHolders.areaAtuacao"
+              :setor-atuacao-holder="placeHolders.setorAtuacao"
+              :faixa-salarial-holder="placeHolders.faixaSalarial"
+            >
+              <template #EditButton>
+                <h1 class="relative">
+                  <ButtonEdit
+                    label="Editar"
+                    icon-path="/src/assets/edit.svg"
+                    icon-path2="/src/assets/wcheck.svg"
+                    color="invisiblesky"
+                    color2="emerald"
+                    classimg="sky-600"
+                    :has-shadow="false"
+                    @toggle="toggleIsInput('carreira')"
+                    :is-input="dataEgresso.carreira.isInput"
+                    v-if="!isPublic"
+                  />
+                </h1>
+              </template>
+              <template #NonInputData>
+                <CustomPerfilData
+                  type="text"
+                  class="mb-10"
+                  :vmodel="dataEgresso.carreira.area"
+                  name="carreira.area"
+                  label="Área de Atuação"
+                  placeholder="Área"
+                  icon-path=""
+                />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-10"
+                  :vmodel="dataEgresso.carreira.setor"
+                  name="carreira.setor"
+                  label="Setor de Atuação"
+                  placeholder="Setor"
+                  icon-path=""
+                />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.carreira.empresa"
+                  name="carreira.empresa"
+                  label="Empresa Atual"
+                  placeholder="Empresa"
+                  icon-path=""
+                />
+                <div v-if="dataEgresso.carreira.area === '' ">
+                  <div>
+                    <div class="text-gray-400 text-center mb-6 mt-12">
+                      <SvgIcon
+                        type="mdi"
+                        size="30"
+                        class="inline"
+                        :path="mdiAlertCircleOutline"
+                      />
+                      <div class="mt-4">
+                        Sem dados cadastrados
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </template>
-          </FolderCarreira>
-
+              </template>
+            </FolderCarreira>
+          </Form>
           <Form
             ref="formLocalizacao"
             @submit="handleSubmitLocalizacao"
@@ -504,6 +644,7 @@
                     </div>
                   </div>
                 </div>
+
                 <div v-show="dataEgresso.localizacao.isInput">
                   <div>
                     <CustomSelect
@@ -647,6 +788,8 @@ import CustomButtonLink from 'src/components/CustomButtonLink.vue'
 import ButtonEdit from 'src/components/ButtonEdit.vue'
 import FolderSection from 'src/components/FolderSection.vue'
 import CustomInput from 'src/components/CustomInput.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
+
 import CustomPerfilData from 'src/components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
@@ -658,9 +801,8 @@ import { Form } from 'vee-validate'
 import { object, string, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
 import CustomDialog from 'src/components/CustomDialog.vue'
-import FolderAcademico from 'src/components/FolderAcademico.vue'
 import FolderCarreira from 'src/components/FolderCarreira.vue'
-// import FolderLocalizacao from 'src/components/FolderLocalizacao.vue'
+
 import FolderAdicionais from 'src/components/FolderAdicionais.vue'
 import ProfileImage from 'src/components/ProfileImage.vue'
 import {
@@ -674,7 +816,8 @@ import {
   mdiCheckCircle,
   mdiAlertCircle,
   mdiMapMarker,
-  mdiAlertCircleOutline
+  mdiAlertCircleOutline,
+  mdiSchool
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
 const dialogSucesso = ref(false)
@@ -690,7 +833,11 @@ const formAcademico = ref<typeof Form | null>(null)
 const formCarreira = ref<typeof Form | null>(null)
 const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
+const missingDigits = ref(0)
 
+const checkRegistrationLength = ($event: Event) => {
+  missingDigits.value = 12 - String($event).length
+}
 const countries = computed(() => {
   const countries = Country.getAllCountries()
   const filteredCountries = []
@@ -882,7 +1029,6 @@ async function handleSubmitAcademico (values: any) {
   }
   if (values.academico.bolsista.value) {
     jsonResponse.bolsa = bolsa
-    // jsonResponse.bolsa.id = values.academico.bolsista.tipo
     jsonResponse.remuneracaoBolsa = values.academico.bolsista.remuneracao
   } else {
     jsonResponse.bolsa = null
@@ -1341,7 +1487,7 @@ const schemaHeader = object().shape({
   geral: object({
     nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
       if (value) {
-        return value?.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/)
+        return value?.match(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/)
       }
 
       return (typeof value).constructor(true)
@@ -1387,14 +1533,20 @@ const schemaAcademico = object().shape({
   academico: object({
     matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres').matches(/^(\d{12})?$/),
     cotista: object({
-      value: boolean(),
+      value: boolean().test('Cotas', 'Marque pelo menos uma das opções acima', (value: any, cotas) => {
+        if (value) {
+          if (cotas.parent.tipos.renda || cotas.parent.tipos.escola || cotas.parent.tipos.raca || cotas.parent.tipos.quilombolaIndigena) return true
+          return false
+        }
+        return true
+      }),
       tipos: object({
         renda: boolean(),
         escola: boolean(),
         raca: boolean(),
-        quilombolaIndigena: boolean()
+        quilombolaIndigena: boolean(),
+        pcd: boolean()
       })
-
     }),
     bolsista: object({
       value: boolean(),
