@@ -66,6 +66,7 @@
             v-if="money"
             class="col-span-6 focus:outline-none bg-transparent"
             :class="iconPath ? 'col-span-7' : 'col-span-8'"
+            :model-value="inputValue"
             v-bind="config"
             :placeholder="placeholder"
             :disabled="disabled"
@@ -74,8 +75,7 @@
             :required="required"
             :step="step"
             :maxlength="maxLength"
-            @update:model-value="handleInput"
-            v-model="config.currentValue"
+            @update:modelValue="handleInput"
             @focus="() => {
               focused = true
               config.allowBlank = false
