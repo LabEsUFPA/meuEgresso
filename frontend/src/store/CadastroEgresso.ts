@@ -54,8 +54,6 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
 
       if (response?.status === 200) {
         this.tiposBolsa = response.data?.map((elem: any) => {
-          console.log(elem)
-
           return ({
             label: elem.nome,
             value: elem.id

@@ -713,6 +713,11 @@ async function handleSubmit (values: any) {
     dialogFalha.value = true
   } else {
     dialogSucesso.value = true
+    const token = storage.getToken()
+
+    if (token !== undefined) {
+      storage.setLoggedUser(token)
+    }
   }
 }
 
