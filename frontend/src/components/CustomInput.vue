@@ -1,5 +1,8 @@
 <template>
-  <div class="input">
+  <div
+    class="input"
+    :id="name.replaceAll('.', '-')"
+  >
     <OField
       override
       message-class="text-xs mt-1 max-w-[250px]"
@@ -8,7 +11,9 @@
         ['opacity-80']: disabled
       })"
     >
-      <template #label>
+      <template
+        #label
+      >
         <div v-if="label">
           {{ label }}
           <sup
@@ -59,9 +64,9 @@
           </div>
           <money3
             v-if="money"
-            class="col-span-6 focus:outline-none bg-transparent col-span-8"
-            :model-value="inputValue"
+            class="col-span-6 focus:outline-none bg-transparent"
             :class="iconPath ? 'col-span-7' : 'col-span-8'"
+            :model-value="inputValue"
             v-bind="config"
             :placeholder="placeholder"
             :disabled="disabled"
@@ -72,8 +77,8 @@
             :maxlength="maxLength"
             @update:modelValue="handleInput"
             @focus="() => {
-              focused = true;
-              config.allowBlank = false;
+              focused = true
+              config.allowBlank = false
             }"
             @blur="focused = false; handleBlur()"
           />
@@ -87,7 +92,6 @@
               ['focus:outline-none bg-transparent']: true,
               ['cursor-not-allowed']: disabled
             })"
-            :model-value="inputValue"
             :placeholder="placeholder"
             :disabled="disabled"
             :type="type"
@@ -110,7 +114,7 @@
             :root-class="classNames({
               ['col-span-7']: iconPath,
               ['col-span-8']: !iconPath,
-              ['w-full md:w-1/2 h-32']: true
+              ['w-full md:w-1/2']: true
             })"
             :input-class="classNames({
               ['bg-gray-100 cursor-not-allowed']: disabled,
@@ -118,7 +122,6 @@
               ['outline outline-emerald-500']: meta.valid && meta.validated && meta.touched,
               ['px-2 py-0.5 border border-gray-400 h-full rounded-md block focus:outline-sky-400 focus:outline-2']: true
             })"
-            :model-value="inputValue"
             :placeholder="placeholder"
             :disabled="disabled"
             :name="name"
@@ -126,6 +129,8 @@
             :data-maska="mask"
             :step="step"
             :maxlength="maxLength"
+            :style="{ height: height || '128px' }"
+            v-model="inputValue"
             @update:model-value="handleInput"
             @focus="focused = true"
             @blur="focused = false; handleBlur()"
@@ -138,7 +143,7 @@
           v-if="meta.validated"
           class="text-red-500"
         >
-          {{ meta.valid ? null : customErrorMessage ? props.errorMessage : errorMessage }}
+          {{ meta.valid ? null : customErrorMessage? props.errorMessage : errorMessage }}
         </div>
         <div :class="classHelperText">
           {{ helperText }}
@@ -149,13 +154,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, toRef, defineEmits, defineProps, withDefaults } from 'vue'
+import { ref, toRef } from 'vue'
 import { useField } from 'vee-validate'
 import classNames from 'classnames'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { OField, OInput } from '@oruga-ui/oruga-next'
 
-type inputs = 'date' | 'text' | 'email' | 'number' | 'password' | 'textarea'
+type inputs = 'date' | 'text' | 'email' | 'number' | 'password' | 'textarea' | 'datetime-local'
 
 const $emit = defineEmits(['update:value'])
 
@@ -172,13 +177,13 @@ interface Props {
   maxLength?: number | string
   imgIcon?: boolean
   step?: number | string
-  disabled?: boolean
-  classHelperText?: string
-  errorMessage?: string
-  customErrorMessage?: boolean
+  disabled?: boolean,
+  classHelperText?: string,
+  errorMessage?: string,
+  customErrorMessage?: boolean,
   withoutValidation?: boolean
   money?: boolean
-  height?: string | number
+  height?: string | number,
   customLabel?: boolean
 }
 
@@ -201,6 +206,7 @@ const props = withDefaults(defineProps<Props>(), {
   money: false,
   height: '128px',
   customLabel: false
+
 })
 
 const focused = ref(false)
@@ -219,7 +225,8 @@ const config = ref({
   max: null,
   minimumNumberOfCharacters: 0,
   shouldRound: true,
-  focusOnRight: false
+  focusOnRight: true,
+  currentValue: 'null'
 })
 
 const {
@@ -231,10 +238,10 @@ const {
 } = useField(name, undefined)
 
 function handleInput (e: Event) {
-  $emit('update:value', e)
-  if (String(e) === '' && props.money) {
+  if (props.money && config.value.currentValue === 'null') {
     return
   }
+  $emit('update:value', e)
   handleChange(e)
 }
 </script>
