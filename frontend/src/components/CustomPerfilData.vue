@@ -22,7 +22,6 @@
           :path="iconPath"
           current="sky-900"
         />
-
         <h1 class="font-semibold absolute top-0 ml-8 mt-[1px]">
           {{ label }}
         </h1>
@@ -39,7 +38,6 @@
             helper-text=""
             :placeholder="placeholder"
           />
-
           <div v-else>
             <div v-if="vmodel">
               <div class="whitespace-pre-wrap">

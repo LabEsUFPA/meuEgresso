@@ -35,6 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import labes.facomp.ufpa.br.meuegresso.config.Configuracao;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
@@ -58,7 +59,7 @@ import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class EgressoControllerTest {
+class EgressoControllerTest extends Configuracao {
 
         @Autowired
         private TitulacaoRepository titulacaoRepository;

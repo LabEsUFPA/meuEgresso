@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.envers.AuditOverride;
+import org.hibernate.envers.Audited;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -39,11 +41,13 @@ import lombok.NoArgsConstructor;
  * @version 1.0
  */
 @Data
+@Audited
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "usuario")
 @EqualsAndHashCode(callSuper = false)
+@AuditOverride(forClass = Auditable.class)
 public class UsuarioModel extends Auditable implements UserDetails {
 
 	@Id

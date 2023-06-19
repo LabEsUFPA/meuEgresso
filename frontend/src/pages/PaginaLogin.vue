@@ -42,10 +42,12 @@
         </div>
         <p class="mb-14">
           Esqueceu a senha?
-          <a
-            href="./"
+          <RouterLink
+            to="/redefinir-senha"
             class="text-sky-600"
-          > Recupere aqui </a>
+          >
+            Recupere aqui
+          </RouterLink>
         </p>
         <CustomButton
           label="Entrar"

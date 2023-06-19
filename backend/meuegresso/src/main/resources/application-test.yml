@@ -21,6 +21,14 @@ spring:
       data-locations:
       - classpath:h2alias/age.sql
 
+  # Email configuration
+  mail:
+    username: user
+    password: admin
+    host: 127.0.0.1
+    port: 3025
+    protocol: smtp
+
   jpa:
     database: h2
     database-platform: org.hibernate.dialect.H2Dialect
@@ -41,5 +49,4 @@ server:
 token:
   domain: teste.com
   expiresHours: 3
-
 fotosDir: test/fotosTeste/

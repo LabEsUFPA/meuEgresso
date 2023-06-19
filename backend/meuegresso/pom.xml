@@ -135,6 +135,14 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!-- END -->
+		<!-- https://mvnrepository.com/artifact/com.icegreen/greenmail-junit5 -->
+		<dependency>
+			<groupId>com.icegreen</groupId>
+			<artifactId>greenmail-junit5</artifactId>
+			<version>2.0.0</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- JackSON LocalDate-->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -149,6 +157,23 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 		<!-- END  -->
+		<!-- PDF -->
+
+		<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.13.3</version>
+		</dependency>
+
+		<!-- END  -->
+		<!-- Auditoria -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-envers</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

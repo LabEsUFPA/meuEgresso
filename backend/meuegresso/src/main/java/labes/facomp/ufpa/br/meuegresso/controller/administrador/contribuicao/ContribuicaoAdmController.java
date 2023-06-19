@@ -47,7 +47,7 @@ public class ContribuicaoAdmController {
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIA')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO)
 			throws InvalidRequestException {
 		ContribuicaoModel contribuicaoModel = mapper.map(contribuicaoDTO, ContribuicaoModel.class);

@@ -3,6 +3,7 @@ package labes.facomp.ufpa.br.meuegresso.model.audit;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -29,6 +30,7 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
+@Audited
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class Auditable {

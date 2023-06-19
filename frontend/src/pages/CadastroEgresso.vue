@@ -5,6 +5,7 @@
       @submit="handleSubmit"
       @invalid-submit="handleFail"
       :validation-schema="schema"
+      v-slot="{ values }"
     >
       <h1 class="text-cyan-800 text-2xl font-semibold">
         Cadastro de egresso
@@ -123,6 +124,12 @@
             </div>
 
             <div class="w-fit p-3 pr-5 rounded-xl bg-gray-100 mb-5">
+              <p
+                v-if="values.academico?.cotista.value"
+                class="text-sm mt-1 position-absolute display-none mb-5"
+              >
+                Por favor, marque pelo menos uma das opções abaixo:
+              </p>
               <CustomCheckbox
                 class="mb-5"
                 name="academico.cotista.tipos.renda"
@@ -148,11 +155,23 @@
               />
 
               <CustomCheckbox
+                class="mb-5"
                 name="academico.cotista.tipos.quilombolaIndigena"
                 label="Quilombola/Indigena"
                 :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
+
+              <p
+                v-if="bools.cotista &&
+                  !values.academico?.cotista?.tipos?.renda &&
+                  !values.academico?.cotista?.tipos?.escola &&
+                  !values.academico?.cotista?.tipos?.raca &&
+                  !values.academico?.cotista?.tipos?.quilombolaIndigena"
+                class="text-red-500 text-sm mt-1 position-absolute display-none"
+              >
+                Marque pelo menos uma das opções acima!
+              </p>
             </div>
 
             <CustomCheckbox
@@ -197,7 +216,6 @@
               label="Instituição da pós-graduação"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
-              id="posGradLocal"
             />
 
             <CustomInput
@@ -524,6 +542,7 @@ import { useLoginStore } from 'src/store/LoginStore'
 import { Form } from 'vee-validate'
 import { computed, onMounted, ref, watch } from 'vue'
 import { boolean, mixed, object, string } from 'yup'
+import VueScrollTo from 'vue-scrollto'
 const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
 const $storeCadastro = useCadastroEgressoStore()
@@ -554,8 +573,12 @@ const bools = ref({
 
 const selectOpts = ref({
   tipoAluno: ['Graduação', 'Pós-graduação'],
-  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Outros'],
+  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Programador', 'Analísta', 'Outros'],
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
+})
+
+const compCotista = computed(() => {
+  return bools.value.cotista
 })
 
 const countries = computed(() => {
@@ -622,11 +645,16 @@ async function handleSubmit (values: any) {
     })
   }
 
+  if (values.academico.cotista.tipos.pcd) {
+    cotas.push({
+      id: 5
+    })
+  }
+
   if (cotas.length === 0) {
     cotas = null
   }
 
-  console.log(values.carreira.area !== 'Desempregado')
   const empresa = values.carreira.area !== 'Desempregado'
     ? {
         areaAtuacao: values.carreira.area,
@@ -680,8 +708,6 @@ async function handleSubmit (values: any) {
     empresa,
     titulacao
   })
-  console.log('Staus: ')
-  console.log(status)
 
   if (status !== 201) {
     dialogFalha.value = true
@@ -691,8 +717,10 @@ async function handleSubmit (values: any) {
 }
 
 function handleFail (e: any) {
-  console.log(e)
   camposFaltosos.value = true
+  const incorrectElements = Object.keys(e.errors)
+  const el = document.querySelector(`#${incorrectElements[0].replaceAll('.', '-')}`)
+  VueScrollTo.scrollTo(el, 800, { offset: -300 })
 }
 
 const schema = object().shape({
@@ -738,21 +766,23 @@ const schema = object().shape({
       return (typeof value).constructor(true)
     })
   }),
-  localizacao: object({
-    pais: string().required('Campo obrigatório'),
-    estado: string().required('Campo obrigatório'),
-    cidade: string().required('Campo obrigatório')
-  }),
   academico: object({
     matricula: string().max(12, 'Valor muito comprido, insira até 12 caracteres').matches(/^(\d{12})?$/),
     tipoAluno: string(),
     cotista: object({
-      value: boolean(),
+      value: boolean().test('Cotas', 'Marque pelo menos uma das opções acima', (value: any, cotas) => {
+        if (value) {
+          if (cotas.parent.tipos.renda || cotas.parent.tipos.escola || cotas.parent.tipos.raca || cotas.parent.tipos.quilombolaIndigena) return true
+          return false
+        }
+        return true
+      }),
       tipos: object({
         renda: boolean(),
         escola: boolean(),
         raca: boolean(),
-        quilombolaIndigena: boolean()
+        quilombolaIndigena: boolean(),
+        pcd: boolean()
       })
     }),
     bolsista: object({
@@ -787,6 +817,11 @@ const schema = object().shape({
       return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     })
   }),
+  localizacao: object({
+    pais: string().required('Campo obrigatório'),
+    estado: string().required('Campo obrigatório'),
+    cidade: string().required('Campo obrigatório')
+  }),
   adicionais: object({
     palestras: boolean(),
     assuntosPalestras: string().when('palestras', ([palestras], schema) => {
@@ -814,6 +849,14 @@ onMounted(() => {
     setTimeout(() => {
       cidadeInput.value = ''
     }, 10)
+  })
+
+  watch(compCotista, (_, oldVal) => {
+    if (oldVal) {
+      ['renda', 'escola', 'raca', 'quilombolaIndigena', 'pcd'].forEach(field => {
+        form.value?.setFieldValue(`academico.cotista.tipos.${field}`, false)
+      })
+    }
   })
 
   if (storage.has('loggedUser')) {

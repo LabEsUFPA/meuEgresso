@@ -154,7 +154,7 @@ const setIdAccessLevel = (accessLevel: string) => {
 }
 
 const schema = object().shape({
-  name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/, 'Informe nome e sobrenome'),
+  name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
   username: string().required('Informe um nome de usuário').trim().matches(/^[a-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
   email: string().required('Informe um email').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))/, 'Email inválido'),
   confirmationEmail: string().email().required('Confirme o email').oneOf([refYup('email')], 'Os e-mails informados são diferentes'),

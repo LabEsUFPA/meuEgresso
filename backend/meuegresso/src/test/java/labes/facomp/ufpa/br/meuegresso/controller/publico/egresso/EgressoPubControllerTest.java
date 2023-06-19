@@ -69,7 +69,9 @@ class EgressoPubControllerTest {
 		GeneroDTO genero = new GeneroDTO(1, "TRANSSEXUAL");
 		DepoimentoDTO depoimento = new DepoimentoDTO(1, "TextoDepoimento");
 		ContribuicaoDTO contribuicao = new ContribuicaoDTO();
-		
+		contribuicao.setId(1);
+		contribuicao.setDescricao("TextoContribuicao");
+
 		UsuarioDTO usuario = UsuarioDTO.builder()
 				.username("username")
 				.nome("nome_test")
@@ -83,17 +85,12 @@ class EgressoPubControllerTest {
 		egressoModel.setNascimento(LocalDate.parse("1999-10-20"));
 		egressoModel.setGenero(mapper.map(genero, GeneroModel.class));
 		egressoModel.setDepoimento(mapper.map(depoimento, DepoimentoModel.class));
-		
-		contribuicao.setId(1);
-		contribuicao.setDescricao("TextoContribuicao");
-		contribuicao.setEgressoId(egressoModel.getId());
-		
+		contribuicao.setEgressoId(1);
 		egressoModel.setContribuicao(mapper.map(contribuicao, ContribuicaoModel.class));
-		
+
 		// No banco vai ter conflito de valores unicos, mas pro teste basta
 		egressosModel.add(egressoModel);
 		egressosModel.add(egressoModel);
-		
 	}
 
 	@Test

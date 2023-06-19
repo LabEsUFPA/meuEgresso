@@ -4,18 +4,11 @@ INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario) VALUES ('ad
 INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario) VALUES ('secretario@secretario.com','SECRETARIO SECRETARIO','{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy','SECRETARIO') ON CONFLICT DO NOTHING;
 INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario) VALUES ('egresso@egresso.com','EGRESSO EGRESSO','{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO','EGRESSO') ON CONFLICT DO NOTHING;
 
--- Grupos Padrões
-
-INSERT INTO grupo (nome_grupo, created_by) values ('ADMIN', 1) ON CONFLICT DO NOTHING;
-INSERT INTO grupo (nome_grupo, created_by) values ('SECRETARIO', 1) ON CONFLICT DO NOTHING;
-INSERT INTO grupo (nome_grupo, created_by) values ('EGRESSO', 1) ON CONFLICT DO NOTHING;
-
-
 -- Usuarios por Grupo
 
-INSERT INTO public.usuario_grupo VALUES (1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO public.usuario_grupo VALUES (2, 2) ON CONFLICT DO NOTHING;
-INSERT INTO public.usuario_grupo VALUES (3, 3) ON CONFLICT DO NOTHING;
+INSERT INTO public.usuario_grupo VALUES (1, 'ADMIN') ON CONFLICT DO NOTHING;
+INSERT INTO public.usuario_grupo VALUES (2, 'SECRETARIO') ON CONFLICT DO NOTHING;
+INSERT INTO public.usuario_grupo VALUES (3, 'EGRESSO') ON CONFLICT DO NOTHING;
 
 --- Tipos de Cota
 

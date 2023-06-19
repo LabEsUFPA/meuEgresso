@@ -27,7 +27,6 @@
         />
 
         <CustomSelect
-          class="mb-5"
           name="carreira.setor"
           label="Setor de Atuação"
           :placeholder="placeHolders.setorAtuacaoHolder"

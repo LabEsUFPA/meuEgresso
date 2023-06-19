@@ -10,10 +10,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -21,12 +23,14 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Implementação do Serviço responsável pelas rotinas internas da aplicação
@@ -36,6 +40,7 @@ import lombok.RequiredArgsConstructor;
  * @since 16/04/2023
  * @version 1.0
  */
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class EgressoServiceImpl implements EgressoService {
@@ -123,10 +128,15 @@ public class EgressoServiceImpl implements EgressoService {
 	@Override
 	public Resource getFileAsResource(String fotoNomeString) throws NotFoundFotoEgressoException {
 
-		Path file = Paths.get(String.format("%s%s", uploadDirectory + "/", fotoNomeString));
+		Path file = Paths.get(String.format("%s/%s", uploadDirectory, fotoNomeString));
 		try {
-			return new UrlResource(file.toUri());
+			UrlResource url = new UrlResource(file.toUri());
+			if (!url.exists()) {
+				throw new NotFoundFotoEgressoException();
+			}
+			return url;
 		} catch (MalformedURLException e) {
+			log.error("URL: " + file.getFileName(), e);
 			throw new NotFoundFotoEgressoException();
 		}
 
@@ -150,6 +160,7 @@ public class EgressoServiceImpl implements EgressoService {
 			Path filePath = uploadPath.resolve(nomeFoto);
 			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException ioe) {
+			log.error("Could not save file: " + arquivo.getOriginalFilename(), ioe);
 			throw new IOException("Could not save file: " + arquivo.getOriginalFilename(), ioe);
 		}
 	}
@@ -261,4 +272,47 @@ public class EgressoServiceImpl implements EgressoService {
 		contagem.computeIfAbsent(posGraduacao, k -> 0);
 		return contagem;
 	}
+
+	@Override
+	public Map<LocalDate, Long> countEgressoPorData() {
+		List<Tuple> cadastros = egressoRepository.countEgressoData();
+
+		return cadastros.stream()
+				.collect(Collectors.groupingBy(
+						tuple -> tuple.get(0, java.sql.Date.class)
+								.toLocalDate(),
+						Collectors.counting()));
+	}
+
+	@Override
+	public Map<Integer, Long> countEgressoPorAno() {
+		List<Tuple> cadastros = egressoRepository.countEgressoData();
+
+		return cadastros.stream()
+				.collect(Collectors.groupingBy(
+						tuple -> Year.of(
+								tuple.get(0, java.sql.Date.class)
+										.toLocalDate()
+										.getYear())
+								.getValue(),
+						Collectors.counting()));
+	}
+
+	@Override
+	public Map<LocalDate, Long> countEgressoPorMesEAno() {
+		List<Tuple> cadastros = egressoRepository.countEgressoData();
+
+		return cadastros.stream()
+				.collect(Collectors.groupingBy(
+						tuple -> tuple.get(0, java.sql.Date.class)
+								.toLocalDate()
+								.withDayOfMonth(1),
+						Collectors.counting()));
+	}
+
+	@Override
+	public void deleteAll() {
+		egressoRepository.deleteAll();
+	}
+
 }

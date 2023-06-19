@@ -1,5 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "genero")
 @EqualsAndHashCode(callSuper = false)
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class GeneroModel extends Auditable {
 
     @Id
