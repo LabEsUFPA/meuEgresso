@@ -18,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -27,7 +28,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoValidoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoValidoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoValidoRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoValidoService;
 
@@ -51,9 +51,6 @@ class EgressoValidoControllerTest {
     EgressoValidoRepository egressoValidoRepository;
 
     @Autowired
-    GeneroRepository generoRepository;
-
-    @Autowired
     EgressoValidoService egressoValidoService;
 
     EgressoService egressoService;
@@ -68,11 +65,7 @@ class EgressoValidoControllerTest {
     @BeforeAll
     void setUp() throws Exception {
 
-        generoModel.setId(1);
-        generoModel.setNome("genero1");
-        generoRepository.save(generoModel);
-
-        egressoValidoModel.setId(EGRESSO_ID);
+        //egressoValidoModel.setId(EGRESSO_ID);
         egressoValidoModel.setNome(NOME);
         egressoValidoModel.setMatricula(MATRICULA);
         egressoValidoModel.setEmail(EMAIL);
@@ -91,13 +84,14 @@ class EgressoValidoControllerTest {
         egressoValidoDTO.setNome(NOME);
         egressoValidoDTO.setMatricula(MATRICULA);
         egressoValidoDTO.setEmail(EMAIL);
-        egressoValidoDTO.setId(EGRESSO_ID);
+        //egressoValidoDTO.setId(2);
 
-        MvcResult resposta = mockMvc.perform(
-                MockMvcRequestBuilders.post("/egressoValido")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(egressoValidoDTO)))
-                .andExpect(status().isOk()).andReturn();
+        MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/egressoValido")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(egressoValidoDTO)))
+                    .andDo(MockMvcResultHandlers.print())
+                    .andExpect(status().isOk())
+                    .andReturn();
 
         EgressoValidoDTO egressoValidado = objectMapper.readValue(resposta.getResponse().getContentAsString(), 
                 EgressoValidoDTO.class);

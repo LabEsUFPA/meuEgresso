@@ -8,12 +8,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,6 +24,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoValidoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoValidoRepository;
 
@@ -49,8 +52,7 @@ class EgressoValidoServiceTest {
     @MockBean
     private EgressoValidoRepository repository;
 
-    //TODO escrever teste para validarEgresso()
-    
+    // TODO verificar validarEgresso()
 
     /**
      * Metodo que preenche um mock de um EgressoValidoModel para retorno dos testes
@@ -88,6 +90,22 @@ class EgressoValidoServiceTest {
         egressoLista.add(egressoTest2);
 
         return egressoLista;
+    }
+
+    @Test
+    void testeValidarEgresso() throws NotValidEgressoException {
+        EgressoValidoModel egressoValidoModel = getMockEgresso();
+
+        repository.save(egressoValidoModel); // TODO verificar;
+
+        Optional<String> optionalMatricula = Optional.of(egressoValidoModel.getMatricula());
+        Optional<String> optionalNome = Optional.of(egressoValidoModel.getNome());
+        Optional<String> optionalEmail = Optional.of(egressoValidoModel.getEmail());
+
+        EgressoValidoModel response = egressoValidoService.validarEgresso(optionalMatricula, optionalNome, optionalEmail);
+
+        assertNotNull(response);
+        assertEquals(egressoValidoModel, response);
     }
 
     @AfterAll
