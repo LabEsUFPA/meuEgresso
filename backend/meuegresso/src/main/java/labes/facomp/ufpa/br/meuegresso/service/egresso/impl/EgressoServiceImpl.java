@@ -285,10 +285,9 @@ public class EgressoServiceImpl implements EgressoService {
 		List<Tuple> cadastros = egressoRepository.countEgressoData();
 
 		return cadastros.stream()
-				.collect(Collectors.groupingBy(
-						tuple -> tuple.get(0, java.sql.Date.class)
-								.toLocalDate(),
-						Collectors.counting()));
+				.collect(Collectors.toMap(
+						tuple -> tuple.get(0, java.sql.Date.class).toLocalDate(),
+						tuple -> tuple.get(1, Long.class)));
 	}
 
 	@Override
@@ -297,12 +296,10 @@ public class EgressoServiceImpl implements EgressoService {
 
 		return cadastros.stream()
 				.collect(Collectors.groupingBy(
-						tuple -> Year.of(
-								tuple.get(0, java.sql.Date.class)
-										.toLocalDate()
-										.getYear())
-								.getValue(),
-						Collectors.counting()));
+						tuple -> tuple.get(0, java.sql.Date.class)
+								.toLocalDate()
+								.getYear(),
+						Collectors.summingLong(tuple -> tuple.get(1, Long.class))));
 	}
 
 	@Override
@@ -314,7 +311,7 @@ public class EgressoServiceImpl implements EgressoService {
 						tuple -> tuple.get(0, java.sql.Date.class)
 								.toLocalDate()
 								.withDayOfMonth(1),
-						Collectors.counting()));
+						Collectors.summingLong(tuple -> tuple.get(1, Long.class))));
 	}
 
 	@Override
