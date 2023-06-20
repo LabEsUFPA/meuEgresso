@@ -73,7 +73,7 @@
             />
 
             <CustomInput
-              label="Curriculo Lattes"
+              label="Currículo Lattes"
               name="geral.lattes"
               icon-path="src/assets/lattesCinza.svg"
               img-icon
@@ -157,7 +157,7 @@
               <CustomCheckbox
                 class="mb-5"
                 name="academico.cotista.tipos.quilombolaIndigena"
-                label="Quilombola/Indigena"
+                label="Quilombola/Indígena"
                 :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
@@ -237,7 +237,7 @@
 
             <CustomCheckbox
               name="academico.posGrad.desejaPos"
-              label="Desejo realizar pós graduação"
+              label="Desejo realizar pós-graduação"
               v-if="!bools.posGrad"
             />
           </div>
