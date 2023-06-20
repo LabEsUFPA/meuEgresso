@@ -33,7 +33,7 @@
               color2="emerald"
               @toggle="toggleIsInput('profileHead')"
               :is-input="dataEgresso.profileHead.isInput"
-              v-if="!isPublic"
+              v-if="!isPublic || isSuperUser"
             />
           </h1>
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
@@ -177,7 +177,7 @@
                   icon-size="20"
                   @toggle="toggleIsInput('geral')"
                   :is-input="dataEgresso.geral.isInput"
-                  v-if="!isPublic"
+                  v-if="!isPublic || isSuperUser"
                 />
               </h1>
             </template>
@@ -212,7 +212,7 @@
                   label="E-mail"
                   placeholder="marcele@email.com"
                   :icon-path="mdiEmail"
-                  v-if="!isPublic"
+                  v-if="!isPublic || isSuperUser"
                 />
                 <CustomPerfilData
                   type="date"
@@ -276,7 +276,7 @@
                   :has-shadow="false"
                   @toggle="toggleIsInput('academico')"
                   :is-input="dataEgresso.academico.isInput"
-                  v-if="!isPublic"
+                  v-if="!isPublic || isSuperUser"
                 />
               </h1>
             </template>
@@ -510,7 +510,7 @@
                     :has-shadow="false"
                     @toggle="toggleIsInput('carreira')"
                     :is-input="dataEgresso.carreira.isInput"
-                    v-if="!isPublic"
+                    v-if="!isPublic || isSuperUser"
                   />
                 </h1>
               </template>
@@ -581,7 +581,7 @@
                     :has-shadow="false"
                     @toggle="toggleIsInput('localizacao')"
                     :is-input="dataEgresso.localizacao.isInput"
-                    v-if="!isPublic"
+                    v-if="!isPublic || isSuperUser"
                   />
                 </h1>
               </template>
@@ -707,7 +707,7 @@
                     :has-shadow="false"
                     @toggle="toggleIsInput('adicionais')"
                     :is-input="dataEgresso.adicionais.isInput"
-                    v-if="!isPublic"
+                    v-if="!isPublic || isSuperUser"
                   />
                 </h1>
               </template>
@@ -884,7 +884,15 @@ const stagedChanges = ref({
 if (storage.has('loggedEgresso')) {
   $store.fetchAll()
 }
-
+const isSuperUser = computed(() => {
+  if (storage.has('loggedUser')) {
+    const logUser = JSON.parse(storage.get('loggedUser'))
+    if (logUser.scope === 'ADMIN') {
+      return true
+    }
+  }
+  return false
+})
 const isPublic = computed(() => {
   if (storage.has('loggedUser') && storage.has('loggedEgresso')) {
     const logEgresso = JSON.parse(storage.get('loggedEgresso'))
