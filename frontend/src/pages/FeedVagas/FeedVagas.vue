@@ -39,6 +39,7 @@
           <SearchBar
             name="pesquisa"
             v-model="pesquisaValue"
+            :placeholder="'Pesquisar vaga'"
           />
 
           <div class="flex flex-col sm:flex-row w-full items-start gap-4 sm:gap-8">
