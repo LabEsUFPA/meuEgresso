@@ -744,7 +744,7 @@ const schema = object().shape({
     }),
     nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
       if (value) {
-        return value?.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/)
+        return value?.match(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/)
       }
 
       return (typeof value).constructor(true)
@@ -763,7 +763,7 @@ const schema = object().shape({
       }
       return true
     }),
-    email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/, 'Email inválido'),
+    email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.[a-zA-Z]{2,}))?$/, 'Email inválido'),
     genero: string().required('Campo obrigatório'),
     linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
       if (value) {
