@@ -2,17 +2,17 @@
 import { defineStore } from 'pinia'
 import Api from 'src/services/api'
 import { type models } from 'src/@types'
-interface AnuncioVaga extends models.AnuncioModel {}
-interface AnuncioVagaPost extends models.AnuncioModelPost {}
-interface AreaEmpregoFiltro extends models.areasEmpregoFiltro {}
+interface AnuncioVaga extends models.AnuncioModel { }
+interface AnuncioVagaPost extends models.AnuncioModelPost { }
+interface AreaEmpregoFiltro extends models.areasEmpregoFiltro { }
 
-interface ComplexOpts extends models.ComplexOpts {}
+interface ComplexOpts extends models.ComplexOpts { }
 
 interface State {
   anuncio: AnuncioVaga
-  anuncios: AnuncioVaga []
-  areasEmpregoFiltros: AreaEmpregoFiltro []
-  areasEmprego: ComplexOpts []
+  anuncios: AnuncioVaga[]
+  areasEmpregoFiltros: AreaEmpregoFiltro[]
+  areasEmprego: ComplexOpts[]
   totalPages: number
 
 }
@@ -42,7 +42,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
   }),
 
   actions: {
-    async fetchAnuncios () {
+    async fetchAnuncios() {
       const response = await Api.request({
         method: 'get',
         route: '/anuncio'
@@ -70,7 +70,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       }
     },
 
-    async deleteAnuncioAdmin (id: number) {
+    async deleteAnuncioAdmin(id: number) {
       const response = await Api.request({
         method: 'delete',
         route: '/administrador/anuncio/' + id.toString()
@@ -83,7 +83,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       }
     },
 
-    async deleteAnuncioEgresso (id: number) {
+    async deleteAnuncioEgresso(id: number) {
       const response = await Api.request({
         method: 'delete',
         route: '/anuncio/' + id.toString()
@@ -96,7 +96,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       }
     },
 
-    async fetchBusca (page: number, size: number) {
+    async fetchBusca(page: number, size: number) {
       const response = await Api.request({
         method: 'get',
         route: '/anuncio/busca',
@@ -125,7 +125,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       }
     },
 
-    async fetchBuscaAnuncio (titulo: string, areasEmpregos: number[], page: number, size: number) {
+    async fetchBuscaAnuncio(titulo: string, areasEmpregos: number[], page: number, size: number) {
       const areaEmprego = areasEmpregos.join()
       const response = await Api.request({
         method: 'get',
@@ -154,7 +154,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       }
     },
 
-    async fetchBuscaAnuncioTitulo (titulo: string, page: number, size: number) {
+    async fetchBuscaAnuncioTitulo(titulo: string, page: number, size: number) {
       const response = await Api.request({
         method: 'get',
         route: '/anuncio/busca',
@@ -182,7 +182,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       }
     },
 
-    async fetchBuscaAnuncioAreas (areasEmpregos: number[], page: number, size: number) {
+    async fetchBuscaAnuncioAreas(areasEmpregos: number[], page: number, size: number) {
       const areaEmprego = areasEmpregos.join()
       const response = await Api.request({
         method: 'get',
@@ -211,10 +211,10 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
         }))
       }
     },
-    async fetchAreasEmprego () {
+    async fetchAreasEmprego() {
       const response = await Api.request({
         method: 'get',
-        route: '/areaemprego'
+        route: '/publico/areaemprego'
       })
       if (response?.status === 200) {
         this.areasEmpregoFiltros = response.data?.map((elem: any) => ({
@@ -230,7 +230,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       }
     },
 
-    async cadastraAnuncio (dadosAnuncio: AnuncioVagaPost) {
+    async cadastraAnuncio(dadosAnuncio: AnuncioVagaPost) {
       const response = await Api.request({
         method: 'post',
         route: '/anuncio',
@@ -239,7 +239,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       return (response?.status) !== undefined ? response.status : 500
     },
 
-    getAnuncioId (id: number) {
+    getAnuncioId(id: number) {
       const anuncioEncontrado = this.anuncios.find(element => element.id === id)
       if (anuncioEncontrado !== undefined) {
         this.anuncio = anuncioEncontrado
