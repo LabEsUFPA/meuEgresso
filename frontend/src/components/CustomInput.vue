@@ -238,6 +238,7 @@ const {
 } = useField(name, undefined)
 
 function handleInput (e: Event) {
+  inputValue.value = e
   if (props.money && config.value.currentValue === 'null') {
     return
   }
