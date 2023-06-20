@@ -58,23 +58,38 @@
                 :icon-path="mdiEmail"
               />
             </div>
-            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
+            <CustomCheckbox
+              name="checkbox.senha"
+              label="Redefinir Senha"
+              v-model:value="boolSenha"
+              :required="false"
+            />
+            <div
+              class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row"
+              v-show="boolSenha"
+            >
               <CustomInput
                 name="password"
-                label="Senha atual ou uma nova"
-                type="password"
-                :required="true"
+                label="Senha nova"
+                :type="showPassword? 'text' : 'password'"
+                :required="boolSenha"
                 :icon-path="mdiLock"
               />
               <CustomInput
                 name="confirmationPassword"
                 label="Confirmar senha"
-                type="password"
+                :type="showPassword? 'text' : 'password'"
                 error-message="As senhas informadas são diferentes"
-                :required="true"
+                :required="boolSenha"
                 :icon-path="mdiLock"
               />
             </div>
+            <CustomCheckbox
+              label="Visualizar senhas"
+              name="showPassword"
+              v-show="boolSenha"
+              @update:value="toggleShowPassword"
+            />
           </div>
 
           <div class="flex w-full justify-center gap-16 border-t-[1px] pt-8 mt-8 border-gray-200">
@@ -125,6 +140,7 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Form } from 'vee-validate'
 import { object, string, ref as refYup } from 'yup'
 import { mdiAccount, mdiEmail, mdiLock, mdiCheckCircle } from '@mdi/js'
@@ -144,17 +160,29 @@ let dataUserUpdate = {
 }
 
 const error = ref(false)
-
 const errorText = ref('')
 const submitSuccess = ref(false)
+const boolSenha = ref(false)
+const showPassword = ref(false)
 
 const schema = object().shape({
   name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
-  email: string().required().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))?$/, 'Email inválido'),
-  username: string().required('Informe um nome de usuário').trim().matches(/^[a-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
-  confirmationEmail: string().email().required('Confirme seu email').oneOf([refYup('email')], 'Email diferente').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))?$/, 'Email inválido'),
-  password: string().required().matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
-  confirmationPassword: string().required().oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida')
+  email: string().required().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))?$/, 'E-mail inválido'),
+  username: string().required('Informe um nome de usuário').trim().matches(/^[A-Za-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
+  confirmationEmail: string().email().required('Confirme seu e-mail').oneOf([refYup('email')], 'E-mail diferente').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))?$/, 'Email inválido'),
+  password: string().test('required', 'Informe uma senha', function (value) {
+    console.log(!boolSenha.value)
+    if (boolSenha.value) {
+      return !!value
+    }
+    return true
+  }).matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida'),
+  confirmationPassword: string().test('required', 'Confirme a senha', function (value) {
+    if (boolSenha.value) {
+      return !!value
+    }
+    return true
+  }).matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida')
 })
 
 //  Chamando getUsuario
@@ -191,6 +219,10 @@ const handleSubmit = async (submitData: any) => {
 }
 const onInvalid = (e: any) => {
   console.log(e)
+}
+
+const toggleShowPassword = () => {
+  showPassword.value = !showPassword.value
 }
 
 onMounted(() => {
