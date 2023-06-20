@@ -50,7 +50,7 @@
         <CustomInput
           class="mb-5"
           name="geral.linkedin"
-          label="Linkedin"
+          label="linkedIn"
           :icon-path="svgPath.linkedin"
         />
 

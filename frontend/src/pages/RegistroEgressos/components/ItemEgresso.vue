@@ -70,7 +70,7 @@ const props = defineProps<{
     nome: string,
     dataCadastro: string,
     status: string
-    foto: string
+    foto?: string
     email: string
 }>()
 
