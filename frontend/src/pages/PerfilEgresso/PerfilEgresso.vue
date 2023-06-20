@@ -887,7 +887,7 @@ if (storage.has('loggedEgresso')) {
 const isSuperUser = computed(() => {
   if (storage.has('loggedUser')) {
     const logUser = JSON.parse(storage.get('loggedUser'))
-    if (logUser.scope === 'ADMIN') {
+    if (logUser.scope === 'ADMIN' || logUser.scope === 'SECRETARIO') {
       return true
     }
   }
