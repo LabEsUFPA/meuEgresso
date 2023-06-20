@@ -96,7 +96,7 @@
             :titulo="anuncio.titulo"
             :area="anuncio.areaEmprego.nome"
             :descricao="anuncio.descricao"
-            :salario="formatCurrency(parseFloat(anuncio.salario))"
+            :salario="anuncio.salario"
           />
         </div>
       </div>
@@ -193,15 +193,6 @@ const toggleFilterApplied = (id:number) => {
 
 const applyFilters = (filters:any) => {
   filtersById.value = filters.map((elem: any) => (elem.id))
-}
-
-function formatCurrency (value:number) {
-  const formattedValue = value.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  })
-
-  return formattedValue
 }
 
 </script>

@@ -1,4 +1,4 @@
-package labes.facomp.ufpa.br.meuegresso.dto.areaemprego;
+package labes.facomp.ufpa.br.meuegresso.dto.administradores.areaemprego;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

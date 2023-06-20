@@ -68,7 +68,7 @@
             <CustomInput
               class="mb-5"
               name="geral.linkedin"
-              label="Linkedin"
+              label="linkedIn"
               :icon-path="svgPath.linkedin"
             />
 
@@ -162,12 +162,21 @@
                 :disabled="!bools.cotista"
               />
 
+              <CustomCheckbox
+                class="mb-5"
+                name="academico.cotista.tipos.pcd"
+                label="PCD"
+                :required="bools.cotista"
+                :disabled="!bools.cotista"
+              />
               <p
                 v-if="bools.cotista &&
                   !values.academico?.cotista?.tipos?.renda &&
                   !values.academico?.cotista?.tipos?.escola &&
                   !values.academico?.cotista?.tipos?.raca &&
-                  !values.academico?.cotista?.tipos?.quilombolaIndigena"
+                  !values.academico?.cotista?.tipos?.quilombolaIndigena &&
+                  !values.academico?.cotista?.tipos?.pcd"
+
                 class="text-red-500 text-sm mt-1 position-absolute display-none"
               >
                 Marque pelo menos uma das opções acima!
@@ -777,7 +786,7 @@ const schema = object().shape({
     cotista: object({
       value: boolean().test('Cotas', 'Marque pelo menos uma das opções acima', (value: any, cotas) => {
         if (value) {
-          if (cotas.parent.tipos.renda || cotas.parent.tipos.escola || cotas.parent.tipos.raca || cotas.parent.tipos.quilombolaIndigena) return true
+          if (cotas.parent.tipos.renda || cotas.parent.tipos.escola || cotas.parent.tipos.raca || cotas.parent.tipos.quilombolaIndigena || cotas.parent.tipos.pcd) return true
           return false
         }
         return true

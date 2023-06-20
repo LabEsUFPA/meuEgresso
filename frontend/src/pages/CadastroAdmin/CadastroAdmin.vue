@@ -40,7 +40,7 @@
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 name="email"
-                label="Email"
+                label="E-mail"
                 type="email"
                 :required="true"
                 :icon-path="mdiEmail"

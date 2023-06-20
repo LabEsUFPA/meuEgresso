@@ -89,7 +89,7 @@ const form = ref<typeof Form | null>(null)
 
 const selectOpts = ref({
   tipoAluno: ['Graduação', 'Pós-graduação'],
-  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Outros'],
+  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Programador', 'Analísta', 'Outros'],
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
 })
 interface Props {
