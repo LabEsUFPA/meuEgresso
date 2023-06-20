@@ -102,7 +102,7 @@
               name="academico.matricula"
               label="Matrícula"
               mask="############"
-              placeholder="205004940001"
+              placeholder="Ex: 205004940001"
               :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
               custom-error-message
               @update:value="checkRegistrationLength"
