@@ -40,7 +40,7 @@
           @click="handleFilters('general')"
         />
         <FilterChip
-          title="Academico"
+          title="Acadêmico"
           icon="maki:college"
           :selected="filters.academic"
           selectable
@@ -68,7 +68,7 @@
       <CustomPieGraph
         v-show="filters.all || filters.career"
         legend="Área de atuação"
-        info="Quantidade de egressos pro cada área de atuação"
+        info="Quantidade de egressos por cada área de atuação"
         :loading="loadedData.sector ? false : true"
         :data="loadedData.sector"
       />
@@ -89,13 +89,13 @@
       <CustomPieGraph
         v-show="filters.all || filters.career"
         legend="Salário"
-        info="Quantidade de egressos por faixa salárial"
+        info="Quantidade de egressos por faixa salarial"
         :loading="loadedData.wage ? false : true"
         :data="loadedData.wage"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
-        legend="Pos-graduação"
+        legend="Pós-graduação"
         info="Quantidade de egressos que fizeram pós-graduação"
         :loading="loadedData.postGraduate ? false : true"
         :data="loadedData.postGraduate"
@@ -110,7 +110,7 @@
       <CustomPieGraph
         v-show="filters.all || filters.academic"
         legend="Cotas"
-        info="Quantidade de egressos por cada conta"
+        info="Quantidade de egressos por cada cota"
         :loading="loadedData.quotas ? false : true"
         :data="loadedData.quotas"
       />
@@ -151,15 +151,15 @@
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
-        legend="Local de Pós-graduação"
+        legend="Local de pós-graduação"
         info="Quantidade de egressos por instituição de pós-graduação"
         :loading="loadedData.postGraduateLocal ? false : true"
         :data="loadedData.postGraduateLocal"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
-        legend="Curso de Pós-graduação"
-        info="Quantidade de egressos por curso de pós graduação"
+        legend="Curso de pós-graduação"
+        info="Quantidade de egressos por curso de pós-graduação"
         :loading="loadedData.postGraduateCourse ? false : true"
         :data="loadedData.postGraduateCourse"
       />
