@@ -299,7 +299,7 @@
                   :vmodel="dataEgresso.academico.matricula"
                   name="academico.matricula"
                   label="Matrícula"
-                  placeholder="205004940001"
+                  placeholder="Ex: 205004940001"
                   icon-path=""
                 />
 
