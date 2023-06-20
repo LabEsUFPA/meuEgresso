@@ -160,7 +160,7 @@
         <div class="mr-10">
           <img
             class="w-14"
-            src="../assets/brasão.png"
+            src="src/assets/brasão.png"
             alt="Brasão"
           >
         </div>
@@ -186,8 +186,8 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { watch, ref, onMounted } from 'vue'
 import { mdiMenu, mdiAlertCircle } from '@mdi/js'
 
-import { useLoginStore } from '../store/LoginStore'
-import CustomButton from '../components/CustomButton.vue'
+import { useLoginStore } from 'src/store/LoginStore'
+import CustomButton from 'src/components/CustomButton.vue'
 import UserDropdownMenu from './UserDropdownMenu.vue'
 import CustomDialog from './CustomDialog.vue'
 import LocalStorage from 'src/services/localStorage'

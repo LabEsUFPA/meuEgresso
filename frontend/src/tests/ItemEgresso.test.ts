@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
-import ItemEgresso from 'src/components/ItemEgresso.vue'
+import ItemEgresso from 'src/pages/RegistroEgressos/components/ItemEgresso.vue'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 describe('ItemEgresso', () => {

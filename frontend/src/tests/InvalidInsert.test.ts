@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import InvalidInsert from '../components/InvalidInsert.vue'
+import InvalidInsert from 'src/components/InvalidInsert.vue'
 
 describe('InvalidInsert Test', () => {
   it('InvalidInsert component rendering test', () => {

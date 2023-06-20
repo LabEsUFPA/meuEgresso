@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import ShortPost from 'src/components/ShortPost.vue'
+import ShortPost from 'src/pages/FeedVagas/components/ShortPost.vue'
 import { describe, expect, it } from 'vitest'
 
 describe('ShortPost', () => {
