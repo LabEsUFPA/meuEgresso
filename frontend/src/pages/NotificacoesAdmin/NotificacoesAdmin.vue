@@ -75,8 +75,8 @@
             </div>
           </div>
           <div
-            v-for="notificacao in $store.notificacoes"
-            :key="notificacao.usuarioId"
+            v-for="(notificacao,index) in $store.notificacoes"
+            :key="index"
             class="flex justify-center"
           >
             <NotificationItem
@@ -180,6 +180,7 @@ onMounted(async () => {
   })
 
   watch(filtroStatusSelecionado, () => {
+    currentPage.value = 0
     console.log('novo filtro de status:', filtroStatusSelecionado.value)
     $store.fetchNotificacoes(filtroStatusSelecionado.value, currentPage.value, size.value)
   })
