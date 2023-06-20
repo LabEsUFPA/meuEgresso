@@ -912,10 +912,7 @@ function handleStatus (status: any) {
     return true
   }
 }
-const profileImageRef = ref<typeof ProfileImage | null>(null)
-const profileImageSave = () => {
-  return profileImageRef?.value?.imageUploadBack()
-}
+
 async function handleSubmitHeader (values: any) {
   jsonResponse.usuario.nome = values.geral.nome
   if (values.geral.linkedin !== '' && values.geral.linkedin !== undefined) {
@@ -930,7 +927,7 @@ async function handleSubmitHeader (values: any) {
     jsonResponse.lattes = null
   }
 
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   let responseImage: any
   if (stagedChanges.value.profileHead.removedImage) {
     responseImage = await removeImageEgresso()
@@ -958,7 +955,7 @@ async function handleSubmitGeral (values: any) {
   // ID request
   jsonResponse.genero.id = values.geral.genero
   jsonResponse.nascimento = values.geral.nascimento
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('geral')
   }
@@ -1043,7 +1040,7 @@ async function handleSubmitAcademico (values: any) {
     jsonResponse.remuneracaoBolsa = 0
   }
 
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
 
   if (handleStatus(status)) {
     toggleIsInput('academico')
@@ -1056,7 +1053,7 @@ async function handleSubmitLocalizacao (values: any) {
   jsonResponse.emprego.empresa.endereco = values.localizacao
   // delete jsonResponse.emprego.empresa.endereco.id
 
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('localizacao')
   }
@@ -1109,7 +1106,7 @@ async function handleSubmitCarreira (values: any) {
     jsonResponse.emprego = null
   }
 
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('carreira')
   }
@@ -1131,7 +1128,7 @@ async function handleSubmitAdicionais (values: any) {
   } else {
     jsonResponse.palestras = null
   }
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('adicionais')
   }
@@ -1487,10 +1484,6 @@ onMounted(() => {
   })
 })
 
-function fetchPublicEgresso (id: number) {
-  return egressoStore.fetchPublicEgresso(id)
-}
-
 const schemaHeader = object().shape({
   geral: object({
     nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
@@ -1608,6 +1601,18 @@ const schemaAdicionais = object().shape({
     contribuicoes: string().required('Campo obrigatório')
   })
 })
+const profileImageRef = ref<typeof ProfileImage | null>(null)
+const profileImageSave = () => {
+  return profileImageRef?.value?.imageUploadBack()
+}
+function fetchPublicEgresso (id: number) {
+  return egressoStore.fetchPublicEgresso(id)
+}
+async function atualizarEgresso (data : any) {
+  // if superUser...
+  const resp = await egressoStore.atualizarEgresso(data)
+  return resp
+}
 async function removeImageEgresso () {
   const removeResp = await egressoStore.removeImageEgresso()
   dataEgresso.value.profileHead.image = '0'

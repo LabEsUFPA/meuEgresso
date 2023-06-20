@@ -157,6 +157,14 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       })
       return (response?.status) !== undefined ? response.status : 500
     },
+    async atualizarEgressoAdmin (dataEgresso: any, egressoId: number) {
+      const response = await Api.request({
+        method: 'put',
+        route: `administrador/egresso/${egressoId}`,
+        body: dataEgresso
+      })
+      return (response?.status) !== undefined ? response.status : 500
+    },
 
     async uploadImageEgresso (file: File) {
       if (file === undefined || file === null || file.size === 0 || file.length === 0) {
@@ -168,6 +176,23 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         const response = await Api.request({
           method: 'post',
           route: '/egresso/foto',
+          body: formData
+        })
+        // maxContentLength: 5 * 1024 * 1024 // 5 MB
+        // console.log(response?.data)
+        return (response?.status) !== undefined ? response.status : 500
+      }
+    },
+    async uploadImageEgressoAdmin (file: File, egressoId: number) {
+      if (file === undefined || file === null || file.size === 0 || file.length === 0) {
+        return 201
+      } else {
+        const formData = new FormData()
+        formData.append('arquivo', file)
+
+        const response = await Api.request({
+          method: 'post',
+          route: `administrador/egresso/foto/${egressoId}`,
           body: formData
         })
         // maxContentLength: 5 * 1024 * 1024 // 5 MB
@@ -212,7 +237,13 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         route: '/egresso/foto'
       })
       return (response?.status) !== undefined ? response.status : 500
+    },
+    async removeImageEgressoAdmin (egressoId: string) {
+      const response = await Api.request({
+        method: 'delete',
+        route: `/administrador/egresso/foto/${egressoId}`
+      })
+      return (response?.status) !== undefined ? response.status : 500
     }
   }
-
 })
