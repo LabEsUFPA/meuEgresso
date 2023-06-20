@@ -92,7 +92,7 @@ public class CotaController {
      * @since 21/04/2023
      */
     @PutMapping
-    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarCota(@RequestBody @Valid CotaDTO cotaDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {

@@ -91,7 +91,7 @@ public class GeneroController {
      * @since 21/04/2023
      */
     @PutMapping
-    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarGenero(@RequestBody @Valid GeneroDTO generoDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {

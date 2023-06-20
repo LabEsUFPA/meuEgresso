@@ -42,8 +42,8 @@ public class EgressoAdmController {
      * @since 05/06/2023
      */
     @DeleteMapping(value = "/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarEgresso(@PathVariable Integer id) {
         if (egressoService.existsById(id)) {
@@ -54,8 +54,8 @@ public class EgressoAdmController {
     }
 
     @DeleteMapping(value = "/foto/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deleteFotoEgresso(@PathVariable Integer id) throws IOException {
         EgressoModel egressoModel = egressoService.findById(id);

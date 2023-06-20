@@ -58,6 +58,7 @@ public class EgressoEmpresaController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<EgressoMapaDTO> consultarEgressoEmpresas() {
 		return mapper.map(egressoEmpresaService.findAll(), new TypeToken<List<EgressoEmpresaDTO>>() {
@@ -72,8 +73,8 @@ public class EgressoEmpresaController {
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
-	@ResponseStatus(code = HttpStatus.OK)
 	@GetMapping(params = { "egressoId", "empresaId" })
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoEmpresaDTO findById(@RequestParam(required = false) Integer egressoId,
 			@RequestParam(required = false) Integer empresaId) {
@@ -136,8 +137,9 @@ public class EgressoEmpresaController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(params = { "egressoId", "empresaId" })
+	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(@RequestParam(required = false) Integer egressoId,
 			@RequestParam(required = false) Integer empresaId) {

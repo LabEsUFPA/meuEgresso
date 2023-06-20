@@ -56,6 +56,7 @@ public class ContribuicaoController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<ContribuicaoDTO> consultarContribuicaos() {
 		return mapper.map(contribuicaoService.findAll(), new TypeToken<List<ContribuicaoDTO>>() {
@@ -133,6 +134,7 @@ public class ContribuicaoController {
 	 * @since 17/04/2023
 	 */
 	@DeleteMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(Integer id) {

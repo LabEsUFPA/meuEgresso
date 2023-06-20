@@ -26,7 +26,7 @@ public class EgressoValidoController {
     private final EgressoValidoService egressosValidosService;
 
     @PostMapping
-    @ResponseStatus(code = HttpStatus.OK)
+    @ResponseStatus(code = HttpStatus.CREATED)
     public EgressoValidoDTO validarEgresso(@RequestBody @Valid EgressoValidoDTO egressosValidosDTO)
             throws NotValidEgressoException {
         return mapper.map(egressosValidosService.validarEgresso(Optional.of(egressosValidosDTO.getMatricula()),

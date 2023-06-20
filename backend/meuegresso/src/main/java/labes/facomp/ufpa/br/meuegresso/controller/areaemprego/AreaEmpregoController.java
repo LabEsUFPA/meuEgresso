@@ -93,7 +93,7 @@ public class AreaEmpregoController {
      * @since 18/05/2023
      */
     @PutMapping
-    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarGenero(@RequestBody @Valid AreaEmpregoDTO areaEmpregoDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {

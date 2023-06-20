@@ -257,8 +257,8 @@ public class EgressoController {
      *         foi deletada.
      * @throws IOException
      */
-    @ResponseStatus(code = HttpStatus.OK)
     @DeleteMapping(value = "/foto")
+    @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<String> deleteFotoEgresso(JwtAuthenticationToken token) throws IOException {
         EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));

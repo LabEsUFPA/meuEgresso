@@ -93,7 +93,7 @@ public class TipoBolsaController {
      * @since 21/04/2023
      */
     @PutMapping
-    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarTipoBolsa(@RequestBody @Valid TipoBolsaDTO tipoBolsaDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {

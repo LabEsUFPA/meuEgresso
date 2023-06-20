@@ -58,6 +58,7 @@ public class AnuncioController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping()
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<AnuncioDTO> consultarAnuncios(
 			@RequestParam(defaultValue = "0", required = false) Integer page,
@@ -79,6 +80,7 @@ public class AnuncioController {
 	 * @since 19/05/2023
 	 */
 	@GetMapping(value = "/busca")
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<AnuncioDTO> filtrarAnuncios(
 			@RequestParam(name = "titulo", defaultValue = "") String titulo,
@@ -146,6 +148,7 @@ public class AnuncioController {
 	 * @since 17/06/2023
 	 */
 	@DeleteMapping(value = "/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('EGRESSO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(@PathVariable Integer id, JwtAuthenticationToken token) {
