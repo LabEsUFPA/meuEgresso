@@ -162,18 +162,16 @@ onMounted(async () => {
 
   loading.value = true
   watch(currentPage, () => {
-    $store.fetchBusca(currentPage.value, size.value)
+    $store.fetchBuscaAnuncio(pesquisaValue.value, filtersById.value, currentPage.value, size.value)
     window.scrollTo(0, 0)
   })
   watch(pesquisaValue, () => {
-    $store.fetchBuscaAnuncioTitulo(pesquisaValue.value, currentPage.value, size.value)
+    currentPage.value = 0
+    $store.fetchBuscaAnuncio(pesquisaValue.value, filtersById.value, currentPage.value, size.value)
   })
   watch(filtersById, () => {
-    if (filtersById.value.length > 0) {
-      $store.fetchBuscaAnuncioAreas(filtersById.value, currentPage.value, size.value)
-    } else {
-      $store.fetchBusca(currentPage.value, size.value)
-    }
+    currentPage.value = 0
+    $store.fetchBuscaAnuncio(pesquisaValue.value, filtersById.value, currentPage.value, size.value)
   })
 })
 
