@@ -165,7 +165,7 @@ const loading = ref(false)
 
 const currentPage = ref(0)
 
-const size = ref(10)
+const size = ref(3)
 
 const filtroStatusSelecionado = ref('')
 

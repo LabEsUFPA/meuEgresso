@@ -172,19 +172,22 @@ onMounted(async () => {
   loading.value = true
   $store.fetchEgressos()
 
+  watch(currentPage, () => {
+    $store.fetchEgressos(pesquisaValue.value, filtersByName.value, currentPage.value)
+    window.scrollTo(0, 0)
+  })
   watch(pesquisaValue, () => {
+    currentPage.value = 0
     $store.fetchEgressos(pesquisaValue.value, filtersByName.value, currentPage.value)
   })
   watch(filtersByName, () => {
-    $store.fetchEgressos(pesquisaValue.value, filtersByName.value, currentPage.value)
-  })
-  watch(currentPage, () => {
+    currentPage.value = 0
     $store.fetchEgressos(pesquisaValue.value, filtersByName.value, currentPage.value)
   })
 })
 
 const updateData = () => {
-  $store.fetchEgressos()
+  $store.fetchEgressos(pesquisaValue.value, filtersByName.value, currentPage.value)
 }
 
 const openModalFilters = () => {
