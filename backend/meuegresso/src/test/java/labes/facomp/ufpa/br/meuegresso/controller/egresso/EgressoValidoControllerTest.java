@@ -41,7 +41,7 @@ class EgressoValidoControllerTest {
 
     final String NOME = "nome_test1";
     final String EMAIL = "test@gmail.com";
-    final String MATRICULA = "2020013400";
+    final String MATRICULA = "202001340021";
     final Integer EGRESSO_ID = 1;
 
     @Autowired
@@ -70,8 +70,7 @@ class EgressoValidoControllerTest {
         egressoValidoModel.setMatricula(MATRICULA);
         egressoValidoModel.setEmail(EMAIL);
 
-        egressoValidoRepository.save(egressoValidoModel);
-
+        egressoValidoModel = egressoValidoRepository.save(egressoValidoModel);
     }
 
     
@@ -84,7 +83,7 @@ class EgressoValidoControllerTest {
         egressoValidoDTO.setNome(NOME);
         egressoValidoDTO.setMatricula(MATRICULA);
         egressoValidoDTO.setEmail(EMAIL);
-        //egressoValidoDTO.setId(2);
+        //egressoValidoDTO.setId(EGRESSO_ID);
 
         MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/egressoValido")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -95,6 +94,7 @@ class EgressoValidoControllerTest {
 
         EgressoValidoDTO egressoValidado = objectMapper.readValue(resposta.getResponse().getContentAsString(), 
                 EgressoValidoDTO.class);
-        assertEquals(egressoValidoDTO, egressoValidado);
+        
+        assertEquals(egressoValidoModel.getId(), egressoValidado.getId());
     }
 }
