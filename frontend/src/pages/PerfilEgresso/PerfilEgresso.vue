@@ -82,7 +82,7 @@
               class="items-start flex justify-center mt-8 relative gap-[10px]"
             >
               <CustomButtonLink
-                label="Linkedin"
+                label="linkedIn"
                 icon-path="/src/assets/linkedin-icon.svg"
                 :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
@@ -106,7 +106,7 @@
               class="items-start flex justify-center mt-8 relative gap-[10px]"
             >
               <CustomButtonLink
-                label="Linkedin"
+                label="linkedIn"
                 icon-path="/src/assets/linkedin-icon.svg"
                 :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
