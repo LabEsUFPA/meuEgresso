@@ -46,7 +46,7 @@
         v-show="salario"
         class="text-neutral-900 font-medium"
       >
-        {{ salario }}
+        {{ formataSalario(salario) }}
       </p>
     </div>
 
@@ -86,5 +86,18 @@ defineProps<
   descricao: String,
   salario: String,
 }>()
+
+const formataSalario = (value:String) => {
+  console.log(value)
+  const valueConvertido = parseFloat(value.toString())
+  const formattedValue = valueConvertido.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  })
+  if (valueConvertido !== 0.00) {
+    return formattedValue
+  }
+  return ''
+}
 
 </script>
