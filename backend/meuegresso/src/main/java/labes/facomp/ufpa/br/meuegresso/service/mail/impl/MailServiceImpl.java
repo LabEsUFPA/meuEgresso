@@ -123,15 +123,22 @@ public class MailServiceImpl implements MailService, Runnable {
         Integer year = dateTime.getYear() - nowDateTime.getYear();
         Integer month = dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue();
         Integer day = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
+        Integer minute = dateTime.getMinute() - nowDateTime.getMinute();
         if (year < 0) {
             return 0;
-        } else if (year == 0) {
+        } 
+        else if (year == 0) {
             if (month < 0) {
                 return 0;
-            } else if (month == 0) {
-                if (day <= 0) {
+            } 
+            else if (month == 0) {
+                if (day < 0) {
                     return 0;
-                } else {
+                } 
+                else if(minute <= 0){
+                    return 0;
+                }
+                else {
                     return 1;
                 }
             } else {
@@ -167,10 +174,11 @@ public class MailServiceImpl implements MailService, Runnable {
     public void scheduledSendEmail() {
         Map<String, LocalDateTime> emailList = usuarioService.findByAtivo();
         List<MensagemModel> mensagemModel = mensagemRepository.findAll();
+        LocalDateTime dataAtual = LocalDateTime.now();
         Integer sizes = mensagemModel.size();
         for (int i = 0; i < sizes; i++) {
             if (mensagemModel.get(i).getEmail() != null
-                    && checkData(mensagemModel.get(i).getDataEnvio(), LocalDateTime.now()) == 0) {
+                    && checkData(mensagemModel.get(i).getDataEnvio(), dataAtual) == 0) {
                 sendEmail(mensagemModel.get(i).getEmail(), mensagemModel.get(i).getEscopo(),
                         mensagemModel.get(i).getCorpo());
                 removeScheduledTask(mensagemModel.get(i));
@@ -179,22 +187,22 @@ public class MailServiceImpl implements MailService, Runnable {
                 if (Boolean.TRUE.equals(mensagemModel.get(i).getFrequente())) {
                     if (Boolean.TRUE.equals(mensagemModel.get(i).getAnual())) {
                         for (String email : emailList.keySet()) {
-                            if (yearlyMessage(mensagemModel.get(i).getDataEnvio(), LocalDateTime.now()) == 0) {
+                            if (yearlyMessage(mensagemModel.get(i).getDataEnvio(), dataAtual) == 0) {
                                 sendEmail(email, mensagemModel.get(i).getEscopo(), mensagemModel.get(i).getCorpo());
                             }
-                            if (yearlyMessage(emailList.get(email), LocalDateTime.now()) == 0
+                            if (yearlyMessage(emailList.get(email), dataAtual) == 0
                                     && mensagemModel.get(i).getId() == 1) {
                                 sendEmail(email, mensagemModel.get(i).getEscopo(), mensagemModel.get(i).getCorpo());
                             }
                         }
                     } else {
                         for (String email : emailList.keySet()) {
-                            if (semesterMessage(mensagemModel.get(i).getDataEnvio(), LocalDateTime.now()) == 0) {
+                            if (semesterMessage(mensagemModel.get(i).getDataEnvio(), dataAtual) == 0) {
                                 sendEmail(email, mensagemModel.get(i).getEscopo(), mensagemModel.get(i).getCorpo());
                             }
                         }
                     }
-                } else if (checkData(mensagemModel.get(i).getDataEnvio(), LocalDateTime.now()) == 0) {
+                } else if (checkData(mensagemModel.get(i).getDataEnvio(), dataAtual) == 0) {
                     for (String email : emailList.keySet()) {
                         sendEmail(email, mensagemModel.get(i).getEscopo(), mensagemModel.get(i).getCorpo());
                     }
@@ -224,25 +232,14 @@ public class MailServiceImpl implements MailService, Runnable {
                 String.valueOf(dateTime.getDayOfMonth()),
                 String.valueOf(dateTime.getMonth().getValue()));
         if (frequente) {
-            if (anual) {
-                cronExpression = toCron(String.valueOf(0),
-                        String.valueOf(dateTime.getMinute()),
-                        String.valueOf(dateTime.getHour()),
-                        String.valueOf(dateTime.getDayOfMonth()),
-                        String.valueOf(dateTime.getMonth().getValue()));
-                ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
-                String jobId = String.valueOf(mensagemModel.getId());
-                taskList.put(jobId, scheduledTask);
-            } else {
-                cronExpression = toCron(String.valueOf(0),
-                        String.valueOf(dateTime.getMinute()),
-                        String.valueOf(dateTime.getHour()),
-                        String.valueOf(dateTime.getDayOfMonth()),
-                        "1/6");
-                ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
-                String jobId = String.valueOf(mensagemModel.getId());
-                taskList.put(jobId, scheduledTask);
-            }
+            cronExpression = toCron(String.valueOf(0),
+                    String.valueOf(dateTime.getMinute()),
+                    String.valueOf(dateTime.getHour()),
+                    String.valueOf(dateTime.getDayOfMonth()),
+                    String.valueOf(dateTime.getMonth().getValue()));
+            ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
+            String jobId = String.valueOf(mensagemModel.getId());
+            taskList.put(jobId, scheduledTask);
         } else {
             ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
             String jobId = String.valueOf(mensagemModel.getEscopo());
