@@ -117,10 +117,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	// PageRequest.of(page, size, Sort.by(direction, "u.created_date")
 	@Override
-	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size,
-			Direction direction) {
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size, String ordenacao) {
 
-		List<Tuple> tupla = usuarioRepository.findBySearch(nomeUsuario, status);
+		List<Tuple> tupla = usuarioRepository.findBySearch(nomeUsuario, status, ordenacao);
 
 		List<EgressoDashDTO> dashDtos = tupla.stream()
 				.map(t -> new EgressoDashDTO(
@@ -134,7 +133,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 						t.get(7, String.class))) // status
 				.toList();
 
-		Pageable paging = PageRequest.of(page, size, Sort.by(direction, "u.created_date"));
+		Pageable paging = PageRequest.of(page, size);
 		int start = Math.min((int) paging.getOffset(), dashDtos.size());
 		int end = Math.min((start + paging.getPageSize()), dashDtos.size());
 

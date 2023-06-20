@@ -34,7 +34,7 @@ export const usePainelStore = defineStore('Painel', {
         params: {
           nome_usuario: nomeUsuario,
           status,
-          direction: 'DESC',
+          ordenacao: 'DESC',
           size: 10,
           page
         }
