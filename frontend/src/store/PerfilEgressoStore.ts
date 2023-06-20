@@ -18,6 +18,7 @@ interface State {
   faixasSalariais: ComplexOpts[]
   tiposBolsa: ComplexOpts[]
   tiposCota: ComplexOpts[]
+  areasAtuacao: ComplexOpts[]
 
 }
 Axios.interceptors.request.use((config) => {
@@ -31,7 +32,8 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
     generos: [],
     faixasSalariais: [],
     tiposBolsa: [],
-    tiposCota: []
+    tiposCota: [],
+    areasAtuacao: []
   }),
 
   actions: {
@@ -71,6 +73,23 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
 
       if (response?.status === 200) {
         this.tiposBolsa = response.data?.map((elem: any) => {
+          console.log(elem)
+
+          return ({
+            label: elem.nome,
+            value: elem.id
+          })
+        })
+      }
+    },
+    async fetchAreaEmprego () {
+      const response = await Api.request({
+        method: 'get',
+        route: '/areaemprego'
+      })
+
+      if (response?.status === 200) {
+        this.areasAtuacao = response.data?.map((elem: any) => {
           console.log(elem)
 
           return ({
