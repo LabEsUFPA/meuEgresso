@@ -180,8 +180,10 @@
             :path="mdiCheckCircle"
           />
         </div>
-        <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
-          E-mail atualizado com sucesso!
+        <h1
+          class="text-blue-900 text-center text-2xl font-semibold mb-8"
+        >
+          E-mail enviado ou programado com sucesso!
         </h1>
       </div>
     </div>
