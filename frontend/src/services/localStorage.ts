@@ -55,6 +55,13 @@ export default class LocalStorage {
     return undefined
   }
 
+  b64DecodeUnicode = (str: string): string => {
+    // Going backwards: from bytestream, to percent-encoding, to original string.
+    return decodeURIComponent(window.atob(str).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+    }).join(''))
+  }
+
   capitalize = (nome: string): string => {
     const result = nome.toLocaleLowerCase().split(' ').map((str) => {
       return str !== 'de' && str !== 'da' && str !== '' ? str[0].toUpperCase() + str.substring(1) : str
@@ -71,7 +78,8 @@ export default class LocalStorage {
     const base64Url = token.split('.')[1]
     const base64 = base64Url.replace('-', '+').replace('_', '/')
 
-    const result: UserData = JSON.parse(window.atob(base64))
+    const result: UserData = JSON.parse(this.b64DecodeUnicode(base64))
+
     result.nome = this.capitalize(result.nome)
     result.sobrenome = this.capitalize(result.sobrenome)
     result.nomeCompleto = `${result.nome} ${result.sobrenome}`
