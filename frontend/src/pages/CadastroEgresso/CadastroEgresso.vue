@@ -73,9 +73,9 @@
             />
 
             <CustomInput
-              label="Currículo Lattes"
+              label="Curriculo Lattes"
               name="geral.lattes"
-              icon-path="src/assets/lattesCinza.svg"
+              icon-path="/img/lattesCinza.svg"
               img-icon
             />
           </div>
@@ -176,7 +176,6 @@
                   !values.academico?.cotista?.tipos?.raca &&
                   !values.academico?.cotista?.tipos?.quilombolaIndigena &&
                   !values.academico?.cotista?.tipos?.pcd"
-
                 class="text-red-500 text-sm mt-1 position-absolute display-none"
               >
                 Marque pelo menos uma das opções acima!
@@ -554,7 +553,6 @@ import { boolean, mixed, object, string } from 'yup'
 import VueScrollTo from 'vue-scrollto'
 
 const baseURL = 'https://egressos.computacao.ufpa.br/'
-
 const $storeCadastro = useCadastroEgressoStore()
 useLoginStore()
 const storage = new LocalStorage()
