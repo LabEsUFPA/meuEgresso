@@ -184,6 +184,7 @@ class CursoControllerTest {
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isCreated())
 				.andReturn();
+		
 		String retornoString = resposta.getResponse().getContentAsString();
 		assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
 	}

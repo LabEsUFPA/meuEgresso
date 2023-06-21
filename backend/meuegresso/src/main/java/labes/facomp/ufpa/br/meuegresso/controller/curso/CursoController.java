@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
@@ -109,10 +110,10 @@ public class CursoController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarCurso(@RequestBody @Valid CursoDTO cursoDTO, JwtAuthenticationToken token)
-			throws UnauthorizedRequestException {
+			throws UnauthorizedRequestException, InvalidRequestException {
 		if (cursoService.existsByIdAndCreatedById(cursoDTO.getId(), jwtService.getIdUsuario(token))) {
 			CursoModel cursoModel = mapper.map(cursoDTO, CursoModel.class);
-			cursoService.save(cursoModel);
+			cursoService.update(cursoModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();

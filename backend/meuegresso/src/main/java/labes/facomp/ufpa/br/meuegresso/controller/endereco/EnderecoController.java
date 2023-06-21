@@ -130,11 +130,14 @@ public class EnderecoController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping
+	@DeleteMapping(value = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(Integer id) {
-		return enderecoService.deleteById(id);
+	public String deleteById(@PathVariable Integer id) {
+		if(enderecoService.deleteById(id)){
+			return ResponseType.SUCCESS_DELETE.getMessage();
+		}
+		return ResponseType.FAIL_DELETE.getMessage();
 	}
 
 }
