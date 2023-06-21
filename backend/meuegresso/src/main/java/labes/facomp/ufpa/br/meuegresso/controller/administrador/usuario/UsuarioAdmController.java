@@ -100,7 +100,7 @@ public class UsuarioAdmController {
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 
 		usuarioModel = usuarioService.save(usuarioModel);
-		mailService.usuarioCadastrado(usuarioModel);
+		// mailService.usuarioCadastrado(usuarioModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
