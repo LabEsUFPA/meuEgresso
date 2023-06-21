@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -54,6 +55,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 //TODO consertar teste
 @SpringBootTest
 @DirtiesContext
@@ -126,11 +128,14 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
     TitulacaoDTO titulacaoDTO;
     TitulacaoModel titulacaoModel;
 
+    @Autowired
+	PasswordEncoder passwordEncoder;
 
     @Autowired
     ModelMapper modelMapper;
 
-
+	@Autowired
+	UsuarioRepository usuarioRepository;
 
     @BeforeAll
     void setUp() throws Exception {
@@ -145,11 +150,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
         egressoModel = EgressoModel.builder().cotista(true).interesseEmPos(true).nascimento(LocalDate.parse("1999-10-20")).genero(genero).build();
         egressoModel = egressoRepository.save(this.egressoModel);
         //egressoPublicDTO = modelMapper.map(egressoModel, EgressoPublicDTO.class);
-
-
-        /*ModelId */
-        egressoTitulacaoModelId = EgressoTitulacaoModelId.builder().egressoId(EGRESSO_ID).titulacaoId(TITULACAO_ID).build();
-
+        
         /*Curso */
         cursoModel = CursoModel.builder().nome("Ciência da Computação").build();
         cursoModel = cursoRepository.save(cursoModel);
@@ -165,6 +166,9 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
         titulacaoModel = titulacaoRepository.save(titulacaoModel);
         titulacaoDTO = modelMapper.map(titulacaoModel, TitulacaoDTO.class);
 
+        /*ModelId */
+        egressoTitulacaoModelId = EgressoTitulacaoModelId.builder().egressoId(egressoModel.getId()).titulacaoId(titulacaoModel.getId()).build();
+
         /*EgressoTitulacao */
         egressoTitulacaoDTO = EgressoTitulacaoDTO.builder().id(egressoTitulacaoModelId)
                     .empresa(empresaDTO)
@@ -175,19 +179,17 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
         usuarioModel.setUsername(USERNAME);
         usuarioModel.setNome("nome_test");
         usuarioModel.setEmail("teste@gmail.com");
-        usuarioModel.setPassword("teste123");
         usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(usuarioModel)))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isCreated())
-                                .andReturn();
+        final String plainTextPassword = "teste123";
+        final String encodedPassword = passwordEncoder.encode(plainTextPassword);
+
+        usuarioModel.setPassword(encodedPassword);
+		usuarioRepository.save(usuarioModel);
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
         authenticationRequest.setUsername(usuarioModel.getUsername());
-        authenticationRequest.setPassword(usuarioModel.getPassword());
+        authenticationRequest.setPassword(plainTextPassword);
         String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
         MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
@@ -211,12 +213,11 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
         UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(), UsuarioAuthDTO.class);
 
         usuarioModel.setId(usuarioAuthDTO.getId());
-
     }
 
     @Test
     @Order(1)
-    void testCadastrarTitulacao() throws Exception{
+    void cadastrarEgressoTitulacao() throws Exception{
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
         MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/egressoTitulacao")
@@ -229,7 +230,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
 
         String retornoString = resposta.getResponse().getContentAsString();
         assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
-
     }
 
     @Test

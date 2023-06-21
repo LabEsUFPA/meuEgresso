@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -96,6 +97,7 @@ public class EgressoTitulacaoController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public String cadastrarEgressoTitulacao(@RequestBody @Valid EgressoTitulacaoDTO egressoTitulacaoDTO) {
+		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
 		EgressoTitulacaoModel egressoTitulacaoModel = mapper.map(egressoTitulacaoDTO, EgressoTitulacaoModel.class);
 		egressoTitulacaoService.save(egressoTitulacaoModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
