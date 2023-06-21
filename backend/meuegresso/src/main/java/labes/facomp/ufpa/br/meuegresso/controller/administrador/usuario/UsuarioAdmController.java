@@ -1,8 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.administrador.usuario;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -23,19 +21,14 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioRegistro;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioRegistroAdmin;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
-import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
-import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoValidoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -52,8 +45,6 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioAdmController {
 
 	private final UsuarioService usuarioService;
-
-	private final MailService mailService;
 
 	private final ModelMapper mapper;
 
@@ -100,8 +91,7 @@ public class UsuarioAdmController {
 
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 
-		usuarioModel = usuarioService.save(usuarioModel);
-		// mailService.usuarioCadastrado(usuarioModel);
+		usuarioService.save(usuarioModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
