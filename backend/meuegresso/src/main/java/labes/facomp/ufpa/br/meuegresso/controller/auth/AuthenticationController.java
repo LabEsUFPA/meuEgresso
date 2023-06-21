@@ -174,7 +174,6 @@ public class AuthenticationController {
 			usuarioModel.setValido(false);
 		}
 
-		usuarioModel.setGrupos(Set.of(Grupos.EGRESSO));
 		usuarioModel = usuarioService.save(usuarioModel);
 		mailService.usuarioCadastrado(usuarioModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
