@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -24,6 +27,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
@@ -90,18 +94,18 @@ public class EgressoAdmController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarEgressoPrimeiroCadastro(
             @PathVariable Integer id,
-            @RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO) {
+            @RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO) throws InvalidRequestException {
+        UsuarioModel user = usuarioService.findById(id);
+        if (!user.getGrupos().contains(Grupos.EGRESSO)) {
+            throw new InvalidRequestException();
+        }
+
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
         // em cima ok
         EgressoModel egresso = mapper.map(egressoCadastroDTO, EgressoModel.class);
-
         // Cadastro da titulacao POS-Graduação ou n
         if (egressoCadastroDTO.getTitulacao() != null) {
-            UsuarioModel user = usuarioService.findById(id);
-            if (!user.getGrupos().contains(Grupos.EGRESSO)) {
-                return ResponseType.FAIL_SAVE.getMessage();
 
-            }
             TitulacaoEgressoDTO titulacaoEgressoDTO = egressoCadastroDTO.getTitulacao();
             // Cadastro do curso
             CursoModel curso = cursoService.findByNome(titulacaoEgressoDTO.getCurso());
@@ -182,7 +186,13 @@ public class EgressoAdmController {
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(@PathVariable Integer id,
-            @RequestBody EgressoAttDTO egresso) {
+            @RequestBody EgressoAttDTO egresso) throws InvalidRequestException {
+
+        UsuarioModel user = usuarioService.findById(egresso.getUsuarioId());
+        if (!user.getGrupos().contains(Grupos.EGRESSO)) {
+            throw new InvalidRequestException();
+        }
+
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
         if (egressoModel.getContribuicao() != null) {
@@ -250,6 +260,45 @@ public class EgressoAdmController {
         return ResponseType.FAIL_DELETE.getMessage();
     }
 
+    /**
+     * Endpoint responsável pelo salvamento local do arquivo da foto do egresso
+     *
+     * @author Camilo Santos, Eude Monteiro
+     * @since 11/05/2023
+     * @param MultipartFile arquivo
+     * @return Uma string representando uma mensagem de êxito indicando que a foto
+     *         foi salva.
+     * @throws IOException
+     */
+    @PostMapping(value = "/foto/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public String saveFotoEgresso(@PathVariable Integer id, @RequestPart MultipartFile arquivo)
+            throws IOException, InvalidRequestException {
+        EgressoModel egressoModel = egressoService.findById(id);
+        if (egressoModel != null) {
+            String fileCode = egressoModel.getId().toString() + ".png";
+            if (egressoModel.getFotoNome() != null) {
+                egressoService.deleteFile(egressoModel.getFotoNome());
+            }
+            egressoModel.setFotoNome(fileCode);
+            egressoService.updateEgresso(egressoModel);
+            egressoService.saveFoto(fileCode, arquivo);
+            return ResponseType.SUCCESS_IMAGE_SAVE.getMessage();
+        }
+        throw new InvalidRequestException();
+    }
+
+    /**
+     * Endpoint responsável pela deleção local do arquivo da foto do egresso
+     *
+     * @author Camilo Santos, Eude Monteiro
+     * @since 11/05/2023
+     * @param token
+     * @return Uma string representando uma mensagem de êxito indicando que a foto
+     *         foi deletada.
+     * @throws IOException
+     */
     @DeleteMapping(value = "/foto/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(code = HttpStatus.OK)
