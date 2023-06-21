@@ -145,12 +145,23 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
         GeneroModel genero = new GeneroModel(1, "genero X");
         genero = generoRepository.save(genero);
 
+        usuarioModel = new UsuarioModel();
+        usuarioModel.setUsername(USERNAME);
+        usuarioModel.setNome("nome_test");
+        usuarioModel.setEmail("teste@gmail.com");
+        usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+
+        final String plainTextPassword = "teste123";
+        final String encodedPassword = passwordEncoder.encode(plainTextPassword);
+
+        usuarioModel.setPassword(encodedPassword);
+        usuarioRepository.save(usuarioModel);
 
         /*Egresso */
         egressoModel = EgressoModel.builder().cotista(true).interesseEmPos(true).nascimento(LocalDate.parse("1999-10-20")).genero(genero).build();
         egressoModel = egressoRepository.save(this.egressoModel);
         //egressoPublicDTO = modelMapper.map(egressoModel, EgressoPublicDTO.class);
-        
+
         /*Curso */
         cursoModel = CursoModel.builder().nome("Ciência da Computação").build();
         cursoModel = cursoRepository.save(cursoModel);
@@ -174,18 +185,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
                     .empresa(empresaDTO)
                     .curso(cursoDTO)
                     .titulacao(titulacaoDTO).build();
-
-        usuarioModel = new UsuarioModel();
-        usuarioModel.setUsername(USERNAME);
-        usuarioModel.setNome("nome_test");
-        usuarioModel.setEmail("teste@gmail.com");
-        usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
-
-        final String plainTextPassword = "teste123";
-        final String encodedPassword = passwordEncoder.encode(plainTextPassword);
-
-        usuarioModel.setPassword(encodedPassword);
-		usuarioRepository.save(usuarioModel);
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
         authenticationRequest.setUsername(usuarioModel.getUsername());
@@ -220,7 +219,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
     void cadastrarEgressoTitulacao() throws Exception{
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-        MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/egressoTitulacao")
+            MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/egressoTitulacao")
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("Authorization", "Bearer " + this.token)
                     .content(objectMapper.writeValueAsString(egressoTitulacaoDTO)))

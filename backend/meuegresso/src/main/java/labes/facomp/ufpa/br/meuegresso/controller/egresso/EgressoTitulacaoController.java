@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -25,8 +24,12 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoTitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
+import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
+import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
 import lombok.RequiredArgsConstructor;
@@ -97,8 +100,7 @@ public class EgressoTitulacaoController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public String cadastrarEgressoTitulacao(@RequestBody @Valid EgressoTitulacaoDTO egressoTitulacaoDTO) {
-		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		EgressoTitulacaoModel egressoTitulacaoModel = mapper.map(egressoTitulacaoDTO, EgressoTitulacaoModel.class);
+		EgressoTitulacaoModel egressoTitulacaoModel = toModel(egressoTitulacaoDTO);
 		egressoTitulacaoService.save(egressoTitulacaoModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
@@ -123,7 +125,7 @@ public class EgressoTitulacaoController {
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (egressoTitulacaoService.existsByIdAndCreatedById(egressoTitulacaoDTO.getId(),
 				jwtService.getIdUsuario(token))) {
-			EgressoTitulacaoModel egressoTitulacaoModel = mapper.map(egressoTitulacaoDTO, EgressoTitulacaoModel.class);
+			EgressoTitulacaoModel egressoTitulacaoModel = toModel(egressoTitulacaoDTO);
 			egressoTitulacaoService.update(egressoTitulacaoModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
@@ -140,13 +142,26 @@ public class EgressoTitulacaoController {
 	 * @since 17/04/2023
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
 	@DeleteMapping(params = { "egressoId", "titulacaoId" })
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(
-			@RequestParam(required = false) Integer egressoId,
+	public String deleteById(@RequestParam(required = false) Integer egressoId,
 			@RequestParam(required = false) Integer titulacaoId) {
-		return egressoTitulacaoService
-				.deleteById(EgressoTitulacaoModelId.builder().egressoId(egressoId).titulacaoId(titulacaoId).build());
+		if (egressoTitulacaoService.deleteById(
+			EgressoTitulacaoModelId.builder().egressoId(egressoId).titulacaoId(titulacaoId).build())) {
+			return ResponseType.SUCCESS_DELETE.getMessage();
+		}
+		return ResponseType.FAIL_DELETE.getMessage();
+	}
+
+	private EgressoTitulacaoModel toModel(EgressoTitulacaoDTO egressoTitulacaoDTO) {
+		var curso = mapper.map(egressoTitulacaoDTO.getCurso(), CursoModel.class);
+		var empresa = mapper.map(egressoTitulacaoDTO.getEmpresa(), EmpresaModel.class);
+		var titulacao = mapper.map(egressoTitulacaoDTO.getTitulacao(), TitulacaoModel.class);
+		var id = egressoTitulacaoDTO.getId();
+		return EgressoTitulacaoModel.builder().id(id).curso(curso).empresa(empresa)
+				.titulacao(titulacao).egresso(EgressoModel.builder().id(id.getEgressoId()).build()).build();
+
 	}
 
 }
