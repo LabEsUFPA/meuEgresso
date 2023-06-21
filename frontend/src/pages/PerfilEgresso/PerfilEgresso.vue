@@ -1532,7 +1532,7 @@ const schemaHeader = object().shape({
     }),
     linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
       if (value) {
-        return value?.match(/https?:\/\/(?:www\.)?br\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/*/)
+        return value?.match(/\bhttps?:\/\/(?:www\.)?(?:br\.)?linkedin\.com\/in\/[\w-]+\/?\b/)
       }
 
       return (typeof value).constructor(true)
