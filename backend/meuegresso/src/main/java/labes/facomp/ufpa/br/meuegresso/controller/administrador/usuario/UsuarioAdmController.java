@@ -1,6 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.controller.administrador.usuario;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -9,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +23,18 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioRegistro;
+import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoValidoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -42,6 +52,8 @@ public class UsuarioAdmController {
 
 	private final UsuarioService usuarioService;
 
+	private final MailService mailService;
+
 	private final ModelMapper mapper;
 
 	/**
@@ -58,6 +70,38 @@ public class UsuarioAdmController {
 	public List<UsuarioAuthDTO> consultarUsuarios() {
 		return mapper.map(usuarioService.findAll(), new TypeToken<List<UsuarioAuthDTO>>() {
 		}.getType());
+	}
+
+	/**
+	 * Endpoint responsavel por cadastrar o usuário admin, secretário e egresso.
+	 *
+	 * @param usuarioDTO Estrutura de dados contendo as informações necessárias para
+	 *                   persistir o Usuário.
+	 * @return String confirmando a transação.
+	 * @author Lucas Cantão
+	 * @throws NotFoundException
+	 * @throws NameAlreadyExistsException
+	 * @see {@link UsuarioDTO}
+	 * @since 20/06/2023
+	 */
+	@PostMapping(value = "/register")
+	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public String cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO)
+			throws NameAlreadyExistsException {
+		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
+			throw new NameAlreadyExistsException(
+					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),
+					ErrorType.USER_001.getInternalCode());
+		}
+		mapper.getConfiguration().setSkipNullEnabled(true);
+
+		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
+
+		usuarioModel = usuarioService.save(usuarioModel);
+		mailService.usuarioCadastrado(usuarioModel);
+		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
 	/**
