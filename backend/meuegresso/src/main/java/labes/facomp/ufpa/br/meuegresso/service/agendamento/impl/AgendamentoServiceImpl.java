@@ -74,19 +74,15 @@ public class AgendamentoServiceImpl implements AgendamentoService, Runnable {
         Integer minute = dateTime.getMinute() - nowDateTime.getMinute();
         if (year < 0) {
             return 0;
-        } 
-        else if (year == 0) {
+        } else if (year == 0) {
             if (month < 0) {
                 return 0;
-            } 
-            else if (month == 0) {
+            } else if (month == 0) {
                 if (day < 0) {
                     return 0;
-                } 
-                else if(minute <= 0){
+                } else if (minute <= 0) {
                     return 0;
-                }
-                else {
+                } else {
                     return 1;
                 }
             } else {
@@ -121,7 +117,7 @@ public class AgendamentoServiceImpl implements AgendamentoService, Runnable {
     @Override
     public void scheduledSendEmail() {
         Map<String, LocalDateTime> emailList = usuarioService.findByAtivo();
-        List<MensagemModel> mensagemEnvioUmaVez = mensagemRepository.findMensagemByData();
+        List<MensagemModel> mensagemEnvioUmaVez = mensagemRepository.findEmailsParaEnviar();
         List<MensagemModel> mensagemAnual = mensagemRepository.findMensagemByDataAnual();
         List<MensagemModel> mensagemSemestral = mensagemRepository.findMensagemByDataSemestral();
         Integer size = mensagemEnvioUmaVez.size();
@@ -130,12 +126,13 @@ public class AgendamentoServiceImpl implements AgendamentoService, Runnable {
 
         for (int i = 0; i < size; i++) {
             if (mensagemEnvioUmaVez.get(i).getEmail() != null) {
-                mailService.sendEmail(mensagemEnvioUmaVez.get(i).getEmail(), mensagemEnvioUmaVez.get(i).getEscopo(),mensagemEnvioUmaVez.get(i).getCorpo());
+                mailService.sendEmail(mensagemEnvioUmaVez.get(i).getEmail(), mensagemEnvioUmaVez.get(i).getEscopo(),
+                        mensagemEnvioUmaVez.get(i).getCorpo());
                 mensagemEnvioUmaVez.get(i).setDataEnviada(LocalDateTime.now());
-            } 
-            else {
+            } else {
                 for (String email : emailList.keySet()) {
-                    mailService.sendEmail(email, mensagemEnvioUmaVez.get(i).getEscopo(), mensagemEnvioUmaVez.get(i).getCorpo());
+                    mailService.sendEmail(email, mensagemEnvioUmaVez.get(i).getEscopo(),
+                            mensagemEnvioUmaVez.get(i).getCorpo());
                 }
                 mensagemEnvioUmaVez.get(i).setDataEnviada(LocalDateTime.now());
             }
@@ -169,25 +166,29 @@ public class AgendamentoServiceImpl implements AgendamentoService, Runnable {
         ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger("0 */5 * * * *"));
         String jobId = String.valueOf(1);
         taskList.put(jobId, scheduledTask);
-        /*String cronExpression = toCron(String.valueOf(0),
-                String.valueOf(dateTime.getMinute()),
-                String.valueOf(dateTime.getHour()),
-                String.valueOf(dateTime.getDayOfMonth()),
-                String.valueOf(dateTime.getMonth().getValue()));
-        if (frequente) {
-            cronExpression = toCron(String.valueOf(0),
-                    String.valueOf(dateTime.getMinute()),
-                    String.valueOf(dateTime.getHour()),
-                    String.valueOf(dateTime.getDayOfMonth()),
-                    String.valueOf(dateTime.getMonth().getValue()));
-            ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
-            String jobId = String.valueOf(mensagemModel.getId());
-            taskList.put(jobId, scheduledTask);
-        } else {
-            ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression));
-            String jobId = String.valueOf(mensagemModel.getEscopo());
-            taskList.put(jobId, scheduledTask);
-        }*/
+        /*
+         * String cronExpression = toCron(String.valueOf(0),
+         * String.valueOf(dateTime.getMinute()),
+         * String.valueOf(dateTime.getHour()),
+         * String.valueOf(dateTime.getDayOfMonth()),
+         * String.valueOf(dateTime.getMonth().getValue()));
+         * if (frequente) {
+         * cronExpression = toCron(String.valueOf(0),
+         * String.valueOf(dateTime.getMinute()),
+         * String.valueOf(dateTime.getHour()),
+         * String.valueOf(dateTime.getDayOfMonth()),
+         * String.valueOf(dateTime.getMonth().getValue()));
+         * ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new
+         * CronTrigger(cronExpression));
+         * String jobId = String.valueOf(mensagemModel.getId());
+         * taskList.put(jobId, scheduledTask);
+         * } else {
+         * ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new
+         * CronTrigger(cronExpression));
+         * String jobId = String.valueOf(mensagemModel.getEscopo());
+         * taskList.put(jobId, scheduledTask);
+         * }
+         */
     }
 
     @Override
@@ -198,21 +199,23 @@ public class AgendamentoServiceImpl implements AgendamentoService, Runnable {
             scheduledTask.cancel(true);
             taskList.remove(mensagemId, scheduledTask);
         }
-        /*if (mensagemModel.getEmail() != null) {
-            String mensagemEmail = mensagemModel.getEscopo();
-            ScheduledFuture<?> scheduledTask = taskList.get(mensagemEmail);
-            if (scheduledTask != null) {
-                scheduledTask.cancel(true);
-                taskList.remove(mensagemEmail, scheduledTask);
-            }
-        } else {
-            String mensagemId = String.valueOf(mensagemModel.getId());
-            ScheduledFuture<?> scheduledTask = taskList.get(mensagemId);
-            if (scheduledTask != null) {
-                scheduledTask.cancel(true);
-                taskList.remove(mensagemId, scheduledTask);
-            }
-        }*/
+        /*
+         * if (mensagemModel.getEmail() != null) {
+         * String mensagemEmail = mensagemModel.getEscopo();
+         * ScheduledFuture<?> scheduledTask = taskList.get(mensagemEmail);
+         * if (scheduledTask != null) {
+         * scheduledTask.cancel(true);
+         * taskList.remove(mensagemEmail, scheduledTask);
+         * }
+         * } else {
+         * String mensagemId = String.valueOf(mensagemModel.getId());
+         * ScheduledFuture<?> scheduledTask = taskList.get(mensagemId);
+         * if (scheduledTask != null) {
+         * scheduledTask.cancel(true);
+         * taskList.remove(mensagemId, scheduledTask);
+         * }
+         * }
+         */
     }
 
     @Override

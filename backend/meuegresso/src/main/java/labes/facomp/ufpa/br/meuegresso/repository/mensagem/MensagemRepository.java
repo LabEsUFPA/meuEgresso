@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 
 import labes.facomp.ufpa.br.meuegresso.model.MensagemModel;
 
@@ -25,42 +24,30 @@ public interface MensagemRepository extends CrudRepository<MensagemModel, Intege
 
     void deleteById(Integer id);
 
-    @Query(value = """
-            SELECT *
-            FROM mensagem m
-            WHERE m.frequente_mensagem = false 
-                AND YEAR(data_mensagem) = YEAR(NOW())
-                AND MONTH(data_mensagem) = MONTH(NOW())
-                AND DAY(data_mensagem) = DAY(NOW())
-                AND HOUR(data_mensagem) = HOUR(NOW())
-                AND TIMESTAMPDIFF(MINUTE, data_mensagem, NOW()) < 5
-            """)
-    List<MensagemModel> findMensagemByData();
+    @Query(value = "select m from mensagem m " +
+            "WHERE m.frequente = false and (FUNCTION('date', m.dataEnvio) = CURRENT_DATE " +
+            "and (FUNCTION('date', m.dataEnviada) != CURRENT_DATE or FUNCTION('date', m.dataEnviada) is null) " +
+            "and extract(hour from m.dataEnvio - now()) = 0) " +
+            "or m.dataEnvio < now() and m.dataEnviada is null")
+    List<MensagemModel> findEmailsParaEnviar();
 
     @Query(value = """
-            SELECT *
-            FROM mensagem m
-            WHERE m.email_mensagem is null
-                AND m.data_enviada_mensagem is not null
-                AND m.anual_mensagem = true
-                AND MONTH(data_mensagem) = MONTH(NOW())
-                AND DAY(data_mensagem) = DAY(NOW())
-                AND HOUR(data_mensagem) = HOUR(NOW())
-                AND TIMESTAMPDIFF(MINUTE, data_mensagem, NOW()) < 5
-            """)
+            SELECT * FROM mensagem m
+            WHERE m.frequente_mensagem = true
+              AND m.anual_mensagem = false
+              and current_date >= m.data_mensagem::::date
+              AND EXTRACT(MONTH FROM AGE(now(), m.data_mensagem)) % 12 = 0
+              AND (EXTRACT(MONTH FROM AGE(now(), m.data_enviada_mensagem)) >= 6 OR m.data_enviada_mensagem IS NULL)
+            """, nativeQuery = true)
     List<MensagemModel> findMensagemByDataAnual();
 
     @Query(value = """
-            SELECT *
-            FROM mensagem m
-            WHERE m.email_mensagem is null
-                AND m.data_enviada_mensagem is not null
-                AND m.frequente_mensagem = true
-                AND m.anual_mensagem = false
-                AND TIMESTAMPDIFF(MONTH, data_mensagem, NOW()) % 6 = 0
-                AND DAY(data_mensagem) = DAY(NOW())
-                AND HOUR(data_mensagem) = HOUR(NOW())
-                AND TIMESTAMPDIFF(MINUTE, data_mensagem, NOW()) < 5
-            """)
+            SELECT * FROM mensagem m
+            WHERE m.frequente_mensagem = true
+              AND m.anual_mensagem = false
+              and current_date >= m.data_mensagem::::date
+              AND EXTRACT(MONTH FROM AGE(now(), m.data_mensagem)) % 6 = 0
+              AND (EXTRACT(MONTH FROM AGE(now(), m.data_enviada_mensagem)) >= 6 OR m.data_enviada_mensagem IS NULL)
+            """, nativeQuery = true)
     List<MensagemModel> findMensagemByDataSemestral();
 }

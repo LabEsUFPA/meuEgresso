@@ -35,7 +35,7 @@ public class MensagemModel {
     @Column(name = "data_mensagem", unique = false, nullable = false)
     private LocalDateTime dataEnvio;
 
-    @Column(name = "data_enviada_mensagem", unique = false, nullable = false)
+    @Column(name = "data_enviada_mensagem", unique = false, nullable = true)
     private LocalDateTime dataEnviada;
 
     @Builder.Default
