@@ -439,7 +439,7 @@
                     Marque pelo menos uma das opções acima!
                   </p>
                 </div>
-                
+
                 <CustomCheckbox
                   class="mb-5"
                   name="academico.bolsista.value"
@@ -1337,7 +1337,6 @@ async function fetchUpdateEgresso () {
   // Cotas
   let cotasEgresso = ''
   imageEgressoUrl = await handleEgressoImage(json.id)
-  const tiposCotasList = $store.tiposCota
   for (const element of json.cotas) {
     $store.tiposCota.forEach(option => {
       if (option.value === element.id) {
