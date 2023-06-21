@@ -9,7 +9,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaBasicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoTitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.publico.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.tipobolsa.TipoBolsaDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,8 +54,6 @@ public class EgressoDTO {
 
         private String lattes;
 
-        private String linkedin;
-
-        private UsuarioDTO usuario;
+        private String linkedin;        
         
 }
