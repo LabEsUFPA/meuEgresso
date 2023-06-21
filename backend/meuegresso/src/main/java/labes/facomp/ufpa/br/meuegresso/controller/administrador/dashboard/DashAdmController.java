@@ -227,26 +227,4 @@ public class DashAdmController {
 		return new EgressoCadastroAnualGraficoDTO(egressoCadAno);
 	}
 
-	/**
-	 * Endpoint responsável por deletar todos os dados da tabela egressos e
-	 * associados
-	 *
-	 * @return ResponseEntity<String> confirmação de retorno
-	 * @author Lucas Cantão
-	 * @since 12/06/2023
-	 */
-	@DeleteMapping("/deleteall")
-	@PreAuthorize("hasRole('ADMIN')")
-	@ResponseStatus(code = HttpStatus.OK)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public ResponseEntity<String> deleteAll() {
-		egressoService.deleteAll();
-		empresaService.deleteAll();
-		if (egressoService.findAll().isEmpty() && empresaService.findAll().isEmpty()) {
-			return new ResponseEntity<>("Todos os dados deletados com sucesso", null, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Dados não deletados", null, HttpStatus.EXPECTATION_FAILED);
-		}
-	}
-
 }
