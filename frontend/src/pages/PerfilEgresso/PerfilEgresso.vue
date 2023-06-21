@@ -82,7 +82,7 @@
               class="items-start flex justify-center mt-8 relative gap-[10px]"
             >
               <CustomButtonLink
-                label="Linkedin"
+                label="LinkedIn"
                 icon-path="/img/linkedin-icon.svg"
                 :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
@@ -106,7 +106,7 @@
               class="items-start flex justify-center mt-8 relative gap-[10px]"
             >
               <CustomButtonLink
-                label="Linkedin"
+                label="LinkedIn"
                 icon-path="/src/assets/linkedin-icon.svg"
                 :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
@@ -299,7 +299,7 @@
                   :vmodel="dataEgresso.academico.matricula"
                   name="academico.matricula"
                   label="Matrícula"
-                  placeholder="205004940001"
+                  placeholder="Ex: 205004940001"
                   icon-path=""
                 />
 
@@ -419,19 +419,32 @@
                     :required="bools.cotista"
                     :disabled="!bools.cotista"
                   />
-
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.pcd"
+                    label="PCD"
+                    :required="bools.cotista"
+                    :disabled="!bools.cotista"
+                  />
                   <p
                     v-if="bools.cotista &&
                       !values.academico?.cotista?.tipos?.renda &&
                       !values.academico?.cotista?.tipos?.escola &&
                       !values.academico?.cotista?.tipos?.raca &&
-                      !values.academico?.cotista?.tipos?.quilombolaIndigena"
+                      !values.academico?.cotista?.tipos?.quilombolaIndigena &&
+                      !values.academico?.cotista?.tipos?.pcd"
                     class="text-red-500 text-sm mt-1 position-absolute display-none"
                   >
                     Marque pelo menos uma das opções acima!
                   </p>
                 </div>
-
+                
+                <CustomCheckbox
+                  class="mb-5"
+                  name="academico.bolsista.value"
+                  label="Bolsista"
+                  v-model:value="bools.bolsista"
+                />
                 <CustomSelect
                   class="mb-5"
                   name="academico.bolsista.tipo"
@@ -981,6 +994,11 @@ async function handleSubmitAcademico (values: any) {
         id: 4
       })
     }
+    if (values.academico.cotista.tipos.pcd) {
+      cotas.push({
+        id: 5
+      })
+    }
   }
 
   jsonResponse.posGraduacao = values.academico.posGrad.value
@@ -1094,6 +1112,14 @@ async function handleSubmitCarreira (values: any) {
   if (values.carreira.area !== 'Desempregado') {
     jsonResponse.emprego.empresa.nome = values.carreira.empresa
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
+    // let areaNome = ''
+    // $store.areasAtuacao.forEach(option => {
+    //   if (option.value === values.carreira.area) {
+    //     areaNome = option.label
+    //     console.log(areaNome)
+    //   }
+    // })
+    // jsonResponse.emprego.areaAtuacao.nome = areaNome
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
   } else {
@@ -1164,11 +1190,8 @@ function toggleIsInput (FolderLabel: string) {
 //
 
 const selectOpts = ref({
-  genero: ['Masculino', 'Feminino', 'Não-Binário', 'Transsexual'],
   tipoAluno: ['Graduação', 'Pós-graduação'],
-  tipoCota: ['Escola', 'Renda', 'Autodeclaração de Raça', 'Quilombola/Indígena'],
-  tipoBolsa: ['PIBIC', 'PROAD', 'PROEX', 'Permanência', 'Outros'],
-  areaAtuacao: ['Computação', 'Pesquisa', 'Outros'],
+  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Programador', 'Analísta', 'Outros'],
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
 })
 function onInvalid (e: any) {
@@ -1209,7 +1232,8 @@ const dataEgresso = ref({
         escola: false,
         renda: false,
         raca: false,
-        quilombolaIndigena: false
+        quilombolaIndigena: false,
+        pcd: false
       }
     },
     bolsista: {
@@ -1305,9 +1329,16 @@ async function fetchUpdateEgresso () {
   // Cotas
   let cotasEgresso = ''
   imageEgressoUrl = await handleEgressoImage(json.id)
-
-  for (let i = 0; i < json.cotas.length; i++) {
-    cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
+  console.log('cotas')
+  const tiposCotasList = $store.tiposCota
+  console.log(tiposCotasList)
+  console.log(json.cotas)
+  for (const element of json.cotas) {
+    $store.tiposCota.forEach(option => {
+      if (option.value === element.id) {
+        cotasEgresso += option.label + '\n'
+      }
+    })
   }
 
   dataEgresso.value = {
@@ -1344,7 +1375,8 @@ async function fetchUpdateEgresso () {
           escola: false,
           renda: false,
           raca: false,
-          quilombolaIndigena: false
+          quilombolaIndigena: false,
+          pcd: false
         }
 
       },
@@ -1398,6 +1430,9 @@ async function fetchUpdateEgresso () {
     }
     if (element.id === 4) {
       dataEgresso.value.academico.cotista.tipos.quilombolaIndigena = true
+    }
+    if (element.id === 5) {
+      dataEgresso.value.academico.cotista.tipos.pcd = true
     }
   }
   bools.value = {
@@ -1494,7 +1529,7 @@ const schemaHeader = object().shape({
     }),
     linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
       if (value) {
-        return value?.match(/https?:\/\/(?:www\.)?br\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/*/)
+        return value?.match(/\bhttps?:\/\/(?:www\.)?(?:br\.)?linkedin\.com\/in\/[\w-]+\/?\b/)
       }
 
       return (typeof value).constructor(true)
@@ -1535,7 +1570,7 @@ const schemaAcademico = object().shape({
     cotista: object({
       value: boolean().test('Cotas', 'Marque pelo menos uma das opções acima', (value: any, cotas) => {
         if (value) {
-          if (cotas.parent.tipos.renda || cotas.parent.tipos.escola || cotas.parent.tipos.raca || cotas.parent.tipos.quilombolaIndigena) return true
+          if (cotas.parent.tipos.renda || cotas.parent.tipos.escola || cotas.parent.tipos.raca || cotas.parent.tipos.quilombolaIndigena || cotas.parent.tipos.pcd) return true
           return false
         }
         return true

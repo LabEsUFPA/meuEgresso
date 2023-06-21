@@ -77,7 +77,7 @@ public class DashAdmController {
 	 * @since 06/06/2023
 	 */
 	@GetMapping
-	// @PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<EgressoDashDTO> consultarEgressoDash(
@@ -85,8 +85,8 @@ public class DashAdmController {
 			@RequestParam(name = "status", defaultValue = "incompleto") String[] status,
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
-			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
-		Page<EgressoDashDTO> egressos = usuarioService.findBySearch(nomeUsuario, status, page, size, direction);
+			@RequestParam(defaultValue = "DESC", required = false) String ordenacao) {
+		Page<EgressoDashDTO> egressos = usuarioService.findBySearch(nomeUsuario, status, page, size, ordenacao);
 		egressos.forEach(e -> {
 			if (e.getIdEgresso() != null) {
 				try {
@@ -128,7 +128,7 @@ public class DashAdmController {
 		document.open();
 
 		List<EgressoDashDTO> egressos = usuarioService.findBySearch("",
-				new String[] { "pendente", "inativo", "completo", "incompleto" }, 0, 20, Direction.ASC).toList();
+				new String[] { "pendente", "inativo", "completo", "incompleto" }, 0, 20, "DESC").toList();
 
 		document.add(new Paragraph("UNIVERSIDADE FEDERAL DO PARÁ"));
 		document.add(new Paragraph("Listagem de Egressos", bold));

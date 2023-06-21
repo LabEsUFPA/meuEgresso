@@ -67,6 +67,11 @@
             label="Quilombola/Indigena"
             :disabled="!bools.cotista"
           />
+          <CustomCheckbox
+            name="academico.cotista.tipos.pcd"
+            label="PCD"
+            :disabled="!bools.cotista"
+          />
         </div>
 
         <CustomCheckbox
