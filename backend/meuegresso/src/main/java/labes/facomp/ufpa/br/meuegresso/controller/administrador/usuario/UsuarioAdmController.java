@@ -1,11 +1,14 @@
 package labes.facomp.ufpa.br.meuegresso.controller.administrador.usuario;
 
 import java.util.List;
+import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,12 +26,14 @@ import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioRegistroAdmin;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -47,6 +52,8 @@ public class UsuarioAdmController {
 	private final UsuarioService usuarioService;
 
 	private final ModelMapper mapper;
+
+	private final JwtService jwtService;
 
 	/**
 	 * Endpoint responsável por retornar a lista de usuários cadastrados no banco de
@@ -77,22 +84,34 @@ public class UsuarioAdmController {
 	 * @since 20/06/2023
 	 */
 	@PostMapping(value = "/register")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarUsuario(@RequestBody @Valid UsuarioRegistroAdmin usuarioDTO)
+	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistroAdmin usuarioDTO,JwtAuthenticationToken token)
 			throws NameAlreadyExistsException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
 			throw new NameAlreadyExistsException(
 					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),
 					ErrorType.USER_001.getInternalCode());
 		}
+
+		UsuarioModel usuarioModelTeste = usuarioService.findById(jwtService.getIdUsuario(token));
+		Set<Grupos> gruposUsuario = usuarioModelTeste.getGrupos();
+
+		if(!gruposUsuario.contains(Grupos.ADMIN)){
+			Set<Grupos> grupos = usuarioDTO.getGrupos();
+			for(Grupos grupo :grupos){
+				if(grupo.getAuthority().equals("ROLE_ADMIN") || grupo.getAuthority().equals("ROLE_SECRETARIO")){
+					return new ResponseEntity<>(ResponseType.FAIL_SAVE.getMessage(),null,HttpStatus.FORBIDDEN);
+				}
+			}
+		}
 		mapper.getConfiguration().setSkipNullEnabled(true);
 
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 
 		usuarioService.save(usuarioModel);
-		return ResponseType.SUCCESS_SAVE.getMessage();
+		return new ResponseEntity<>(ResponseType.SUCCESS_SAVE.getMessage(), null, HttpStatus.CREATED);
 	}
 
 	/**
