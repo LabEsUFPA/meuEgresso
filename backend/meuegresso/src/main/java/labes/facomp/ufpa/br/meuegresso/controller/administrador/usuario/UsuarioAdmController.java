@@ -31,6 +31,7 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnalthorizedRegisterException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
@@ -80,6 +81,7 @@ public class UsuarioAdmController {
 	 * @author Lucas Cantão
 	 * @throws NotFoundException
 	 * @throws NameAlreadyExistsException
+	 * @throws UnalthorizedRegisterException
 	 * @see {@link UsuarioDTO}
 	 * @since 20/06/2023
 	 */
@@ -88,11 +90,10 @@ public class UsuarioAdmController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistroAdmin usuarioDTO,JwtAuthenticationToken token)
-			throws NameAlreadyExistsException {
+			throws NameAlreadyExistsException, UnalthorizedRegisterException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
 			throw new NameAlreadyExistsException(
-					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),
-					ErrorType.USER_001.getInternalCode());
+					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),ErrorType.USER_001.getInternalCode());
 		}
 
 		UsuarioModel usuarioModelTeste = usuarioService.findById(jwtService.getIdUsuario(token));
@@ -101,8 +102,8 @@ public class UsuarioAdmController {
 		if(!gruposUsuario.contains(Grupos.ADMIN)){
 			Set<Grupos> grupos = usuarioDTO.getGrupos();
 			for(Grupos grupo :grupos){
-				if(grupo.getAuthority().equals("ROLE_ADMIN") || grupo.getAuthority().equals("ROLE_SECRETARIO")){
-					return new ResponseEntity<>(ResponseType.FAIL_SAVE.getMessage(),null,HttpStatus.FORBIDDEN);
+				if (grupo.getAuthority().equals("ROLE_ADMIN") || grupo.getAuthority().equals("ROLE_SECRETARIO")) {
+					throw new UnalthorizedRegisterException(String.format(ErrorType.UNAUTHORIZED_REGISTER.getMessage()),ErrorType.UNAUTHORIZED_REGISTER.getInternalCode());
 				}
 			}
 		}

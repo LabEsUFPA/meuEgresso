@@ -7,8 +7,6 @@ public enum ResponseType {
 
     SUCCESS_SAVE("Dado salvo com sucesso"),
 
-    FAIL_SAVE("Credenciais insuficientes para cadastrar secretário/admin"),
-
     SUCCESS_UPDATE("Dado atualizado com sucesso"),
 
     SUCCESS_DELETE("Dado deletado com sucesso"),
