@@ -11,7 +11,7 @@ interface State {
     mes: any[]
     ano: any[]
   }
-  sendToEmail: string
+  sendToEmail: string | null
 }
 
 export const usePainelStore = defineStore('Painel', {
@@ -133,7 +133,7 @@ export const usePainelStore = defineStore('Painel', {
       return response?.status != null ? response.status : 500
     },
 
-    setEgressoEmail (email: string) {
+    setEgressoEmail (email: string | null) {
       this.sendToEmail = email
     },
 

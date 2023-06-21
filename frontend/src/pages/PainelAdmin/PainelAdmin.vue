@@ -141,29 +141,28 @@
               />
             </RouterLink>
           </div>
-          <div class="border-b text-cyan-600 p-4 font-semibold text-left">
-            <RouterLink
-              to="/email"
-              class="flex items-center"
-            >
-              <SvgIcon
-                type="mdi"
-                size="20"
-                class="inline mr-2"
-                :path="mdiEmail"
-              />
+          <div
+            role="button"
+            class="flex items-center border-b text-cyan-600 p-4 font-semibold text-left"
+            @click="navigateToEmailSettings"
+          >
+            <SvgIcon
+              type="mdi"
+              size="20"
+              class="inline mr-2"
+              :path="mdiEmail"
+            />
 
-              Configurar e-mail de atualização
+            Configurar e-mail de atualização
 
-              <div class="flex-1" />
+            <div class="flex-1" />
 
-              <SvgIcon
-                type="mdi"
-                size="20"
-                class="inline"
-                :path="mdiChevronRight"
-              />
-            </RouterLink>
+            <SvgIcon
+              type="mdi"
+              size="20"
+              class="inline"
+              :path="mdiChevronRight"
+            />
           </div>
           <div class="border-b text-cyan-600 p-4 font-semibold text-left">
             <button @click="$painelStore.getPdf()">
@@ -403,6 +402,11 @@ const imageFlags = ref(new Map())
 async function logout () {
   $loginStore.userLogout()
   await $router.push('/entrar')
+}
+
+function navigateToEmailSettings () {
+  $router.push('/email')
+  $painelStore.setEgressoEmail(null)
 }
 
 type clickedTypes = keyof typeof selected.value
