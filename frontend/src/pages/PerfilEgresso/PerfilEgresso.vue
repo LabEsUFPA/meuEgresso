@@ -3,11 +3,12 @@
     v-if="loading"
     class="flex h-[70vh] items-center justify-center text-center"
   >
-    <img
-      class="animate-spin mr-3 w-[100px]"
-      src="src/assets/loading.svg"
-      alt="Loading"
-    >
+    <SvgIcon
+      type="mdi"
+      size="80"
+      class="animate-spin text-gray-400"
+      :path="mdiLoading"
+    />
   </div>
   <div
     v-else
@@ -831,7 +832,8 @@ import {
   mdiAlertCircle,
   mdiMapMarker,
   mdiAlertCircleOutline,
-  mdiSchool
+  mdiSchool,
+  mdiLoading
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
 const dialogSucesso = ref(false)
@@ -848,6 +850,7 @@ const formCarreira = ref<typeof Form | null>(null)
 const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 const missingDigits = ref(0)
+const loading = ref(true)
 
 const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
@@ -902,11 +905,16 @@ if (storage.has('loggedEgresso')) {
 const isPublic = computed(() => {
   if (storage.has('loggedUser') && storage.has('loggedEgresso')) {
     const logEgresso = JSON.parse(storage.get('loggedEgresso'))
-    console.log(logEgresso)
     return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id))
   } else {
     return (Object.keys($route.params).length === 1)
   }
+})
+
+watch(() => $route.params, async () => {
+  loading.value = true
+  await fetchUpdateEgresso()
+  loading.value = false
 })
 
 function handleStatus (status: any) {
@@ -930,7 +938,6 @@ async function handleSubmitHeader (values: any) {
     jsonResponse.linkedin = null
   }
   if (values.geral.lattes !== '' && values.geral.lattes !== undefined) {
-    console.log(jsonResponse.lattes)
     jsonResponse.lattes = values.geral.lattes
   } else {
     jsonResponse.lattes = null
@@ -945,14 +952,10 @@ async function handleSubmitHeader (values: any) {
     responseImage = await profileImageSave()
   }
 
-  // console.log(status)
-  console.log(responseImage)
-
   if (status === 201 && (responseImage === 201 || responseImage === 200 || responseImage === 204)) {
     dialogSucesso.value = true
 
     toggleIsInput('profileHead')
-    fetchUpdateEgresso()
     fetchUpdateEgresso()
   } else {
     dialogFalha.value = true
@@ -1063,7 +1066,6 @@ async function handleSubmitAcademico (values: any) {
   fetchUpdateEgresso()
 }
 async function handleSubmitLocalizacao (values: any) {
-  console.log(values)
   jsonResponse.emprego.empresa.endereco = values.localizacao
   // delete jsonResponse.emprego.empresa.endereco.id
 
@@ -1289,7 +1291,6 @@ const placeHolders = ref({
   faixaSalarial: dataEgresso.value.carreira.faixaSalarial
 })
 
-const loading = ref(true)
 watch(() => dataEgresso.value.egressoId, () => {
   if (dataEgresso.value.egressoId !== 0) {
     loading.value = false
@@ -1313,15 +1314,22 @@ async function handleEgressoImage (id : string) {
   }
 }
 
+onMounted(async () => {
+  window.scrollTo(0, 0)
+  await fetchUpdateEgresso()
+  loading.value = false
+})
+
 async function fetchUpdateEgresso () {
   // getEgresso
   if (isPublic.value) {
-    egressoResponseBack = fetchPublicEgresso(Number($route.params?.id))
+    egressoResponseBack = await fetchPublicEgresso(Number($route.params?.id))
   } else {
-    egressoResponseBack = egressoStore.fetchEgresso()
+    if (storage.has('loggedUser') && storage.getLoggedUser()?.scope !== 'EGRESSO') return
+    egressoResponseBack = await egressoStore.fetchEgresso()
   }
 
-  const ResponseBack = await egressoResponseBack
+  const ResponseBack = egressoResponseBack
 
   const json = JSON.parse(ResponseBack)
 
@@ -1331,11 +1339,6 @@ async function fetchUpdateEgresso () {
   let cotasEgresso = ''
   imageEgressoUrl = await handleEgressoImage(json.id)
 
-  console.log('cotas')
-
-  const tiposCotasList = $store.tiposCota
-  console.log(tiposCotasList)
-  console.log(json.cotas)
   for (const element of json.cotas) {
     $store.tiposCota.forEach(option => {
       if (option.value === element.id) {
@@ -1484,11 +1487,6 @@ let estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElem
 let cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
 
 onMounted(() => {
-  window.scrollTo(0, 0)
-  fetchUpdateEgresso()
-})
-
-onMounted(() => {
   estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
 
   cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
@@ -1505,8 +1503,6 @@ onMounted(() => {
   })
 
   watch(() => dataEgresso.value.localizacao.estado, (newValue) => {
-    console.log('estado')
-    console.log(formLocalizacao.value)
     formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
     if (formLocalizacao.value) {
       dataEgresso.value.localizacao.cidade = ''
