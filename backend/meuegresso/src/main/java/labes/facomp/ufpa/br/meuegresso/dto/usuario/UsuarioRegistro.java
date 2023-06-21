@@ -1,12 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.dto.usuario;
 
-import java.util.Set;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
-import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +28,6 @@ public class UsuarioRegistro {
     @Pattern(regexp = "[0-9]{12}|$", message = "Informe uma matrícula válida.")
     private String registration;
 
-    @NotEmpty(message = "Informe um grupo")
-    private Set<Grupos> grupos;
+    // @NotEmpty(message = "Informe um grupo")
+    // private Set<Grupos> grupos;
 }
