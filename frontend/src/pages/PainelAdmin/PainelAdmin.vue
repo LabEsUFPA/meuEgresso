@@ -173,22 +173,7 @@
                 class="inline"
                 :path="mdiFileDocument"
               />
-
               Exportar dados em pdf
-            </button>
-          </div>
-          <div
-            v-if="user.scope !== 'SECRETARIO'"
-            class="border-b text-red-700 p-4 font-semibold text-left"
-          >
-            <button @click="deleteDialog">
-              <SvgIcon
-                type="mdi"
-                size="20"
-                class="inline"
-                :path="mdiTrashCan"
-              />
-              Apagar dados
             </button>
           </div>
         </div>
@@ -354,122 +339,6 @@
         </div>
       </div>
     </div>
-
-    <CustomDialog
-      @close="deleting = null"
-      v-model="modalOpen"
-    >
-      <div class="h-full pt-9 pb-5">
-        <div
-          class="flex flex-col justify-center items-center"
-          v-if="deleting === null"
-        >
-          <div class="block md:hidden">
-            <SvgIcon
-              type="mdi"
-              :path="mdiDeleteForever"
-              class="text-red-500 inline mb-2"
-              size="50"
-            />
-          </div>
-
-          <div class="hidden md:block">
-            <SvgIcon
-              type="mdi"
-              :path="mdiDeleteForever"
-              class="text-red-500 inline mb-2"
-              size="100"
-            />
-          </div>
-
-          <div class="text-center text-cyan-800 text-lg md:text-xl font-semibold mb-8">
-            Excluir todos os dados do sistema permanentemente?
-          </div>
-
-          <Form
-            :validation-schema="schema"
-            @submit="deleteAll"
-            v-slot="values"
-          >
-            <div class="text-center select-none">
-              {{ passPhrase }}
-            </div>
-
-            <CustomInput
-              name="passPhrase"
-              label="Insira a frase acima para confirmar"
-              placeholder="lorem ipsum dolor sit amet"
-              class="mb-3"
-            />
-
-            <div class="flex justify-center gap-5 md:gap-10">
-              <CustomButton
-                type="submit"
-                color="red"
-                :disabled="values.values?.passPhrase !== passPhrase"
-              >
-                Confirmar
-              </CustomButton>
-
-              <CustomButton
-                @click="modalOpen = false"
-                type="reset"
-                variant="flat"
-                color="red"
-              >
-                Cancelar
-              </CustomButton>
-            </div>
-          </Form>
-        </div>
-
-        <div
-          class="flex flex-col justify-around items-center h-full"
-          v-else-if="deleting === true"
-        >
-          <div class="text-red-700 text-2xl md:text-3xl font-semibold mb-10 md:mb-0">
-            Deletando
-          </div>
-
-          <SvgIcon
-            type="mdi"
-            size="100"
-            :path="mdiLoading"
-            class="inline text-cyan-800 animate-spin md:hidden"
-          />
-
-          <SvgIcon
-            type="mdi"
-            size="150"
-            :path="mdiLoading"
-            class="hidden text-cyan-800 animate-spin md:inline"
-          />
-        </div>
-
-        <div
-          class="flex flex-col justify-around items-center h-full"
-          v-else
-        >
-          <div class="text-cyan-800 text-2xl md:text-3xl font-semibold mb-10 md:mb-0">
-            Dados deletados
-          </div>
-
-          <SvgIcon
-            type="mdi"
-            size="100"
-            :path="mdiCheckCircle"
-            class="inline text-green-500 md:hidden"
-          />
-
-          <SvgIcon
-            type="mdi"
-            size="150"
-            :path="mdiCheckCircle"
-            class="hidden text-green-500 md:inline"
-          />
-        </div>
-      </div>
-    </CustomDialog>
   </div>
 </template>
 
@@ -484,12 +353,9 @@ import {
   mdiExitToApp,
   mdiEmail,
   mdiFileDocument,
-  mdiTrashCan,
   mdiCalendar,
   mdiClock,
   mdiLoading,
-  mdiDeleteForever,
-  mdiCheckCircle,
   mdiAccount
 } from '@mdi/js'
 import CustomButton from 'src/components/CustomButton.vue'
@@ -499,11 +365,6 @@ import AdminOptionsDropdown from 'src/components/AdminOptionsDropdown.vue'
 import { capitalize, ref, watch, computed, onMounted } from 'vue'
 import { usePainelStore } from 'src/store/PainelStore'
 import CustomBarGraph from 'src/components/CustomBarGraph.vue'
-import CustomDialog from 'src/components/CustomDialog.vue'
-import { object, string } from 'yup'
-import { Form } from 'vee-validate'
-import CustomInput from 'src/components/CustomInput.vue'
-import { faker } from '@faker-js/faker'
 import { useLoginStore } from 'src/store/LoginStore'
 import { useRouter } from 'vue-router'
 import LocalStorage from 'src/services/localStorage'
@@ -516,9 +377,6 @@ const selected = ref({
 
 type periodos = 'ano' | 'mes' | 'dia'
 const selectedString = ref<periodos>('ano')
-const modalOpen = ref(false)
-const passPhrase = ref('')
-const deleting = ref<true | false | null>(null)
 
 const $painelStore = usePainelStore()
 const $loginStore = useLoginStore()
@@ -542,22 +400,9 @@ const graphData = computed(() => ({
 
 const imageFlags = ref(new Map())
 
-function deleteDialog () {
-  modalOpen.value = true
-  passPhrase.value = capitalize(faker.lorem.words(4))
-}
-
 async function logout () {
   $loginStore.userLogout()
   await $router.push('/entrar')
-}
-
-async function deleteAll () {
-  deleting.value = true
-  const code = await $painelStore.deleteAll()
-  if (code === 200) {
-    deleting.value = false
-  }
 }
 
 type clickedTypes = keyof typeof selected.value
@@ -570,10 +415,6 @@ function handleSelect (clicked: string) {
     }
   })
 }
-
-const schema = object().shape({
-  passphrase: string()
-})
 
 onMounted(async () => {
   user.value = JSON.parse((new LocalStorage()).get('loggedUser'))
