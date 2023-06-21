@@ -39,6 +39,7 @@
           <SearchBar
             name="pesquisa"
             v-model="pesquisaValue"
+            :placeholder="'Pesquisar vaga'"
           />
 
           <div class="flex flex-col sm:flex-row w-full items-start gap-4 sm:gap-8">
@@ -96,7 +97,7 @@
             :titulo="anuncio.titulo"
             :area="anuncio.areaEmprego.nome"
             :descricao="anuncio.descricao"
-            :salario="formatCurrency(parseFloat(anuncio.salario))"
+            :salario="anuncio.salario"
           />
         </div>
       </div>
@@ -162,18 +163,16 @@ onMounted(async () => {
 
   loading.value = true
   watch(currentPage, () => {
-    $store.fetchBusca(currentPage.value, size.value)
+    $store.fetchBuscaAnuncio(pesquisaValue.value, filtersById.value, currentPage.value, size.value)
     window.scrollTo(0, 0)
   })
   watch(pesquisaValue, () => {
-    $store.fetchBuscaAnuncioTitulo(pesquisaValue.value, currentPage.value, size.value)
+    currentPage.value = 0
+    $store.fetchBuscaAnuncio(pesquisaValue.value, filtersById.value, currentPage.value, size.value)
   })
   watch(filtersById, () => {
-    if (filtersById.value.length > 0) {
-      $store.fetchBuscaAnuncioAreas(filtersById.value, currentPage.value, size.value)
-    } else {
-      $store.fetchBusca(currentPage.value, size.value)
-    }
+    currentPage.value = 0
+    $store.fetchBuscaAnuncio(pesquisaValue.value, filtersById.value, currentPage.value, size.value)
   })
 })
 
@@ -195,15 +194,6 @@ const toggleFilterApplied = (id:number) => {
 
 const applyFilters = (filters:any) => {
   filtersById.value = filters.map((elem: any) => (elem.id))
-}
-
-function formatCurrency (value:number) {
-  const formattedValue = value.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  })
-
-  return formattedValue
 }
 
 </script>

@@ -101,7 +101,7 @@
   </Form>
 
   <CustomDialog
-    v-model="submitSuccess"
+    :model-value="submitSuccess"
     @close="retornaFeed"
   >
     <div class="h-full flex justify-center items-center">

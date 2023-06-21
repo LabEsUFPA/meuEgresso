@@ -68,14 +68,14 @@
             <CustomInput
               class="mb-5"
               name="geral.linkedin"
-              label="Linkedin"
+              label="linkedIn"
               :icon-path="svgPath.linkedin"
             />
 
             <CustomInput
               label="Curriculo Lattes"
               name="geral.lattes"
-              icon-path="src/assets/lattesCinza.svg"
+              icon-path="/img/lattesCinza.svg"
               img-icon
             />
           </div>
@@ -102,7 +102,7 @@
               name="academico.matricula"
               label="Matrícula"
               mask="############"
-              placeholder="205004940001"
+              placeholder="Ex: 205004940001"
               :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
               custom-error-message
               @update:value="checkRegistrationLength"
@@ -157,7 +157,7 @@
               <CustomCheckbox
                 class="mb-5"
                 name="academico.cotista.tipos.quilombolaIndigena"
-                label="Quilombola/Indigena"
+                label="Quilombola/Indígena"
                 :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
@@ -176,7 +176,6 @@
                   !values.academico?.cotista?.tipos?.raca &&
                   !values.academico?.cotista?.tipos?.quilombolaIndigena &&
                   !values.academico?.cotista?.tipos?.pcd"
-
                 class="text-red-500 text-sm mt-1 position-absolute display-none"
               >
                 Marque pelo menos uma das opções acima!
@@ -237,7 +236,7 @@
 
             <CustomCheckbox
               name="academico.posGrad.desejaPos"
-              label="Desejo realizar pós graduação"
+              label="Desejo realizar pós-graduação"
               v-if="!bools.posGrad"
             />
           </div>
@@ -552,8 +551,8 @@ import { Form } from 'vee-validate'
 import { computed, onMounted, ref, watch } from 'vue'
 import { boolean, mixed, object, string } from 'yup'
 import VueScrollTo from 'vue-scrollto'
-const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
+const baseURL = 'https://egressos.computacao.ufpa.br/'
 const $storeCadastro = useCadastroEgressoStore()
 useLoginStore()
 const storage = new LocalStorage()
@@ -744,7 +743,7 @@ const schema = object().shape({
     }),
     nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
       if (value) {
-        return value?.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+\s*$/)
+        return value?.match(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/)
       }
 
       return (typeof value).constructor(true)
@@ -763,11 +762,11 @@ const schema = object().shape({
       }
       return true
     }),
-    email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/, 'Email inválido'),
+    email: string().email('Email inválido').required('Campo obrigatório').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.[a-zA-Z]{2,}))?$/, 'Email inválido'),
     genero: string().required('Campo obrigatório'),
     linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
       if (value) {
-        return value?.match(/https?:\/\/(?:www\.)?br\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/*/)
+        return value?.match(/\bhttps?:\/\/(?:www\.)?(?:br\.)?linkedin\.com\/in\/[\w-]+\/?\b/)
       }
 
       return (typeof value).constructor(true)

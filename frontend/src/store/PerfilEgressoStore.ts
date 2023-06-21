@@ -73,8 +73,6 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
 
       if (response?.status === 200) {
         this.tiposBolsa = response.data?.map((elem: any) => {
-          console.log(elem)
-
           return ({
             label: elem.nome,
             value: elem.id
@@ -90,8 +88,6 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
 
       if (response?.status === 200) {
         this.areasAtuacao = response.data?.map((elem: any) => {
-          console.log(elem)
-
           return ({
             label: elem.nome,
             value: elem.id
