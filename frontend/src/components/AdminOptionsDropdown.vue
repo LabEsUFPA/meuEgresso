@@ -168,7 +168,7 @@ const $store = usePainelStore()
 const $router = useRouter()
 const $login = useLoginStore()
 
-const userScope = ref($login.getLoggedUser()?.scope)
+const userScope = ref($login.getUserData()?.scope)
 const isConfirmationOpen = ref<true | false>(false)
 const isLoadingAction = ref<true | false | null>(null)
 const action = ref('')
