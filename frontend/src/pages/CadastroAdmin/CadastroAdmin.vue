@@ -1,4 +1,16 @@
 <template>
+  <OLoading
+    :full-page="true"
+    v-model:active="loading"
+    full-page-class="bg-white/[.25] backdrop-blur-[1px] z-50"
+  >
+    <SvgIcon
+      type="mdi"
+      size="80"
+      class="text-blue-400 animate-spin"
+      :path="mdiLoading"
+    />
+  </OLoading>
   <Form
     @submit="handleSubmit"
     @invalid-submit="onInvalid"
@@ -122,9 +134,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import CustomInput from 'src/components/CustomInput.vue'
-import { mdiAccount, mdiEmail, mdiLock } from '@mdi/js'
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiAccount, mdiEmail, mdiLock, mdiLoading } from '@mdi/js'
 import { Form } from 'vee-validate'
 import { object, string, ref as refYup } from 'yup'
+import { OLoading } from '@oruga-ui/oruga-next'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
@@ -142,6 +156,7 @@ const username = ref('')
 const showPassword = ref(false)
 const $store = useCadastroPerfilStore()
 const accessLevel = ref(useLoginStore().userData?.scope)
+const loading = ref(false)
 
 const schema = object().shape({
   nome: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
@@ -166,6 +181,7 @@ const mapAccessLevel = (accessLevel: string | undefined) => {
 const handleSubmit = async (submitData: any) => {
   const profileData: ProfileRegisterModel = submitData
 
+  loading.value = true
   const response = await $store.registrationByAdmin(
     profileData.username,
     profileData.password,
@@ -182,6 +198,7 @@ const handleSubmit = async (submitData: any) => {
     errorText.value = response.data.technicalMessage ? response.data.technicalMessage : 'Requisição não aceita.'
     error.value = true
   }
+  loading.value = false
 }
 
 const onInvalid = (e: any) => {
