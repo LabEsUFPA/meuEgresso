@@ -103,6 +103,7 @@
                 />
 
                 <CustomInput
+                  v-show="bools.multiDestinatario"
                   class="mb-5"
                   name="email"
                   type="text"
