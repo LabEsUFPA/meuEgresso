@@ -67,7 +67,7 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
     async fetchAreaEmprego () {
       const response = await Api.request({
         method: 'get',
-        route: '/areaemprego'
+        route: 'publico/areaemprego'
       })
 
       if (response?.status === 200) {

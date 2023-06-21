@@ -1037,7 +1037,7 @@ async function handleSubmitAcademico (values: any) {
     }
   }
 
-  jsonResponse.matricula = values.academico.matricula
+  jsonResponse.matricula = values.academico.matricula === '' ? null : values.academico.matricula
 
   jsonResponse.cotista = values.academico.cotista.value
 

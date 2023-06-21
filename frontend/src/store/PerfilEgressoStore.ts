@@ -83,7 +83,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
     async fetchAreaEmprego () {
       const response = await Api.request({
         method: 'get',
-        route: '/areaemprego'
+        route: 'publico/areaemprego'
       })
 
       if (response?.status === 200) {
