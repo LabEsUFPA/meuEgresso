@@ -106,7 +106,7 @@ export const usePainelStore = defineStore('Painel', {
       return response?.status != null ? response.status : 500
     },
 
-    async ativaUsuario (id: number) {
+    async toggleAtivacaoUsuario (id: number) {
       const response = await Api.request({
         method: 'put',
         route: `/administrador/usuario/${id}/ativo`
@@ -115,7 +115,7 @@ export const usePainelStore = defineStore('Painel', {
       return response?.status != null ? response.status : 500
     },
 
-    async validaUsuario (id: number) {
+    async toggleValidacaoUsuario (id: number) {
       const response = await Api.request({
         method: 'put',
         route: `/administrador/usuario/${id}/valido`
