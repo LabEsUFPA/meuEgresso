@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -37,6 +38,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 @SpringBootTest
 @DirtiesContext
@@ -46,125 +48,127 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 @TestMethodOrder(OrderAnnotation.class)
 class CotaControllerTest {
 
-    UsuarioModel usuarioModel;
+        @Autowired
+        MockMvc mockMvc;
 
-    CotaDTO cotaDTO;
+        String token;
 
-    String token;
+        UsuarioModel usuarioModel;
 
-    @Autowired
-    MockMvc mockMvc;
+        @Autowired
+        UsuarioRepository usuarioRepository;
 
-    @Autowired
-    ModelMapper modelMapper;
+        @Autowired
+        PasswordEncoder passwordEncoder;
 
-    ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+        CotaDTO cotaDTO;
 
-    @BeforeAll
-    void setUp() throws Exception {
+        @Autowired
+        ModelMapper modelMapper;
 
-        usuarioModel = new UsuarioModel();
-        usuarioModel.setUsername("username_test");
-        usuarioModel.setNome("nome_test");
-        usuarioModel.setEmail("teste@gmail.com");
-        usuarioModel.setPassword("teste123");
-        usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(usuarioModel)))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isCreated())
-                .andReturn();
+        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-        authenticationRequest.setUsername(usuarioModel.getUsername());
-        authenticationRequest.setPassword(usuarioModel.getPassword());
-        String objectJson = objectMapper.writeValueAsString(authenticationRequest);
+        @BeforeAll
+        void setUp() throws Exception {
 
-        MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectJson))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk())
-                .andReturn();
-        AuthenticationResponse authenticationResponse = objectMapper.readValue(
-                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
-        this.token = authenticationResponse.getToken();
+                usuarioModel = new UsuarioModel();
+                usuarioModel.setUsername("username_test");
+                usuarioModel.setNome("nome_test");
+                usuarioModel.setEmail("teste@gmail.com");
+                usuarioModel.setPassword("teste123");
+                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
-    }
+                final String plainTextPassword = "teste123";
+                final String encodedPassword = passwordEncoder.encode(plainTextPassword);
 
-    @Test
-    @Order(1)
-    void testCadastrarCota() throws Exception {
+                usuarioModel.setPassword(encodedPassword);
+                usuarioRepository.save(usuarioModel);
 
-        CotaDTO cotaDTO = new CotaDTO();
-        cotaDTO.setNome("cota1");
-        cotaDTO.setId(1);
+                AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+                authenticationRequest.setUsername(usuarioModel.getUsername());
+                authenticationRequest.setPassword(plainTextPassword);
 
-        MvcResult resposta = mockMvc.perform(
-            MockMvcRequestBuilders.post("/cota")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(cotaDTO))
-                        .header("Authorization", "Bearer " + this.token))
-                        .andDo(MockMvcResultHandlers.print())
-                        .andExpect(status().isCreated()).andReturn();
-        String retornoString = resposta.getResponse().getContentAsString();
-        assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
-    }
+                String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
-    @Test
-    @Order(2)
-    void testBuscarCotas() throws Exception{
+                MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectJson))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk())
+                                .andReturn();
+                AuthenticationResponse authenticationResponse = objectMapper.readValue(
+                                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
+                this.token = authenticationResponse.getToken();
 
-        MvcResult resposta = mockMvc.perform(
-                MockMvcRequestBuilders.get("/cota")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + this.token))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk()).andReturn();
+        }
 
-        List<CotaDTO> cotas = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-                new TypeReference<List<CotaDTO>>() {
-                });
+        @Test
+        @Order(1)
+        void testCadastrarCota() throws Exception {
 
-        cotaDTO = cotas.get(0);
-        assertNotNull(cotaDTO);
-    }
+                cotaDTO = CotaDTO.builder().nome("cota1").build();
 
-    @Test
-    @Order(3)
-    void testAtualizarCota() throws Exception{
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.post("/cota")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(objectMapper.writeValueAsString(cotaDTO))
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isCreated()).andReturn();
+                String retornoString = resposta.getResponse().getContentAsString();
+                assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
+        }
 
-        final String NOVO_NOME = "cota2222";
-        cotaDTO.setNome(NOVO_NOME);
+        @Test
+        @Order(2)
+        void testBuscarCotas() throws Exception {
 
-        MvcResult resposta = mockMvc.perform(
-                MockMvcRequestBuilders.put("/cota")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(cotaDTO))
-                        .header("Authorization", "Bearer " + this.token))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isAccepted()).andReturn();
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.get("/cota")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
 
-        String resp = resposta.getResponse().getContentAsString();
-        assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), resp);
+                List<CotaDTO> cotas = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                                new TypeReference<List<CotaDTO>>() {
+                                });
 
-    }
+                cotaDTO = cotas.get(0);
+                assertNotNull(cotaDTO);
+        }
 
-    @Test
-    @Order(4)
-    void testDeletarCota() throws Exception{
+        @Test
+        @Order(3)
+        void testAtualizarCota() throws Exception {
 
-        MvcResult resposta = mockMvc.perform(
-                MockMvcRequestBuilders.delete("/cota")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(
-                                cotaDTO))
-                        .header("Authorization", "Bearer " + this.token))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk()).andReturn();
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.put("/cota")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(objectMapper.writeValueAsString(cotaDTO))
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isAccepted()).andReturn();
 
-        String res = resposta.getResponse().getContentAsString();
-        assertEquals(res, ResponseType.SUCCESS_DELETE.getMessage());
-    }
+                String resp = resposta.getResponse().getContentAsString();
+                assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), resp);
+
+        }
+
+        @Test
+        @Order(4)
+        void testDeletarCota() throws Exception {
+
+                MvcResult resposta = mockMvc.perform(
+                                MockMvcRequestBuilders.delete("/cota")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(objectMapper.writeValueAsString(
+                                                                cotaDTO))
+                                                .header("Authorization", "Bearer " + this.token))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isOk()).andReturn();
+
+                String res = resposta.getResponse().getContentAsString();
+                assertEquals(res, ResponseType.SUCCESS_DELETE.getMessage());
+        }
 }

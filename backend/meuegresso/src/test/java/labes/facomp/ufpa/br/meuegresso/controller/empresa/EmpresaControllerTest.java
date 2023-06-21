@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -38,6 +39,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 @SpringBootTest
 @DirtiesContext
@@ -47,157 +49,162 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 @TestMethodOrder(OrderAnnotation.class)
 class EmpresaControllerTest {
 
-        static final String NOME = "EmpresaTeste";
-        static final String SETORATUACAO = "SetorTeste";
-        final String USERNAME = "username_test";
+	static final String NOME = "EmpresaTeste";
+	static final String SETORATUACAO = "SetorTeste";
+	final String USERNAME = "username_test";
 
-        @Autowired
-        MockMvc mockMvc;
+	@Autowired
+	MockMvc mockMvc;
 
-        String token;
+	String token;
 
-        UsuarioModel usuarioModel;
+	UsuarioModel usuarioModel;
 
-        EmpresaDTO empresaDTO;
+	@Autowired
+	UsuarioRepository usuarioRepository;
 
-        @Autowired
-        ModelMapper modelMapper;
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+	EmpresaDTO empresaDTO;
 
-        @BeforeAll
-        void setUp() throws Exception {
+	@Autowired
+	ModelMapper modelMapper;
 
-                usuarioModel = new UsuarioModel();
-                usuarioModel.setUsername(USERNAME);
-                usuarioModel.setNome("nome_test");
-                usuarioModel.setEmail("teste@gmail.com");
-                usuarioModel.setPassword("teste123");
-                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+	ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-                mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(usuarioModel)))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isCreated())
-                                .andReturn();
+	@BeforeAll
+	void setUp() throws Exception {
 
-                AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-                authenticationRequest.setUsername(usuarioModel.getUsername());
-                authenticationRequest.setPassword(usuarioModel.getPassword());
-                String objectJson = objectMapper.writeValueAsString(authenticationRequest);
+		usuarioModel = new UsuarioModel();
+		usuarioModel.setUsername(USERNAME);
+		usuarioModel.setNome("nome_test");
+		usuarioModel.setEmail("teste@gmail.com");
+		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
-                MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectJson))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk())
-                                .andReturn();
+		final String plainTextPassword = "teste123";
+		final String encodedPassword = passwordEncoder.encode(plainTextPassword);
 
-                AuthenticationResponse authenticationResponse = objectMapper.readValue(
-                                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
-                this.token = authenticationResponse.getToken();
+		usuarioModel.setPassword(encodedPassword);
+		usuarioRepository.save(usuarioModel);
 
-                MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.get("/usuario")
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk()).andReturn();
+		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+		authenticationRequest.setUsername(usuarioModel.getUsername());
+		authenticationRequest.setPassword(plainTextPassword);
 
-                UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-                                UsuarioAuthDTO.class);
+		String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
-                usuarioModel.setId(usuarioAuthDTO.getId());
+		MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectJson))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk())
+				.andReturn();
 
-        }
+		AuthenticationResponse authenticationResponse = objectMapper.readValue(
+				resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
+		this.token = authenticationResponse.getToken();
 
-        @Test
-        @Order(1)
-        void testCadastrarEmpresa() throws Exception {
+		MvcResult resposta = mockMvc.perform(
+				MockMvcRequestBuilders.get("/usuario")
+						.contentType(MediaType.APPLICATION_JSON)
+						.header("Authorization", "Bearer " + this.token))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk()).andReturn();
 
-                empresaDTO = EmpresaDTO.builder()
-                                .id(1)
-                                .nome(NOME)
-                                .setorAtuacao(SETORATUACAO)
-                                .build();
+		UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+				UsuarioAuthDTO.class);
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/empresa")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer " + this.token)
-                                .content(objectMapper.writeValueAsString(empresaDTO)))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isCreated())
-                                .andReturn();
+		usuarioModel.setId(usuarioAuthDTO.getId());
 
-                String retornoString = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
-        }
+	}
 
-        @Test
-        @Order(2)
-        void testFindById() throws Exception {
+	@Test
+	@Order(1)
+	void testCadastrarEmpresa() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/empresa/" + 1)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk()).andReturn();
+		empresaDTO = EmpresaDTO.builder()
+				.id(1)
+				.nome(NOME)
+				.setorAtuacao(SETORATUACAO)
+				.build();
 
-                empresaDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-                                EmpresaDTO.class);
+		MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/empresa")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + this.token)
+				.content(objectMapper.writeValueAsString(empresaDTO)))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isCreated())
+				.andReturn();
 
-                assertEquals(NOME, empresaDTO.getNome());
-                // assertEquals(SETORATUACAO, empresaDTO.getSetorAtuacao());
+		String retornoString = resposta.getResponse().getContentAsString();
+		assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
+	}
 
-        }
+	@Test
+	@Order(2)
+	void testFindById() throws Exception {
 
-        @Test
-        @Order(3)
-        void testConsultarEmpresas() throws Exception {
+		MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/empresa/" + 1)
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + this.token))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk()).andReturn();
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/empresa")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk()).andReturn();
-                List<EmpresaDTO> empresasDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-                                new TypeReference<List<EmpresaDTO>>() {
-                                });
+		empresaDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+				EmpresaDTO.class);
 
-                assertNotNull(empresasDTO);
+		assertEquals(NOME, empresaDTO.getNome());
+		// assertEquals(SETORATUACAO, empresaDTO.getSetorAtuacao());
 
-        }
+	}
 
-        @Test
-        @Order(4)
-        void testAtualizarEmpresa() throws Exception {
+	@Test
+	@Order(3)
+	void testConsultarEmpresas() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.put("/empresa")
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .content(objectMapper.writeValueAsString(empresaDTO))
-                                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isCreated())
-                                .andReturn();
-                String retornoString = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
-        }
+		MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/empresa")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + this.token))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk()).andReturn();
+		List<EmpresaDTO> empresasDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+				new TypeReference<List<EmpresaDTO>>() {
+				});
 
-        @Test
-        @Order(5)
-        void testDeleteById() throws Exception {
+		assertNotNull(empresasDTO);
 
-                MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.delete("/empresa/" + empresaDTO.getId())
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk())
-                                .andReturn();
-                String resultado = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCCESS_DELETE.getMessage(), resultado);
+	}
 
-        }
+	@Test
+	@Order(4)
+	void testAtualizarEmpresa() throws Exception {
+
+		MvcResult resposta = mockMvc.perform(
+				MockMvcRequestBuilders.put("/empresa")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(empresaDTO))
+						.header("Authorization", "Bearer " + this.token))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isCreated())
+				.andReturn();
+		String retornoString = resposta.getResponse().getContentAsString();
+		assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
+	}
+
+	@Test
+	@Order(5)
+	void testDeleteById() throws Exception {
+
+		MvcResult resposta = mockMvc.perform(
+				MockMvcRequestBuilders.delete("/empresa/" + empresaDTO.getId())
+						.contentType(MediaType.APPLICATION_JSON)
+						.header("Authorization", "Bearer " + this.token))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk())
+				.andReturn();
+		String resultado = resposta.getResponse().getContentAsString();
+		assertEquals(ResponseType.SUCCESS_DELETE.getMessage(), resultado);
+
+	}
 }

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -37,6 +38,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 @SpringBootTest
 @DirtiesContext
@@ -45,6 +47,8 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 class GeneroControllerTest {
+
+	final String USERNAME = "username_test";
 
 	@Autowired
 	MockMvc mockMvc;
@@ -56,27 +60,34 @@ class GeneroControllerTest {
 
 	ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
+	UsuarioModel usuarioModel;
+
+	@Autowired
+	UsuarioRepository usuarioRepository;
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
 	GeneroDTO genero;
 
 	@BeforeAll
 	void setUp() throws Exception {
 
-		UsuarioModel usuarioModel = new UsuarioModel();
-		usuarioModel.setUsername("username");
+		usuarioModel = new UsuarioModel();
+		usuarioModel.setUsername(USERNAME);
 		usuarioModel.setNome("nome_test");
 		usuarioModel.setEmail("teste@gmail.com");
-		usuarioModel.setPassword("teste123");
 		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
-		mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(usuarioModel)))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isCreated())
-				.andReturn();
+
+		final String plainTextPassword = "teste123";
+		final String encodedPassword = passwordEncoder.encode(plainTextPassword);
+
+		usuarioModel.setPassword(encodedPassword);
+		usuarioRepository.save(usuarioModel);
 
 		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
 		authenticationRequest.setUsername(usuarioModel.getUsername());
-		authenticationRequest.setPassword(usuarioModel.getPassword());
+		authenticationRequest.setPassword(plainTextPassword);
 		String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
 		MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")

@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -43,6 +44,7 @@ import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 @SpringBootTest
 @DirtiesContext
@@ -70,6 +72,12 @@ class ContribuicaoControllerTest {
 
         ContribuicaoDTO contribuicaoDTO;
 
+        @Autowired
+        UsuarioRepository usuarioRepository;
+
+        @Autowired
+        PasswordEncoder passwordEncoder;
+
         EgressoModel egresso;
 
         @Autowired
@@ -80,23 +88,22 @@ class ContribuicaoControllerTest {
         @BeforeAll
         void setUp() throws Exception {
 
+                final String senha = "teste123";
+
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
                 usuarioModel.setNome("nome_test");
                 usuarioModel.setEmail("teste@gmail.com");
-                usuarioModel.setPassword("teste123");
+                usuarioModel.setPassword(senha);
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
-                mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(usuarioModel)))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isCreated())
-                                .andReturn();
+                usuarioModel.setPassword(passwordEncoder.encode(usuarioModel.getPassword()));
+
+                usuarioRepository.save(usuarioModel);
 
                 AuthenticationRequest authenticationRequest = new AuthenticationRequest();
                 authenticationRequest.setUsername(usuarioModel.getUsername());
-                authenticationRequest.setPassword(usuarioModel.getPassword());
+                authenticationRequest.setPassword(senha);
                 String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
                 MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")

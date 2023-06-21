@@ -57,7 +57,7 @@ public class FaixaSalarialController {
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public List<FaixaSalarialDTO> buscarFaixaSalarials() {
+    public List<FaixaSalarialDTO> buscarFaixaSalarial() {
 
         return mapper.map(faixaSalarialService.findAll(), new TypeToken<List<FaixaSalarialDTO>>() {
         }.getType());

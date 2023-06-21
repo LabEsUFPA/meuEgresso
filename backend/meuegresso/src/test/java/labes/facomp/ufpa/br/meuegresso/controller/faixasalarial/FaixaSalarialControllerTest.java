@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,10 +34,12 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 import labes.facomp.ufpa.br.meuegresso.service.faixasalarial.FaixaSalarialService;
 
 @SpringBootTest
@@ -46,135 +50,156 @@ import labes.facomp.ufpa.br.meuegresso.service.faixasalarial.FaixaSalarialServic
 @TestMethodOrder(OrderAnnotation.class)
 class FaixaSalarialControllerTest {
 
-        static final String FAIXA = "2000-3000";
-        final String USERNAME = "username_test";
+	static final String FAIXA = "2000-3000";
+	final String USERNAME = "username_test";
 
-        @Autowired
-        private FaixaSalarialService faixaSalarialService;
+	@Autowired
+	private FaixaSalarialService faixaSalarialService;
 
-        @Autowired
-        MockMvc mockMvc;
+	@Autowired
+	MockMvc mockMvc;
 
-        String token;
+	String token;
 
-        UsuarioModel usuarioModel;
+	UsuarioModel usuarioModel;
 
-        FaixaSalarialModel faixaSalarialModel;
+	@Autowired
+	UsuarioRepository usuarioRepository;
 
-        FaixaSalarialModel faixaSalarialModel2;
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
-        FaixaSalarialDTO faixaSalarialDTO;
+	FaixaSalarialModel faixaSalarialModel;
 
-        @Autowired
-        ModelMapper modelMapper;
+	FaixaSalarialModel faixaSalarialModel2;
 
-        ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+	FaixaSalarialDTO faixaSalarialDTO;
 
-        @BeforeAll
-        void setUp() throws Exception {
+	@Autowired
+	ModelMapper modelMapper;
 
-                faixaSalarialModel = FaixaSalarialModel.builder()
-                                .faixa(FAIXA)
-                                .build();
+	ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-                usuarioModel = new UsuarioModel();
-                usuarioModel.setUsername(USERNAME);
-                usuarioModel.setNome("nome_test");
-                usuarioModel.setEmail("teste@gmail.com");
-                usuarioModel.setPassword("teste123");
-                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+	@BeforeAll
+	void setUp() throws Exception {
 
-                mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(usuarioModel)))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isCreated())
-                                .andReturn();
+		faixaSalarialModel = FaixaSalarialModel.builder()
+				.faixa(FAIXA)
+				.build();
 
-                AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-                authenticationRequest.setUsername(usuarioModel.getUsername());
-                authenticationRequest.setPassword(usuarioModel.getPassword());
-                String objectJson = objectMapper.writeValueAsString(authenticationRequest);
+		usuarioModel = new UsuarioModel();
+		usuarioModel.setUsername(USERNAME);
+		usuarioModel.setNome("nome_test");
+		usuarioModel.setEmail("teste@gmail.com");
+		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
-                MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectJson))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk())
-                                .andReturn();
+		final String plainTextPassword = "teste123";
+		final String encodedPassword = passwordEncoder.encode(plainTextPassword);
 
-                AuthenticationResponse authenticationResponse = objectMapper.readValue(
-                                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
-                this.token = authenticationResponse.getToken();
+		usuarioModel.setPassword(encodedPassword);
+		usuarioRepository.save(usuarioModel);
 
-                faixaSalarialModel = faixaSalarialService.save(faixaSalarialModel);
-        }
+		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+		authenticationRequest.setUsername(usuarioModel.getUsername());
+		authenticationRequest.setPassword(plainTextPassword);
 
-        @Test
-        void testCadastrarFaixaSalarial() throws Exception {
+		String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/faixaSalarial")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer " + this.token)
-                                .content(objectMapper.writeValueAsString(faixaSalarialModel)))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isCreated())
-                                .andReturn();
+		MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectJson))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk())
+				.andReturn();
 
-                String retornoString = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
-        }
+		AuthenticationResponse authenticationResponse = objectMapper.readValue(
+				resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
 
+		this.token = authenticationResponse.getToken();
 
-        @Test
-        void testConsultarFaixaSalarials() throws Exception {
+		MvcResult resposta = mockMvc.perform(
+				MockMvcRequestBuilders.get("/usuario")
+						.contentType(MediaType.APPLICATION_JSON)
+						.header("Authorization", "Bearer " + this.token))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk()).andReturn();
 
-                MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/faixaSalarial")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk()).andReturn();
-                List<FaixaSalarialDTO> faixaSalarialsDTO = objectMapper.readValue(
-                                resposta.getResponse().getContentAsString(),
-                                new TypeReference<List<FaixaSalarialDTO>>() {
-                                });
+		UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+				UsuarioAuthDTO.class);
 
-                List<FaixaSalarialDTO> faixaSalarialsDTO2 = modelMapper.map(faixaSalarialService.findAll(),
-                                new TypeReference<List<FaixaSalarialDTO>>() {
-                                }.getType());
-                assertEquals(faixaSalarialsDTO2, faixaSalarialsDTO);
+		usuarioModel.setId(usuarioAuthDTO.getId());
 
-        }
+		faixaSalarialModel = faixaSalarialService.save(faixaSalarialModel);
+	}
 
-        @Test
-        void testAtualizarFaixaSalarial() throws Exception {
+	@Test
+	@Order(1)
+	void testCadastrarFaixaSalarial() throws Exception {
 
-                FaixaSalarialDTO faixaSalarialDTO = modelMapper.map(faixaSalarialModel, FaixaSalarialDTO.class);
+		MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/faixaSalarial")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + this.token)
+				.content(objectMapper.writeValueAsString(faixaSalarialModel)))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isCreated())
+				.andReturn();
 
-                MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.put("/faixaSalarial")
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .content(objectMapper.writeValueAsString(faixaSalarialDTO))
-                                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isCreated())
-                                .andReturn();
-                String retornoString = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
-        }
+		String retornoString = resposta.getResponse().getContentAsString();
+		assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
+	}
 
-        @Test
-        void testDeleteById() throws Exception {
+	@Test
+	@Order(2)
+	void testConsultarFaixaSalarials() throws Exception {
 
-                MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.delete("/faixaSalarial/" + faixaSalarialModel.getId())
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk())
-                                .andReturn();
-                String resultado = resposta.getResponse().getContentAsString();
-                assertEquals(ResponseType.SUCCESS_DELETE.getMessage(), resultado);
+		MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/faixaSalarial")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + this.token))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk()).andReturn();
+		List<FaixaSalarialDTO> faixaSalarialsDTO = objectMapper.readValue(
+				resposta.getResponse().getContentAsString(),
+				new TypeReference<List<FaixaSalarialDTO>>() {
+				});
 
-        }
+		List<FaixaSalarialDTO> faixaSalarialsDTO2 = modelMapper.map(faixaSalarialService.findAll(),
+				new TypeReference<List<FaixaSalarialDTO>>() {
+				}.getType());
+		assertEquals(faixaSalarialsDTO2, faixaSalarialsDTO);
+
+	}
+
+	@Test
+	@Order(3)
+	void testAtualizarFaixaSalarial() throws Exception {
+
+		FaixaSalarialDTO faixaSalarialDTO = modelMapper.map(faixaSalarialModel, FaixaSalarialDTO.class);
+
+		MvcResult resposta = mockMvc.perform(
+				MockMvcRequestBuilders.put("/faixaSalarial")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(faixaSalarialDTO))
+						.header("Authorization", "Bearer " + this.token))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isCreated())
+				.andReturn();
+		String retornoString = resposta.getResponse().getContentAsString();
+		assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
+	}
+
+	@Test
+	@Order(4)
+	void testDeleteById() throws Exception {
+
+		MvcResult resposta = mockMvc.perform(
+				MockMvcRequestBuilders.delete("/faixaSalarial/" + faixaSalarialModel.getId())
+						.contentType(MediaType.APPLICATION_JSON)
+						.header("Authorization", "Bearer " + this.token))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk())
+				.andReturn();
+		String resultado = resposta.getResponse().getContentAsString();
+		assertEquals(ResponseType.SUCCESS_DELETE.getMessage(), resultado);
+
+	}
 }

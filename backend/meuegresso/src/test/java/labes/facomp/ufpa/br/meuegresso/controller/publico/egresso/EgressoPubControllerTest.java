@@ -67,7 +67,7 @@ class EgressoPubControllerTest {
 	@BeforeAll
 	void setUp() throws Exception {
 		GeneroDTO genero = new GeneroDTO(1, "TRANSSEXUAL");
-		DepoimentoDTO depoimento = new DepoimentoDTO(1, "TextoDepoimento");
+		DepoimentoDTO depoimento = new DepoimentoDTO(1, "TextoDepoimento", null);
 		ContribuicaoDTO contribuicao = new ContribuicaoDTO();
 		contribuicao.setId(1);
 		contribuicao.setDescricao("TextoContribuicao");

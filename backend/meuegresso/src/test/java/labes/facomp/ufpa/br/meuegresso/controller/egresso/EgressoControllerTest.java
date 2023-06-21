@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,13 +44,11 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
-import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 
 @SpringBootTest
 @DirtiesContext
@@ -68,18 +65,12 @@ class EgressoControllerTest extends Configuracao {
         private GeneroRepository generoRepository;
 
         @Autowired
-        MockMvc mockMvc;
+        MockMvc mockMvc;        
 
-        @Autowired
-        ModelMapper modelMapper;
-
-        EgressoService egressoService;
-
+        
         EgressoDTO egressoDTO;
 
         String token;
-
-        EgressoModel egressoModel;
 
         UsuarioModel usuarioModel;
 

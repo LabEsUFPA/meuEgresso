@@ -24,4 +24,5 @@ public class PalestraDTO {
     @NotBlank(message = "Insira a descrição dos topicos que você pode abordar na palestra.")
     private String descricao;
 
+    private Integer egressoId;
 }
