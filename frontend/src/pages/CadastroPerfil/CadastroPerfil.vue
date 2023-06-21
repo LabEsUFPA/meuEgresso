@@ -1,4 +1,17 @@
 <template>
+  <OLoading
+    :full-page="true"
+    v-model:active="loading"
+    full-page-class="bg-white/[.25] backdrop-blur-[1px] z-50"
+    :can-cancel="true"
+  >
+    <SvgIcon
+      type="mdi"
+      size="80"
+      class="text-blue-400 animate-spin"
+      :path="mdiLoading"
+    />
+  </OLoading>
   <Form
     @submit="handleSubmit"
     @invalid-submit="onInvalid"
@@ -20,8 +33,8 @@
           <p class="text-blue-400 text-base text-center font-bold mb-5">
             Preencha os campos abaixo
           </p>
-          <div class="flex flex-col gap-y-5 mb-4">
-            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
+          <div class="flex flex-col gap-y-2 mb-4">
+            <div class="flex flex-col gap-x-6 gap-y-2 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 name="name"
                 label="Nome Completo"
@@ -38,7 +51,7 @@
                 :icon-path="mdiAccount"
               />
             </div>
-            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
+            <div class="flex flex-col gap-x-6 gap-y-2 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 name="registration"
                 type="text"
@@ -60,7 +73,7 @@
                 :icon-path="mdiEmail"
               />
             </div>
-            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
+            <div class="flex flex-col gap-x-6 gap-y-2 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 name="password"
                 label="Senha"
@@ -126,13 +139,15 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import CustomInput from 'src/components/CustomInput.vue'
-import { mdiAccount, mdiSchool, mdiEmail, mdiLock } from '@mdi/js'
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiAccount, mdiSchool, mdiEmail, mdiLock, mdiLoading } from '@mdi/js'
 import { Form } from 'vee-validate'
 import { object, string, ref as refYup } from 'yup'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
+import { OLoading } from '@oruga-ui/oruga-next'
 import router from 'src/router'
 import { useLoginStore } from 'src/store/LoginStore'
 import { models } from 'src/@types'
@@ -145,6 +160,7 @@ const storeLogin = useLoginStore()
 const missingDigits = ref(0)
 const showPassword = ref(false)
 const $store = useCadastroPerfilStore()
+const loading = ref(true)
 
 const schema = object().shape({
   name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
@@ -165,7 +181,7 @@ const toggleShowPassword = () => {
 
 const handleSubmit = async (submitData: any) => {
   const profileData: ProfileRegisterModel = submitData
-
+  loading.value = true
   const response = await $store.userProfileRegister(
     profileData.username,
     profileData.password,
@@ -178,12 +194,14 @@ const handleSubmit = async (submitData: any) => {
     submitSuccess.value = true
     await storeLogin.userLogin(profileData.username, profileData.password, true)
     await router.push({ path: '/cadastro' })
-  } else if (response.status === 400) {
-    errorText.value = response.data?.technicalMessage
+  } else if (response.status !== 201) {
+    if (response.data?.technicalMessage) {
+      errorText.value = response.data.technicalMessage
+    } else {
+      errorText.value = 'Requisição não aceita'
+    }
     error.value = true
-  } else {
-    errorText.value = 'Requisição não aceita'
-    error.value = true
+    loading.value = false
   }
 }
 
