@@ -148,8 +148,8 @@ const schema = object().shape({
   username: string().required('Informe um nome de usuário').trim().matches(/^[A-Za-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
   email: string().required('Informe um email').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))/, 'Email inválido'),
   confirmationEmail: string().email().required('Confirme o email').oneOf([refYup('email')], 'Os e-mails informados são diferentes'),
-  password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
-  confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
+  password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida'),
+  confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida'),
   accessLevel: string().required('Selecione o nível de acesso')
 })
 
