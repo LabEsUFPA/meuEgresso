@@ -27,8 +27,8 @@
           <h1 class=" absolute flex flex-auto top-[15px] right-[10px] sm:right-[20%]">
             <ButtonEdit
               label="Editar"
-              icon-path="/src/assets/edit.svg"
-              icon-path2="/src/assets/wcheck.svg"
+              icon-path="/img/edit.svg"
+              icon-path2="/img/wcheck.svg"
               color="whitesky"
               color2="emerald"
               @toggle="toggleIsInput('profileHead')"
@@ -45,7 +45,7 @@
                 @image-upload-back="profileImageSave"
                 @remove="softRemoveImageEgresso"
                 :img-url="dataEgresso.profileHead.image"
-                img-default="/src/assets/profile-pic.png"
+                img-default="/img/profile-pic.png"
                 :is-input="dataEgresso.profileHead.isInput"
                 :trigger-back-upload="dataEgresso.profileHead.isInput"
               />
@@ -82,8 +82,8 @@
               class="items-start flex justify-center mt-8 relative gap-[10px]"
             >
               <CustomButtonLink
-                label="linkedIn"
-                icon-path="/src/assets/linkedin-icon.svg"
+                label="LinkedIn"
+                icon-path="/img/linkedin-icon.svg"
                 :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
                 color="whitesky"
@@ -93,7 +93,7 @@
 
               <CustomButtonLink
                 label="Lattes"
-                icon-path="/src/assets/lattesP.svg"
+                icon-path="/img/lattesP.svg"
                 :url="dataEgresso.profileHead.lattes"
                 placeholder="https://lattes.cnpq.br/"
                 color="whitesky"
@@ -106,7 +106,7 @@
               class="items-start flex justify-center mt-8 relative gap-[10px]"
             >
               <CustomButtonLink
-                label="linkedIn"
+                label="LinkedIn"
                 icon-path="/src/assets/linkedin-icon.svg"
                 :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
@@ -168,8 +168,8 @@
               <h1 class="relative">
                 <ButtonEdit
                   label="Editar"
-                  icon-path="/src/assets/edit.svg"
-                  icon-path2="/src/assets/wcheck.svg"
+                  icon-path="/img/edit.svg"
+                  icon-path2="/img/wcheck.svg"
                   color="invisiblesky"
                   color2="emerald"
                   classimg="sky-600"
@@ -268,8 +268,8 @@
               <h1 class="relative">
                 <ButtonEdit
                   label="Editar"
-                  icon-path="/src/assets/edit.svg"
-                  icon-path2="/src/assets/wcheck.svg"
+                  icon-path="/img/edit.svg"
+                  icon-path2="/img/wcheck.svg"
                   color="invisiblesky"
                   color2="emerald"
                   classimg="sky-600"
@@ -438,14 +438,13 @@
                     Marque pelo menos uma das opções acima!
                   </p>
                 </div>
-
+                
                 <CustomCheckbox
                   class="mb-5"
                   name="academico.bolsista.value"
                   label="Bolsista"
                   v-model:value="bools.bolsista"
                 />
-
                 <CustomSelect
                   class="mb-5"
                   name="academico.bolsista.tipo"
@@ -516,8 +515,8 @@
                 <h1 class="relative">
                   <ButtonEdit
                     label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    icon-path2="/src/assets/wcheck.svg"
+                    icon-path="/img/edit.svg"
+                    icon-path2="/img/wcheck.svg"
                     color="invisiblesky"
                     color2="emerald"
                     classimg="sky-600"
@@ -587,8 +586,8 @@
                 <h1 class="relative">
                   <ButtonEdit
                     label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    icon-path2="/src/assets/wcheck.svg"
+                    icon-path="/img/edit.svg"
+                    icon-path2="/img/wcheck.svg"
                     color="invisiblesky"
                     color2="emerald"
                     classimg="sky-600"
@@ -713,8 +712,8 @@
                 <h1 class="relative">
                   <ButtonEdit
                     label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    icon-path2="/src/assets/wcheck.svg"
+                    icon-path="/img/edit.svg"
+                    icon-path2="/img/wcheck.svg"
                     color="invisiblesky"
                     color2="emerald"
                     classimg="sky-600"
@@ -1330,9 +1329,7 @@ async function fetchUpdateEgresso () {
   // Cotas
   let cotasEgresso = ''
   imageEgressoUrl = await handleEgressoImage(json.id)
-
   console.log('cotas')
-
   const tiposCotasList = $store.tiposCota
   console.log(tiposCotasList)
   console.log(json.cotas)
