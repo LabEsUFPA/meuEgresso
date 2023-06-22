@@ -73,9 +73,9 @@
             />
 
             <CustomInput
-              label="Currículo Lattes"
+              label="Curriculo Lattes"
               name="geral.lattes"
-              icon-path="src/assets/lattesCinza.svg"
+              icon-path="/img/lattesCinza.svg"
               img-icon
             />
           </div>
@@ -176,7 +176,6 @@
                   !values.academico?.cotista?.tipos?.raca &&
                   !values.academico?.cotista?.tipos?.quilombolaIndigena &&
                   !values.academico?.cotista?.tipos?.pcd"
-
                 class="text-red-500 text-sm mt-1 position-absolute display-none"
               >
                 Marque pelo menos uma das opções acima!
@@ -552,8 +551,8 @@ import { Form } from 'vee-validate'
 import { computed, onMounted, ref, watch } from 'vue'
 import { boolean, mixed, object, string } from 'yup'
 import VueScrollTo from 'vue-scrollto'
-const baseURL = import.meta.env.VITE_API_URL_LOCAL
 
+const baseURL = 'https://egressos.computacao.ufpa.br/'
 const $storeCadastro = useCadastroEgressoStore()
 useLoginStore()
 const storage = new LocalStorage()
@@ -767,7 +766,7 @@ const schema = object().shape({
     genero: string().required('Campo obrigatório'),
     linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
       if (value) {
-        return value?.match(/https?:\/\/(?:www\.)?br\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/*/)
+        return value?.match(/\bhttps?:\/\/(?:www\.)?(?:br\.)?linkedin\.com\/in\/[\w-]+\/?\b/)
       }
 
       return (typeof value).constructor(true)
