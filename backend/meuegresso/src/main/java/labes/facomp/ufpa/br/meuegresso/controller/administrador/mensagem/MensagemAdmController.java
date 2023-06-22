@@ -125,7 +125,7 @@ public class MensagemAdmController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public String deleteById(@PathVariable(name = "id") Integer id) {
 		if (mailService.deleteById(id)) {
-			if(mailService.findAll().isEmpty()){
+			if(mailService.findAll().isEmpty() && !agendamentoService.getTasks().isEmpty()){
 				agendamentoService.removeScheduledTask();
 			}
 			return ResponseType.SUCCESS_DELETE.getMessage();
@@ -149,7 +149,7 @@ public class MensagemAdmController {
 	public String save(@RequestBody @Valid MensagemDTO mensagemDTO) {
 		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
 		mensagemModel.setDataEnviada(mensagemModel.getDataEnvio());
-		if(mailService.findAll().isEmpty()){
+		if(mailService.findAll().isEmpty() || agendamentoService.getTasks().isEmpty()){
 			agendamentoService.setScheduleATask(agendamentoServiceImpl);
 		}
 		mailService.save(mensagemModel);

@@ -163,32 +163,9 @@ public class AgendamentoServiceImpl implements AgendamentoService, Runnable {
 
     @Override
     public void setScheduleATask(Runnable tasklet) {
-        ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger("0 */5 * * * *"));
+        ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger("0 */2 * * * *"));
         String jobId = String.valueOf(1);
         taskList.put(jobId, scheduledTask);
-        /*
-         * String cronExpression = toCron(String.valueOf(0),
-         * String.valueOf(dateTime.getMinute()),
-         * String.valueOf(dateTime.getHour()),
-         * String.valueOf(dateTime.getDayOfMonth()),
-         * String.valueOf(dateTime.getMonth().getValue()));
-         * if (frequente) {
-         * cronExpression = toCron(String.valueOf(0),
-         * String.valueOf(dateTime.getMinute()),
-         * String.valueOf(dateTime.getHour()),
-         * String.valueOf(dateTime.getDayOfMonth()),
-         * String.valueOf(dateTime.getMonth().getValue()));
-         * ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new
-         * CronTrigger(cronExpression));
-         * String jobId = String.valueOf(mensagemModel.getId());
-         * taskList.put(jobId, scheduledTask);
-         * } else {
-         * ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new
-         * CronTrigger(cronExpression));
-         * String jobId = String.valueOf(mensagemModel.getEscopo());
-         * taskList.put(jobId, scheduledTask);
-         * }
-         */
     }
 
     @Override
@@ -199,23 +176,6 @@ public class AgendamentoServiceImpl implements AgendamentoService, Runnable {
             scheduledTask.cancel(true);
             taskList.remove(mensagemId, scheduledTask);
         }
-        /*
-         * if (mensagemModel.getEmail() != null) {
-         * String mensagemEmail = mensagemModel.getEscopo();
-         * ScheduledFuture<?> scheduledTask = taskList.get(mensagemEmail);
-         * if (scheduledTask != null) {
-         * scheduledTask.cancel(true);
-         * taskList.remove(mensagemEmail, scheduledTask);
-         * }
-         * } else {
-         * String mensagemId = String.valueOf(mensagemModel.getId());
-         * ScheduledFuture<?> scheduledTask = taskList.get(mensagemId);
-         * if (scheduledTask != null) {
-         * scheduledTask.cancel(true);
-         * taskList.remove(mensagemId, scheduledTask);
-         * }
-         * }
-         */
     }
 
     @Override
