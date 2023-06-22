@@ -183,7 +183,7 @@ public class EgressoAdmController {
      */
     @PutMapping(value = "/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
-    @ResponseStatus(code = HttpStatus.OK)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(@PathVariable Integer id,
             @RequestBody EgressoAttDTO egresso) throws InvalidRequestException {
