@@ -188,7 +188,7 @@ public class EgressoAdmController {
     public String atualizarEgresso(@PathVariable Integer id,
             @RequestBody EgressoAttDTO egresso) throws InvalidRequestException {
 
-        UsuarioModel user = usuarioService.findById(egresso.getUsuarioId());
+        UsuarioModel user = usuarioService.findById(egresso.getUsuario().getId());
         if (!user.getGrupos().contains(Grupos.EGRESSO)) {
             throw new InvalidRequestException();
         }
