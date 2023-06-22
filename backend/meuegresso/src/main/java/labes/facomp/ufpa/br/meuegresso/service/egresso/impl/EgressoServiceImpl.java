@@ -10,11 +10,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -284,34 +284,43 @@ public class EgressoServiceImpl implements EgressoService {
 	public Map<LocalDate, Long> countEgressoPorData() {
 		List<Tuple> cadastros = egressoRepository.countEgressoData();
 
-		return cadastros.stream()
+		var result = cadastros.stream()
 				.collect(Collectors.toMap(
 						tuple -> tuple.get(0, java.sql.Date.class).toLocalDate(),
 						tuple -> tuple.get(1, Long.class)));
+		Map<LocalDate, Long> sortedResult = new TreeMap<>(result);		
+		return sortedResult;
 	}
 
 	@Override
 	public Map<Integer, Long> countEgressoPorAno() {
 		List<Tuple> cadastros = egressoRepository.countEgressoData();
 
-		return cadastros.stream()
+		var result = cadastros.stream()
 				.collect(Collectors.groupingBy(
 						tuple -> tuple.get(0, java.sql.Date.class)
 								.toLocalDate()
 								.getYear(),
 						Collectors.summingLong(tuple -> tuple.get(1, Long.class))));
+	
+		Map<Integer, Long> sortedResult = new TreeMap<>(result);
+
+		return sortedResult;
 	}
 
 	@Override
 	public Map<LocalDate, Long> countEgressoPorMesEAno() {
 		List<Tuple> cadastros = egressoRepository.countEgressoData();
 
-		return cadastros.stream()
+		var result = cadastros.stream()
 				.collect(Collectors.groupingBy(
 						tuple -> tuple.get(0, java.sql.Date.class)
 								.toLocalDate()
 								.withDayOfMonth(1),
 						Collectors.summingLong(tuple -> tuple.get(1, Long.class))));
+		
+		Map<LocalDate, Long> sortedResult = new TreeMap<>(result);		
+		return sortedResult;
 	}
 
 	@Override
