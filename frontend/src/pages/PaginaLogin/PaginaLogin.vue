@@ -79,9 +79,9 @@ import { mdiAccount, mdiLock } from '@mdi/js'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useLoginStore } from 'src/store/LoginStore'
-import router from 'src/router'
 import { models } from 'src/@types'
 import { createPinia } from 'pinia'
+import { useRouter } from 'vue-router'
 interface LoginModel extends models.LoginModel {}
 
 const pinia = createPinia()
@@ -90,6 +90,7 @@ app.use(pinia)
 const error = ref(false)
 const storeLogin = useLoginStore()
 const errorText = ref('Nome de usuário ou senha incorretos.')
+const router = useRouter()
 
 const schema = object().shape({
   username: string().required('Informe o seu usuário'),
@@ -109,7 +110,7 @@ const handleSubmit = async (submitData: any) => {
 
     if (response.status === 200) {
       error.value = false
-      await router.push('/')
+      router.push('/')
     } else if (response.status !== 200) {
       errorText.value = response.data?.technicalMessage
       error.value = true

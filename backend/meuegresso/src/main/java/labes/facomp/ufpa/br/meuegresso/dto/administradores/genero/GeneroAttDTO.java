@@ -2,10 +2,8 @@ package labes.facomp.ufpa.br.meuegresso.dto.administradores.genero;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import labes.facomp.ufpa.br.meuegresso.dto.administradores.AuditableDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -18,8 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-public class GeneroDTO extends AuditableDTO {
+public class GeneroAttDTO {
 
     private Integer id;
 

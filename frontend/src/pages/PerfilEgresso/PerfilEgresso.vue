@@ -3,11 +3,12 @@
     v-if="loading"
     class="flex h-[70vh] items-center justify-center text-center"
   >
-    <img
-      class="animate-spin mr-3 w-[100px]"
-      src="src/assets/loading.svg"
-      alt="Loading"
-    >
+    <SvgIcon
+      type="mdi"
+      size="80"
+      class="animate-spin text-gray-400"
+      :path="mdiLoading"
+    />
   </div>
   <div
     v-else
@@ -27,13 +28,13 @@
           <h1 class=" absolute flex flex-auto top-[15px] right-[10px] sm:right-[20%]">
             <ButtonEdit
               label="Editar"
-              icon-path="/src/assets/edit.svg"
-              icon-path2="/src/assets/wcheck.svg"
+              icon-path="/img/edit.svg"
+              icon-path2="/img/wcheck.svg"
               color="whitesky"
               color2="emerald"
               @toggle="toggleIsInput('profileHead')"
               :is-input="dataEgresso.profileHead.isInput"
-              v-if="!isPublic"
+              v-if="!isPublic || isSuperUser"
             />
           </h1>
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
@@ -45,7 +46,7 @@
                 @image-upload-back="profileImageSave"
                 @remove="softRemoveImageEgresso"
                 :img-url="dataEgresso.profileHead.image"
-                img-default="/src/assets/profile-pic.png"
+                img-default="/img/profile-pic.png"
                 :is-input="dataEgresso.profileHead.isInput"
                 :trigger-back-upload="dataEgresso.profileHead.isInput"
               />
@@ -82,8 +83,8 @@
               class="items-start flex justify-center mt-8 relative gap-[10px]"
             >
               <CustomButtonLink
-                label="linkedIn"
-                icon-path="/src/assets/linkedin-icon.svg"
+                label="LinkedIn"
+                icon-path="/img/linkedin-icon.svg"
                 :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
                 color="whitesky"
@@ -93,7 +94,7 @@
 
               <CustomButtonLink
                 label="Lattes"
-                icon-path="/src/assets/lattesP.svg"
+                icon-path="/img/lattesP.svg"
                 :url="dataEgresso.profileHead.lattes"
                 placeholder="https://lattes.cnpq.br/"
                 color="whitesky"
@@ -106,8 +107,8 @@
               class="items-start flex justify-center mt-8 relative gap-[10px]"
             >
               <CustomButtonLink
-                label="linkedIn"
-                icon-path="/src/assets/linkedin-icon.svg"
+                label="LinkedIn"
+                icon-path="/img/linkedin-icon.svg"
                 :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
                 color="whitesky"
@@ -129,7 +130,7 @@
 
               <CustomButtonLink
                 label="Lattes"
-                icon-path="/src/assets/lattesP.svg"
+                icon-path="/img/lattesP.svg"
                 :url="dataEgresso.profileHead.lattes"
                 placeholder="https://lattes.cnpq.br/"
                 color="whitesky"
@@ -168,8 +169,8 @@
               <h1 class="relative">
                 <ButtonEdit
                   label="Editar"
-                  icon-path="/src/assets/edit.svg"
-                  icon-path2="/src/assets/wcheck.svg"
+                  icon-path="/img/edit.svg"
+                  icon-path2="/img/wcheck.svg"
                   color="invisiblesky"
                   color2="emerald"
                   classimg="sky-600"
@@ -177,7 +178,7 @@
                   icon-size="20"
                   @toggle="toggleIsInput('geral')"
                   :is-input="dataEgresso.geral.isInput"
-                  v-if="!isPublic"
+                  v-if="!isPublic || isSuperUser"
                 />
               </h1>
             </template>
@@ -212,7 +213,7 @@
                   label="E-mail"
                   placeholder="marcele@email.com"
                   :icon-path="mdiEmail"
-                  v-if="!isPublic"
+                  v-if="!isPublic || isSuperUser"
                 />
                 <CustomPerfilData
                   type="date"
@@ -268,15 +269,15 @@
               <h1 class="relative">
                 <ButtonEdit
                   label="Editar"
-                  icon-path="/src/assets/edit.svg"
-                  icon-path2="/src/assets/wcheck.svg"
+                  icon-path="/img/edit.svg"
+                  icon-path2="/img/wcheck.svg"
                   color="invisiblesky"
                   color2="emerald"
                   classimg="sky-600"
                   :has-shadow="false"
                   @toggle="toggleIsInput('academico')"
                   :is-input="dataEgresso.academico.isInput"
-                  v-if="!isPublic"
+                  v-if="!isPublic || isSuperUser"
                 />
               </h1>
             </template>
@@ -445,7 +446,6 @@
                   label="Bolsista"
                   v-model:value="bools.bolsista"
                 />
-
                 <CustomSelect
                   class="mb-5"
                   name="academico.bolsista.tipo"
@@ -516,15 +516,15 @@
                 <h1 class="relative">
                   <ButtonEdit
                     label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    icon-path2="/src/assets/wcheck.svg"
+                    icon-path="/img/edit.svg"
+                    icon-path2="/img/wcheck.svg"
                     color="invisiblesky"
                     color2="emerald"
                     classimg="sky-600"
                     :has-shadow="false"
                     @toggle="toggleIsInput('carreira')"
                     :is-input="dataEgresso.carreira.isInput"
-                    v-if="!isPublic"
+                    v-if="!isPublic || isSuperUser"
                   />
                 </h1>
               </template>
@@ -587,15 +587,15 @@
                 <h1 class="relative">
                   <ButtonEdit
                     label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    icon-path2="/src/assets/wcheck.svg"
+                    icon-path="/img/edit.svg"
+                    icon-path2="/img/wcheck.svg"
                     color="invisiblesky"
                     color2="emerald"
                     classimg="sky-600"
                     :has-shadow="false"
                     @toggle="toggleIsInput('localizacao')"
                     :is-input="dataEgresso.localizacao.isInput"
-                    v-if="!isPublic"
+                    v-if="!isPublic || isSuperUser"
                   />
                 </h1>
               </template>
@@ -713,15 +713,15 @@
                 <h1 class="relative">
                   <ButtonEdit
                     label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    icon-path2="/src/assets/wcheck.svg"
+                    icon-path="/img/edit.svg"
+                    icon-path2="/img/wcheck.svg"
                     color="invisiblesky"
                     color2="emerald"
                     classimg="sky-600"
                     :has-shadow="false"
                     @toggle="toggleIsInput('adicionais')"
                     :is-input="dataEgresso.adicionais.isInput"
-                    v-if="!isPublic"
+                    v-if="!isPublic || isSuperUser"
                   />
                 </h1>
               </template>
@@ -831,7 +831,8 @@ import {
   mdiAlertCircle,
   mdiMapMarker,
   mdiAlertCircleOutline,
-  mdiSchool
+  mdiSchool,
+  mdiLoading
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
 const dialogSucesso = ref(false)
@@ -848,6 +849,7 @@ const formCarreira = ref<typeof Form | null>(null)
 const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 const missingDigits = ref(0)
+const loading = ref(true)
 
 const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
@@ -895,18 +897,33 @@ const stagedChanges = ref({
   }
 })
 
-if (storage.has('loggedEgresso')) {
-  $store.fetchAll()
-}
+// if (storage.has('loggedEgresso')) {
+$store.fetchAll()
 
+const isSuperUser = computed(() => {
+  if (storage.has('loggedUser')) {
+    const logUser = JSON.parse(storage.get('loggedUser'))
+    if (logUser.scope === 'ADMIN' || logUser.scope === 'SECRETARIO') {
+      return true
+    }
+  }
+  return false
+})
 const isPublic = computed(() => {
+  console.log('route')
+  console.log(Number($route.params.id))
   if (storage.has('loggedUser') && storage.has('loggedEgresso')) {
     const logEgresso = JSON.parse(storage.get('loggedEgresso'))
-    console.log(logEgresso)
     return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id))
   } else {
     return (Object.keys($route.params).length === 1)
   }
+})
+
+watch(() => $route.params, async () => {
+  loading.value = true
+  await fetchUpdateEgresso()
+  loading.value = false
 })
 
 function handleStatus (status: any) {
@@ -918,10 +935,6 @@ function handleStatus (status: any) {
     return true
   }
 }
-const profileImageRef = ref<typeof ProfileImage | null>(null)
-const profileImageSave = () => {
-  return profileImageRef?.value?.imageUploadBack()
-}
 async function handleSubmitHeader (values: any) {
   jsonResponse.usuario.nome = values.geral.nome
   if (values.geral.linkedin !== '' && values.geral.linkedin !== undefined) {
@@ -930,30 +943,26 @@ async function handleSubmitHeader (values: any) {
     jsonResponse.linkedin = null
   }
   if (values.geral.lattes !== '' && values.geral.lattes !== undefined) {
-    console.log(jsonResponse.lattes)
     jsonResponse.lattes = values.geral.lattes
   } else {
     jsonResponse.lattes = null
   }
 
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   let responseImage: any
   if (stagedChanges.value.profileHead.removedImage) {
     responseImage = await removeImageEgresso()
     stagedChanges.value.profileHead.removedImage = false
+    console.log('stagedChange')
   } else {
     responseImage = await profileImageSave()
   }
-
-  // console.log(status)
-  console.log(responseImage)
 
   if (status === 201 && (responseImage === 201 || responseImage === 200 || responseImage === 204)) {
     dialogSucesso.value = true
 
     toggleIsInput('profileHead')
-    fetchUpdateEgresso()
-    fetchUpdateEgresso()
+    await fetchUpdateEgresso()
   } else {
     dialogFalha.value = true
   }
@@ -964,7 +973,7 @@ async function handleSubmitGeral (values: any) {
   // ID request
   jsonResponse.genero.id = values.geral.genero
   jsonResponse.nascimento = values.geral.nascimento
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('geral')
   }
@@ -1035,7 +1044,7 @@ async function handleSubmitAcademico (values: any) {
     }
   }
 
-  jsonResponse.matricula = values.academico.matricula
+  jsonResponse.matricula = values.academico.matricula === '' ? null : values.academico.matricula
 
   jsonResponse.cotista = values.academico.cotista.value
 
@@ -1054,7 +1063,7 @@ async function handleSubmitAcademico (values: any) {
     jsonResponse.remuneracaoBolsa = 0
   }
 
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
 
   if (handleStatus(status)) {
     toggleIsInput('academico')
@@ -1063,11 +1072,10 @@ async function handleSubmitAcademico (values: any) {
   fetchUpdateEgresso()
 }
 async function handleSubmitLocalizacao (values: any) {
-  console.log(values)
   jsonResponse.emprego.empresa.endereco = values.localizacao
   // delete jsonResponse.emprego.empresa.endereco.id
 
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('localizacao')
   }
@@ -1128,7 +1136,7 @@ async function handleSubmitCarreira (values: any) {
     jsonResponse.emprego = null
   }
 
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('carreira')
   }
@@ -1150,7 +1158,7 @@ async function handleSubmitAdicionais (values: any) {
   } else {
     jsonResponse.palestras = null
   }
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('adicionais')
   }
@@ -1289,7 +1297,6 @@ const placeHolders = ref({
   faixaSalarial: dataEgresso.value.carreira.faixaSalarial
 })
 
-const loading = ref(true)
 watch(() => dataEgresso.value.egressoId, () => {
   if (dataEgresso.value.egressoId !== 0) {
     loading.value = false
@@ -1313,15 +1320,22 @@ async function handleEgressoImage (id : string) {
   }
 }
 
+onMounted(async () => {
+  window.scrollTo(0, 0)
+  await fetchUpdateEgresso()
+  loading.value = false
+})
+
 async function fetchUpdateEgresso () {
   // getEgresso
   if (isPublic.value) {
-    egressoResponseBack = fetchPublicEgresso(Number($route.params?.id))
+    egressoResponseBack = await fetchPublicEgresso(Number($route.params?.id))
   } else {
-    egressoResponseBack = egressoStore.fetchEgresso()
+    if (storage.has('loggedUser') && storage.getLoggedUser()?.scope !== 'EGRESSO') return
+    egressoResponseBack = await egressoStore.fetchEgresso()
   }
 
-  const ResponseBack = await egressoResponseBack
+  const ResponseBack = egressoResponseBack
 
   const json = JSON.parse(ResponseBack)
 
@@ -1329,13 +1343,10 @@ async function fetchUpdateEgresso () {
 
   // Cotas
   let cotasEgresso = ''
+  if (json.id === 0) {
+    console.log('wttffff')
+  }
   imageEgressoUrl = await handleEgressoImage(json.id)
-
-  console.log('cotas')
-
-  const tiposCotasList = $store.tiposCota
-  console.log(tiposCotasList)
-  console.log(json.cotas)
   for (const element of json.cotas) {
     $store.tiposCota.forEach(option => {
       if (option.value === element.id) {
@@ -1484,11 +1495,6 @@ let estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElem
 let cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
 
 onMounted(() => {
-  window.scrollTo(0, 0)
-  fetchUpdateEgresso()
-})
-
-onMounted(() => {
   estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
 
   cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
@@ -1505,8 +1511,6 @@ onMounted(() => {
   })
 
   watch(() => dataEgresso.value.localizacao.estado, (newValue) => {
-    console.log('estado')
-    console.log(formLocalizacao.value)
     formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
     if (formLocalizacao.value) {
       dataEgresso.value.localizacao.cidade = ''
@@ -1516,10 +1520,6 @@ onMounted(() => {
     }, 10)
   })
 })
-
-function fetchPublicEgresso (id: number) {
-  return egressoStore.fetchPublicEgresso(id)
-}
 
 const schemaHeader = object().shape({
   geral: object({
@@ -1532,7 +1532,7 @@ const schemaHeader = object().shape({
     }),
     linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
       if (value) {
-        return value?.match(/https?:\/\/(?:www\.)?br\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/*/)
+        return value?.match(/\bhttps?:\/\/(?:www\.)?(?:br\.)?linkedin\.com\/in\/[\w-]+\/?\b/)
       }
 
       return (typeof value).constructor(true)
@@ -1638,14 +1638,39 @@ const schemaAdicionais = object().shape({
     contribuicoes: string().required('Campo obrigatório')
   })
 })
+const profileImageRef = ref<typeof ProfileImage | null>(null)
+const profileImageSave = () => {
+  if (isSuperUser.value) {
+    return profileImageRef?.value?.imageUploadBackAdmin(Number($route.params?.id))
+  }
+  return profileImageRef?.value?.imageUploadBack()
+}
+function fetchPublicEgresso (id: number) {
+  if (isSuperUser.value) {
+    return egressoStore.fetchAdminEgresso(id)
+  }
+  return egressoStore.fetchPublicEgresso(id)
+}
+async function atualizarEgresso (data : any) {
+  if (isSuperUser.value) {
+    return egressoStore.atualizarEgressoAdmin(data, Number($route.params?.id))
+  }
+  return await egressoStore.atualizarEgresso(data)
+}
 async function removeImageEgresso () {
-  const removeResp = await egressoStore.removeImageEgresso()
-  dataEgresso.value.profileHead.image = '0'
-  return removeResp
+  let response = 100
+  if (isSuperUser.value) {
+    response = await egressoStore.removeImageEgressoAdmin(Number($route.params?.id))
+    dataEgresso.value.profileHead.image = ' '
+    return response
+  }
+  response = await egressoStore.removeImageEgresso()
+  dataEgresso.value.profileHead.image = ' '
+  return response
 }
 async function softRemoveImageEgresso () {
   stagedChanges.value.profileHead.removedImage = true
-  dataEgresso.value.profileHead.image = '0'
+  dataEgresso.value.profileHead.image = ' '
 }
 
 watch(() => dataEgresso.value.profileHead.image, (newValue) => {

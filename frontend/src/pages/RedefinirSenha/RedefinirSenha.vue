@@ -323,7 +323,7 @@ const handleSubmit = async (data: any) => {
       route: '/auth/recoveryPassword',
       body: {
         email: data.email,
-        redirect: 'http://localhost:5173/redefinir-senha'
+        redirect: 'https://egressos.computacao.ufpa.br/redefinir-senha'
       }
     })
 

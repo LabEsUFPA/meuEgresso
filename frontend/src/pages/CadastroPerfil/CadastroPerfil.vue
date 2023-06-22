@@ -36,7 +36,7 @@
           <div class="flex flex-col gap-y-2 mb-4">
             <div class="flex flex-col gap-x-6 gap-y-2 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
-                name="name"
+                name="nome"
                 label="Nome Completo"
                 class-helper-text="text-gray-600"
                 :required="true"
@@ -163,7 +163,7 @@ const $store = useCadastroPerfilStore()
 const loading = ref(true)
 
 const schema = object().shape({
-  name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
+  nome: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
   username: string().required('Informe um nome de usuário').trim().matches(/^[A-Za-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
   registration: string().max(12).matches(/^(\d{12})?$/),
   email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.[a-zA-Z]{2,}))?$/, 'Email inválido'),
@@ -186,7 +186,7 @@ const handleSubmit = async (submitData: any) => {
     profileData.username,
     profileData.password,
     profileData.email,
-    profileData.name,
+    profileData.nome,
     profileData.registration
   )
 
