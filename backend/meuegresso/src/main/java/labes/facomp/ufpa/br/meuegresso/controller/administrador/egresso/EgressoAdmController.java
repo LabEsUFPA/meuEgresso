@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +24,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoAttDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
@@ -78,11 +80,31 @@ public class EgressoAdmController {
     private final ModelMapper mapper;
 
     /**
+     * Endpoint responsavel por buscar o egresso.
+     *
+     * @param Id do egresso.
+     * @return {@link EgressoDTO} Dados retornados do banco.
+     * @author Marcus Maciel
+     * @since 20/06/2023
+     */
+    @GetMapping(value = "/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
+    @ResponseStatus(code = HttpStatus.OK)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public EgressoDTO getEgresso(@PathVariable Integer id) {
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+
+        EgressoModel egressoModel = egressoService.findById(id);
+        return mapper.map(egressoModel, EgressoDTO.class);
+    }
+
+    /**
      * Endpoint responsavel por cadastrar o egresso.
      *
-     * @param egressoCadastroDTO,token Estruturas de dados contendo as informações
-     *                                 necessárias para
-     *                                 salvar o egresso.
+     * @param Id do usuário, egressoCadastroDTO Estruturas de dados contendo as
+     *           informações
+     *           necessárias para
+     *           salvar o egresso.
      * @return {@link String} Uma string representando uma mensagem de êxito
      *         indicando que o egresso
      *         foi salvo.
@@ -90,6 +112,7 @@ public class EgressoAdmController {
      * @since 20/06/2023
      */
     @PostMapping(value = "/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarEgressoPrimeiroCadastro(
@@ -174,8 +197,9 @@ public class EgressoAdmController {
     /**
      * Endpoint responsavel por atualizar o egresso pelo administrador.
      *
-     * @param egresso Estrutura de dados contendo as informações necessárias para
-     *                persistir o Usuário.
+     * @param Id do egresso, egresso Estrutura de dados contendo as informações ne
+     *           essárias para
+     *           persistir o Usuário.
      * @return {@link EgressoModel} Dados gravados no banco com a Id atualizada.
      * @author Marcus Maciel Oliveira
      * @throws UnauthorizedRequestException
