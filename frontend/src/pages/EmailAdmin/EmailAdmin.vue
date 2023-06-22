@@ -170,6 +170,7 @@
   </div>
   <CustomDialog
     v-model="dialogSucesso"
+    @close="$router.push('/painel-admin')"
   >
     <div class="h-full flex justify-center items-center">
       <div class="w-1/2">
