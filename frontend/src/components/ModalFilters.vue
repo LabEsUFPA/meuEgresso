@@ -34,7 +34,7 @@
           class="flex flex-wrap gap-4 px-8 py-8 border-b-[1px] border-b-gray-200"
         >
           <FilterChip
-            v-for="filtro in filtrosAreaEmprego"
+            v-for="filtro in filtrosModal"
             :key="filtro.id"
             :title="filtro.name"
             :selected="filtro.selected"
@@ -48,13 +48,7 @@
             color="gray"
             @click="$emit('update:modelValue', false)"
           >
-            Cancelar
-          </CustomButton>
-          <CustomButton
-            color="emerald"
-            @click="$emit('applyFilters', filtrosAreaEmprego.filter(f => f.selected)); $emit('update:modelValue', false)"
-          >
-            Aplicar filtros
+            Fechar
           </CustomButton>
         </div>
       </div>
@@ -71,7 +65,7 @@ import { mdiClose, mdiPencil } from '@mdi/js'
 import FilterChip from './FilterChip.vue'
 import CustomButton from './CustomButton.vue'
 
-defineEmits(['update:modelValue', 'close', 'applyFilters'])
+const $emit = defineEmits(['update:modelValue', 'close', 'applyFilters'])
 
 interface Props {
     modelValue: boolean
@@ -86,16 +80,17 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const filtrosAreaEmprego = ref(props.filters)
+const filtrosModal = ref(props.filters)
 
 onMounted(async () => {
-  filtrosAreaEmprego.value = props.filters
+  filtrosModal.value = props.filters
 })
 
 const toggleFilterApplied = (id:number) => {
-  const filtro = filtrosAreaEmprego.value.find(f => f.id === id)
+  const filtro = filtrosModal.value.find(f => f.id === id)
   if (filtro) {
     filtro.selected = !filtro.selected
+    $emit('applyFilters', filtrosModal.value.filter(f => f.selected))
   }
 }
 

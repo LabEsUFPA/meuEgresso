@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import CustomPerfilData from 'src/components/CustomPerfilData.vue'
+import CustomPerfilData from 'src/pages/PerfilEgresso/components/CustomPerfilData.vue'
 
 describe('CustomPerfilData Test', () => {
   it('CustomPerfilData Render Test', () => {
