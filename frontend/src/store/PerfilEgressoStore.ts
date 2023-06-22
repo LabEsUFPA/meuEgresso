@@ -245,7 +245,6 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       response = url
       return response
     },
-    // futuro remover por id: async removeImageEgresso (egressoId: string) {
     async removeImageEgresso () {
       const response = await Api.request({
         method: 'delete',
@@ -253,7 +252,7 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       })
       return (response?.status) !== undefined ? response.status : 500
     },
-    async removeImageEgressoAdmin (egressoId: string) {
+    async removeImageEgressoAdmin (egressoId: number) {
       const response = await Api.request({
         method: 'delete',
         route: `/administrador/egresso/foto/${egressoId}`

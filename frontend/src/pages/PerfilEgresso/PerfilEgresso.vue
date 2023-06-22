@@ -108,7 +108,7 @@
             >
               <CustomButtonLink
                 label="LinkedIn"
-                icon-path="/src/assets/linkedin-icon.svg"
+                icon-path="/img/linkedin-icon.svg"
                 :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
                 color="whitesky"
@@ -130,7 +130,7 @@
 
               <CustomButtonLink
                 label="Lattes"
-                icon-path="/src/assets/lattesP.svg"
+                icon-path="/img/lattesP.svg"
                 :url="dataEgresso.profileHead.lattes"
                 placeholder="https://lattes.cnpq.br/"
                 color="whitesky"
@@ -897,9 +897,9 @@ const stagedChanges = ref({
   }
 })
 
-if (storage.has('loggedEgresso')) {
-  $store.fetchAll()
-}
+// if (storage.has('loggedEgresso')) {
+$store.fetchAll()
+
 const isSuperUser = computed(() => {
   if (storage.has('loggedUser')) {
     const logUser = JSON.parse(storage.get('loggedUser'))
@@ -1635,20 +1635,28 @@ const schemaAdicionais = object().shape({
 })
 const profileImageRef = ref<typeof ProfileImage | null>(null)
 const profileImageSave = () => {
+  if (isSuperUser.value) {
+    return profileImageRef?.value?.imageUploadBackAdmin(Number($route.params?.id))
+  }
   return profileImageRef?.value?.imageUploadBack()
 }
 function fetchPublicEgresso (id: number) {
   return egressoStore.fetchPublicEgresso(id)
 }
 async function atualizarEgresso (data : any) {
-  // if superUser...
-  const resp = await egressoStore.atualizarEgresso(data)
-  return resp
+  if (isSuperUser.value) {
+    return egressoStore.atualizarEgressoAdmin(data, Number($route.params?.id))
+  }
+  return await egressoStore.atualizarEgresso(data)
 }
 async function removeImageEgresso () {
-  const removeResp = await egressoStore.removeImageEgresso()
+  if (isSuperUser.value) {
+    dataEgresso.value.profileHead.image = '0'
+    return await egressoStore.removeImageEgressoAdmin(Number($route.params?.id))
+  }
+
   dataEgresso.value.profileHead.image = '0'
-  return removeResp
+  return await egressoStore.removeImageEgresso()
 }
 async function softRemoveImageEgresso () {
   stagedChanges.value.profileHead.removedImage = true

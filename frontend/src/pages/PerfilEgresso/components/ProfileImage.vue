@@ -155,6 +155,15 @@ async function imageUploadBack () {
   }
   return response
 }
+async function imageUploadBackAdmin (egressoId : number) {
+  const response = await egressoStore.uploadImageEgressoAdmin(imageEgressoFile, egressoId)
+  if (response === 201) {
+    isValid.value.value = true
+  } else {
+    isValid.value.value = false
+  }
+  return response
+}
 
 const styleImageInput = computed(() => {
   const imageStyle = [' hover:duration-200 w-[120px] h-[120px] absolute z-5 rounded-full']
@@ -165,7 +174,8 @@ const styleImageInput = computed(() => {
 })
 
 defineExpose({
-  imageUploadBack
+  imageUploadBack,
+  imageUploadBackAdmin
 })
 
 function cleanImageState () {
