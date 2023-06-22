@@ -23,7 +23,7 @@ public enum ErrorType {
 
     UNAUTHORIZED_TRANSACTION("Permisões insuficientes para realizar esta transação", "SECURITY-001"),
 
-    UNAUTHORIZED_REGISTER("Credenciais insuficientes para cadastrar secretário/admin", "SECURITY-002"),
+    UNAUTHORIZED_REGISTER("Credenciais insuficientes", "SECURITY-002"),
 
     USER_001("Usuário %s ja existe.", "US-001"),
 

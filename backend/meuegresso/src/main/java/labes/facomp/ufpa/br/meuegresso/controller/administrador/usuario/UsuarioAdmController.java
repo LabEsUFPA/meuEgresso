@@ -102,7 +102,7 @@ public class UsuarioAdmController {
 		if(!gruposUsuario.contains(Grupos.ADMIN)){
 			Set<Grupos> grupos = usuarioDTO.getGrupos();
 			for(Grupos grupo :grupos){
-				if (grupo.getAuthority().equals("ROLE_ADMIN") || grupo.getAuthority().equals("ROLE_SECRETARIO")) {
+				if (grupo.getAuthority().equals("ROLE_ADMIN")) {
 					throw new UnalthorizedRegisterException(String.format(ErrorType.UNAUTHORIZED_REGISTER.getMessage()),ErrorType.UNAUTHORIZED_REGISTER.getInternalCode());
 				}
 			}
