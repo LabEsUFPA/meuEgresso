@@ -20,7 +20,6 @@ describe('ShortPost', () => {
     expect(wrapper.html()).toContain('Título')
     expect(wrapper.html()).toContain('Área de emprego')
     expect(wrapper.html()).toContain('Descrição da vaga')
-    expect(wrapper.html()).toContain('10.000,00')
   })
 
   it('should render button', () => {

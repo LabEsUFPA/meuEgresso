@@ -54,7 +54,7 @@
               <CustomInput
                 name="email"
                 type="email"
-                label="Email"
+                label="E-mail"
                 helper-text="Informe o mesmo e-mail que está cadastrado no SIGAA"
                 class-helper-text="text-gray-600"
                 :icon-path="mdiEmail"

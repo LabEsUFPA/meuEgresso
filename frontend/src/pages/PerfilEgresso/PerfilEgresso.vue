@@ -3,11 +3,12 @@
     v-if="loading"
     class="flex h-[70vh] items-center justify-center text-center"
   >
-    <img
-      class="animate-spin mr-3 w-[100px]"
-      src="src/assets/loading.svg"
-      alt="Loading"
-    >
+    <SvgIcon
+      type="mdi"
+      size="80"
+      class="animate-spin text-gray-400"
+      :path="mdiLoading"
+    />
   </div>
   <div
     v-else
@@ -27,8 +28,8 @@
           <h1 class=" absolute flex flex-auto top-[15px] right-[10px] sm:right-[20%]">
             <ButtonEdit
               label="Editar"
-              icon-path="/src/assets/edit.svg"
-              icon-path2="/src/assets/wcheck.svg"
+              icon-path="/img/edit.svg"
+              icon-path2="/img/wcheck.svg"
               color="whitesky"
               color2="emerald"
               @toggle="toggleIsInput('profileHead')"
@@ -45,7 +46,7 @@
                 @image-upload-back="profileImageSave"
                 @remove="softRemoveImageEgresso"
                 :img-url="dataEgresso.profileHead.image"
-                img-default="/src/assets/profile-pic.png"
+                img-default="/img/profile-pic.png"
                 :is-input="dataEgresso.profileHead.isInput"
                 :trigger-back-upload="dataEgresso.profileHead.isInput"
               />
@@ -82,8 +83,8 @@
               class="items-start flex justify-center mt-8 relative gap-[10px]"
             >
               <CustomButtonLink
-                label="Linkedin"
-                icon-path="/src/assets/linkedin-icon.svg"
+                label="LinkedIn"
+                icon-path="/img/linkedin-icon.svg"
                 :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
                 color="whitesky"
@@ -93,7 +94,7 @@
 
               <CustomButtonLink
                 label="Lattes"
-                icon-path="/src/assets/lattesP.svg"
+                icon-path="/img/lattesP.svg"
                 :url="dataEgresso.profileHead.lattes"
                 placeholder="https://lattes.cnpq.br/"
                 color="whitesky"
@@ -106,7 +107,7 @@
               class="items-start flex justify-center mt-8 relative gap-[10px]"
             >
               <CustomButtonLink
-                label="Linkedin"
+                label="LinkedIn"
                 icon-path="/src/assets/linkedin-icon.svg"
                 :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
@@ -168,8 +169,8 @@
               <h1 class="relative">
                 <ButtonEdit
                   label="Editar"
-                  icon-path="/src/assets/edit.svg"
-                  icon-path2="/src/assets/wcheck.svg"
+                  icon-path="/img/edit.svg"
+                  icon-path2="/img/wcheck.svg"
                   color="invisiblesky"
                   color2="emerald"
                   classimg="sky-600"
@@ -268,8 +269,8 @@
               <h1 class="relative">
                 <ButtonEdit
                   label="Editar"
-                  icon-path="/src/assets/edit.svg"
-                  icon-path2="/src/assets/wcheck.svg"
+                  icon-path="/img/edit.svg"
+                  icon-path2="/img/wcheck.svg"
                   color="invisiblesky"
                   color2="emerald"
                   classimg="sky-600"
@@ -299,7 +300,7 @@
                   :vmodel="dataEgresso.academico.matricula"
                   name="academico.matricula"
                   label="Matrícula"
-                  placeholder="205004940001"
+                  placeholder="Ex: 205004940001"
                   icon-path=""
                 />
 
@@ -419,19 +420,32 @@
                     :required="bools.cotista"
                     :disabled="!bools.cotista"
                   />
-
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.pcd"
+                    label="PCD"
+                    :required="bools.cotista"
+                    :disabled="!bools.cotista"
+                  />
                   <p
                     v-if="bools.cotista &&
                       !values.academico?.cotista?.tipos?.renda &&
                       !values.academico?.cotista?.tipos?.escola &&
                       !values.academico?.cotista?.tipos?.raca &&
-                      !values.academico?.cotista?.tipos?.quilombolaIndigena"
+                      !values.academico?.cotista?.tipos?.quilombolaIndigena &&
+                      !values.academico?.cotista?.tipos?.pcd"
                     class="text-red-500 text-sm mt-1 position-absolute display-none"
                   >
                     Marque pelo menos uma das opções acima!
                   </p>
                 </div>
 
+                <CustomCheckbox
+                  class="mb-5"
+                  name="academico.bolsista.value"
+                  label="Bolsista"
+                  v-model:value="bools.bolsista"
+                />
                 <CustomSelect
                   class="mb-5"
                   name="academico.bolsista.tipo"
@@ -502,8 +516,8 @@
                 <h1 class="relative">
                   <ButtonEdit
                     label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    icon-path2="/src/assets/wcheck.svg"
+                    icon-path="/img/edit.svg"
+                    icon-path2="/img/wcheck.svg"
                     color="invisiblesky"
                     color2="emerald"
                     classimg="sky-600"
@@ -573,8 +587,8 @@
                 <h1 class="relative">
                   <ButtonEdit
                     label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    icon-path2="/src/assets/wcheck.svg"
+                    icon-path="/img/edit.svg"
+                    icon-path2="/img/wcheck.svg"
                     color="invisiblesky"
                     color2="emerald"
                     classimg="sky-600"
@@ -699,8 +713,8 @@
                 <h1 class="relative">
                   <ButtonEdit
                     label="Editar"
-                    icon-path="/src/assets/edit.svg"
-                    icon-path2="/src/assets/wcheck.svg"
+                    icon-path="/img/edit.svg"
+                    icon-path2="/img/wcheck.svg"
                     color="invisiblesky"
                     color2="emerald"
                     classimg="sky-600"
@@ -817,7 +831,8 @@ import {
   mdiAlertCircle,
   mdiMapMarker,
   mdiAlertCircleOutline,
-  mdiSchool
+  mdiSchool,
+  mdiLoading
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
 const dialogSucesso = ref(false)
@@ -834,6 +849,7 @@ const formCarreira = ref<typeof Form | null>(null)
 const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 const missingDigits = ref(0)
+const loading = ref(true)
 
 const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
@@ -896,11 +912,16 @@ const isSuperUser = computed(() => {
 const isPublic = computed(() => {
   if (storage.has('loggedUser') && storage.has('loggedEgresso')) {
     const logEgresso = JSON.parse(storage.get('loggedEgresso'))
-    console.log(logEgresso)
     return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id))
   } else {
     return (Object.keys($route.params).length === 1)
   }
+})
+
+watch(() => $route.params, async () => {
+  loading.value = true
+  await fetchUpdateEgresso()
+  loading.value = false
 })
 
 function handleStatus (status: any) {
@@ -921,7 +942,6 @@ async function handleSubmitHeader (values: any) {
     jsonResponse.linkedin = null
   }
   if (values.geral.lattes !== '' && values.geral.lattes !== undefined) {
-    console.log(jsonResponse.lattes)
     jsonResponse.lattes = values.geral.lattes
   } else {
     jsonResponse.lattes = null
@@ -936,14 +956,10 @@ async function handleSubmitHeader (values: any) {
     responseImage = await profileImageSave()
   }
 
-  // console.log(status)
-  console.log(responseImage)
-
   if (status === 201 && (responseImage === 201 || responseImage === 200 || responseImage === 204)) {
     dialogSucesso.value = true
 
     toggleIsInput('profileHead')
-    fetchUpdateEgresso()
     fetchUpdateEgresso()
   } else {
     dialogFalha.value = true
@@ -986,6 +1002,11 @@ async function handleSubmitAcademico (values: any) {
         id: 4
       })
     }
+    if (values.academico.cotista.tipos.pcd) {
+      cotas.push({
+        id: 5
+      })
+    }
   }
 
   jsonResponse.posGraduacao = values.academico.posGrad.value
@@ -1021,7 +1042,7 @@ async function handleSubmitAcademico (values: any) {
     }
   }
 
-  jsonResponse.matricula = values.academico.matricula
+  jsonResponse.matricula = values.academico.matricula === '' ? null : values.academico.matricula
 
   jsonResponse.cotista = values.academico.cotista.value
 
@@ -1049,7 +1070,6 @@ async function handleSubmitAcademico (values: any) {
   fetchUpdateEgresso()
 }
 async function handleSubmitLocalizacao (values: any) {
-  console.log(values)
   jsonResponse.emprego.empresa.endereco = values.localizacao
   // delete jsonResponse.emprego.empresa.endereco.id
 
@@ -1099,6 +1119,14 @@ async function handleSubmitCarreira (values: any) {
   if (values.carreira.area !== 'Desempregado') {
     jsonResponse.emprego.empresa.nome = values.carreira.empresa
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
+    // let areaNome = ''
+    // $store.areasAtuacao.forEach(option => {
+    //   if (option.value === values.carreira.area) {
+    //     areaNome = option.label
+    //     console.log(areaNome)
+    //   }
+    // })
+    // jsonResponse.emprego.areaAtuacao.nome = areaNome
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
   } else {
@@ -1169,11 +1197,8 @@ function toggleIsInput (FolderLabel: string) {
 //
 
 const selectOpts = ref({
-  genero: ['Masculino', 'Feminino', 'Não-Binário', 'Transsexual'],
   tipoAluno: ['Graduação', 'Pós-graduação'],
-  tipoCota: ['Escola', 'Renda', 'Autodeclaração de Raça', 'Quilombola/Indígena'],
-  tipoBolsa: ['PIBIC', 'PROAD', 'PROEX', 'Permanência', 'Outros'],
-  areaAtuacao: ['Computação', 'Pesquisa', 'Outros'],
+  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Programador', 'Analísta', 'Outros'],
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
 })
 function onInvalid (e: any) {
@@ -1214,7 +1239,8 @@ const dataEgresso = ref({
         escola: false,
         renda: false,
         raca: false,
-        quilombolaIndigena: false
+        quilombolaIndigena: false,
+        pcd: false
       }
     },
     bolsista: {
@@ -1269,7 +1295,6 @@ const placeHolders = ref({
   faixaSalarial: dataEgresso.value.carreira.faixaSalarial
 })
 
-const loading = ref(true)
 watch(() => dataEgresso.value.egressoId, () => {
   if (dataEgresso.value.egressoId !== 0) {
     loading.value = false
@@ -1293,15 +1318,22 @@ async function handleEgressoImage (id : string) {
   }
 }
 
+onMounted(async () => {
+  window.scrollTo(0, 0)
+  await fetchUpdateEgresso()
+  loading.value = false
+})
+
 async function fetchUpdateEgresso () {
   // getEgresso
   if (isPublic.value) {
-    egressoResponseBack = fetchPublicEgresso(Number($route.params?.id))
+    egressoResponseBack = await fetchPublicEgresso(Number($route.params?.id))
   } else {
-    egressoResponseBack = egressoStore.fetchEgresso()
+    if (storage.has('loggedUser') && storage.getLoggedUser()?.scope !== 'EGRESSO') return
+    egressoResponseBack = await egressoStore.fetchEgresso()
   }
 
-  const ResponseBack = await egressoResponseBack
+  const ResponseBack = egressoResponseBack
 
   const json = JSON.parse(ResponseBack)
 
@@ -1310,9 +1342,12 @@ async function fetchUpdateEgresso () {
   // Cotas
   let cotasEgresso = ''
   imageEgressoUrl = await handleEgressoImage(json.id)
-
-  for (let i = 0; i < json.cotas.length; i++) {
-    cotasEgresso += selectOpts.value.tipoCota[json.cotas[i].id - 1] + '\n'
+  for (const element of json.cotas) {
+    $store.tiposCota.forEach(option => {
+      if (option.value === element.id) {
+        cotasEgresso += option.label + '\n'
+      }
+    })
   }
 
   dataEgresso.value = {
@@ -1349,7 +1384,8 @@ async function fetchUpdateEgresso () {
           escola: false,
           renda: false,
           raca: false,
-          quilombolaIndigena: false
+          quilombolaIndigena: false,
+          pcd: false
         }
 
       },
@@ -1404,6 +1440,9 @@ async function fetchUpdateEgresso () {
     if (element.id === 4) {
       dataEgresso.value.academico.cotista.tipos.quilombolaIndigena = true
     }
+    if (element.id === 5) {
+      dataEgresso.value.academico.cotista.tipos.pcd = true
+    }
   }
   bools.value = {
     cotista: dataEgresso.value.academico.cotista.value,
@@ -1451,11 +1490,6 @@ let estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElem
 let cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
 
 onMounted(() => {
-  window.scrollTo(0, 0)
-  fetchUpdateEgresso()
-})
-
-onMounted(() => {
   estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
 
   cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
@@ -1472,8 +1506,6 @@ onMounted(() => {
   })
 
   watch(() => dataEgresso.value.localizacao.estado, (newValue) => {
-    console.log('estado')
-    console.log(formLocalizacao.value)
     formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
     if (formLocalizacao.value) {
       dataEgresso.value.localizacao.cidade = ''
@@ -1495,7 +1527,7 @@ const schemaHeader = object().shape({
     }),
     linkedin: string().notRequired().test('linkedin', 'Link inválido', (value) => {
       if (value) {
-        return value?.match(/https?:\/\/(?:www\.)?br\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/*/)
+        return value?.match(/\bhttps?:\/\/(?:www\.)?(?:br\.)?linkedin\.com\/in\/[\w-]+\/?\b/)
       }
 
       return (typeof value).constructor(true)
@@ -1536,7 +1568,7 @@ const schemaAcademico = object().shape({
     cotista: object({
       value: boolean().test('Cotas', 'Marque pelo menos uma das opções acima', (value: any, cotas) => {
         if (value) {
-          if (cotas.parent.tipos.renda || cotas.parent.tipos.escola || cotas.parent.tipos.raca || cotas.parent.tipos.quilombolaIndigena) return true
+          if (cotas.parent.tipos.renda || cotas.parent.tipos.escola || cotas.parent.tipos.raca || cotas.parent.tipos.quilombolaIndigena || cotas.parent.tipos.pcd) return true
           return false
         }
         return true
