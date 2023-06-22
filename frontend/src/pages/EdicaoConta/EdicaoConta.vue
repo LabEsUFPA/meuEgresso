@@ -195,26 +195,51 @@ $store.fetchUsuario().then(usuario => {
 
 // Update Usuario
 const handleSubmit = async (submitData: any) => {
-  const usuario = await $store.fetchUsuario()
-  dataUserUpdate = {
-    id: usuario?.id,
-    username: usuario?.username,
-    email: submitData?.email,
-    nome: submitData?.name,
-    password: submitData?.password
-  }
+  if (boolSenha.value) {
+    const usuario = await $store.fetchUsuario()
+    dataUserUpdate = {
+      id: usuario?.id,
+      username: usuario?.username,
+      email: submitData?.email,
+      nome: submitData?.name,
+      password: submitData?.password
+    }
 
-  const responseValidation = await useEditaContaUsuarioStore().updateContaUsuario(
-    dataUserUpdate.id,
-    dataUserUpdate.username,
-    dataUserUpdate.email,
-    dataUserUpdate.nome,
-    dataUserUpdate.password
-  )
+    const responseValidation = await useEditaContaUsuarioStore().updateContaUsuario(
+      dataUserUpdate.id,
+      dataUserUpdate.username,
+      dataUserUpdate.email,
+      dataUserUpdate.nome,
+      dataUserUpdate.password
+    )
 
-  if (responseValidation.status === 201) {
-    error.value = false
-    submitSuccess.value = true
+    if (responseValidation.status === 201) {
+      error.value = false
+      submitSuccess.value = true
+    }
+  } else {
+    const usuario = await $store.fetchUsuario()
+    // Colocar depois o sem uso de senha
+    dataUserUpdate = {
+      id: usuario?.id,
+      username: usuario?.username,
+      email: submitData?.email,
+      nome: submitData?.name,
+      password: submitData?.password
+    }
+
+    const responseValidation = await useEditaContaUsuarioStore().updateContaUsuario(
+      dataUserUpdate.id,
+      dataUserUpdate.username,
+      dataUserUpdate.email,
+      dataUserUpdate.nome,
+      dataUserUpdate.password
+    )
+
+    if (responseValidation.status === 201) {
+      error.value = false
+      submitSuccess.value = true
+    }
   }
 }
 const onInvalid = (e: any) => {
