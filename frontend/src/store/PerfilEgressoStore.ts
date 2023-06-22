@@ -163,6 +163,17 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         return this.returnEgresso(returnValue)
       }
     },
+    async fetchAdminEgresso (id: number) {
+      const response = await Api.request({
+        method: 'get',
+        route: `/administrador/egresso/${id}`
+      })
+
+      if (response?.status === 200) {
+        const returnValue = JSON.stringify(response.data)
+        return this.returnEgresso(returnValue)
+      }
+    },
 
     async atualizarEgresso (dataEgresso: any) {
       const response = await Api.request({

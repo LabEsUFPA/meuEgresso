@@ -188,8 +188,10 @@ function cleanImageState () {
 }
 
 watch(() => props.imgUrl, (newValue) => {
-  if (newValue === '' || newValue === '0') {
+  if (newValue === '' || newValue === ' ') {
     cleanImageState()
+    imgUrl.value.value = newValue
+    return
   }
   imgUrl.value.value = newValue
 })

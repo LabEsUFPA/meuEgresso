@@ -910,6 +910,8 @@ const isSuperUser = computed(() => {
   return false
 })
 const isPublic = computed(() => {
+  console.log('route')
+  console.log(Number($route.params.id))
   if (storage.has('loggedUser') && storage.has('loggedEgresso')) {
     const logEgresso = JSON.parse(storage.get('loggedEgresso'))
     return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id))
@@ -951,6 +953,7 @@ async function handleSubmitHeader (values: any) {
   if (stagedChanges.value.profileHead.removedImage) {
     responseImage = await removeImageEgresso()
     stagedChanges.value.profileHead.removedImage = false
+    console.log('stagedChange')
   } else {
     responseImage = await profileImageSave()
   }
@@ -959,7 +962,7 @@ async function handleSubmitHeader (values: any) {
     dialogSucesso.value = true
 
     toggleIsInput('profileHead')
-    fetchUpdateEgresso()
+    await fetchUpdateEgresso()
   } else {
     dialogFalha.value = true
   }
@@ -1340,6 +1343,9 @@ async function fetchUpdateEgresso () {
 
   // Cotas
   let cotasEgresso = ''
+  if (json.id === 0) {
+    console.log('wttffff')
+  }
   imageEgressoUrl = await handleEgressoImage(json.id)
   for (const element of json.cotas) {
     $store.tiposCota.forEach(option => {
@@ -1640,6 +1646,9 @@ const profileImageSave = () => {
   return profileImageRef?.value?.imageUploadBack()
 }
 function fetchPublicEgresso (id: number) {
+  if (isSuperUser.value) {
+    return egressoStore.fetchAdminEgresso(id)
+  }
   return egressoStore.fetchPublicEgresso(id)
 }
 async function atualizarEgresso (data : any) {
@@ -1649,17 +1658,19 @@ async function atualizarEgresso (data : any) {
   return await egressoStore.atualizarEgresso(data)
 }
 async function removeImageEgresso () {
+  let response = 100
   if (isSuperUser.value) {
-    dataEgresso.value.profileHead.image = '0'
-    return await egressoStore.removeImageEgressoAdmin(Number($route.params?.id))
+    response = await egressoStore.removeImageEgressoAdmin(Number($route.params?.id))
+    dataEgresso.value.profileHead.image = ' '
+    return response
   }
-
-  dataEgresso.value.profileHead.image = '0'
-  return await egressoStore.removeImageEgresso()
+  response = await egressoStore.removeImageEgresso()
+  dataEgresso.value.profileHead.image = ' '
+  return response
 }
 async function softRemoveImageEgresso () {
   stagedChanges.value.profileHead.removedImage = true
-  dataEgresso.value.profileHead.image = '0'
+  dataEgresso.value.profileHead.image = ' '
 }
 
 watch(() => dataEgresso.value.profileHead.image, (newValue) => {
