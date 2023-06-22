@@ -933,7 +933,6 @@ function handleStatus (status: any) {
     return true
   }
 }
-
 async function handleSubmitHeader (values: any) {
   jsonResponse.usuario.nome = values.geral.nome
   if (values.geral.linkedin !== '' && values.geral.linkedin !== undefined) {
