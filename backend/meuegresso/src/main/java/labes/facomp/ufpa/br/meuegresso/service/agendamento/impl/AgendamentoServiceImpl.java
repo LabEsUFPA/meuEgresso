@@ -129,25 +129,29 @@ public class AgendamentoServiceImpl implements AgendamentoService, Runnable {
                 mailService.sendEmail(mensagemEnvioUmaVez.get(i).getEmail(), mensagemEnvioUmaVez.get(i).getEscopo(),
                         mensagemEnvioUmaVez.get(i).getCorpo());
                 mensagemEnvioUmaVez.get(i).setDataEnviada(LocalDateTime.now());
+                mailService.update(mensagemEnvioUmaVez.get(i));
             } else {
                 for (String email : emailList.keySet()) {
                     mailService.sendEmail(email, mensagemEnvioUmaVez.get(i).getEscopo(),
                             mensagemEnvioUmaVez.get(i).getCorpo());
                 }
                 mensagemEnvioUmaVez.get(i).setDataEnviada(LocalDateTime.now());
+                mailService.update(mensagemEnvioUmaVez.get(i));
             }
         }
         for (int i = 0; i < sizesAnual; i++) {
             for (String email : emailList.keySet()) {
                 mailService.sendEmail(email, mensagemAnual.get(i).getEscopo(), mensagemAnual.get(i).getCorpo());
             }
-            mensagemEnvioUmaVez.get(i).setDataEnviada(LocalDateTime.now());
+            mensagemAnual.get(i).setDataEnviada(LocalDateTime.now());
+            mailService.update(mensagemAnual.get(i));
         }
         for (int i = 0; i < sizeSemestral; i++) {
             for (String email : emailList.keySet()) {
                 mailService.sendEmail(email, mensagemSemestral.get(i).getEscopo(), mensagemSemestral.get(i).getCorpo());
             }
-            mensagemEnvioUmaVez.get(i).setDataEnviada(LocalDateTime.now());
+            mensagemSemestral.get(i).setDataEnviada(LocalDateTime.now());
+            mailService.update(mensagemSemestral.get(i));
         }
     }
 
