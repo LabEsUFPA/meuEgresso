@@ -14,8 +14,14 @@ import labes.facomp.ufpa.br.meuegresso.dto.administradores.depoimento.Depoimento
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.genero.GeneroAttDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.palestra.PalestraAttDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.tipobolsa.TipoBolsaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.cota.CotaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaBasicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoTitulacaoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.palestra.PalestraDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,7 +44,7 @@ public class EgressoAttDTO {
 
     @Valid
     @NotNull(message = "Informe o gênero do usuário.")
-    private GeneroAttDTO genero;
+    private GeneroDTO genero;
 
     @Pattern(regexp = "[0-9]{12}|$", message = "Informe uma matrícula válida.")
     private String matricula;
@@ -63,16 +69,18 @@ public class EgressoAttDTO {
 
     @Valid
     @Builder.Default
-    private List<CotaAttDTO> cotas = new ArrayList<>(0);
-
-    private Integer usuarioId;
+    private List<CotaDTO> cotas = new ArrayList<>(0);
 
     @Valid
-    private PalestraAttDTO palestras;
+    @NotNull(message = "Informe o usuário")
+    private UsuarioAuthDTO usuario;
+
+    @Valid
+    private PalestraDTO palestras;
 
     @Valid
     @NotNull(message = "Informe a contribuição do egresso.")
-    private ContribuicaoAttDTO contribuicao;
+    private ContribuicaoDTO contribuicao;
 
     @Valid
     private EgressoTitulacaoDTO titulacao;
@@ -82,7 +90,7 @@ public class EgressoAttDTO {
 
     @Valid
     @NotNull(message = "Informe a depoimento do egresso.")
-    private DepoimentoAttDTO depoimento;
+    private DepoimentoDTO depoimento;
 
     @Valid
     private TipoBolsaDTO bolsa;
