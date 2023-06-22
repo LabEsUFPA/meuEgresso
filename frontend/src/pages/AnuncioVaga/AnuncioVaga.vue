@@ -204,11 +204,11 @@ const userEmail = ref('')
 console.log('salário:', $store.anuncio.salario)
 
 onMounted(() => {
-  if ($loginStore.userLogged) {
-    tipoUsuario.value = $loginStore.getLoggedUser()?.scope ?? ''
+  if ($loginStore.loggedIn) {
+    tipoUsuario.value = $loginStore.getUserData()?.scope ?? ''
   }
   if (tipoUsuario.value !== 'ADMIN') {
-    userEmail.value = ($loginStore.getLoggedUser() as any)?.email ?? ''
+    userEmail.value = ($loginStore.getUserData() as any)?.email ?? ''
   }
 })
 
