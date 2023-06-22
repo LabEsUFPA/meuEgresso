@@ -148,7 +148,6 @@ public class MensagemAdmController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public String save(@RequestBody @Valid MensagemDTO mensagemDTO) {
 		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
-		mensagemModel.setDataEnviada(mensagemModel.getDataEnvio());
 		if(mailService.findAll().isEmpty() || agendamentoService.getTasks().isEmpty()){
 			agendamentoService.setScheduleATask(agendamentoServiceImpl);
 		}
