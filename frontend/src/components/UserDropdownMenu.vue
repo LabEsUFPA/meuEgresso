@@ -45,7 +45,9 @@
           </div>
         </RouterLink>
 
-        <RouterLink :to="isEgress ? '/conta-egresso' : '/conta-admin'">
+        <RouterLink
+          to="/conta"
+        >
           <div
             class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900"
             @click="toggleUserMenu()"
