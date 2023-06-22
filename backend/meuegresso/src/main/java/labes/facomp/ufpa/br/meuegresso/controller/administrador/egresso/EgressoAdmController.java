@@ -231,7 +231,7 @@ public class EgressoAdmController {
             validaInstituicao(egresso.getTitulacao().getEmpresa().getNome(), egressoModel);
             egressoModel.getTitulacao().setEgresso(egressoModel);
         }
-
+        egressoModel.getUsuario().setPassword(user.getPassword());
         egressoModel.setId(id);
 
         egressoService.updateEgresso(egressoModel);
