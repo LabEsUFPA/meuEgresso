@@ -25,8 +25,8 @@
           <div class="flex-1" />
 
           <UserDropdownMenu
-            v-if="userLogged"
-            :user-logged="userLogged"
+            v-if="loggedIn"
+            :logged-in="loggedIn"
           />
 
           <div
@@ -190,35 +190,33 @@ import { useLoginStore } from 'src/store/LoginStore'
 import CustomButton from 'src/components/CustomButton.vue'
 import UserDropdownMenu from './UserDropdownMenu.vue'
 import CustomDialog from './CustomDialog.vue'
-import LocalStorage from 'src/services/localStorage'
 import CookieService from 'src/services/cookieService'
 
 const $store = useLoginStore()
-const userLogged = ref($store.userLogged)
+const loggedIn = ref($store.loggedIn)
 const $router = useRouter()
 const showEgressNotRegisteredModal = ref(false)
-const storage = new LocalStorage()
 const cookieService = new CookieService()
 
 onMounted(() => {
   checkEgressRegistration()
 })
 
-watch(() => $store.userLogged, () => {
-  userLogged.value = $store.userLogged
+watch(() => $store.loggedIn, () => {
+  loggedIn.value = $store.loggedIn
 
-  if (userLogged.value) {
+  if (loggedIn.value) {
     checkEgressRegistration()
   }
 })
 
 const checkEgressRegistration = () => {
-  const loggedUser = storage.getLoggedUser()
+  const userData = $store.getUserData()
   const isFirstAccess = cookieService.get('isFirstAccess')
 
   if (
-    loggedUser?.scope === 'EGRESSO' &&
-    !loggedUser?.isEgresso &&
+    userData?.scope === 'EGRESSO' &&
+    !userData?.isEgresso &&
     isFirstAccess !== 'yes'
   ) showEgressNotRegisteredModal.value = true
 }

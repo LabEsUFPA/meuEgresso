@@ -34,7 +34,7 @@
               color2="emerald"
               @toggle="toggleIsInput('profileHead')"
               :is-input="dataEgresso.profileHead.isInput"
-              v-if="!isPublic"
+              v-if="!isPublic || isSuperUser"
             />
           </h1>
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
@@ -108,7 +108,7 @@
             >
               <CustomButtonLink
                 label="LinkedIn"
-                icon-path="/src/assets/linkedin-icon.svg"
+                icon-path="/img/linkedin-icon.svg"
                 :url="dataEgresso.profileHead.linkedin"
                 placeholder="https://br.linkedin.com/"
                 color="whitesky"
@@ -130,7 +130,7 @@
 
               <CustomButtonLink
                 label="Lattes"
-                icon-path="/src/assets/lattesP.svg"
+                icon-path="/img/lattesP.svg"
                 :url="dataEgresso.profileHead.lattes"
                 placeholder="https://lattes.cnpq.br/"
                 color="whitesky"
@@ -178,7 +178,7 @@
                   icon-size="20"
                   @toggle="toggleIsInput('geral')"
                   :is-input="dataEgresso.geral.isInput"
-                  v-if="!isPublic"
+                  v-if="!isPublic || isSuperUser"
                 />
               </h1>
             </template>
@@ -213,7 +213,7 @@
                   label="E-mail"
                   placeholder="marcele@email.com"
                   :icon-path="mdiEmail"
-                  v-if="!isPublic"
+                  v-if="!isPublic || isSuperUser"
                 />
                 <CustomPerfilData
                   type="date"
@@ -277,7 +277,7 @@
                   :has-shadow="false"
                   @toggle="toggleIsInput('academico')"
                   :is-input="dataEgresso.academico.isInput"
-                  v-if="!isPublic"
+                  v-if="!isPublic || isSuperUser"
                 />
               </h1>
             </template>
@@ -524,7 +524,7 @@
                     :has-shadow="false"
                     @toggle="toggleIsInput('carreira')"
                     :is-input="dataEgresso.carreira.isInput"
-                    v-if="!isPublic"
+                    v-if="!isPublic || isSuperUser"
                   />
                 </h1>
               </template>
@@ -595,7 +595,7 @@
                     :has-shadow="false"
                     @toggle="toggleIsInput('localizacao')"
                     :is-input="dataEgresso.localizacao.isInput"
-                    v-if="!isPublic"
+                    v-if="!isPublic || isSuperUser"
                   />
                 </h1>
               </template>
@@ -721,7 +721,7 @@
                     :has-shadow="false"
                     @toggle="toggleIsInput('adicionais')"
                     :is-input="dataEgresso.adicionais.isInput"
-                    v-if="!isPublic"
+                    v-if="!isPublic || isSuperUser"
                   />
                 </h1>
               </template>
@@ -897,11 +897,21 @@ const stagedChanges = ref({
   }
 })
 
-if (storage.has('loggedEgresso')) {
-  $store.fetchAll()
-}
+// if (storage.has('loggedEgresso')) {
+$store.fetchAll()
 
+const isSuperUser = computed(() => {
+  if (storage.has('loggedUser')) {
+    const logUser = JSON.parse(storage.get('loggedUser'))
+    if (logUser.scope === 'ADMIN' || logUser.scope === 'SECRETARIO') {
+      return true
+    }
+  }
+  return false
+})
 const isPublic = computed(() => {
+  console.log('route')
+  console.log(Number($route.params.id))
   if (storage.has('loggedUser') && storage.has('loggedEgresso')) {
     const logEgresso = JSON.parse(storage.get('loggedEgresso'))
     return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id))
@@ -925,10 +935,6 @@ function handleStatus (status: any) {
     return true
   }
 }
-const profileImageRef = ref<typeof ProfileImage | null>(null)
-const profileImageSave = () => {
-  return profileImageRef?.value?.imageUploadBack()
-}
 async function handleSubmitHeader (values: any) {
   jsonResponse.usuario.nome = values.geral.nome
   if (values.geral.linkedin !== '' && values.geral.linkedin !== undefined) {
@@ -942,11 +948,12 @@ async function handleSubmitHeader (values: any) {
     jsonResponse.lattes = null
   }
 
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   let responseImage: any
   if (stagedChanges.value.profileHead.removedImage) {
     responseImage = await removeImageEgresso()
     stagedChanges.value.profileHead.removedImage = false
+    console.log('stagedChange')
   } else {
     responseImage = await profileImageSave()
   }
@@ -955,7 +962,7 @@ async function handleSubmitHeader (values: any) {
     dialogSucesso.value = true
 
     toggleIsInput('profileHead')
-    fetchUpdateEgresso()
+    await fetchUpdateEgresso()
   } else {
     dialogFalha.value = true
   }
@@ -966,7 +973,7 @@ async function handleSubmitGeral (values: any) {
   // ID request
   jsonResponse.genero.id = values.geral.genero
   jsonResponse.nascimento = values.geral.nascimento
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('geral')
   }
@@ -1056,7 +1063,7 @@ async function handleSubmitAcademico (values: any) {
     jsonResponse.remuneracaoBolsa = 0
   }
 
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
 
   if (handleStatus(status)) {
     toggleIsInput('academico')
@@ -1068,7 +1075,7 @@ async function handleSubmitLocalizacao (values: any) {
   jsonResponse.emprego.empresa.endereco = values.localizacao
   // delete jsonResponse.emprego.empresa.endereco.id
 
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('localizacao')
   }
@@ -1129,7 +1136,7 @@ async function handleSubmitCarreira (values: any) {
     jsonResponse.emprego = null
   }
 
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('carreira')
   }
@@ -1151,7 +1158,7 @@ async function handleSubmitAdicionais (values: any) {
   } else {
     jsonResponse.palestras = null
   }
-  const status = await egressoStore.atualizarEgresso(jsonResponse)
+  const status = await atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
     toggleIsInput('adicionais')
   }
@@ -1336,6 +1343,9 @@ async function fetchUpdateEgresso () {
 
   // Cotas
   let cotasEgresso = ''
+  if (json.id === 0) {
+    console.log('wttffff')
+  }
   imageEgressoUrl = await handleEgressoImage(json.id)
   for (const element of json.cotas) {
     $store.tiposCota.forEach(option => {
@@ -1511,10 +1521,6 @@ onMounted(() => {
   })
 })
 
-function fetchPublicEgresso (id: number) {
-  return egressoStore.fetchPublicEgresso(id)
-}
-
 const schemaHeader = object().shape({
   geral: object({
     nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
@@ -1632,14 +1638,39 @@ const schemaAdicionais = object().shape({
     contribuicoes: string().required('Campo obrigatório')
   })
 })
+const profileImageRef = ref<typeof ProfileImage | null>(null)
+const profileImageSave = () => {
+  if (isSuperUser.value) {
+    return profileImageRef?.value?.imageUploadBackAdmin(Number($route.params?.id))
+  }
+  return profileImageRef?.value?.imageUploadBack()
+}
+function fetchPublicEgresso (id: number) {
+  if (isSuperUser.value) {
+    return egressoStore.fetchAdminEgresso(id)
+  }
+  return egressoStore.fetchPublicEgresso(id)
+}
+async function atualizarEgresso (data : any) {
+  if (isSuperUser.value) {
+    return egressoStore.atualizarEgressoAdmin(data, Number($route.params?.id))
+  }
+  return await egressoStore.atualizarEgresso(data)
+}
 async function removeImageEgresso () {
-  const removeResp = await egressoStore.removeImageEgresso()
-  dataEgresso.value.profileHead.image = '0'
-  return removeResp
+  let response = 100
+  if (isSuperUser.value) {
+    response = await egressoStore.removeImageEgressoAdmin(Number($route.params?.id))
+    dataEgresso.value.profileHead.image = ' '
+    return response
+  }
+  response = await egressoStore.removeImageEgresso()
+  dataEgresso.value.profileHead.image = ' '
+  return response
 }
 async function softRemoveImageEgresso () {
   stagedChanges.value.profileHead.removedImage = true
-  dataEgresso.value.profileHead.image = '0'
+  dataEgresso.value.profileHead.image = ' '
 }
 
 watch(() => dataEgresso.value.profileHead.image, (newValue) => {

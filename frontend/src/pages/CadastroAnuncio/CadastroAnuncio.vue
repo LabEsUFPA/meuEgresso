@@ -47,9 +47,10 @@
               />
               <CustomInput
                 name="descricao"
-                label="Descrição"
+                label="Descrição (máximo de 1000 caracteres)"
                 placeholder="Insira a descrição da vaga que você deseja anunciar!"
                 type="textarea"
+                :max-length="1000"
                 :input-class="classNames(['flex w-full'])"
                 :required="true"
                 :icon-path="mdiLink"
