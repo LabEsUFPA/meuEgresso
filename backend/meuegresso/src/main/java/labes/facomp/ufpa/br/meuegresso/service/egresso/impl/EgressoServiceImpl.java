@@ -150,6 +150,11 @@ public class EgressoServiceImpl implements EgressoService {
 	}
 
 	@Override
+	public boolean existsMatricula(String matricula) {
+		return egressoRepository.existsByMatricula(matricula);
+	}
+
+	@Override
 	public void deleteFile(String fotoNomeString) throws IOException {
 		Path file = Paths.get(String.format("%s%s", uploadDirectory + "/", fotoNomeString));
 		Files.deleteIfExists(file);

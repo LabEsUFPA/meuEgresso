@@ -12,6 +12,8 @@ public enum ResponseType {
     SUCCESS_DELETE("Dado deletado com sucesso"),
 
     FAIL_DELETE("Dado não deletado"),
+    
+    EGRESSO_NAO_ENCONTRADO("Egresso não encontrado"),
 
     EGRESSO_ENCONTRADO("Egresso encontrado"),
 
