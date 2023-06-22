@@ -160,7 +160,7 @@ const storeLogin = useLoginStore()
 const missingDigits = ref(0)
 const showPassword = ref(false)
 const $store = useCadastroPerfilStore()
-const loading = ref(true)
+const loading = ref(false)
 
 const schema = object().shape({
   nome: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),

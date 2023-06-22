@@ -49,8 +49,7 @@ public class RecuperacaoSenhaServiceImpl implements RecuperacaoSenhaService {
             recuperacaoSenha = recuperacaoSenhaRepository.save(recuperacaoSenha);
             URI location = UriComponentsBuilder.fromHttpUrl(redirect)
                     .queryParam("tokenAuth", recuperacaoSenha.getToken()).build().toUri();
-            mailService.sendEmail(email, TITULO_REDEFINICAO_SENHA,
-                    String.format(MENSAGEM_REDEFINICAO, projection.getNome(), location.toString()));
+            new Thread(() -> mailService.sendEmail(email, TITULO_REDEFINICAO_SENHA, String.format(MENSAGEM_REDEFINICAO, projection.getNome(), location.toString()))).start();
             return true;
         } else {
             return false;

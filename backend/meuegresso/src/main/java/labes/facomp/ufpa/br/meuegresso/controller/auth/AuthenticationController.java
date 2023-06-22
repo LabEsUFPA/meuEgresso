@@ -163,7 +163,7 @@ public class AuthenticationController {
 		}
 		mapper.getConfiguration().setSkipNullEnabled(true);
 
-		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
+		final UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 
 		EgressoValidoModel egressoValido;
 		try {
@@ -175,8 +175,8 @@ public class AuthenticationController {
 		}
 
 		usuarioModel.setGrupos(Set.of(Grupos.EGRESSO));
-		usuarioModel = usuarioService.save(usuarioModel);
-		mailService.usuarioCadastrado(usuarioModel);
+		usuarioService.save(usuarioModel);
+		new Thread(() -> mailService.usuarioCadastrado(usuarioModel)).start();
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
