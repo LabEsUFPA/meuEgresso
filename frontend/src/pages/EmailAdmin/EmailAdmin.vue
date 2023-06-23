@@ -95,12 +95,15 @@
                 </CustomInput>
 
                 <CustomCheckbox
-                  class="mb-[-20px] mt-16"
+                  class="mb-[-15px] mt-16"
                   name="emailMulti"
                   label="E-mail para destinatário único"
                   v-model:value="bools.multiDestinatario "
                   :disabled="bools.frequente"
                 />
+                <h2 class="text-sm text-blue-600 mb-[-10px]">
+                  Caso desmarcado envia E-mail para todos os usuários
+                </h2>
 
                 <CustomInput
                   v-show="bools.multiDestinatario"
