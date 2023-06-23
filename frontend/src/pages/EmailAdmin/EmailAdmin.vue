@@ -79,7 +79,7 @@
                   </CustomInput>
                 </div>
               </h1>
-              <div class="mt-7 mb-5 ">
+              <div class="mt-7 mb-5">
                 <CustomInput
                   class="mb-5 mt-1.5"
                   name="dataEnvio"
@@ -95,21 +95,21 @@
                 </CustomInput>
 
                 <CustomCheckbox
-                  class="mb-[-20px] mt-16"
-                  name="emailMulti"
+                  name="destinatarioUnico"
                   label="E-mail para destinatário único"
-                  v-model:value="bools.multiDestinatario "
-                  :disabled="bools.frequente"
+                  v-model:value="bools.destinatarioUnico"
+                  :disabled="bools.semestral || bools.anual"
                 />
 
                 <CustomInput
-                  v-show="bools.multiDestinatario"
-                  class="mb-5"
+                  v-show="bools.destinatarioUnico"
+                  class="mt-[-1.5em] mb-5"
                   name="email"
                   type="text"
+                  :icon-path="mdiEmail"
                   custom-label
-                  :required="bools.multiDestinatario"
-                  :disabled="!bools.multiDestinatario || bools.frequente"
+                  :required="bools.destinatarioUnico"
+                  :disabled="bools.semestral || bools.anual"
                 >
                   <template #label>
                     <div class="text-lg font-medium text-neutral-900 inline">
@@ -117,27 +117,19 @@
                     </div>
                   </template>
                 </CustomInput>
-                <div>
-                  <CustomCheckbox
-                    class="mt-12"
-                    name="frequente"
-                    label="Frequente"
-                    v-model:value="bools.frequente"
-                  />
-                  <CustomCheckbox
-                    name="semanal"
-                    label="Envio Semestral"
-                    v-model:value="bools.semanal"
-                    :disabled="bools.anual || !bools.frequente"
-                  />
-                  <CustomCheckbox
-                    class="mb-15"
-                    name="anual"
-                    label="Envio Anual"
-                    v-model:value="bools.anual"
-                    :disabled="bools.semanal || !bools.frequente"
-                  />
-                </div>
+                <CustomCheckbox
+                  name="semestral"
+                  label="Envio Semestral"
+                  v-model:value="bools.semestral"
+                  :disabled="bools.anual || bools.destinatarioUnico"
+                />
+                <CustomCheckbox
+                  class="mb-15"
+                  name="anual"
+                  label="Envio Anual"
+                  v-model:value="bools.anual"
+                  :disabled="bools.semestral || bools.destinatarioUnico"
+                />
               </div>
             </div>
             <div class="flex flex-col items-start sm:flex-row justify-end gap-4 p-4 m-1 mr-5 mb-5">
@@ -219,10 +211,8 @@ import {
   mdiChevronLeft,
   mdiCheckCircle,
   mdiAlertCircle
-
 } from '@mdi/js'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
-
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import classNames from 'classnames'
@@ -233,24 +223,27 @@ import { useEmailStore } from 'src/store/EmailStore'
 import { usePainelStore } from 'src/store/PainelStore'
 
 const emailStore = useEmailStore()
-
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const form = ref<typeof Form | null>(null)
 const $painelStore = usePainelStore()
 
 const bools = ref({
-  multiDestinatario: !!$painelStore.getEgressoEmail(),
-  frequente: false,
-  semanal: false,
+  destinatarioUnico: !!$painelStore.getEgressoEmail(),
+  semestral: false,
   anual: false
 })
+
 async function handleSubmit (values: any) {
-  console.log('sub')
-  if (!values.emailMulti || values.frequente) {
-    values.email = null
+  const data = {
+    escopo: values.escopo,
+    corpo: values.corpo,
+    dataEnvio: values.dataEnvio,
+    email: values.destinatarioUnico && !values.semestral && !values.anual ? values.email : '',
+    frequente: values.semestral || values.anual,
+    anual: values.anual === undefined ? false : values.anual
   }
-  const status = await emailStore.createEmail(values)
+  const status = await emailStore.createEmail(data)
   if (status !== 201) {
     dialogFalha.value = true
   } else {
@@ -274,22 +267,22 @@ const schema = object().shape({
     }
     return true
   }),
+  destinatarioUnico: boolean(),
   email: string()
     .email('Email inválido')
     .test('required', 'Campo obrigatório', function (value) {
-      const { multiDestinatario, frequente } = this.parent
-      if (!multiDestinatario && !frequente) {
-        return !!value
+      if (!this.parent.destinatarioUnico) return true
+      else if (value) {
+        if (value.length) return true
       }
-      return true
+      return false
     })
     .matches(
-      /^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/,
+      /^([A-Za-z\d]+([._][A-Za-z\d]+)*@[A-Za-z\d]+(.[A-Za-z\d]+)*(.[A-z]{2,}))?$/,
       'Email inválido'
     ),
-  frequente: boolean(),
+  semestral: boolean(),
   anual: boolean()
-
 })
 
 async function handleCancel (e: any) {
@@ -336,7 +329,7 @@ async function fetchUpdateEmail () {
   form.value?.setFieldValue('dataEnvio', '')
 
   if ($painelStore.getEgressoEmail()) {
-    form.value?.setFieldValue('emailMulti', true)
+    form.value?.setFieldValue('destinatarioUnico', true)
     form.value?.setFieldValue('email', $painelStore.getEgressoEmail())
   }
 }
