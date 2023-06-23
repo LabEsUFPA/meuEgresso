@@ -134,7 +134,6 @@
                 class="mb-5"
                 name="academico.cotista.tipos.renda"
                 label="Cota Renda"
-                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -142,7 +141,6 @@
                 class="mb-5"
                 name="academico.cotista.tipos.escola"
                 label="Cota Escola"
-                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -150,7 +148,6 @@
                 class="mb-5"
                 name="academico.cotista.tipos.raca"
                 label="Autodeclaração de Raça"
-                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -158,7 +155,6 @@
                 class="mb-5"
                 name="academico.cotista.tipos.quilombolaIndigena"
                 label="Quilombola/Indígena"
-                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -166,7 +162,6 @@
                 class="mb-5"
                 name="academico.cotista.tipos.pcd"
                 label="PCD"
-                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
               <p
