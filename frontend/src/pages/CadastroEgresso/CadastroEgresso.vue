@@ -36,6 +36,7 @@
               name="geral.nome"
               label="Nome"
               :icon-path="mdiAccount"
+              :max-length="50"
               required
             />
 
@@ -44,6 +45,7 @@
               name="geral.nascimento"
               type="date"
               label="Data de Nascimento"
+              :max-length="10"
               required
             />
 
@@ -62,6 +64,7 @@
               placeholder="Ex: example@gov.br"
               helper-text="Use um email válido: hotmail, outlook, gmail, etc."
               :icon-path="mdiEmail"
+              :max-length="64"
               required
             />
 
@@ -203,6 +206,7 @@
               placeholder="R$ 0,00"
               :required="bools.bolsista"
               :disabled="!bools.bolsista"
+              :max-length="12"
               money
             />
 
@@ -217,6 +221,7 @@
               class="mb-5"
               name="academico.posGrad.local"
               label="Instituição da pós-graduação"
+              :max-length="50"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
             />
@@ -225,6 +230,7 @@
               class="mb-5"
               name="academico.posGrad.curso"
               label="Curso de pós-graduação"
+              :max-length="50"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
             />
@@ -377,6 +383,7 @@
               name="adicionais.assuntosPalestras"
               :required="bools.palestras"
               :disabled="!bools.palestras"
+              :max-length="300"
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -392,6 +399,7 @@
               type="textarea"
               class="mb-5"
               name="adicionais.experiencias"
+              :max-length="300"
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -405,6 +413,7 @@
             <CustomInput
               type="textarea"
               name="adicionais.contribuicoes"
+              :max-length="300"
             />
           </div>
         </template>
