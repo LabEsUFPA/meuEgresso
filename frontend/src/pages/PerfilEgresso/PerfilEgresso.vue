@@ -121,7 +121,7 @@
                   <CustomInput
                     class="mr-[-5px]"
                     label=""
-                    input-class="w-[150px] h-[31px] "
+                    input-class="w-[155px] h-[34px] "
                     :icon-path="mdiLinkVariant"
                     name="geral.linkedin"
                     :value="dataEgresso.profileHead.linkedin"
@@ -142,7 +142,7 @@
                 <template #input>
                   <CustomInput
                     class="mr-[-5px]"
-                    input-class="w-[150px] h-[31px]"
+                    input-class="w-[155px] h-[34px]"
                     label=""
                     :icon-path="mdiLinkVariant"
                     name="geral.lattes"
