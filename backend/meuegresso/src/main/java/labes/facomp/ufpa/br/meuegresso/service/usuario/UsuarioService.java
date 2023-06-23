@@ -64,7 +64,7 @@ public interface UsuarioService extends UserDetailsService {
 
 	/**
 	 * Método responsável por encontrar um determinado usuário por seu username.
-	 * 
+	 *
 	 * @param username
 	 * @return {@link UsuarioModel}
 	 */

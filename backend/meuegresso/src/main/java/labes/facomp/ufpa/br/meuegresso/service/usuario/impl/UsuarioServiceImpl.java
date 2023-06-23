@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +40,7 @@ import lombok.extern.log4j.Log4j2;
  * @version 1.0
  */
 @Log4j2
+@Primary
 @Service
 @RequiredArgsConstructor
 public class UsuarioServiceImpl implements UsuarioService {
