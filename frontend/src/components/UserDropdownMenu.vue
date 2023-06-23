@@ -77,11 +77,11 @@ import { useLoginStore } from 'src/store/LoginStore'
 import LocalStorage from 'src/services/localStorage'
 
 interface Props {
-  userLogged: boolean
+  loggedIn: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  userLogged: false
+  loggedIn: false
 })
 const pinia = createPinia()
 const app = createApp({})
@@ -89,8 +89,8 @@ app.use(pinia)
 
 const store = useLoginStore()
 const storage = new LocalStorage()
-const userLoggedName = ref(props.userLogged ? storage.getLoggedUser()?.sub : '')
-const isEgress = ref(props.userLogged ? storage.getLoggedUser()?.scope === 'EGRESSO' : false)
+const userLoggedName = ref(props.loggedIn ? storage.getLoggedUser()?.sub : '')
+const isEgress = ref(props.loggedIn ? storage.getLoggedUser()?.scope === 'EGRESSO' : false)
 
 const userMenuIsOpen = ref(false)
 const toggleUserMenu = () => {

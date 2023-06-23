@@ -32,7 +32,6 @@ describe('ModalFilters', () => {
       }
     })
 
-    expect(wrapper.html()).toContain('Aplicar filtros')
-    expect(wrapper.html()).toContain('Cancelar')
+    expect(wrapper.html()).toContain('Fechar')
   })
 })

@@ -27,7 +27,9 @@
             />
 
             <div class="ml-4">
-              <div>{{ file ? file.name : 'Clique para selecionar foto' }}</div>
+              <div class="w-52 truncate">
+                {{ file ? file.name : 'Clique para selecionar foto' }}
+              </div>
               <div>{{ file ? fileSize : 'Máximo de 5 MB' }}</div>
             </div>
 

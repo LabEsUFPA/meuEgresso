@@ -97,7 +97,7 @@ const getPagesShown = () => {
   pagesShown.add(current + 1)
   pagesShown.add(props.totalPages)
 
-  const pagesShownArray = [...pagesShown].filter(p => p > 0 && p <= props.totalPages).sort()
+  const pagesShownArray = [...pagesShown].filter(p => p > 0 && p <= props.totalPages).sort((a, b) => a - b)
   const pagination = []
 
   for (let i = 0; i < pagesShownArray.length - 1; i++) {

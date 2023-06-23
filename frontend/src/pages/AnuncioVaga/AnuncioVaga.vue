@@ -77,10 +77,10 @@
               Salário
             </h2>
             <p
-              v-if="$store.anuncio.salario"
+              v-if="$store.anuncio.salario != '0.00'"
               class="text-neutral-900"
             >
-              R$ {{ $store.anuncio.salario }}
+              {{ formataSalario(parseFloat($store.anuncio.salario)) }}
             </p>
             <p
               v-else
@@ -201,12 +201,14 @@ const $loginStore = useLoginStore()
 const tipoUsuario = ref('')
 const userEmail = ref('')
 
+console.log('salário:', $store.anuncio.salario)
+
 onMounted(() => {
-  if ($loginStore.userLogged) {
-    tipoUsuario.value = $loginStore.getLoggedUser()?.scope ?? ''
+  if ($loginStore.loggedIn) {
+    tipoUsuario.value = $loginStore.getUserData()?.scope ?? ''
   }
   if (tipoUsuario.value !== 'ADMIN') {
-    userEmail.value = ($loginStore.getLoggedUser() as any)?.email ?? ''
+    userEmail.value = ($loginStore.getUserData() as any)?.email ?? ''
   }
 })
 
@@ -220,6 +222,15 @@ const onDeleteAnuncio = () => {
 
   openDeleteConfirmation.value = false
   $router.push('/vagas')
+}
+
+const formataSalario = (value:number) => {
+  const formattedValue = value.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  })
+  console.log(value)
+  return formattedValue
 }
 
 </script>

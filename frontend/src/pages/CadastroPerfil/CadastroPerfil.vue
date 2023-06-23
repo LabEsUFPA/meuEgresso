@@ -23,7 +23,7 @@
           <div class="flex flex-col gap-y-5 mb-4">
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
-                name="name"
+                name="nome"
                 label="Nome Completo"
                 class-helper-text="text-gray-600"
                 :required="true"
@@ -54,7 +54,7 @@
               <CustomInput
                 name="email"
                 type="email"
-                label="Email"
+                label="E-mail"
                 helper-text="Informe o mesmo e-mail que está cadastrado no SIGAA"
                 class-helper-text="text-gray-600"
                 :icon-path="mdiEmail"
@@ -147,7 +147,7 @@ const showPassword = ref(false)
 const $store = useCadastroPerfilStore()
 
 const schema = object().shape({
-  name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
+  nome: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
   username: string().required('Informe um nome de usuário').trim().matches(/^[A-Za-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
   registration: string().max(12).matches(/^(\d{12})?$/),
   email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.[a-zA-Z]{2,}))?$/, 'Email inválido'),
@@ -170,7 +170,7 @@ const handleSubmit = async (submitData: any) => {
     profileData.username,
     profileData.password,
     profileData.email,
-    profileData.name,
+    profileData.nome,
     profileData.registration
   )
 
@@ -178,11 +178,8 @@ const handleSubmit = async (submitData: any) => {
     submitSuccess.value = true
     await storeLogin.userLogin(profileData.username, profileData.password, true)
     await router.push({ path: '/cadastro' })
-  } else if (response.status === 400) {
-    errorText.value = response.data?.technicalMessage
-    error.value = true
-  } else {
-    errorText.value = 'Requisição não aceita'
+  } else if (response.status !== 201) {
+    errorText.value = response.data?.technicalMessage ? response.data?.technicalMessage : 'Requisição não aceita'
     error.value = true
   }
 }

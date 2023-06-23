@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class AreaEmpregoDTO {
 
     private Integer id;
+
     @NotBlank
     private String nome;
 

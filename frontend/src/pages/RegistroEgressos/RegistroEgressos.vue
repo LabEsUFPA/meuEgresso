@@ -11,6 +11,7 @@
         <SearchBar
           name="pesquisa"
           v-model="pesquisaValue"
+          :placeholder="'Pesquisar egresso'"
         />
 
         <div class="flex flex-col sm:flex-row w-full items-start gap-4 sm:gap-8">
@@ -171,19 +172,22 @@ onMounted(async () => {
   loading.value = true
   $store.fetchEgressos()
 
+  watch(currentPage, () => {
+    $store.fetchEgressos(pesquisaValue.value, filtersByName.value, currentPage.value)
+    window.scrollTo(0, 0)
+  })
   watch(pesquisaValue, () => {
+    currentPage.value = 0
     $store.fetchEgressos(pesquisaValue.value, filtersByName.value, currentPage.value)
   })
   watch(filtersByName, () => {
-    $store.fetchEgressos(pesquisaValue.value, filtersByName.value, currentPage.value)
-  })
-  watch(currentPage, () => {
+    currentPage.value = 0
     $store.fetchEgressos(pesquisaValue.value, filtersByName.value, currentPage.value)
   })
 })
 
 const updateData = () => {
-  $store.fetchEgressos()
+  $store.fetchEgressos(pesquisaValue.value, filtersByName.value, currentPage.value)
 }
 
 const openModalFilters = () => {

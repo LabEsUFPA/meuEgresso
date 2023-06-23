@@ -19,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,7 +44,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroDiaGra
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroMensalGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
-import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -65,7 +63,6 @@ public class DashAdmController {
 
 	private final UsuarioService usuarioService;
 	private final EgressoService egressoService;
-	private final EmpresaService empresaService;
 
 	/**
 	 * Endpoint responsável por retornar uma lista de egressoDashDTO para
@@ -77,7 +74,7 @@ public class DashAdmController {
 	 * @since 06/06/2023
 	 */
 	@GetMapping
-	// @PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<EgressoDashDTO> consultarEgressoDash(
@@ -85,8 +82,8 @@ public class DashAdmController {
 			@RequestParam(name = "status", defaultValue = "incompleto") String[] status,
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
-			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
-		Page<EgressoDashDTO> egressos = usuarioService.findBySearch(nomeUsuario, status, page, size, direction);
+			@RequestParam(defaultValue = "DESC", required = false) String ordenacao) {
+		Page<EgressoDashDTO> egressos = usuarioService.findBySearch(nomeUsuario, status, page, size, ordenacao);
 		egressos.forEach(e -> {
 			if (e.getIdEgresso() != null) {
 				try {
@@ -128,7 +125,7 @@ public class DashAdmController {
 		document.open();
 
 		List<EgressoDashDTO> egressos = usuarioService.findBySearch("",
-				new String[] { "pendente", "inativo", "completo", "incompleto" }, 0, 20, Direction.ASC).toList();
+				new String[] { "pendente", "inativo", "completo", "incompleto" }, 0, 20, "DESC").toList();
 
 		document.add(new Paragraph("UNIVERSIDADE FEDERAL DO PARÁ"));
 		document.add(new Paragraph("Listagem de Egressos", bold));
@@ -225,28 +222,6 @@ public class DashAdmController {
 		Map<Integer, Long> egressoCadAno = egressoService.countEgressoPorAno();
 
 		return new EgressoCadastroAnualGraficoDTO(egressoCadAno);
-	}
-
-	/**
-	 * Endpoint responsável por deletar todos os dados da tabela egressos e
-	 * associados
-	 *
-	 * @return ResponseEntity<String> confirmação de retorno
-	 * @author Lucas Cantão
-	 * @since 12/06/2023
-	 */
-	@DeleteMapping("/deleteall")
-	@PreAuthorize("hasRole('ADMIN')")
-	@ResponseStatus(code = HttpStatus.OK)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public ResponseEntity<String> deleteAll() {
-		egressoService.deleteAll();
-		empresaService.deleteAll();
-		if (egressoService.findAll().isEmpty() && empresaService.findAll().isEmpty()) {
-			return new ResponseEntity<>("Todos os dados deletados com sucesso", null, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Dados não deletados", null, HttpStatus.EXPECTATION_FAILED);
-		}
 	}
 
 }

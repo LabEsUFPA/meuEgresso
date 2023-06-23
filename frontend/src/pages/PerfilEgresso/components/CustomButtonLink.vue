@@ -27,12 +27,13 @@
       :type="type"
     >
       <img
-        :class="classimg"
+        class="mt-[-3px]"
         :src="iconPath"
         :width="iconSize"
         :height="iconSize"
+        alt="input"
       >
-      <h1 class="text-sky-600 outline-sky-600 text-base font-bold ml-3 mr-2">
+      <h1 class="text-sky-600 outline-sky-600 text-base font-bold ml-3 mr-2 mt-[-18px] ">
         <slot name="input" />
       </h1>
     </button>
