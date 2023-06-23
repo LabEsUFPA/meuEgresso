@@ -321,7 +321,6 @@ class GraficoPubControllerTest extends Configuracao {
                 empresaModel = EmpresaModel.builder()
                                 .id(EGRESSO_ID)
                                 .nome(EMPRESA_NOME)
-                                .endereco(enderecoModel)
                                 .build();
                 empresaModel = empresaRepository.save(empresaModel);
 

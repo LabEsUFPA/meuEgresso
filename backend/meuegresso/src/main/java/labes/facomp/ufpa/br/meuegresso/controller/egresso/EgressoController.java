@@ -139,7 +139,6 @@ public class EgressoController {
             empresa = empresaService.findByNome(empresaDTO.getNome());
             if (empresa == null) {
                 empresa = mapper.map(empresaDTO, EmpresaModel.class);
-                empresa.setEndereco(enderecoEmpresa);
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
@@ -213,14 +212,14 @@ public class EgressoController {
             if (egressoModel.getEmprego() != null) {
                 EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
                 egressoEmpresaModel.setEgresso(egressoModel);
-                EnderecoModel enderecoModel = egressoEmpresaModel.getEmpresa().getEndereco();
+                EnderecoModel enderecoModel = egressoEmpresaModel.getEndereco();
                 EnderecoModel enderecoModelNoBanco = enderecoService.findByCidadeAndEstadoAndPais(
                         enderecoModel.getCidade(), enderecoModel.getEstado(),
                         enderecoModel.getPais());
                 if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
-                    egressoEmpresaModel.getEmpresa().setEndereco(enderecoModelNoBanco);
+                    egressoEmpresaModel.setEndereco(enderecoModelNoBanco);
                 } else if (enderecoModelNoBanco == null) {
-                    egressoEmpresaModel.getEmpresa()
+                    egressoEmpresaModel
                             .setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
                                     .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
                 }
