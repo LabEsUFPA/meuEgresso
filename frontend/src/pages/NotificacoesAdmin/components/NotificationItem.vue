@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col w-[960px] bg-white mx-4 sm:mx-6">
-    <div :class="['flex', 'gap-4', 'px-6', 'sm:px-8', 'pt-8', 'sm:pt-8', 'pb-8', 'items-center', 'border-b-[1px]', 'border-b-gray-200']">
+  <div class="flex sm:grid flex-col gap-2 sm:gap-0  sm:grid-cols-2 w-full px-6 sm:px-8 py-8 border-gray-200 border-b-[1px] items-start sm:items-center">
+    <div class="flex gap-4 col-span-2 items-center">
       <div :class="['shrink-0', 'p-2', 'rounded-3xl', 'text-white', getStatusColor(status)]">
         <SvgIcon
           type="mdi"
@@ -9,7 +9,7 @@
         />
       </div>
 
-      <div class="flex flex-col flex-grow text-cyan-800">
+      <div class="flex flex-row flex-grow text-cyan-800">
         <div class="flex items-center">
           <p class="text-sm sm:text-lg font-medium leading-tight">
             {{ nome }}

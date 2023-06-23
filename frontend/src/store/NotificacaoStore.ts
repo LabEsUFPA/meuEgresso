@@ -18,13 +18,13 @@ export const useNotificacaoStore = defineStore('Notificacao', {
   }),
 
   actions: {
-    async fetchNotificacoes(status: string, page: number, size: number) {
+    async fetchNotificacoes (status: string[] = ['incompleto', 'completo', 'pendente'], page: number, size: number) {
       const response = await Api.request({
         method: 'get',
         route: '/administrador/dashboard/notificacaoStatus',
-        params: { status: status.toUpperCase(), page, size, direction: 'DESC' }
+        params: { status, page, size, direction: 'DESC' }
       })
-
+      console.log(response)
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
         this.notificacoes = response.data?.content.map((elem: any) => ({
