@@ -29,6 +29,9 @@ import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
+import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
@@ -266,6 +269,8 @@ public class EgressoAdmController {
         return ResponseType.SUCCESS_UPDATE.getMessage();
     }
 
+    private final StatusUsuarioService statusUsuarioService;
+
     /**
      * Endpoint responsavel por deletar o egresso.
      *
@@ -280,8 +285,12 @@ public class EgressoAdmController {
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarEgresso(@PathVariable Integer id) {
-        if (egressoService.existsById(id)) {
+        EgressoModel egressoModel = egressoService.findById(id);
+        if (egressoModel != null) {
             egressoService.deleteById(id);
+            statusUsuarioService.save(StatusUsuarioModel.builder().usuarioId(egressoModel.getUsuario().getId())
+                    .nome(egressoModel.getUsuario().getNome())
+                    .status(UsuarioStatus.EXCLUIDO).build());
             return ResponseType.SUCCESS_DELETE.getMessage();
         }
         return ResponseType.FAIL_DELETE.getMessage();

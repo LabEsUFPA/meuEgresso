@@ -71,8 +71,7 @@
             <h1 class="col-span-3">
               Atividade
             </h1>
-
-            <h1 class="px-12">
+            <h1 class="px-6">
               Data e hora
             </h1>
           </div>
@@ -88,7 +87,7 @@
                 :nome="notificacao.nome"
                 :usuario-id="notificacao.usuarioId"
                 :status="notificacao.status"
-                :data-modificacao="notificacao.dataModificacao"
+                :data-modificacao="formatarDataHora(notificacao.dataModificacao)"
               />
             </div>
           </div>
@@ -173,26 +172,25 @@ const loading = ref(false)
 
 const currentPage = ref(0)
 
-const size = ref(3)
-
-const filtroStatusSelecionado = ref('')
+const size = ref(10)
 
 const isModalFiltersOpen = ref(false)
 
-const filtersByName = ref(['incompleto', 'completo', 'pendente'])
+const filtersByName = ref(['INCOMPLETO', 'COMPLETO', 'PENDENTE', 'EXCLUIDO'])
+
 
 onMounted(async () => {
-  await $store.fetchNotificacoes(filtroStatusSelecionado.value, currentPage.value, size.value)
+  await $store.fetchNotificacoes([], currentPage.value, size.value)
   loading.value = true
 
   watch(currentPage, () => {
-    $store.fetchNotificacoes(filtroStatusSelecionado.value, currentPage.value, size.value)
+    $store.fetchNotificacoes(filtersByName.value, currentPage.value, size.value)
   })
 
-  watch(filtroStatusSelecionado, () => {
+  watch(filtersByName, () => {
     currentPage.value = 0
-    console.log('novo filtro de status:', filtroStatusSelecionado.value)
-    $store.fetchNotificacoes(filtroStatusSelecionado.value, currentPage.value, size.value)
+    console.log(filtersByName)
+    $store.fetchNotificacoes(filtersByName.value, currentPage.value, size.value)
   })
 })
 const openModalFilters = () => {
@@ -213,7 +211,21 @@ const applyFilters = (filters:any) => {
     filters = [...filtrosStatus.value]
   }
 
-  filtersByName.value = filters.map((elem: any) => elem.name.toLowerCase())
+
+  filtersByName.value = filters.map((elem: any) => elem.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase())
+}
+
+function formatarDataHora (dataHora: string): string {
+  const data = new Date(dataHora)
+  const dia = String(data.getDate()).padStart(2, '0')
+  const mes = String(data.getMonth() + 1).padStart(2, '0')
+  const ano = String(data.getFullYear())
+  const hora = String(data.getHours()).padStart(2, '0')
+  const minuto = String(data.getMinutes()).padStart(2, '0')
+  const segundo = String(data.getSeconds()).padStart(2, '0')
+  const dataFormatada = `${dia}/${mes}/${ano}`
+  const timeFormatado = `${hora}:${minuto}:${segundo}h`
+  return `${dataFormatada} ${timeFormatado}`
 }
 
 </script>
