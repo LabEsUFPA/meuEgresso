@@ -256,31 +256,6 @@ public class EgressoController {
     }
 
     /**
-     * Endpoint responsável pela deleção local do arquivo da foto do egresso
-     *
-     * @author Camilo Santos, Eude Monteiro
-     * @since 11/05/2023
-     * @param token
-     * @return Uma string representando uma mensagem de êxito indicando que a foto
-     *         foi deletada.
-     * @throws IOException
-     */
-    @ResponseStatus(code = HttpStatus.OK)
-    @DeleteMapping(value = "/foto")
-    @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public ResponseEntity<String> deleteFotoEgresso(JwtAuthenticationToken token) throws IOException {
-        EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
-        if (egressoModel.getFotoNome() != null) {
-            egressoService.deleteFile(egressoModel.getFotoNome());
-            egressoModel.setFotoNome(null);
-            egressoService.updateEgresso(egressoModel);
-            return ResponseEntity.ok(ResponseType.SUCCESS_IMAGE_DELETE.getMessage());
-        }
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseType.FAIL_IMAGE_DELETE.getMessage());
-
-    }
-
-    /**
      * Endpoint responsável pelo salvamento local do arquivo da foto do egresso
      *
      * @author Camilo Santos, Eude Monteiro
@@ -302,6 +277,30 @@ public class EgressoController {
         egressoService.updateEgresso(egressoModel);
         egressoService.saveFoto(fileCode, arquivo);
         return ResponseType.SUCCESS_IMAGE_SAVE.getMessage();
+    }
+
+    /**
+     * Endpoint responsável pela deleção local do arquivo da foto do egresso
+     *
+     * @author Camilo Santos, Eude Monteiro
+     * @since 11/05/2023
+     * @param token
+     * @return Uma string representando uma mensagem de êxito indicando que a foto
+     *         foi deletada.
+     * @throws IOException
+     */
+    @ResponseStatus(code = HttpStatus.OK)
+    @DeleteMapping(value = "/foto")
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public ResponseEntity<String> deleteFotoEgresso(JwtAuthenticationToken token) throws IOException {
+        EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
+        if (egressoModel.getFotoNome() != null) {
+            egressoService.deleteFile(egressoModel.getFotoNome());
+            egressoModel.setFotoNome(null);
+            egressoService.updateEgresso(egressoModel);
+            return ResponseEntity.ok(ResponseType.SUCCESS_IMAGE_DELETE.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseType.FAIL_IMAGE_DELETE.getMessage());
     }
 
     private void validaSetorAtuacao(String setorAtuacaoNome, EgressoModel egressoModel) {

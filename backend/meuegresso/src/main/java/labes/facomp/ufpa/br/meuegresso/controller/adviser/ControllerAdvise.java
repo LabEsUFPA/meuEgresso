@@ -28,6 +28,7 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnalthorizedRegisterException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 
 /**
@@ -300,6 +301,15 @@ public class ControllerAdvise {
 	@ExceptionHandler(NotFoundFotoEgressoException.class)
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public ErrorResponse handleNotFoundFotoEgressoException(NotFoundFotoEgressoException ex) {
+		return new ErrorResponse(
+				ex.getMessage(),
+				ex.getLocalizedMessage(),
+				ex.getInternalCode());
+	}
+
+	@ExceptionHandler(UnalthorizedRegisterException.class)
+	@ResponseStatus(code = HttpStatus.FORBIDDEN)
+	public ErrorResponse handleUnalthorizedRegisterException(UnalthorizedRegisterException ex) {
 		return new ErrorResponse(
 				ex.getMessage(),
 				ex.getLocalizedMessage(),

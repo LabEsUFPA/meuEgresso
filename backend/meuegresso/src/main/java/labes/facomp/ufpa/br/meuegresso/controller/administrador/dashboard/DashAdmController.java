@@ -68,6 +68,7 @@ public class DashAdmController {
 	private final EgressoService egressoService;
 	private final StatusUsuarioService statusUsuarioService;
 
+
 	/**
 	 * Endpoint responsável por retornar uma lista de egressoDashDTO para
 	 * disponibilizar dados no dashboard do administrador

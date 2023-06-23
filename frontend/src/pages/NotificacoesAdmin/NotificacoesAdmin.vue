@@ -71,7 +71,6 @@
             <h1 class="col-span-3">
               Atividade
             </h1>
-
             <h1 class="px-6">
               Data e hora
             </h1>
@@ -164,12 +163,6 @@ const filtrosStatus = ref([
     name: 'Incompleto',
     selected: false,
     selectable: true
-  },
-  {
-    id: 4,
-    name: 'Excluído',
-    selected: false,
-    selectable: true
   }
 ])
 
@@ -184,6 +177,7 @@ const size = ref(10)
 const isModalFiltersOpen = ref(false)
 
 const filtersByName = ref(['INCOMPLETO', 'COMPLETO', 'PENDENTE', 'EXCLUIDO'])
+
 
 onMounted(async () => {
   await $store.fetchNotificacoes([], currentPage.value, size.value)
@@ -216,6 +210,7 @@ const applyFilters = (filters:any) => {
   if (filters.length === 0) {
     filters = [...filtrosStatus.value]
   }
+
 
   filtersByName.value = filters.map((elem: any) => elem.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase())
 }
