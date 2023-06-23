@@ -1,4 +1,16 @@
 <template>
+  <OLoading
+    :full-page="true"
+    v-model:active="loading"
+    full-page-class="bg-white/[.25] backdrop-blur-[1px] z-50"
+  >
+    <SvgIcon
+      type="mdi"
+      size="80"
+      class="text-blue-400 animate-spin"
+      :path="mdiLoading"
+    />
+  </OLoading>
   <Form
     @submit="handleSubmit"
     @invalid-submit="onInvalid"
@@ -13,17 +25,17 @@
           :text="errorText"
           :show-alert="error"
         />
-        <h1 class="text-blue-900 text-4xl font-bold mb-12">
+        <h1 class="text-blue-900 text-4xl font-bold mb-6">
           Criar Perfil
         </h1>
         <div class="mb-8 mx-4 sm:mx-0">
           <p class="text-blue-400 text-center font-bold mb-5 sm:text-base">
             Preencha os campos abaixo:
           </p>
-          <div class="flex flex-col gap-y-4 sm:gap-y-6">
+          <div class="flex flex-col">
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
-                name="name"
+                name="nome"
                 label="Nome Completo"
                 :required="true"
                 :icon-path="mdiAccount"
@@ -72,6 +84,7 @@
               />
             </div>
             <CustomCheckbox
+              class="mt-2"
               label="Visualizar senhas"
               name="showPassword"
               @update:value="toggleShowPassword"
@@ -85,7 +98,7 @@
               label="Nível de Acesso"
               name="accessLevel"
               placeholder="Selecionar"
-              :options="['Egresso', 'Secretário', 'Administrador']"
+              :options="accessLevel === 'ADMIN'? ['Egresso', 'Secretário', 'Administrador'] : ['Egresso', 'Secretário']"
               :required="true"
             />
           </div>
@@ -121,75 +134,71 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import CustomInput from 'src/components/CustomInput.vue'
-import { mdiAccount, mdiEmail, mdiLock } from '@mdi/js'
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiAccount, mdiEmail, mdiLock, mdiLoading } from '@mdi/js'
 import { Form } from 'vee-validate'
-import { object, string, ref as refYup, number } from 'yup'
+import { object, string, ref as refYup } from 'yup'
+import { OLoading } from '@oruga-ui/oruga-next'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
+import { useLoginStore } from 'src/store/LoginStore'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import { models } from 'src/@types'
 interface ProfileRegisterModel extends models.ProfileRegisterModel {}
 
 const error = ref(false)
-const errorMessages = ref({
-  errorRequest: 'Requisição não aceita.'
-})
 const errorText = ref('')
 const submitSuccess = ref(false)
 const username = ref('')
 const showPassword = ref(false)
-const storeCadastro = useCadastroPerfilStore()
-
-const setIdAccessLevel = (accessLevel: string) => {
-  if (accessLevel === 'Administrador') {
-    return 1
-  } else if (accessLevel === 'Secretário') {
-    return 2
-  } else {
-    return 3
-  }
-}
+const $store = useCadastroPerfilStore()
+const accessLevel = ref(useLoginStore().userData?.scope)
+const loading = ref(false)
 
 const schema = object().shape({
-  name: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
-  username: string().required('Informe um nome de usuário').trim().matches(/^[a-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
+  nome: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
+  username: string().required('Informe um nome de usuário').trim().matches(/^[A-Za-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
   email: string().required('Informe um email').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))/, 'Email inválido'),
   confirmationEmail: string().email().required('Confirme o email').oneOf([refYup('email')], 'Os e-mails informados são diferentes'),
-  password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
-  confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'Senha inválida'),
-  accessLevel: string().required('Selecione o nível de acesso'),
-  idAccessLevel: number()
+  password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida'),
+  confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida'),
+  accessLevel: string().required('Selecione o nível de acesso')
 })
 
 const toggleShowPassword = () => {
   showPassword.value = !showPassword.value
 }
 
+const mapAccessLevel = (accessLevel: string | undefined) => {
+  if (accessLevel === 'Administrador') return 'ADMIN'
+  else if (accessLevel === 'Secretário') return 'SECRETARIO'
+  return 'EGRESSO'
+}
+
 const handleSubmit = async (submitData: any) => {
   const profileData: ProfileRegisterModel = submitData
 
-  profileData.idAccessLevel = setIdAccessLevel(profileData.accessLevel ? profileData.accessLevel : 'Egresso')
-  const response = await storeCadastro.userProfileRegister(
+  loading.value = true
+  const response = await $store.registrationByAdmin(
     profileData.username,
     profileData.password,
     profileData.email,
-    profileData.name
-    /* [{ //QUEBROU, AGURANDO AS ROTAS DE ADMIN
-      id: submitData.idAccessLevel
-    }] */
+    profileData.nome,
+    mapAccessLevel(profileData.accessLevel)
   )
 
   if (response.status === 201) {
     username.value = submitData.username
     error.value = false
     submitSuccess.value = true
-  } else {
-    errorText.value = response.data?.message ? response.data.message : errorMessages.value.errorRequest
+  } else if (response.status !== 201) {
+    errorText.value = response.data.technicalMessage ? response.data.technicalMessage : 'Requisição não aceita.'
     error.value = true
   }
+  loading.value = false
 }
 
 const onInvalid = (e: any) => {

@@ -30,6 +30,8 @@ public class MensagemDTO {
     
     private LocalDateTime dataEnvio;
     
+    private LocalDateTime dataEnviada;
+    
     @Builder.Default
     private Boolean frequente = false;
 
