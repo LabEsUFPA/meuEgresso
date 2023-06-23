@@ -38,15 +38,15 @@ export namespace models {
   }
 
   export interface ProfileRegisterModel {
-    name: string
+    nome: string
     username: string
-    registration: string
+    registration?: string
     email: string
     confirmationEmail?: string
     password: string
     confirmationPassword?: string
     accessLevel?: string
-    idAccessLevel?: number
+    grupos?: string[]
   }
 
   export interface UserModel {

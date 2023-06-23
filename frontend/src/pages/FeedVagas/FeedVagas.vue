@@ -145,7 +145,7 @@ import FilterChip from 'src/components/FilterChip.vue'
 import ModalFilters from 'src/components/ModalFilters.vue'
 import PageSelector from 'src/components/PageSelector.vue'
 
-const logado = ref(useLoginStore().userLogged)
+const logado = ref(useLoginStore().loggedIn)
 
 const $store = useAnuncioVagaStore()
 

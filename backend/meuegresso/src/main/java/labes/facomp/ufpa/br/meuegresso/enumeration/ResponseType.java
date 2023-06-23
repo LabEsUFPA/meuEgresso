@@ -7,7 +7,11 @@ public enum ResponseType {
 
     SUCCESS_SAVE("Dado salvo com sucesso"),
 
+    FAIL_SAVE("Dado não-salvo com sucesso"),
+
     SUCCESS_UPDATE("Dado atualizado com sucesso"),
+
+    FAIL_UPDATE("Dado não-atualizado com sucesso"),
 
     SUCCESS_DELETE("Dado deletado com sucesso"),
 

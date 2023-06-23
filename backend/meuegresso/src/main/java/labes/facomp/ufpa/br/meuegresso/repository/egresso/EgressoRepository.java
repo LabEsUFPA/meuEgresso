@@ -36,7 +36,7 @@ public interface EgressoRepository extends CrudRepository<EgressoModel, Integer>
     @Query(value = "select e.bolsista, count(e) from egresso e group by e.bolsista")
     List<Tuple> countBolsista();
 
-    @Query(value = "select DATE(e.createdDate), count(e) from egresso e group by DATE(e.createdDate)")
+    @Query(value = "select DATE(e.createdDate), count(e.id) from egresso e group by DATE(e.createdDate) order by DATE(e.createdDate) DESC")
     List<Tuple> countEgressoData();
 
     @Query(value = "select e.remuneracaoBolsa, count(e) from egresso e where e.remuneracaoBolsa is not null group by e.remuneracaoBolsa ")

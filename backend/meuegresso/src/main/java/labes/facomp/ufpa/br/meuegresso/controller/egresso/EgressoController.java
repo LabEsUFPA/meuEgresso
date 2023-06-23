@@ -29,6 +29,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.MatriculaAlreadyExistsException;
+import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
@@ -42,6 +43,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.PalestraModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
@@ -50,6 +52,7 @@ import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.endereco.EnderecoService;
 import labes.facomp.ufpa.br.meuegresso.service.setoratuacao.SetorAtuacaoService;
+import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.titulacao.TitulacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +77,7 @@ public class EgressoController {
     private final EnderecoService enderecoService;
     private final TitulacaoService titulacaoService;
     private final AreaAtuacaoService areaAtuacaoService;
+    private final StatusUsuarioService statusUsuarioService;
 
     private final ModelMapper mapper;
 
@@ -170,6 +174,10 @@ public class EgressoController {
         contribuicao.setEgresso(egresso);
         egresso.getUsuario().setAtivo(egresso.getUsuario().getValido());
         egressoService.adicionarEgresso(egresso);
+        statusUsuarioService
+                .save(StatusUsuarioModel.builder().usuarioId(egresso.getUsuario().getId())
+                        .nome(egresso.getUsuario().getNome()).status(UsuarioStatus.PENDENTE)
+                        .build());
 
         return ResponseType.SUCCESS_SAVE.getMessage();
     }
@@ -265,31 +273,6 @@ public class EgressoController {
     }
 
     /**
-     * Endpoint responsável pela deleção local do arquivo da foto do egresso
-     *
-     * @author Camilo Santos, Eude Monteiro
-     * @since 11/05/2023
-     * @param token
-     * @return Uma string representando uma mensagem de êxito indicando que a foto
-     *         foi deletada.
-     * @throws IOException
-     */
-    @ResponseStatus(code = HttpStatus.OK)
-    @DeleteMapping(value = "/foto")
-    @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public ResponseEntity<String> deleteFotoEgresso(JwtAuthenticationToken token) throws IOException {
-        EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
-        if (egressoModel.getFotoNome() != null) {
-            egressoService.deleteFile(egressoModel.getFotoNome());
-            egressoModel.setFotoNome(null);
-            egressoService.updateEgresso(egressoModel);
-            return ResponseEntity.ok(ResponseType.SUCCESS_IMAGE_DELETE.getMessage());
-        }
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseType.FAIL_IMAGE_DELETE.getMessage());
-
-    }
-
-    /**
      * Endpoint responsável pelo salvamento local do arquivo da foto do egresso
      *
      * @author Camilo Santos, Eude Monteiro
@@ -311,6 +294,30 @@ public class EgressoController {
         egressoService.updateEgresso(egressoModel);
         egressoService.saveFoto(fileCode, arquivo);
         return ResponseType.SUCCESS_IMAGE_SAVE.getMessage();
+    }
+
+    /**
+     * Endpoint responsável pela deleção local do arquivo da foto do egresso
+     *
+     * @author Camilo Santos, Eude Monteiro
+     * @since 11/05/2023
+     * @param token
+     * @return Uma string representando uma mensagem de êxito indicando que a foto
+     *         foi deletada.
+     * @throws IOException
+     */
+    @ResponseStatus(code = HttpStatus.OK)
+    @DeleteMapping(value = "/foto")
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public ResponseEntity<String> deleteFotoEgresso(JwtAuthenticationToken token) throws IOException {
+        EgressoModel egressoModel = egressoService.findByUsuarioId(jwtService.getIdUsuario(token));
+        if (egressoModel.getFotoNome() != null) {
+            egressoService.deleteFile(egressoModel.getFotoNome());
+            egressoModel.setFotoNome(null);
+            egressoService.updateEgresso(egressoModel);
+            return ResponseEntity.ok(ResponseType.SUCCESS_IMAGE_DELETE.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseType.FAIL_IMAGE_DELETE.getMessage());
     }
 
     private void validaSetorAtuacao(String setorAtuacaoNome, EgressoModel egressoModel) {
