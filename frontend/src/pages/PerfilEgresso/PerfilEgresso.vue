@@ -75,6 +75,7 @@
                   label=""
                   placeholder="Ex: Marcelle Mota"
                   :icon-path="mdiAccount"
+                  :max-length="50"
                 />
               </div>
             </h1>
@@ -244,6 +245,7 @@
                   placeholder="Ex: marcelle.mota.@gov.br"
                   helper-text="Use um email válido: hotmail, outlook, gmail, etc."
                   :icon-path="mdiEmail"
+                  :max-length="64"
                   required
                 />
                 <CustomInput
@@ -251,6 +253,7 @@
                   name="geral.nascimento"
                   :value="dataEgresso.geral.nascimento"
                   label="Data de Nascimento"
+                  :max-length="10"
                   type="date"
                 />
               </div>
@@ -464,6 +467,7 @@
                   type="number"
                   step="0.01"
                   placeholder="R$ 0,00"
+                  :max-length="12"
                   :required="bools.bolsista"
                   :disabled="!bools.bolsista"
                   money
@@ -480,6 +484,7 @@
                   class="mb-5"
                   name="academico.posGrad.local"
                   label="Instituição da pós-graduação"
+                  :max-length="50"
                   :required="bools.posGrad"
                   :disabled="!bools.posGrad"
                 />
@@ -489,6 +494,7 @@
                   name="academico.posGrad.curso"
                   label="Curso de pós-graduação"
                   :required="bools.posGrad"
+                  :max-length="50"
                   :disabled="!bools.posGrad"
                 />
 
