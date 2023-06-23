@@ -23,9 +23,10 @@ public class StatusUsuarioServiceImpl implements StatusUsuarioService {
     }
 
     @Override
-    public Page<StatusUsuarioModel> findBySearch(UsuarioStatus[] status, Integer page, Integer size,
+    public Page<StatusUsuarioModel> findBySearch(String nome, UsuarioStatus[] status, Integer page, Integer size,
             Direction direction) {
-        return statusUsuarioRepository.findBySearch(status, PageRequest.of(page, size, direction, "mudanca"));
+        return statusUsuarioRepository.findByNomeContainsIgnoreCaseAndStatusIn(nome, status,
+                PageRequest.of(page, size, direction, "dataModificacao"));
     }
 
 }

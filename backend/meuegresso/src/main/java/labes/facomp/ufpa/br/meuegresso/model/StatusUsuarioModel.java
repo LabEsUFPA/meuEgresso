@@ -12,22 +12,19 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "status_usuario")
-@ToString(exclude = "usuario")
-@EqualsAndHashCode(callSuper = false, exclude = "usuario")
 public class StatusUsuarioModel {
 
     @Id
@@ -35,15 +32,20 @@ public class StatusUsuarioModel {
     @Column(name = "id_status_usuario", unique = true, nullable = false)
     private Integer id;
 
-    @JoinColumn(name = "usuario_status_usuario", unique = true, nullable = false)
-    private UsuarioModel usuario;
+    @Column(name = "nome_status_usuario", unique = false, nullable = false, length = 50)
+    private String nome;
+
+    @Column(name = "usuario_id_status_usuario", unique = false, nullable = false)
+    private Integer usuarioId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", unique = false, nullable = false, length = 10)
     private UsuarioStatus status;
 
     @CreatedDate
+    @Builder.Default
     @ColumnDefault(value = "now()")
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "mudanca", unique = false, nullable = false)
-    private LocalDateTime mudanca;
+    private LocalDateTime dataModificacao = LocalDateTime.now();
 }

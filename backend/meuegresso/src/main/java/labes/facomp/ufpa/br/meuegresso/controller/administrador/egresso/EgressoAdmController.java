@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
+import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -32,6 +35,8 @@ public class EgressoAdmController {
 
     private final EgressoService egressoService;
 
+    private final StatusUsuarioService statusUsuarioService;
+
     /**
      * Endpoint responsavel por deletar o egresso.
      *
@@ -46,8 +51,12 @@ public class EgressoAdmController {
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarEgresso(@PathVariable Integer id) {
-        if (egressoService.existsById(id)) {
+        EgressoModel egressoModel = egressoService.findById(id);
+        if (egressoModel != null) {
             egressoService.deleteById(id);
+            statusUsuarioService.save(StatusUsuarioModel.builder().usuarioId(egressoModel.getUsuario().getId())
+                    .nome(egressoModel.getUsuario().getNome())
+                    .status(UsuarioStatus.EXCLUIDO).build());
             return ResponseType.SUCCESS_DELETE.getMessage();
         }
         return ResponseType.FAIL_DELETE.getMessage();

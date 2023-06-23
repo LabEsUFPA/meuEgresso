@@ -21,10 +21,13 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
+import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +44,8 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioAdmController {
 
 	private final UsuarioService usuarioService;
+
+	private final StatusUsuarioService statusUsuarioService;
 
 	private final ModelMapper mapper;
 
@@ -96,6 +101,11 @@ public class UsuarioAdmController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public ResponseType toggleValidoUsuario(@PathVariable Integer id) throws NotFoundException {
 		usuarioService.toggleValido(id);
+		UsuarioModel usuarioModel = usuarioService.findById(id);
+		statusUsuarioService.save(StatusUsuarioModel.builder().usuarioId(usuarioModel.getId())
+				.nome(usuarioModel.getNome())
+				.status(usuarioModel.getValido().booleanValue() ? UsuarioStatus.COMPLETO : UsuarioStatus.PENDENTE)
+				.build());
 		return ResponseType.SUCCESS_UPDATE;
 	}
 
@@ -112,7 +122,11 @@ public class UsuarioAdmController {
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String deleteById(@PathVariable(name = "id") Integer id) {
+		UsuarioModel usuarioModel = usuarioService.findById(id);
 		if (usuarioService.deleteById(id)) {
+			statusUsuarioService.save(StatusUsuarioModel.builder().usuarioId(usuarioModel.getId())
+					.nome(usuarioModel.getNome())
+					.status(UsuarioStatus.EXCLUIDO).build());
 			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
 		return ResponseType.FAIL_DELETE.getMessage();

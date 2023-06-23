@@ -10,6 +10,6 @@ public interface StatusUsuarioService {
 
     public StatusUsuarioModel save(StatusUsuarioModel statusUsuarioModel);
 
-    public Page<StatusUsuarioModel> findBySearch(UsuarioStatus[] status, Integer page, Integer size,
+    public Page<StatusUsuarioModel> findBySearch(String nome, UsuarioStatus[] status, Integer page, Integer size,
             Direction direction);
 }
