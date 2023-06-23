@@ -168,7 +168,7 @@ const $store = usePainelStore()
 const $router = useRouter()
 const $login = useLoginStore()
 
-const userScope = ref($login.getLoggedUser()?.scope)
+const userScope = ref($login.getUserData()?.scope)
 const isConfirmationOpen = ref<true | false>(false)
 const isLoadingAction = ref<true | false | null>(null)
 const action = ref('')
@@ -186,10 +186,10 @@ const escolheAcao = (acao:string) => {
 async function aprovaCadastro () {
   isLoadingAction.value = true
 
-  const codeAtiva = await $store.ativaUsuario(props.id)
-  const codeValida = await $store.validaUsuario(props.id)
+  const codeAtiva = await $store.toggleAtivacaoUsuario(props.id)
+  const codeValida = await $store.toggleValidacaoUsuario(props.id)
 
-  if (codeAtiva === 201 && codeValida === 201) {
+  if (codeValida === 201 && codeAtiva === 201) {
     $emits('updateData')
     isLoadingAction.value = false
   }
@@ -204,9 +204,23 @@ async function excluiCadastro () {
 
   if (props.idEgresso) {
     const codeDelete = await $store.deleteUsuario(props.idEgresso)
-    if (codeDelete === 200) {
-      $emits('updateData')
-      isLoadingAction.value = false
+
+    if (props.status === 'completo') {
+      // Desvalida o usuário completo
+      const codeDesvalida = await $store.toggleValidacaoUsuario(props.id)
+
+      if (codeDelete === 200 && codeDesvalida === 201) {
+        $emits('updateData')
+        isLoadingAction.value = false
+      }
+    } else {
+      // Desativa o usuário pendente
+      const codeDesativa = await $store.toggleAtivacaoUsuario(props.id)
+
+      if (codeDelete === 200 && codeDesativa === 201) {
+        $emits('updateData')
+        isLoadingAction.value = false
+      }
     }
   }
 }

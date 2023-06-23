@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import ButtonActionIcon from 'src/components/ButtonActionIcon.vue'
+import ButtonActionIcon from 'src/pages/PerfilEgresso/components/ButtonActionIcon.vue'
 
 describe('ButtonActionIcon', () => {
   it('renders a button element', () => {

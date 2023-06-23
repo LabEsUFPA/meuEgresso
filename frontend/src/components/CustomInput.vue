@@ -75,7 +75,7 @@
             :required="required"
             :step="step"
             :maxlength="maxLength"
-            @update:modelValue="handleInput"
+            @update:model-value="handleInput"
             @focus="() => {
               focused = true
               config.allowBlank = false
@@ -238,6 +238,7 @@ const {
 } = useField(name, undefined)
 
 function handleInput (e: Event) {
+  inputValue.value = e
   if (props.money && config.value.currentValue === 'null') {
     return
   }

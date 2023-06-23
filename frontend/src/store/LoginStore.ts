@@ -4,13 +4,15 @@ import { type models } from 'src/@types'
 import LocalStorage from 'src/services/localStorage'
 import CookieService from 'src/services/cookieService'
 interface LoginModel extends models.LoginModel {}
+interface UserData extends models.UserData {}
 
 const storage = new LocalStorage()
 const cookieService = new CookieService()
 
 export const useLoginStore = defineStore('LoginStore', {
   state: () => ({
-    userLogged: storage.getToken() !== undefined
+    loggedIn: storage.getToken() !== undefined,
+    userData: cookieService.get('Token') !== undefined ? storage.parseToken(cookieService.get('Token')) : null
   }),
 
   actions: {
@@ -27,8 +29,9 @@ export const useLoginStore = defineStore('LoginStore', {
       })
 
       if (response?.status === 200) {
-        this.userLogged = true
+        this.loggedIn = true
         storage.setLoggedUser(response.data?.token)
+        this.setUserData(storage.parseToken(response.data?.token))
 
         isFirstAccess ?? false ? cookieService.set('isFirstAccess', 'yes', 1) : cookieService.set('isFirstAccess', 'no', 1)
       }
@@ -40,16 +43,22 @@ export const useLoginStore = defineStore('LoginStore', {
     },
 
     userLogout () {
-      this.userLogged = false
+      this.loggedIn = false
       storage.remove('loggedUser')
       cookieService.remove('Token')
+      this.userData = null
       if (storage.has('loggedEgresso')) {
         storage.remove('loggedEgresso')
       }
     },
 
-    getLoggedUser () {
-      return storage.getLoggedUser()
+    getUserData (): UserData | null {
+      if (this.userData !== undefined && cookieService.get('Token') !== undefined) return this.userData
+      return null
+    },
+
+    setUserData (userData: UserData | null): void {
+      this.userData = userData
     }
   }
 })

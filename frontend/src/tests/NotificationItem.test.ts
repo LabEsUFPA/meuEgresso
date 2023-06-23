@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import NotificationItem from 'src/components/NotificationItem.vue'
+import NotificationItem from 'src/pages/NotificacoesAdmin/components/NotificationItem.vue'
 import { describe, expect, it } from 'vitest'
 
 describe('NotificationItem', () => {
