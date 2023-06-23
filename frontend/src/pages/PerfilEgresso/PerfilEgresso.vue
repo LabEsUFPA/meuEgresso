@@ -1354,6 +1354,7 @@ async function fetchUpdateEgresso () {
       }
     })
   }
+  console.log(json)
   dataEgresso.value = {
     egressoId: json.id,
     generoId: json.genero.id,
@@ -1380,7 +1381,7 @@ async function fetchUpdateEgresso () {
     academico: {
       matricula: json.matricula || '',
       email: json.usuario.email || '',
-      tipoAluno: json.titulacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
+      tipoAluno: json.posGraduacao ? selectOpts.value.tipoAluno[1] : selectOpts.value.tipoAluno[0],
       cotista: {
         value: json.cotista,
         tipo: cotasEgresso || '',
