@@ -1505,8 +1505,10 @@ onMounted(() => {
       dataEgresso.value.localizacao.cidade = ''
     }
     setTimeout(() => {
-      cidadeInput.value = ''
-      estadoInput.value = ''
+      if (cidadeInput?.value) {
+        cidadeInput.value = ''
+        estadoInput.value = ''
+      }
     }, 10)
   })
 
@@ -1516,7 +1518,9 @@ onMounted(() => {
       dataEgresso.value.localizacao.cidade = ''
     }
     setTimeout(() => {
-      cidadeInput.value = ''
+      if (cidadeInput?.value) {
+        cidadeInput.value = ''
+      }
     }, 10)
   })
 })
