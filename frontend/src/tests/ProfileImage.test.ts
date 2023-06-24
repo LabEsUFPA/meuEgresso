@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it } from 'vitest'
-import ProfileImage from 'src/components/ProfileImage.vue'
+import ProfileImage from 'src/pages/PerfilEgresso/components/ProfileImage.vue'
 
 describe('ProfileImage', () => {
   beforeEach(() => {

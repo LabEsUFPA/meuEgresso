@@ -1,5 +1,8 @@
 <template>
-  <div class="input">
+  <div
+    class="input"
+    :id="name.replaceAll('.', '-')"
+  >
     <OField
       override
       message-class="text-xs mt-1 max-w-[250px]"
@@ -63,6 +66,7 @@
             v-if="money"
             class="col-span-6 focus:outline-none bg-transparent"
             :class="iconPath ? 'col-span-7' : 'col-span-8'"
+            :model-value="inputValue"
             v-bind="config"
             :placeholder="placeholder"
             :disabled="disabled"
@@ -110,7 +114,7 @@
             :root-class="classNames({
               ['col-span-7']: iconPath,
               ['col-span-8']: !iconPath,
-              ['w-full md:w-1/2 h-32']: true
+              ['w-full md:w-1/2']: true
             })"
             :input-class="classNames({
               ['bg-gray-100 cursor-not-allowed']: disabled,
@@ -125,6 +129,7 @@
             :data-maska="mask"
             :step="step"
             :maxlength="maxLength"
+            :style="{ height: height || '128px' }"
             v-model="inputValue"
             @update:model-value="handleInput"
             @focus="focused = true"
@@ -155,7 +160,7 @@ import classNames from 'classnames'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { OField, OInput } from '@oruga-ui/oruga-next'
 
-type inputs = 'date' | 'text' | 'email' | 'number' | 'password' | 'textarea'
+type inputs = 'date' | 'text' | 'email' | 'number' | 'password' | 'textarea' | 'datetime-local'
 
 const $emit = defineEmits(['update:value'])
 
@@ -220,7 +225,8 @@ const config = ref({
   max: null,
   minimumNumberOfCharacters: 0,
   shouldRound: true,
-  focusOnRight: false
+  focusOnRight: true,
+  currentValue: 'null'
 })
 
 const {
@@ -232,10 +238,11 @@ const {
 } = useField(name, undefined)
 
 function handleInput (e: Event) {
-  $emit('update:value', e)
-  if (String(e) === '' && props.money) {
+  inputValue.value = e
+  if (props.money && config.value.currentValue === 'null') {
     return
   }
+  $emit('update:value', e)
   handleChange(e)
 }
 </script>

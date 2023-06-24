@@ -5,32 +5,48 @@ export namespace API {
     method: string
     route: string
     body?: Record<string, any>
+    params?: Record<string, any>
+    headers?: Record<string, any>
+    responseType?: any
   }
 
   export interface Response {
     status: number
-    data?: Record<string, any> | null
+    data?: Record<string, any> | null | any
   }
   export type Request = (params: RequestParams) => Promise<API.Response | null>
 
 }
 
 export namespace models {
+  export interface UserData {
+    exp: number
+    iat: number
+    idUsuario: number
+    isEgresso: boolean
+    iss: string
+    nomeCompleto: string
+    nome: string
+    scope: string
+    sobrenome: string
+    sub: string
+  }
+
   export interface LoginModel {
     username: string
     password: string
   }
 
   export interface ProfileRegisterModel {
-    name: string
+    nome: string
     username: string
-    registration: string
+    registration?: string
     email: string
     confirmationEmail?: string
     password: string
     confirmationPassword?: string
     accessLevel?: string
-    idAccessLevel?: number
+    grupos?: string[]
   }
 
   export interface UserModel {
@@ -39,6 +55,7 @@ export namespace models {
     password: string
     email: string
     nome: string
+    registration?: string
     egresso?: {
       id: number
       matricula: number
@@ -264,22 +281,70 @@ export namespace models {
     }
 
     export interface AllChartSeries {
-      company: PieChartModel | null
-      postGraduateCourse: PieChartModel | null
-      postGraduateLocal: PieChartModel | null
-      scholarshipType: PieChartModel | null
-      remuneration: BarChartModel | null
-      interestInPost: PieChartModel | null
-      acting: PieChartModel | null
-      scholar: PieChartModel | null
-      quotas: PieChartModel | null
-      shareHolder: PieChartModel | null
-      postGraduate: PieChartModel | null
-      student: PieChartModel | null
-      wage: PieChartModel | null
-      sector: PieChartModel | null
-      gender: PieChartModel | null
-      age: BarChartModel | null
+      company: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      postGraduateCourse: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      postGraduateLocal: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      scholarshipType: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      remuneration: {
+        series: BarChartModel
+        error: boolean
+      } | null
+      interestInPost: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      acting: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      scholar: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      quotas: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      shareHolder: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      postGraduate: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      student: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      wage: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      sector: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      gender: {
+        series: PieChartModel
+        error: boolean
+      } | null
+      age: {
+        series: BarChartModel
+        error: boolean
+      } | null
     }
   }
 

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.mail.MailException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -27,6 +28,7 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnalthorizedRegisterException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 
 /**
@@ -124,6 +126,16 @@ public class ControllerAdvise {
 				.message(ErrorType.USER_002.getMessage())
 				.technicalMessage(ex.getLocalizedMessage())
 				.internalCode(ErrorType.USER_002.getInternalCode())
+				.build();
+	}
+
+	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(DisabledException.class)
+	public ErrorResponse handleDisabledException(DisabledException ex) {
+		return ErrorResponse.builder()
+				.message(ErrorType.USER_003.getMessage())
+				.technicalMessage(ex.getLocalizedMessage())
+				.internalCode(ErrorType.USER_003.getInternalCode())
 				.build();
 	}
 
@@ -289,6 +301,15 @@ public class ControllerAdvise {
 	@ExceptionHandler(NotFoundFotoEgressoException.class)
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public ErrorResponse handleNotFoundFotoEgressoException(NotFoundFotoEgressoException ex) {
+		return new ErrorResponse(
+				ex.getMessage(),
+				ex.getLocalizedMessage(),
+				ex.getInternalCode());
+	}
+
+	@ExceptionHandler(UnalthorizedRegisterException.class)
+	@ResponseStatus(code = HttpStatus.FORBIDDEN)
+	public ErrorResponse handleUnalthorizedRegisterException(UnalthorizedRegisterException ex) {
 		return new ErrorResponse(
 				ex.getMessage(),
 				ex.getLocalizedMessage(),

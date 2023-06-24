@@ -30,27 +30,20 @@ export const useEditaContaUsuarioStore = defineStore('EditaContaUsuario', {
       username: string,
       email: string,
       nome: string,
-      password: string,
-      idGrupo: number,
-      nomeGrupo: string
+      password: string
     ) {
       const dataUsuario = {
         id,
         username,
         email,
         nome,
-        password,
-        grupos: [{
-          id: idGrupo,
-          nomeGrupo
-        }]
+        password
       }
 
       const response = await Api.request({
         method: 'put',
         route: '/usuario',
         body: dataUsuario
-
       })
 
       return {

@@ -23,7 +23,9 @@ public enum ResponseType {
 
     SUCCESS_IMAGE_DELETE("Imagem deletada com sucesso"),
 
-    FAIL_IMAGE_DELETE("Usuário não tem imagem para deletar");
+    FAIL_IMAGE_DELETE("Usuário não tem imagem para deletar"),
+
+    SOLICITACAO_REALIZADA_SUCESSO("Solicitação realizada com sucesso.");
 
     private String message;
 

@@ -27,6 +27,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
@@ -35,6 +36,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
@@ -43,6 +45,7 @@ import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.endereco.EnderecoService;
 import labes.facomp.ufpa.br.meuegresso.service.setoratuacao.SetorAtuacaoService;
+import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.titulacao.TitulacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -59,18 +62,28 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping(value = "/egresso")
 public class EgressoController {
 
-    private final EgressoService egressoService;
-    private final UsuarioService usuarioService;
-    private final EmpresaService empresaService;
-    private final SetorAtuacaoService setorAtuacaoService;
-    private final CursoService cursoService;
-    private final EnderecoService enderecoService;
-    private final TitulacaoService titulacaoService;
-    private final AreaAtuacaoService areaAtuacaoService;
-
     private final ModelMapper mapper;
 
     private final JwtService jwtService;
+
+    private final CursoService cursoService;
+
+    private final EgressoService egressoService;
+
+    private final UsuarioService usuarioService;
+
+    private final EmpresaService empresaService;
+
+    private final EnderecoService enderecoService;
+
+    private final TitulacaoService titulacaoService;
+
+    private final AreaAtuacaoService areaAtuacaoService;
+
+    private final SetorAtuacaoService setorAtuacaoService;
+
+    private final StatusUsuarioService statusUsuarioService;
+
 
     /**
      * Endpoint responsavel por cadastrar o egresso.
@@ -110,6 +123,10 @@ public class EgressoController {
         egressoModel.getUsuario().setAtivo(egressoModel.getUsuario().isEnabled());
 
         egressoService.adicionarEgresso(egressoModel);
+        statusUsuarioService
+                .save(StatusUsuarioModel.builder().usuarioId(egressoModel.getUsuario().getId())
+                        .nome(egressoModel.getUsuario().getNome()).status(UsuarioStatus.PENDENTE)
+                        .build());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseType.SUCCESS_SAVE.getMessage());
     }
@@ -139,7 +156,7 @@ public class EgressoController {
      * @param egresso Estrutura de dados contendo as informações necessárias para
      *                persistir o Usuário.
      * @return {@link EgressoModel} Dados gravados no banco com a Id atualizada.
-     * @author Pedro Inácio, Marcus Maciel
+     * @author Alfredo Gabriel, Pedro Inácio, Marcus Maciel
      * @throws UnauthorizedRequestException
      * @since 16/04/2023
      */

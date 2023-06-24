@@ -1,5 +1,8 @@
 <template>
-  <div class="select">
+  <div
+    class="select"
+    :id="name.replaceAll('.', '-')"
+  >
     <OField
       override
       message-class="text-xs mt-1 max-w-[250px]"
@@ -42,6 +45,7 @@
               class="w-[20px]"
               :src="iconPath"
               v-if="imgIcon"
+              alt="Seta para baixo"
             >
 
             <SvgIcon
@@ -185,7 +189,6 @@ const {
 
 function handleEmit (option: IOpts) {
   selected.value = option
-  console.log(selected.value)
 
   if (option !== null) {
     if (typeof selected.value === 'object') {
@@ -215,9 +218,6 @@ onMounted(() => {
     }
     if (input.value) {
       input.value.focus()
-    }
-    if (props.infinite) {
-      $emit('typing', '')
     }
   })
 })

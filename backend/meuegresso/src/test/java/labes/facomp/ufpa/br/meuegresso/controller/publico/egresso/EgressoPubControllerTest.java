@@ -5,9 +5,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,8 +29,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.grupo.GrupoDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
@@ -70,18 +67,11 @@ class EgressoPubControllerTest {
 	@BeforeAll
 	void setUp() throws Exception {
 		GeneroDTO genero = new GeneroDTO(1, "TRANSSEXUAL");
-		GrupoDTO grupo = new GrupoDTO(1, "ADMIN");
-		Set<GrupoDTO> grupos = new HashSet<>();
-		grupos.add(grupo);
 		DepoimentoDTO depoimento = new DepoimentoDTO(1, "TextoDepoimento");
 		ContribuicaoDTO contribuicao = new ContribuicaoDTO(1, "TextoContribuicao");
 
 		UsuarioDTO usuario = UsuarioDTO.builder()
-				.username("username")
 				.nome("nome_test")
-				.email("teste@gmail.com")
-				.password("teste123")
-				.grupos(grupos)
 				.build();
 
 		egressoModel.setId(1);
@@ -116,8 +106,6 @@ class EgressoPubControllerTest {
 						.value(egressoModel.getDepoimento().getDescricao()))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].contribuicao.descricao")
 						.value(egressoModel.getContribuicao().getDescricao()))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].usuario.email")
-						.value(egressoModel.getUsuario().getEmail()))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 
 		Mockito.verify(egressoService).findAll();
@@ -141,8 +129,6 @@ class EgressoPubControllerTest {
 						.value(egressoModel.getDepoimento().getDescricao()))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.contribuicao.descricao")
 						.value(egressoModel.getContribuicao().getDescricao()))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.usuario.email")
-						.value(egressoModel.getUsuario().getEmail()))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 
 		Mockito.verify(egressoService).findById(anyInt());

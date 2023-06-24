@@ -40,6 +40,7 @@ public class JwtService {
                 .claim(JwtUtils.NOME.getPropriedade(), userModel.getFirstName())
                 .claim(JwtUtils.SOBRENOME.getPropriedade(), userModel.getLastName())
                 .claim(JwtUtils.USER_ID.getPropriedade(), userModel.getId())
+                .claim(JwtUtils.EMAIL.getPropriedade(), userModel.getEmail())
                 .claim(JwtUtils.EGRESSO.getPropriedade(), egressoRepository.existsByUsuarioId(userModel.getId()))
                 .claim(JwtUtils.SCOPE.getPropriedade(), scope);
         return jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet.build())).getTokenValue();

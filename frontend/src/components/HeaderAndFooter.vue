@@ -24,33 +24,35 @@
           <!-- Div que preenche o espaco vazio no container flexbox -->
           <div class="flex-1" />
 
-          <UserDropdownMenu
-            v-if="userLogged"
-            :user-logged="userLogged"
-          />
+          <div class="hidden md:flex">
+            <UserDropdownMenu
+              v-if="loggedIn"
+              :logged-in="loggedIn"
+            />
 
-          <div
-            v-else
-            class="px-8 hidden gap-x-2 md:flex"
-          >
-            <CustomButton
-              color="white"
-              variant="flat"
-              tag="router"
-              link="/entrar"
+            <div
+              v-else
+              class="flex px-8 gap-x-2"
             >
-              Entrar
-            </CustomButton>
+              <CustomButton
+                color="white"
+                variant="flat"
+                tag="router"
+                link="/entrar"
+              >
+                Entrar
+              </CustomButton>
 
-            <CustomButton
-              class="ml-4"
-              color="white"
-              variant="outlined"
-              tag="router"
-              link="/cadastro-perfil"
-            >
-              Cadastre-se
-            </CustomButton>
+              <CustomButton
+                class="ml-4"
+                color="white"
+                variant="outlined"
+                tag="router"
+                link="/cadastro-perfil"
+              >
+                Cadastre-se
+              </CustomButton>
+            </div>
           </div>
         </div>
       </div>
@@ -63,21 +65,6 @@
                   Mapa
                 </div>
               </RouterLink>
-              <!--
-              <div class="hidden absolute z-50 bg-cyan-900 cursor-default text-white py-3 overflow-hidden rounded-b-xl group-hover:block hover:block">
-                <ul class="text-sm font-normal">
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
-                    Anúncios
-                  </li>
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
-                    Programa
-                  </li>
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer">
-                    Faculdade
-                  </li>
-                </ul>
-              </div>
-              -->
             </li>
             <li class="cursor-pointer relative group hover:text-white h-full">
               <RouterLink to="/graficos">
@@ -85,21 +72,6 @@
                   Gráficos
                 </div>
               </RouterLink>
-              <!--
-              <div class="hidden absolute z-50 bg-cyan-900 cursor-default text-white py-3 overflow-hidden rounded-b-xl group-hover:block hover:block">
-                <ul class="text-sm font-normal">
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
-                    Anúncios
-                  </li>
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
-                    Programa
-                  </li>
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer">
-                    Faculdade
-                  </li>
-                </ul>
-              </div>
-              -->
             </li>
             <li class="cursor-pointer relative group hover:text-white h-full">
               <RouterLink to="/vagas">
@@ -107,64 +79,49 @@
                   Vagas
                 </div>
               </RouterLink>
-              <!--
-              <div class="hidden absolute z-50 bg-cyan-900 cursor-default text-white py-3 overflow-hidden rounded-b-xl group-hover:block hover:block">
-                <ul class="text-sm font-normal">
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
-                    Anúncios
-                  </li>
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer mb-1">
-                    Programa
-                  </li>
-                  <li class="py-2 px-3 pr-16 hover:bg-cyan-800 cursor-pointer">
-                    Faculdade
-                  </li>
-                </ul>
-              </div>
-              -->
             </li>
           </ul>
 
           <div class="h-full items-center relative group flex md:hidden">
-            <button class="px-4 py-1 peer flex items-center">
-              <SvgIcon
-                type="mdi"
-                class="inline mr-3"
-                size="35"
-                :path="mdiMenu"
-              />
-
-              Menu
-            </button>
-            <div
-              tabindex="0"
-              class="bg-white hidden text-neutral-900 absolute left-4 top-14 group-focus-within:block z-50"
-            >
-              <ul class="py-3 overflow-hidden rounded-b-xl shadow-lg">
-                <li>
-                  <RouterLink
-                    to="/entrar"
-                    class="block py-2 px-3 hover:bg-gray-100"
-                  >
-                    Entrar
-                  </RouterLink>
-                </li>
-                <li>
-                  <RouterLink
-                    to="/cadastro-perfil"
-                    class="block py-2 px-3 hover:bg-gray-100"
-                  >
-                    Cadastre-se
-                  </RouterLink>
-                </li>
-              </ul>
-            </div>
+            <NavbarDrawer />
           </div>
         </nav>
       </div>
     </header>
     <main class="flex-1 bg-neutral-100">
       <div class="h-fit">
+        <CustomDialog
+          v-if="showEgressNotRegisteredModal"
+          v-model="showEgressNotRegisteredModal"
+          :button-botton="true"
+          :hide-close-button="true"
+          @close="$router.push({ path: '/cadastro' })"
+        >
+          <div class="flex flex-col items-center">
+            <SvgIcon
+              type="mdi"
+              size="110"
+              class="text-amber-500 absolute bottom-[13rem] bg-white rounded-full sm:bottom-[21rem]"
+              :path="mdiAlertCircle"
+            />
+          </div>
+          <div class="flex flex-col w-full h-full items-center justify-center">
+            <div class="flex flex-col h-full items-center justify-center text-center gap-y-8">
+              <h1 class="font-bold text-amber-500 text-3xl sm:text-5xl">
+                Cadastro pendente!
+              </h1>
+              <p class="text-gray-500 px-4 text-lg sm:px-32 sm:text-2xl">
+                É necessário realizar o cadastro completo para usar o sistema.
+              </p>
+            </div>
+            <CustomButton
+              class="mb-2"
+              @click="() => {showEgressNotRegisteredModal = false}"
+            >
+              Finalizar Cadastro
+            </CustomButton>
+          </div>
+        </CustomDialog>
         <RouterView />
       </div>
     </main>
@@ -173,7 +130,7 @@
         <div class="mr-10">
           <img
             class="w-14"
-            src="../assets/brasão.png"
+            src="src/assets/brasão.png"
             alt="Brasão"
           >
         </div>
@@ -194,21 +151,45 @@
 </template>
 
 <script lang="ts" setup>
-
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { watch, ref } from 'vue'
-import { mdiMenu } from '@mdi/js'
+import { watch, ref, onMounted } from 'vue'
+import { mdiAlertCircle } from '@mdi/js'
 
-import { useLoginStore } from '../store/LoginStore'
-import CustomButton from '../components/CustomButton.vue'
+import { useLoginStore } from 'src/store/LoginStore'
+import CustomButton from 'src/components/CustomButton.vue'
 import UserDropdownMenu from './UserDropdownMenu.vue'
+import NavbarDrawer from './NavbarDrawer.vue'
+import CustomDialog from './CustomDialog.vue'
+import CookieService from 'src/services/cookieService'
 
-const store = useLoginStore()
-const userLogged = ref(store.userLogged)
+const $store = useLoginStore()
+const loggedIn = ref($store.loggedIn)
+const $router = useRouter()
+const showEgressNotRegisteredModal = ref(false)
+const cookieService = new CookieService()
 
-watch(() => store.userLogged, () => {
-  userLogged.value = store.userLogged
+onMounted(() => {
+  checkEgressRegistration()
 })
+
+watch(() => $store.loggedIn, () => {
+  loggedIn.value = $store.loggedIn
+
+  if (loggedIn.value) {
+    checkEgressRegistration()
+  }
+})
+
+const checkEgressRegistration = () => {
+  const userData = $store.getUserData()
+  const isFirstAccess = cookieService.get('isFirstAccess')
+
+  if (
+    userData?.scope === 'EGRESSO' &&
+    !userData?.isEgresso &&
+    isFirstAccess !== 'yes'
+  ) showEgressNotRegisteredModal.value = true
+}
 
 </script>

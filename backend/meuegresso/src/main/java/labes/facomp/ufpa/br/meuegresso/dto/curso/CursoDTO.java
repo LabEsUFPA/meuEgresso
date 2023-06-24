@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.curso;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,5 +22,6 @@ public class CursoDTO {
 
     private Integer id;
 
+    @NotBlank(message = "Informe o nome do curso.")
     private String nome;
 }

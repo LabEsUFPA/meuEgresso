@@ -14,6 +14,7 @@ interface State {
   query: string
   totalPages: number
   isFetchingUniversidades: boolean
+  areasAtuacao: ComplexOpts[]
 }
 export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
   state: (): State => ({
@@ -26,7 +27,8 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
     page: 0,
     query: '',
     totalPages: -1,
-    isFetchingUniversidades: false
+    isFetchingUniversidades: false,
+    areasAtuacao: []
   }),
 
   actions: {
@@ -66,6 +68,21 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
 
       if (response?.status === 200) {
         this.tiposBolsa = response.data?.map((elem: any) => {
+          return ({
+            label: elem.nome,
+            value: elem.id
+          })
+        })
+      }
+    },
+    async fetchAreaEmprego () {
+      const response = await Api.request({
+        method: 'get',
+        route: 'publico/areaEmprego'
+      })
+
+      if (response?.status === 200) {
+        this.areasAtuacao = response.data?.map((elem: any) => {
           return ({
             label: elem.nome,
             value: elem.id
@@ -146,8 +163,8 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
       await this.fetchBolsas()
       await this.fetchCotas()
       await this.fetchCursos()
+      await this.fetchAreaEmprego()
     },
-
     async cadastrarEgresso (foto: { temFoto: boolean, foto: FormData }, dadosEgresso: EgressoModel) {
       let response = await Api.request({
         method: 'post',

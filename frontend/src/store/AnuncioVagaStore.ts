@@ -2,20 +2,17 @@
 import { defineStore } from 'pinia'
 import Api from 'src/services/api'
 import { type models } from 'src/@types'
-import axios from 'axios'
-interface AnuncioVaga extends models.AnuncioModel {}
-interface AnuncioVagaPost extends models.AnuncioModelPost {}
-interface AreaEmpregoFiltro extends models.areasEmpregoFiltro {}
+interface AnuncioVaga extends models.AnuncioModel { }
+interface AnuncioVagaPost extends models.AnuncioModelPost { }
+interface AreaEmpregoFiltro extends models.areasEmpregoFiltro { }
 
-interface ComplexOpts extends models.ComplexOpts {}
-
-const BASE_URL = import.meta.env.VITE_API_URL_LOCAL
+interface ComplexOpts extends models.ComplexOpts { }
 
 interface State {
   anuncio: AnuncioVaga
-  anuncios: AnuncioVaga []
-  areasEmpregoFiltros: AreaEmpregoFiltro []
-  areasEmprego: ComplexOpts []
+  anuncios: AnuncioVaga[]
+  areasEmpregoFiltros: AreaEmpregoFiltro[]
+  areasEmprego: ComplexOpts[]
   totalPages: number
 
 }
@@ -53,7 +50,6 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
 
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
-        // console.log('resposta API:', response.data?.content)
         this.anuncios = response.data?.content.map((elem: any) => ({
           id: elem.id,
           titulo: elem.titulo,
@@ -73,146 +69,146 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       }
     },
 
-    async fetchBusca (page: number, size: number) {
-      const rota = 'anuncio/busca'
-      const params = {
-        page,
-        size
-      }
+    async deleteAnuncioAdmin (id: number) {
+      const response = await Api.request({
+        method: 'delete',
+        route: '/administrador/anuncio/' + id.toString()
+      })
 
-      axios.get(`${BASE_URL}${rota}`, { params })
-        .then(response => {
-          console.log('data:', response.data)
-          this.totalPages = response.data?.totalPages
-          this.anuncios = response.data?.content.map((elem: any) => ({
-            id: elem.id,
-            titulo: elem.titulo,
-            areaEmprego: {
-              id: elem.areaEmprego.id,
-              nome: elem.areaEmprego.nome
-            },
-            descricao: elem.descricao,
-            dataExpiracao: elem.dataExpiracao,
-            link: elem.link,
-            salario: elem.salario,
-            createdBy: {
-              email: elem.createdBy.email,
-              nome: elem.createdBy.nome
-            }
-          }))
-        })
-        .catch(error => {
-          console.log('Falha na requisição', error)
-        })
+      if (response?.status === 200) {
+        return true
+      } else {
+        return false
+      }
+    },
+
+    async deleteAnuncioEgresso (id: number) {
+      const response = await Api.request({
+        method: 'delete',
+        route: '/anuncio/' + id.toString()
+      })
+
+      if (response?.status === 200) {
+        return true
+      } else {
+        return false
+      }
+    },
+
+    async fetchBusca (page: number, size: number) {
+      const response = await Api.request({
+        method: 'get',
+        route: '/anuncio/busca',
+        params: { page, size }
+      })
+
+      if (response?.status === 200) {
+        this.totalPages = response.data?.totalPages
+        this.anuncios = response.data?.content.map((elem: any) => ({
+          id: elem.id,
+          titulo: elem.titulo,
+          areaEmprego: {
+            id: elem.areaEmprego.id,
+            nome: elem.areaEmprego.nome
+          },
+          descricao: elem.descricao,
+          dataExpiracao: elem.dataExpiracao,
+          link: elem.link,
+          salario: elem.salario,
+          createdBy: {
+            email: elem.createdBy.email,
+            nome: elem.createdBy.nome
+          }
+        }))
+      }
     },
 
     async fetchBuscaAnuncio (titulo: string, areasEmpregos: number[], page: number, size: number) {
-      const rota = 'anuncio/busca'
-      const params = {
-        titulo,
-        areaEmprego: areasEmpregos.join(),
-        page,
-        size
+      const areaEmprego = areasEmpregos.join()
+      const response = await Api.request({
+        method: 'get',
+        route: '/anuncio/busca',
+        params: { titulo, areaEmprego, page, size }
+      })
+      if (response?.status === 200) {
+        this.totalPages = response.data?.totalPages
+        this.anuncios = response.data?.content.map((elem: any) => ({
+          id: elem.id,
+          titulo: elem.titulo,
+          areaEmprego: {
+            id: elem.areaEmprego.id,
+            nome: elem.areaEmprego.nome
+          },
+          descricao: elem.descricao,
+          dataExpiracao: elem.dataExpiracao,
+          link: elem.link,
+          salario: elem.salario,
+          createdBy: {
+            email: elem.createdBy.email,
+            nome: elem.createdBy.nome
+          }
+        }))
       }
-      console.log(`${BASE_URL}${rota}`, { params })
-      axios.get(`${BASE_URL}${rota}`, { params })
-        .then(response => {
-          this.totalPages = response.data?.totalPages
-          console.log('data:', response.data)
-          this.anuncios = response.data?.content.map((elem: any) => ({
-            id: elem.id,
-            titulo: elem.titulo,
-            areaEmprego: {
-              id: elem.areaEmprego.id,
-              nome: elem.areaEmprego.nome
-            },
-            descricao: elem.descricao,
-            dataExpiracao: elem.dataExpiracao,
-            link: elem.link,
-            salario: elem.salario,
-            createdBy: {
-              email: elem.createdBy.email,
-              nome: elem.createdBy.nome
-            }
-          }))
-        })
-        .catch(error => {
-          console.log('Falha na requisição', error)
-        })
     },
 
     async fetchBuscaAnuncioTitulo (titulo: string, page: number, size: number) {
-      const rota = 'anuncio/busca'
-      const params = {
-        titulo,
-        page,
-        size
+      const response = await Api.request({
+        method: 'get',
+        route: '/anuncio/busca',
+        params: { titulo, page, size }
+      })
+      if (response?.status === 200) {
+        this.totalPages = response.data?.totalPages
+        this.anuncios = response.data?.content.map((elem: any) => ({
+          id: elem.id,
+          titulo: elem.titulo,
+          areaEmprego: {
+            id: elem.areaEmprego.id,
+            nome: elem.areaEmprego.nome
+          },
+          descricao: elem.descricao,
+          dataExpiracao: elem.dataExpiracao,
+          link: elem.link,
+          salario: elem.salario,
+          createdBy: {
+            email: elem.createdBy.email,
+            nome: elem.createdBy.nome
+          }
+        }))
       }
-      console.log(`${BASE_URL}${rota}`, { params })
-      axios.get(`${BASE_URL}${rota}`, { params })
-        .then(response => {
-          console.log('data:', response.data?.content)
-          this.totalPages = response.data?.totalPages
-          this.anuncios = response.data?.content.map((elem: any) => ({
-            id: elem.id,
-            titulo: elem.titulo,
-            areaEmprego: {
-              id: elem.areaEmprego.id,
-              nome: elem.areaEmprego.nome
-            },
-            descricao: elem.descricao,
-            dataExpiracao: elem.dataExpiracao,
-            link: elem.link,
-            salario: elem.salario,
-            createdBy: {
-              email: elem.createdBy.email,
-              nome: elem.createdBy.nome
-            }
-          }))
-        })
-        .catch(error => {
-          console.log('Falha na requisição', error)
-        })
     },
 
     async fetchBuscaAnuncioAreas (areasEmpregos: number[], page: number, size: number) {
-      const rota = 'anuncio/busca'
-      const params = {
-        areaEmprego: areasEmpregos.join(),
-        page,
-        size
+      const areaEmprego = areasEmpregos.join()
+      const response = await Api.request({
+        method: 'get',
+        route: '/anuncio/busca',
+        params: { areaEmprego, page, size }
+      })
+      if (response?.status === 200) {
+        this.totalPages = response.data?.totalPages
+        this.anuncios = response.data?.content.map((elem: any) => ({
+          id: elem.id,
+          titulo: elem.titulo,
+          areaEmprego: {
+            id: elem.areaEmprego.id,
+            nome: elem.areaEmprego.nome
+          },
+          descricao: elem.descricao,
+          dataExpiracao: elem.dataExpiracao,
+          link: elem.link,
+          salario: elem.salario,
+          createdBy: {
+            email: elem.createdBy.email,
+            nome: elem.createdBy.nome
+          }
+        }))
       }
-      console.log(`${BASE_URL}${rota}`, { params })
-      axios.get(`${BASE_URL}${rota}`, { params })
-        .then(response => {
-          console.log('data:', response.data?.content)
-          this.totalPages = response.data?.totalPages
-          this.anuncios = response.data?.content?.map((elem: any) => ({
-            id: elem.id,
-            titulo: elem.titulo,
-            areaEmprego: {
-              id: elem.areaEmprego.id,
-              nome: elem.areaEmprego.nome
-            },
-            descricao: elem.descricao,
-            dataExpiracao: elem.dataExpiracao,
-            link: elem.link,
-            salario: elem.salario,
-            createdBy: {
-              email: elem.createdBy.email,
-              nome: elem.createdBy.nome
-            }
-          }))
-        })
-        .catch(error => {
-          console.log('Falha na requisição', error)
-        })
     },
-
     async fetchAreasEmprego () {
       const response = await Api.request({
         method: 'get',
-        route: '/areaemprego'
+        route: '/publico/areaemprego'
       })
       if (response?.status === 200) {
         this.areasEmpregoFiltros = response.data?.map((elem: any) => ({

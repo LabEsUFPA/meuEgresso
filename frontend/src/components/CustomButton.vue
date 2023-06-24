@@ -2,8 +2,9 @@
   <span>
     <button
       v-if="tag === 'button'"
+      :disabled="disabled"
       :class="styles"
-      @click="$emit('click')"
+      @click="disabled ? '' : $emit('click')"
       :type="type"
     >
       <slot />
@@ -41,6 +42,7 @@ interface Props {
   link?: string
   rel?: string
   target?: string
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -132,23 +134,27 @@ const colorClassNames = {
 }
 
 const styles = computed(() => {
-  const classes = ['rounded-md px-4 py-1 text-lg font-semibold hover:duration-200 inline-block flex flex-row items-center justify-center max-h-[32px]']
+  const classes = ['rounded-md px-4 py-1 text-lg font-semibold hover:duration-200 inline-block flex flex-row items-center justify-center max-h-[64px]']
   switch (props.variant) {
     case 'standard':
       classes.push(colorClassNames[props.color].background.standard)
-      classes.push(colorClassNames[props.color].background.hover)
+      classes.push(props.disabled ? '' : colorClassNames[props.color].background.hover)
       break
     case 'outlined':
-      classes.push(`outline-1 focus:outline-3 outline ${colorClassNames[props.color].outline} ${colorClassNames[props.color].background.hoverLight} focus:outline-slate-900`)
+      classes.push(`outline-1 focus:outline-3 outline ${colorClassNames[props.color].outline} ${props.disabled ? '' : colorClassNames[props.color].background.hoverLight} focus:outline-slate-900`)
       break
     case 'flat':
-      classes.push(colorClassNames[props.color].background.hoverLight)
+      classes.push(props.disabled ? '' : colorClassNames[props.color].background.hoverLight)
   }
 
   if (props.variant === 'standard') {
     classes.push(props.textClass)
   } else {
     classes.push(colorClassNames[props.color].text)
+  }
+
+  if (props.disabled) {
+    classes.push('opacity-60 cursor-not-allowed')
   }
 
   return classes.join(' ')
