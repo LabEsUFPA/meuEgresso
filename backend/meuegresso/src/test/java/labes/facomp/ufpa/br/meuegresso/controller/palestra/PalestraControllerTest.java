@@ -141,7 +141,7 @@ class PalestraControllerTest {
 				.usuario(usuarioModel)
 				.build();
 
-		egressoModel = egressoService.save(egressoModel);
+		egressoModel = egressoService.adicionarEgresso(egressoModel);
 	}
 
 	@Test
@@ -190,7 +190,7 @@ class PalestraControllerTest {
 				.header("Authorization", "Bearer " + this.token))
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isOk()).andReturn();
-		
+
 		List<PalestraDTO> palestrasDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
 				new TypeReference<List<PalestraDTO>>() {
 				});

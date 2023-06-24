@@ -41,6 +41,8 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
+// TODO ARRUMAR
+
 @SpringBootTest
 @DirtiesContext
 @AutoConfigureMockMvc
@@ -184,7 +186,7 @@ class CursoControllerTest {
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isCreated())
 				.andReturn();
-		
+
 		String retornoString = resposta.getResponse().getContentAsString();
 		assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
 	}

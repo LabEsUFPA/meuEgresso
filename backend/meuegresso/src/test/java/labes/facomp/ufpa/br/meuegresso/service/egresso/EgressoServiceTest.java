@@ -78,7 +78,7 @@ class EgressoServiceTest {
 
         BDDMockito.given(egressoRepository.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
-         
+
         BDDMockito.given(egressoService.deleteById(Mockito.anyInt()))
                 .willReturn(true);
 
@@ -88,7 +88,7 @@ class EgressoServiceTest {
     @Order(1)
     void testAdicionarEgresso() {
 
-        EgressoModel response = egressoService.save(new EgressoModel());
+        EgressoModel response = egressoService.adicionarEgresso(new EgressoModel());
 
         assertNotNull(response);
         assertEquals(ID, response.getId());
@@ -147,7 +147,7 @@ class EgressoServiceTest {
                     EgressoModel.class)))
                     .willReturn(getMockEgresso());
 
-            EgressoModel response = egressoService.update(getMockEgresso());
+            EgressoModel response = egressoService.updateEgresso(getMockEgresso());
             assertNotNull(response);
             assertEquals(getMockEgresso(), response);
         } catch (Exception e) {
@@ -184,7 +184,7 @@ class EgressoServiceTest {
 
         Mockito.when(egressoRepository.findById(Mockito.anyInt()))
                 .thenReturn(Optional.of(getMockEgresso()));
-                
+
         Mockito.when(egressoRepository.existsById(Mockito.anyInt())).thenReturn(true);
 
         Boolean response = egressoService.deleteById(ID);

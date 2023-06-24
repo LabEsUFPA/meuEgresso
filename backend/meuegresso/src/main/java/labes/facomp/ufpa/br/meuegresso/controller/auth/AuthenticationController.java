@@ -36,6 +36,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.ExpireRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
@@ -43,12 +44,14 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoValidoModel;
 import labes.facomp.ufpa.br.meuegresso.model.RecuperacaoSenhaModel;
+import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoValidoService;
 import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
 import labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha.RecuperacaoSenhaService;
+import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -75,6 +78,8 @@ public class AuthenticationController {
 	private final UsuarioService usuarioService;
 
 	private final TokenProperties tokenProperties;
+
+	private final StatusUsuarioService statusUsuarioService;
 
 	private final EgressoValidoService egressosValidosService;
 
@@ -148,7 +153,7 @@ public class AuthenticationController {
 	 * @throws NotFoundException
 	 * @throws NameAlreadyExistsException
 	 * @throws NotValidEgressoException
-	 * @see {@link UsuarioDTO}
+	 * @see {@link UsuarioRegistro}
 	 * @since 26/03/2023
 	 */
 	@PostMapping(value = "/register")
@@ -176,6 +181,9 @@ public class AuthenticationController {
 
 		usuarioModel.setGrupos(Set.of(Grupos.EGRESSO));
 		usuarioModel = usuarioService.save(usuarioModel);
+		statusUsuarioService
+				.save(StatusUsuarioModel.builder().usuarioId(usuarioModel.getId())
+						.nome(usuarioModel.getNome()).status(UsuarioStatus.INCOMPLETO).build());
 		mailService.usuarioCadastrado(usuarioModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
@@ -185,7 +193,8 @@ public class AuthenticationController {
 	public void recuperarSenha(@PathVariable String token, @RequestBody AuthNewPasswordRequest authNewPassReq)
 			throws UnauthorizedRequestException, ExpireRequestException {
 		RecuperacaoSenhaModel recuperacaoSenha = recuperacaoSenhaService.tokenValido(UUID.fromString(token));
-		if (recuperacaoSenha.getPasswordChange().booleanValue() || recuperacaoSenha.getPrazoFinal().isBefore(LocalDateTime.now())) {
+		if (recuperacaoSenha.getPasswordChange().booleanValue()
+				|| recuperacaoSenha.getPrazoFinal().isBefore(LocalDateTime.now())) {
 			throw new ExpireRequestException();
 		}
 		UsuarioModel usuarioModel = recuperacaoSenha.getUsuario();

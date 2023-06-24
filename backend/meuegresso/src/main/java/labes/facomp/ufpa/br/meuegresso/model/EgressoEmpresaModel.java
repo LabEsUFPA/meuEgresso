@@ -35,6 +35,10 @@ public class EgressoEmpresaModel extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private EmpresaModel empresa;
 
+    @MapsId(value = "enderecoId")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    private EnderecoModel endereco;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faixa_salarial_id", unique = false, nullable = false)
     private FaixaSalarialModel faixaSalarial;
@@ -46,5 +50,4 @@ public class EgressoEmpresaModel extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "setor_atuacao_id", unique = false, nullable = false)
     private SetorAtuacaoModel setorAtuacao;
-
 }

@@ -114,6 +114,6 @@ public class UsuarioModel extends Auditable implements UserDetails {
 
 	@Transient
 	public String getLastName() {
-		return this.nome.replace(getFirstName(), "");
+		return this.nome.split(" ", 2)[1];
 	}
 }

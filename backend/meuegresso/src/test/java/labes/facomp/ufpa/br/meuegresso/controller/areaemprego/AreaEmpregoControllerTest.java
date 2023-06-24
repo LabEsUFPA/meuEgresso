@@ -39,6 +39,7 @@ import labes.facomp.ufpa.br.meuegresso.model.AreaEmpregoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.areaemprego.AreaEmpregoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
+// TODO ARRUMAR
 
 @SpringBootTest
 @DirtiesContext
@@ -103,7 +104,7 @@ class AreaEmpregoControllerTest {
 		this.token = authenticationResponse.getToken();
 
 	}
-	
+
 	@Test
 	@Order(1)
 	void testConsultarAreasEmprego() throws Exception {
@@ -122,7 +123,7 @@ class AreaEmpregoControllerTest {
 		List<AreaEmpregoDTO> resp = objectMapper.readValue(resposta.getResponse().getContentAsString(),
 				new TypeReference<List<AreaEmpregoDTO>>() {
 				});
-		
+
 		assertEquals(areaEmprego1.getNome(), resp.get(0).getNome());
 		assertEquals(areaEmprego2.getNome(), resp.get(1).getNome());
 	}

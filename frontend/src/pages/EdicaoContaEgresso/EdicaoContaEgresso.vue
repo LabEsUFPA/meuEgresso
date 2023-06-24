@@ -35,6 +35,7 @@
                 label="Nome Completo"
                 :required="true"
                 :icon-path="mdiAccount"
+                :max-length="100"
               />
               <CustomInput
                 name="email"
@@ -42,6 +43,7 @@
                 label="E-mail"
                 :required="true"
                 :icon-path="mdiEmail"
+                :max-length="50"
               />
               <CustomInput
                 name="confirmationEmail"
@@ -50,6 +52,7 @@
                 error-message="Os e-mails informados são diferentes"
                 :required="true"
                 :icon-path="mdiEmail"
+                :max-length="50"
               />
               <CustomInput
                 name="password"
@@ -57,6 +60,7 @@
                 label="Senha atual ou uma nova"
                 :required="true"
                 :icon-path="mdiLock"
+                :max-length="80"
               />
               <CustomInput
                 name="confirmationPassword"
@@ -65,6 +69,7 @@
                 error-message="As senhas informadas são diferentes"
                 :required="true"
                 :icon-path="mdiLock"
+                :max-length="80"
               />
             </div>
           </div>

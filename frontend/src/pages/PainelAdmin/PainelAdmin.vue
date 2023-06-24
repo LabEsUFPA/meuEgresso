@@ -56,7 +56,7 @@
                   :path="mdiCrown"
                 />
 
-                Secretario
+                Secretário
               </div>
             </div>
           </div>
@@ -391,11 +391,45 @@ watch(selectedString, () => {
 
 const graphData = computed(() => ({
   series: {
-    x: Object.keys($painelStore.graficos[selectedString.value]),
+    x: Object.keys($painelStore.graficos[selectedString.value]).map((key: any) => {
+      if (selectedString.value === 'ano') {
+        console.log('aq')
+        return key
+      } else {
+        // key: YYYY-MM-DD
+        const meses = [
+          'Janeiro',
+          'Fevereiro',
+          'Março',
+          'Abril',
+          'Maio',
+          'Junho',
+          'Julho',
+          'Agosto',
+          'Setembro',
+          'Outubro',
+          'Novembro',
+          'Dezemmbro'
+        ]
+        if (selectedString.value === 'mes') {
+          const date = new Date(key + 'T00:00:00')
+          console.log(key, date.toLocaleDateString(), date.getMonth())
+          return `${meses[date.getMonth()]}/${date.getFullYear()}`
+        } else {
+          const date = new Date(key + 'T00:00:00')
+          console.log(key, date.toLocaleDateString(), date.getMonth())
+          return `${date.toLocaleDateString()}`
+        }
+      }
+    }),
     y: Object.keys($painelStore.graficos[selectedString.value]).map((key: any) => $painelStore.graficos[selectedString.value][key])
   },
   error: false
 }))
+
+watch(selectedString, () => {
+  Object.keys($painelStore.graficos[selectedString.value])
+})
 
 const imageFlags = ref(new Map())
 

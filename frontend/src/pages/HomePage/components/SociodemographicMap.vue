@@ -2,7 +2,7 @@
   <div class="flex flex-col md:flex-row md:justify-center items-center p-2 relative h-full">
     <div class="rounded-xl border border-gray-400 overflow-hidden h-96 md:h-[600px] w-full md:max-w-screen">
       <div
-        class="w-full h-full"
+        class="w-full h-full z-0"
         id="mapContainer"
       />
     </div>

@@ -26,9 +26,10 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
+// TODO ARRUMAR
 /**
  * Classe que testa as features do generoRepository
- * 
+ *
  * @author Pedro Inácio
  * @since 10/06/2023
  */
@@ -41,7 +42,7 @@ class GeneroRepositoryTest {
 
     @Autowired
     private GeneroRepository generoRepository;
-    
+
     @Autowired
     private EgressoRepository egressoRepository;
 
@@ -49,12 +50,12 @@ class GeneroRepositoryTest {
     private UsuarioRepository usuarioRepository;
 
     private GeneroModel generoModel;
-    
+
     private EgressoModel egressoModel;
-    
+
 
     private UsuarioModel usuarioModel;
-    
+
     private final static Integer ID = 1;
     private final static String GENERO = "GeneroTeste";
 
@@ -71,7 +72,7 @@ class GeneroRepositoryTest {
         usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
         usuarioModel = usuarioRepository.save(usuarioModel);
 
-        
+
         egressoModel = EgressoModel.builder()
                 .id(1)
                 .nascimento(LocalDate.parse("1999-10-20"))
@@ -82,12 +83,12 @@ class GeneroRepositoryTest {
                 .linkedin("null")
                 .usuario(usuarioModel)
                 .build();
-        
+
         generoModel = GeneroModel.builder()
                 .id(ID)
                 .nome(GENERO)
                 .build();
-        
+
         generoModel.setCreatedBy(usuarioModel);
 
         generoModel = generoRepository.save(generoModel);
@@ -99,7 +100,7 @@ class GeneroRepositoryTest {
     }
     /**
      * Método que testa o repositório que salva genero
-     * 
+     *
      * @author Pedro Inácio
      * @since 10/06/2023
      */
@@ -114,7 +115,7 @@ class GeneroRepositoryTest {
 
     /**
      * Método que testa o repositório que retorna todos os generos
-     * 
+     *
      * @author Pedro Inácio
      * @since 10/06/2023
      */

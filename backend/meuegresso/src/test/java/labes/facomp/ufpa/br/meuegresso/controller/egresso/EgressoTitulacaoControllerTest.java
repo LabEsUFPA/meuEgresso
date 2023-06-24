@@ -168,7 +168,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
         cursoDTO = modelMapper.map(cursoModel, CursoDTO.class);
 
         /*Empresa */
-        empresaModel = EmpresaModel.builder().nome("EmpresaTeste").endereco(null).build();
+        empresaModel = EmpresaModel.builder().nome("EmpresaTeste").build();
         empresaModel = empresaRepository.save(empresaModel);
         empresaDTO = modelMapper.map(empresaModel, EmpresaDTO.class);
 

@@ -29,7 +29,7 @@ describe('AdminOptionsDropdown', () => {
         email: 'email@teste.com'
       }
     })
-    console.log(wrapper.text())
+
     expect(wrapper.text()).toContain('Editar cadastro')
     expect(wrapper.text()).toContain('Enviar e-mail')
   })

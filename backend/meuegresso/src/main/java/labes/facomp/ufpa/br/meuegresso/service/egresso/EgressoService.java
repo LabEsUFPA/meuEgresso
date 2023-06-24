@@ -21,9 +21,9 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
  * @version 1.0
  */
 public interface EgressoService {
-	
+
 	public EgressoModel findByUsuarioId(Integer idUsuario);
-	
+
 	/**
 	 * Metodo responsavel retornar lista de idades dos egressos.
 	 *
@@ -33,7 +33,7 @@ public interface EgressoService {
 	 * @since 19/05/2023
 	 */
 	public List<Integer> findAllIdades();
-	
+
 	public EgressoModel findById(Integer id);
 
 	/**
@@ -42,8 +42,8 @@ public interface EgressoService {
 	 * @return Lista de objetos da classe EgressoModel.
 	 */
 	public List<EgressoModel> findAll();
-	
-	public EgressoModel save(EgressoModel egresso);
+
+	public EgressoModel adicionarEgresso(EgressoModel egressoModel);
 
 	/**
 	 * Metodo responsavel por atualizar informacoes do egresso no banco de dados.
@@ -54,7 +54,7 @@ public interface EgressoService {
 	 * @since 16/04/2023
 	 */
 
-	public EgressoModel update(EgressoModel egresso);
+	public EgressoModel updateEgresso(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por verificar se egresso existe no banco de dados.
