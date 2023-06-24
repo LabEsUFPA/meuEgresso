@@ -146,6 +146,7 @@ public class EgressoController {
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
+                    .endereco(enderecoEmpresa)
                     .faixaSalarial(FaixaSalarialModel.builder().id(empresaDTO.getFaixaSalarialId()).build()).build());
             validaSetorAtuacao(empresaDTO.getSetorAtuacao(), egresso);
             validaAreaAtuacao(empresaDTO.getAreaAtuacao(), egresso);
@@ -226,7 +227,9 @@ public class EgressoController {
                         enderecoModel.getPais());
                 if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
                     egressoEmpresaModel.setEndereco(enderecoModelNoBanco);
+                    egressoEmpresaModel.getId().setEnderecoId(enderecoModelNoBanco.getId());
                 } else if (enderecoModelNoBanco == null) {
+                    egressoEmpresaModel.getId().setEnderecoId(null);
                     egressoEmpresaModel
                             .setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
                                     .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
