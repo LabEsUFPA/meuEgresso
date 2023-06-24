@@ -29,7 +29,6 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
-import labes.facomp.ufpa.br.meuegresso.exceptions.UnalthorizedRegisterException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 
 /**
