@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +40,7 @@ import lombok.extern.log4j.Log4j2;
  * @version 1.0
  */
 @Log4j2
+@Primary
 @Service
 @RequiredArgsConstructor
 public class UsuarioServiceImpl implements UsuarioService {
@@ -148,7 +150,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 						.nome(e.get(0, String.class))
 						.usuarioId(e.get(1, Integer.class))
 						.status(e.get(2, String.class))
-						.dataModificacao(e.get(3, Timestamp.class).toLocalDateTime().toLocalDate())
+						.dataModificacao(e.get(3, Timestamp.class).toLocalDateTime())
 						.build()));
 
 		Pageable paging = PageRequest.of(page, size, Sort.by(direction, "u.last_modified_date"));

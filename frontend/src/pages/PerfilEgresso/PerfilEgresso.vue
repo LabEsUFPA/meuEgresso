@@ -75,6 +75,7 @@
                   label=""
                   placeholder="Ex: Marcelle Mota"
                   :icon-path="mdiAccount"
+                  :max-length="100"
                 />
               </div>
             </h1>
@@ -120,7 +121,7 @@
                   <CustomInput
                     class="mr-[-5px]"
                     label=""
-                    input-class="w-[150px] h-[31px] "
+                    input-class="w-[155px] h-[34px] "
                     :icon-path="mdiLinkVariant"
                     name="geral.linkedin"
                     :value="dataEgresso.profileHead.linkedin"
@@ -141,7 +142,7 @@
                 <template #input>
                   <CustomInput
                     class="mr-[-5px]"
-                    input-class="w-[150px] h-[31px]"
+                    input-class="w-[155px] h-[34px]"
                     label=""
                     :icon-path="mdiLinkVariant"
                     name="geral.lattes"
@@ -244,6 +245,7 @@
                   placeholder="Ex: marcelle.mota.@gov.br"
                   helper-text="Use um email válido: hotmail, outlook, gmail, etc."
                   :icon-path="mdiEmail"
+                  :max-length="50"
                   required
                 />
                 <CustomInput
@@ -251,6 +253,7 @@
                   name="geral.nascimento"
                   :value="dataEgresso.geral.nascimento"
                   label="Data de Nascimento"
+                  :max-length="10"
                   type="date"
                 />
               </div>
@@ -464,6 +467,7 @@
                   type="number"
                   step="0.01"
                   placeholder="R$ 0,00"
+                  :max-length="12"
                   :required="bools.bolsista"
                   :disabled="!bools.bolsista"
                   money
@@ -480,6 +484,7 @@
                   class="mb-5"
                   name="academico.posGrad.local"
                   label="Instituição da pós-graduação"
+                  :max-length="100"
                   :required="bools.posGrad"
                   :disabled="!bools.posGrad"
                 />
@@ -489,6 +494,7 @@
                   name="academico.posGrad.curso"
                   label="Curso de pós-graduação"
                   :required="bools.posGrad"
+                  :max-length="100"
                   :disabled="!bools.posGrad"
                 />
 
@@ -1354,7 +1360,7 @@ async function fetchUpdateEgresso () {
       }
     })
   }
-
+  console.log(json)
   dataEgresso.value = {
     egressoId: json.id,
     generoId: json.genero.id,
@@ -1505,8 +1511,10 @@ onMounted(() => {
       dataEgresso.value.localizacao.cidade = ''
     }
     setTimeout(() => {
-      cidadeInput.value = ''
-      estadoInput.value = ''
+      if (cidadeInput?.value) {
+        cidadeInput.value = ''
+        estadoInput.value = ''
+      }
     }, 10)
   })
 
@@ -1516,7 +1524,9 @@ onMounted(() => {
       dataEgresso.value.localizacao.cidade = ''
     }
     setTimeout(() => {
-      cidadeInput.value = ''
+      if (cidadeInput?.value) {
+        cidadeInput.value = ''
+      }
     }, 10)
   })
 })
