@@ -75,7 +75,7 @@
                   label=""
                   placeholder="Ex: Marcelle Mota"
                   :icon-path="mdiAccount"
-                  :max-length="50"
+                  :max-length="100"
                 />
               </div>
             </h1>
@@ -245,7 +245,7 @@
                   placeholder="Ex: marcelle.mota.@gov.br"
                   helper-text="Use um email válido: hotmail, outlook, gmail, etc."
                   :icon-path="mdiEmail"
-                  :max-length="64"
+                  :max-length="50"
                   required
                 />
                 <CustomInput
@@ -484,7 +484,7 @@
                   class="mb-5"
                   name="academico.posGrad.local"
                   label="Instituição da pós-graduação"
-                  :max-length="50"
+                  :max-length="100"
                   :required="bools.posGrad"
                   :disabled="!bools.posGrad"
                 />
@@ -494,7 +494,7 @@
                   name="academico.posGrad.curso"
                   label="Curso de pós-graduação"
                   :required="bools.posGrad"
-                  :max-length="50"
+                  :max-length="100"
                   :disabled="!bools.posGrad"
                 />
 

@@ -36,7 +36,7 @@
               name="geral.nome"
               label="Nome"
               :icon-path="mdiAccount"
-              :max-length="50"
+              :max-length="100"
               required
             />
 
@@ -64,7 +64,7 @@
               placeholder="Ex: example@gov.br"
               helper-text="Use um email válido: hotmail, outlook, gmail, etc."
               :icon-path="mdiEmail"
-              :max-length="64"
+              :max-length="50"
               required
             />
 
@@ -230,7 +230,7 @@
               class="mb-5"
               name="academico.posGrad.curso"
               label="Curso de pós-graduação"
-              :max-length="50"
+              :max-length="100"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
             />
@@ -286,6 +286,7 @@
               placeholder="Ex: Google"
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
+              :max-length="130"
             />
 
             <CustomSelect

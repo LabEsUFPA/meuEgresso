@@ -42,7 +42,7 @@
                     placeholder="Digite uma nova senha"
                     :icon-path="mdiLock"
                     input-class="flex w-80 sm:w-96"
-                    :max-length="20"
+                    :max-length="80"
                   />
                 </div>
                 <div>
@@ -55,7 +55,7 @@
                     placeholder="Confirme a senha"
                     :icon-path="mdiLock"
                     input-class="flex w-80 sm:w-96"
-                    :max-length="20"
+                    :max-length="80"
                   />
                 </div>
                 <div>
@@ -191,7 +191,7 @@
                     placeholder="Informe seu e-mail"
                     :icon-path="mdiEmail"
                     input-class="flex w-80 sm:w-96"
-                    :max-length="64"
+                    :max-length="50"
                   />
                 </div>
                 <hr class="w-full">

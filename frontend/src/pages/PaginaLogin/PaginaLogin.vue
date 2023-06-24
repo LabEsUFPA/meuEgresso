@@ -23,7 +23,7 @@
             name="username"
             label="Usuário"
             :icon-path="mdiAccount"
-            :max-length="16"
+            :max-length="50"
             without-validation
             required
           />
@@ -32,7 +32,7 @@
             label="Senha"
             :type="showPassword? 'text' : 'password'"
             :icon-path="mdiLock"
-            :max-length="20"
+            :max-length="80"
             without-validation
             required
           />
