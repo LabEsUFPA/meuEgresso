@@ -1,80 +1,71 @@
 <template>
-  <button
-    class="relative w-fit gap-x-2 md:flex rounded items-center justify-end"
-    @click="toggleUserMenu()"
-    @blur="delayedToggleUserMenu()"
+  <ODropdown
+    aria-role="list"
+    position="bottom-left"
+    menu-class="flex flex-col bg-white p-2 whitespace-nowrap rounded-md shadow-xl border-[1px] border-gray-200')"
   >
-    <h1 class="text-sm font-semibold">
-      {{ userLoggedName }}
-    </h1>
-
-    <div class="flex flex-col justify-end">
-      <SvgIcon
-        type="mdi"
-        class="inline"
-        size="24"
-        :path="userMenuIsOpen ? mdiMenuUp : mdiMenuDown"
-      />
-
-      <div
-        v-show="userMenuIsOpen"
-        id="dropdown"
-        class="absolute shadow-md bg-white min-w-32 z-50 cursor-pointer right-[1px] max-h-96 overflow-y-auto top-8 py-3 rounded-lg border border-t-0 text-sm justify-self-end"
+    <template #trigger="{active}">
+      <button
+        class="flex w-fit gap-3 py-4 rounded items-center justify-end"
       >
-        <RouterLink
-          to="/egresso"
-          v-show="isEgress"
+        <h1 class="text-sm font-semibold">
+          {{ userLoggedName }}
+        </h1>
+        <img
+          v-if="fotoEgresso"
+          @error="!fotoEgresso"
+          :src="fotoEgresso"
+          class="w-8 h-8 object-cover rounded-full border-2 border-sky-200/80"
         >
-          <div
-            class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900"
-            @click="toggleUserMenu()"
-          >
-            Perfil
-          </div>
-        </RouterLink>
-
-        <RouterLink
-          to="/painel-admin"
-          v-show="!isEgress"
+        <img
+          v-else
+          :src="eagle"
+          class="w-8 h-8 p-2 rounded-full flex items-center justify-center shrink-0 bg-sky-200"
         >
-          <div
-            class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900"
-            @click="toggleUserMenu()"
-          >
-            Painel
-          </div>
-        </RouterLink>
 
-        <RouterLink :to="isEgress ? '/conta-egresso' : '/conta-admin'">
-          <div
-            class="w-32 p-2 pr-8 hover:bg-sky-100 text-start text-blue-900"
-            @click="toggleUserMenu()"
-          >
-            Editar conta
-          </div>
-        </RouterLink>
+        <SvgIcon
+          type="mdi"
+          class="inline"
+          size="24"
+          :path="active ? mdiMenuUp : mdiMenuDown"
+        />
+      </button>
+    </template>
 
-        <RouterLink to="/entrar">
-          <div
-            class="w-32 p-2 hover:bg-red-100 border-t text-start text-red-500"
-            @click="userLogout()"
-          >
-            Sair
-          </div>
-        </RouterLink>
-      </div>
-    </div>
-  </button>
+    <ODropdownItem
+      v-for="(opcao, index) in opcoesMenu.filter(op => op.scope.includes(String(userScope)))"
+      :key="index"
+      aria-role="listitem"
+      role="button"
+      override
+      :item-class="classNames({
+        ['p-2 pr-8 rounded']: true,
+        ['text-cyan-600 hover:bg-sky-300/30'] : opcao.title !== 'Sair',
+        ['text-red-500 hover:bg-red-300/30'] : opcao.title === 'Sair'
+      })"
+      @click="() => {opcao.click(); $router.push(opcao.navigateTo)}"
+    >
+      {{ opcao.title }}
+    </ODropdownItem>
+  </ODropdown>
 </template>
 
 <script lang="ts" setup>
 
-import { ref, createApp } from 'vue'
+import { ref, createApp, onMounted, watch } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiMenuDown, mdiMenuUp } from '@mdi/js'
+import { ODropdown, ODropdownItem } from '@oruga-ui/oruga-next'
 import { createPinia } from 'pinia'
+import Api from 'src/services/api'
+import classNames from 'classnames'
+
 import { useLoginStore } from 'src/store/LoginStore'
 import LocalStorage from 'src/services/localStorage'
+import { useRouter } from 'vue-router'
+
+import eagle from 'src/assets/eagle.svg'
+import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 
 interface Props {
   loggedIn: boolean
@@ -87,23 +78,68 @@ const pinia = createPinia()
 const app = createApp({})
 app.use(pinia)
 
-const store = useLoginStore()
+const $router = useRouter()
+const $loginStore = useLoginStore()
+const $perfilStore = usePerfilEgressoStore()
 const storage = new LocalStorage()
-const userLoggedName = ref(props.loggedIn ? storage.getLoggedUser()?.sub : '')
-const isEgress = ref(props.loggedIn ? storage.getLoggedUser()?.scope === 'EGRESSO' : false)
+const userLoggedName = ref<string|undefined>('')
+const userScope = ref('')
+const idEgresso = ref<number|null>(null)
+const fotoEgresso = ref<string|null>(null)
 
 const userMenuIsOpen = ref(false)
+
+onMounted(async () => {
+  fotoEgresso.value = null
+  userLoggedName.value = $loginStore.loggedIn ? storage.getLoggedUser()?.sub : ''
+  userScope.value = props.loggedIn ? String(storage.getLoggedUser()?.scope) : 'EGRESSO'
+
+  if (userScope.value === 'EGRESSO') {
+    await fetchEgresso()
+    fotoEgresso.value = await $perfilStore.fetchImageEgressoUrl(String(idEgresso.value))
+  }
+
+  watch($loginStore, async () => {
+    fotoEgresso.value = null
+    userLoggedName.value = $loginStore.loggedIn ? storage.getLoggedUser()?.sub : ''
+    userScope.value = props.loggedIn ? String(storage.getLoggedUser()?.scope) : 'EGRESSO'
+
+    if (userScope.value === 'EGRESSO') {
+      await fetchEgresso()
+      fotoEgresso.value = await $perfilStore.fetchImageEgressoUrl(String(idEgresso.value))
+    }
+  })
+})
+
 const toggleUserMenu = () => {
   userMenuIsOpen.value = !userMenuIsOpen.value
 }
 
-const delayedToggleUserMenu = () => setTimeout(() => toggleUserMenu(), 150)
-
 const userLogout = () => {
-  store.userLogout()
+  $loginStore.userLogout()
   toggleUserMenu()
 }
 
 defineExpose({ toggleUserMenu, userMenuIsOpen })
+
+async function fetchEgresso () {
+  const response = await Api.request({
+    method: 'get',
+    route: '/egresso'
+  })
+
+  if (response?.status === 200) {
+    idEgresso.value = response?.data.id
+  }
+
+  return response?.status != null ? response.status : 500
+}
+
+const opcoesMenu = [
+  { title: 'Painel', navigateTo: '/painel-admin', click: toggleUserMenu, scope: ['ADMIN', 'SECRETARIO'] },
+  { title: 'Perfil', navigateTo: '/egresso', click: toggleUserMenu, scope: ['EGRESSO'] },
+  { title: 'Editar conta', navigateTo: '/conta', click: toggleUserMenu, scope: ['EGRESSO', 'ADMIN', 'SECRETARIO'] },
+  { title: 'Sair', navigateTo: '/entrar', click: userLogout, scope: ['EGRESSO', 'ADMIN', 'SECRETARIO'] }
+]
 
 </script>

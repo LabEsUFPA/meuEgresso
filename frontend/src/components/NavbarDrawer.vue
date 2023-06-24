@@ -6,7 +6,7 @@
     <SvgIcon
       type="mdi"
       class="inline mr-3"
-      size="35"
+      size="32"
       :path="mdiMenu"
     />
 

@@ -56,7 +56,7 @@
                   :path="mdiCrown"
                 />
 
-                Secretario
+                Secretário
               </div>
             </div>
           </div>
@@ -172,7 +172,7 @@
                 class="inline"
                 :path="mdiFileDocument"
               />
-              Exportar dados em pdf
+              Exportar dados em PDF
             </button>
           </div>
         </div>
