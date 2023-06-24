@@ -20,12 +20,14 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.areaatuacao.AreaAtuacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.endereco.EnderecoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.setoratuacao.SetorAtuacaoRepository;
@@ -65,6 +67,11 @@ class EgressoEmpresaRepositoryTest {
 
     @Autowired
     private SetorAtuacaoRepository setorAtuacaoRepository;
+
+    @Autowired
+    private EnderecoRepository enderecoRepository;
+
+    private EnderecoModel enderecoModel;
 
     private GeneroModel generoModel;
 
@@ -126,7 +133,7 @@ class EgressoEmpresaRepositoryTest {
         faixaSalarialModel = new FaixaSalarialModel();
         faixaSalarialModel.setId(1);
         faixaSalarialModel.setFaixa("1000-2000");
-        
+
         faixaSalarialModel = faixaSalarialRepository.save(faixaSalarialModel);
 
         areaAtuacaoModel = new AreaAtuacaoModel();
@@ -141,10 +148,14 @@ class EgressoEmpresaRepositoryTest {
 
         setorAtuacaoModel = setorAtuacaoRepository.save(setorAtuacaoModel);
 
+        enderecoModel = EnderecoModel.builder().cidade("cidade").estado("estado").pais("pais").build();
+        enderecoModel = enderecoRepository.save(enderecoModel);
+
         egressoEmpresaModel = new EgressoEmpresaModel();
         egressoEmpresaModel.setId(egressoEmpresaModelId);
         egressoEmpresaModel.setEgresso(egressoModel);
         egressoEmpresaModel.setEmpresa(empresaModel);
+        egressoEmpresaModel.setEndereco(enderecoModel);
         egressoEmpresaModel.setFaixaSalarial(faixaSalarialModel);
         egressoEmpresaModel.setAreaAtuacao(areaAtuacaoModel);
         egressoEmpresaModel.setSetorAtuacao(setorAtuacaoModel);
@@ -164,8 +175,8 @@ class EgressoEmpresaRepositoryTest {
     @Test
     void testExistsByIdAndCreatedById() {
 
-        Boolean response = egressoEmpresaRepository.existsByIdAndCreatedById(
-                egressoEmpresaModelId, egressoEmpresaModel.getCreatedBy().getId());
+        Boolean response = egressoEmpresaRepository.existsById(
+                egressoEmpresaModelId);
 
         assertTrue(response);
     }

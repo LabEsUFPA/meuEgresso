@@ -136,13 +136,13 @@ class EgressoEmpresaServiceTest {
      * @since 28/04/2023
      */
     @Test
-    void testExistsByIdAndCreatedById() {
+    void testExistsById() {
 
-        BDDMockito.given(repository.existsByIdAndCreatedById(Mockito.any(
-                EgressoEmpresaModelId.class), Mockito.anyInt()))
+        BDDMockito.given(repository.existsById(Mockito.any(
+                EgressoEmpresaModelId.class)))
                 .willReturn(true);
 
-        Boolean response = egressoEmpresaService.existsByIdAndCreatedById(ID, 1);
+        Boolean response = egressoEmpresaService.existsById(ID);
         assertTrue(response);
     }
 

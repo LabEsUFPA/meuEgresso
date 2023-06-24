@@ -62,7 +62,7 @@ public interface EgressoEmpresaService {
 	 * @param createdBy
 	 * @return boolean
 	 */
-	boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy);
+	boolean existsById(EgressoEmpresaModelId id);
 
 	/**
 	 * Método responsável por retornar os dados para o mapa sociodemográfico
@@ -77,4 +77,5 @@ public interface EgressoEmpresaService {
 	 * @return List<EmpresaGraficoDTO>
 	 */
 	public List<EmpresaGraficoDTO> countEgressoByEmpresas();
+
 }
