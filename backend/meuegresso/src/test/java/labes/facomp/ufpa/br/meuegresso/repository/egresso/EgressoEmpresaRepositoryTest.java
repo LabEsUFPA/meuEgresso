@@ -7,11 +7,14 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
@@ -39,9 +42,10 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
  * @author Pedro Inácio
  * @since 28/04/2023
  */
+@DirtiesContext
 @SpringBootTest
 @ActiveProfiles("test")
-
+@TestInstance(Lifecycle.PER_CLASS)
 class EgressoEmpresaRepositoryTest {
 
     @Autowired
@@ -89,7 +93,7 @@ class EgressoEmpresaRepositoryTest {
 
     private SetorAtuacaoModel setorAtuacaoModel;
 
-    @BeforeEach
+    @BeforeAll
     void setUp() {
 
         generoModel = new GeneroModel();
@@ -127,8 +131,12 @@ class EgressoEmpresaRepositoryTest {
 
         empresaModel = empresaRepository.save(empresaModel);
 
+        enderecoModel = EnderecoModel.builder().cidade("cidade").estado("estado").pais("pais").build();
+        enderecoModel = enderecoRepository.save(enderecoModel);
+
         egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(egressoModel.getId())
-                .empresaId(empresaModel.getId()).build();
+                .empresaId(empresaModel.getId())
+                .enderecoId(enderecoModel.getId()).build();
 
         faixaSalarialModel = new FaixaSalarialModel();
         faixaSalarialModel.setId(1);
@@ -147,9 +155,6 @@ class EgressoEmpresaRepositoryTest {
         setorAtuacaoModel.setNome("setorTeste");
 
         setorAtuacaoModel = setorAtuacaoRepository.save(setorAtuacaoModel);
-
-        enderecoModel = EnderecoModel.builder().cidade("cidade").estado("estado").pais("pais").build();
-        enderecoModel = enderecoRepository.save(enderecoModel);
 
         egressoEmpresaModel = new EgressoEmpresaModel();
         egressoEmpresaModel.setId(egressoEmpresaModelId);
@@ -181,7 +186,7 @@ class EgressoEmpresaRepositoryTest {
         assertTrue(response);
     }
 
-    @AfterEach
+    @AfterAll
     public void tearDown() {
         egressoEmpresaModel = null;
     }

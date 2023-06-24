@@ -57,7 +57,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
-//TODO consertar teste
 @SpringBootTest
 @DirtiesContext
 @AutoConfigureMockMvc
@@ -75,7 +74,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
  */
 class EgressoTitulacaoControllerTest {
     static final Integer TITULACAO_ID = 1;
-    static final String NOME = "TituloTeste";
+    static final String NOME = "Titulo Teste";
     static final String SETORATUACAO = "SetorTeste";
     static final Integer EMPRESA_ID = 2;
 

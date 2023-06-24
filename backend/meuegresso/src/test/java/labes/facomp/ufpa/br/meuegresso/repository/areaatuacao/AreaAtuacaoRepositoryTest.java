@@ -45,9 +45,9 @@ public class AreaAtuacaoRepositoryTest {
 
     @BeforeAll
     void setUp() {
-        
+
         usuarioModel = UsuarioModel.builder()
-                .nome("John")
+                .nome("John Jon")
                 .username("john123")
                 .email("john@example.com")
                 .password("password123")
