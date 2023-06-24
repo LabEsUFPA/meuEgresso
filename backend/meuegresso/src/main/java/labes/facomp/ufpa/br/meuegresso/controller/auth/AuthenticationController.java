@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.controller.auth;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,15 +30,16 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.config.properties.TokenProperties;
-import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioRegistro;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthNewPasswordRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthRecoveryPasswordRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
+import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioRegistro;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.ExpireRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
@@ -148,13 +151,14 @@ public class AuthenticationController {
 	 * @throws NotFoundException
 	 * @throws NameAlreadyExistsException
 	 * @throws NotValidEgressoException
-	 * @see {@link UsuarioDTO}
+	 * @see {@link UsuarioRegistro}
 	 * @since 26/03/2023
 	 */
 	@PostMapping(value = "/register")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO)
+	public String cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO, Optional<String> redirect,
+			@RequestHeader("Host") String header)
 			throws NameAlreadyExistsException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
 			throw new NameAlreadyExistsException(
@@ -175,9 +179,21 @@ public class AuthenticationController {
 		}
 
 		usuarioModel.setGrupos(Set.of(Grupos.EGRESSO));
+		mailService.usuarioCadastrado(usuarioModel, redirect.orElse("https://" + header + "/auth/validarEmail"));
 		usuarioService.save(usuarioModel);
-		new Thread(() -> mailService.usuarioCadastrado(usuarioModel)).start();
 		return ResponseType.SUCCESS_SAVE.getMessage();
+	}
+
+	@PostMapping(value = "/validarEmail")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void validarEmail(@RequestParam String tokenAuth)
+			throws InvalidRequestException {
+		Map<String, Object> claims = jwtService.extractClains(tokenAuth);
+		if (claims.get("email") instanceof String email) {
+			UsuarioModel usuarioModel = usuarioService.findByEmail(email);
+			usuarioModel.setEmailVerificado(true);
+			usuarioService.update(usuarioModel);
+		}
 	}
 
 	@PostMapping(value = "/recoveryPassword/{token}")
@@ -185,7 +201,8 @@ public class AuthenticationController {
 	public void recuperarSenha(@PathVariable String token, @RequestBody AuthNewPasswordRequest authNewPassReq)
 			throws UnauthorizedRequestException, ExpireRequestException {
 		RecuperacaoSenhaModel recuperacaoSenha = recuperacaoSenhaService.tokenValido(UUID.fromString(token));
-		if (recuperacaoSenha.getPasswordChange().booleanValue() || recuperacaoSenha.getPrazoFinal().isBefore(LocalDateTime.now())) {
+		if (recuperacaoSenha.getPasswordChange().booleanValue()
+				|| recuperacaoSenha.getPrazoFinal().isBefore(LocalDateTime.now())) {
 			throw new ExpireRequestException();
 		}
 		UsuarioModel usuarioModel = recuperacaoSenha.getUsuario();

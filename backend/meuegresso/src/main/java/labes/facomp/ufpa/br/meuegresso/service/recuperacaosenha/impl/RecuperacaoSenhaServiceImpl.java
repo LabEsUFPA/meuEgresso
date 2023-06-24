@@ -40,7 +40,7 @@ public class RecuperacaoSenhaServiceImpl implements RecuperacaoSenhaService {
             e.setPasswordChange(true);
             recuperacaoSenhaRepository.save(e);
         });
-        Optional<RecoveryPasswordProjection> projectionOptional = usuarioRepository.findByEmailIgnoreCase(email);
+        Optional<RecoveryPasswordProjection> projectionOptional = usuarioRepository.findByEmailIgnoreCase(email, RecoveryPasswordProjection.class);
         if (projectionOptional.isPresent()) {
             RecoveryPasswordProjection projection = projectionOptional.get();
             RecuperacaoSenhaModel recuperacaoSenha = RecuperacaoSenhaModel.builder().token(UUID.randomUUID())
