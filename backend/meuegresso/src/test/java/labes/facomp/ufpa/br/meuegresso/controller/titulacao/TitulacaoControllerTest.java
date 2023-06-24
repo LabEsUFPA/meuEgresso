@@ -73,9 +73,9 @@ class TitulacaoControllerTest {
 	void setUp() throws Exception {
 
 		usuarioModel = new UsuarioModel();
-		usuarioModel.setUsername("username");
+		usuarioModel.setUsername("usernameeee");
 		usuarioModel.setNome("nome test");
-		usuarioModel.setEmail("teste@gmail.com");
+		usuarioModel.setEmail("teste123@example.com");
 		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
 		final String plainTextPassword = "teste123";

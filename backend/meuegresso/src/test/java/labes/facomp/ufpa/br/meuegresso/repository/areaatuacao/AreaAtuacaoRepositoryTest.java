@@ -47,9 +47,9 @@ public class AreaAtuacaoRepositoryTest {
     void setUp() {
 
         usuarioModel = UsuarioModel.builder()
-                .nome("John Jon")
-                .username("john123")
-                .email("john@example.com")
+                .nome("John Jonnnn")
+                .username("john1234")
+                .email("john1234@example.com")
                 .password("password123")
                 .build();
         usuarioModel.setGrupos(Set.of(Grupos.ADMIN));

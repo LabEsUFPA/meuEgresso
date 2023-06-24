@@ -48,9 +48,9 @@ public class AreaEmpregoRepositoryTest {
     void setUp() {
 
         usuarioModel = UsuarioModel.builder()
-                .nome("John")
-                .username("john123")
-                .email("john@example.com")
+                .nome("John Jooss")
+                .username("john123654")
+                .email("john654@example.com")
                 .password("password123")
                 .build();
         usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
