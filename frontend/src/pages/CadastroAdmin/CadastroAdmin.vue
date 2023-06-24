@@ -124,7 +124,7 @@
             <img
               class="w-16 sm:w-24"
               src="src/assets/check.svg"
-              alt="Loading"
+              alt="Ícone com sinal de positivo"
             >
             <h1 class="text-blue-900 font-bold text-2xl sm:text-4xl">
               Perfil {{ username }} <br>

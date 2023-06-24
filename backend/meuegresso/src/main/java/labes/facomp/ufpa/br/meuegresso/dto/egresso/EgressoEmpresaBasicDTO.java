@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.endereco.EnderecoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.areaatuacao.AreaAtuacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaBasicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
@@ -38,4 +39,7 @@ public class EgressoEmpresaBasicDTO {
     private AreaAtuacaoDTO areaAtuacao;
 
     private SetorAtuacaoDTO setorAtuacao;
+
+    private EnderecoDTO endereco;
+
 }

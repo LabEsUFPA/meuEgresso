@@ -1078,7 +1078,7 @@ async function handleSubmitAcademico (values: any) {
   fetchUpdateEgresso()
 }
 async function handleSubmitLocalizacao (values: any) {
-  jsonResponse.emprego.empresa.endereco = values.localizacao
+  jsonResponse.emprego.endereco = values.localizacao
   // delete jsonResponse.emprego.empresa.endereco.id
 
   const status = await atualizarEgresso(jsonResponse)
@@ -1107,15 +1107,15 @@ async function handleSubmitCarreira (values: any) {
         id: 2
 
       },
+      endereco: {
+        id: 6,
+        cidade: '',
+        estado: '',
+        pais: ''
+      },
       empresa: {
         id: 1,
         nome: '',
-        endereco: {
-          id: 6,
-          cidade: '',
-          estado: '',
-          pais: ''
-        },
         faixaSalarial: {
           id: 2
         }
@@ -1379,9 +1379,9 @@ async function fetchUpdateEgresso () {
     },
     localizacao: {
       cep: '',
-      pais: json.emprego?.empresa.endereco.pais || '',
-      estado: json.emprego?.empresa.endereco.estado || '',
-      cidade: json.emprego?.empresa.endereco.cidade || '',
+      pais: json.emprego?.endereco.pais || '',
+      estado: json.emprego?.endereco.estado || '',
+      cidade: json.emprego?.endereco.cidade || '',
       isInput: false
     },
     academico: {
