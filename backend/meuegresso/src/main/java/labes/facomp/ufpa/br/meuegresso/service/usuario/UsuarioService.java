@@ -64,7 +64,7 @@ public interface UsuarioService extends UserDetailsService {
 
 	/**
 	 * Método responsável por encontrar um determinado usuário por seu username.
-	 * 
+	 *
 	 * @param username
 	 * @return {@link UsuarioModel}
 	 */
@@ -93,8 +93,7 @@ public interface UsuarioService extends UserDetailsService {
 	 * @author Bruno Eiki
 	 */
 
-	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size,
-			Direction direction);
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size, String ordenacao);
 
 	/**
 	 * Método responsável por retornar um mapa com informações

@@ -2,17 +2,17 @@
 import { defineStore } from 'pinia'
 import Api from 'src/services/api'
 import { type models } from 'src/@types'
-interface AnuncioVaga extends models.AnuncioModel {}
-interface AnuncioVagaPost extends models.AnuncioModelPost {}
-interface AreaEmpregoFiltro extends models.areasEmpregoFiltro {}
+interface AnuncioVaga extends models.AnuncioModel { }
+interface AnuncioVagaPost extends models.AnuncioModelPost { }
+interface AreaEmpregoFiltro extends models.areasEmpregoFiltro { }
 
-interface ComplexOpts extends models.ComplexOpts {}
+interface ComplexOpts extends models.ComplexOpts { }
 
 interface State {
   anuncio: AnuncioVaga
-  anuncios: AnuncioVaga []
-  areasEmpregoFiltros: AreaEmpregoFiltro []
-  areasEmprego: ComplexOpts []
+  anuncios: AnuncioVaga[]
+  areasEmpregoFiltros: AreaEmpregoFiltro[]
+  areasEmprego: ComplexOpts[]
   totalPages: number
 
 }
@@ -50,7 +50,6 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
 
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
-        // console.log('resposta API:', response.data?.content)
         this.anuncios = response.data?.content.map((elem: any) => ({
           id: elem.id,
           titulo: elem.titulo,
@@ -104,7 +103,6 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       })
 
       if (response?.status === 200) {
-        console.log('data:', response.data)
         this.totalPages = response.data?.totalPages
         this.anuncios = response.data?.content.map((elem: any) => ({
           id: elem.id,
@@ -134,7 +132,6 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       })
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
-        console.log('data:', response.data)
         this.anuncios = response.data?.content.map((elem: any) => ({
           id: elem.id,
           titulo: elem.titulo,
@@ -162,7 +159,6 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       })
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
-        console.log('data:', response.data)
         this.anuncios = response.data?.content.map((elem: any) => ({
           id: elem.id,
           titulo: elem.titulo,
@@ -189,10 +185,8 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
         route: '/anuncio/busca',
         params: { areaEmprego, page, size }
       })
-      console.log()
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
-        console.log('data:', response.data)
         this.anuncios = response.data?.content.map((elem: any) => ({
           id: elem.id,
           titulo: elem.titulo,
@@ -214,7 +208,7 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
     async fetchAreasEmprego () {
       const response = await Api.request({
         method: 'get',
-        route: '/areaemprego'
+        route: '/publico/areaemprego'
       })
       if (response?.status === 200) {
         this.areasEmpregoFiltros = response.data?.map((elem: any) => ({

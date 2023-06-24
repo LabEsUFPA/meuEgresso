@@ -23,8 +23,9 @@ import labes.facomp.ufpa.br.meuegresso.dto.mensagem.MensagemDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.mensagem.MensagemStatusDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.MensagemModel;
+import labes.facomp.ufpa.br.meuegresso.service.agendamento.AgendamentoService;
+import labes.facomp.ufpa.br.meuegresso.service.agendamento.impl.AgendamentoServiceImpl;
 import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
-import labes.facomp.ufpa.br.meuegresso.service.mail.impl.MailServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -41,7 +42,9 @@ public class MensagemAdmController {
 
 	private final MailService mailService;
 
-	private final MailServiceImpl mailServiceImpl;
+	private final AgendamentoService agendamentoService;
+
+	private final AgendamentoServiceImpl agendamentoServiceImpl;
 
 	private final ModelMapper mapper;
 
@@ -58,7 +61,7 @@ public class MensagemAdmController {
 	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public MensagemStatusDTO consultarStatusMensagens() {
-		return mailService.getMensagensStatus();
+		return agendamentoService.getMensagensStatus();
 	}
 
 	/**
@@ -75,7 +78,7 @@ public class MensagemAdmController {
 	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public Map<String, ScheduledFuture<?>> consultarTarefasMensagens() {
-		return mailService.getTasks();
+		return 	agendamentoService.getTasks();
 	}
 
 	/**
@@ -108,11 +111,7 @@ public class MensagemAdmController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public String atualizarMensagem(@RequestBody @Valid MensagemDTO mensagemDTO) {
-		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
-		mailService.removeScheduledTask(mensagemModel);
-		mensagemModel = mailService.update(mensagemModel);
-		mailService.setScheduleATask(mailServiceImpl, mensagemModel.getDataEnvio(), mensagemModel.getFrequente(),
-				mensagemModel.getAnual(), mensagemModel);
+		mailService.update(mapper.map(mensagemDTO, MensagemModel.class));
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
@@ -128,9 +127,10 @@ public class MensagemAdmController {
 	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteById(@PathVariable(name = "id") Integer id) {
-		MensagemModel mensagemModel = mailService.findbyId(id);
-		mailService.removeScheduledTask(mensagemModel);
 		if (mailService.deleteById(id)) {
+			if(mailService.findAll().isEmpty() && !agendamentoService.getTasks().isEmpty()){
+				agendamentoService.removeScheduledTask();
+			}
 			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
 		return ResponseType.FAIL_DELETE.getMessage();
@@ -151,17 +151,10 @@ public class MensagemAdmController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public String save(@RequestBody @Valid MensagemDTO mensagemDTO) {
 		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
+		if(mailService.findAll().isEmpty() || agendamentoService.getTasks().isEmpty()){
+			agendamentoService.setScheduleATask(agendamentoServiceImpl);
+		}
 		mailService.save(mensagemModel);
-		if (mailService.findAll().size() == 1) {
-			mensagemModel.setFrequente(true);
-			mensagemModel.setAnual(true);
-			mailService.setEmailAnualCadastro(mailServiceImpl, mensagemModel);
-		}
-		if (mailService.findAll().size() > 1) {
-			mailService.setScheduleATask(mailServiceImpl, mensagemDTO.getDataEnvio(), mensagemDTO.getFrequente(),
-					mensagemDTO.getAnual(), mensagemModel);
-		}
-
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 

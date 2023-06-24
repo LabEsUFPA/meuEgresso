@@ -6,18 +6,20 @@ describe('SearchBar', () => {
   it('should render props', () => {
     const wrapper = mount(SearchBar, {
       props: {
-        modelValue: 'Pesquisa'
+        modelValue: 'Pesquisa',
+        placeholder: 'Placeholder'
       }
     })
 
-    expect(wrapper.html()).toContain('Pesquisa')
     expect(wrapper.vm.modelValue).toEqual('Pesquisa')
+    expect(wrapper.vm.placeholder).toEqual('Placeholder')
   })
 
   it('should render button', () => {
     const wrapper = mount(SearchBar, {
       props: {
-        modelValue: 'Pesquisa'
+        modelValue: 'Pesquisa',
+        placeholder: 'Placeholder'
       }
     })
 

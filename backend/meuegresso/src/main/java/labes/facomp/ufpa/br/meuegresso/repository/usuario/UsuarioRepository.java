@@ -51,7 +51,7 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			SELECT
 			u.id_usuario,
 			e.id_egresso,
-			u.nome_usuario,
+			upper(u.nome_usuario),
 			empr.nome_empresa,
 			u.email,
 			u.created_date,
@@ -84,10 +84,14 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			ELSE 'incompleto'
 			END) in (:status)
 			AND u.nome_usuario ilike %:nomeUsuario%
+			ORDER BY
+			CASE WHEN :ordenacao = 'ASC'  THEN u.created_date END ASC,
+			CASE WHEN :ordenacao = 'DESC' THEN u.created_date END DESC
 			""")
 	List<Tuple> findBySearch(
 			@Param("nomeUsuario") String nomeUsuario,
-			@Param("status") String[] status);
+			@Param("status") String[] status,
+			@Param("ordenacao") String ordenacao);
 
 	@Query(value = """
 			WITH usuario_status AS (

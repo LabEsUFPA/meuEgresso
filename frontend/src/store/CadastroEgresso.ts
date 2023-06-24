@@ -8,13 +8,16 @@ interface State {
   faixasSalariais: ComplexOpts[]
   tiposBolsa: ComplexOpts[]
   tiposCota: ComplexOpts[]
+  areasAtuacao: ComplexOpts[]
 }
 export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
   state: (): State => ({
     generos: [],
     faixasSalariais: [],
     tiposBolsa: [],
-    tiposCota: []
+    tiposCota: [],
+    areasAtuacao: []
+
   }),
 
   actions: {
@@ -54,8 +57,21 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
 
       if (response?.status === 200) {
         this.tiposBolsa = response.data?.map((elem: any) => {
-          console.log(elem)
+          return ({
+            label: elem.nome,
+            value: elem.id
+          })
+        })
+      }
+    },
+    async fetchAreaEmprego () {
+      const response = await Api.request({
+        method: 'get',
+        route: 'publico/areaemprego'
+      })
 
+      if (response?.status === 200) {
+        this.areasAtuacao = response.data?.map((elem: any) => {
           return ({
             label: elem.nome,
             value: elem.id
@@ -83,8 +99,8 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
       await this.fetchFaixa()
       await this.fetchBolsas()
       await this.fetchCotas()
+      await this.fetchAreaEmprego()
     },
-
     async cadastrarEgresso (foto: { temFoto: boolean, foto: FormData }, dadosEgresso: EgressoModel) {
       let response = await Api.request({
         method: 'post',
