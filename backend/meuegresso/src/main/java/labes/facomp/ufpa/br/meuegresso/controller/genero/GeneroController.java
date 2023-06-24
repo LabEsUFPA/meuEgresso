@@ -5,6 +5,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,6 +74,7 @@ public class GeneroController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
     public String cadastrarGenero(
             @RequestBody @Valid GeneroDTO generoDTO) {
         GeneroModel generoModel = mapper.map(generoDTO, GeneroModel.class);
@@ -93,9 +95,10 @@ public class GeneroController {
     @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public String atualizarGenero(@RequestBody @Valid GeneroDTO generoDTO, JwtAuthenticationToken token)
+    @PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
+    public String atualizarGenero(@RequestBody @Valid GeneroDTO generoDTO)
             throws InvalidRequestException, UnauthorizedRequestException {
-        if (generoService.existsByIdAndCreatedById(generoDTO.getId(), jwtService.getIdUsuario(token))) {
+        if (generoService.existsById(generoDTO.getId())) {
             GeneroModel generoModel = mapper.map(generoDTO, GeneroModel.class);
             generoService.update(generoModel);
             return ResponseType.SUCCESS_UPDATE.getMessage();
@@ -115,6 +118,7 @@ public class GeneroController {
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
     public String deletarGenero(@RequestBody @Valid GeneroDTO generoDTO) {
 
         GeneroModel generoModel = mapper.map(generoDTO, GeneroModel.class);

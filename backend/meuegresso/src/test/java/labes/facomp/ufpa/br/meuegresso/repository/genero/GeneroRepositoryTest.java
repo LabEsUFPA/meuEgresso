@@ -26,7 +26,6 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
-// TODO ARRUMAR
 /**
  * Classe que testa as features do generoRepository
  *
@@ -43,18 +42,7 @@ class GeneroRepositoryTest {
     @Autowired
     private GeneroRepository generoRepository;
 
-    @Autowired
-    private EgressoRepository egressoRepository;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
     private GeneroModel generoModel;
-
-    private EgressoModel egressoModel;
-
-
-    private UsuarioModel usuarioModel;
 
     private final static Integer ID = 1;
     private final static String GENERO = "GeneroTeste";
@@ -62,41 +50,12 @@ class GeneroRepositoryTest {
     @BeforeEach
     void setUp() {
 
-        usuarioModel = UsuarioModel.builder()
-                .id(1)
-                .nome("John")
-                .username("john123")
-                .email("john@example.com")
-                .password("password123")
-                .build();
-        usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
-        usuarioModel = usuarioRepository.save(usuarioModel);
-
-
-        egressoModel = EgressoModel.builder()
-                .id(1)
-                .nascimento(LocalDate.parse("1999-10-20"))
-                //.genero(generoModel)
-                .matricula("202003940011")
-                .interesseEmPos(true)
-                .lattes("null")
-                .linkedin("null")
-                .usuario(usuarioModel)
-                .build();
-
         generoModel = GeneroModel.builder()
                 .id(ID)
                 .nome(GENERO)
                 .build();
 
-        generoModel.setCreatedBy(usuarioModel);
-
         generoModel = generoRepository.save(generoModel);
-
-        egressoModel.setGenero(generoModel);
-        egressoModel.setCreatedBy(usuarioModel);
-
-        egressoModel = egressoRepository.save(egressoModel);
     }
     /**
      * Método que testa o repositório que salva genero
@@ -130,7 +89,7 @@ class GeneroRepositoryTest {
 
     @Test
     void testExistsByIdAndCreatedById() {
-        Boolean response = generoRepository.existsByIdAndCreatedById(generoModel.getId(), usuarioModel.getId());
+        Boolean response = generoRepository.existsById(generoModel.getId());
 
         assertNotNull(response);
         assertTrue(response);
