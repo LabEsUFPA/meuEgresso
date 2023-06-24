@@ -72,12 +72,11 @@
             :data="filteredDataArray"
             :placeholder="placeholder"
             :field="typeof options[0] === 'object' ? 'label' : 'value'"
-            :required="required"
             :disabled="disabled"
             :loading="isFetching"
             :input-class="classNames({
               ['cursor-not-allowed']: disabled,
-              ['bg-transparent focus:outline-none']: true,
+              ['bg-transparent focus:outline-none border-none shadow-none h-full p-0']: true,
               [name.replaceAll('.', '-')]: true
             })"
             :root-class="classNames({
