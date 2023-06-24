@@ -28,8 +28,8 @@ import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
-import labes.facomp.ufpa.br.meuegresso.exceptions.MatriculaAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
+import labes.facomp.ufpa.br.meuegresso.exceptions.MatriculaAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
@@ -102,10 +102,10 @@ public class EgressoController {
             JwtAuthenticationToken token) throws MatriculaAlreadyExistsException {
 
         if (egressoService.existsMatricula(egressoCadastroDTO.getMatricula())) {
-			throw new MatriculaAlreadyExistsException(
-					String.format(ErrorType.REPORT_007.getMessage(), egressoCadastroDTO.getMatricula()),
-					ErrorType.REPORT_007.getInternalCode());
-		}
+            throw new MatriculaAlreadyExistsException(
+                    String.format(ErrorType.REPORT_007.getMessage(), egressoCadastroDTO.getMatricula()),
+                    ErrorType.REPORT_007.getInternalCode());
+        }
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
 
@@ -218,14 +218,18 @@ public class EgressoController {
             @RequestBody EgressoDTO egresso, JwtAuthenticationToken token)
             throws MatriculaAlreadyExistsException {
 
-        if (egressoService.existsMatricula(egresso.getMatricula())) {
-			throw new MatriculaAlreadyExistsException(
-					String.format(ErrorType.REPORT_007.getMessage(), egresso.getMatricula()),
+        // Se a matricula passada for diferente da matricula que a pessoa já tinha,
+        // checar se é duplicado.
+        if (egresso.getMatricula() != null
+                && !egresso.getMatricula().equals(egressoService.findById(egresso.getId()).getMatricula())
+                && egressoService.existsMatricula(egresso.getMatricula())) {
+            throw new MatriculaAlreadyExistsException(
+                    String.format(ErrorType.REPORT_007.getMessage(), egresso.getMatricula()),
                     ErrorType.REPORT_007.getInternalCode());
         }
 
         if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
-            
+
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
             if (egressoModel.getContribuicao() != null) {
