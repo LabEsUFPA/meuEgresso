@@ -40,6 +40,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoEmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaBasicDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.setoratuacao.SetorAtuacaoDTO;
@@ -50,6 +51,7 @@ import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
@@ -57,6 +59,7 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.areaatuacao.AreaAtuacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.endereco.EnderecoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.setoratuacao.SetorAtuacaoRepository;
@@ -72,6 +75,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 class EgressoEmpresaControllerTest {
 
 	static final Integer EMPRESA_ID = 1;
+	static final Integer ENDERECO_ID = 1;
 	static final String NOME = "EmpresaTeste";
 	static final String SETORATUACAO = "SetorTeste";
 
@@ -95,6 +99,9 @@ class EgressoEmpresaControllerTest {
 
 	@Autowired
 	private EmpresaRepository empresaRepository;
+
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	@Autowired
 	private FaixaSalarialRepository faixaSalarialRepository;
@@ -156,13 +163,17 @@ class EgressoEmpresaControllerTest {
 		GeneroDTO generoDTO = modelMapper.map(genero, GeneroDTO.class);
 		genero = generoRepository.save(genero);
 
+		/* Endereco */
+		EnderecoDTO enderecoDTO = EnderecoDTO.builder().id(ENDERECO_ID).cidade("CidadeTest").estado("EstadoTest")
+				.pais("PaísTest").build();
+
+		EnderecoModel enderecoModel = modelMapper.map(enderecoDTO, EnderecoModel.class);
+		enderecoRepository.save(enderecoModel);
+
 		/* Empresa */
 		empresaBasicDTO = EmpresaBasicDTO.builder().id(EMPRESA_ID).nome(NOME).build();
 		empresaModel = modelMapper.map(empresaBasicDTO, EmpresaModel.class);
 		empresaRepository.save(empresaModel);
-
-		/* ModelId */
-		egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(EGRESSO_ID).empresaId(EMPRESA_ID).build();
 
 		/* FaixaSalarial */
 		faixaSalarialDTO = FaixaSalarialDTO.builder().id(FAIXASALARIAL_ID).faixa(FAIXASALARIAL).build();
@@ -179,6 +190,10 @@ class EgressoEmpresaControllerTest {
 		SetorAtuacaoModel setorAtuacaoModel = modelMapper.map(setorAtuacaoDTO, SetorAtuacaoModel.class);
 		setorAtuacaoRepository.save(setorAtuacaoModel);
 
+		/* ModelId */
+		egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(EGRESSO_ID).empresaId(EMPRESA_ID)
+				.enderecoId(ENDERECO_ID).build();
+
 		/* Egresso */
 		egressoPublicDTO = EgressoPublicDTO.builder().id(EGRESSO_ID).email(EGRESSO_EMAIL).genero(generoDTO).build();
 		// egressoModel = modelMapper.map(egressoPublicDTO, EgressoModel.class);
@@ -193,7 +208,9 @@ class EgressoEmpresaControllerTest {
 
 		/* EgressoEmpresa */
 		egressoEmpresaDTO = EgressoEmpresaDTO.builder().id(egressoEmpresaModelId).egresso(egressoPublicDTO)
-				.empresa(empresaBasicDTO).areaAtuacao("AreaTesteEE").faixaSalarial(faixaSalarialDTO).build();
+				.empresa(empresaBasicDTO).endereco(enderecoDTO).areaAtuacao(areaAtuacaoDTO)
+				.faixaSalarial(faixaSalarialDTO)
+				.setorAtuacao(setorAtuacaoDTO).build();
 
 		MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
 				.contentType(MediaType.APPLICATION_JSON)
