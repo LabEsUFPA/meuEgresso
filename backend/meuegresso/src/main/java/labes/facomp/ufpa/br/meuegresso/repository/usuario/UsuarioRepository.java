@@ -57,13 +57,13 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			u.created_date,
 			e.foto_egresso,
 			CASE
-			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
-			CASE
-			WHEN e.ativo = FALSE THEN 'inativo'
-			WHEN u.valido_usuario = FALSE THEN 'pendente'
-			WHEN u.valido_usuario = TRUE THEN 'completo'
-			END
-			ELSE 'incompleto'
+			when ug.grupo = 'EGRESSO' then
+		case
+			when e.ativo = false then 'inativo'
+			when u.valido_usuario = true then 'completo'
+			when u.valido_usuario = false and e.usuario_id is not null then 'pendente'
+			when u.valido_usuario = false and e.usuario_id is null then 'incompleto'
+		end
 			END AS status
 			FROM
 			usuario_grupo ug
@@ -75,13 +75,13 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			ug.grupo = 'EGRESSO'
 			AND (
 			CASE
-			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
-			CASE
-			WHEN e.ativo = FALSE THEN 'inativo'
-			WHEN u.valido_usuario = TRUE THEN 'completo'
-			WHEN u.valido_usuario = FALSE THEN 'pendente'
-			END
-			ELSE 'incompleto'
+			when ug.grupo = 'EGRESSO' then
+		case
+			when e.ativo = false then 'inativo'
+			when u.valido_usuario = true then 'completo'
+			when u.valido_usuario = false and e.usuario_id is not null then 'pendente'
+			when u.valido_usuario = false and e.usuario_id is null then 'incompleto'
+		end
 			END) in (:status)
 			AND u.nome_usuario ilike %:nomeUsuario%
 			ORDER BY
@@ -94,58 +94,60 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			@Param("ordenacao") String ordenacao);
 
 	@Query(value = """
-			WITH usuario_status AS (
-			SELECT
-			upper(u.nome_usuario) AS nome_usuario,
-			u.id_usuario,
-			CASE
-			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
-			case
+			with usuario_status as (select 
+	u.nome_usuario, 
+	u.id_usuario,
+	case
+		when ug.grupo = 'EGRESSO' then
+		case
 			when u.revtype = 2 then 'excluido'
-			WHEN e.ativo = FALSE THEN 'inativo'
-			WHEN u.valido_usuario = TRUE THEN 'completo'
-			WHEN u.valido_usuario = FALSE THEN 'pendente'
-			END
-			ELSE 'incompleto'
-			END AS status,
-			u.last_modified_date
-			FROM
-			usuario_grupo_aud ug
-			LEFT JOIN egresso_aud e ON ug.id_usuario = e.usuario_id
-			JOIN usuario_aud u ON ug.id_usuario = u.id_usuario
-			WHERE
-			ug.grupo = 'EGRESSO'
-			AND u.nome_usuario ILIKE %:nome%
-			and case
-			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
-			case
-			when u.revtype = 2 then 'excluido'
-			WHEN e.ativo = FALSE THEN 'inativo'
-			WHEN u.valido_usuario = TRUE THEN 'completo'
-			WHEN u.valido_usuario = FALSE THEN 'pendente'
-			END
-			ELSE 'incompleto'
-			end ilike %:status%
-			AND (ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL OR u.valido_usuario = FALSE)
-			)
-			SELECT
-			nome_usuario,
-			id_usuario,
-			status,
-			last_modified_date
-			FROM
-			(
-			SELECT
-			nome_usuario,
-			id_usuario,
-			status,
-			last_modified_date,
-			lag(status) OVER (ORDER BY last_modified_date) AS prev_status
-			FROM
-			usuario_status
-			) t
-			WHERE
-			status <> prev_status OR prev_status IS NULL
+			when e.ativo = false then 'inativo'
+			when u.valido_usuario = true then 'completo'
+			when u.valido_usuario = false and e.usuario_id is not null then 'pendente'
+			when u.valido_usuario = false and e.usuario_id is null then 'incompleto'
+		end
+	end as status,
+	u.last_modified_date
+from 
+	usuario_grupo_aud ug 
+	LEFT JOIN egresso_aud e ON ug.id_usuario = e.usuario_id
+	JOIN usuario_aud u ON ug.id_usuario = u.id_usuario
+where
+	ug.grupo = 'EGRESSO'
+	and u.nome_usuario ilike %:nome%
+	
+	and (
+		case
+			when ug.grupo = 'EGRESSO' then
+				case
+					when u.revtype = 2 then 'excluido'
+					when e.ativo = false then 'inativo'
+					when u.valido_usuario = true then 'completo'
+					when u.valido_usuario = false and e.usuario_id is not null then 'pendente'
+					when u.valido_usuario = false and e.usuario_id is null then 'incompleto'
+				end
+		end
+		ilike %:status%
+	)
+)
+select 
+	nome_usuario,
+	id_usuario,
+	status,
+	last_modified_date
+from
+	(
+        SELECT
+            nome_usuario,
+            id_usuario,
+            status,
+            last_modified_date,
+            lag(status) OVER (ORDER BY last_modified_date) AS prev_status
+        FROM
+            usuario_status
+    ) t
+WHERE
+    status <> prev_status OR prev_status IS NULL;
 			""", nativeQuery = true)
 
 	List<Tuple> getStatus(
