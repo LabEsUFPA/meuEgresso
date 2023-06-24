@@ -178,7 +178,6 @@ const isModalFiltersOpen = ref(false)
 
 const filtersByName = ref(['INCOMPLETO', 'COMPLETO', 'PENDENTE', 'EXCLUIDO'])
 
-
 onMounted(async () => {
   await $store.fetchNotificacoes([], currentPage.value, size.value)
   loading.value = true
@@ -210,7 +209,6 @@ const applyFilters = (filters:any) => {
   if (filters.length === 0) {
     filters = [...filtrosStatus.value]
   }
-
 
   filtersByName.value = filters.map((elem: any) => elem.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase())
 }
