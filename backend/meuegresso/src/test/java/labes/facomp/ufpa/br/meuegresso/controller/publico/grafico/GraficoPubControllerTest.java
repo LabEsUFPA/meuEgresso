@@ -229,7 +229,7 @@ class GraficoPubControllerTest extends Configuracao {
 
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
-                usuarioModel.setNome("nome_test");
+                usuarioModel.setNome("nome_test asdsad");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
@@ -321,7 +321,6 @@ class GraficoPubControllerTest extends Configuracao {
                 empresaModel = EmpresaModel.builder()
                                 .id(EGRESSO_ID)
                                 .nome(EMPRESA_NOME)
-                                .endereco(enderecoModel)
                                 .build();
                 empresaModel = empresaRepository.save(empresaModel);
 
@@ -334,6 +333,7 @@ class GraficoPubControllerTest extends Configuracao {
                 /* EgressoEmpresa ModelId */
                 egressoEmpresaModelId = EgressoEmpresaModelId.builder()
                                 .egressoId(EGRESSO_ID)
+                                .enderecoId(enderecoModel.getId())
                                 .empresaId(EMPRESA_ID)
                                 .build();
 
@@ -375,6 +375,7 @@ class GraficoPubControllerTest extends Configuracao {
                 egressoEmpresaModel.setId(egressoEmpresaModelId);
                 egressoEmpresaModel.setEgresso(egressoModel);
                 egressoEmpresaModel.setEmpresa(empresaModel);
+                egressoEmpresaModel.setEndereco(enderecoModel);
                 egressoEmpresaModel.setAreaAtuacao(area);
                 egressoEmpresaModel.setSetorAtuacao(setorAtuacaoModel);
                 egressoEmpresaModel.setFaixaSalarial(faixaSalarialModel);

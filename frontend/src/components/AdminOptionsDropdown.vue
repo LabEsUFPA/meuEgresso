@@ -22,18 +22,17 @@
       v-for="(opcao, index) in opcoesAdmin.filter(op => op.status.includes(status) && op.habilitado)"
       :key="index"
       aria-role="listitem"
+      role="button"
       override
       :item-class="classNames({
-        ['text-sm text-cyan-600 p-2 hover:bg-sky-300/30 rounded']: true,
-        ['text-red-500 hover:bg-red-300/30 rounded'] : opcao.titulo === 'Excluir cadastro',
-        ['text-emerald-500 hover:bg-red-emerald/30 rounded'] : opcao.titulo === 'Aprovar cadastro',
+        ['text-sm p-2 pr-8 rounded']: true,
+        ['text-cyan-600 hover:bg-sky-300/30']: opcao.titulo !== 'Excluir cadastro' && opcao.titulo !== 'Aprovar cadastro',
+        ['text-red-500 hover:bg-red-300/30']: opcao.titulo === 'Excluir cadastro',
+        ['text-emerald-500 hover:bg-emerald-200/50']: opcao.titulo === 'Aprovar cadastro'
       })"
+      @click="() => escolheAcao(opcao.titulo)"
     >
-      <button
-        @click="() => escolheAcao(opcao.titulo)"
-      >
-        {{ opcao.titulo }}
-      </button>
+      {{ opcao.titulo }}
     </ODropdownItem>
   </ODropdown>
 

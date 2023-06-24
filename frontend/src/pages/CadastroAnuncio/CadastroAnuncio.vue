@@ -37,6 +37,7 @@
                 label="Título da vaga"
                 placeholder="Ex: Vaga no PCT-Guamá"
                 :required="true"
+                :max-length="80"
               />
               <CustomSelect
                 class="mb-5"
@@ -77,6 +78,7 @@
                 type="date"
                 label="Data de expiração"
                 :required="true"
+                :max-length="10"
               />
             </div>
           </div>

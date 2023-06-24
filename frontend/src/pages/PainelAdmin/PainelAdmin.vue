@@ -56,7 +56,7 @@
                   :path="mdiCrown"
                 />
 
-                Secretario
+                Secretário
               </div>
             </div>
           </div>
@@ -172,7 +172,7 @@
                 class="inline"
                 :path="mdiFileDocument"
               />
-              Exportar dados em pdf
+              Exportar dados em PDF
             </button>
           </div>
         </div>
@@ -221,7 +221,7 @@
                 <CustomBarGraph
                   legend="Cadastros"
                   info="Egressos cadastrados por período"
-                  :loading="graphData.series.x.length === 0"
+                  :loading="graphData.series.x.length === 0 && !graphData.error"
                   :data="graphData"
                   shadowless
                 />
@@ -231,9 +231,12 @@
         </div>
 
         <div class="col-span-1 row-span-6 bg-white rounded-lg flex flex-col">
-          <div class="text-xl font-semibold text-cyan-800 border-b p-4">
+          <RouterLink
+            to="/registro-egressos"
+            class="text-xl font-semibold text-cyan-800 border-b p-4"
+          >
             Registro de egressos
-          </div>
+          </RouterLink>
 
           <div class="text-gray-400 px-4 py-2 flex items-center gap-2 border-b">
             <SvgIcon
@@ -247,17 +250,17 @@
           </div>
 
           <div
-            class="flex-1 border-b flex items-center justify-center"
+            class="flex-1 flex-col gap-4 border-b flex items-center justify-center text-gray-400"
             v-if="$painelStore.egressos.length === 0"
           >
-            <div class="animate-spin">
-              <SvgIcon
-                type="mdi"
-                size="120"
-                class="text-cyan-800"
-                :path="mdiLoading"
-              />
-            </div>
+            <SvgIcon
+              type="mdi"
+              size="48"
+              :path="mdiEmoticonSadOutline"
+            />
+            <h1 class="text-xl sm:text-2xl font-medium">
+              Nenhum egresso encontrado
+            </h1>
           </div>
 
           <div
@@ -272,7 +275,11 @@
                 ['border-b']: index !== $painelStore.egressos.length - 1
               }"
             >
-              <div class="w-10 h-10 rounded-full flex items-center overflow-hidden justify-center bg-cyan-900">
+              <div
+                role="button"
+                class="w-10 h-10 rounded-full flex items-center overflow-hidden justify-center bg-cyan-900"
+                @click="() => egresso.idEgresso ? $router.push(`/egresso/${egresso.idEgresso}`) : null"
+              >
                 <img
                   v-if="imageFlags.get(egresso.id)"
                   @error="imageFlags.set(egresso.id, false)"
@@ -288,7 +295,11 @@
               </div>
 
               <div flex="flex items-center">
-                <div class="font-semibold text-cyan-800">
+                <div
+                  role="button"
+                  class="font-semibold text-cyan-800"
+                  @click="() => egresso.idEgresso ? $router.push(`/egresso/${egresso.idEgresso}`) : null"
+                >
                   {{ egresso.name }}
                 </div>
 
@@ -354,7 +365,7 @@ import {
   mdiFileDocument,
   mdiCalendar,
   mdiClock,
-  mdiLoading,
+  mdiEmoticonSadOutline,
   mdiAccount
 } from '@mdi/js'
 import CustomButton from 'src/components/CustomButton.vue'
@@ -387,15 +398,50 @@ const user = ref({
 
 watch(selectedString, () => {
   $painelStore.fetchGrafico(selectedString.value)
+  graphData.value.error = graphData.value.series.x.length === 0
 })
 
 const graphData = computed(() => ({
   series: {
-    x: Object.keys($painelStore.graficos[selectedString.value]),
+    x: Object.keys($painelStore.graficos[selectedString.value]).map((key: any) => {
+      if (selectedString.value === 'ano') {
+        console.log('aq')
+        return key
+      } else {
+        // key: YYYY-MM-DD
+        const meses = [
+          'Janeiro',
+          'Fevereiro',
+          'Março',
+          'Abril',
+          'Maio',
+          'Junho',
+          'Julho',
+          'Agosto',
+          'Setembro',
+          'Outubro',
+          'Novembro',
+          'Dezemmbro'
+        ]
+        if (selectedString.value === 'mes') {
+          const date = new Date(key + 'T00:00:00')
+          console.log(key, date.toLocaleDateString(), date.getMonth())
+          return `${meses[date.getMonth()]}/${date.getFullYear()}`
+        } else {
+          const date = new Date(key + 'T00:00:00')
+          console.log(key, date.toLocaleDateString(), date.getMonth())
+          return `${date.toLocaleDateString()}`
+        }
+      }
+    }),
     y: Object.keys($painelStore.graficos[selectedString.value]).map((key: any) => $painelStore.graficos[selectedString.value][key])
   },
   error: false
 }))
+
+watch(selectedString, () => {
+  Object.keys($painelStore.graficos[selectedString.value])
+})
 
 const imageFlags = ref(new Map())
 
@@ -427,5 +473,7 @@ onMounted(async () => {
   $painelStore.egressos.forEach(egresso => {
     imageFlags.value.set(egresso.id, egresso.foto !== undefined)
   })
+  graphData.value.error = graphData.value.series.x.length === 0
 })
+
 </script>

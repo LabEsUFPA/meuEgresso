@@ -49,6 +49,7 @@
                     name="escopo"
                     input-class="w-[25%] h-[40px]"
                     custom-label
+                    :max-length="100"
                     required
                   >
                     <template #label>
@@ -121,6 +122,7 @@
                   custom-label
                   :required="bools.destinatarioUnico"
                   :disabled="bools.semestral || bools.anual"
+                  :max-length="64"
                 >
                   <template #label>
                     <div class="text-lg font-medium text-neutral-900 inline">

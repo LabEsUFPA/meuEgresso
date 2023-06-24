@@ -22,4 +22,8 @@ public class EgressoEmpresaModelId {
     @Column(name = "empresa_id", unique = false, nullable = false)
     private Integer empresaId;
 
+    @Column(name = "endereco_id", unique = false, nullable = false)
+    private Integer enderecoId;
+
+
 }
