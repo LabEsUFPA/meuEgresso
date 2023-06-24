@@ -39,6 +39,7 @@
                 label="Nome Completo"
                 :required="true"
                 :icon-path="mdiAccount"
+                :max-length="100"
               />
               <CustomInput
                 name="username"
@@ -47,6 +48,7 @@
                 class-helper-text="text-gray-600"
                 :required="true"
                 :icon-path="mdiAccount"
+                :max-length="50"
               />
             </div>
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
@@ -56,6 +58,7 @@
                 type="email"
                 :required="true"
                 :icon-path="mdiEmail"
+                :max-length="50"
               />
               <CustomInput
                 name="confirmationEmail"
@@ -63,6 +66,7 @@
                 type="email"
                 :required="true"
                 :icon-path="mdiEmail"
+                :max-length="50"
               />
             </div>
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
@@ -74,6 +78,7 @@
                 class-helper-text="text-gray-600"
                 :required="true"
                 :icon-path="mdiLock"
+                :max-length="80"
               />
               <CustomInput
                 name="confirmationPassword"
@@ -81,6 +86,7 @@
                 :type="showPassword? 'text' : 'password'"
                 :required="true"
                 :icon-path="mdiLock"
+                :max-length="80"
               />
             </div>
             <CustomCheckbox
