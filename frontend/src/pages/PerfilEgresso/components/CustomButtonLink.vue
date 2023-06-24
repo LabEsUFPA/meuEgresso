@@ -22,17 +22,19 @@
   </div>
   <div v-if="mode === 'input'">
     <button
-      class="fakebutton hover:bg-white/90"
+
       :class="styles"
+      class="fakebutton hover:bg-white/90"
       :type="type"
     >
       <img
-        :class="classimg"
+        class="mt-[-3px]"
         :src="iconPath"
         :width="iconSize"
         :height="iconSize"
+        alt="input"
       >
-      <h1 class="text-sky-600 outline-sky-600 text-base font-bold ml-3 mr-2">
+      <h1 class="text-sky-600 outline-sky-600 text-base font-bold ml-2 mr-1.5 mt-[-23px] mb-[-3px]">
         <slot name="input" />
       </h1>
     </button>

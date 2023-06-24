@@ -36,6 +36,7 @@
               name="geral.nome"
               label="Nome"
               :icon-path="mdiAccount"
+              :max-length="100"
               required
             />
 
@@ -44,6 +45,7 @@
               name="geral.nascimento"
               type="date"
               label="Data de Nascimento"
+              :max-length="10"
               required
             />
 
@@ -62,6 +64,7 @@
               placeholder="Ex: example@gov.br"
               helper-text="Use um email válido: hotmail, outlook, gmail, etc."
               :icon-path="mdiEmail"
+              :max-length="50"
               required
             />
 
@@ -73,9 +76,9 @@
             />
 
             <CustomInput
-              label="Currículo Lattes"
+              label="Curriculo Lattes"
               name="geral.lattes"
-              icon-path="src/assets/lattesCinza.svg"
+              icon-path="/img/lattesCinza.svg"
               img-icon
             />
           </div>
@@ -134,7 +137,6 @@
                 class="mb-5"
                 name="academico.cotista.tipos.renda"
                 label="Cota Renda"
-                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -142,7 +144,6 @@
                 class="mb-5"
                 name="academico.cotista.tipos.escola"
                 label="Cota Escola"
-                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -150,7 +151,6 @@
                 class="mb-5"
                 name="academico.cotista.tipos.raca"
                 label="Autodeclaração de Raça"
-                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -158,7 +158,6 @@
                 class="mb-5"
                 name="academico.cotista.tipos.quilombolaIndigena"
                 label="Quilombola/Indígena"
-                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
 
@@ -166,7 +165,6 @@
                 class="mb-5"
                 name="academico.cotista.tipos.pcd"
                 label="PCD"
-                :required="bools.cotista"
                 :disabled="!bools.cotista"
               />
               <p
@@ -176,7 +174,6 @@
                   !values.academico?.cotista?.tipos?.raca &&
                   !values.academico?.cotista?.tipos?.quilombolaIndigena &&
                   !values.academico?.cotista?.tipos?.pcd"
-
                 class="text-red-500 text-sm mt-1 position-absolute display-none"
               >
                 Marque pelo menos uma das opções acima!
@@ -209,6 +206,7 @@
               placeholder="R$ 0,00"
               :required="bools.bolsista"
               :disabled="!bools.bolsista"
+              :max-length="12"
               money
             />
 
@@ -223,6 +221,7 @@
               class="mb-5"
               name="academico.posGrad.local"
               label="Instituição da pós-graduação"
+              :max-length="50"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
             />
@@ -231,6 +230,7 @@
               class="mb-5"
               name="academico.posGrad.curso"
               label="Curso de pós-graduação"
+              :max-length="100"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
             />
@@ -286,6 +286,7 @@
               placeholder="Ex: Google"
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
+              :max-length="130"
             />
 
             <CustomSelect
@@ -383,6 +384,7 @@
               name="adicionais.assuntosPalestras"
               :required="bools.palestras"
               :disabled="!bools.palestras"
+              :max-length="300"
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -398,6 +400,7 @@
               type="textarea"
               class="mb-5"
               name="adicionais.experiencias"
+              :max-length="300"
             />
 
             <div class="mb-5 text-sm font-semibold text-cyan-600">
@@ -411,6 +414,7 @@
             <CustomInput
               type="textarea"
               name="adicionais.contribuicoes"
+              :max-length="300"
             />
           </div>
         </template>
@@ -554,7 +558,6 @@ import { boolean, mixed, object, string } from 'yup'
 import VueScrollTo from 'vue-scrollto'
 
 const baseURL = 'https://egressos.computacao.ufpa.br/'
-
 const $storeCadastro = useCadastroEgressoStore()
 useLoginStore()
 const storage = new LocalStorage()

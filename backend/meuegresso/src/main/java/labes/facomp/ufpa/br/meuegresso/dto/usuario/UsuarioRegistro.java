@@ -27,4 +27,5 @@ public class UsuarioRegistro {
 
     @Pattern(regexp = "[0-9]{12}|$", message = "Informe uma matrícula válida.")
     private String registration;
+
 }

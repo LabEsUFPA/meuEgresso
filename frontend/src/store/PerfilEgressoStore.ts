@@ -73,8 +73,6 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
 
       if (response?.status === 200) {
         this.tiposBolsa = response.data?.map((elem: any) => {
-          console.log(elem)
-
           return ({
             label: elem.nome,
             value: elem.id
@@ -85,13 +83,11 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
     async fetchAreaEmprego () {
       const response = await Api.request({
         method: 'get',
-        route: '/areaemprego'
+        route: 'publico/areaemprego'
       })
 
       if (response?.status === 200) {
         this.areasAtuacao = response.data?.map((elem: any) => {
-          console.log(elem)
-
           return ({
             label: elem.nome,
             value: elem.id
@@ -167,11 +163,30 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         return this.returnEgresso(returnValue)
       }
     },
+    async fetchAdminEgresso (id: number) {
+      const response = await Api.request({
+        method: 'get',
+        route: `/administrador/egresso/${id}`
+      })
+
+      if (response?.status === 200) {
+        const returnValue = JSON.stringify(response.data)
+        return this.returnEgresso(returnValue)
+      }
+    },
 
     async atualizarEgresso (dataEgresso: any) {
       const response = await Api.request({
         method: 'put',
         route: '/egresso',
+        body: dataEgresso
+      })
+      return (response?.status) !== undefined ? response.status : 500
+    },
+    async atualizarEgressoAdmin (dataEgresso: any, egressoId: number) {
+      const response = await Api.request({
+        method: 'put',
+        route: `administrador/egresso/${egressoId}`,
         body: dataEgresso
       })
       return (response?.status) !== undefined ? response.status : 500
@@ -187,6 +202,23 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         const response = await Api.request({
           method: 'post',
           route: '/egresso/foto',
+          body: formData
+        })
+        // maxContentLength: 5 * 1024 * 1024 // 5 MB
+        // console.log(response?.data)
+        return (response?.status) !== undefined ? response.status : 500
+      }
+    },
+    async uploadImageEgressoAdmin (file: File, egressoId: number) {
+      if (file === undefined || file === null || file.size === 0 || file.length === 0) {
+        return 201
+      } else {
+        const formData = new FormData()
+        formData.append('arquivo', file)
+
+        const response = await Api.request({
+          method: 'post',
+          route: `administrador/egresso/foto/${egressoId}`,
           body: formData
         })
         // maxContentLength: 5 * 1024 * 1024 // 5 MB
@@ -224,14 +256,19 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
       response = url
       return response
     },
-    // futuro remover por id: async removeImageEgresso (egressoId: string) {
     async removeImageEgresso () {
       const response = await Api.request({
         method: 'delete',
         route: '/egresso/foto'
       })
       return (response?.status) !== undefined ? response.status : 500
+    },
+    async removeImageEgressoAdmin (egressoId: number) {
+      const response = await Api.request({
+        method: 'delete',
+        route: `/administrador/egresso/foto/${egressoId}`
+      })
+      return (response?.status) !== undefined ? response.status : 500
     }
   }
-
 })
