@@ -56,7 +56,7 @@
                   :path="mdiCrown"
                 />
 
-                Secretario
+                Secretário
               </div>
             </div>
           </div>
