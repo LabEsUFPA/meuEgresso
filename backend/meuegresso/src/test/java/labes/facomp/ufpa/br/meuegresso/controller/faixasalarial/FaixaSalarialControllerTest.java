@@ -181,7 +181,7 @@ class FaixaSalarialControllerTest {
 						.content(objectMapper.writeValueAsString(faixaSalarialDTO))
 						.header("Authorization", "Bearer " + this.token))
 				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isCreated())
+				.andExpect(status().isAccepted())
 				.andReturn();
 		String retornoString = resposta.getResponse().getContentAsString();
 		assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
@@ -190,10 +190,12 @@ class FaixaSalarialControllerTest {
 	@Test
 	@Order(4)
 	void testDeleteById() throws Exception {
+		FaixaSalarialDTO faixaSalarialDTO = modelMapper.map(faixaSalarialModel, FaixaSalarialDTO.class);
 
 		MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.delete("/faixaSalarial/" + faixaSalarialModel.getId())
+				MockMvcRequestBuilders.delete("/faixaSalarial")
 						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(faixaSalarialDTO))
 						.header("Authorization", "Bearer " + this.token))
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isOk())

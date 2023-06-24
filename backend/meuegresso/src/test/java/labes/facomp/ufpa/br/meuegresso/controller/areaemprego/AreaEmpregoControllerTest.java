@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.areaemprego;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -36,8 +35,9 @@ import labes.facomp.ufpa.br.meuegresso.dto.areaemprego.AreaEmpregoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
-import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.model.AreaEmpregoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.areaemprego.AreaEmpregoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 @SpringBootTest
@@ -62,6 +62,9 @@ class AreaEmpregoControllerTest {
 	PasswordEncoder passwordEncoder;
 
 	@Autowired
+	AreaEmpregoRepository areaEmpregoRepository;
+
+	@Autowired
 	ModelMapper modelMapper;
 
 	ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
@@ -70,16 +73,16 @@ class AreaEmpregoControllerTest {
 
 	@BeforeAll
 	void setUp() throws Exception {
-		
+
 		UsuarioModel usuarioModel = new UsuarioModel();
 		usuarioModel.setUsername("username");
 		usuarioModel.setNome("nome_test");
-		usuarioModel.setEmail("teste@gmail.com");		
+		usuarioModel.setEmail("teste@gmail.com");
 		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
 		final String plainTextPassword = "teste123";
 		final String encodedPassword = passwordEncoder.encode(plainTextPassword);
-		
+
 		usuarioModel.setPassword(encodedPassword);
 		usuarioRepository.save(usuarioModel);
 
@@ -100,76 +103,27 @@ class AreaEmpregoControllerTest {
 		this.token = authenticationResponse.getToken();
 
 	}
-
+	
 	@Test
 	@Order(1)
-	void testCadastrarAreaEmprego() throws Exception {
-		areaEmprego = new AreaEmpregoDTO(null, "AAAAAA");
+	void testConsultarAreasEmprego() throws Exception {
+		AreaEmpregoModel areaEmprego1 = new AreaEmpregoModel(null, "area1");
+		AreaEmpregoModel areaEmprego2 = new AreaEmpregoModel(null, "area2");
+
+		areaEmpregoRepository.save(areaEmprego1);
+		areaEmpregoRepository.save(areaEmprego2);
 
 		MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.post("/areaemprego")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(areaEmprego))
-						.header("Authorization", "Bearer " + this.token))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isCreated()).andReturn();
-
-		String resp = resposta.getResponse().getContentAsString();
-		assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), resp);
-	}
-
-	@Test
-	@Order(2)
-	void testBuscarAreaEmpregos() throws Exception {
-
-		MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.get("/areaemprego")
-						.contentType(MediaType.APPLICATION_JSON)
-						.header("Authorization", "Bearer " + this.token))
+				MockMvcRequestBuilders.get("/publico/areaemprego")
+						.contentType(MediaType.APPLICATION_JSON))
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isOk()).andReturn();
 
-		List<AreaEmpregoDTO> areaempregos = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+		List<AreaEmpregoDTO> resp = objectMapper.readValue(resposta.getResponse().getContentAsString(),
 				new TypeReference<List<AreaEmpregoDTO>>() {
 				});
-		areaEmprego = areaempregos.get(0);
-		assertNotNull(areaempregos);
+		
+		assertEquals(areaEmprego1.getNome(), resp.get(0).getNome());
+		assertEquals(areaEmprego2.getNome(), resp.get(1).getNome());
 	}
-
-	@Test
-	@Order(3)
-	void testAtualizarAreaEmprego() throws Exception {
-		final String NOVO_NOME = "BBBBBBBBBBBBBBBBBB";
-		areaEmprego.setNome(NOVO_NOME);
-
-		MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.put("/areaemprego")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(areaEmprego))
-						.header("Authorization", "Bearer " + this.token))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isAccepted()).andReturn();
-
-		String resp = resposta.getResponse().getContentAsString();
-		assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), resp);
-
-	}
-
-	@Test
-	@Order(4)
-	void testDeletarAreaEmprego() throws Exception {
-
-		MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.delete("/areaemprego")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(areaEmprego))
-						.header("Authorization", "Bearer " + this.token))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isOk()).andReturn();
-
-		String res = resposta.getResponse().getContentAsString();
-		assertEquals(res, ResponseType.SUCCESS_DELETE.getMessage());
-
-	}
-
 }
