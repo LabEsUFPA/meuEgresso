@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col">
     <PageHeader
-      back-to="/"
+      back-to="/painel-admin"
       :icon-path="mdiAccountSearch"
       titulo="Registro de Egressos"
     />

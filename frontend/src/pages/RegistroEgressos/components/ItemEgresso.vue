@@ -1,31 +1,33 @@
 <template>
-  <div class="flex sm:grid flex-col gap-2 sm:gap-0  sm:grid-cols-4 w-full px-6 sm:px-8 py-3 border-gray-200 border-b-[1px] items-start sm:items-center">
+  <div class="flex sm:grid flex-col gap-2 sm:gap-0 sm:grid-cols-4 w-full px-6 sm:px-8 py-3 border-gray-200 border-b-[1px] items-start sm:items-center">
     <div class="flex gap-4 col-span-2 items-center">
-      <RouterLink :to="`/egresso/${idEgresso}`">
-        <div
-          class="flex w-8 h-8 justify-center items-center rounded-full bg-cyan-800 overflow-hidden"
+      <div
+        role="button"
+        class="flex w-8 h-8 justify-center items-center rounded-full bg-cyan-800 overflow-hidden"
+        @click="() => idEgresso ? $router.push(`/egresso/${idEgresso}`) : null"
+      >
+        <img
+          v-if="fotoUsuario !== '' && foto"
+          @error="fotoUsuario = ''"
+          :src="fotoUsuario"
         >
-          <img
-            v-if="fotoUsuario !== '' && foto"
-            @error="fotoUsuario = ''"
-            :src="fotoUsuario"
-          >
 
-          <SvgIcon
-            v-else
+        <SvgIcon
+          v-else
 
-            type="mdi"
-            size="16"
-            :path="mdiAccount"
-            class="text-white"
-          />
-        </div>
-      </RouterLink>
-      <RouterLink :to="`/egresso/${idEgresso}`">
-        <h1 class="text-cyan-800 font-normal">
-          {{ nome }}
-        </h1>
-      </RouterLink>
+          type="mdi"
+          size="16"
+          :path="mdiAccount"
+          class="text-white"
+        />
+      </div>
+      <h1
+        role="button"
+        class="text-cyan-800 font-normal"
+        @click="() => idEgresso ? $router.push(`/egresso/${idEgresso}`) : null"
+      >
+        {{ nome }}
+      </h1>
     </div>
 
     <h1 class="text-gray-400 font-normal">
