@@ -41,8 +41,6 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
-// TODO ARRUMAR
-
 @SpringBootTest
 @DirtiesContext
 @AutoConfigureMockMvc

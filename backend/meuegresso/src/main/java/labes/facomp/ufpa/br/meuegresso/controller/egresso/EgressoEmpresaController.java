@@ -27,7 +27,6 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
-import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoEmpresaService;
 import lombok.RequiredArgsConstructor;
 
@@ -46,8 +45,6 @@ public class EgressoEmpresaController {
 	private final EgressoEmpresaService egressoEmpresaService;
 
 	private final ModelMapper mapper;
-
-	private final JwtService jwtService;
 
 	/**
 	 * Endpoint responsável por retornar a lista de egressoEmpresa cadastrados no
