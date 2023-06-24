@@ -43,7 +43,7 @@
         ['text-cyan-600 hover:bg-sky-300/30'] : opcao.title !== 'Sair',
         ['text-red-500 hover:bg-red-300/30'] : opcao.title === 'Sair'
       })"
-      @click="() => {opcao.click(); $router.push(opcao.navigateTo)}"
+      @click="opcao.click()"
     >
       {{ opcao.title }}
     </ODropdownItem>
@@ -87,8 +87,6 @@ const userScope = ref('')
 const idEgresso = ref<number|null>(null)
 const fotoEgresso = ref<string|null>(null)
 
-const userMenuIsOpen = ref(false)
-
 onMounted(async () => {
   fotoEgresso.value = null
   userLoggedName.value = $loginStore.loggedIn ? storage.getLoggedUser()?.sub : ''
@@ -111,16 +109,10 @@ onMounted(async () => {
   })
 })
 
-const toggleUserMenu = () => {
-  userMenuIsOpen.value = !userMenuIsOpen.value
-}
-
 const userLogout = () => {
   $loginStore.userLogout()
-  toggleUserMenu()
+  $router.push('/entrar')
 }
-
-defineExpose({ toggleUserMenu, userMenuIsOpen })
 
 async function fetchEgresso () {
   const response = await Api.request({
@@ -136,10 +128,10 @@ async function fetchEgresso () {
 }
 
 const opcoesMenu = [
-  { title: 'Painel', navigateTo: '/painel-admin', click: toggleUserMenu, scope: ['ADMIN', 'SECRETARIO'] },
-  { title: 'Perfil', navigateTo: '/egresso', click: toggleUserMenu, scope: ['EGRESSO'] },
-  { title: 'Editar conta', navigateTo: '/conta', click: toggleUserMenu, scope: ['EGRESSO', 'ADMIN', 'SECRETARIO'] },
-  { title: 'Sair', navigateTo: '/entrar', click: userLogout, scope: ['EGRESSO', 'ADMIN', 'SECRETARIO'] }
+  { title: 'Painel', click: () => $router.push('/painel-admin'), scope: ['ADMIN', 'SECRETARIO'] },
+  { title: 'Perfil', click: () => $router.push('/egresso'), scope: ['EGRESSO'] },
+  { title: 'Editar conta', click: () => $router.push('/conta'), scope: ['EGRESSO', 'ADMIN', 'SECRETARIO'] },
+  { title: 'Sair', click: userLogout, scope: ['EGRESSO', 'ADMIN', 'SECRETARIO'] }
 ]
 
 </script>
