@@ -1,27 +1,25 @@
 <template>
-  <div class="flex sm:grid flex-col gap-2 sm:gap-0 sm:grid-cols-3 w-full px-6 sm:px-10 py-3 border-gray-200 border-b-[1px] items-start sm:items-center">
-    <div class="flex gap-4 col-span-2 items-center">
-      <div :class="['shrink-0', 'p-2', 'rounded-3xl', 'text-white', getStatusColor(status)]">
+  <div class="flex sm:grid flex-col gap-2 sm:gap-0 sm:grid-cols-4 w-full px-6 sm:px-8 py-3 border-gray-200 border-b-[1px] items-start sm:items-center">
+    <div class="flex gap-4 col-span-3 items-center justify-center sm:justify-start">
+      <div :class="['shrink-0', 'p-2', 'rounded-full', 'text-white', getStatusColor(status)]">
         <SvgIcon
           type="mdi"
           size="21"
           :path="defineStatus(status)"
         />
       </div>
-      <div class="flex flex-row justify-center">
-        <h1 class="text-cyan-800 font-normal mb-1 mr-5">
+      <div class="flex flex-col sm:flex-row gap-0 sm:gap-1 justify-center">
+        <h1 class="text-cyan-800 font-normal">
           {{ nome }}
         </h1>
-        <h1 class="text-gray-400 font-normal mb-1 mr-5">
+        <h1 class="text-gray-400 text-sm sm:text-base font-normal">
           {{ defineDescricao(status) }}
         </h1>
       </div>
-      <div class="col-span-">
-        <h1 class="text-gray-400 font-normal mb-1 ">
-          {{ dataModificacao }}
-        </h1>
-      </div>
     </div>
+    <h1 class="text-gray-400 text-sm sm:text-base font-normal self-end sm:self-center">
+      {{ dataModificacao }}
+    </h1>
   </div>
 </template>
 

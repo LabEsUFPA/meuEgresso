@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col">
     <PageHeader
-      back-to="/"
+      back-to="/painel-admin"
       :icon-path="mdiBell"
       titulo="Atividades Recentes"
     />
@@ -62,12 +62,13 @@
       v-if="$store.notificacoes.length > 0"
     >
       <div class="hidden sm:flex justify-center">
-        <div class="grid grid-cols-4 w-[960px] bg-white px-8 sm:px-8 py-2 sm:py-3 mx-4 sm:mx-6 border-gray-200 border-b-[1px] text-sm text-gray-400 font-normal">
+        <div class="grid grid-cols-4 w-[960px] bg-white px-6 sm:px-8 py-2 sm:py-3 mx-4 sm:mx-6 border-gray-200 border-b-[1px] text-sm text-gray-400 font-normal">
           <h1 class="col-span-3">
             Atividade
           </h1>
-          <h1 class="px-6">
-            Data e hora
+
+          <h1>
+            Data de cadastro
           </h1>
         </div>
       </div>
