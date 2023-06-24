@@ -5,6 +5,7 @@ import { vMaska } from 'maska'
 import { createPinia } from 'pinia'
 import money from 'v-money3'
 import '@oruga-ui/oruga-next/dist/oruga.css'
+import '@oruga-ui/oruga-next/dist/oruga-full.css'
 import './style.scss'
 import VueScrollTo from 'vue-scrollto'
 const pinia = createPinia()
