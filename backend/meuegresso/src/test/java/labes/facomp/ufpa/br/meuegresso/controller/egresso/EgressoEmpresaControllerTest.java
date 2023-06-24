@@ -136,7 +136,7 @@ class EgressoEmpresaControllerTest {
 
 		usuarioModel = new UsuarioModel();
 		usuarioModel.setUsername(USERNAME);
-		usuarioModel.setNome("nome_test");
+		usuarioModel.setNome("nome test");
 		usuarioModel.setEmail("teste@gmail.com");
 		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
@@ -203,15 +203,15 @@ class EgressoEmpresaControllerTest {
 				.andReturn();
 
 		AuthenticationResponse authenticationResponse = objectMapper.readValue(
-			resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
+				resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
 		this.token = authenticationResponse.getToken();
 
 		MvcResult resposta = mockMvc.perform(
-			MockMvcRequestBuilders.get("/usuario")
-					.contentType(MediaType.APPLICATION_JSON)
-					.header("Authorization", "Bearer " + this.token))
-			.andDo(MockMvcResultHandlers.print())
-			.andExpect(status().isOk()).andReturn();
+				MockMvcRequestBuilders.get("/usuario")
+						.contentType(MediaType.APPLICATION_JSON)
+						.header("Authorization", "Bearer " + this.token))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk()).andReturn();
 
 		UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
 				UsuarioAuthDTO.class);
@@ -250,7 +250,8 @@ class EgressoEmpresaControllerTest {
 				.andExpect(status().isOk()).andReturn();
 
 		List<EgressoEmpresaDTO> egressoEmpresasDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-				new TypeReference<List<EgressoEmpresaDTO>>() {});
+				new TypeReference<List<EgressoEmpresaDTO>>() {
+				});
 
 		assertNotNull(egressoEmpresasDTO);
 		assertEquals(1, egressoEmpresasDTO.size());

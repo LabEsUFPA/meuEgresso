@@ -75,7 +75,7 @@ class GeneroControllerTest {
 
 		usuarioModel = new UsuarioModel();
 		usuarioModel.setUsername(USERNAME);
-		usuarioModel.setNome("nome_test");
+		usuarioModel.setNome("nome test");
 		usuarioModel.setEmail("teste@gmail.com");
 		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 

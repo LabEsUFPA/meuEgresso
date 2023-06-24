@@ -46,7 +46,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
-// TODO ARRUMAR
 
 @SpringBootTest
 @DirtiesContext
@@ -94,7 +93,7 @@ class ContribuicaoControllerTest {
 
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
-                usuarioModel.setNome("nome_test");
+                usuarioModel.setNome("nome test");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword(senha);
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));

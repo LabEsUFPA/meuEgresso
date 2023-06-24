@@ -34,7 +34,7 @@ import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 
 /**
  * Class que implementa testes para o DepoimentoService.
- * 
+ *
  * @author Bruno Eiki
  * @since 27/04/2023
  */
@@ -46,155 +46,155 @@ import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
 class DepoimentoServiceTest {
 
-    private static final Integer ID = 1;
-    private static final String DESCRICAO = "Me formei";
+        private static final Integer ID = 1;
+        private static final String DESCRICAO = "Me formei";
 
-    @Autowired
-    private DepoimentoService depoimentoService;
+        @Autowired
+        private DepoimentoService depoimentoService;
 
-    @Autowired
-    private UsuarioService usuarioService;
+        @Autowired
+        private UsuarioService usuarioService;
 
-    @MockBean
-    private DepoimentoRepository depoimentoRepository;
+        @MockBean
+        private DepoimentoRepository depoimentoRepository;
 
-    /**
-     * Metodo para testar a criacao de um DepoimentoModel com save.
-     * 
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     */
-    @Test
-    void testSave() {
+        /**
+         * Metodo para testar a criacao de um DepoimentoModel com save.
+         *
+         * @author Bruno Eiki
+         * @since 27/04/2023
+         */
+        @Test
+        void testSave() {
 
-        BDDMockito.given(depoimentoRepository.save(Mockito.any(DepoimentoModel.class)))
-                .willReturn(getMockDepoimento());
+                BDDMockito.given(depoimentoRepository.save(Mockito.any(DepoimentoModel.class)))
+                                .willReturn(getMockDepoimento());
 
-        DepoimentoModel response = depoimentoService.save(getMockDepoimento());
+                DepoimentoModel response = depoimentoService.save(getMockDepoimento());
 
-        assertNotNull(response);
-        assertEquals(ID, response.getId());
-        assertEquals(DESCRICAO, response.getDescricao());
-    }
+                assertNotNull(response);
+                assertEquals(ID, response.getId());
+                assertEquals(DESCRICAO, response.getDescricao());
+        }
 
-    /**
-     * Metodo para testar o metodo findAll.
-     * 
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     */
-    @Test
-    void testFindAll() {
-        BDDMockito.given(depoimentoRepository.findAll())
-                .willReturn(List.of(getMockDepoimento()));
+        /**
+         * Metodo para testar o metodo findAll.
+         *
+         * @author Bruno Eiki
+         * @since 27/04/2023
+         */
+        @Test
+        void testFindAll() {
+                BDDMockito.given(depoimentoRepository.findAll())
+                                .willReturn(List.of(getMockDepoimento()));
 
-        List<DepoimentoModel> response = depoimentoService.findAll();
-        assertNotNull(response);
-        assertEquals(response, List.of(getMockDepoimento()));
+                List<DepoimentoModel> response = depoimentoService.findAll();
+                assertNotNull(response);
+                assertEquals(response, List.of(getMockDepoimento()));
 
-    }
+        }
 
-    /**
-     * Metodo para testar o findById.
-     * 
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     */
-    @Test
-    void testFindById() {
-        BDDMockito.given(depoimentoRepository.findById(ID))
-                .willReturn(Optional.of(getMockDepoimento()));
+        /**
+         * Metodo para testar o findById.
+         *
+         * @author Bruno Eiki
+         * @since 27/04/2023
+         */
+        @Test
+        void testFindById() {
+                BDDMockito.given(depoimentoRepository.findById(ID))
+                                .willReturn(Optional.of(getMockDepoimento()));
 
-        DepoimentoModel response = depoimentoService.findById(ID);
+                DepoimentoModel response = depoimentoService.findById(ID);
 
-        assertNotNull(response);
-        assertEquals(ID, response.getId());
-    }
+                assertNotNull(response);
+                assertEquals(ID, response.getId());
+        }
 
-    /**
-     * Metodo para testar o update.
-     * 
-     * @author Bruno Eiki
-     * @throws InvalidRequestException
-     * @since 27/04/2023
-     */
-    @Test
-    void testUpdate() throws InvalidRequestException {
-        BDDMockito.given(depoimentoRepository.save(Mockito.any(DepoimentoModel.class)))
-                .willReturn(getMockDepoimento());
+        /**
+         * Metodo para testar o update.
+         *
+         * @author Bruno Eiki
+         * @throws InvalidRequestException
+         * @since 27/04/2023
+         */
+        @Test
+        void testUpdate() throws InvalidRequestException {
+                BDDMockito.given(depoimentoRepository.save(Mockito.any(DepoimentoModel.class)))
+                                .willReturn(getMockDepoimento());
 
-        DepoimentoModel depoimentoUpdated = depoimentoService.update(getMockDepoimento());
+                DepoimentoModel depoimentoUpdated = depoimentoService.update(getMockDepoimento());
 
-        assertNotNull(depoimentoUpdated);
-        assertEquals(depoimentoUpdated, getMockDepoimento());
-    }
+                assertNotNull(depoimentoUpdated);
+                assertEquals(depoimentoUpdated, getMockDepoimento());
+        }
 
-    /**
-     * Metodo para testar o deleteById.
-     * 
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     */
-    @Test
-    void testDeleteById() {
+        /**
+         * Metodo para testar o deleteById.
+         *
+         * @author Bruno Eiki
+         * @since 27/04/2023
+         */
+        @Test
+        void testDeleteById() {
 
-        Mockito.when(depoimentoRepository.findById(Mockito.anyInt()))
-                .thenReturn(Optional.of(getMockDepoimento()));
-        Mockito.when(depoimentoRepository.existsById(Mockito.anyInt()))
-                .thenReturn(true);
-        Boolean response = depoimentoService.deleteById(ID);
-        assertTrue(response);
-    }
+                Mockito.when(depoimentoRepository.findById(Mockito.anyInt()))
+                                .thenReturn(Optional.of(getMockDepoimento()));
+                Mockito.when(depoimentoRepository.existsById(Mockito.anyInt()))
+                                .thenReturn(true);
+                Boolean response = depoimentoService.deleteById(ID);
+                assertTrue(response);
+        }
 
-    /**
-     * Metodo para testar o existsByIdAndCreatedById.
-     * 
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     */
-    @Test
-    void testExistsByIdAndCreatedById() {
+        /**
+         * Metodo para testar o existsByIdAndCreatedById.
+         *
+         * @author Bruno Eiki
+         * @since 27/04/2023
+         */
+        @Test
+        void testExistsByIdAndCreatedById() {
 
-        BDDMockito.given(depoimentoRepository.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
-                .willReturn(true);
+                BDDMockito.given(depoimentoRepository.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+                                .willReturn(true);
 
-        UsuarioModel usuarioModel = new UsuarioModel();
+                UsuarioModel usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername("username");
-                usuarioModel.setNome("nome_test");
+                usuarioModel.setNome("nome test");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
-        DepoimentoModel curso = getMockDepoimento();
-        curso.setCreatedBy(usuarioModel);
+                DepoimentoModel curso = getMockDepoimento();
+                curso.setCreatedBy(usuarioModel);
 
-        usuarioService.save(usuarioModel);
-        depoimentoService.save(curso);
+                usuarioService.save(usuarioModel);
+                depoimentoService.save(curso);
 
-        Boolean response = depoimentoService.existsByIdAndCreatedById(
-                curso.getId(),
-                curso.getCreatedBy().getId());
-        assertTrue(response);
-    }
+                Boolean response = depoimentoService.existsByIdAndCreatedById(
+                                curso.getId(),
+                                curso.getCreatedBy().getId());
+                assertTrue(response);
+        }
 
-    /**
-     * Metodo que preenche um mock de um DepoimentoModel para retorno dos testes
-     * 
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     * 
-     * @return <code>depoimentoTeste</code> object
-     */
-    private DepoimentoModel getMockDepoimento() {
-        DepoimentoModel depoimentoTest = DepoimentoModel.builder()
-                .id(ID)
-                .descricao(DESCRICAO)
-                .build();
-        return depoimentoTest;
-    }
+        /**
+         * Metodo que preenche um mock de um DepoimentoModel para retorno dos testes
+         *
+         * @author Bruno Eiki
+         * @since 27/04/2023
+         *
+         * @return <code>depoimentoTeste</code> object
+         */
+        private DepoimentoModel getMockDepoimento() {
+                DepoimentoModel depoimentoTest = DepoimentoModel.builder()
+                                .id(ID)
+                                .descricao(DESCRICAO)
+                                .build();
+                return depoimentoTest;
+        }
 
-    @AfterAll
-    public void tearDown() {
-        depoimentoRepository.deleteAll();
-    }
+        @AfterAll
+        public void tearDown() {
+                depoimentoRepository.deleteAll();
+        }
 
 }

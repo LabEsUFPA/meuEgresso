@@ -4,9 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,12 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
-import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 /**
  * Classe que testa as features do generoRepository
@@ -57,6 +50,7 @@ class GeneroRepositoryTest {
 
         generoModel = generoRepository.save(generoModel);
     }
+
     /**
      * Método que testa o repositório que salva genero
      *
@@ -84,7 +78,7 @@ class GeneroRepositoryTest {
         List<GeneroModel> response = generoRepository.findAll();
 
         assertNotNull(response);
-        assertEquals(List.of(generoModel),response);
+        assertEquals(List.of(generoModel), response);
     }
 
     @Test

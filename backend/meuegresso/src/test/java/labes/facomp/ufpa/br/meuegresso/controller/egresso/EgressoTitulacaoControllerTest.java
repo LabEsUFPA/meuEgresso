@@ -56,6 +56,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
+
 //TODO consertar teste
 @SpringBootTest
 @DirtiesContext
@@ -72,7 +73,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
  * @author Eude Monteiro
  * @since 03/05/2023
  */
- class EgressoTitulacaoControllerTest {
+class EgressoTitulacaoControllerTest {
     static final Integer TITULACAO_ID = 1;
     static final String NOME = "TituloTeste";
     static final String SETORATUACAO = "SetorTeste";
@@ -117,7 +118,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
     EmpresaDTO empresaDTO;
     EmpresaModel empresaModel;
 
-
     EgressoTitulacaoDTO egressoTitulacaoDTO;
     EgressoTitulacaoModelId egressoTitulacaoModelId;
 
@@ -129,25 +129,25 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
     TitulacaoModel titulacaoModel;
 
     @Autowired
-	PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     ModelMapper modelMapper;
 
-	@Autowired
-	UsuarioRepository usuarioRepository;
+    @Autowired
+    UsuarioRepository usuarioRepository;
 
     @BeforeAll
     void setUp() throws Exception {
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-        /*Gênero */
+        /* Gênero */
         GeneroModel genero = new GeneroModel(1, "genero X");
         genero = generoRepository.save(genero);
 
         usuarioModel = new UsuarioModel();
         usuarioModel.setUsername(USERNAME);
-        usuarioModel.setNome("nome_test");
+        usuarioModel.setNome("nome test");
         usuarioModel.setEmail("teste@gmail.com");
         usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
@@ -157,34 +157,36 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
         usuarioModel.setPassword(encodedPassword);
         usuarioRepository.save(usuarioModel);
 
-        /*Egresso */
-        egressoModel = EgressoModel.builder().cotista(true).interesseEmPos(true).nascimento(LocalDate.parse("1999-10-20")).genero(genero).build();
+        /* Egresso */
+        egressoModel = EgressoModel.builder().cotista(true).interesseEmPos(true)
+                .nascimento(LocalDate.parse("1999-10-20")).genero(genero).build();
         egressoModel = egressoRepository.save(this.egressoModel);
-        //egressoPublicDTO = modelMapper.map(egressoModel, EgressoPublicDTO.class);
+        // egressoPublicDTO = modelMapper.map(egressoModel, EgressoPublicDTO.class);
 
-        /*Curso */
+        /* Curso */
         cursoModel = CursoModel.builder().nome("Ciência da Computação").build();
         cursoModel = cursoRepository.save(cursoModel);
         cursoDTO = modelMapper.map(cursoModel, CursoDTO.class);
 
-        /*Empresa */
+        /* Empresa */
         empresaModel = EmpresaModel.builder().nome("EmpresaTeste").build();
         empresaModel = empresaRepository.save(empresaModel);
         empresaDTO = modelMapper.map(empresaModel, EmpresaDTO.class);
 
-        /*Titulação */
+        /* Titulação */
         titulacaoModel = TitulacaoModel.builder().nome("Mestrado").build();
         titulacaoModel = titulacaoRepository.save(titulacaoModel);
         titulacaoDTO = modelMapper.map(titulacaoModel, TitulacaoDTO.class);
 
-        /*ModelId */
-        egressoTitulacaoModelId = EgressoTitulacaoModelId.builder().egressoId(egressoModel.getId()).titulacaoId(titulacaoModel.getId()).build();
+        /* ModelId */
+        egressoTitulacaoModelId = EgressoTitulacaoModelId.builder().egressoId(egressoModel.getId())
+                .titulacaoId(titulacaoModel.getId()).build();
 
-        /*EgressoTitulacao */
+        /* EgressoTitulacao */
         egressoTitulacaoDTO = EgressoTitulacaoDTO.builder().id(egressoTitulacaoModelId)
-                    .empresa(empresaDTO)
-                    .curso(cursoDTO)
-                    .titulacao(titulacaoDTO).build();
+                .empresa(empresaDTO)
+                .curso(cursoDTO)
+                .titulacao(titulacaoDTO).build();
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
         authenticationRequest.setUsername(usuarioModel.getUsername());
@@ -192,40 +194,41 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
         String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
         MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectJson))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk())
-                                .andReturn();
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectJson))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andReturn();
 
         AuthenticationResponse authenticationResponse = objectMapper.readValue(
-                                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
+                resultado.getResponse().getContentAsString(), AuthenticationResponse.class);
         this.token = authenticationResponse.getToken();
 
         MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.get("/usuario")
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk()).andReturn();
+                MockMvcRequestBuilders.get("/usuario")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk()).andReturn();
 
-        UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(), UsuarioAuthDTO.class);
+        UsuarioAuthDTO usuarioAuthDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+                UsuarioAuthDTO.class);
 
         usuarioModel.setId(usuarioAuthDTO.getId());
     }
 
     @Test
     @Order(1)
-    void cadastrarEgressoTitulacao() throws Exception{
+    void cadastrarEgressoTitulacao() throws Exception {
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-            MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/egressoTitulacao")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("Authorization", "Bearer " + this.token)
-                    .content(objectMapper.writeValueAsString(egressoTitulacaoDTO)))
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(status().isCreated())
-                    .andReturn();
+        MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/egressoTitulacao")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + this.token)
+                .content(objectMapper.writeValueAsString(egressoTitulacaoDTO)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andReturn();
 
         String retornoString = resposta.getResponse().getContentAsString();
         assertEquals(ResponseType.SUCCESS_SAVE.getMessage(), retornoString);
@@ -237,14 +240,15 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
         MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.get("/egressoTitulacao")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk()).andReturn();
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk()).andReturn();
 
-        List<EgressoTitulacaoDTO> egressoTitulacaoDTOs = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-                                new TypeReference<List<EgressoTitulacaoDTO>>() {
-                                });
+        List<EgressoTitulacaoDTO> egressoTitulacaoDTOs = objectMapper.readValue(
+                resposta.getResponse().getContentAsString(),
+                new TypeReference<List<EgressoTitulacaoDTO>>() {
+                });
 
         assertNotNull(egressoTitulacaoDTOs);
         egressoTitulacaoDTO.setId(egressoTitulacaoDTOs.get(0).getId());
@@ -254,16 +258,16 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
     @Test
     @Order(3)
-    void testAtualizarTitulacao() throws Exception{
+    void testAtualizarTitulacao() throws Exception {
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
         MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.put("/egressoTitulacao")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("Authorization", "Bearer " + this.token)
-                    .content(objectMapper.writeValueAsString(egressoTitulacaoDTO)))
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(status().isCreated())
-                    .andReturn();
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + this.token)
+                .content(objectMapper.writeValueAsString(egressoTitulacaoDTO)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andReturn();
 
         String retornoString = resposta.getResponse().getContentAsString();
         assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
@@ -272,16 +276,16 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
     @Test
     @Order(4)
-    void testDeleteById() throws Exception{
+    void testDeleteById() throws Exception {
         MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.delete("/egressoTitulacao")
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .param("egressoId", egressoTitulacaoDTO.getId().getEgressoId().toString())
-                                                .param("titulacaoId", egressoTitulacaoDTO.getId().getTitulacaoId().toString())
-                                                .header("Authorization", "Bearer " + this.token))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isOk())
-                                .andReturn();
+                MockMvcRequestBuilders.delete("/egressoTitulacao")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("egressoId", egressoTitulacaoDTO.getId().getEgressoId().toString())
+                        .param("titulacaoId", egressoTitulacaoDTO.getId().getTitulacaoId().toString())
+                        .header("Authorization", "Bearer " + this.token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andReturn();
         String resultado = resposta.getResponse().getContentAsString();
         assertEquals(ResponseType.SUCCESS_DELETE.getMessage(), resultado);
 

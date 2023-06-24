@@ -74,7 +74,7 @@ class CotaControllerTest {
 
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername("username_test");
-                usuarioModel.setNome("nome_test");
+                usuarioModel.setNome("nome test");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));

@@ -71,7 +71,7 @@ class EgressoPubControllerTest {
 		ContribuicaoDTO contribuicao = ContribuicaoDTO.builder().id(1).descricao("TextoContribuicao").build();
 
 		UsuarioDTO usuario = UsuarioDTO.builder()
-				.nome("nome_test")
+				.nome("nome test")
 				.build();
 
 		egressoModel.setId(1);

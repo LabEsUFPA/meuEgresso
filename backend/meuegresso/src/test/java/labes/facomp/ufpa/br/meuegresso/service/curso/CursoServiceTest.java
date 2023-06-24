@@ -35,7 +35,7 @@ import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 
 /**
  * Class que implementa testes para o CursoService.
- * 
+ *
  * @author Bruno Eiki
  * @since 27/04/2023
  */
@@ -47,177 +47,177 @@ import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
 class CursoServiceTest {
 
-    private static final Integer ID = 1;
-    private static final String NOME = "Ciência da Computação";
+        private static final Integer ID = 1;
+        private static final String NOME = "Ciência da Computação";
 
-    private static final Integer ID2 = 2;
-    private static final String NOME2 = "Sistema da Informação";
+        private static final Integer ID2 = 2;
+        private static final String NOME2 = "Sistema da Informação";
 
-    @Autowired
-    private CursoService cursoService;
+        @Autowired
+        private CursoService cursoService;
 
-    @Autowired
-    private UsuarioService usuarioService;
+        @Autowired
+        private UsuarioService usuarioService;
 
-    @MockBean
-    private CursoRepository cursoRepository;
+        @MockBean
+        private CursoRepository cursoRepository;
 
-    /**
-     * Metodo para testar a criacao de um CursoModel com save.
-     * 
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     */
-    @Test
-    void testSave() {
+        /**
+         * Metodo para testar a criacao de um CursoModel com save.
+         *
+         * @author Bruno Eiki
+         * @since 27/04/2023
+         */
+        @Test
+        void testSave() {
 
-        BDDMockito.given(cursoRepository.save(Mockito.any(CursoModel.class)))
-                .willReturn(getMockCurso());
+                BDDMockito.given(cursoRepository.save(Mockito.any(CursoModel.class)))
+                                .willReturn(getMockCurso());
 
-        CursoModel response = cursoService.save(new CursoModel());
+                CursoModel response = cursoService.save(new CursoModel());
 
-        assertNotNull(response);
-        assertEquals(getMockCurso(), response);
-    }
+                assertNotNull(response);
+                assertEquals(getMockCurso(), response);
+        }
 
-    /**
-     * Metodo para testar o metodo findAll.
-     * 
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     */
-    @Test
-    void testFindAll() {
-        BDDMockito.given(cursoRepository.findAll())
-                .willReturn(getMockCursoLista());
+        /**
+         * Metodo para testar o metodo findAll.
+         *
+         * @author Bruno Eiki
+         * @since 27/04/2023
+         */
+        @Test
+        void testFindAll() {
+                BDDMockito.given(cursoRepository.findAll())
+                                .willReturn(getMockCursoLista());
 
-        List<CursoModel> response = cursoService.findAll();
-        assertEquals(getMockCursoLista(), response);
-    }
+                List<CursoModel> response = cursoService.findAll();
+                assertEquals(getMockCursoLista(), response);
+        }
 
-    /**
-     * Metodo para testar o findById.
-     * 
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     */
-    @Test
-    void testFindById() {
-        BDDMockito.given(cursoRepository.findById(ID))
-                .willReturn(Optional.of(getMockCurso()));
+        /**
+         * Metodo para testar o findById.
+         *
+         * @author Bruno Eiki
+         * @since 27/04/2023
+         */
+        @Test
+        void testFindById() {
+                BDDMockito.given(cursoRepository.findById(ID))
+                                .willReturn(Optional.of(getMockCurso()));
 
-        CursoModel response = cursoService.findById(ID);
-        assertEquals(getMockCurso(), response);
-    }
+                CursoModel response = cursoService.findById(ID);
+                assertEquals(getMockCurso(), response);
+        }
 
-    /**
-     * Metodo para testar o update.
-     * 
-     * @author Bruno Eiki
-     * @throws InvalidRequestException
-     * @since 27/04/2023
-     */
-    @Test
-    void testUpdate() throws InvalidRequestException {
+        /**
+         * Metodo para testar o update.
+         *
+         * @author Bruno Eiki
+         * @throws InvalidRequestException
+         * @since 27/04/2023
+         */
+        @Test
+        void testUpdate() throws InvalidRequestException {
 
-        var cursoUpdate = getMockCurso();
-        cursoUpdate.setNome("Teste");
+                var cursoUpdate = getMockCurso();
+                cursoUpdate.setNome("Teste");
 
-        BDDMockito.given(cursoRepository.save(Mockito.any(CursoModel.class)))
-                .willReturn(cursoUpdate);
+                BDDMockito.given(cursoRepository.save(Mockito.any(CursoModel.class)))
+                                .willReturn(cursoUpdate);
 
-        CursoModel response = cursoService.update(getMockCurso());
+                CursoModel response = cursoService.update(getMockCurso());
 
-        assertNotNull(response);
-        assertEquals(cursoUpdate, response);
-    }
+                assertNotNull(response);
+                assertEquals(cursoUpdate, response);
+        }
 
-    /**
-     * Metodo para testar o deleteById.
-     * 
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     */
-    @Test
-    void testDeleteById() {
+        /**
+         * Metodo para testar o deleteById.
+         *
+         * @author Bruno Eiki
+         * @since 27/04/2023
+         */
+        @Test
+        void testDeleteById() {
 
-        BDDMockito.given(cursoService.deleteById(ID))
-                .willReturn(true);
+                BDDMockito.given(cursoService.deleteById(ID))
+                                .willReturn(true);
 
-        Boolean response = cursoService.deleteById(ID);
-        assertTrue(response);
-    }
+                Boolean response = cursoService.deleteById(ID);
+                assertTrue(response);
+        }
 
-    /**
-     * Metodo para testar o existsByIdAndCreatedById.
-     * 
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     */
-    @Test
-    void testExistsByIdAndCreatedById() {
+        /**
+         * Metodo para testar o existsByIdAndCreatedById.
+         *
+         * @author Bruno Eiki
+         * @since 27/04/2023
+         */
+        @Test
+        void testExistsByIdAndCreatedById() {
 
-        BDDMockito.given(cursoRepository.existsByIdAndCreatedById(ID, ID))
-                .willReturn(true);
+                BDDMockito.given(cursoRepository.existsByIdAndCreatedById(ID, ID))
+                                .willReturn(true);
 
-        UsuarioModel usuarioModel = new UsuarioModel();
+                UsuarioModel usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername("username");
-                usuarioModel.setNome("nome_test");
+                usuarioModel.setNome("nome test");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
-        CursoModel curso = getMockCurso();
-        curso.setCreatedBy(usuarioModel);
+                CursoModel curso = getMockCurso();
+                curso.setCreatedBy(usuarioModel);
 
-        usuarioService.save(usuarioModel);
-        cursoService.save(curso);
+                usuarioService.save(usuarioModel);
+                cursoService.save(curso);
 
-        Boolean response = cursoService.existsByIdAndCreatedById(
-                curso.getId(),
-                curso.getCreatedBy().getId());
-        assertTrue(response);
-    }
+                Boolean response = cursoService.existsByIdAndCreatedById(
+                                curso.getId(),
+                                curso.getCreatedBy().getId());
+                assertTrue(response);
+        }
 
-    /**
-     * Metodo que preenche um mock de um CursoModel para retorno dos testes
-     * 
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     * 
-     * @return <code>cursoTeste</code> object
-     */
-    private CursoModel getMockCurso() {
-        CursoModel cursoTest = CursoModel.builder()
-                .id(ID)
-                .nome(NOME)
-                .build();
-        return cursoTest;
-    }
+        /**
+         * Metodo que preenche um mock de um CursoModel para retorno dos testes
+         *
+         * @author Bruno Eiki
+         * @since 27/04/2023
+         *
+         * @return <code>cursoTeste</code> object
+         */
+        private CursoModel getMockCurso() {
+                CursoModel cursoTest = CursoModel.builder()
+                                .id(ID)
+                                .nome(NOME)
+                                .build();
+                return cursoTest;
+        }
 
-    private List<CursoModel> getMockCursoLista() {
+        private List<CursoModel> getMockCursoLista() {
 
-        List<CursoModel> cursoLista = new ArrayList<>();
+                List<CursoModel> cursoLista = new ArrayList<>();
 
-        CursoModel cursoTest = CursoModel.builder()
-                .id(ID)
-                .nome(NOME)
-                .build();
+                CursoModel cursoTest = CursoModel.builder()
+                                .id(ID)
+                                .nome(NOME)
+                                .build();
 
-        CursoModel cursoTest2 = CursoModel.builder()
-                .id(ID2)
-                .nome(NOME2)
-                .build();
+                CursoModel cursoTest2 = CursoModel.builder()
+                                .id(ID2)
+                                .nome(NOME2)
+                                .build();
 
-        cursoLista.add(cursoTest);
-        cursoLista.add(cursoTest2);
+                cursoLista.add(cursoTest);
+                cursoLista.add(cursoTest2);
 
-        return cursoLista;
-    }
+                return cursoLista;
+        }
 
-    @AfterAll
-    public void tearDown() {
-        usuarioService.deleteById(ID);
-        cursoService.deleteById(ID);
-        cursoRepository.deleteAll();
-    }
+        @AfterAll
+        public void tearDown() {
+                usuarioService.deleteById(ID);
+                cursoService.deleteById(ID);
+                cursoRepository.deleteAll();
+        }
 }

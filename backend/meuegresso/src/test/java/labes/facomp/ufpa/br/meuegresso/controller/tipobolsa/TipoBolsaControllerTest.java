@@ -76,7 +76,7 @@ class TipoBolsaControllerTest {
 
 		usuarioModel = new UsuarioModel();
 		usuarioModel.setUsername(USERNAME);
-		usuarioModel.setNome("nome_test");
+		usuarioModel.setNome("nome test");
 		usuarioModel.setEmail("teste@gmail.com");
 		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
@@ -166,7 +166,7 @@ class TipoBolsaControllerTest {
 	void testDeleteById() throws Exception {
 
 		MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.delete("/tipoBolsa/"+ tipoBolsaDTO.getId())
+				MockMvcRequestBuilders.delete("/tipoBolsa/" + tipoBolsaDTO.getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.header("Authorization", "Bearer " + this.token))
 				.andDo(MockMvcResultHandlers.print())

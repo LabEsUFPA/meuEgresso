@@ -80,20 +80,20 @@ class EnderecoControllerTest {
         void setUp() throws Exception {
 
                 usuarioModel = new UsuarioModel();
-		usuarioModel.setUsername(USERNAME);
-		usuarioModel.setNome("nome_test");
-		usuarioModel.setEmail("teste@gmail.com");
-		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+                usuarioModel.setUsername(USERNAME);
+                usuarioModel.setNome("nome test");
+                usuarioModel.setEmail("teste@gmail.com");
+                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
-		final String plainTextPassword = "teste123";
-		final String encodedPassword = passwordEncoder.encode(plainTextPassword);
+                final String plainTextPassword = "teste123";
+                final String encodedPassword = passwordEncoder.encode(plainTextPassword);
 
-		usuarioModel.setPassword(encodedPassword);
-		usuarioRepository.save(usuarioModel);
+                usuarioModel.setPassword(encodedPassword);
+                usuarioRepository.save(usuarioModel);
 
-		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-		authenticationRequest.setUsername(usuarioModel.getUsername());
-		authenticationRequest.setPassword(plainTextPassword);
+                AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+                authenticationRequest.setUsername(usuarioModel.getUsername());
+                authenticationRequest.setPassword(plainTextPassword);
 
                 String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
