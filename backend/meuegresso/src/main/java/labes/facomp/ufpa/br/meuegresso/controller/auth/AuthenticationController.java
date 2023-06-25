@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -179,7 +178,8 @@ public class AuthenticationController {
 		}
 
 		usuarioModel.setGrupos(Set.of(Grupos.EGRESSO));
-		mailService.usuarioCadastrado(usuarioModel, usuarioDTO.getRedirect().orElse("https://" + header + "/auth/validarEmail"));
+		mailService.usuarioCadastrado(usuarioModel,
+				usuarioDTO.getRedirect().orElse("https://" + header + "/auth/validarEmail"));
 		usuarioService.save(usuarioModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
@@ -189,7 +189,8 @@ public class AuthenticationController {
 	public void validarEmail(@PathVariable String tokenAuth)
 			throws InvalidRequestException {
 		Map<String, Object> claims = jwtService.extractClains(tokenAuth);
-		if (claims.get("email") instanceof String email) {
+		if (claims.get("recoveryPass") instanceof Boolean valor && valor.booleanValue()
+				&& claims.get("email") instanceof String email) {
 			UsuarioModel usuarioModel = usuarioService.findByEmail(email);
 			usuarioModel.setEmailVerificado(true);
 			usuarioService.update(usuarioModel);

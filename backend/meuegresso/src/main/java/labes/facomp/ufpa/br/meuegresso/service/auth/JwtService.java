@@ -60,7 +60,7 @@ public class JwtService {
      * @param unidadeTempo
      * @return
      */
-    public String generateToken(Map<String, String> claims, Integer expireAt, ChronoUnit unidadeTempo) {
+    public String generateToken(Map<String, Object> claims, Integer expireAt, ChronoUnit unidadeTempo) {
         Instant now = Instant.now();
         var jwtClaimsSet = JwtClaimsSet.builder()
                 .issuer("API Meu Egresso - UFPA")
@@ -99,11 +99,11 @@ public class JwtService {
         }
     }
 
-    private static Consumer<Map<String, Object>> toClaimsConsumer(Map<String, String> claims) {
+    private static Consumer<Map<String, Object>> toClaimsConsumer(Map<String, Object> claims) {
         return map -> {
-            for (Map.Entry<String, String> entry : claims.entrySet()) {
+            for (Map.Entry<String, Object> entry : claims.entrySet()) {
                 String key = entry.getKey();
-                String value = entry.getValue();
+                Object value = entry.getValue();
                 map.put(key, value);
             }
         };

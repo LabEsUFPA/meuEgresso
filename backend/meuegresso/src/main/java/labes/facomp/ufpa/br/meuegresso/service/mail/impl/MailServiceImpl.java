@@ -53,7 +53,8 @@ public class MailServiceImpl implements MailService, Runnable {
 
     public void usuarioCadastrado(UsuarioModel usuario, String redirect) {
         SimpleMailMessage mensagem = new SimpleMailMessage();
-        String token = jwtService.generateToken(Map.of("email", usuario.getEmail(), "nome", usuario.getNome()), 30,
+        String token = jwtService.generateToken(
+                Map.of("email", usuario.getEmail(), "nome", usuario.getNome(), "recoveryPass", true), 30,
                 ChronoUnit.MINUTES);
         URI location = UriComponentsBuilder.fromHttpUrl(redirect)
                 .queryParam("tokenAuth", token).build().toUri();
