@@ -225,21 +225,19 @@ const handleSubmit = async (submitData: any) => {
     }
   } else {
     const usuario = await $store.fetchUsuario()
-    // Colocar depois o sem uso de senha
     dataUserUpdate = {
       id: usuario?.id,
       username: usuario?.username,
       email: submitData?.email,
       nome: submitData?.name,
-      password: submitData?.password
+      password: ''
     }
 
-    const responseValidation = await useEditaContaUsuarioStore().updateContaUsuario(
+    const responseValidation = await useEditaContaUsuarioStore().updateContaSemSenha(
       dataUserUpdate.id,
       dataUserUpdate.username,
       dataUserUpdate.email,
-      dataUserUpdate.nome,
-      dataUserUpdate.password
+      dataUserUpdate.nome
     )
 
     if (responseValidation.status === 201) {
