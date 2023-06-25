@@ -480,13 +480,20 @@
                   label="Pós-graduação"
                 />
 
-                <CustomInput
+                <CustomSelect
                   class="mb-1"
                   name="academico.posGrad.local"
                   label="Instituição da pós-graduação"
-                  :max-length="100"
+                  :placeholder="dataEgresso.academico.posGrad.local"
+                  :options="$storeCadastro.instituicoes"
                   :required="bools.posGrad"
                   :disabled="!bools.posGrad"
+                  :is-fetching="$storeCadastro.isFetchingUniversidades"
+                  @typing="$storeCadastro.fetchUniversidadesAsync($event, true)"
+                  @infinite-scroll="$storeCadastro.fetchMoreUniversidadesAsync"
+                  infinite
+                  id="posGradLocal"
+                  :pre-filled="true"
                 />
                 <button
                   type="button"
@@ -496,13 +503,15 @@
                 >
                   Não encontrou sua instituição? Clique aqui
                 </button>
-                <CustomInput
+                <CustomSelect
                   class="mb-1"
                   name="academico.posGrad.curso"
                   label="Curso de pós-graduação"
+                  :placeholder="dataEgresso.academico.posGrad.curso"
+                  :options="$storeCadastro.cursos"
                   :required="bools.posGrad"
-                  :max-length="100"
                   :disabled="!bools.posGrad"
+                  :pre-filled="true"
                 />
                 <button
                   type="button"
@@ -1021,6 +1030,7 @@ async function handleSubmitGeral (values: any) {
 }
 
 async function handleSubmitAcademico (values: any) {
+  console.log(values)
   const cotas: Array<{ id: number }> | null = []
   if (values.academico.cotista.value) {
     if (values.academico.cotista.tipos.escola) {
@@ -1064,13 +1074,10 @@ async function handleSubmitAcademico (values: any) {
           titulacaoId: 2
         },
         curso: {
-          id: 1,
-          nome: values.academico.posGrad.curso
+          id: values.academico.posGrad.curso
         },
         empresa: {
-          id: 1,
-          nome: values.academico.posGrad.local
-
+          id: values.academico.posGrad.local
         },
         titulacao: {
           id: 2
@@ -1078,8 +1085,16 @@ async function handleSubmitAcademico (values: any) {
       }
       jsonResponse.titulacao = titulacao
     } else {
-      jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
-      jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
+      const curso = {
+        id: values.academico.posGrad.curso
+      }
+      const empresa = {
+        id: values.academico.posGrad.local
+
+      }
+      jsonResponse.titulacao.empresa = empresa
+
+      jsonResponse.titulacao.curso = curso
     }
   }
 
@@ -1253,6 +1268,8 @@ const dataEgresso = ref({
   bolsaId: 0,
   areaAtuacaoId: 0,
   faixaSalarialId: 0,
+  localPosId: 0,
+  cursoId: 0,
   grupos: [''],
 
   geral: {
@@ -1400,6 +1417,8 @@ async function fetchUpdateEgresso () {
     bolsaId: json.bolsa?.id,
     areaAtuacaoId: json.emprego?.areaAtuacao?.id,
     faixaSalarialId: json.emprego?.faixaSalarial?.id,
+    localPosId: json.titulacao?.empresa?.id,
+    cursoId: json.titulacao?.curso?.id,
     grupos: [''],
 
     geral:
@@ -1519,7 +1538,9 @@ async function fetchUpdateEgresso () {
   })
   formAcademico.value?.setValues({
     academico: dataEgresso.value.academico,
-    'academico.bolsista.tipo': dataEgresso.value.bolsaId
+    'academico.bolsista.tipo': dataEgresso.value.bolsaId,
+    'academico.posGrad.curso': dataEgresso.value.cursoId,
+    'academico.posGrad.local': dataEgresso.value.localPosId
   })
   formCarreira.value?.setValues({
     carreira: dataEgresso.value.carreira,
