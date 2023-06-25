@@ -38656,12 +38656,10 @@ INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by)
 VALUES ('PROEX', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by)
 VALUES ('PROBAC', 1) ON CONFLICT DO NOTHING;
-<< << << < HEAD
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by)
-VALUES ('PERMANENCIA', 1) ON CONFLICT DO NOTHING;
+VALUES ('PERMANÊNCIA', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.tipo_bolsa (nome_tipo_bolsa, created_by)
 VALUES ('CAPES/CNPQ', 1) ON CONFLICT DO NOTHING;
->> >> >> > develop --- Titulação
 INSERT INTO public.titulacao (nome_titulacao, created_by)
 VALUES ('GRADUAÇÃO', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.titulacao (nome_titulacao, created_by)
@@ -43358,6 +43356,7 @@ values (
         null,
         'yurilimacavalcante@gmail.com'
     ),
+    (
         'Yuri Santa Rosa Nassar dos Santos',
         null,
         'yuri.nassar@gmail.com'
