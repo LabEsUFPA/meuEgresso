@@ -70,14 +70,10 @@ public class EgressoEmpresaController {
 	 * @since 21/04/2023
 	 */
 	@ResponseStatus(code = HttpStatus.OK)
-	@GetMapping(params = { "egressoId", "empresaId" })
+	@GetMapping(params = { "egressoId", "empresaId", "enderecoId" })
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public EgressoEmpresaDTO findById(@RequestParam(required = false) Integer egressoId,
-			@RequestParam(required = false) Integer empresaId) {
-		return mapper.map(
-				egressoEmpresaService
-						.findById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).build()),
-				EgressoEmpresaDTO.class);
+	public EgressoEmpresaDTO findById(@RequestParam(required = false) Integer egressoId, @RequestParam(required = false) Integer empresaId, @RequestParam(required = false) Integer enderecoId) {
+		return mapper.map(egressoEmpresaService.findById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).enderecoId(enderecoId).build()),EgressoEmpresaDTO.class);
 	}
 
 	/**
@@ -134,12 +130,10 @@ public class EgressoEmpresaController {
 	 * @since 17/04/2023
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping(params = { "egressoId", "empresaId" })
+	@DeleteMapping(params = { "egressoId", "empresaId", "enderecoId" })
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(@RequestParam(required = false) Integer egressoId,
-			@RequestParam(required = false) Integer empresaId) {
-		return egressoEmpresaService
-				.deleteById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).build());
+	public boolean deleteById(@RequestParam(required = false) Integer egressoId,@RequestParam(required = false) Integer empresaId, @RequestParam(required = false) Integer enderecoId) {
+		return egressoEmpresaService.deleteById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).enderecoId(enderecoId).build());
 	}
 
 }

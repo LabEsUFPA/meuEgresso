@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.egresso;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -65,7 +66,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.setoratuacao.SetorAtuacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
-//TODO consertar teste
 @SpringBootTest
 @DirtiesContext
 @AutoConfigureMockMvc
@@ -278,14 +278,13 @@ class EgressoEmpresaControllerTest {
 	@Test
 	@Order(3)
 	void testFindById() throws Exception {
-		// TODO: fazer setorAtuacaoController e areaAtuacaoController pra funcionar
 
 		ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
 		MvcResult resposta = mockMvc
 				.perform(MockMvcRequestBuilders
-						.get("/egressoEmpresa?egressoId=" + egressoPublicDTO.getId() + "&empresaId="
-								+ empresaBasicDTO.getId())
+						.get("/egressoEmpresa?egressoId=" + egressoEmpresaDTO.getId().getEgressoId() + "&empresaId="
+								+ egressoEmpresaDTO.getId().getEmpresaId() + "&enderecoId=" + egressoEmpresaDTO.getId().getEnderecoId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.header("Authorization", "Bearer " + this.token))
 				.andDo(MockMvcResultHandlers.print())
@@ -300,6 +299,7 @@ class EgressoEmpresaControllerTest {
 	@Test
 	@Order(4)
 	void testAtualizarEgressoEmpresa() throws Exception {
+
 		ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
 		MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.put("/egressoEmpresa")
@@ -318,17 +318,18 @@ class EgressoEmpresaControllerTest {
 	@Test
 	@Order(5)
 	void testDeleteById() throws Exception {
+		
 		MvcResult resposta = mockMvc.perform(
 				MockMvcRequestBuilders
 						.delete("/egressoEmpresa?egressoId=" + egressoPublicDTO.getId() + "&empresaId="
-								+ empresaBasicDTO.getId())
+								+ empresaBasicDTO.getId()  + "&enderecoId=" + egressoEmpresaDTO.getId().getEnderecoId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.header("Authorization", "Bearer " + this.token))
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isOk())
 				.andReturn();
 		String resultado = resposta.getResponse().getContentAsString();
-		assertEquals(ResponseType.SUCCESS_DELETE.getMessage(), resultado);
+		assertTrue(Boolean.parseBoolean(resultado));
 	}
 
 }
