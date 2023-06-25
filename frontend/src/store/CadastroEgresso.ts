@@ -124,6 +124,9 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
         this.instituicoes = []
         this.page = 0
         this.totalPages = -1
+        if (query === 'event') {
+          query = ' '
+        }
       }
 
       this.query = query
