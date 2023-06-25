@@ -100,12 +100,12 @@
           <div class="flex flex-col items-center">
             <SvgIcon
               type="mdi"
-              size="110"
+              size="90"
               class="text-amber-500 absolute bottom-[13rem] bg-white rounded-full sm:bottom-[21rem]"
               :path="mdiAlertCircle"
             />
           </div>
-          <div class="flex flex-col w-full h-full items-center justify-center">
+          <div class="flex flex-col w-full h-[230px] items-center justify-center sm:h-full">
             <div class="flex flex-col h-full items-center justify-center text-center gap-y-8">
               <h1 class="font-bold text-amber-500 text-3xl sm:text-5xl">
                 Cadastro pendente!
@@ -115,7 +115,7 @@
               </p>
             </div>
             <CustomButton
-              class="mb-2"
+              text-class="text-white font-bold text-lg p-20 py-2"
               @click="() => {showEgressNotRegisteredModal = false}"
             >
               Finalizar Cadastro
