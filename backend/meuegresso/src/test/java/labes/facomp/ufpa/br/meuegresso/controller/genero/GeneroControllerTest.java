@@ -105,7 +105,7 @@ class GeneroControllerTest {
 	@Test
 	@Order(1)
 	void testCadastrarGenero() throws Exception {
-		genero = new GeneroDTO(null, "AAAAAA");
+		genero = new GeneroDTO(1, "AAAAAA");
 
 		MvcResult resposta = mockMvc.perform(
 				MockMvcRequestBuilders.post("/genero")
@@ -133,8 +133,10 @@ class GeneroControllerTest {
 		List<GeneroDTO> generos = objectMapper.readValue(resposta.getResponse().getContentAsString(),
 				new TypeReference<List<GeneroDTO>>() {
 				});
-		genero = generos.get(0);
+
 		assertNotNull(generos);
+		assertEquals(1, generos.size());
+		assertEquals(genero.getId(), generos.get(0).getId());
 	}
 
 	@Test

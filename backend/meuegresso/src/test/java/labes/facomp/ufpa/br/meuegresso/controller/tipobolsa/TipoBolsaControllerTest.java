@@ -107,7 +107,7 @@ class TipoBolsaControllerTest {
 	@Order(1)
 	void testCadastrarTipoBolsa() throws Exception {
 
-		TipoBolsaDTO tipoBolsaDTO = new TipoBolsaDTO();
+		tipoBolsaDTO = new TipoBolsaDTO();
 		tipoBolsaDTO.setNome("PIBIC");
 		tipoBolsaDTO.setId(1);
 
@@ -137,8 +137,9 @@ class TipoBolsaControllerTest {
 				new TypeReference<List<TipoBolsaDTO>>() {
 				});
 
-		tipoBolsaDTO = bolsas.get(0);
 		assertNotNull(tipoBolsaDTO);
+		assertEquals(1, bolsas.size());
+		assertEquals(tipoBolsaDTO.getId(), bolsas.get(0).getId());
 	}
 
 	@Test

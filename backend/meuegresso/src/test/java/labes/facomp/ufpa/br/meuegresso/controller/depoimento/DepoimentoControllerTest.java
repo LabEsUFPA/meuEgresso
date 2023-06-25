@@ -200,6 +200,8 @@ class DepoimentoControllerTest {
 				});
 
 		assertNotNull(depoimentosDTO);
+		assertEquals(1, depoimentosDTO.size());
+        assertEquals(depoimentoDTO, depoimentosDTO.get(0));
 
 	}
 

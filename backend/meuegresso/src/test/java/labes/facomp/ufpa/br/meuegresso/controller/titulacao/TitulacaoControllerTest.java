@@ -149,7 +149,8 @@ class TitulacaoControllerTest {
 				});
 
 		assertNotNull(titulacaosDTO);
-
+		assertEquals(1, titulacaosDTO.size());
+		assertEquals(titulacaoDTO.getId(), titulacaosDTO.get(0).getId());
 	}
 
 	@Test

@@ -272,6 +272,7 @@ class EgressoEmpresaControllerTest {
 
 		assertNotNull(egressoEmpresasDTO);
 		assertEquals(1, egressoEmpresasDTO.size());
+		assertEquals(egressoEmpresaDTO.getId(), egressoEmpresasDTO.get(0).getId());
 
 	}
 

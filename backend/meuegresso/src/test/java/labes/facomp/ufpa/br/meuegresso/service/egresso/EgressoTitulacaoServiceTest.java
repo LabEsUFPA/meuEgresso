@@ -178,12 +178,12 @@ class EgressoTitulacaoServiceTest {
      * @author Pedro Inácio
      * @since 28/04/2023
      *
-     * @return <code>EgressoTitulacaoTeste</code> object
+     * @return <code>egressoTitulacaoTeste</code> object
      */
     private EgressoTitulacaoModel getMockEgressoTitulacao() {
-        EgressoTitulacaoModel EgressoTitulacaoTest = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, EMPRESA, CURSO);
+        EgressoTitulacaoModel egressoTitulacaoTest = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, EMPRESA, CURSO);
 
-        return EgressoTitulacaoTest;
+        return egressoTitulacaoTest;
     }
 
     /**
@@ -194,17 +194,17 @@ class EgressoTitulacaoServiceTest {
      * @author Pedro Inácio
      * @since 28/04/2023
      *
-     * @return <code>EgressoTitulacaoLista</code> object
+     * @return <code>egressoTitulacaoLista</code> object
      */
     private List<EgressoTitulacaoModel> getMockEgressoTitulacaoLista() {
-        List<EgressoTitulacaoModel> EgressoTitulacaoLista = new ArrayList<>();
-        EgressoTitulacaoModel EgressoTitulacaoTest = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, EMPRESA, CURSO);
-        EgressoTitulacaoModel EgressoTitulacaoTest2 = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, EMPRESA, CURSO);
+        List<EgressoTitulacaoModel> egressoTitulacaoLista = new ArrayList<>();
+        EgressoTitulacaoModel egressoTitulacaoTest = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, EMPRESA, CURSO);
+        EgressoTitulacaoModel egressoTitulacaoTest2 = new EgressoTitulacaoModel(ID, EGRESSO, COLACAO, EMPRESA, CURSO);
 
-        EgressoTitulacaoLista.add(EgressoTitulacaoTest);
-        EgressoTitulacaoLista.add(EgressoTitulacaoTest2);
+        egressoTitulacaoLista.add(egressoTitulacaoTest);
+        egressoTitulacaoLista.add(egressoTitulacaoTest2);
 
-        return EgressoTitulacaoLista;
+        return egressoTitulacaoLista;
     }
 
     @AfterAll

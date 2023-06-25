@@ -105,7 +105,7 @@ class CotaControllerTest {
         @Order(1)
         void testCadastrarCota() throws Exception {
 
-                cotaDTO = CotaDTO.builder().nome("cota1").build();
+                cotaDTO = CotaDTO.builder().id(1).nome("cota1").build();
 
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.post("/cota")
@@ -133,8 +133,9 @@ class CotaControllerTest {
                                 new TypeReference<List<CotaDTO>>() {
                                 });
 
-                cotaDTO = cotas.get(0);
-                assertNotNull(cotaDTO);
+                assertNotNull(cotas);
+		assertEquals(1, cotas.size());
+                assertEquals(cotaDTO, cotas.get(0));
         }
 
         @Test

@@ -196,7 +196,8 @@ class PalestraControllerTest {
 				});
 
 		assertNotNull(palestrasDTO);
-
+		assertEquals(1, palestrasDTO.size());
+		assertEquals(palestraDTO.getId(), palestrasDTO.get(0).getId());
 	}
 
 	@Test

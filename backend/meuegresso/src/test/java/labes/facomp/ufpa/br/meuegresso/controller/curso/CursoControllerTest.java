@@ -169,6 +169,8 @@ class CursoControllerTest {
 				});
 
 		assertNotNull(cursosDTO);
+		assertEquals(1, cursosDTO.size());
+        assertEquals(cursoDTO, cursosDTO.get(0));
 
 	}
 
