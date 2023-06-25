@@ -37,6 +37,7 @@
                 label="Título da vaga"
                 placeholder="Ex: Vaga no PCT-Guamá"
                 :required="true"
+                :max-length="80"
               />
               <CustomSelect
                 class="mb-5"
@@ -47,9 +48,10 @@
               />
               <CustomInput
                 name="descricao"
-                label="Descrição"
+                label="Descrição (máximo de 1000 caracteres)"
                 placeholder="Insira a descrição da vaga que você deseja anunciar!"
                 type="textarea"
+                :max-length="1000"
                 :input-class="classNames(['flex w-full'])"
                 :required="true"
                 :icon-path="mdiLink"
@@ -76,6 +78,7 @@
                 type="date"
                 label="Data de expiração"
                 :required="true"
+                :max-length="10"
               />
             </div>
           </div>

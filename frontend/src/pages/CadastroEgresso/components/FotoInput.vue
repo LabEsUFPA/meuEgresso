@@ -1,16 +1,15 @@
 <template>
   <div>
-    <o-field
-      :root-class="classNames({
-        ['outline outline-red-500']: meta.touched && !meta.valid
-      })"
-    >
+    <o-field>
       <template #default>
         <o-upload
           v-model="file"
           accept="image/png, image/jpg, image/jpeg, image/gif"
           @update:model-value="handleUpload"
           drag-drop
+          :root-class="classNames({
+            ['outline outline-red-500 rounded-md']: !meta.valid
+          })"
         >
           <div class="text-gray-600 flex flex-row items-center border w-64 px-4 py-2 text-sm rounded-md bg-gray-200 cursor-pointer">
             <img
@@ -27,7 +26,9 @@
             />
 
             <div class="ml-4">
-              <div>{{ file ? file.name : 'Clique para selecionar foto' }}</div>
+              <div>
+                {{ file ? limitChar(file.name) : 'Clique para selecionar foto' }}
+              </div>
               <div>{{ file ? fileSize : 'Máximo de 5 MB' }}</div>
             </div>
 
@@ -96,7 +97,8 @@ const fileSize = computed(() => {
 const {
   handleChange,
   meta,
-  errorMessage
+  errorMessage,
+  resetField
 } = useField(name, undefined)
 
 function handleUpload () {
@@ -106,6 +108,11 @@ function handleUpload () {
 
 function handleClean () {
   file.value = null
+  resetField()
   $emit('clean')
+}
+
+function limitChar (str: string) {
+  return str.length > 18 ? str.slice(0, 18).trim() + '...' : str
 }
 </script>

@@ -24,33 +24,35 @@
           <!-- Div que preenche o espaco vazio no container flexbox -->
           <div class="flex-1" />
 
-          <UserDropdownMenu
-            v-if="userLogged"
-            :user-logged="userLogged"
-          />
+          <div class="hidden md:flex">
+            <UserDropdownMenu
+              v-if="loggedIn"
+              :logged-in="loggedIn"
+            />
 
-          <div
-            v-else
-            class="px-8 hidden gap-x-2 md:flex"
-          >
-            <CustomButton
-              color="white"
-              variant="flat"
-              tag="router"
-              link="/entrar"
+            <div
+              v-else
+              class="flex px-8 gap-x-2"
             >
-              Entrar
-            </CustomButton>
+              <CustomButton
+                color="white"
+                variant="flat"
+                tag="router"
+                link="/entrar"
+              >
+                Entrar
+              </CustomButton>
 
-            <CustomButton
-              class="ml-4"
-              color="white"
-              variant="outlined"
-              tag="router"
-              link="/cadastro-perfil"
-            >
-              Cadastre-se
-            </CustomButton>
+              <CustomButton
+                class="ml-4"
+                color="white"
+                variant="outlined"
+                tag="router"
+                link="/cadastro-perfil"
+              >
+                Cadastre-se
+              </CustomButton>
+            </div>
           </div>
         </div>
       </div>
@@ -81,39 +83,7 @@
           </ul>
 
           <div class="h-full items-center relative group flex md:hidden">
-            <button class="px-4 py-1 peer flex items-center">
-              <SvgIcon
-                type="mdi"
-                class="inline mr-3"
-                size="35"
-                :path="mdiMenu"
-              />
-
-              Menu
-            </button>
-            <div
-              tabindex="0"
-              class="bg-white hidden text-neutral-900 absolute left-4 top-14 group-focus-within:block z-50"
-            >
-              <ul class="py-3 overflow-hidden rounded-b-xl shadow-lg">
-                <li>
-                  <RouterLink
-                    to="/entrar"
-                    class="block py-2 px-3 hover:bg-gray-100"
-                  >
-                    Entrar
-                  </RouterLink>
-                </li>
-                <li>
-                  <RouterLink
-                    to="/cadastro-perfil"
-                    class="block py-2 px-3 hover:bg-gray-100"
-                  >
-                    Cadastre-se
-                  </RouterLink>
-                </li>
-              </ul>
-            </div>
+            <NavbarDrawer />
           </div>
         </nav>
       </div>
@@ -184,41 +154,40 @@
 import { RouterLink, useRouter } from 'vue-router'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { watch, ref, onMounted } from 'vue'
-import { mdiMenu, mdiAlertCircle } from '@mdi/js'
+import { mdiAlertCircle } from '@mdi/js'
 
 import { useLoginStore } from 'src/store/LoginStore'
 import CustomButton from 'src/components/CustomButton.vue'
 import UserDropdownMenu from './UserDropdownMenu.vue'
+import NavbarDrawer from './NavbarDrawer.vue'
 import CustomDialog from './CustomDialog.vue'
-import LocalStorage from 'src/services/localStorage'
 import CookieService from 'src/services/cookieService'
 
 const $store = useLoginStore()
-const userLogged = ref($store.userLogged)
+const loggedIn = ref($store.loggedIn)
 const $router = useRouter()
 const showEgressNotRegisteredModal = ref(false)
-const storage = new LocalStorage()
 const cookieService = new CookieService()
 
 onMounted(() => {
   checkEgressRegistration()
 })
 
-watch(() => $store.userLogged, () => {
-  userLogged.value = $store.userLogged
+watch(() => $store.loggedIn, () => {
+  loggedIn.value = $store.loggedIn
 
-  if (userLogged.value) {
+  if (loggedIn.value) {
     checkEgressRegistration()
   }
 })
 
 const checkEgressRegistration = () => {
-  const loggedUser = storage.getLoggedUser()
+  const userData = $store.getUserData()
   const isFirstAccess = cookieService.get('isFirstAccess')
 
   if (
-    loggedUser?.scope === 'EGRESSO' &&
-    !loggedUser?.isEgresso &&
+    userData?.scope === 'EGRESSO' &&
+    !userData?.isEgresso &&
     isFirstAccess !== 'yes'
   ) showEgressNotRegisteredModal.value = true
 }

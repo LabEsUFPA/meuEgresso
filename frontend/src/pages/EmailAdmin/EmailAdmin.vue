@@ -49,6 +49,7 @@
                     name="escopo"
                     input-class="w-[25%] h-[40px]"
                     custom-label
+                    :max-length="100"
                     required
                   >
                     <template #label>
@@ -95,20 +96,25 @@
                 </CustomInput>
 
                 <CustomCheckbox
-                  class="mb-[-20px] mt-16"
+                  class="mb-[-15px] mt-16"
                   name="emailMulti"
                   label="E-mail para destinatário único"
                   v-model:value="bools.multiDestinatario "
                   :disabled="bools.frequente"
                 />
+                <h2 class="text-sm text-blue-600 mb-[-10px]">
+                  Caso desmarcado envia E-mail para todos os usuários
+                </h2>
 
                 <CustomInput
+                  v-show="bools.multiDestinatario"
                   class="mb-5"
                   name="email"
                   type="text"
                   custom-label
                   :required="bools.multiDestinatario"
                   :disabled="!bools.multiDestinatario || bools.frequente"
+                  :max-length="64"
                 >
                   <template #label>
                     <div class="text-lg font-medium text-neutral-900 inline">
@@ -169,6 +175,7 @@
   </div>
   <CustomDialog
     v-model="dialogSucesso"
+    @close="$router.push('/painel-admin')"
   >
     <div class="h-full flex justify-center items-center">
       <div class="w-1/2">
@@ -312,15 +319,15 @@ async function fetchUpdateEmail () {
   //   form.value?.setFieldValue('escopo', jsonEmail.escopo)
   // }
 
-  const message = `Prezado(a) [nome do aluno],
+  const message = `Prezado(a),
 
   Espero que esta mensagem o encontre bem. Gostaríamos de lembrá-lo(a) da importância de manter seu cadastro atualizado em nosso portal Meu Egresso.
 
   Para garantir que possamos manter contato com você e fornecer informações importantes sobre eventos, oportunidades de emprego, cursos e outros escopos relevantes, solicitamos que atualize suas informações pessoais e profissionais.
 
-  Pedimos que acesse o portal Meu Egresso (link) e faça login com suas credenciais. Em seguida, atualize suas informações no seu perfil.
+  Pedimos que acesse o portal Meu Egresso (https://egressos.computacao.ufpa.br/) e faça login com suas credenciais. Em seguida, atualize suas informações no seu perfil.
 
-  Caso tenha alguma dificuldade para acessar o portal ou atualizar suas informações, entre em contato conosco pelo e-mail (e-mail) ou telefone (número). Teremos o maior prazer em ajudá-lo(a).
+  Caso tenha alguma dificuldade para acessar o portal ou atualizar suas informações, entre em contato conosco pelo e-mail egressocomp@ufpa.br ou pelo telefone 3201-7405 (Faculdade de Computação). Teremos o maior prazer em ajudá-lo(a).
 
   Agradecemos antecipadamente pela sua colaboração em manter suas informações atualizadas. Isso nos ajuda a manter contato com você e oferecer um serviço mais eficiente e personalizado.
 
