@@ -3,7 +3,6 @@
     :full-page="true"
     v-model:active="loading"
     full-page-class="bg-white/[.25] backdrop-blur-[1px] z-50"
-    :can-cancel="true"
   >
     <SvgIcon
       type="mdi"
@@ -19,7 +18,6 @@
   >
     <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
       <div
-        v-if="!submitSuccess"
         class="flex flex-col items-center bg-white w-[960px] py-6 mx-6 rounded-2xl shadow-md"
       >
         <InvalidInsert
@@ -111,56 +109,66 @@
           </RouterLink>
         </p>
       </div>
-
-      <div
-        v-if="submitSuccess"
-        class="bg-white w-[960px] py-20 mx-6 rounded-2xl"
-      >
-        <div class="flex flex-col items-center text-center gap-y-28 mx-4">
-          <h1 class="text-blue-900 text-4xl font-bold">
-            Suas informações estão sendo analisadas
-          </h1>
-          <img
-            class="animate-spin mr-3 max-w-[100px]"
-            src="src/assets/loading.svg"
-            alt="Loading"
-          >
-          <div>
-            <p class="max-w-xl text-center text-blue-400 text-2xl mb-5">
-              Aguarde o redirecionamento para a página de cadastro de egresso.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   </Form>
+  <CustomDialog
+    v-model="showRegistrationModal"
+  >
+    <div class="flex flex-col h-full justify-center items-center text-center gap-y-6 sm:gap-y-6">
+      <div class="flex flex-col justify-center items-center gap-y-4">
+        <SvgIcon
+          type="mdi"
+          size="75"
+          :path="mdiAlertCircle"
+          class="text-amber-400"
+        />
+        <p class="text-amber-400 text-2xl sm:text-3xl font-bold">
+          Açao necessária
+        </p>
+      </div>
+      <p class="font-medium text-lg max-w-lg">
+        Para validar o seu cadastro siga as instruções que foram enviadas para o e-mail:
+      </p>
+      <p class="font-bold text-lg">
+        {{ userEmail }}
+      </p>
+      <CustomButton
+        type="button"
+        tag="router"
+        color="sky"
+        text-class="text-white font-bold text-lg p-20 w-64 py-6"
+        link="/"
+      >
+        Fechar
+      </CustomButton>
+    </div>
+  </CustomDialog>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiAccount, mdiSchool, mdiEmail, mdiLock, mdiLoading } from '@mdi/js'
+import { mdiAccount, mdiSchool, mdiEmail, mdiLock, mdiLoading, mdiAlertCircle } from '@mdi/js'
 import { Form } from 'vee-validate'
 import { object, string, ref as refYup } from 'yup'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
+import CustomDialog from 'src/components/CustomDialog.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 import { OLoading } from '@oruga-ui/oruga-next'
-import router from 'src/router'
-import { useLoginStore } from 'src/store/LoginStore'
 import { models } from 'src/@types'
 interface ProfileRegisterModel extends models.ProfileRegisterModel { }
 
 const error = ref(false)
 const errorText = ref('')
-const submitSuccess = ref(false)
-const storeLogin = useLoginStore()
 const missingDigits = ref(0)
 const showPassword = ref(false)
 const $store = useCadastroPerfilStore()
 const loading = ref(false)
+const userEmail = ref('')
+const showRegistrationModal = ref(false)
 
 const schema = object().shape({
   nome: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
@@ -191,9 +199,9 @@ const handleSubmit = async (submitData: any) => {
   )
 
   if (response.status === 201) {
-    submitSuccess.value = true
-    await storeLogin.userLogin(profileData.username, profileData.password, true)
-    await router.push({ path: '/cadastro' })
+    userEmail.value = submitData.email
+    loading.value = false
+    showRegistrationModal.value = true
   } else if (response.status !== 201) {
     if (response.data?.technicalMessage) {
       errorText.value = response.data.technicalMessage

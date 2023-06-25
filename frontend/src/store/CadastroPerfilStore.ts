@@ -49,7 +49,10 @@ export const useCadastroPerfilStore = defineStore('CadastroPerfilStore', {
       const response = await Api.request({
         method: 'post',
         route: '/auth/register',
-        body: data
+        body: {
+          ...data,
+          redirect: 'https://egressos.computacao.ufpa.br/entrar'
+        }
       })
 
       return {
