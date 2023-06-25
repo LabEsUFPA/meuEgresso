@@ -2,7 +2,6 @@ package labes.facomp.ufpa.br.meuegresso.controller.auth;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -38,7 +37,6 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.ExpireRequestException;
-import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
@@ -83,6 +81,8 @@ public class AuthenticationController {
 	private final AuthenticationManager authenticationManager;
 
 	private final RecuperacaoSenhaService recuperacaoSenhaService;
+
+	private final String redirect = "https://%s/auth/validarEmail";
 
 	/**
 	 * Endpoint responsavel por autentica um determinado usuário.
@@ -179,26 +179,23 @@ public class AuthenticationController {
 
 		usuarioModel.setGrupos(Set.of(Grupos.EGRESSO));
 		mailService.usuarioCadastrado(usuarioModel,
-				usuarioDTO.getRedirect().orElse("https://" + header + "/auth/validarEmail"));
+				usuarioDTO.getRedirect().orElse(String.format(redirect, header)));
 		usuarioService.save(usuarioModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
-	@PostMapping(value = "/validarEmail/{tokenAuth}")
+	@PostMapping(value = "/validarEmail")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void validarEmail(@PathVariable String tokenAuth)
-			throws InvalidRequestException {
-		Map<String, Object> claims = jwtService.extractClains(tokenAuth);
-		if (claims.get("recoveryPass") instanceof Boolean valor && valor.booleanValue()
-				&& claims.get("email") instanceof String email) {
-			UsuarioModel usuarioModel = usuarioService.findByEmail(email);
-			usuarioModel.setEmailVerificado(true);
-			usuarioService.update(usuarioModel);
-		}
+	public void reenviarValidacaoEmail(@RequestBody AuthRecoveryPasswordRequest request,
+			@RequestHeader("Host") String header) {
+		UsuarioModel usuarioModel = usuarioService.findByEmail(request.getEmail());
+		mailService.reenviarValidacaoEmail(usuarioModel,
+				request.getRedirect().orElse(String.format(redirect, header)));
 	}
 
 	@PostMapping(value = "/recoveryPassword/{token}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+
 	public void recuperarSenha(@PathVariable String token, @RequestBody AuthNewPasswordRequest authNewPassReq)
 			throws UnauthorizedRequestException, ExpireRequestException {
 		RecuperacaoSenhaModel recuperacaoSenha = recuperacaoSenhaService.tokenValido(UUID.fromString(token));

@@ -46,6 +46,8 @@ public interface MailService {
     */
     public MensagemModel save(MensagemModel mensagemModel);
 
+    public void reenviarValidacaoEmail(UsuarioModel usuario, String redirect);
+
     /**
     * metodo para atualizar a mensagem de email.
     *

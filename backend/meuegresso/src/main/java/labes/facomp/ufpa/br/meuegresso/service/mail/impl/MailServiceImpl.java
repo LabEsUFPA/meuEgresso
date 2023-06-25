@@ -66,6 +66,21 @@ public class MailServiceImpl implements MailService, Runnable {
         mailSender.send(mensagem);
     }
 
+    public void reenviarValidacaoEmail(UsuarioModel usuario, String redirect) {
+        SimpleMailMessage mensagem = new SimpleMailMessage();
+        String token = jwtService.generateToken(
+                Map.of("email", usuario.getEmail(), "nome", usuario.getNome(), "recoveryPass", true), 30,
+                ChronoUnit.MINUTES);
+        URI location = UriComponentsBuilder.fromHttpUrl(redirect)
+                .queryParam("tokenAuth", token).build().toUri();
+        mensagem.setTo(usuario.getEmail());
+        mensagem.setSubject("Link de validação do e-amail.");
+        mensagem.setText(String.format(
+                "Acesso o link a seguir para validar seu e-mail:%n%s",
+                location.toString()));
+        mailSender.send(mensagem);
+    }
+
     @Override
     public MensagemModel save(MensagemModel mensagemModel) {
         return mensagemRepository.save(mensagemModel);
