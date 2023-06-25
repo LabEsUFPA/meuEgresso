@@ -46,7 +46,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
-
 @SpringBootTest
 @DirtiesContext
 @AutoConfigureMockMvc
@@ -191,6 +190,8 @@ class ContribuicaoControllerTest {
                                 });
 
                 assertNotNull(contribuicaosDTO);
+                assertEquals(1, contribuicaosDTO.size());
+                assertEquals(DESCRICAO, contribuicaosDTO.get(0).getDescricao());
 
         }
 
