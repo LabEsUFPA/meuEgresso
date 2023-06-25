@@ -87,21 +87,31 @@ public class UsuarioController {
 			}
 
 			if (usuarioModelFront.getEmail() != null) {
-				if (!usuarioModelBack.getEmail().equals(usuarioModelFront.getEmail())
-						&& !(usuarioService.existsByEmail(usuarioModelFront.getEmail()))) {
-					throw new EmailAlreadyExistsException();
+				// código legado por que o && nao deu bom
+				if (usuarioModelBack.getEmail().equals(usuarioModelFront.getEmail())) {
+					usuarioModelBack.setEmail(usuarioModelFront.getEmail());
+				} else {
+					if (usuarioService.existsByEmail(usuarioModelFront.getEmail())) {
+						throw new EmailAlreadyExistsException();
+					} else {
+						usuarioModelBack.setEmail(usuarioModelFront.getEmail());
+					}
 				}
 				usuarioModelBack.setEmail(usuarioModelFront.getEmail());
 			}
 
 			if (usuarioModelFront.getUsername() != null) {
-				if (!usuarioModelBack.getUsername().equals(usuarioModelFront.getUsername())
-						&& !usuarioService.existsByUsername(usuarioModelFront.getUsername())) {
-					throw new NameAlreadyExistsException(
-							String.format(ErrorType.USER_001.getMessage(), usuarioModelFront.getUsername()),
-							ErrorType.USER_001.getInternalCode());
+				if (usuarioModelBack.getUsername().equals(usuarioModelFront.getUsername())) {
+					usuarioModelBack.setUsername(usuarioModelFront.getUsername());
+				} else {
+					if (usuarioService.existsByUsername(usuarioModelFront.getUsername())) {
+						throw new NameAlreadyExistsException(
+								String.format(ErrorType.USER_001.getMessage(), usuarioModelFront.getUsername()),
+								ErrorType.USER_001.getInternalCode());
+					} else {
+						usuarioModelBack.setUsername(usuarioModelFront.getUsername());
+					}
 				}
-				usuarioModelBack.setUsername(usuarioModelFront.getUsername());
 			}
 
 			if (usuarioModelFront.getPassword() != null) {
