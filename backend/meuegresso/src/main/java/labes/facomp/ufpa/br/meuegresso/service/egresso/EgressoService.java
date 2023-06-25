@@ -122,6 +122,16 @@ public interface EgressoService {
 	 * @since 07/05/2023
 	 */
 	public void saveFoto(String nomeAnexo, MultipartFile arquivo) throws IOException;
+	
+	/**
+	 * Método responsável por verificar se matrícula já está associada a um egresso
+	 *
+	 * @param matricula
+	 * @return True caso matricula exista, false do contrario.
+	 * @author Bruno Eiki
+	 * @since 21/06/2023
+	 */
+	public boolean existsMatricula(String matricula);
 
 	public Map<Integer, Integer> countAgeFromEgressos();
 

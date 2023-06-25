@@ -47,7 +47,7 @@
           v-if="!isValid.value"
           class="text-red-500 absolute ml-[-60px] mt-[-5px]"
         >
-          O arquivo deve ser menor que 5 MB
+          <!-- O arquivo deve ser menor que 5 MB -->
           <!-- {{ meta.valid ? null : errorMessage }} -->
         </div>
       </template>
