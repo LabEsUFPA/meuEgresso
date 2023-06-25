@@ -12,14 +12,14 @@ export function getRandomEgresso (): EgressoMapa {
     empresa: {
       id: faker.datatype.number({ min: 0 }),
       nome: faker.company.name(),
-      endereco: {
-        id: faker.datatype.number({ min: 0 }),
-        cidade: faker.location.city(),
-        estado: faker.location.state(),
-        pais: faker.location.countryCode(),
-        latitude: faker.location.latitude(),
-        longitude: faker.location.longitude()
-      }
+    },
+    endereco: {
+      id: faker.datatype.number({ min: 0 }),
+      cidade: faker.location.city(),
+      estado: faker.location.state(),
+      pais: faker.location.countryCode(),
+      latitude: faker.location.latitude(),
+      longitude: faker.location.longitude(),
     }
   }
 }
