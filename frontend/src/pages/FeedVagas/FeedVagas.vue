@@ -16,7 +16,7 @@
         <CustomButton
           v-show="logado"
           tag="router"
-          link="/cadastro-anuncio"
+          link="/cadastro/anuncio"
           color="emerald"
           text-class="text-white font-medium"
           class="w-full sm:w-fit sm:self-end"

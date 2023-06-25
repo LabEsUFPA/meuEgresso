@@ -60,7 +60,7 @@
         <p class="mt-9">
           Não possui login?
           <RouterLink
-            to="/cadastro-perfil"
+            to="/cadastro/perfil"
             class="text-sky-600"
           >
             Cadastre-se

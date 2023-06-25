@@ -4,7 +4,7 @@
       <div class="flex flex-col gap-4 sm:flex-row w-[960px] border-2 border-b-0 border-white rounded-tl-2xl rounded-tr-2xl p-6 sm:p-8 mt-10 mx-4 sm:mx-6 items-start sm:items-center justify-between">
         <div class="flex gap-6 text-cyan-800 items-center">
           <RouterLink
-            to="/painel-admin"
+            to="/admin/painel"
             class="flex items-center hover:bg-sky-600/20 rounded-md"
           >
             <div class="flex-1" />
@@ -148,7 +148,7 @@
             <div class="flex flex-col items-start sm:flex-row justify-end gap-4 p-4 m-1 mr-5 mb-5">
               <CustomButton
                 tag="router"
-                link="/painel-admin"
+                link="/admin/painelpainel"
                 variant="flat"
                 color="gray"
                 @click="handleCancel"
@@ -301,8 +301,8 @@ const schema = object().shape({
       const inputDate = new Date(value)
       if (
         currentDate.getDate() > inputDate.getDate() ||
-        currentDate.getMonth() > inputDate.getMonth() ||
-        currentDate.getFullYear() > inputDate.getFullYear()
+          currentDate.getMonth() > inputDate.getMonth() ||
+          currentDate.getFullYear() > inputDate.getFullYear()
       ) return true
       if (currentDate.getHours() === inputDate.getHours()) {
         if (currentDate.getMinutes() >= inputDate.getMinutes()) return false
@@ -352,22 +352,22 @@ async function fetchUpdateEmail () {
   // }
 
   const message = `Prezado(a),
-
-  Espero que esta mensagem o encontre bem. Gostaríamos de lembrá-lo(a) da importância de manter seu cadastro atualizado em nosso portal Meu Egresso.
-
-  Para garantir que possamos manter contato com você e fornecer informações importantes sobre eventos, oportunidades de emprego, cursos e outros escopos relevantes, solicitamos que atualize suas informações pessoais e profissionais.
-
-  Pedimos que acesse o portal Meu Egresso (https://egressos.computacao.ufpa.br/) e faça login com suas credenciais. Em seguida, atualize suas informações no seu perfil.
-
-  Caso tenha alguma dificuldade para acessar o portal ou atualizar suas informações, entre em contato conosco pelo e-mail egressocomp@ufpa.br ou pelo telefone 3201-7405 (Faculdade de Computação). Teremos o maior prazer em ajudá-lo(a).
-
-  Agradecemos antecipadamente pela sua colaboração em manter suas informações atualizadas. Isso nos ajuda a manter contato com você e oferecer um serviço mais eficiente e personalizado.
-
-  Atenciosamente,
-
-  [Seu nome]
-
-  [Assinatura]`
+  
+    Espero que esta mensagem o encontre bem. Gostaríamos de lembrá-lo(a) da importância de manter seu cadastro atualizado em nosso portal Meu Egresso.
+  
+    Para garantir que possamos manter contato com você e fornecer informações importantes sobre eventos, oportunidades de emprego, cursos e outros escopos relevantes, solicitamos que atualize suas informações pessoais e profissionais.
+  
+    Pedimos que acesse o portal Meu Egresso (https://egressos.computacao.ufpa.br/) e faça login com suas credenciais. Em seguida, atualize suas informações no seu perfil.
+  
+    Caso tenha alguma dificuldade para acessar o portal ou atualizar suas informações, entre em contato conosco pelo e-mail egressocomp@ufpa.br ou pelo telefone 3201-7405 (Faculdade de Computação). Teremos o maior prazer em ajudá-lo(a).
+  
+    Agradecemos antecipadamente pela sua colaboração em manter suas informações atualizadas. Isso nos ajuda a manter contato com você e oferecer um serviço mais eficiente e personalizado.
+  
+    Atenciosamente,
+  
+    [Seu nome]
+  
+    [Assinatura]`
   form.value?.setFieldValue('escopo', 'Atualização Cadastral - Meu Egresso')
   form.value?.setFieldValue('corpo', message)
   form.value?.setFieldValue('dataEnvio', new Date())

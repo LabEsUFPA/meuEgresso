@@ -128,7 +128,7 @@ async function fetchEgresso () {
 }
 
 const opcoesMenu = [
-  { title: 'Painel', click: () => $router.push('/painel-admin'), scope: ['ADMIN', 'SECRETARIO'] },
+  { title: 'Painel', click: () => $router.push('/admin/painel'), scope: ['ADMIN', 'SECRETARIO'] },
   { title: 'Perfil', click: () => $router.push('/egresso'), scope: ['EGRESSO'] },
   { title: 'Editar conta', click: () => $router.push('/conta'), scope: ['EGRESSO', 'ADMIN', 'SECRETARIO'] },
   { title: 'Sair', click: userLogout, scope: ['EGRESSO', 'ADMIN', 'SECRETARIO'] }

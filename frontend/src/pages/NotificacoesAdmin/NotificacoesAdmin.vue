@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col">
     <PageHeader
-      back-to="/painel-admin"
+      back-to="/admin/painel"
       :icon-path="mdiBell"
       titulo="Atividades Recentes"
     />

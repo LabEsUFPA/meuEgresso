@@ -64,7 +64,7 @@
             <CustomButton
               tag="router"
               variant="flat"
-              link="/notificacoes-admin"
+              link="/admin/notificacoes"
             >
               <SvgIcon
                 type="mdi"
@@ -78,7 +78,7 @@
 
             <CustomButton
               tag="router"
-              link="/conta-admin"
+              link="/conta"
               variant="flat"
             >
               <SvgIcon
@@ -119,7 +119,7 @@
 
           <div class="border-b text-cyan-600 p-4 font-semibold text-left">
             <RouterLink
-              to="/cadastro-admin"
+              to="/cadastro/admin"
               class="flex items-center"
             >
               <SvgIcon
@@ -451,7 +451,7 @@ async function logout () {
 }
 
 function navigateToEmailSettings () {
-  $router.push('/email')
+  $router.push('/admin/email')
   $painelStore.setEgressoEmail(null)
 }
 

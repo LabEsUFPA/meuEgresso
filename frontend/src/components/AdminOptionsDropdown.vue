@@ -226,7 +226,7 @@ async function excluiCadastro () {
 
 function enviaEmail () {
   $store.setEgressoEmail(props.email)
-  $router.push({ path: '/email' })
+  $router.push({ path: '/admin/email' })
 }
 
 const opcoesAdmin = [
