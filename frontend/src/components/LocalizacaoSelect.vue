@@ -13,7 +13,6 @@
       infinite
       required
       :placeholder="placeHolder.paisHolder"
-      :pre-filled="true"
     />
     <CustomSelect
       class="mb-2"
@@ -28,7 +27,6 @@
       infinite
       required
       :placeholder="placeHolder.estadoHolder"
-      :pre-filled="true"
     />
     <CustomSelect
       name="localizacao.cidade"
@@ -39,7 +37,6 @@
       @infinite-scroll="fetchMoreCities"
       infinite
       required
-      :pre-filled="true"
       :placeholder="placeHolder.cidadeHolder"
     />
   </div>
@@ -49,7 +46,7 @@
 
 import CustomSelect from 'src/components/CustomSelect.vue'
 
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import apiEnderecos from 'src/services/apiEnderecos'
 
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
@@ -61,7 +58,8 @@ const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 const paisChange = ref(false)
 const estadoChange = ref(false)
-const $emit = defineEmits(['paisChange', 'estadoChange'])
+
+// const $emit = defineEmits(['paisChange', 'estadoChange'])
 
 if (storage.has('loggedEgresso')) {
   $store.fetchAll()
@@ -81,6 +79,7 @@ const estado = ref({
 })
 
 const cidade = ref({
+  id: 0,
   page: 0,
   isFetching: false,
   query: ''
@@ -99,6 +98,11 @@ const props = withDefaults(defineProps<Props>(), {
   estadoHolder: '',
   cidadeHolder: ''
 })
+defineExpose({
+  fetchMoreCounties,
+  fetchMoreStates,
+  fetchMoreCities
+})
 
 const placeHolder = ref({
   paisHolder: props.paisHolder,
@@ -107,29 +111,41 @@ const placeHolder = ref({
 })
 
 async function handleChangeLocal (name: string, event: any) {
+  console.log('handleChange')
   switch (name) {
     case 'pais':
       paisChange.value = !paisChange.value
       pais.value.id = event
-      $emit('paisChange')
+
+      console.log('local')
+      console.log(pais.value)
+      // $emit('paisChange')
       break
     case 'estado':
       estadoChange.value = !estadoChange.value
       estado.value.id = event
-      $emit('estadoChange')
+      // $emit('estadoChange')
       break
   }
 }
 
 const countries = ref<ComplexOpts[]>([])
 async function fetchCountries (query: string, clean: boolean) {
+  console.log('aqui13')
   if (clean) {
-    console.log('aqui')
+    // $emit('paisChange')
+
+    console.log('aqui3')
     pais.value.id = 0
     pais.value.page = 0
+
     countries.value = []
+    if (query === 'event') {
+      query = ''
+    }
   }
 
+  console.log(pais.value)
   pais.value.query = query
   pais.value.isFetching = true
   const response = await apiEnderecos.getPaises(query, pais.value.page)
@@ -148,9 +164,14 @@ async function fetchMoreCounties () {
 const states = ref<ComplexOpts[]>([])
 async function fetchStates (query: string, clean: boolean) {
   if (clean) {
+    // $emit('estadoChange')
+
     estado.value.id = 0
     estado.value.page = 0
     states.value = []
+    if (query === 'event') {
+      query = ''
+    }
   }
 
   estado.value.query = query
@@ -173,6 +194,9 @@ async function fetchCities (query: string, clean: boolean) {
     cidade.value.id = 0
     cidade.value.page = 0
     cities.value = []
+    if (query === 'event') {
+      query = ''
+    }
   }
 
   cidade.value.query = query
@@ -190,6 +214,31 @@ async function fetchMoreCities () {
   fetchStates(cidade.value.query, false)
 }
 
+onMounted(() => {
+  const estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
+
+  const cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
+
+  watch(paisChange, () => {
+    console.log('changepais1')
+
+    setTimeout(() => {
+      if (cidadeInput?.value) {
+        cidadeInput.value = ''
+        estadoInput.value = ''
+      }
+    }, 10)
+  })
+
+  watch(estadoChange, () => {
+    console.log('changeestado1')
+    setTimeout(() => {
+      if (cidadeInput?.value) {
+        cidadeInput.value = ''
+      }
+    }, 10)
+  })
+})
 watch(() => props.paisHolder, (newValue) => {
   placeHolder.value.paisHolder = newValue
 })

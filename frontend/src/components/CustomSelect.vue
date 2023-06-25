@@ -194,8 +194,10 @@ function handleEmit (option: IOpts) {
     if (typeof selected.value === 'object') {
       handleChange(selected.value.value)
       $emit('change', selected.value.value)
+      console.log('emit')
       return
     }
+    console.log('emit')
 
     handleChange(selected.value)
     $emit('change', selected.value)
@@ -215,6 +217,10 @@ onMounted(() => {
   watch(focusInput, () => {
     if (model.value !== '') {
       model.value = ''
+    } else {
+      console.log('click')
+      $emit('typing', 'event')
+      // $emit('change', model.value)
     }
     if (input.value) {
       input.value.focus()

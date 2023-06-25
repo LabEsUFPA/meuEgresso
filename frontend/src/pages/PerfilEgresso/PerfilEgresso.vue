@@ -233,7 +233,7 @@
                   name="geral.genero"
                   :placeholder="dataEgresso.geral.genero"
                   label="Gênero"
-                  :options="$storeCadastro.generos"
+                  :options="$store.generos"
                   required
                   :pre-filled="true"
                 />
@@ -267,13 +267,7 @@
           :validation-schema="schemaAcademico"
           v-slot="{ values }"
         >
-          <FolderAcademico
-            :is-input="dataEgresso.academico.isInput"
-            :bools="bools"
-            :bolsa-holder="placeHolders.bolsaNome"
-            :instituicao-holder="dataEgresso.academico.posGrad.local"
-            :curso-holder="dataEgresso.academico.posGrad.curso"
-          >
+          <FolderSection>
             <template #EditButton>
               <h1 class="relative">
                 <ButtonEdit
@@ -301,29 +295,236 @@
                 Acadêmico
               </h1>
             </template>
-            <template #Localizacao>
-              <LocalizacaoSelect
-                :pais-holder="dataEgresso.localizacao.pais"
-                :estado-holder="dataEgresso.localizacao.estado"
-                :cidade-holder="dataEgresso.localizacao.cidade"
-                @pais-change="handleChangeLocal('pais', $event)"
-                @estado-change="handleChangeLocal('estado', $event)"
-              />
+            <template #default>
+              <div v-if="!dataEgresso.academico.isInput">
+                <CustomPerfilData
+                  type="number"
+                  class="mb-5"
+                  :vmodel="dataEgresso.academico.matricula"
+                  name="academico.matricula"
+                  label="Matrícula"
+                  placeholder="Ex: 205004940001"
+                  icon-path=""
+                />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.academico.cotista.tipo"
+                  name="academico.cotista.tipo"
+                  label="Cotas"
+                  placeholder="Tipo de cota"
+                  icon-path=""
+                />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.academico.tipoAluno"
+                  name="academico.tipoAluno"
+                  label="Formação"
+                  placeholder="Selecione"
+                  icon-path=""
+                />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.academico.posGrad.curso"
+                  name="academico.posGrad.curso"
+                  label="Curso"
+                  placeholder="Curso de pós-graduação"
+                  icon-path=""
+                />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.academico.posGrad.local"
+                  name="academico.posGrad.local"
+                  label="Local da pós-graduação"
+                  placeholder="Local da pós-graduação"
+                  icon-path=""
+                />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-1"
+                  :vmodel="dataEgresso.academico.bolsista.tipo"
+                  name="academico.bolsista.tipo"
+                  label="Bolsa"
+                  placeholder="Bolsa"
+                  icon-path=""
+                />
+              </div>
+
+              <div v-else>
+                <CustomInput
+                  class="mb-5"
+                  name="academico.matricula"
+                  label="Matrícula"
+                  mask="############"
+                  placeholder="205004940001"
+                  :error-message="`Matrícula inválida, faltam ${missingDigits} dígitos`"
+                  custom-error-message
+                  @update:value="checkRegistrationLength"
+                />
+
+                <div class="mb-5 text-sm font-semibold text-cyan-600">
+                  Marque todos as opções que sejam verdadeiras abaixo:
+                </div>
+
+                <CustomCheckbox
+                  class="mb-5"
+                  name="academico.cotista.value"
+                  label="Cotista"
+                  v-model:value="bools.cotista"
+                />
+
+                <div class="mb-5 text-sm font-semibold text-cyan-600">
+                  Tipos de cota:
+                </div>
+
+                <div class="w-fit p-3 pr-5 rounded-xl bg-gray-100 mb-5">
+                  <p
+                    v-if="values.academico?.cotista.value"
+                    class="text-sm mt-1 position-absolute display-none mb-5"
+                  >
+                    Por favor, marque pelo menos uma das opções abaixo:
+                  </p>
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.renda"
+                    label="Cota Renda"
+                    :required="bools.cotista"
+                    :disabled="!bools.cotista"
+                  />
+
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.escola"
+                    label="Cota Escola"
+                    :required="bools.cotista"
+                    :disabled="!bools.cotista"
+                  />
+
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.raca"
+                    label="Autodeclaração de Raça"
+                    :required="bools.cotista"
+                    :disabled="!bools.cotista"
+                  />
+
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.quilombolaIndigena"
+                    label="Quilombola/Indigena"
+                    :required="bools.cotista"
+                    :disabled="!bools.cotista"
+                  />
+                  <CustomCheckbox
+                    class="mb-5"
+                    name="academico.cotista.tipos.pcd"
+                    label="PCD"
+                    :required="bools.cotista"
+                    :disabled="!bools.cotista"
+                  />
+                  <p
+                    v-if="bools.cotista &&
+                      !values.academico?.cotista?.tipos?.renda &&
+                      !values.academico?.cotista?.tipos?.escola &&
+                      !values.academico?.cotista?.tipos?.raca &&
+                      !values.academico?.cotista?.tipos?.quilombolaIndigena &&
+                      !values.academico?.cotista?.tipos?.pcd"
+                    class="text-red-500 text-sm mt-1 position-absolute display-none"
+                  >
+                    Marque pelo menos uma das opções acima!
+                  </p>
+                </div>
+
+                <CustomCheckbox
+                  class="mb-5"
+                  name="academico.bolsista.value"
+                  label="Bolsista"
+                  v-model:value="bools.bolsista"
+                />
+                <CustomSelect
+                  class="mb-5"
+                  name="academico.bolsista.tipo"
+                  label="Tipo de Bolsa"
+                  :placeholder="placeHolders.bolsaNome"
+                  :options="$store.tiposBolsa"
+                  :required="bools.bolsista"
+                  :disabled="!bools.bolsista"
+                  :pre-filled="true"
+                />
+
+                <CustomInput
+                  class="mb-5"
+                  name="academico.bolsista.remuneracao"
+                  label="Remuneração da bolsa"
+                  type="number"
+                  step="0.01"
+                  placeholder="R$ 0,00"
+                  :max-length="12"
+                  :required="bools.bolsista"
+                  :disabled="!bools.bolsista"
+                  money
+                />
+
+                <CustomCheckbox
+                  class="mb-5"
+                  name="academico.posGrad.value"
+                  v-model:value="bools.posGrad"
+                  label="Pós-graduação"
+                />
+
+                <CustomInput
+                  class="mb-1"
+                  name="academico.posGrad.local"
+                  label="Instituição da pós-graduação"
+                  :max-length="100"
+                  :required="bools.posGrad"
+                  :disabled="!bools.posGrad"
+                />
+                <button
+                  type="button"
+                  class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
+                  :disabled="!bools.posGrad"
+                  @click="dialogInstituicao = true"
+                >
+                  Não encontrou sua instituição? Clique aqui
+                </button>
+                <CustomInput
+                  class="mb-1"
+                  name="academico.posGrad.curso"
+                  label="Curso de pós-graduação"
+                  :required="bools.posGrad"
+                  :max-length="100"
+                  :disabled="!bools.posGrad"
+                />
+                <button
+                  type="button"
+                  class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
+                  :disabled="!bools.posGrad"
+                  @click="dialogCurso = true"
+                >
+                  Não encontrou seu curso? Clique aqui
+                </button>
+                <CustomCheckbox
+                  name="academico.posGrad.desejaPos"
+                  label="Desejo realizar pós graduação"
+                  v-if="!bools.posGrad"
+                />
+              </div>
             </template>
-          </FolderAcademico>
-        </Form>
-        <Form
-          ref="formCarreira"
-          @submit="handleSubmitCarreira"
-          @invalid-submit="onInvalid"
-          :validation-schema="schemaCarreira"
-        >
-          <FolderCarreira
-            :is-input="dataEgresso.carreira.isInput"
-            :area-atuacao-holder="placeHolders.areaAtuacao"
-            :setor-atuacao-holder="placeHolders.setorAtuacao"
-            :faixa-salarial-holder="placeHolders.faixaSalarial"
-            :empresa-nome-holder="dataEgresso.carreira.empresa"
+          </FolderSection>
+          <Form
+            ref="formCarreira"
+            @submit="handleSubmitCarreira"
+            @invalid-submit="onInvalid"
+            :validation-schema="schemaCarreira"
           >
             <FolderCarreira
               :is-input="dataEgresso.carreira.isInput"
@@ -392,26 +593,10 @@
                     </div>
                   </div>
                 </div>
-              </div>
-            </template>
-<template #Localizacao>
-  <div>
-    <CustomSelect class="mb-2" name="localizacao.pais" label="País" :options="countries" v-model:value="pais"
-      @change="handleChangeLocal('pais', $event)" :is-fetching="pais.isFetching" @typing="fetchCountries($event, true)"
-      @infinite-scroll="fetchMoreCounties" infinite required :placeholder="dataEgresso.localizacao.pais"
-      :pre-filled="true" />
-    <CustomSelect class="mb-2" name="localizacao.estado" label="Estado" :options="states" v-model:value="estado"
-      @change="handleChangeLocal('estado', $event)" :is-fetching="pais.isFetching" @typing="fetchStates($event, true)"
-      @infinite-scroll="fetchMoreStates" infinite required :placeholder="dataEgresso.localizacao.estado"
-      :pre-filled="true" />
-    <CustomSelect name="localizacao.cidade" label="Cidade" :options="cities" :is-fetching="pais.isFetching"
-      @typing="fetchCities($event, true)" @infinite-scroll="fetchMoreCities" infinite required :pre-filled="true"
-      :placeholder="dataEgresso.localizacao.cidade" />
-  </div>
-</template>
-          </FolderCarreira>
-
-<Form
+              </template>
+            </FolderCarreira>
+          </Form>
+          <Form
             ref="formLocalizacao"
             @submit="handleSubmitLocalizacao"
             @invalid-submit="onInvalid"
@@ -451,7 +636,7 @@
                   <CustomPerfilData
                     type="text"
                     class="mb-5"
-                    :vmodel="dataEgresso.localizacao.pais"
+                    :vmodel="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
                     name="localizacao.pais"
                     placeholder="Brasil"
                     label="País"
@@ -461,7 +646,7 @@
                   <CustomPerfilData
                     type="text"
                     class="mb-5"
-                    :vmodel="dataEgresso.localizacao.estado"
+                    :vmodel="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
                     name="localizacao.estado"
                     label="Estado"
                     placeholder="Pará"
@@ -496,61 +681,19 @@
 
                 <div v-show="dataEgresso.localizacao.isInput">
                   <div>
-                    <CustomSelect
-                      class="mb-5"
-                      name="localizacao.pais"
-                      label="País"
-                      :options="countries"
-                      v-model:value="pais"
-                      @change="handleChangeLocal('pais', $event)"
-                      :is-fetching="pais.isFetching"
-                      @typing="fetchCountries($event, true)"
-                      @infinite-scroll="fetchMoreCounties"
-                      infinite
-                      required
-                      :placeholder="dataEgresso.localizacao.pais"
-                      :pre-filled="true"
-                    />
-                    <CustomSelect
-                      class="mb-5"
-                      name="localizacao.estado"
-                      label="Estado"
-                      :options="states"
-                      v-model:value="estado"
-                      @change="handleChangeLocal('estado', $event)"
-                      :is-fetching="pais.isFetching"
-                      @typing="fetchStates($event, true)"
-                      @infinite-scroll="fetchMoreStates"
-                      infinite
-                      required
-                      :placeholder="dataEgresso.localizacao.estado"
-                      :pre-filled="true"
-                    />
-                    <CustomSelect
-                      name="localizacao.cidade"
-                      label="Cidade"
-                      :options="cities"
-                      :is-fetching="pais.isFetching"
-                      @typing="fetchCities($event, true)"
-                      @infinite-scroll="fetchMoreCities"
-                      infinite
-                      required
-                      :pre-filled="true"
-                      :placeholder="dataEgresso.localizacao.cidade"
-                    />
-                    <!-- <LocalizacaoSelect
+                    <!--  @pais-change="handleChangeLocal('pais', $event)"
+                      @estado-change="handleChangeLocal('estado', $event)" -->
+                    <LocalizacaoSelect
                       :pais-holder="dataEgresso.localizacao.pais"
                       :estado-holder="dataEgresso.localizacao.estado"
                       :cidade-holder="dataEgresso.localizacao.cidade"
-                      @pais-change="handleChangeLocal('pais', $event)"
-                      @estado-change="handleChangeLocal('estado', $event)"
-                    /> -->
+                    />
                   </div>
                 </div>
               </template>
             </FolderSection>
           </Form>
-<Form
+          <Form
             ref="formAdicionais"
             @submit="handleSubmitAdicionais"
             @invalid-submit="onInvalid"
@@ -610,7 +753,7 @@
       </div>
     <!-- Body End-->
     </div>
-<CustomDialog v-model="dialogSucesso">
+    <CustomDialog v-model="dialogSucesso">
       <div class="h-full flex justify-center items-center">
         <div class="w-1/2">
           <div class="text-green-500 text-center mb-3">
@@ -628,7 +771,7 @@
       </div>
     </CustomDialog>
 
-<CustomDialog v-model="dialogFalha">
+    <CustomDialog v-model="dialogFalha">
       <div class="h-full flex justify-center items-center">
         <div class="w-1/2">
           <div class="text-red-600 text-center mb-3">
@@ -645,30 +788,118 @@
         </div>
       </div>
     </CustomDialog>
+    <CustomDialog v-model="dialogInstituicao">
+      <div class="h-full flex justify-center gap-1 flex-col items-center">
+        <div class="text-2xl font-semibold text-cyan-800">
+          Cadastrar instituição
+        </div>
+
+        <Form
+          :validation-schema="instituicaoSchema"
+          @submit="handleNewInstituicao"
+          class="flex flex-col items-center gap-1.5 mt-[-5px]"
+        >
+          <CustomInput
+            name="nome"
+            label="Nome da instituição de ensino"
+            placeholder="Universidade Federal do Pará (UFPA)"
+          />
+          <LocalizacaoSelect
+            class="mb-1"
+            :pais-holder="dataEgresso.localizacao.pais"
+            :estado-holder="dataEgresso.localizacao.estado"
+            :cidade-holder="dataEgresso.localizacao.cidade"
+          />
+
+          <CustomButton type="submit">
+            Cadastrar
+          </CustomButton>
+        </Form>
+      </div>
+    </CustomDialog>
+
+    <CustomDialog v-model="dialogCurso">
+      <div class="h-full flex justify-center gap-1 flex-col items-center">
+        <div class="text-2xl font-semibold text-cyan-800">
+          Cadastrar curso
+        </div>
+
+        <Form
+          :validation-schema="cursoSchema"
+          @submit="handleNewCurso"
+          class="flex flex-col items-center gap-1.5 mt-[-5px]"
+        >
+          <CustomInput
+            name="nome"
+            label="Nome da curso"
+            placeholder="Engenharia de software"
+          />
+          <LocalizacaoSelect
+            class="mb-1"
+
+            :pais-holder="dataEgresso.localizacao.pais"
+            :estado-holder="dataEgresso.localizacao.estado"
+            :cidade-holder="dataEgresso.localizacao.cidade"
+          />
+
+          <CustomButton type="submit">
+            Cadastrar
+          </CustomButton>
+        </Form>
+      </div>
+    </CustomDialog>
   </div>
 </template>
 
 <script setup lang="ts">
+import CustomButtonLink from './components/CustomButtonLink.vue'
+import ButtonEdit from './components/ButtonEdit.vue'
+import FolderSection from 'src/components/FolderSection.vue'
+import CustomInput from 'src/components/CustomInput.vue'
+import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 
+import CustomPerfilData from './components/CustomPerfilData.vue'
+import SvgIcon from '@jamescoyle/vue-icon'
+import CustomButton from 'src/components/CustomButton.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
-import LocalStorage from 'src/services/localStorage'
-import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
+import { Country, State } from 'country-state-city'
+import LocalizacaoSelect from 'src/components/LocalizacaoSelect.vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
 import { Form } from 'vee-validate'
-import { computed, onMounted, ref, watch } from 'vue'
-import { boolean, object, string } from 'yup'
+import { object, string, boolean } from 'yup'
+import LocalStorage from 'src/services/localStorage'
+import CustomDialog from 'src/components/CustomDialog.vue'
+import FolderCarreira from './components/FolderCarreira.vue'
+import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 
-import { type models } from 'src/@types'
-import apiEnderecos from 'src/services/apiEnderecos'
-import { useRoute } from 'vue-router'
+import FolderAdicionais from './components/FolderAdicionais.vue'
 import ProfileImage from './components/ProfileImage.vue'
+import {
+  mdiAccount,
+  mdiEmail,
+  mdiCake,
+  mdiWeb,
+  mdiMapOutline,
+  mdiMapMarkerRadius,
+  mdiLinkVariant,
+  mdiCheckCircle,
+  mdiAlertCircle,
+  mdiMapMarker,
+  mdiAlertCircleOutline,
+  mdiSchool,
+  mdiLoading
+} from '@mdi/js'
+import { useRoute } from 'vue-router'
 
-interface ComplexOpts extends models.ComplexOpts { }
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
+const dialogInstituicao = ref(false)
+const dialogCurso = ref(false)
 const $route = useRoute()
+const $store = usePerfilEgressoStore()
 const $storeCadastro = useCadastroEgressoStore()
-const egressoStore = usePerfilEgressoStore()
+
 const storage = new LocalStorage()
 const formHeader = ref<typeof Form | null>(null)
 const formGeral = ref<typeof Form | null>(null)
@@ -676,109 +907,25 @@ const formAcademico = ref<typeof Form | null>(null)
 const formCarreira = ref<typeof Form | null>(null)
 const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
+const missingDigits = ref(0)
+const loading = ref(true)
 const paisChange = ref(false)
 const estadoChange = ref(false)
-const loading = ref(true)
 
-const pais = ref({
-  id: 0,
-  page: 0,
-  isFetching: false,
-  query: ''
-})
+const localCarreira = ref<typeof LocalizacaoSelect | null>(null)
 
-const countries = ref<ComplexOpts[]>([])
-async function fetchCountries(query: string, clean: boolean) {
-  if (clean) {
-    console.log('aqui')
-    pais.value.id = 0
-    pais.value.page = 0
-    countries.value = []
-  }
-
-  pais.value.query = query
-  pais.value.isFetching = true
-  const response = await apiEnderecos.getPaises(query, pais.value.page)
-  pais.value.isFetching = false
-
-  if (response.status === 200) {
-    countries.value = [...countries.value, ...response.data]
-    pais.value.page++
-  }
+const checkRegistrationLength = ($event: Event) => {
+  missingDigits.value = 12 - String($event).length
 }
 
-async function fetchMoreCounties() {
-  fetchCountries(pais.value.query, false)
-}
-
-const estado = ref({
-  id: 0,
-  page: 0,
-  isFetching: false,
-  query: ''
-})
-
-const states = ref<ComplexOpts[]>([])
-async function fetchStates(query: string, clean: boolean) {
-  if (clean) {
-    estado.value.id = 0
-    estado.value.page = 0
-    states.value = []
-  }
-
-  estado.value.query = query
-  estado.value.isFetching = true
-  const response = await apiEnderecos.getEstados(query, pais.value.id, estado.value.page)
-  estado.value.isFetching = false
-
-  if (response.status === 200) {
-    states.value = [...states.value, ...response.data]
-    estado.value.page++
-  }
-}
-
-async function fetchMoreStates() {
-  fetchStates(estado.value.query, false)
-}
-
-const cidade = ref({
-  id: 0,
-  page: 0,
-  isFetching: false,
-  query: ''
-})
-
-const cities = ref<ComplexOpts[]>([])
-async function fetchCities(query: string, clean: boolean) {
-  if (clean) {
-    cidade.value.id = 0
-    cidade.value.page = 0
-    cities.value = []
-  }
-
-  cidade.value.query = query
-  cidade.value.isFetching = true
-  const response = await apiEnderecos.getCidades(query, estado.value.id, cidade.value.page)
-  cidade.value.isFetching = false
-
-  if (response.status === 200) {
-    cities.value = [...cities.value, ...response.data]
-    cidade.value.page++
-  }
-}
-
-async function fetchMoreCities() {
-  fetchStates(cidade.value.query, false)
-}
 const stagedChanges = ref({
   profileHead: {
     removedImage: false
   }
 })
 
-if (storage.has('loggedEgresso')) {
-  $storeCadastro.fetchAll()
-}
+// if (storage.has('loggedEgresso')) {
+$store.fetchAll()
 
 const isSuperUser = computed(() => {
   if (storage.has('loggedUser')) {
@@ -806,7 +953,7 @@ watch(() => $route.params, async () => {
   loading.value = false
 })
 
-function handleStatus(status: any) {
+function handleStatus (status: any) {
   if (status !== 201) {
     dialogFalha.value = true
     return false
@@ -815,20 +962,19 @@ function handleStatus(status: any) {
     return true
   }
 }
-
-async function handleChangeLocal(name: string, event: any) {
-  switch (name) {
-    case 'pais':
-      paisChange.value = !paisChange.value
-      pais.value.id = event
-      break
-    case 'estado':
-      estadoChange.value = !estadoChange.value
-      estado.value.id = event
-      break
-  }
-}
-async function handleSubmitHeader(values: any) {
+// async function handleChangeLocal (name: string, event: any) {
+//   switch (name) {
+//     case 'pais':
+//       paisChange.value = !paisChange.value
+//       pais.value.id = event
+//       break
+//     case 'estado':
+//       estadoChange.value = !estadoChange.value
+//       estado.value.id = event
+//       break
+//   }
+// }
+async function handleSubmitHeader (values: any) {
   jsonResponse.usuario.nome = values.geral.nome
   if (values.geral.linkedin !== '' && values.geral.linkedin !== undefined) {
     jsonResponse.linkedin = values.geral.linkedin
@@ -861,7 +1007,7 @@ async function handleSubmitHeader(values: any) {
   }
 }
 
-async function handleSubmitGeral(values: any) {
+async function handleSubmitGeral (values: any) {
   jsonResponse.usuario.email = values.geral.email
   // ID request
   jsonResponse.genero.id = values.geral.genero
@@ -874,8 +1020,7 @@ async function handleSubmitGeral(values: any) {
   fetchUpdateEgresso()
 }
 
-async function handleSubmitAcademico(values: any) {
-  console.log(values)
+async function handleSubmitAcademico (values: any) {
   const cotas: Array<{ id: number }> | null = []
   if (values.academico.cotista.value) {
     if (values.academico.cotista.tipos.escola) {
@@ -919,10 +1064,12 @@ async function handleSubmitAcademico(values: any) {
           titulacaoId: 2
         },
         curso: {
-          id: values.academico.posGrad.curso
+          id: 1,
+          nome: values.academico.posGrad.curso
         },
         empresa: {
-          id: values.academico.posGrad.local
+          id: 1,
+          nome: values.academico.posGrad.local
 
         },
         titulacao: {
@@ -931,16 +1078,8 @@ async function handleSubmitAcademico(values: any) {
       }
       jsonResponse.titulacao = titulacao
     } else {
-      const curso = {
-        id: values.academico.posGrad.curso
-      }
-      const empresa = {
-        id: values.academico.posGrad.local
-
-      }
-      jsonResponse.titulacao.empresa = empresa
-
-      jsonResponse.titulacao.curso = curso
+      jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
+      jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
     }
   }
 
@@ -971,12 +1110,9 @@ async function handleSubmitAcademico(values: any) {
 
   fetchUpdateEgresso()
 }
-async function handleSubmitLocalizacao(values: any) {
-  console.log(values)
-  // !Mantem o mesmo id por enquanto!
-  const id = jsonResponse.emprego.empresa.endereco.id
-  jsonResponse.emprego.empresa.endereco = values.localizacao
-  jsonResponse.emprego.empresa.endereco.id = id
+async function handleSubmitLocalizacao (values: any) {
+  jsonResponse.emprego.endereco = values.localizacao
+  // delete jsonResponse.emprego.empresa.endereco.id
 
   const status = await atualizarEgresso(jsonResponse)
   if (handleStatus(status)) {
@@ -985,7 +1121,7 @@ async function handleSubmitLocalizacao(values: any) {
 
   fetchUpdateEgresso()
 }
-async function handleSubmitCarreira(values: any) {
+async function handleSubmitCarreira (values: any) {
   if (jsonResponse.emprego === undefined) {
     jsonResponse.emprego = {
       id: {
@@ -1011,6 +1147,7 @@ async function handleSubmitCarreira(values: any) {
         pais: ''
       },
       empresa: {
+        id: 1,
         nome: '',
         faixaSalarial: {
           id: 2
@@ -1021,10 +1158,7 @@ async function handleSubmitCarreira(values: any) {
     }
   }
   if (values.carreira.area !== 'Desempregado') {
-    // jsonResponse.emprego.empresa.nome = values.carreira.empresa
-    jsonResponse.emprego.empresa.id = values.carreira.empresa
-    jsonResponse.emprego.id.empresaId = values.carreira.empresa
-
+    jsonResponse.emprego.empresa.nome = values.carreira.empresa
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
     // let areaNome = ''
     // $store.areasAtuacao.forEach(option => {
@@ -1048,7 +1182,7 @@ async function handleSubmitCarreira(values: any) {
 
   fetchUpdateEgresso()
 }
-async function handleSubmitAdicionais(values: any) {
+async function handleSubmitAdicionais (values: any) {
   jsonResponse.depoimento.descricao = values.adicionais.experiencias
   jsonResponse.contribuicao.descricao = values.adicionais.contribuicoes
   if (values.adicionais.palestras) {
@@ -1071,7 +1205,7 @@ async function handleSubmitAdicionais(values: any) {
 }
 
 let isInputLocal = false
-function toggleIsInput(FolderLabel: string) {
+function toggleIsInput (FolderLabel: string) {
   switch (FolderLabel) {
     case 'profileHead':
       dataEgresso.value.profileHead.isInput = !dataEgresso.value.profileHead.isInput
@@ -1108,9 +1242,8 @@ const selectOpts = ref({
   areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Programador', 'Analísta', 'Outros'],
   setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
 })
-function onInvalid(e: any) {
+function onInvalid (e: any) {
   // updateEgressoDataModel(e)
-  console.log('invalid')
   console.log(e)
 }
 
@@ -1120,8 +1253,6 @@ const dataEgresso = ref({
   bolsaId: 0,
   areaAtuacaoId: 0,
   faixaSalarialId: 0,
-  cursoId: 0,
-  localPosId: 0,
   grupos: [''],
 
   geral: {
@@ -1156,7 +1287,7 @@ const dataEgresso = ref({
     bolsista: {
       value: false,
       tipo: '',
-      remuneracao: '0'
+      remuneracao: ''
     },
     posGrad: {
       value: false,
@@ -1200,7 +1331,6 @@ const bools = ref({
 
 const placeHolders = ref({
   bolsaNome: dataEgresso.value.academico.bolsista.tipo,
-
   areaAtuacao: dataEgresso.value.carreira.area,
   setorAtuacao: dataEgresso.value.carreira.setor,
   faixaSalarial: dataEgresso.value.carreira.faixaSalarial
@@ -1216,11 +1346,11 @@ watch(() => dataEgresso.value.egressoId, () => {
 let jsonResponse: any
 let egressoResponseBack: any
 
-let egressoImageResponse: any
+let egressoImageResponse : any
 let imageEgressoUrl: string
 imageEgressoUrl = ''
-async function handleEgressoImage(id: string) {
-  egressoImageResponse = await egressoStore.fetchImageEgressoUrl(id)
+async function handleEgressoImage (id : string) {
+  egressoImageResponse = await $store.fetchImageEgressoUrl(id)
   imageEgressoUrl = egressoImageResponse
   if (imageEgressoUrl === '') {
     return ''
@@ -1235,13 +1365,13 @@ onMounted(async () => {
   loading.value = false
 })
 
-async function fetchUpdateEgresso() {
+async function fetchUpdateEgresso () {
   // getEgresso
   if (isPublic.value) {
     egressoResponseBack = await fetchPublicEgresso(Number($route.params?.id))
   } else {
     if (storage.has('loggedUser') && storage.getLoggedUser()?.scope !== 'EGRESSO') return
-    egressoResponseBack = await egressoStore.fetchEgresso()
+    egressoResponseBack = await $store.fetchEgresso()
   }
 
   const ResponseBack = egressoResponseBack
@@ -1270,8 +1400,6 @@ async function fetchUpdateEgresso() {
     bolsaId: json.bolsa?.id,
     areaAtuacaoId: json.emprego?.areaAtuacao?.id,
     faixaSalarialId: json.emprego?.faixaSalarial?.id,
-    localPosId: json.titulacao?.empresa?.id,
-    cursoId: json.titulacao?.curso?.id,
     grupos: [''],
 
     geral:
@@ -1391,9 +1519,7 @@ async function fetchUpdateEgresso() {
   })
   formAcademico.value?.setValues({
     academico: dataEgresso.value.academico,
-    'academico.bolsista.tipo': dataEgresso.value.bolsaId,
-    'academico.posGrad.curso': dataEgresso.value.cursoId,
-    'academico.posGrad.local': dataEgresso.value.localPosId
+    'academico.bolsista.tipo': dataEgresso.value.bolsaId
   })
   formCarreira.value?.setValues({
     carreira: dataEgresso.value.carreira,
@@ -1411,13 +1537,13 @@ onMounted(() => {
   estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
 
   cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
+
   watch(paisChange, () => {
-    console.log('pais')
+    console.log('changepais1')
     formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
     formLocalizacao.value?.setFieldValue('localizacao.estado', '')
     if (formLocalizacao.value) {
       dataEgresso.value.localizacao.cidade = ''
-      dataEgresso.value.localizacao.estado = ''
     }
     setTimeout(() => {
       if (cidadeInput?.value) {
@@ -1428,8 +1554,8 @@ onMounted(() => {
   })
 
   watch(estadoChange, () => {
-    console.log('estado')
-    console.log(formLocalizacao.value)
+    console.log('changeestado1')
+    localCarreira?.value?.fetchMoreStates()
     formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
     if (formLocalizacao.value) {
       dataEgresso.value.localizacao.cidade = ''
@@ -1441,8 +1567,23 @@ onMounted(() => {
     }, 10)
   })
 })
+async function handleNewInstituicao (event: any) {
+  const response = await $storeCadastro.cadastrarInstituicao(event.nome)
 
+  if (response?.status === 201) {
+    alert('Instituição cadastrada com sucesso.')
+    dialogInstituicao.value = false
+  }
+}
 
+async function handleNewCurso (event: any) {
+  const response = await $storeCadastro.cadastrarCurso(event.nome)
+
+  if (response?.status === 201) {
+    alert('Instituição cadastrada com sucesso.')
+    dialogCurso.value = false
+  }
+}
 const schemaHeader = object().shape({
   geral: object({
     nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {
@@ -1529,6 +1670,13 @@ const schemaAcademico = object().shape({
     desejaPos: boolean()
   })
 })
+const instituicaoSchema = object().shape({
+  nome: string().required('Insira o nome da instituição')
+})
+
+const cursoSchema = object().shape({
+  nome: string().required('Insira o nome do curso')
+})
 
 const schemaCarreira = object().shape({
   carreira: object({
@@ -1568,30 +1716,30 @@ const profileImageSave = () => {
   }
   return profileImageRef?.value?.imageUploadBack()
 }
-function fetchPublicEgresso(id: number) {
+function fetchPublicEgresso (id: number) {
   if (isSuperUser.value) {
-    return egressoStore.fetchAdminEgresso(id)
+    return $store.fetchAdminEgresso(id)
   }
-  return egressoStore.fetchPublicEgresso(id)
+  return $store.fetchPublicEgresso(id)
 }
-async function atualizarEgresso(data: any) {
+async function atualizarEgresso (data : any) {
   if (isSuperUser.value) {
-    return egressoStore.atualizarEgressoAdmin(data, Number($route.params?.id))
+    return $store.atualizarEgressoAdmin(data, Number($route.params?.id))
   }
-  return await egressoStore.atualizarEgresso(data)
+  return await $store.atualizarEgresso(data)
 }
-async function removeImageEgresso() {
+async function removeImageEgresso () {
   let response = 100
   if (isSuperUser.value) {
-    response = await egressoStore.removeImageEgressoAdmin(Number($route.params?.id))
+    response = await $store.removeImageEgressoAdmin(Number($route.params?.id))
     dataEgresso.value.profileHead.image = ' '
     return response
   }
-  response = await egressoStore.removeImageEgresso()
+  response = await $store.removeImageEgresso()
   dataEgresso.value.profileHead.image = ' '
   return response
 }
-async function softRemoveImageEgresso() {
+async function softRemoveImageEgresso () {
   stagedChanges.value.profileHead.removedImage = true
   dataEgresso.value.profileHead.image = ' '
 }

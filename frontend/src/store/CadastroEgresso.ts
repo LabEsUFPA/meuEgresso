@@ -76,19 +76,19 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
       }
     },
     async fetchAreaEmprego () {
-      const response = await Api.request({
-        method: 'get',
-        route: 'publico/areaEmprego'
-      })
+      // const response = await Api.request({
+      //   method: 'get',
+      //   route: 'publico/areaEmprego'
+      // })
 
-      if (response?.status === 200) {
-        this.areasAtuacao = response.data?.map((elem: any) => {
-          return ({
-            label: elem.nome,
-            value: elem.id
-          })
-        })
-      }
+      // if (response?.status === 200) {
+      //   this.areasAtuacao = response.data?.map((elem: any) => {
+      //     return ({
+      //       label: elem.nome,
+      //       value: elem.id
+      //     })
+      //   })
+      // }
     },
 
     async fetchCotas () {

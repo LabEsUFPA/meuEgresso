@@ -80,21 +80,21 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         })
       }
     },
-    async fetchAreaEmprego () {
-      const response = await Api.request({
-        method: 'get',
-        route: 'publico/areaemprego'
-      })
+    // async fetchAreaEmprego () {
+    //   const response = await Api.request({
+    //     method: 'get',
+    //     route: 'publico/areaemprego'
+    //   })
 
-      if (response?.status === 200) {
-        this.areasAtuacao = response.data?.map((elem: any) => {
-          return ({
-            label: elem.nome,
-            value: elem.id
-          })
-        })
-      }
-    },
+    //   if (response?.status === 200) {
+    //     this.areasAtuacao = response.data?.map((elem: any) => {
+    //       return ({
+    //         label: elem.nome,
+    //         value: elem.id
+    //       })
+    //     })
+    //   }
+    // },
 
     async fetchCotas () {
       const response = await Api.request({
