@@ -157,7 +157,7 @@ public class AuthenticationController {
 	@PostMapping(value = "/register")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO, Optional<String> redirect,
+	public String cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,
 			@RequestHeader("Host") String header)
 			throws NameAlreadyExistsException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
@@ -179,14 +179,14 @@ public class AuthenticationController {
 		}
 
 		usuarioModel.setGrupos(Set.of(Grupos.EGRESSO));
-		mailService.usuarioCadastrado(usuarioModel, redirect.orElse("https://" + header + "/auth/validarEmail"));
+		mailService.usuarioCadastrado(usuarioModel, usuarioDTO.getRedirect().orElse("https://" + header + "/auth/validarEmail"));
 		usuarioService.save(usuarioModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
-	@PostMapping(value = "/validarEmail")
+	@PostMapping(value = "/validarEmail/{tokenAuth}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void validarEmail(@RequestParam String tokenAuth)
+	public void validarEmail(@PathVariable String tokenAuth)
 			throws InvalidRequestException {
 		Map<String, Object> claims = jwtService.extractClains(tokenAuth);
 		if (claims.get("email") instanceof String email) {
