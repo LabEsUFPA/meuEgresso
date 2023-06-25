@@ -112,7 +112,7 @@ public class EmpresaController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarEmpresa(@RequestBody @Valid EmpresaBasicDTO empresaDTO,
 			JwtAuthenticationToken token) throws InvalidRequestException, UnauthorizedRequestException {
-		if (empresaService.existsByIdAndCreatedById(empresaDTO.getId(), jwtService.getIdUsuario(token))) {
+		if (empresaService.existsByIdAndCreatedBy(empresaDTO.getId(), jwtService.getIdUsuario(token))) {
 			EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);
 			empresaService.update(empresaModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();

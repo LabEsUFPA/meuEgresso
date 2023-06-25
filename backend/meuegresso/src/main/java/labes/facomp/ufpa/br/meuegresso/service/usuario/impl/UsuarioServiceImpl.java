@@ -105,8 +105,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-		return usuarioRepository.existsByIdAndCreatedById(id, createdBy);
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+		return usuarioRepository.existsByIdAndCreatedBy(id, createdBy);
 	}
 
 	@Override
@@ -119,7 +119,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	// PageRequest.of(page, size, Sort.by(direction, "u.created_date")
 	@Override
-	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size, String ordenacao) {
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size,
+			String ordenacao) {
 
 		List<Tuple> tupla = usuarioRepository.findBySearch(nomeUsuario, status, ordenacao);
 
