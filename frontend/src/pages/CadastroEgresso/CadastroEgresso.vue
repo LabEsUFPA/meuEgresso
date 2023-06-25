@@ -415,6 +415,10 @@
           text="Campos inválidos ou faltando"
           class="mb-3"
         />
+        <InvalidInsert
+          :text="errorText"
+          :show-alert="error"
+        />
 
         <CustomButton
           color="emerald"
@@ -566,6 +570,8 @@ const estado = ref('')
 const area = ref('')
 const temFoto = ref(false)
 const form = ref<typeof Form | null>(null)
+const errorText = ref('')
+const error = ref(false)
 
 const bools = ref({
   cotista: false,
@@ -684,7 +690,7 @@ async function handleSubmit (values: any) {
   const formData = new FormData()
   formData.append('arquivo', values.geral.foto)
 
-  const status = await $storeCadastro.cadastrarEgresso({
+  const response = await $storeCadastro.cadastrarEgresso({
     temFoto: temFoto.value, // false por padrao
     foto: formData
   }, {
@@ -712,8 +718,10 @@ async function handleSubmit (values: any) {
     titulacao
   })
 
-  if (status !== 201) {
+  if (response.status !== 201) {
     dialogFalha.value = true
+    errorText.value = response.data?.technicalMessage ? response.data?.technicalMessage : 'Ocorreu um problema na requisição'
+    error.value = true
   } else {
     dialogSucesso.value = true
     const token = storage.getToken()
@@ -726,6 +734,7 @@ async function handleSubmit (values: any) {
 
 function handleFail (e: any) {
   camposFaltosos.value = true
+
   const incorrectElements = Object.keys(e.errors)
   const el = document.querySelector(`#${incorrectElements[0].replaceAll('.', '-')}`)
   VueScrollTo.scrollTo(el, 800, { offset: -300 })
