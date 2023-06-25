@@ -148,14 +148,14 @@ export namespace models {
     empresa: {
       id: number
       nome: string
-      endereco: {
-        id: number
-        cidade: string
-        estado: string
-        pais: string
-        latitude: number
-        longitude: number
-      }
+    },
+    endereco: {
+      id: number
+      cidade: string
+      estado: string
+      pais: string
+      latitude: number
+      longitude: number
     }
   }
 

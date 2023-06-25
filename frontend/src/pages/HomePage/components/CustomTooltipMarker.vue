@@ -7,9 +7,9 @@
         class="inline text-gray-400"
         size="18"
       />
-      {{ egressos[0].empresa.endereco.cidade }},
-      {{ State.getStateByCodeAndCountry(egressos[0].empresa.endereco.estado, egressos[0].empresa.endereco.pais)?.name }},
-      {{ Country.getCountryByCode(egressos[0].empresa.endereco.pais)?.name }}
+      {{ egressos[0].endereco.cidade }},
+      {{ State.getStateByCodeAndCountry(egressos[0].endereco.estado, egressos[0].endereco.pais)?.name }},
+      {{ Country.getCountryByCode(egressos[0].endereco.pais)?.name }}
     </div>
     <div class="font-bold italic text-right text-[16px]">
       {{ egressos.length }} egresso{{ egressos.length === 1 ? '' : 's' }}
