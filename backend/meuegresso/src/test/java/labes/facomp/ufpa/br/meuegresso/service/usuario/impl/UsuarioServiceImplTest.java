@@ -102,6 +102,26 @@ class UsuarioServiceImplTest {
 	}
 
 	@Test
+	void test_Given_Valid_Email_Should_Return_True() {
+		Mockito.when(usuarioRepository.existsByEmail(anyString())).thenReturn(true);
+
+		boolean userindb = usuarioService.existsByEmail("john@example.com");
+
+		assertTrue(userindb);
+		Mockito.verify(usuarioRepository).existsByEmail(anyString());
+	}
+
+	@Test
+	void test_Given_Invalid_Email_Should_Return_False() {
+		Mockito.when(usuarioRepository.existsByEmail(anyString())).thenReturn(false);
+
+		boolean userindb = usuarioService.existsByEmail("john2@example.com");
+
+		assertFalse(userindb);
+		Mockito.verify(usuarioRepository).existsByEmail(anyString());
+	}
+
+	@Test
 	void test_Given_Valid_Username_Should_Return_True() {
 		Mockito.when(usuarioRepository.existsByUsernameIgnoreCase(anyString())).thenReturn(true);
 

@@ -15,8 +15,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.EmailAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
@@ -72,11 +75,40 @@ public class UsuarioController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarUsuario(
 			@RequestBody @Valid UsuarioDTO usuarioDTO, JwtAuthenticationToken token)
-			throws UnauthorizedRequestException, InvalidRequestException {
+			throws UnauthorizedRequestException, InvalidRequestException, NameAlreadyExistsException,
+			EmailAlreadyExistsException {
 		if (jwtService.getIdUsuario(token).equals(usuarioDTO.getId())) {
-			UsuarioModel usuarioModel = usuarioService.findById(jwtService.getIdUsuario(token));
-			mapper.map(usuarioDTO, usuarioModel);
-			usuarioService.update(usuarioModel);
+
+			UsuarioModel usuarioModelBack = usuarioService.findById(jwtService.getIdUsuario(token));
+			UsuarioModel usuarioModelFront = mapper.map(usuarioDTO, UsuarioModel.class);
+
+			if (usuarioModelFront.getNome() != null) {
+				usuarioModelBack.setNome(usuarioModelFront.getNome());
+			}
+
+			if (usuarioModelFront.getEmail() != null) {
+				if (!usuarioModelBack.getEmail().equals(usuarioModelFront.getEmail())
+						&& !(usuarioService.existsByEmail(usuarioModelFront.getEmail()))) {
+					throw new EmailAlreadyExistsException();
+				}
+				usuarioModelBack.setEmail(usuarioModelFront.getEmail());
+			}
+
+			if (usuarioModelFront.getUsername() != null) {
+				if (!usuarioModelBack.getUsername().equals(usuarioModelFront.getUsername())
+						&& !usuarioService.existsByUsername(usuarioModelFront.getUsername())) {
+					throw new NameAlreadyExistsException(
+							String.format(ErrorType.USER_001.getMessage(), usuarioModelFront.getUsername()),
+							ErrorType.USER_001.getInternalCode());
+				}
+				usuarioModelBack.setUsername(usuarioModelFront.getUsername());
+			}
+
+			if (usuarioModelFront.getPassword() != null) {
+				usuarioModelBack.setPassword(usuarioModelFront.getPassword());
+			}
+
+			usuarioService.update(usuarioModelBack);
 			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();

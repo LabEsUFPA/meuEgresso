@@ -73,6 +73,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
+	public boolean existsByEmail(String email) {
+		return usuarioRepository.existsByEmail(email);
+	}
+
+	@Override
 	public UsuarioModel findById(Integer idUsuario) {
 		return usuarioRepository.findById(idUsuario).orElseThrow();
 	}
@@ -119,7 +124,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	// PageRequest.of(page, size, Sort.by(direction, "u.created_date")
 	@Override
-	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size, String ordenacao) {
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size,
+			String ordenacao) {
 
 		List<Tuple> tupla = usuarioRepository.findBySearch(nomeUsuario, status, ordenacao);
 
