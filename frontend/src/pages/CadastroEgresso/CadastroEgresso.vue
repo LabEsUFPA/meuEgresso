@@ -768,7 +768,7 @@ async function handleNewCurso (event: any) {
   const response = await $storeCadastro.cadastrarCurso(event.nome)
 
   if (response?.status === 201) {
-    alert('Instituição cadastrada com sucesso.')
+    alert('Curso cadastrado com sucesso.')
     dialogCurso.value = false
   }
 }

@@ -21,7 +21,7 @@
       :options="states"
       v-model:value="estado"
       @change="handleChangeLocal('estado', $event)"
-      :is-fetching="pais.isFetching"
+      :is-fetching="estado.isFetching"
       @typing="fetchStates($event, true)"
       @infinite-scroll="fetchMoreStates"
       infinite
@@ -32,7 +32,9 @@
       name="localizacao.cidade"
       label="Cidade"
       :options="cities"
-      :is-fetching="pais.isFetching"
+      v-model:value="cidade"
+      @change="handleChangeLocal('cidade', $event)"
+      :is-fetching="cidade.isFetching"
       @typing="fetchCities($event, true)"
       @infinite-scroll="fetchMoreCities"
       infinite
@@ -119,11 +121,15 @@ async function handleChangeLocal (name: string, event: any) {
 
       console.log('local')
       console.log(pais.value)
+      fetchMoreStates()
+
       // $emit('paisChange')
       break
     case 'estado':
       estadoChange.value = !estadoChange.value
       estado.value.id = event
+      console.log('state')
+      fetchMoreCities()
       // $emit('estadoChange')
       break
   }
@@ -131,11 +137,8 @@ async function handleChangeLocal (name: string, event: any) {
 
 const countries = ref<ComplexOpts[]>([])
 async function fetchCountries (query: string, clean: boolean) {
-  console.log('aqui13')
   if (clean) {
     // $emit('paisChange')
-
-    console.log('aqui3')
     pais.value.id = 0
     pais.value.page = 0
 
@@ -211,17 +214,17 @@ async function fetchCities (query: string, clean: boolean) {
 }
 
 async function fetchMoreCities () {
-  fetchStates(cidade.value.query, false)
+  console.log('123')
+  fetchCities(cidade.value.query, false)
 }
 
 onMounted(() => {
+  fetchMoreCounties()
   const estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
 
   const cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
 
   watch(paisChange, () => {
-    console.log('changepais1')
-
     setTimeout(() => {
       if (cidadeInput?.value) {
         cidadeInput.value = ''
@@ -231,7 +234,6 @@ onMounted(() => {
   })
 
   watch(estadoChange, () => {
-    console.log('changeestado1')
     setTimeout(() => {
       if (cidadeInput?.value) {
         cidadeInput.value = ''

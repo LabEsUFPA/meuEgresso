@@ -535,12 +535,7 @@
             @invalid-submit="onInvalid"
             :validation-schema="schemaCarreira"
           >
-            <FolderCarreira
-              :is-input="dataEgresso.carreira.isInput"
-              :area-atuacao-holder="placeHolders.areaAtuacao"
-              :setor-atuacao-holder="placeHolders.setorAtuacao"
-              :faixa-salarial-holder="placeHolders.faixaSalarial"
-            >
+            <FolderSection class="mt-6">
               <template #EditButton>
                 <h1 class="relative">
                   <ButtonEdit
@@ -557,53 +552,122 @@
                   />
                 </h1>
               </template>
-              <template #NonInputData>
-                <CustomPerfilData
-                  type="text"
-                  class="mb-10"
-                  :vmodel="dataEgresso.carreira.area"
-                  name="carreira.area"
-                  label="Área de Atuação"
-                  placeholder="Área"
-                  icon-path=""
-                />
+              <template #title>
+                <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
+                  <SvgIcon
+                    type="mdi"
+                    size="20"
+                    class="inline mr-2"
+                    :path="mdiBriefcase"
+                  />
+                  Carreira
+                </h1>
+              </template>
 
-                <CustomPerfilData
-                  type="text"
-                  class="mb-10"
-                  :vmodel="dataEgresso.carreira.setor"
-                  name="carreira.setor"
-                  label="Setor de Atuação"
-                  placeholder="Setor"
-                  icon-path=""
-                />
+              <template #default>
+                <div v-if="!dataEgresso.carreira.isInput">
+                  <CustomPerfilData
+                    type="text"
+                    class="mb-10"
+                    :vmodel="dataEgresso.carreira.area"
+                    name="carreira.area"
+                    label="Área de Atuação"
+                    placeholder="Área"
+                    icon-path=""
+                  />
 
-                <CustomPerfilData
-                  type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.carreira.empresa"
-                  name="carreira.empresa"
-                  label="Empresa Atual"
-                  placeholder="Empresa"
-                  icon-path=""
-                />
-                <div v-if="dataEgresso.carreira.area === '' ">
-                  <div>
-                    <div class="text-gray-400 text-center mb-6 mt-12">
-                      <SvgIcon
-                        type="mdi"
-                        size="30"
-                        class="inline"
-                        :path="mdiAlertCircleOutline"
-                      />
-                      <div class="mt-4">
-                        Sem dados cadastrados
+                  <CustomPerfilData
+                    type="text"
+                    class="mb-10"
+                    :vmodel="dataEgresso.carreira.setor"
+                    name="carreira.setor"
+                    label="Setor de Atuação"
+                    placeholder="Setor"
+                    icon-path=""
+                  />
+
+                  <CustomPerfilData
+                    type="text"
+                    class="mb-5"
+                    :vmodel="dataEgresso.carreira.empresa"
+                    name="carreira.empresa"
+                    label="Empresa Atual"
+                    placeholder="Empresa"
+                    icon-path=""
+                  />
+                  <div v-if="dataEgresso.carreira.area === '' ">
+                    <div>
+                      <div class="text-gray-400 text-center mb-6 mt-12">
+                        <SvgIcon
+                          type="mdi"
+                          size="30"
+                          class="inline"
+                          :path="mdiAlertCircleOutline"
+                        />
+                        <div class="mt-4">
+                          Sem dados cadastrados
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                <div v-show="dataEgresso.carreira.isInput">
+                  <CustomSelect
+                    class="mb-5"
+                    name="carreira.area"
+                    label="Área de Atuação"
+                    :placeholder="dataEgresso.carreira.area"
+                    @change="area = $event"
+                    :options="selectOpts.areaAtuacao"
+                    required
+                    :pre-filled="true"
+                  />
+
+                  <CustomSelect
+                    class="mb-5"
+                    name="carreira.setor"
+                    label="Setor de Atuação"
+                    :placeholder="dataEgresso.carreira.setor"
+                    :options="selectOpts.setorAtuacao"
+                    :required="area !== 'Desempregado'"
+                    :disabled="area === 'Desempregado'"
+                    :pre-filled="true"
+                  />
+                  <CustomSelect
+                    name="carreira.empresa"
+                    label="Empresa"
+                    :placeholder="dataEgresso.carreira.empresa"
+                    :options="$storeCadastro.instituicoes"
+                    :required="area !== 'Desempregado'"
+                    :disabled="area === 'Desempregado'"
+                    :is-fetching="$storeCadastro.isFetchingUniversidades"
+                    @typing="$storeCadastro.fetchUniversidadesAsync($event, true)"
+                    @infinite-scroll="$storeCadastro.fetchMoreUniversidadesAsync"
+                    infinite
+                    id="empresaLocal"
+                  />
+                  <button
+                    type="button"
+                    class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
+                    :disabled="!bools.posGrad"
+                    @click="dialogEmpresa = true"
+                  >
+                    Não encontrou sua empresa? Clique aqui
+                  </button>
+
+                  <CustomSelect
+                    class="mb-5"
+                    name="carreira.faixaSalarial"
+                    label="Faixa Salarial"
+                    :placeholder="dataEgresso.carreira.faixaSalarial"
+                    :options="$store.faixasSalariais"
+                    :required="area !== 'Desempregado'"
+                    :disabled="area === 'Desempregado'"
+                    :pre-filled="true"
+                  />
+                </div>
               </template>
-            </FolderCarreira>
+            </FolderSection>
           </Form>
           <Form
             ref="formLocalizacao"
@@ -798,7 +862,7 @@
       </div>
     </CustomDialog>
     <CustomDialog v-model="dialogInstituicao">
-      <div class="h-full flex justify-center gap-1 flex-col items-center">
+      <div class="h-full flex justify-center gap-10 flex-col items-center">
         <div class="text-2xl font-semibold text-cyan-800">
           Cadastrar instituição
         </div>
@@ -806,18 +870,12 @@
         <Form
           :validation-schema="instituicaoSchema"
           @submit="handleNewInstituicao"
-          class="flex flex-col items-center gap-1.5 mt-[-5px]"
+          class="flex flex-col items-center gap-4"
         >
           <CustomInput
             name="nome"
             label="Nome da instituição de ensino"
             placeholder="Universidade Federal do Pará (UFPA)"
-          />
-          <LocalizacaoSelect
-            class="mb-1"
-            :pais-holder="dataEgresso.localizacao.pais"
-            :estado-holder="dataEgresso.localizacao.estado"
-            :cidade-holder="dataEgresso.localizacao.cidade"
           />
 
           <CustomButton type="submit">
@@ -828,7 +886,7 @@
     </CustomDialog>
 
     <CustomDialog v-model="dialogCurso">
-      <div class="h-full flex justify-center gap-1 flex-col items-center">
+      <div class="h-full flex justify-center gap-10 flex-col items-center">
         <div class="text-2xl font-semibold text-cyan-800">
           Cadastrar curso
         </div>
@@ -836,6 +894,29 @@
         <Form
           :validation-schema="cursoSchema"
           @submit="handleNewCurso"
+          class="flex flex-col items-center gap-4"
+        >
+          <CustomInput
+            name="nome"
+            label="Nome da curso"
+            placeholder="Engenharia de software"
+          />
+
+          <CustomButton type="submit">
+            Cadastrar
+          </CustomButton>
+        </Form>
+      </div>
+    </CustomDialog>
+    <CustomDialog v-model="dialogEmpresa">
+      <div class="h-full flex justify-center gap-1 flex-col items-center">
+        <div class="text-2xl font-semibold text-cyan-800">
+          Cadastrar empresa
+        </div>
+
+        <Form
+          :validation-schema="empresaSchema"
+          @submit="handleNewEmpresa"
           class="flex flex-col items-center gap-1.5 mt-[-5px]"
         >
           <CustomInput
@@ -879,7 +960,6 @@ import { Form } from 'vee-validate'
 import { object, string, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
 import CustomDialog from 'src/components/CustomDialog.vue'
-import FolderCarreira from './components/FolderCarreira.vue'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 
 import FolderAdicionais from './components/FolderAdicionais.vue'
@@ -897,7 +977,8 @@ import {
   mdiMapMarker,
   mdiAlertCircleOutline,
   mdiSchool,
-  mdiLoading
+  mdiLoading,
+  mdiBriefcase
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
 
@@ -905,6 +986,7 @@ const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const dialogInstituicao = ref(false)
 const dialogCurso = ref(false)
+const dialogEmpresa = ref(false)
 const $route = useRoute()
 const $store = usePerfilEgressoStore()
 const $storeCadastro = useCadastroEgressoStore()
@@ -920,6 +1002,7 @@ const missingDigits = ref(0)
 const loading = ref(true)
 const paisChange = ref(false)
 const estadoChange = ref(false)
+const area = ref('')
 
 const localCarreira = ref<typeof LocalizacaoSelect | null>(null)
 
@@ -1144,37 +1227,25 @@ async function handleSubmitCarreira (values: any) {
         empresaId: 1
       },
       setorAtuacao: {
-        id: 1,
-        nome: ''
+        id: values.carreira.setorId
       },
       areaAtuacao: {
-        id: 1,
-        nome: ''
+        id: values.carreira.areaId
       },
       faixaSalarial: {
-        id: 2
+        id: values.carreira.faixaSalarial
 
       },
-      endereco: {
-        id: 6,
-        cidade: '',
-        estado: '',
-        pais: ''
-      },
+
       empresa: {
-        id: 1,
-        nome: '',
-        faixaSalarial: {
-          id: 2
-        }
-
+        id: values.carreira.empresa
       }
 
     }
   }
   if (values.carreira.area !== 'Desempregado') {
-    jsonResponse.emprego.empresa.nome = values.carreira.empresa
-    jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
+    // jsonResponse.emprego.empresa.nome = values.carreira.empresa
+    // jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
     // let areaNome = ''
     // $store.areasAtuacao.forEach(option => {
     //   if (option.value === values.carreira.area) {
@@ -1183,8 +1254,8 @@ async function handleSubmitCarreira (values: any) {
     //   }
     // })
     // jsonResponse.emprego.areaAtuacao.nome = areaNome
-    jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
-    jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
+    // jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
+    // jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
   } else {
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego = null
@@ -1589,6 +1660,7 @@ onMounted(() => {
   })
 })
 async function handleNewInstituicao (event: any) {
+  console.log(event)
   const response = await $storeCadastro.cadastrarInstituicao(event.nome)
 
   if (response?.status === 201) {
@@ -1601,8 +1673,16 @@ async function handleNewCurso (event: any) {
   const response = await $storeCadastro.cadastrarCurso(event.nome)
 
   if (response?.status === 201) {
-    alert('Instituição cadastrada com sucesso.')
+    alert('Curso cadastrado com sucesso.')
     dialogCurso.value = false
+  }
+}
+async function handleNewEmpresa (event: any) {
+  const response = await $storeCadastro.cadastrarEmpresa(event.nome, event.localizacao.pais, event.localizacao.estado, event.localizacao.cidade)
+
+  if (response?.status === 201) {
+    alert('Empresa cadastrada com sucesso.')
+    dialogEmpresa.value = false
   }
 }
 const schemaHeader = object().shape({
@@ -1697,6 +1777,9 @@ const instituicaoSchema = object().shape({
 
 const cursoSchema = object().shape({
   nome: string().required('Insira o nome do curso')
+})
+const empresaSchema = object().shape({
+  nome: string().required('Insira o nome da empresa')
 })
 
 const schemaCarreira = object().shape({

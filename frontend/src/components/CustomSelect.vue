@@ -220,7 +220,7 @@ onMounted(() => {
     } else {
       console.log('click')
       $emit('typing', 'event')
-      // $emit('change', model.value)
+      $emit('change', model.value)
     }
     if (input.value) {
       input.value.focus()
