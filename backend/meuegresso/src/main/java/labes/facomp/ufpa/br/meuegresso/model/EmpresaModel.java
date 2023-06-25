@@ -1,14 +1,10 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +28,4 @@ public class EmpresaModel extends Auditable {
     @Column(name = "nome_empresa", unique = true, nullable = false, length = 130)
     private String nome;
 
-    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-    @JoinColumn(name = "endereco_empresa", unique = false, nullable = true)
-    private EnderecoModel endereco;
 }

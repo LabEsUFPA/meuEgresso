@@ -93,9 +93,9 @@ public class GraficoPubController {
 		for (int i = 0; i < lista.size(); i++) {
 			umEndereco = new ArrayList<>();
 			umEndereco.add(lista.get(i).getEmpresa().getNome());
-			umEndereco.add(lista.get(i).getEmpresa().getEndereco().getPais());
-			umEndereco.add(lista.get(i).getEmpresa().getEndereco().getEstado());
-			umEndereco.add(lista.get(i).getEmpresa().getEndereco().getCidade());
+			umEndereco.add(lista.get(i).getEndereco().getPais());
+			umEndereco.add(lista.get(i).getEndereco().getEstado());
+			umEndereco.add(lista.get(i).getEndereco().getCidade());
 			enderecos.add(umEndereco);
 		}
 

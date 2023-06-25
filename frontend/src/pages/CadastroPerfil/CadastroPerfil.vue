@@ -28,6 +28,7 @@
                 class-helper-text="text-gray-600"
                 :required="true"
                 :icon-path="mdiAccount"
+                :max-length="100"
               />
               <CustomInput
                 name="username"
@@ -36,6 +37,7 @@
                 class-helper-text="text-gray-600"
                 :required="true"
                 :icon-path="mdiAccount"
+                :max-length="50"
               />
             </div>
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
@@ -58,6 +60,7 @@
                 helper-text="Informe o mesmo e-mail que está cadastrado no SIGAA"
                 class-helper-text="text-gray-600"
                 :icon-path="mdiEmail"
+                :max-length="50"
               />
             </div>
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
@@ -69,6 +72,7 @@
                 :type="showPassword? 'text' : 'password'"
                 :required="true"
                 :icon-path="mdiLock"
+                :max-length="80"
               />
               <CustomInput
                 name="confirmationPassword"
@@ -76,6 +80,7 @@
                 :type="showPassword? 'text' : 'password'"
                 :required="true"
                 :icon-path="mdiLock"
+                :max-length="80"
               />
             </div>
             <CustomCheckbox
@@ -150,7 +155,7 @@ const schema = object().shape({
   nome: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
   username: string().required('Informe um nome de usuário').trim().matches(/^[A-Za-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
   registration: string().max(12).matches(/^(\d{12})?$/),
-  email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.[a-zA-Z]{2,}))?$/, 'Email inválido'),
+  email: string().optional().matches(/^([A-Za-z\d]+([._][A-Za-z\d]+)*@[A-Za-z\d]+(.[A-Za-z\d]+)*(.[A-z]{2,}))?$/, 'Email inválido'),
   password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida'),
   confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida')
 })
