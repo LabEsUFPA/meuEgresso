@@ -15,6 +15,14 @@ export default [
         }
       },
       {
+        path: '/cadastro/:id',
+        component: async () => await import('src/pages/CadastroEgresso/CadastroEgresso.vue'),
+        meta: {
+          requiresAuthAdmin: true,
+          allowedScopes: ['SECRETARIO', 'ADMIN']
+        }
+      },
+      {
         path: '/cadastro-perfil',
         component: async () => await import('src/pages/CadastroPerfil/CadastroPerfil.vue')
       },
