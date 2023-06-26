@@ -23,6 +23,7 @@ export default class CookieService {
   }
 
   remove (key: string): void {
-    document.cookie = `${key}=; Max-Age=0`
+    document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    console.log(key, document.cookie);
   }
 }
