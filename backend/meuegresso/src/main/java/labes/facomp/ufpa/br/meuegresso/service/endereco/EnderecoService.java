@@ -59,7 +59,7 @@ public interface EnderecoService {
 	 * @param createdBy
 	 * @return
 	 */
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	EnderecoModel findByCidadeAndEstadoAndPais(String cidade, String estado, String pais);
 }

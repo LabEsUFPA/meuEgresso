@@ -228,7 +228,7 @@ public class EgressoController {
                     ErrorType.REPORT_007.getInternalCode());
         }
 
-        if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
+        if (egressoService.existsByIdAndCreatedBy(egresso.getId(), jwtService.getIdUsuario(token))) {
 
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);

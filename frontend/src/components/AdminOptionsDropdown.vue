@@ -208,23 +208,9 @@ async function excluiCadastro () {
 
   if (props.idEgresso) {
     const codeDelete = await $store.deleteUsuario(props.idEgresso)
-
-    if (props.status === 'completo') {
-      // Desvalida o usuário completo
-      const codeDesvalida = await $store.toggleValidacaoUsuario(props.id)
-
-      if (codeDelete === 200 && codeDesvalida === 201) {
-        $emits('updateData')
-        isLoadingAction.value = false
-      }
-    } else {
-      // Desativa o usuário pendente
-      const codeDesativa = await $store.toggleAtivacaoUsuario(props.id)
-
-      if (codeDelete === 200 && codeDesativa === 201) {
-        $emits('updateData')
-        isLoadingAction.value = false
-      }
+    if (codeDelete === 204 || codeDelete === 200) {
+      $emits('updateData')
+      isLoadingAction.value = false
     }
   }
 }

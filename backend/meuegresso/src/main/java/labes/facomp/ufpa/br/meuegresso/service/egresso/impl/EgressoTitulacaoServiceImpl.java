@@ -58,9 +58,8 @@ public class EgressoTitulacaoServiceImpl implements EgressoTitulacaoService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedById(EgressoTitulacaoModelId id, Integer createdBy) {
-        return egressoTitulacaoRepository.existsByIdAndCreatedById(id, createdBy);
+    public boolean existsByIdAndCreatedBy(EgressoTitulacaoModelId id, Integer createdBy) {
+        return egressoTitulacaoRepository.existsByIdAndCreatedBy(id, createdBy);
     }
-
 
 }

@@ -66,7 +66,7 @@ class UsuarioRepositoryTest {
         usuario2.setEmail("jocke@example.com");
         usuario2.setPassword("password124");
         usuario2.setGrupos(Set.of(Grupos.ADMIN));
-        usuario2.setCreatedBy(usuario);
+        usuario2.setCreatedBy(usuario.getId());
         usuarioRepository.save(usuario2);
 
         usuarios.add(usuario);
@@ -100,17 +100,17 @@ class UsuarioRepositoryTest {
 
     @Test
     void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_True_If_Right() {
-        Mockito.when(usuarioRepository.existsByIdAndCreatedById(anyInt(), anyInt())).thenReturn(true);
+        Mockito.when(usuarioRepository.existsByIdAndCreatedBy(anyInt(), anyInt())).thenReturn(true);
 
-        assertTrue(usuarioRepository.existsByIdAndCreatedById(2, 1));
+        assertTrue(usuarioRepository.existsByIdAndCreatedBy(2, 1));
 
     }
 
     @Test
     void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_False_If_Wrong() {
-        Mockito.when(usuarioRepository.existsByIdAndCreatedById(anyInt(), anyInt())).thenReturn(false);
+        Mockito.when(usuarioRepository.existsByIdAndCreatedBy(anyInt(), anyInt())).thenReturn(false);
 
-        assertFalse(usuarioRepository.existsByIdAndCreatedById(1, 2));
+        assertFalse(usuarioRepository.existsByIdAndCreatedBy(1, 2));
     }
 
     @Test

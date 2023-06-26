@@ -13,7 +13,7 @@ public interface EgressoEmpresaRepository extends CrudRepository<EgressoEmpresaM
 
     List<EgressoEmpresaModel> findAll();
 
-    boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy);
+    boolean existsByIdAndCreatedBy(EgressoEmpresaModelId id, Integer createdBy);
 
     @Query(value = "select new labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EmpresaGraficoDTO(e.nome empresa, count(eg) quantidadeEgresso) from empresa e inner join egresso_empresa ee on e.id = ee.empresa inner join egresso eg on eg.id = ee.id.egressoId group by e.nome")
     List<EmpresaGraficoDTO> countEgressoByEmpresas();
