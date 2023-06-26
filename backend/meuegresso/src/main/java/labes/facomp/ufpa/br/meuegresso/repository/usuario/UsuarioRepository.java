@@ -26,7 +26,7 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	<T> Optional<T> findByEmailIgnoreCase(String email, Class<T> type);
 
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	boolean existsByUsernameIgnoreCase(String username);
 
@@ -84,8 +84,8 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			END) in (:status)
 			AND u.nome_usuario ilike %:nomeUsuario%
 			ORDER BY
-				CASE WHEN :ordenacao = 'ASC'  THEN u.created_date END ASC,
-			    CASE WHEN :ordenacao = 'DESC' THEN u.created_date END DESC
+			CASE WHEN :ordenacao = 'ASC'  THEN u.created_date END ASC,
+			CASE WHEN :ordenacao = 'DESC' THEN u.created_date END DESC
 			""")
 	List<Tuple> findBySearch(
 			@Param("nomeUsuario") String nomeUsuario,

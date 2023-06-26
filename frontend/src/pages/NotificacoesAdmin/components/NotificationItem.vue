@@ -1,39 +1,25 @@
 <template>
-  <div class="flex flex-col w-[960px] bg-white mx-4 sm:mx-6">
-    <div :class="['flex', 'gap-4', 'px-6', 'sm:px-8', 'pt-8', 'sm:pt-8', 'pb-8', 'items-center', 'border-b-[1px]', 'border-b-gray-200']">
-      <div :class="['shrink-0', 'p-2', 'rounded-3xl', 'text-white', getStatusColor(status)]">
+  <div class="flex sm:grid flex-col gap-2 sm:gap-0 sm:grid-cols-4 w-full px-6 sm:px-8 py-3 border-gray-200 border-b-[1px] items-start sm:items-center">
+    <div class="flex gap-4 col-span-3 items-center justify-center sm:justify-start">
+      <div :class="['shrink-0', 'p-2', 'rounded-full', 'text-white', getStatusColor(status)]">
         <SvgIcon
           type="mdi"
           size="21"
           :path="defineStatus(status)"
         />
       </div>
-
-      <div class="flex flex-col flex-grow text-cyan-800">
-        <div class="flex items-center">
-          <p class="text-sm sm:text-lg font-medium leading-tight">
-            {{ nome }}
-          </p>
-          <p class="text-sm sm:text-lg px-2 font-medium-light leading-tight">
-            {{ defineDescricao(status) }}
-          </p>
-        </div>
-      </div>
-
-      <div class="w-200 flex text-gray-400">
-        <p class="text-sm sm:text-lg px-20 font-medium-light leading-tight">
-          {{ dataModificacao.split('-').reverse().join('/') }}
-        </p>
-        <!--
-        <SvgIcon
-          type="mdi"
-          size="21"
-          :path="mdiChevronRight"
-          class="text-cyan-600"
-        />
-        -->
+      <div class="flex flex-col sm:flex-row gap-0 sm:gap-1 justify-center">
+        <h1 class="text-cyan-800 font-normal">
+          {{ nome }}
+        </h1>
+        <h1 class="text-gray-400 text-sm sm:text-base font-normal">
+          {{ defineDescricao(status) }}
+        </h1>
       </div>
     </div>
+    <h1 class="text-gray-400 text-sm sm:text-base font-normal self-end sm:self-center">
+      {{ dataModificacao }}
+    </h1>
   </div>
 </template>
 

@@ -103,12 +103,13 @@ class EgressoControllerTest extends Configuracao {
 
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername("username");
-                usuarioModel.setNome("nome_test");
+                usuarioModel.setNome("nome_test asdsad");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
                 mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                                 .contentType(MediaType.APPLICATION_JSON)
+                                .header("Host", "localhost:15000")
                                 .content(objectMapper.writeValueAsString(usuarioModel)))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isCreated())

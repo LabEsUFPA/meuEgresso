@@ -81,7 +81,7 @@ public interface UsuarioService extends UserDetailsService {
 	 * @param createdBy
 	 * @return {@link boolean}
 	 */
-	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	public boolean existsByUsername(String username);
 
@@ -97,7 +97,8 @@ public interface UsuarioService extends UserDetailsService {
 	 * @author Bruno Eiki
 	 */
 
-	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size, String ordenacao);
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size,
+			String ordenacao);
 
 	/**
 	 * Método responsável por retornar um mapa com informações

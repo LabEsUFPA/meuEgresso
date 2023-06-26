@@ -19,7 +19,7 @@ public interface TitulacaoRepository extends CrudRepository<TitulacaoModel, Inte
 
     List<TitulacaoModel> findAll();
 
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+    boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
     Optional<TitulacaoModel> findByNomeIgnoreCase(String nome);
 }

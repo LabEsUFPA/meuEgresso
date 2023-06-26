@@ -37,6 +37,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioRegistro;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.ExpireRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
@@ -45,12 +46,14 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoValidoModel;
 import labes.facomp.ufpa.br.meuegresso.model.RecuperacaoSenhaModel;
+import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoValidoService;
 import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
 import labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha.RecuperacaoSenhaService;
+import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -78,13 +81,15 @@ public class AuthenticationController {
 
 	private final TokenProperties tokenProperties;
 
+	private final StatusUsuarioService statusUsuarioService;
+
 	private final EgressoValidoService egressosValidosService;
 
 	private final AuthenticationManager authenticationManager;
 
 	private final RecuperacaoSenhaService recuperacaoSenhaService;
 
-	private final String redirect = "https://%s/auth/validarEmail";
+	private static final String REDIRECT = "https://%s/auth/validarEmail";
 
 	/**
 	 * Endpoint responsavel por autentica um determinado usuário.
@@ -159,7 +164,7 @@ public class AuthenticationController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,
-			@RequestHeader("Host") String header)
+			@RequestHeader("Host") String host)
 			throws NameAlreadyExistsException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
 			throw new NameAlreadyExistsException(
@@ -168,7 +173,7 @@ public class AuthenticationController {
 		}
 		mapper.getConfiguration().setSkipNullEnabled(true);
 
-		final UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
+		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 
 		EgressoValidoModel egressoValido;
 		try {
@@ -181,8 +186,11 @@ public class AuthenticationController {
 
 		usuarioModel.setGrupos(Set.of(Grupos.EGRESSO));
 		mailService.usuarioCadastrado(usuarioModel,
-				usuarioDTO.getRedirect().orElse(String.format(redirect, header)));
-		usuarioService.save(usuarioModel);
+				usuarioDTO.getRedirect().orElse(String.format(REDIRECT, host)));
+		usuarioModel = usuarioService.save(usuarioModel);
+		statusUsuarioService
+				.save(StatusUsuarioModel.builder().usuarioId(usuarioModel.getId())
+						.nome(usuarioModel.getNome()).status(UsuarioStatus.INCOMPLETO).build());
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
@@ -202,10 +210,10 @@ public class AuthenticationController {
 	@PostMapping(value = "/solicitarNovaValidacaoEmail")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void reenviarValidacaoEmail(@RequestBody AuthRecoveryPasswordRequest request,
-			@RequestHeader("Host") String header) {
+			@RequestHeader("Host") String host) {
 		UsuarioModel usuarioModel = usuarioService.findByEmail(request.getEmail());
 		mailService.reenviarValidacaoEmail(usuarioModel,
-				request.getRedirect().orElse(String.format(redirect, header)));
+				request.getRedirect().orElse(String.format(REDIRECT, host)));
 	}
 
 	@PostMapping(value = "/recoveryPassword/{token}")
@@ -228,9 +236,9 @@ public class AuthenticationController {
 	@PostMapping(value = "/recoveryPassword")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public ResponseType solicitacaoRecuperarSenha(@RequestBody AuthRecoveryPasswordRequest authPassReq,
-			@RequestHeader("Host") String header) {
+			@RequestHeader("Host") String host) {
 		recuperacaoSenhaService.cadastrarSolicitacaoRecuperacao(authPassReq.getEmail(),
-				authPassReq.getRedirect().orElse("https://" + header));
+				authPassReq.getRedirect().orElse("https://" + host));
 		return ResponseType.SOLICITACAO_REALIZADA_SUCESSO;
 	}
 

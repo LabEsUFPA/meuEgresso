@@ -60,7 +60,7 @@ public interface EmpresaService {
 	 * @param createdBy
 	 * @return
 	 */
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	public EmpresaModel findByNome(String nome);
 

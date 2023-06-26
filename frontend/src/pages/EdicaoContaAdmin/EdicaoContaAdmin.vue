@@ -33,12 +33,14 @@
                 label="Nome Completo"
                 :required="true"
                 :icon-path="mdiAccount"
+                :max-length="100"
               />
               <CustomInput
                 name="username"
                 label="Usuário"
                 :required="true"
                 :icon-path="mdiAccount"
+                :max-length="50"
               />
             </div>
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
@@ -48,6 +50,7 @@
                 type="email"
                 :required="true"
                 :icon-path="mdiEmail"
+                :max-length="50"
               />
               <CustomInput
                 name="confirmationEmail"
@@ -56,6 +59,7 @@
                 error-message="Os e-mails informados são diferentes"
                 :required="true"
                 :icon-path="mdiEmail"
+                :max-length="50"
               />
             </div>
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
@@ -65,6 +69,7 @@
                 type="password"
                 :required="true"
                 :icon-path="mdiLock"
+                :max-length="80"
               />
               <CustomInput
                 name="confirmationPassword"
@@ -73,6 +78,7 @@
                 error-message="As senhas informadas são diferentes"
                 :required="true"
                 :icon-path="mdiLock"
+                :max-length="80"
               />
             </div>
           </div>

@@ -27,9 +27,12 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.MatriculaAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
@@ -43,6 +46,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.PalestraModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
@@ -51,6 +55,7 @@ import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.endereco.EnderecoService;
 import labes.facomp.ufpa.br.meuegresso.service.setoratuacao.SetorAtuacaoService;
+import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.titulacao.TitulacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -117,10 +122,17 @@ public class EgressoAdmController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarEgressoPrimeiroCadastro(
             @PathVariable Integer id,
-            @RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO) throws InvalidRequestException {
+            @RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO)
+            throws InvalidRequestException, MatriculaAlreadyExistsException {
         UsuarioModel user = usuarioService.findById(id);
         if (!user.getGrupos().contains(Grupos.EGRESSO)) {
             throw new InvalidRequestException();
+        }
+
+        if (egressoService.existsMatricula(egressoCadastroDTO.getMatricula())) {
+            throw new MatriculaAlreadyExistsException(
+                    String.format(ErrorType.REPORT_007.getMessage(), egressoCadastroDTO.getMatricula()),
+                    ErrorType.REPORT_007.getInternalCode());
         }
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
@@ -166,10 +178,10 @@ public class EgressoAdmController {
             empresa = empresaService.findByNome(empresaDTO.getNome());
             if (empresa == null) {
                 empresa = mapper.map(empresaDTO, EmpresaModel.class);
-                empresa.setEndereco(enderecoEmpresa);
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
+                    .endereco(enderecoEmpresa)
                     .faixaSalarial(FaixaSalarialModel.builder().id(empresaDTO.getFaixaSalarialId()).build())
                     .build());
             validaSetorAtuacao(empresaDTO.getSetorAtuacao(), egresso);
@@ -210,11 +222,21 @@ public class EgressoAdmController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(@PathVariable Integer id,
-            @RequestBody EgressoAttDTO egresso) throws InvalidRequestException {
+            @RequestBody EgressoAttDTO egresso) throws InvalidRequestException, MatriculaAlreadyExistsException {
 
         UsuarioModel user = usuarioService.findById(egresso.getUsuario().getId());
         if (!user.getGrupos().contains(Grupos.EGRESSO)) {
             throw new InvalidRequestException();
+        }
+
+        // Se a matricula passada for diferente da matricula que a pessoa já tinha,
+        // checar se é duplicado.
+        if (egresso.getMatricula() != null
+                && !egresso.getMatricula().equals(egressoService.findById(id).getMatricula())
+                && egressoService.existsMatricula(egresso.getMatricula())) {
+            throw new MatriculaAlreadyExistsException(
+                    String.format(ErrorType.REPORT_007.getMessage(), egresso.getMatricula()),
+                    ErrorType.REPORT_007.getInternalCode());
         }
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -228,16 +250,17 @@ public class EgressoAdmController {
         if (egressoModel.getEmprego() != null) {
             EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
             egressoEmpresaModel.setEgresso(egressoModel);
-            EnderecoModel enderecoModel = egressoEmpresaModel.getEmpresa().getEndereco();
+            EnderecoModel enderecoModel = egressoEmpresaModel.getEndereco();
             EnderecoModel enderecoModelNoBanco = enderecoService.findByCidadeAndEstadoAndPais(
                     enderecoModel.getCidade(), enderecoModel.getEstado(),
                     enderecoModel.getPais());
             if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
-                egressoEmpresaModel.getEmpresa().setEndereco(enderecoModelNoBanco);
+                egressoEmpresaModel.setEndereco(enderecoModelNoBanco);
+                egressoEmpresaModel.setEndereco(enderecoModelNoBanco);
             } else if (enderecoModelNoBanco == null) {
-                egressoEmpresaModel.getEmpresa()
-                        .setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
-                                .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
+                egressoEmpresaModel.getId().setEnderecoId(null);
+                egressoEmpresaModel.setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
+                        .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
             }
         }
         if (egressoModel.getPalestras() != null) {
@@ -266,6 +289,8 @@ public class EgressoAdmController {
         return ResponseType.SUCCESS_UPDATE.getMessage();
     }
 
+    private final StatusUsuarioService statusUsuarioService;
+
     /**
      * Endpoint responsavel por deletar o egresso.
      *
@@ -280,8 +305,12 @@ public class EgressoAdmController {
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarEgresso(@PathVariable Integer id) {
-        if (egressoService.existsById(id)) {
+        EgressoModel egressoModel = egressoService.findById(id);
+        if (egressoModel != null) {
             egressoService.deleteById(id);
+            statusUsuarioService.save(StatusUsuarioModel.builder().usuarioId(egressoModel.getUsuario().getId())
+                    .nome(egressoModel.getUsuario().getNome())
+                    .status(UsuarioStatus.EXCLUIDO).build());
             return ResponseType.SUCCESS_DELETE.getMessage();
         }
         return ResponseType.FAIL_DELETE.getMessage();

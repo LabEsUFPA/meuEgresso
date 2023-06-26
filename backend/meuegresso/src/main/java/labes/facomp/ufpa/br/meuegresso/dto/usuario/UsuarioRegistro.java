@@ -30,6 +30,6 @@ public class UsuarioRegistro {
     @Pattern(regexp = "[0-9]{12}|$", message = "Informe uma matrícula válida.")
     private String registration;
 
-    Optional<String> redirect;
+    Optional<String> redirect = Optional.ofNullable(null);
 
 }

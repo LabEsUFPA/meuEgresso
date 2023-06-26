@@ -49,6 +49,7 @@
                     name="escopo"
                     input-class="w-[25%] h-[40px]"
                     custom-label
+                    :max-length="100"
                     required
                   >
                     <template #label>
@@ -58,8 +59,7 @@
                     </template>
                   </CustomInput>
                 </h3>
-
-                <div class="mt-7 mb-10">
+                <div>
                   <CustomInput
                     class="mt-1"
                     placeholder="Conteúdo do E-mail"
@@ -72,18 +72,19 @@
                     required
                   >
                     <template #label>
-                      <h2 class="text-2xl font-semibold text-neutral-900 inline ">
+                      <h2 class="text-2xl font-semibold text-neutral-900 inline">
                         Conteúdo
                       </h2>
                     </template>
                   </CustomInput>
                 </div>
               </h1>
-              <div class="mt-7 mb-5 ">
-                <CustomInput
-                  class="mb-5 mt-1.5"
+              <div>
+                <CustomDatepicker
                   name="dataEnvio"
-                  type="datetime-local"
+                  :icon-path="mdiCalendarEdit"
+                  :min-date="new Date()"
+                  :max-date="new Date(8640000000000000)"
                   custom-label
                   required
                 >
@@ -92,24 +93,37 @@
                       Data do próximo envio
                     </div>
                   </template>
-                </CustomInput>
-
+                </CustomDatepicker>
+                <CustomTimepicker
+                  class="mb-10"
+                  name="tempoEnvio"
+                  :icon-path="mdiClockEditOutline"
+                  mask="##:##"
+                  custom-label
+                  required
+                >
+                  <template #label>
+                    <div class="text-lg font-medium text-neutral-900 inline">
+                      Horário do próximo envio
+                    </div>
+                  </template>
+                </CustomTimepicker>
                 <CustomCheckbox
-                  class="mb-[-20px] mt-16"
-                  name="emailMulti"
+                  name="destinatarioUnico"
                   label="E-mail para destinatário único"
-                  v-model:value="bools.multiDestinatario "
-                  :disabled="bools.frequente"
+                  v-model:value="bools.destinatarioUnico"
+                  :disabled="bools.semestral || bools.anual"
                 />
-
                 <CustomInput
-                  v-show="bools.multiDestinatario"
-                  class="mb-5"
+                  v-show="bools.destinatarioUnico"
+                  class="mt-[-1.5em] mb-5"
                   name="email"
                   type="text"
+                  :icon-path="mdiEmail"
                   custom-label
-                  :required="bools.multiDestinatario"
-                  :disabled="!bools.multiDestinatario || bools.frequente"
+                  :required="bools.destinatarioUnico"
+                  :disabled="bools.semestral || bools.anual"
+                  :max-length="64"
                 >
                   <template #label>
                     <div class="text-lg font-medium text-neutral-900 inline">
@@ -117,38 +131,31 @@
                     </div>
                   </template>
                 </CustomInput>
-                <div>
-                  <CustomCheckbox
-                    class="mt-12"
-                    name="frequente"
-                    label="Frequente"
-                    v-model:value="bools.frequente"
-                  />
-                  <CustomCheckbox
-                    name="semanal"
-                    label="Envio Semestral"
-                    v-model:value="bools.semanal"
-                    :disabled="bools.anual || !bools.frequente"
-                  />
-                  <CustomCheckbox
-                    class="mb-15"
-                    name="anual"
-                    label="Envio Anual"
-                    v-model:value="bools.anual"
-                    :disabled="bools.semanal || !bools.frequente"
-                  />
-                </div>
+                <CustomCheckbox
+                  name="semestral"
+                  label="Envio Semestral"
+                  v-model:value="bools.semestral"
+                  :disabled="bools.anual || bools.destinatarioUnico"
+                />
+                <CustomCheckbox
+                  class="mb-15"
+                  name="anual"
+                  label="Envio Anual"
+                  v-model:value="bools.anual"
+                  :disabled="bools.semestral || bools.destinatarioUnico"
+                />
               </div>
             </div>
             <div class="flex flex-col items-start sm:flex-row justify-end gap-4 p-4 m-1 mr-5 mb-5">
               <CustomButton
+                tag="router"
+                link="/painel-admin"
                 variant="flat"
                 color="gray"
-                tag="button"
                 @click="handleCancel"
               >
                 <h1 class=" text-gray-400 px-10 py-1.5">
-                  Resetar
+                  Cancelar
                 </h1>
               </CustomButton>
 
@@ -218,13 +225,15 @@ import {
   mdiEmail,
   mdiChevronLeft,
   mdiCheckCircle,
-  mdiAlertCircle
-
+  mdiAlertCircle,
+  mdiCalendarEdit,
+  mdiClockEditOutline
 } from '@mdi/js'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
-
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomInput from 'src/components/CustomInput.vue'
+import CustomDatepicker from 'src/components/CustomDatepicker.vue'
+import CustomTimepicker from 'src/components/CustomTimepicker.vue'
 import classNames from 'classnames'
 import { object, string, boolean } from 'yup'
 import { Form } from 'vee-validate'
@@ -233,24 +242,27 @@ import { useEmailStore } from 'src/store/EmailStore'
 import { usePainelStore } from 'src/store/PainelStore'
 
 const emailStore = useEmailStore()
-
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const form = ref<typeof Form | null>(null)
 const $painelStore = usePainelStore()
 
 const bools = ref({
-  multiDestinatario: !!$painelStore.getEgressoEmail(),
-  frequente: false,
-  semanal: false,
+  destinatarioUnico: !!$painelStore.getEgressoEmail(),
+  semestral: false,
   anual: false
 })
+
 async function handleSubmit (values: any) {
-  console.log('sub')
-  if (!values.emailMulti || values.frequente) {
-    values.email = null
+  const data = {
+    escopo: values.escopo,
+    corpo: values.corpo,
+    dataEnvio: setDatetime(new Date(values.dataEnvio), new Date(values.tempoEnvio)),
+    email: values.destinatarioUnico && !values.semestral && !values.anual ? values.email : '',
+    frequente: values.semestral || values.anual,
+    anual: values.anual === undefined ? false : values.anual
   }
-  const status = await emailStore.createEmail(values)
+  const status = await emailStore.createEmail(data)
   if (status !== 201) {
     dialogFalha.value = true
   } else {
@@ -258,6 +270,16 @@ async function handleSubmit (values: any) {
   }
   fetchUpdateEmail()
 }
+
+const setDatetime = (date: Date, time: Date) => {
+  const fulldate = new Date()
+  fulldate.setTime(time.getTime())
+  fulldate.setFullYear(date.getFullYear(), date.getMonth(), date.getDate())
+  const isoDateTime = new Date(fulldate.getTime() - (fulldate.getTimezoneOffset() * 60000)).toISOString()
+
+  return isoDateTime
+}
+
 async function handleFail (e: any) {
   console.log(e)
 }
@@ -267,29 +289,45 @@ const schema = object().shape({
   corpo: string().required('Insira o corpo do email'),
   dataEnvio: string().required('Insira uma data valida no futuro').test('Data', 'Data inválida', (value) => {
     if (value) {
-      const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
-      const inputDate = new Date(date)
-      const minDate = new Date() // Use the current date as the minimum date
-      return inputDate >= minDate
+      const inputDate = new Date(value)
+      const currentate = new Date(new Date().setHours(0, 0, 0, 0))
+      if (currentate.getTime() > inputDate.getTime()) return false
+      return true
     }
-    return true
+    return false
   }),
+  tempoEnvio: string().required('Insira um horário').test('Tempo', 'Insira um horário no futuro', (value, schema) => {
+    if (value) {
+      const currentDate = new Date(schema.parent.dataEnvio)
+      const inputDate = new Date(value)
+      if (
+        currentDate.getDate() > inputDate.getDate() ||
+        currentDate.getMonth() > inputDate.getMonth() ||
+        currentDate.getFullYear() > inputDate.getFullYear()
+      ) return true
+      if (currentDate.getHours() === inputDate.getHours()) {
+        if (currentDate.getMinutes() >= inputDate.getMinutes()) return false
+        return true
+      } else if (inputDate.getHours() > currentDate.getHours()) return true
+    }
+    return false
+  }),
+  destinatarioUnico: boolean(),
   email: string()
     .email('Email inválido')
     .test('required', 'Campo obrigatório', function (value) {
-      const { multiDestinatario, frequente } = this.parent
-      if (!multiDestinatario && !frequente) {
-        return !!value
+      if (!this.parent.destinatarioUnico) return true
+      else if (value) {
+        if (value.length) return true
       }
-      return true
+      return false
     })
     .matches(
-      /^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))$/,
+      /^([A-Za-z\d]+([._][A-Za-z\d]+)*@[A-Za-z\d]+(.[A-Za-z\d]+)*(.[A-z]{2,}))?$/,
       'Email inválido'
     ),
-  frequente: boolean(),
+  semestral: boolean(),
   anual: boolean()
-
 })
 
 async function handleCancel (e: any) {
@@ -333,10 +371,11 @@ async function fetchUpdateEmail () {
   [Assinatura]`
   form.value?.setFieldValue('escopo', 'Atualização Cadastral - Meu Egresso')
   form.value?.setFieldValue('corpo', message)
-  form.value?.setFieldValue('dataEnvio', '')
+  form.value?.setFieldValue('dataEnvio', new Date())
+  form.value?.setFieldValue('tempoEnvio', new Date(new Date().setMinutes(new Date().getMinutes() + 10)))
 
   if ($painelStore.getEgressoEmail()) {
-    form.value?.setFieldValue('emailMulti', true)
+    form.value?.setFieldValue('destinatarioUnico', true)
     form.value?.setFieldValue('email', $painelStore.getEgressoEmail())
   }
 }

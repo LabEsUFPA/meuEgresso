@@ -65,7 +65,7 @@ class UsuarioServiceImplTest {
 		usuario.setUsername("john123");
 		usuario.setEmail("john@example.com");
 		usuario.setPassword("password123");
-		usuario.setCreatedBy(usuario);
+		usuario.setCreatedBy(usuario.getId());
 
 		usuarioRepository.save(usuario);
 
@@ -75,7 +75,7 @@ class UsuarioServiceImplTest {
 		usuario2.setUsername("jocke123");
 		usuario2.setEmail("jocke@example.com");
 		usuario2.setPassword("password124");
-		usuario2.setCreatedBy(usuario);
+		usuario2.setCreatedBy(usuario2.getId());
 		usuarioRepository.save(usuario2);
 
 		usuarios.add(usuario);
@@ -174,13 +174,13 @@ class UsuarioServiceImplTest {
 		user.setUsername("john123");
 		user.setEmail("john@example.com");
 		user.setPassword("password123");
-		user.setCreatedBy(usuario);
+		user.setCreatedBy(usuario.getId());
 		// updating
 		user.setNome("Michael");
 		user.setEmail("michel@hotmail.com");
 		user.setUsername("michel123");
 		user.setPassword("newpassword");
-		user.setLastModifiedBy(user);
+		user.setLastModifiedBy(user.getId());
 
 		UsuarioModel mockUser = new UsuarioModel();
 		mockUser.setId(10);
@@ -204,13 +204,13 @@ class UsuarioServiceImplTest {
 		user.setUsername("john123");
 		user.setEmail("john@example.com");
 		user.setPassword("password123");
-		user.setCreatedBy(usuario);
+		user.setCreatedBy(usuario.getId());
 		// updating
 		user.setNome("Michael");
 		user.setEmail("michel@hotmail.com");
 		user.setUsername("michel123");
 		user.setPassword("newpassword");
-		user.setLastModifiedBy(user);
+		user.setLastModifiedBy(user.getId());
 
 		UsuarioModel mockUser = new UsuarioModel();
 
@@ -241,16 +241,16 @@ class UsuarioServiceImplTest {
 
 	@Test
 	void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_True_If_Right() {
-		Mockito.when(usuarioRepository.existsByIdAndCreatedById(anyInt(), anyInt())).thenReturn(true);
-		assertTrue(usuarioService.existsByIdAndCreatedById(1, 2));
-		Mockito.verify(usuarioRepository).existsByIdAndCreatedById(anyInt(), anyInt());
+		Mockito.when(usuarioRepository.existsByIdAndCreatedBy(anyInt(), anyInt())).thenReturn(true);
+		assertTrue(usuarioService.existsByIdAndCreatedBy(1, 2));
+		Mockito.verify(usuarioRepository).existsByIdAndCreatedBy(anyInt(), anyInt());
 	}
 
 	@Test
 	void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_False_If_Wrong() {
-		Mockito.when(usuarioRepository.existsByIdAndCreatedById(anyInt(), anyInt())).thenReturn(false);
-		assertFalse(usuarioService.existsByIdAndCreatedById(5, 5));
-		Mockito.verify(usuarioRepository).existsByIdAndCreatedById(anyInt(), anyInt());
+		Mockito.when(usuarioRepository.existsByIdAndCreatedBy(anyInt(), anyInt())).thenReturn(false);
+		assertFalse(usuarioService.existsByIdAndCreatedBy(5, 5));
+		Mockito.verify(usuarioRepository).existsByIdAndCreatedBy(anyInt(), anyInt());
 	}
 
 	@AfterEach

@@ -47,6 +47,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
@@ -55,6 +56,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.areaatuacao.AreaAtuacaoReposit
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoEmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.endereco.EnderecoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 
@@ -125,6 +127,9 @@ class MapaControllerTest extends Configuracao {
         FaixaSalarialDTO faixaSalarialDTO;
 
         @Autowired
+        EnderecoRepository enderecoRepository;
+
+        @Autowired
         ModelMapper modelMapper;
 
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
@@ -134,13 +139,14 @@ class MapaControllerTest extends Configuracao {
 
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
-                usuarioModel.setNome("nome_test");
+                usuarioModel.setNome("nome_test asdsad");
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
 
                 mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                                 .contentType(MediaType.APPLICATION_JSON)
+                                .header("Host", "localhost:15000")
                                 .content(objectMapper.writeValueAsString(usuarioModel)))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isCreated())
@@ -195,6 +201,14 @@ class MapaControllerTest extends Configuracao {
                 egressoEmpresaModelId = EgressoEmpresaModelId.builder().egressoId(EGRESSO_ID).empresaId(EMPRESA_ID)
                                 .build();
 
+                /* Endereco */
+                EnderecoModel enderecoModel = EnderecoModel.builder()
+                                .cidade("ENDERECO_CIDADE")
+                                .estado("ENDERECO_ESTADO")
+                                .pais("ENDERECO_PAIS")
+                                .build();
+                enderecoModel = enderecoRepository.save(enderecoModel);
+
                 /* FaixaSalarial */
                 faixaSalarialDTO = FaixaSalarialDTO.builder().id(FAIXASALARIAL_ID).faixa(FAIXASALARIAL).build();
                 FaixaSalarialModel faixaSalarialModel = modelMapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
@@ -209,6 +223,7 @@ class MapaControllerTest extends Configuracao {
                 egressoEmpresaModel.setEgresso(egressoModel);
                 egressoEmpresaModel.setEmpresa(empresaModel);
                 egressoEmpresaModel.setAreaAtuacao(area);
+                egressoEmpresaModel.setEndereco(enderecoModel);
                 egressoEmpresaModel.setSetorAtuacao(setorAtuacaoModel);
                 egressoEmpresaModel.setFaixaSalarial(faixaSalarialModel);
                 Set<EgressoModel> egressos = new HashSet<>();
@@ -216,7 +231,6 @@ class MapaControllerTest extends Configuracao {
 
                 areaAtuacaoRepository.save(area);
 
-                egressoEmpresaModel.setAreaAtuacao(area);
                 egressoEmpresaRepository.save(egressoEmpresaModel);
 
         }

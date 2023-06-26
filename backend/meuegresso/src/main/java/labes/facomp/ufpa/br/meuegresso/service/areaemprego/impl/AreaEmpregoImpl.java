@@ -62,8 +62,8 @@ public class AreaEmpregoImpl implements AreaEmpregoService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-        return areaEmpregoRepository.existsByIdAndCreatedById(id, createdBy);
+    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+        return areaEmpregoRepository.existsByIdAndCreatedBy(id, createdBy);
     }
 
 }
