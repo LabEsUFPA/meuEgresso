@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.controller.auth;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -37,6 +38,7 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.ExpireRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
@@ -184,7 +186,20 @@ public class AuthenticationController {
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
 
-	@PostMapping(value = "/validarEmail")
+	@PostMapping(value = "/validarEmail/{tokenAuth}")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void validarEmail(@PathVariable String tokenAuth)
+			throws InvalidRequestException {
+		Map<String, Object> claims = jwtService.extractClains(tokenAuth);
+		if (claims.get("recoveryPass") instanceof Boolean valor && valor.booleanValue()
+				&& claims.get("email") instanceof String email) {
+			UsuarioModel usuarioModel = usuarioService.findByEmail(email);
+			usuarioModel.setEmailVerificado(true);
+			usuarioService.update(usuarioModel);
+		}
+	}
+
+	@PostMapping(value = "/solicitarNovaValidacaoEmail")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void reenviarValidacaoEmail(@RequestBody AuthRecoveryPasswordRequest request,
 			@RequestHeader("Host") String header) {
