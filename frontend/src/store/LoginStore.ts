@@ -17,7 +17,7 @@ export const useLoginStore = defineStore('LoginStore', {
   }),
 
   actions: {
-    async userLogin (username: string, password: string, tokenAuth?: string) {
+    async userLogin (username: string, password: string) {
       const data: LoginModel = {
         username,
         password
@@ -28,20 +28,8 @@ export const useLoginStore = defineStore('LoginStore', {
         route: '/auth/login',
         body: data
       })
+
       if (response?.status === 200) {
-        if (tokenAuth !== undefined) {
-          const validation = await this.validateEmail(tokenAuth)
-          if (validation.status === 204) {
-            this.isFirstAccess = 'yes'
-          } else {
-            return {
-              status: validation.status,
-              data: validation?.data
-            }
-          }
-        } else {
-          this.isFirstAccess = 'no'
-        }
         this.loggedIn = true
         storage.setLoggedUser(response.data?.token)
         this.setUserData(storage.parseToken(response.data?.token))
@@ -61,18 +49,6 @@ export const useLoginStore = defineStore('LoginStore', {
       this.isFirstAccess = 'empty'
       if (storage.has('loggedEgresso')) {
         storage.remove('loggedEgresso')
-      }
-    },
-
-    async validateEmail (tokenAuth: string) {
-      const response = await Api.request({
-        method: 'post',
-        route: `/auth/validarEmail/${tokenAuth}`
-      })
-
-      return {
-        status: (response?.status) !== undefined ? response.status : 500,
-        data: (response?.data !== undefined) ? response?.data : null
       }
     },
 
