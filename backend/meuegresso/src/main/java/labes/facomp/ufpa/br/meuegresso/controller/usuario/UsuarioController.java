@@ -78,7 +78,6 @@ public class UsuarioController {
 			throws UnauthorizedRequestException, InvalidRequestException, NameAlreadyExistsException,
 			EmailAlreadyExistsException {
 		if (jwtService.getIdUsuario(token).equals(usuarioDTO.getId())) {
-
 			UsuarioModel usuarioModelBack = usuarioService.findById(jwtService.getIdUsuario(token));
 			UsuarioModel usuarioModelFront = mapper.map(usuarioDTO, UsuarioModel.class);
 
@@ -116,9 +115,10 @@ public class UsuarioController {
 
 			if (usuarioModelFront.getPassword() != null) {
 				usuarioModelBack.setPassword(usuarioModelFront.getPassword());
+				usuarioService.save(usuarioModelBack); // salva com senha codificada
+			} else {
+				usuarioService.update(usuarioModelBack); // evita atualizar extritamente uma nova senha codificada
 			}
-
-			usuarioService.update(usuarioModelBack);
 			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
