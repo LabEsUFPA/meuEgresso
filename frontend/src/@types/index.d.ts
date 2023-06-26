@@ -148,7 +148,7 @@ export namespace models {
     empresa: {
       id: number
       nome: string
-    },
+    }
     endereco: {
       id: number
       cidade: string
