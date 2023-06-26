@@ -39,6 +39,10 @@ public interface UsuarioService extends UserDetailsService {
 	 */
 	public UsuarioModel findById(Integer idUsuario);
 
+
+	public UsuarioModel findByEmail(String email);
+
+
 	/**
 	 * Método responsável por encontrar todos os usuários cadastrados.
 	 *

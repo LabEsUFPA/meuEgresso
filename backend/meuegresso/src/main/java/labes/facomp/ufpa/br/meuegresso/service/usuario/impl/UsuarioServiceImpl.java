@@ -89,7 +89,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	public UsuarioModel update(UsuarioModel usuario) throws InvalidRequestException {
 		if (usuario.getId() != null) {
-			usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 			return usuarioRepository.save(usuario);
 		} else {
 			throw new InvalidRequestException();
@@ -105,6 +104,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
+	public UsuarioModel findByEmail(String email) {
+		return usuarioRepository.findByEmailIgnoreCase(email, UsuarioModel.class).orElseThrow();
+	}
+
 	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
 		return usuarioRepository.existsByIdAndCreatedBy(id, createdBy);
 	}
