@@ -44,6 +44,7 @@ export const useLoginStore = defineStore('LoginStore', {
     userLogout () {
       this.loggedIn = false
       storage.remove('loggedUser')
+      document.cookie = "Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       cookieService.remove('Token')
       this.userData = null
       this.isFirstAccess = 'empty'
