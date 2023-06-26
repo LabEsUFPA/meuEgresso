@@ -181,7 +181,10 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         route: '/egresso',
         body: dataEgresso
       })
-      return (response?.status) !== undefined ? response.status : 500
+      return {
+        status: (response?.status) !== undefined ? response.status : 500,
+        data: (response?.data !== undefined) ? response?.data : null
+      }
     },
     async atualizarEgressoAdmin (dataEgresso: any, egressoId: number) {
       const response = await Api.request({
@@ -189,7 +192,10 @@ export const usePerfilEgressoStore = defineStore('usePerfilEgressoStore', {
         route: `administrador/egresso/${egressoId}`,
         body: dataEgresso
       })
-      return (response?.status) !== undefined ? response.status : 500
+      return {
+        status: (response?.status) !== undefined ? response.status : 500,
+        data: (response?.data !== undefined) ? response?.data : null
+      }
     },
 
     async uploadImageEgresso (file: File) {

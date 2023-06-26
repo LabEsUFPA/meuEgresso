@@ -62,8 +62,8 @@ public class PalestraServiceImpl implements PalestraService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedById(Integer id, Integer egressoId) {
-        return palestraRepository.existsByIdAndCreatedById(id, egressoId);
+    public boolean existsByIdAndCreatedBy(Integer id, Integer egressoId) {
+        return palestraRepository.existsByIdAndCreatedBy(id, egressoId);
     }
 
     @Override
@@ -77,6 +77,5 @@ public class PalestraServiceImpl implements PalestraService {
     public PalestraModel findByEgressoUsuarioId(Integer idUsuario) {
         return palestraRepository.findByEgressoUsuarioId(idUsuario).orElseThrow();
     }
-
 
 }

@@ -27,10 +27,12 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.MatriculaAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
@@ -120,10 +122,17 @@ public class EgressoAdmController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarEgressoPrimeiroCadastro(
             @PathVariable Integer id,
-            @RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO) throws InvalidRequestException {
+            @RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO)
+            throws InvalidRequestException, MatriculaAlreadyExistsException {
         UsuarioModel user = usuarioService.findById(id);
         if (!user.getGrupos().contains(Grupos.EGRESSO)) {
             throw new InvalidRequestException();
+        }
+
+        if (egressoService.existsMatricula(egressoCadastroDTO.getMatricula())) {
+            throw new MatriculaAlreadyExistsException(
+                    String.format(ErrorType.REPORT_007.getMessage(), egressoCadastroDTO.getMatricula()),
+                    ErrorType.REPORT_007.getInternalCode());
         }
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
@@ -213,11 +222,21 @@ public class EgressoAdmController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(@PathVariable Integer id,
-            @RequestBody EgressoAttDTO egresso) throws InvalidRequestException {
+            @RequestBody EgressoAttDTO egresso) throws InvalidRequestException, MatriculaAlreadyExistsException {
 
         UsuarioModel user = usuarioService.findById(egresso.getUsuario().getId());
         if (!user.getGrupos().contains(Grupos.EGRESSO)) {
             throw new InvalidRequestException();
+        }
+
+        // Se a matricula passada for diferente da matricula que a pessoa já tinha,
+        // checar se é duplicado.
+        if (egresso.getMatricula() != null
+                && !egresso.getMatricula().equals(egressoService.findById(id).getMatricula())
+                && egressoService.existsMatricula(egresso.getMatricula())) {
+            throw new MatriculaAlreadyExistsException(
+                    String.format(ErrorType.REPORT_007.getMessage(), egresso.getMatricula()),
+                    ErrorType.REPORT_007.getInternalCode());
         }
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);

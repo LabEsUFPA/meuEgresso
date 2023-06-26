@@ -70,8 +70,8 @@ public class AnuncioServiceImpl implements AnuncioService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-        return anuncioRepository.existsByIdAndCreatedById(id, createdBy);
+    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+        return anuncioRepository.existsByIdAndCreatedBy(id, createdBy);
     }
 
     @Override

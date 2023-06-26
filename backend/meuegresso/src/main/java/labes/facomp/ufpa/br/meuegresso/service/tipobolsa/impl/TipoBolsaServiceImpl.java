@@ -61,8 +61,8 @@ public class TipoBolsaServiceImpl implements TipoBolsaService {
 	}
 
 	@Override
-	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-		return tipoBolsaRepository.existsByIdAndCreatedById(id, createdBy);
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+		return tipoBolsaRepository.existsByIdAndCreatedBy(id, createdBy);
 	}
 
 	@Override

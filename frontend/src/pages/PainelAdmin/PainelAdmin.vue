@@ -421,7 +421,7 @@ const graphData = computed(() => ({
           'Setembro',
           'Outubro',
           'Novembro',
-          'Dezemmbro'
+          'Dezembro'
         ]
         if (selectedString.value === 'mes') {
           const date = new Date(key + 'T00:00:00')
@@ -477,3 +477,4 @@ onMounted(async () => {
 })
 
 </script>
+

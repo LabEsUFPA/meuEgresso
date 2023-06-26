@@ -1,12 +1,14 @@
 <template>
   <section>
     <o-field
+      override
       class="file"
       :root-class="classNames({
         ['outline outline-red-500']: !isValid
       })"
     >
       <o-upload
+        override
         :disabled="!isInput"
         v-model="file"
         drag-drop
@@ -24,7 +26,7 @@
               class="ml-6"
               width="30"
               height="30"
-              src="/src/assets/round-upload.svg"
+              src="/img/round-upload.svg"
               alt="Ícone Usuário"
             >
 
@@ -33,6 +35,7 @@
             </h1>
           </div>
           <o-button
+            override
             tag="a"
             variant="primary"
             rounded
@@ -44,7 +47,7 @@
           v-if="!isValid.value"
           class="text-red-500 absolute ml-[-60px] mt-[-5px]"
         >
-          O arquivo deve ser menor que 5 MB
+          <!-- O arquivo deve ser menor que 5 MB -->
           <!-- {{ meta.valid ? null : errorMessage }} -->
         </div>
       </template>
@@ -92,7 +95,7 @@
   <ButtonActionIcon
     v-if="isInput"
     class="buttonTrash absolute z-5 ml-[90px] mt-[90px] rounded-full"
-    icon-path="/src/assets/trashCan.svg"
+    icon-path="/img/trashCan.svg"
     icon-size="20"
     custom-style="px-2 py-2"
     color="whiteDanger"

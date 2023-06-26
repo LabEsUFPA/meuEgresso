@@ -27,7 +27,7 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	Optional<RecoveryPasswordProjection> findByEmailIgnoreCase(String email);
 
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	boolean existsByUsernameIgnoreCase(String username);
 
