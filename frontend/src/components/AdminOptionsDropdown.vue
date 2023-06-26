@@ -153,12 +153,12 @@ import { usePainelStore } from 'src/store/PainelStore'
 import { useLoginStore } from 'src/store/LoginStore'
 
 const props = defineProps<{
-    id: number
-    idEgresso?: number
-    nome?: string
-    status: string
-    email: string
-    }
+  id: number
+  idEgresso?: number
+  nome?: string
+  status: string
+  email: string
+  }
 >()
 
 const $emits = defineEmits(['updateData'])
@@ -195,7 +195,12 @@ async function aprovaCadastro () {
 }
 
 function editaCadastro () {
-  $router.push(`/egresso/${props.idEgresso}`)
+  if (props.status !== 'incompleto') {
+    $router.push(`/egresso/${props.idEgresso}`)
+    return
+  }
+
+  $router.push(`/cadastro/${props.id}`)
 }
 
 async function excluiCadastro () {
@@ -231,7 +236,7 @@ function enviaEmail () {
 
 const opcoesAdmin = [
   { titulo: 'Aprovar cadastro', status: ['pendente'], click: aprovaCadastro, habilitado: true },
-  { titulo: 'Editar cadastro', status: ['completo', 'pendente'], click: editaCadastro, habilitado: true },
+  { titulo: 'Editar cadastro', status: ['incompleto', 'completo', 'pendente'], click: editaCadastro, habilitado: true },
   { titulo: 'Enviar e-mail', status: ['incompleto', 'completo', 'pendente'], click: enviaEmail, habilitado: true },
   { titulo: 'Excluir cadastro', status: ['completo', 'pendente'], click: excluiCadastro, habilitado: userScope.value === 'ADMIN' }
 ]
