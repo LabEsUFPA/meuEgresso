@@ -96,6 +96,10 @@ export default [
       {
         path: 'redefinir-senha',
         component: async () => await import('src/pages/RedefinirSenha/RedefinirSenha.vue')
+      },
+      {
+        path: 'validar-email',
+        component: async () => await import('src/pages/ValidarEmail/ValidarEmail.vue')
       }
     ]
   },
