@@ -3,12 +3,14 @@
     v-if="!loading"
     :egress-list="markers"
   />
+  <DepoimentosSection />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useHomeStore } from 'src/store/HomeStore'
 import SociodemographicMap from './components/SociodemographicMap.vue'
+import DepoimentosSection from './components/DepoimentosSection.vue'
 import { City } from 'country-state-city'
 import { type models } from 'src/@types'
 interface EgressoMapa extends models.EgressoMapa {}
