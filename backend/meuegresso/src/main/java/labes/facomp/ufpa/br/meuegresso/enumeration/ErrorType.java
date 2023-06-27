@@ -13,13 +13,15 @@ public enum ErrorType {
 
     REPORT_005("Erro no JSON do corpo da requisição.", "RP-005"),
 
-    REPORT_006("Erro ao enviar o email.", "RP-006"),
-
+    REPORT_006("Erro ao enviar o e-mail.", "RP-006"),
+    
+    REPORT_007("Matrícula duplicada.", "RP-007"),
+    
     REPORT_009("Não é permitido enviar lista vazia no corpo da requisição!", "RP-009"),
 
     DATABASE_001("Falha ao tentar salvar no banco de dados.", "DB-001"),
 
-    DATABASE_002("Nenhuma mensagem de email do tipo %s cadastrada.", "DB-002"),
+    DATABASE_002("Nenhuma mensagem de e-mail do tipo %s cadastrada.", "DB-002"),
 
     UNAUTHORIZED_TRANSACTION("Permissões insuficientes para realizar esta transação", "SECURITY-001"),
 
@@ -37,7 +39,7 @@ public enum ErrorType {
 
     SOLICITACAO_EXPIRADA("Solicitação Expirada", "SE-001"),
 
-    FOTO_NAO_ENCONTRADA("Egresso não possui foto", "E-001");
+    FOTO_NAO_ENCONTRADA("Egresso não possui foto","E-001");
 
     private String message;
     private String internalCode;

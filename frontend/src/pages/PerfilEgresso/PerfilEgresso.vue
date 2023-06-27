@@ -37,6 +37,20 @@
               v-if="!isPublic || isSuperUser"
             />
           </h1>
+
+          <div
+            class="absolute flex flex-auto justify-center items-center top-[-15px] mb-12 left-[41.5%]"
+            v-if="errorLocation === 'header'"
+          >
+            <div
+              class="flex flex-col items-center mx-auto z-10 "
+            >
+              <InvalidInsert
+                :text="errorText"
+                :show-alert="error"
+              />
+            </div>
+          </div>
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
             <div
               class="mt-[37px] flex flex-col items-center justify-center"
@@ -165,7 +179,20 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaGeral"
         >
-          <FolderSection>
+          <div class="flex justify-center items-center h-full">
+            <div
+              class="flex flex-col items-center  mx-auto z-10"
+              v-if="errorLocation === 'geral'"
+            >
+              <InvalidInsert
+                :text="errorText"
+                :show-alert="error"
+              />
+            </div>
+          </div>
+          <FolderSection
+            class="mb-5"
+          >
             <template #EditButton>
               <h1 class="relative">
                 <ButtonEdit
@@ -267,9 +294,21 @@
           :validation-schema="schemaAcademico"
           v-slot="{ values }"
         >
+          <div class="flex justify-center items-center h-full">
+            <div
+              class="flex flex-col items-center  mx-auto z-10"
+              v-if="errorLocation === 'academico'"
+            >
+              <InvalidInsert
+                :text="errorText"
+                :show-alert="error"
+              />
+            </div>
+          </div>
+
           <FolderSection>
             <template #EditButton>
-              <h1 class="relative">
+              <h1 class="relative static">
                 <ButtonEdit
                   label="Editar"
                   icon-path="/img/edit.svg"
@@ -512,6 +551,17 @@
             @invalid-submit="onInvalid"
             :validation-schema="schemaCarreira"
           >
+            <div class="flex justify-center items-center h-full">
+              <div
+                class="flex flex-col items-center  mx-auto z-10"
+                v-if="errorLocation === 'carreira'"
+              >
+                <InvalidInsert
+                  :text="errorText"
+                  :show-alert="error"
+                />
+              </div>
+            </div>
             <FolderCarreira
               :is-input="dataEgresso.carreira.isInput"
               :area-atuacao-holder="placeHolders.areaAtuacao"
@@ -588,6 +638,17 @@
             @invalid-submit="onInvalid"
             :validation-schema="schemaLocalizacao"
           >
+            <div class="flex justify-center items-center h-full">
+              <div
+                class="flex flex-col items-center  mx-auto z-10"
+                v-if="errorLocation === 'localizacao'"
+              >
+                <InvalidInsert
+                  :text="errorText"
+                  :show-alert="error"
+                />
+              </div>
+            </div>
             <FolderSection class="mt-6">
               <template #EditButton>
                 <h1 class="relative">
@@ -711,6 +772,18 @@
             @invalid-submit="onInvalid"
             :validation-schema="schemaAdicionais"
           >
+            <div class="flex justify-center items-center h-full">
+              <div
+                class="flex flex-col items-center  mx-auto z-10"
+                v-if="errorLocation === 'adicionais'"
+              >
+                <InvalidInsert
+                  :text="errorText"
+                  :show-alert="error"
+                />
+              </div>
+            </div>
+
             <FolderAdicionais
               :is-input="dataEgresso.adicionais.isInput"
               :bools="bools"
@@ -821,8 +894,9 @@ import { Form } from 'vee-validate'
 import { object, string, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
 import CustomDialog from 'src/components/CustomDialog.vue'
-import FolderCarreira from './components/FolderCarreira.vue'
+import InvalidInsert from 'src/components/InvalidInsert.vue'
 
+import FolderCarreira from './components/FolderCarreira.vue'
 import FolderAdicionais from './components/FolderAdicionais.vue'
 import ProfileImage from './components/ProfileImage.vue'
 import {
@@ -856,6 +930,11 @@ const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 const missingDigits = ref(0)
 const loading = ref(true)
+
+const error = ref(false)
+const errorLocation = ref('')
+
+const errorText = ref('')
 
 const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
@@ -916,8 +995,6 @@ const isSuperUser = computed(() => {
   return false
 })
 const isPublic = computed(() => {
-  console.log('route')
-  console.log(Number($route.params.id))
   if (storage.has('loggedUser') && storage.has('loggedEgresso')) {
     const logEgresso = JSON.parse(storage.get('loggedEgresso'))
     return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id))
@@ -932,9 +1009,13 @@ watch(() => $route.params, async () => {
   loading.value = false
 })
 
-function handleStatus (status: any) {
-  if (status !== 201) {
+function handleStatus (response: any, folderLocation: string) {
+  if (response.status !== 201) {
+    console.log(response.status)
     dialogFalha.value = true
+    errorText.value = response.data?.technicalMessage ? response.data?.technicalMessage : 'Ocorreu um problema na requisição'
+    error.value = true
+    errorLocation.value = folderLocation
     return false
   } else {
     dialogSucesso.value = true
@@ -954,7 +1035,7 @@ async function handleSubmitHeader (values: any) {
     jsonResponse.lattes = null
   }
 
-  const status = await atualizarEgresso(jsonResponse)
+  const response = await atualizarEgresso(jsonResponse)
   let responseImage: any
   if (stagedChanges.value.profileHead.removedImage) {
     responseImage = await removeImageEgresso()
@@ -964,12 +1045,15 @@ async function handleSubmitHeader (values: any) {
     responseImage = await profileImageSave()
   }
 
-  if (status === 201 && (responseImage === 201 || responseImage === 200 || responseImage === 204)) {
+  if (response.status === 201 && (responseImage === 201 || responseImage === 200 || responseImage === 204)) {
     dialogSucesso.value = true
 
     toggleIsInput('profileHead')
     await fetchUpdateEgresso()
   } else {
+    errorText.value = response.data?.technicalMessage ? response.data?.technicalMessage : 'Ocorreu um problema na requisição'
+    error.value = true
+    errorLocation.value = 'header'
     dialogFalha.value = true
   }
 }
@@ -980,11 +1064,10 @@ async function handleSubmitGeral (values: any) {
   jsonResponse.genero.id = values.geral.genero
   jsonResponse.nascimento = values.geral.nascimento
   const status = await atualizarEgresso(jsonResponse)
-  if (handleStatus(status)) {
+  if (handleStatus(status, 'geral')) {
     toggleIsInput('geral')
+    await fetchUpdateEgresso()
   }
-
-  fetchUpdateEgresso()
 }
 
 async function handleSubmitAcademico (values: any) {
@@ -1071,22 +1154,20 @@ async function handleSubmitAcademico (values: any) {
 
   const status = await atualizarEgresso(jsonResponse)
 
-  if (handleStatus(status)) {
+  if (handleStatus(status, 'academico')) {
     toggleIsInput('academico')
+    await fetchUpdateEgresso()
   }
-
-  fetchUpdateEgresso()
 }
 async function handleSubmitLocalizacao (values: any) {
   jsonResponse.emprego.endereco = values.localizacao
   // delete jsonResponse.emprego.empresa.endereco.id
 
   const status = await atualizarEgresso(jsonResponse)
-  if (handleStatus(status)) {
+  if (handleStatus(status, 'localizacao')) {
     toggleIsInput('localizacao')
+    await fetchUpdateEgresso()
   }
-
-  fetchUpdateEgresso()
 }
 async function handleSubmitCarreira (values: any) {
   if (jsonResponse.emprego === undefined) {
@@ -1143,11 +1224,10 @@ async function handleSubmitCarreira (values: any) {
   }
 
   const status = await atualizarEgresso(jsonResponse)
-  if (handleStatus(status)) {
+  if (handleStatus(status, 'carreira')) {
     toggleIsInput('carreira')
+    await fetchUpdateEgresso()
   }
-
-  fetchUpdateEgresso()
 }
 async function handleSubmitAdicionais (values: any) {
   jsonResponse.depoimento.descricao = values.adicionais.experiencias
@@ -1165,14 +1245,15 @@ async function handleSubmitAdicionais (values: any) {
     jsonResponse.palestras = null
   }
   const status = await atualizarEgresso(jsonResponse)
-  if (handleStatus(status)) {
+  if (handleStatus(status, 'adicionais')) {
     toggleIsInput('adicionais')
+    await fetchUpdateEgresso()
   }
-  fetchUpdateEgresso()
 }
 
 let isInputLocal = false
 function toggleIsInput (FolderLabel: string) {
+  console.log('toggole')
   switch (FolderLabel) {
     case 'profileHead':
       dataEgresso.value.profileHead.isInput = !dataEgresso.value.profileHead.isInput
@@ -1198,7 +1279,7 @@ function toggleIsInput (FolderLabel: string) {
     case 'adicionais':
       dataEgresso.value.adicionais.isInput = !dataEgresso.value.adicionais.isInput
   }
-
+  errorLocation.value = ''
   isInputLocal = !isInputLocal
 }
 
@@ -1379,9 +1460,9 @@ async function fetchUpdateEgresso () {
     },
     localizacao: {
       cep: '',
-      pais: json.emprego?.endereco.pais || '',
-      estado: json.emprego?.endereco.estado || '',
-      cidade: json.emprego?.endereco.cidade || '',
+      pais: json.emprego?.empresa?.endereco?.pais || '',
+      estado: json.emprego?.empresa?.endereco?.estado || '',
+      cidade: json.emprego?.empresa?.endereco?.cidade || '',
       isInput: false
     },
     academico: {
