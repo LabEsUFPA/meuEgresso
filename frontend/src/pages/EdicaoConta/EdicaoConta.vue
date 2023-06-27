@@ -41,6 +41,7 @@
                 :required="true"
                 :icon-path="mdiAccount"
                 :max-length="50"
+                :disabled="true"
               />
             </div>
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
@@ -136,6 +137,23 @@
       </div>
     </div>
   </CustomDialog>
+  <CustomDialog v-model="error">
+    <div class="h-full flex justify-center items-center">
+      <div class="w-1/2">
+        <div class="text-red-500 text-center mb-3">
+          <SvgIcon
+            type="mdi"
+            size="100"
+            class="inline"
+            :path="mdiAlertCircle"
+          />
+        </div>
+        <h1 class="text-blue-900 text-center text-2xl font-semibold mb-8">
+          Dados não foram atualizado. Erro.
+        </h1>
+      </div>
+    </div>
+  </CustomDialog>
 </template>
 
 <script setup lang="ts">
@@ -149,7 +167,7 @@ import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { Form } from 'vee-validate'
 import { object, string, ref as refYup } from 'yup'
-import { mdiAccount, mdiEmail, mdiLock, mdiCheckCircle } from '@mdi/js'
+import { mdiAccount, mdiEmail, mdiLock, mdiCheckCircle, mdiAlertCircle } from '@mdi/js'
 import { useEditaContaUsuarioStore } from 'src/store/EditaContaUsuarioStore.js'
 
 const form = ref<typeof Form | null>(null)
@@ -222,6 +240,9 @@ const handleSubmit = async (submitData: any) => {
     if (responseValidation.status === 201) {
       error.value = false
       submitSuccess.value = true
+    } else {
+      error.value = true
+      submitSuccess.value = false
     }
   } else {
     const usuario = await $store.fetchUsuario()
