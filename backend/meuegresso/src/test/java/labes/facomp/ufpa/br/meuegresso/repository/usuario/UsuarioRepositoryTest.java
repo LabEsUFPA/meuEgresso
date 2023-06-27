@@ -66,7 +66,6 @@ class UsuarioRepositoryTest {
         usuario2.setEmail("jocke@example.com");
         usuario2.setPassword("password124");
         usuario2.setGrupos(Set.of(Grupos.ADMIN));
-        usuario2.setCreatedBy(usuario.getId());
         usuarioRepository.save(usuario2);
 
         usuarios.add(usuario);
@@ -138,7 +137,7 @@ class UsuarioRepositoryTest {
     void test_Given_Incorrect_Email_Should_Return_False() {
         Mockito.when(usuarioRepository.existsByUsernameIgnoreCase(anyString())).thenReturn(false);
 
-        assertFalse(usuarioRepository.existsByUsernameIgnoreCase("john124@gmail.com"));
+        assertFalse(usuarioRepository.existsByEmail("john124@gmail.com"));
     }
 
     @AfterEach
