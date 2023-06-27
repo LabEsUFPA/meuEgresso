@@ -12,11 +12,12 @@ const cookieService = new CookieService()
 export const useLoginStore = defineStore('LoginStore', {
   state: () => ({
     loggedIn: storage.getToken() !== undefined,
-    userData: cookieService.get('Token') !== undefined ? storage.parseToken(cookieService.get('Token')) : null
+    userData: cookieService.get('Token') !== undefined ? storage.parseToken(cookieService.get('Token')) : null,
+    isFirstAccess: storage.getToken() === undefined ? 'empty' : 'no'
   }),
 
   actions: {
-    async userLogin (username: string, password: string, isFirstAccess?: boolean) {
+    async userLogin (username: string, password: string) {
       const data: LoginModel = {
         username,
         password
@@ -32,8 +33,6 @@ export const useLoginStore = defineStore('LoginStore', {
         this.loggedIn = true
         storage.setLoggedUser(response.data?.token)
         this.setUserData(storage.parseToken(response.data?.token))
-
-        isFirstAccess ?? false ? cookieService.set('isFirstAccess', 'yes', 1) : cookieService.set('isFirstAccess', 'no', 1)
       }
 
       return {
@@ -47,6 +46,7 @@ export const useLoginStore = defineStore('LoginStore', {
       storage.remove('loggedUser')
       cookieService.remove('Token')
       this.userData = null
+      this.isFirstAccess = 'empty'
       if (storage.has('loggedEgresso')) {
         storage.remove('loggedEgresso')
       }

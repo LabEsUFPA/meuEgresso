@@ -88,7 +88,7 @@ public interface EgressoService {
 	 * @param createdBy
 	 * @return boolean
 	 */
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	/**
 	 * Método responsável pelo retorno do caminho da foto como um URI
@@ -122,7 +122,7 @@ public interface EgressoService {
 	 * @since 07/05/2023
 	 */
 	public void saveFoto(String nomeAnexo, MultipartFile arquivo) throws IOException;
-	
+
 	/**
 	 * Método responsável por verificar se matrícula já está associada a um egresso
 	 *

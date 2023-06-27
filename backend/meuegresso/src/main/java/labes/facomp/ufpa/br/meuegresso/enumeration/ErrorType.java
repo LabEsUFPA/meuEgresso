@@ -23,17 +23,19 @@ public enum ErrorType {
 
     DATABASE_002("Nenhuma mensagem de e-mail do tipo %s cadastrada.", "DB-002"),
 
-    UNAUTHORIZED_TRANSACTION("Permisões insuficientes para realizar esta transação", "SECURITY-001"),
+    UNAUTHORIZED_TRANSACTION("Permissões insuficientes para realizar esta transação", "SECURITY-001"),
 
     UNAUTHORIZED_REGISTER("Credenciais insuficientes", "SECURITY-002"),
 
-    USER_001("Usuário %s ja existe.", "US-001"),
+    USER_001("Usuário %s já existe.", "US-001"),
 
-    USER_002("Usuario ou Senha inválida.", "US-002"),
+    USER_002("Usuário ou Senha inválida.", "US-002"),
 
-    USER_003("Usuario desabilitado.", "US-003"),
+    USER_003("Usuário desabilitado.", "US-003"),
 
-    EGRESSO_NAO_VALIDO("Usuario não cadastrado pela faculdade", "EV-001"),
+    USER_004("E-mail já utilizado.", "US-004"),
+
+    EGRESSO_NAO_VALIDO("Usuário não cadastrado pela faculdade", "EV-001"),
 
     SOLICITACAO_EXPIRADA("Solicitação Expirada", "SE-001"),
 

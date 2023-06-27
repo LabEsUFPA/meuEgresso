@@ -60,14 +60,16 @@ public interface CursoService {
 	 * @param createdBy
 	 * @return
 	 */
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	public CursoModel findByNome(String nome);
 
 	/**
-	 * Método responsável por retornar os cursos cadastrados e a quantidade de egressos por curso.
-	 * 
-	 * @return {@link List<CursosGraficoDTO>} lista de DTOs com as contagens de egresso por curso.
+	 * Método responsável por retornar os cursos cadastrados e a quantidade de
+	 * egressos por curso.
+	 *
+	 * @return {@link List<CursosGraficoDTO>} lista de DTOs com as contagens de
+	 *         egresso por curso.
 	 */
 	public List<CursosGraficoDTO> countEgressoByCurso();
 

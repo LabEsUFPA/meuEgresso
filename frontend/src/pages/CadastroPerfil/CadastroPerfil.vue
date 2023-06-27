@@ -1,4 +1,16 @@
 <template>
+  <OLoading
+    :full-page="true"
+    v-model:active="loading"
+    full-page-class="bg-white/[.25] backdrop-blur-[1px] z-50"
+  >
+    <SvgIcon
+      type="mdi"
+      size="80"
+      class="text-blue-400 animate-spin"
+      :path="mdiLoading"
+    />
+  </OLoading>
   <Form
     @submit="handleSubmit"
     @invalid-submit="onInvalid"
@@ -6,7 +18,6 @@
   >
     <div class="w-full flex items-center justify-center bg-neutral-100 my-8">
       <div
-        v-if="!submitSuccess"
         class="flex flex-col items-center bg-white w-[960px] py-6 mx-6 rounded-2xl shadow-md"
       >
         <InvalidInsert
@@ -20,14 +31,15 @@
           <p class="text-blue-400 text-base text-center font-bold mb-5">
             Preencha os campos abaixo
           </p>
-          <div class="flex flex-col gap-y-5 mb-4">
-            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
+          <div class="flex flex-col gap-y-2 mb-4">
+            <div class="flex flex-col gap-x-6 gap-y-2 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 name="nome"
                 label="Nome Completo"
                 class-helper-text="text-gray-600"
                 :required="true"
                 :icon-path="mdiAccount"
+                :max-length="100"
               />
               <CustomInput
                 name="username"
@@ -36,9 +48,10 @@
                 class-helper-text="text-gray-600"
                 :required="true"
                 :icon-path="mdiAccount"
+                :max-length="50"
               />
             </div>
-            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
+            <div class="flex flex-col gap-x-6 gap-y-2 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 name="registration"
                 type="text"
@@ -58,9 +71,10 @@
                 helper-text="Informe o mesmo e-mail que está cadastrado no SIGAA"
                 class-helper-text="text-gray-600"
                 :icon-path="mdiEmail"
+                :max-length="50"
               />
             </div>
-            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
+            <div class="flex flex-col gap-x-6 gap-y-2 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 name="password"
                 label="Senha"
@@ -69,6 +83,7 @@
                 :type="showPassword? 'text' : 'password'"
                 :required="true"
                 :icon-path="mdiLock"
+                :max-length="80"
               />
               <CustomInput
                 name="confirmationPassword"
@@ -76,6 +91,7 @@
                 :type="showPassword? 'text' : 'password'"
                 :required="true"
                 :icon-path="mdiLock"
+                :max-length="80"
               />
             </div>
             <CustomCheckbox
@@ -98,59 +114,72 @@
           </RouterLink>
         </p>
       </div>
-
-      <div
-        v-if="submitSuccess"
-        class="bg-white w-[960px] py-20 mx-6 rounded-2xl"
-      >
-        <div class="flex flex-col items-center text-center gap-y-28 mx-4">
-          <h1 class="text-blue-900 text-4xl font-bold">
-            Suas informações estão sendo analisadas
-          </h1>
-          <img
-            class="animate-spin mr-3 max-w-[100px]"
-            src="src/assets/loading.svg"
-            alt="Loading"
-          >
-          <div>
-            <p class="max-w-xl text-center text-blue-400 text-2xl mb-5">
-              Aguarde o redirecionamento para a página de cadastro de egresso.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   </Form>
+  <CustomDialog
+    v-model="showRegistrationModal"
+  >
+    <div class="flex flex-col h-full justify-center items-center text-center gap-y-6 sm:gap-y-6">
+      <div class="flex flex-col justify-center items-center gap-y-4">
+        <SvgIcon
+          type="mdi"
+          size="75"
+          :path="mdiAlertCircle"
+          class="text-amber-400"
+        />
+        <p class="text-amber-400 text-2xl sm:text-3xl font-bold">
+          Açao necessária
+        </p>
+      </div>
+      <p class="font-medium text-lg max-w-lg">
+        Para validar o seu cadastro siga as instruções que foram enviadas para o e-mail:
+      </p>
+      <p class="font-bold text-lg">
+        {{ userEmail }}
+      </p>
+      <CustomButton
+        type="button"
+        tag="router"
+        color="sky"
+        text-class="text-white font-bold text-lg p-20 w-64 py-6"
+        link="/"
+      >
+        Fechar
+      </CustomButton>
+    </div>
+  </CustomDialog>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import CustomInput from 'src/components/CustomInput.vue'
-import { mdiAccount, mdiSchool, mdiEmail, mdiLock } from '@mdi/js'
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiAccount, mdiSchool, mdiEmail, mdiLock, mdiLoading, mdiAlertCircle } from '@mdi/js'
 import { Form } from 'vee-validate'
 import { object, string, ref as refYup } from 'yup'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
+import CustomDialog from 'src/components/CustomDialog.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
-import router from 'src/router'
-import { useLoginStore } from 'src/store/LoginStore'
+import { OLoading } from '@oruga-ui/oruga-next'
 import { models } from 'src/@types'
 interface ProfileRegisterModel extends models.ProfileRegisterModel { }
 
 const error = ref(false)
 const errorText = ref('')
-const submitSuccess = ref(false)
-const storeLogin = useLoginStore()
 const missingDigits = ref(0)
 const showPassword = ref(false)
 const $store = useCadastroPerfilStore()
+const loading = ref(false)
+const userEmail = ref('')
+const showRegistrationModal = ref(false)
 
 const schema = object().shape({
   nome: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
   username: string().required('Informe um nome de usuário').trim().matches(/^[A-Za-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
   registration: string().max(12).matches(/^(\d{12})?$/),
-  email: string().optional().matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.[a-zA-Z]{2,}))?$/, 'Email inválido'),
+  email: string().optional().matches(/^([A-Za-z\d]+([._][A-Za-z\d]+)*@[A-Za-z\d]+(.[A-Za-z\d]+)*(.[A-z]{2,}))?$/, 'Email inválido'),
   password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida'),
   confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida')
 })
@@ -165,7 +194,7 @@ const toggleShowPassword = () => {
 
 const handleSubmit = async (submitData: any) => {
   const profileData: ProfileRegisterModel = submitData
-
+  loading.value = true
   const response = await $store.userProfileRegister(
     profileData.username,
     profileData.password,
@@ -175,12 +204,17 @@ const handleSubmit = async (submitData: any) => {
   )
 
   if (response.status === 201) {
-    submitSuccess.value = true
-    await storeLogin.userLogin(profileData.username, profileData.password, true)
-    await router.push({ path: '/cadastro' })
+    userEmail.value = submitData.email
+    loading.value = false
+    showRegistrationModal.value = true
   } else if (response.status !== 201) {
-    errorText.value = response.data?.technicalMessage ? response.data?.technicalMessage : 'Requisição não aceita'
+    if (response.data?.technicalMessage) {
+      errorText.value = response.data.technicalMessage
+    } else {
+      errorText.value = 'Requisição não aceita'
+    }
     error.value = true
+    loading.value = false
   }
 }
 

@@ -59,8 +59,8 @@ public class GeneroServiceImpl implements GeneroService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-        return generoRepository.existsByIdAndCreatedById(id, createdBy);
+    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+        return generoRepository.existsByIdAndCreatedBy(id, createdBy);
     }
 
     @Override

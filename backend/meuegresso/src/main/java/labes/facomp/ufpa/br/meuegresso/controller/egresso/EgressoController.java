@@ -152,10 +152,10 @@ public class EgressoController {
             empresa = empresaService.findByNome(empresaDTO.getNome());
             if (empresa == null) {
                 empresa = mapper.map(empresaDTO, EmpresaModel.class);
-                empresa.setEndereco(enderecoEmpresa);
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
+                    .endereco(enderecoEmpresa)
                     .faixaSalarial(FaixaSalarialModel.builder().id(empresaDTO.getFaixaSalarialId()).build()).build());
             validaSetorAtuacao(empresaDTO.getSetorAtuacao(), egresso);
             validaAreaAtuacao(empresaDTO.getAreaAtuacao(), egresso);
@@ -229,7 +229,7 @@ public class EgressoController {
                     ErrorType.REPORT_007.getInternalCode());
         }
 
-        if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
+        if (egressoService.existsByIdAndCreatedBy(egresso.getId(), jwtService.getIdUsuario(token))) {
 
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
@@ -242,14 +242,16 @@ public class EgressoController {
             if (egressoModel.getEmprego() != null) {
                 EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
                 egressoEmpresaModel.setEgresso(egressoModel);
-                EnderecoModel enderecoModel = egressoEmpresaModel.getEmpresa().getEndereco();
+                EnderecoModel enderecoModel = egressoEmpresaModel.getEndereco();
                 EnderecoModel enderecoModelNoBanco = enderecoService.findByCidadeAndEstadoAndPais(
                         enderecoModel.getCidade(), enderecoModel.getEstado(),
                         enderecoModel.getPais());
                 if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
-                    egressoEmpresaModel.getEmpresa().setEndereco(enderecoModelNoBanco);
+                    egressoEmpresaModel.setEndereco(enderecoModelNoBanco);
+                    egressoEmpresaModel.getId().setEnderecoId(enderecoModelNoBanco.getId());
                 } else if (enderecoModelNoBanco == null) {
-                    egressoEmpresaModel.getEmpresa()
+                    egressoEmpresaModel.getId().setEnderecoId(null);
+                    egressoEmpresaModel
                             .setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
                                     .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
                 }
