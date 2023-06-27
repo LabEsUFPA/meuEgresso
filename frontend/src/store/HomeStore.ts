@@ -23,7 +23,7 @@ export const useHomeStore = defineStore('HomeStore', {
           id: elem.id,
           nomeEgresso: elem.nomeEgresso,
           empresa: elem.empresa,
-          endereco: elem.endereco,
+          endereco: elem.endereco
         }))
       }
     },

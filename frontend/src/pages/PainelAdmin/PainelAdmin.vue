@@ -231,7 +231,10 @@
         </div>
 
         <div class="col-span-1 row-span-6 bg-white rounded-lg flex flex-col">
-          <div class="text-xl font-semibold text-cyan-800 border-b p-4">
+          <RouterLink
+            to="/registro-egressos"
+            class="text-xl font-semibold text-cyan-800 border-b p-4"
+          >
             Registro de egressos
           </RouterLink>
 
@@ -418,7 +421,7 @@ const graphData = computed(() => ({
           'Setembro',
           'Outubro',
           'Novembro',
-          'Dezemmbro'
+          'Dezembro'
         ]
         if (selectedString.value === 'mes') {
           const date = new Date(key + 'T00:00:00')

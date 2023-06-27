@@ -11,7 +11,7 @@ export function getRandomEgresso (): EgressoMapa {
     nomeEgresso: faker.name.fullName(),
     empresa: {
       id: faker.datatype.number({ min: 0 }),
-      nome: faker.company.name(),
+      nome: faker.company.name()
     },
     endereco: {
       id: faker.datatype.number({ min: 0 }),
@@ -19,7 +19,7 @@ export function getRandomEgresso (): EgressoMapa {
       estado: faker.location.state(),
       pais: faker.location.countryCode(),
       latitude: faker.location.latitude(),
-      longitude: faker.location.longitude(),
+      longitude: faker.location.longitude()
     }
   }
 }
