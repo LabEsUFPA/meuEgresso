@@ -109,8 +109,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-		return usuarioRepository.existsByIdAndCreatedById(id, createdBy);
+	public UsuarioModel findByEmail(String email) {
+		return usuarioRepository.findByEmailIgnoreCase(email, UsuarioModel.class).orElseThrow();
+	}
+
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+		return usuarioRepository.existsByIdAndCreatedBy(id, createdBy);
 	}
 
 	@Override

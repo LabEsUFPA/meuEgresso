@@ -96,7 +96,7 @@ public class CotaController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarCota(@RequestBody @Valid CotaDTO cotaDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
-        if (cotaService.existsByIdAndCreatedById(cotaDTO.getId(), jwtService.getIdUsuario(token))) {
+        if (cotaService.existsByIdAndCreatedBy(cotaDTO.getId(), jwtService.getIdUsuario(token))) {
             CotaModel cotaModel = mapper.map(cotaDTO, CotaModel.class);
             cotaService.update(cotaModel);
             return ResponseType.SUCCESS_UPDATE.getMessage();

@@ -39,6 +39,10 @@ public interface UsuarioService extends UserDetailsService {
 	 */
 	public UsuarioModel findById(Integer idUsuario);
 
+
+	public UsuarioModel findByEmail(String email);
+
+
 	/**
 	 * Método responsável por encontrar todos os usuários cadastrados.
 	 *
@@ -77,7 +81,7 @@ public interface UsuarioService extends UserDetailsService {
 	 * @param createdBy
 	 * @return {@link boolean}
 	 */
-	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	public boolean existsByUsername(String username);
 

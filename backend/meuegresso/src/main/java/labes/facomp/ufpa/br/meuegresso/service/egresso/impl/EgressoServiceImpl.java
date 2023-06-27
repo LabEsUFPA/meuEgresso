@@ -128,8 +128,8 @@ public class EgressoServiceImpl implements EgressoService {
 	}
 
 	@Override
-	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-		return egressoRepository.existsByIdAndCreatedById(id, createdBy);
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+		return egressoRepository.existsByIdAndCreatedBy(id, createdBy);
 	}
 
 	@Override
@@ -293,7 +293,7 @@ public class EgressoServiceImpl implements EgressoService {
 				.collect(Collectors.toMap(
 						tuple -> tuple.get(0, java.sql.Date.class).toLocalDate(),
 						tuple -> tuple.get(1, Long.class)));
-		Map<LocalDate, Long> sortedResult = new TreeMap<>(result);		
+		Map<LocalDate, Long> sortedResult = new TreeMap<>(result);
 		return sortedResult;
 	}
 
@@ -307,7 +307,7 @@ public class EgressoServiceImpl implements EgressoService {
 								.toLocalDate()
 								.getYear(),
 						Collectors.summingLong(tuple -> tuple.get(1, Long.class))));
-	
+
 		Map<Integer, Long> sortedResult = new TreeMap<>(result);
 
 		return sortedResult;
@@ -323,8 +323,8 @@ public class EgressoServiceImpl implements EgressoService {
 								.toLocalDate()
 								.withDayOfMonth(1),
 						Collectors.summingLong(tuple -> tuple.get(1, Long.class))));
-		
-		Map<LocalDate, Long> sortedResult = new TreeMap<>(result);		
+
+		Map<LocalDate, Long> sortedResult = new TreeMap<>(result);
 		return sortedResult;
 	}
 

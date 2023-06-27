@@ -13,7 +13,7 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
  * @since 21/04/2023
  * @version 1.0.1
  */
-public interface CotaService  {
+public interface CotaService {
 
 	/**
 	 * Método responsável por persistir determinado cota no banco de dados.
@@ -60,8 +60,8 @@ public interface CotaService  {
 	 * @param createdBy
 	 * @return
 	 */
-	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
- 	public Map<String, Integer> countEgressoByCota();
+	public Map<String, Integer> countEgressoByCota();
 
 }

@@ -61,6 +61,6 @@ public interface AreaEmpregoService {
 	 * @param createdBy
 	 * @return
 	 */
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 }

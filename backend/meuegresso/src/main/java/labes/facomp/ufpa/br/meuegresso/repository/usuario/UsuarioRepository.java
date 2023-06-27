@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 import jakarta.persistence.Tuple;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.projections.usuario.RecoveryPasswordProjection;
 
 /**
  * Interface utilizada para realizar a comunicação entre a aplicação é o banco
@@ -25,9 +24,9 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	List<UsuarioModel> findAll();
 
-	Optional<RecoveryPasswordProjection> findByEmailIgnoreCase(String email);
+	<T> Optional<T> findByEmailIgnoreCase(String email, Class<T> type);
 
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	boolean existsByUsernameIgnoreCase(String username);
 

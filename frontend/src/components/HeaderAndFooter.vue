@@ -250,13 +250,11 @@ import CustomButton from 'src/components/CustomButton.vue'
 import UserDropdownMenu from './UserDropdownMenu.vue'
 import NavbarDrawer from './NavbarDrawer.vue'
 import CustomDialog from './CustomDialog.vue'
-import CookieService from 'src/services/cookieService'
 
 const $store = useLoginStore()
 const loggedIn = ref($store.loggedIn)
 const $router = useRouter()
 const showEgressNotRegisteredModal = ref(false)
-const cookieService = new CookieService()
 
 onMounted(() => {
   checkEgressRegistration()
@@ -264,7 +262,6 @@ onMounted(() => {
 
 watch(() => $store.loggedIn, () => {
   loggedIn.value = $store.loggedIn
-
   if (loggedIn.value) {
     checkEgressRegistration()
   }
@@ -272,13 +269,13 @@ watch(() => $store.loggedIn, () => {
 
 const checkEgressRegistration = () => {
   const userData = $store.getUserData()
-  const isFirstAccess = cookieService.get('isFirstAccess')
-
-  if (
-    userData?.scope === 'EGRESSO' &&
-    !userData?.isEgresso &&
-    isFirstAccess !== 'yes'
-  ) showEgressNotRegisteredModal.value = true
+  if ($store.isFirstAccess === 'yes') showEgressNotRegisteredModal.value = false
+  else {
+    if (
+      userData?.scope === 'EGRESSO' &&
+      !userData?.isEgresso
+    ) showEgressNotRegisteredModal.value = true
+  }
 }
 
 </script>
