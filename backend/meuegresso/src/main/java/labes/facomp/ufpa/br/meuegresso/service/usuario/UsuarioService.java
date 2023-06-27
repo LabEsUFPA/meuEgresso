@@ -85,6 +85,8 @@ public interface UsuarioService extends UserDetailsService {
 
 	public boolean existsByUsername(String username);
 
+	public boolean existsByEmail(String email);
+
 	public Map<String, LocalDateTime> findByAtivo();
 
 	/**

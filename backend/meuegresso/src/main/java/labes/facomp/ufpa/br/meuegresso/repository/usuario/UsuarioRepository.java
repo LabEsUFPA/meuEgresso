@@ -30,6 +30,8 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	boolean existsByUsernameIgnoreCase(String username);
 
+	boolean existsByEmail(String email);
+
 	@Query(nativeQuery = true, value = """
 			SELECT u.email, u.created_date
 			FROM usuario u
