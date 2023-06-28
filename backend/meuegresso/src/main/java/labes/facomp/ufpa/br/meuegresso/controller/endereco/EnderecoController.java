@@ -113,7 +113,7 @@ public class EnderecoController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarEndereco(@RequestBody @Valid EnderecoDTO enderecoDTO,
 			JwtAuthenticationToken token) throws InvalidRequestException, UnauthorizedRequestException {
-		if (enderecoService.existsByIdAndCreatedById(enderecoDTO.getId(), jwtService.getIdUsuario(token))) {
+		if (enderecoService.existsByIdAndCreatedBy(enderecoDTO.getId(), jwtService.getIdUsuario(token))) {
 			EnderecoModel enderecoModel = mapper.map(enderecoDTO, EnderecoModel.class);
 			enderecoService.update(enderecoModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();

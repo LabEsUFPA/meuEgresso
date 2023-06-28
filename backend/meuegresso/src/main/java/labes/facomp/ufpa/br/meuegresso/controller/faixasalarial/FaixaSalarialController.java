@@ -22,7 +22,9 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.faixasalarial.FaixaSalarialService;
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +43,8 @@ public class FaixaSalarialController {
     private final FaixaSalarialService faixaSalarialService;
 
     private final ModelMapper mapper;
+
+    private final JwtService jwtService;
 
     /**
      * Endpoint responsavel por buscar todas as faixas salariais do banco.
@@ -96,10 +100,13 @@ public class FaixaSalarialController {
     @PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
     public String atualizarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO,
             JwtAuthenticationToken token)
-            throws InvalidRequestException {
-        FaixaSalarialModel faixaSalarialModel = mapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
-        faixaSalarialService.update(faixaSalarialModel);
-        return ResponseType.SUCCESS_UPDATE.getMessage();
+            throws InvalidRequestException, UnauthorizedRequestException {
+        if (faixaSalarialService.existsByIdAndCreatedBy(faixaSalarialDTO.getId(), jwtService.getIdUsuario(token))) {
+            FaixaSalarialModel faixaSalarialModel = mapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
+            faixaSalarialService.update(faixaSalarialModel);
+            return ResponseType.SUCCESS_UPDATE.getMessage();
+        }
+        throw new UnauthorizedRequestException();
     }
 
     /**

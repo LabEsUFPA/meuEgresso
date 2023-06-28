@@ -36,14 +36,9 @@ public interface EgressoService {
 
 	public EgressoModel findById(Integer id);
 
-	/**
-	 * Método responsável por encontrar todos os egressoEmpresas cadastrados.
-	 *
-	 * @return Lista de objetos da classe EgressoModel.
-	 */
 	public List<EgressoModel> findAll();
 
-	public EgressoModel adicionarEgresso(EgressoModel egressoModel);
+	public EgressoModel adicionarEgresso(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por atualizar informacoes do egresso no banco de dados.
@@ -53,7 +48,6 @@ public interface EgressoService {
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
-
 	public EgressoModel updateEgresso(EgressoModel egresso);
 
 	/**
@@ -84,7 +78,7 @@ public interface EgressoService {
 	 * @param createdBy
 	 * @return boolean
 	 */
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	/**
 	 * Método responsável pelo retorno do caminho da foto como um URI
@@ -118,6 +112,16 @@ public interface EgressoService {
 	 * @since 07/05/2023
 	 */
 	public void saveFoto(String nomeAnexo, MultipartFile arquivo) throws IOException;
+
+	/**
+	 * Método responsável por verificar se matrícula já está associada a um egresso
+	 *
+	 * @param matricula
+	 * @return True caso matricula exista, false do contrario.
+	 * @author Bruno Eiki
+	 * @since 21/06/2023
+	 */
+	public boolean existsMatricula(String matricula);
 
 	public Map<Integer, Integer> countAgeFromEgressos();
 

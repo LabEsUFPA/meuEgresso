@@ -59,8 +59,8 @@ public class EgressoEmpresaServiceImpl implements EgressoEmpresaService {
     }
 
     @Override
-    public boolean existsById(EgressoEmpresaModelId id) {
-        return egressoEmpresaRepository.existsById(id);
+    public boolean existsByIdAndCreatedBy(EgressoEmpresaModelId id, Integer createdBy) {
+        return egressoEmpresaRepository.existsByIdAndCreatedBy(id, createdBy);
     }
 
     public List<EgressoEmpresaModel> findAllEgressoMapa() {

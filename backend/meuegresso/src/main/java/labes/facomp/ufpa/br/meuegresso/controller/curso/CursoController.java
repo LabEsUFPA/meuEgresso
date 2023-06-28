@@ -104,6 +104,7 @@ public class CursoController {
 	 * @return {@link CursoDTO} Dados gravados no banco com a Id atualizada.
 	 * @author Alfredo Gabriel
 	 * @throws UnauthorizedRequestException
+	 * @throws InvalidRequestException
 	 * @since 21/04/2023
 	 */
 	@PutMapping
@@ -111,7 +112,7 @@ public class CursoController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarCurso(@RequestBody @Valid CursoDTO cursoDTO, JwtAuthenticationToken token)
 			throws UnauthorizedRequestException, InvalidRequestException {
-		if (cursoService.existsByIdAndCreatedById(cursoDTO.getId(), jwtService.getIdUsuario(token))) {
+		if (cursoService.existsByIdAndCreatedBy(cursoDTO.getId(), jwtService.getIdUsuario(token))) {
 			CursoModel cursoModel = mapper.map(cursoDTO, CursoModel.class);
 			cursoService.update(cursoModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();

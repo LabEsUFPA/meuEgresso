@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.genero.GeneroService;
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +43,8 @@ public class GeneroController {
     private final GeneroService generoService;
 
     private final ModelMapper mapper;
+
+    private final JwtService jwtService;
 
     /**
      * Endpoint responsavel por buscar todos generos do banco.
@@ -92,9 +96,9 @@ public class GeneroController {
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     @PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
-    public String atualizarGenero(@RequestBody @Valid GeneroDTO generoDTO)
+    public String atualizarGenero(@RequestBody @Valid GeneroDTO generoDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
-        if (generoService.existsById(generoDTO.getId())) {
+        if (generoService.existsByIdAndCreatedBy(generoDTO.getId(), jwtService.getIdUsuario(token))) {
             GeneroModel generoModel = mapper.map(generoDTO, GeneroModel.class);
             generoService.update(generoModel);
             return ResponseType.SUCCESS_UPDATE.getMessage();

@@ -27,6 +27,7 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModelId;
+import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoEmpresaService;
 import lombok.RequiredArgsConstructor;
 
@@ -46,6 +47,7 @@ public class EgressoEmpresaController {
 
 	private final ModelMapper mapper;
 
+	private final JwtService jwtService;
 	/**
 	 * Endpoint responsável por retornar a lista de egressoEmpresa cadastrados no
 	 * banco de dados.
@@ -112,7 +114,7 @@ public class EgressoEmpresaController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarEgressoEmpresa(@RequestBody @Valid EgressoEmpresaDTO egressoEmpresaDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (egressoEmpresaService.existsById(egressoEmpresaDTO.getId())) {
+		if (egressoEmpresaService.existsByIdAndCreatedBy(egressoEmpresaDTO.getId(), jwtService.getIdUsuario(token))) {
 			EgressoEmpresaModel egressoEmpresaModel = mapper.map(egressoEmpresaDTO, EgressoEmpresaModel.class);
 			egressoEmpresaService.update(egressoEmpresaModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();

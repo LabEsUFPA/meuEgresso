@@ -60,8 +60,8 @@ public class ContribuicaoServiceImpl implements ContribuicaoService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-        return contribuicaoRepository.existsByIdAndCreatedById(id, createdBy);
+    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+        return contribuicaoRepository.existsByIdAndCreatedBy(id, createdBy);
     }
 
     @Override
