@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col items-center">
-    <div class="w-full bg-gradient-to-b from-sky-200 to-indigo-200">
+  <div class="flex flex-col items-center my-16">
+    <div class="w-[1728px] bg-gradient-to-b from-sky-200 to-indigo-200 rounded-2xl">
       <div v-if="depoimentosMock.length > 0">
-        <div class="flex flex-wrap justify-center my-8">
+        <div class="flex flex-wrap justify-center my-8 mx-9">
           <div class="flex w-full items-center justify-between p-6 sm:p-8">
             <div class="flex items-center gap-2">
               <div class="w-[32px] p-2 text-cyan-800">

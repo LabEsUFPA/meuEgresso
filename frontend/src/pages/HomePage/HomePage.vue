@@ -1,9 +1,11 @@
 <template>
-  <SociodemographicMap
-    v-if="!loading"
-    :egress-list="markers"
-  />
-  <DepoimentosSection />
+  <div class="flex flex-col">
+    <SociodemographicMap
+      v-if="!loading"
+      :egress-list="markers"
+    />
+    <DepoimentosSection />
+  </div>
 </template>
 
 <script setup lang="ts">
