@@ -45,7 +45,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class })
-public class TitulacaoRepositoryTest {
+class TitulacaoRepositoryTest {
 
     @Autowired
     private TitulacaoRepository titulacaoRepository;

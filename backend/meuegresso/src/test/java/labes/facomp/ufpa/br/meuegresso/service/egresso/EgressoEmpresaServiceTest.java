@@ -130,20 +130,19 @@ class EgressoEmpresaServiceTest {
     }
 
     /**
-     * Metodo para testar o existsByIdAndCreatedById.
+     * Metodo para testar o existsByIdAndCreatedBy.
      *
      * @author Pedro Inácio
      * @since 28/04/2023
      */
     @Test
-    void testExistsById() {
+    void testExistsByIdAndCreatedBy() {
 
-        BDDMockito.given(repository.existsById(Mockito.any(
-                EgressoEmpresaModelId.class)))
+        BDDMockito.given(repository.existsByIdAndCreatedBy(Mockito.any(
+                EgressoEmpresaModelId.class), Mockito.anyInt()))
                 .willReturn(true);
-        //TODO: consertar teste
-        //Boolean response = egressoEmpresaService.existsByIdAndCreatedBy(ID, usua);
-        //assertTrue(response);
+        Boolean response = egressoEmpresaService.existsByIdAndCreatedBy(ID, 1);
+        assertTrue(response);
     }
 
     /**

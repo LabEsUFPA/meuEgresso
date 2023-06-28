@@ -24,7 +24,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.areaatuacao.AreaAtuacaoReposit
 @SpringBootTest
 @DirtiesContext
 @ActiveProfiles("test")
-public class AreaAtuacaoServiceTest {
+class AreaAtuacaoServiceTest {
 
     @Autowired
     private AreaAtuacaoService areaAtuacaoService;

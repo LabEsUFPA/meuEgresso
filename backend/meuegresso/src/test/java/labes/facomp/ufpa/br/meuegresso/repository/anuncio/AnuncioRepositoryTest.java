@@ -48,8 +48,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-
-public class AnuncioRepositoryTest 
+class AnuncioRepositoryTest 
 {
         private AreaEmpregoModel engenharia;
 

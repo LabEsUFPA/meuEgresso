@@ -173,7 +173,6 @@ class FaixaSalarialControllerTest {
 	@Test
 	@Order(3)
 	void testAtualizarFaixaSalarial() throws Exception {
-		//TODO: consertar teste
 		FaixaSalarialDTO faixaSalarialDTO = modelMapper.map(faixaSalarialModel, FaixaSalarialDTO.class);
 
 		MvcResult resposta = mockMvc.perform(

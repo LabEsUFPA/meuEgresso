@@ -30,7 +30,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EgressoValidoModel;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class })
-public class EgressoValidoRepositoryTest {
+class EgressoValidoRepositoryTest {
     @Autowired
     private EgressoValidoRepository egressoValidoRepository;
 

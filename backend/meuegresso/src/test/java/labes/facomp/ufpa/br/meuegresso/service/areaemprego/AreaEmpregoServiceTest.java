@@ -24,7 +24,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.areaemprego.AreaEmpregoReposit
 @SpringBootTest
 @DirtiesContext
 @ActiveProfiles("test")
-public class AreaEmpregoServiceTest {
+class AreaEmpregoServiceTest {
 
     @Autowired
     private AreaEmpregoService areaEmpregoService;

@@ -33,7 +33,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class })
-public class AreaEmpregoRepositoryTest {
+class AreaEmpregoRepositoryTest {
 
     @Autowired
     private AreaEmpregoRepository areaEmpregoRepository;
