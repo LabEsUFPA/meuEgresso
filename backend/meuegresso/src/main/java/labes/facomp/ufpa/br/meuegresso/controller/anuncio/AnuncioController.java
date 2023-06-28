@@ -123,7 +123,7 @@ public class AnuncioController {
 			@RequestParam(defaultValue = "20", required = false) Integer size,
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
 
-		Page<AnuncioDTO> anuncios = anuncioService.findByDataExpiracaoAfter(LocalDate.now(), page, size, direction)
+		Page<AnuncioDTO> anuncios = anuncioService.findBySearch(titulo, areaEmprego, page, size, direction)
 				.map(e -> mapper.map(e, AnuncioDTO.class));
 
 		anuncios.forEach(anuncio -> {
