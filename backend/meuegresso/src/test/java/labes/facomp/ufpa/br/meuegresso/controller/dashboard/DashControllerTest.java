@@ -263,6 +263,9 @@
 //         usuarioModelAdmin.setCreatedDate(LocalDateTime.now());
 //         usuarioModelAdmin.setLastModifiedDate(LocalDateTime.now());
 //         usuarioModelAdmin.setGrupos(Set.of(Grupos.ADMIN));
+//         usuarioModelAdmin.setEmailVerificado(true);
+//         usuarioModelAdmin.setAtivo(true);
+
 
 //         usuarioModelAdmin.setPassword(passwordEncoder.encode(plainPassword));
 //         usuarioRepository.save(usuarioModelAdmin);
