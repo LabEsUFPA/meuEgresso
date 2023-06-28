@@ -2,10 +2,18 @@
   <div class="flex flex-col w-[960px] bg-white rounded-2xl mx-4 sm:mx-6">
     <div class="flex gap-4 px-6 sm:px-8 pt-6 sm:pt-8 pb-4 items-center border-b-[1px] border-b-gray-200">
       <div class="shrink-0 p-2 bg-cyan-800 rounded-3xl text-white">
+        <img
+          v-if="fotoUsuario !== '' && foto"
+          @error="fotoUsuario = ''"
+          :src="fotoUsuario"
+        >
+
         <SvgIcon
+          v-else
           type="mdi"
           size="21"
           :path="mdiAccount"
+          class="text-white"
         />
       </div>
 
@@ -74,18 +82,21 @@
 
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiAccount, mdiBullhorn, mdiChevronRight } from '@mdi/js'
+import { ref } from 'vue'
 
 import CustomButton from 'src/components/CustomButton.vue'
 
-defineProps<
-  {
-  id: Number,
-  nome: String,
-  titulo: String,
-  area: String,
-  descricao: String,
-  salario: String,
+const props = defineProps<{
+  id: number,
+  nome: string,
+  titulo: string,
+  area: string,
+  descricao: string,
+  salario: string,
+  foto?: string
 }>()
+
+const fotoUsuario = ref(props.foto)
 
 const formataSalario = (value:String) => {
   console.log(value)

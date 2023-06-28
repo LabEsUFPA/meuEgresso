@@ -93,7 +93,7 @@
         >
           <ShortPost
             :id="anuncio.id"
-            :nome="anuncio.createdBy.nome"
+            :nome="anuncio.createdByUser.nome"
             :titulo="anuncio.titulo"
             :area="anuncio.areaEmprego.nome"
             :descricao="anuncio.descricao"

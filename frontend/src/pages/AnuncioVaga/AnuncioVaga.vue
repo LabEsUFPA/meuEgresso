@@ -19,16 +19,24 @@
         </RouterLink>
 
         <div class="shrink-0 p-2 bg-cyan-800 rounded-3xl text-white">
+          <img
+            v-if="fotoUsuario !== '' && $store.anuncio.createdByUser.foto"
+            @error="fotoUsuario = ''"
+            :src="fotoUsuario"
+          >
+
           <SvgIcon
+            v-else
             type="mdi"
             size="21"
             :path="mdiAccount"
+            class="text-white"
           />
         </div>
 
         <div class="flex flex-col text-cyan-800">
           <p class="text-sm sm:text-lg font-medium leading-tight">
-            {{ $store.anuncio.createdBy.nome }}
+            {{ $store.anuncio.createdByUser.nome }}
           </p>
           <p class="flex text-xs sm:text-sm font-normal">
             anunciou uma vaga
@@ -121,7 +129,7 @@
               Vaga disponível até {{ $store.anuncio.dataExpiracao.split('-').reverse().join('/') }}
             </p>
             <CustomButton
-              v-show="tipoUsuario === 'ADMIN' || userEmail === $store.anuncio.createdBy.email"
+              v-show="tipoUsuario === 'ADMIN' || userEmail === $store.anuncio.createdByUser.nome"
               type="button"
               color="red"
               variant="flat"
@@ -200,6 +208,7 @@ $store.getAnuncioId(parseInt(id.toString()))
 const $loginStore = useLoginStore()
 const tipoUsuario = ref('')
 const userEmail = ref('')
+const fotoUsuario = ref($store.anuncio.createdByUser.foto)
 
 console.log('salário:', $store.anuncio.salario)
 
@@ -207,6 +216,7 @@ onMounted(() => {
   if ($loginStore.loggedIn) {
     tipoUsuario.value = $loginStore.getUserData()?.scope ?? ''
   }
+  // Corrigir isso em casa
   if (tipoUsuario.value !== 'ADMIN') {
     userEmail.value = ($loginStore.getUserData() as any)?.email ?? ''
   }

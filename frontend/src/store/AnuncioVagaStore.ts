@@ -30,9 +30,14 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       dataExpiracao: '',
       link: '',
       salario: '',
-      createdBy: {
-        email: '',
-        nome: ''
+      createdBy: 0,
+      createdByUser: {
+        id: 0,
+        nome: '',
+        egresso: {
+          id: 0
+        },
+        foto: ''
       }
     },
     anuncios: [],
@@ -61,9 +66,14 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
           dataExpiracao: elem.dataExpiracao,
           link: elem.link,
           salario: elem.salario,
-          createdBy: {
-            email: elem.createdBy.email,
-            nome: elem.createdBy.nome
+          createdBy: elem.createdBy,
+          createdByUser: {
+            id: elem.createdByUser.id,
+            nome: elem.createdByUser.nome,
+            egresso: {
+              id: elem.createdByUser.egresso.id
+            },
+            foto: elem.createdByUser.foto
           }
         }))
       }
@@ -115,9 +125,14 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
           dataExpiracao: elem.dataExpiracao,
           link: elem.link,
           salario: elem.salario,
-          createdBy: {
-            email: elem.createdBy.email,
-            nome: elem.createdBy.nome
+          createdBy: elem.createdBy,
+          createdByUser: {
+            id: elem.createdByUser.id,
+            nome: elem.createdByUser.nome,
+            egresso: {
+              id: elem.createdByUser.egresso.id
+            },
+            foto: elem.createdByUser.foto
           }
         }))
       }
@@ -143,68 +158,19 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
           dataExpiracao: elem.dataExpiracao,
           link: elem.link,
           salario: elem.salario,
-          createdBy: {
-            email: elem.createdBy.email,
-            nome: elem.createdBy.nome
+          createdBy: elem.createdBy,
+          createdByUser: {
+            id: elem.createdByUser.id,
+            nome: elem.createdByUser.nome,
+            egresso: {
+              id: elem.createdByUser.egresso.id
+            },
+            foto: elem.createdByUser.foto
           }
         }))
       }
     },
 
-    async fetchBuscaAnuncioTitulo (titulo: string, page: number, size: number) {
-      const response = await Api.request({
-        method: 'get',
-        route: '/anuncio/busca',
-        params: { titulo, page, size }
-      })
-      if (response?.status === 200) {
-        this.totalPages = response.data?.totalPages
-        this.anuncios = response.data?.content.map((elem: any) => ({
-          id: elem.id,
-          titulo: elem.titulo,
-          areaEmprego: {
-            id: elem.areaEmprego.id,
-            nome: elem.areaEmprego.nome
-          },
-          descricao: elem.descricao,
-          dataExpiracao: elem.dataExpiracao,
-          link: elem.link,
-          salario: elem.salario,
-          createdBy: {
-            email: elem.createdBy.email,
-            nome: elem.createdBy.nome
-          }
-        }))
-      }
-    },
-
-    async fetchBuscaAnuncioAreas (areasEmpregos: number[], page: number, size: number) {
-      const areaEmprego = areasEmpregos.join()
-      const response = await Api.request({
-        method: 'get',
-        route: '/anuncio/busca',
-        params: { areaEmprego, page, size }
-      })
-      if (response?.status === 200) {
-        this.totalPages = response.data?.totalPages
-        this.anuncios = response.data?.content.map((elem: any) => ({
-          id: elem.id,
-          titulo: elem.titulo,
-          areaEmprego: {
-            id: elem.areaEmprego.id,
-            nome: elem.areaEmprego.nome
-          },
-          descricao: elem.descricao,
-          dataExpiracao: elem.dataExpiracao,
-          link: elem.link,
-          salario: elem.salario,
-          createdBy: {
-            email: elem.createdBy.email,
-            nome: elem.createdBy.nome
-          }
-        }))
-      }
-    },
     async fetchAreasEmprego () {
       const response = await Api.request({
         method: 'get',
@@ -250,9 +216,14 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
           dataExpiracao: '',
           link: '',
           salario: '',
-          createdBy: {
-            email: '',
-            nome: ''
+          createdBy: 0,
+          createdByUser: {
+            id: 0,
+            nome: '',
+            egresso: {
+              id: 0
+            },
+            foto: ''
           }
         }
       }
