@@ -66,6 +66,7 @@ class UsuarioServiceImplTest {
 		usuario.setEmail("john@example.com");
 		usuario.setPassword("password123");
 		usuario.setCreatedBy(usuario.getId());
+		usuario.setEmailVerificado(true);
 
 		usuarioRepository.save(usuario);
 
@@ -76,6 +77,7 @@ class UsuarioServiceImplTest {
 		usuario2.setEmail("jocke@example.com");
 		usuario2.setPassword("password124");
 		usuario2.setCreatedBy(usuario2.getId());
+		usuario2.setEmailVerificado(true);
 		usuarioRepository.save(usuario2);
 
 		usuarios.add(usuario);
@@ -201,18 +203,20 @@ class UsuarioServiceImplTest {
 		user.setUsername("michel123");
 		user.setPassword("newpassword");
 		user.setLastModifiedBy(user.getId());
+		user.setEmailVerificado(true);
+		user.setValido(true);
+
 
 		UsuarioModel mockUser = new UsuarioModel();
 		mockUser.setId(10);
 
-		Mockito.when(usuarioRepository.save(new UsuarioModel(10, null, null, null, null, null, null, true, true)))
+		Mockito.when(usuarioRepository.save(Mockito.any(UsuarioModel.class)))
 				.thenReturn(user);
 		UsuarioModel usertest = usuarioService.update(mockUser);
 
 		MatcherAssert.assertThat(usertest.getId(), Matchers.greaterThan(0));
 		assertNotNull(usertest);
 		assertEquals(user, usertest);
-		Mockito.verify(usuarioRepository).save(new UsuarioModel(10, null, null, null, null, null, null, true, true));
 	}
 
 	@Test

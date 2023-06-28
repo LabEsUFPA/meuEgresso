@@ -113,8 +113,8 @@ public class DashAdmController {
 	 * @since 11/06/2023
 	 */
 	@GetMapping("/export")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public ResponseEntity<byte[]> exportarPDF() throws DocumentException {
 
@@ -183,9 +183,9 @@ public class DashAdmController {
 	 * @author Eude Monteiro
 	 * @since 12/06/2023
 	 */
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@GetMapping(value = "/notificacaoStatus")
 	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<NotificacaoDTO> getStatus(
 			@RequestParam(name = "nome", defaultValue = "", required = false) String nome,
@@ -203,8 +203,8 @@ public class DashAdmController {
 	}
 
 	@GetMapping(value = "/cadastro/dia")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoCadastroDiaGraficoDTO getCadastroEgressoDiario() {
 		Map<LocalDate, Long> egressoCadDia = egressoService.countEgressoPorData();
@@ -213,8 +213,8 @@ public class DashAdmController {
 	}
 
 	@GetMapping(value = "/cadastro/mes")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoCadastroMensalGraficoDTO getCadastroEgressoMensal() {
 		Map<LocalDate, Long> egressoCadMes = egressoService.countEgressoPorMesEAno();
@@ -223,8 +223,8 @@ public class DashAdmController {
 	}
 
 	@GetMapping(value = "/cadastro/ano")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoCadastroAnualGraficoDTO getCadastroEgressoAno() {
 		Map<Integer, Long> egressoCadAno = egressoService.countEgressoPorAno();

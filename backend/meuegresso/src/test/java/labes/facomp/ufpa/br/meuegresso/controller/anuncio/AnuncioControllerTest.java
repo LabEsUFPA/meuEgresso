@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -43,6 +44,7 @@ import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.model.AreaEmpregoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.areaemprego.AreaEmpregoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 @SpringBootTest
 @DirtiesContext
@@ -74,6 +76,12 @@ class AnuncioControllerTest extends Configuracao {
         UsuarioModel usuarioModel;
 
         @Autowired
+        PasswordEncoder encoder;
+
+        @Autowired
+        UsuarioRepository usuarioRepository;
+
+        @Autowired
         ModelMapper modelMapper;
 
         AnuncioModel anuncioModel;
@@ -83,22 +91,20 @@ class AnuncioControllerTest extends Configuracao {
 
         @BeforeAll
         void setUp() throws Exception {
-                //TODO: consertar teste setup
-                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
+                ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+                final String plainPass = "teste123";
                 /* Usuario */
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
                 usuarioModel.setNome("nome_test asdsad");
                 usuarioModel.setEmail("teste@gmail.com");
-                usuarioModel.setPassword("teste123");
+                usuarioModel.setPassword(encoder.encode(plainPass));
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
-                mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(usuarioModel)))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isCreated())
-                                .andReturn();
+                usuarioModel.setEmailVerificado(true);
+                usuarioModel.setAtivo(true);
+
+                usuarioModel = usuarioRepository.save(usuarioModel);
 
                 /* Area Emprego */
                 areaEmprego = new AreaEmpregoModel();
@@ -129,7 +135,7 @@ class AnuncioControllerTest extends Configuracao {
                 /* Authentication */
                 AuthenticationRequest authenticationRequest = new AuthenticationRequest();
                 authenticationRequest.setUsername(usuarioModel.getUsername());
-                authenticationRequest.setPassword(usuarioModel.getPassword());
+                authenticationRequest.setPassword(plainPass);
                 String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
                 MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
@@ -241,7 +247,7 @@ class AnuncioControllerTest extends Configuracao {
 
         @Order(5)
         @Test
-        void testfindByTitulo() throws Exception {
+        void findByTitulo() throws Exception {
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
@@ -263,7 +269,7 @@ class AnuncioControllerTest extends Configuracao {
 
         @Order(6)
         @Test
-        void testfindByAreaEmprego() throws Exception {
+        void findByAreaEmprego() throws Exception {
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(

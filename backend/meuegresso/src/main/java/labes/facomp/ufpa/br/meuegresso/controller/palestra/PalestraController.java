@@ -56,6 +56,7 @@ public class PalestraController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<PalestraDTO> consultarPalestras() {
 		return mapper.map(palestraService.findAll(), new TypeToken<List<PalestraDTO>>() {
@@ -132,6 +133,7 @@ public class PalestraController {
 	 * @since 17/04/2023
 	 */
 	@DeleteMapping(value = "/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String deleteById(@PathVariable Integer id) {

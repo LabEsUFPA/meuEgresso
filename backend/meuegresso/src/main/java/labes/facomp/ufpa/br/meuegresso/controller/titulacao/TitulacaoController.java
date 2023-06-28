@@ -94,7 +94,7 @@ public class TitulacaoController {
      * @since 21/04/2023
      */
     @PutMapping
-    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarTitulacao(@RequestBody @Valid TitulacaoDTO titulacaoDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {

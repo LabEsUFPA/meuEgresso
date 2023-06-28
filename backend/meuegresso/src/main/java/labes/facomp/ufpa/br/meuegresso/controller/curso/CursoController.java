@@ -56,6 +56,7 @@ public class CursoController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<CursoDTO> consultarCursos() {
 		return mapper.map(cursoService.findAll(), new TypeToken<List<CursoDTO>>() {
@@ -130,6 +131,7 @@ public class CursoController {
 	 * @since 17/04/2023
 	 */
 	@DeleteMapping(value = "/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String deleteById(@PathVariable Integer id) {
