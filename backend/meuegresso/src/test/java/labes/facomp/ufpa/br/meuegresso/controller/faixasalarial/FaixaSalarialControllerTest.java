@@ -128,7 +128,7 @@ class FaixaSalarialControllerTest {
 				UsuarioAuthDTO.class);
 
 		usuarioModel.setId(usuarioAuthDTO.getId());
-
+		faixaSalarialModel.setCreatedBy(usuarioModel.getId());
 		faixaSalarialModel = faixaSalarialService.save(faixaSalarialModel);
 	}
 
@@ -181,7 +181,7 @@ class FaixaSalarialControllerTest {
 						.content(objectMapper.writeValueAsString(faixaSalarialDTO))
 						.header("Authorization", "Bearer " + this.token))
 						.andDo(MockMvcResultHandlers.print())
-						.andExpect(status().isAccepted())
+						.andExpect(status().isCreated())
 						.andReturn();
 		String retornoString = resposta.getResponse().getContentAsString();
 		assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
