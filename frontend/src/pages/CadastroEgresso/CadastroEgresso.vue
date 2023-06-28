@@ -300,51 +300,37 @@
               :disabled="area === 'Desempregado'"
             />
           </div>
-        </template>
-      </FolderSection>
 
-      <FolderSection class="mt-6">
-        <template #title>
-          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-            <SvgIcon
-              type="mdi"
-              size="20"
-              class="inline mr-2"
-              :path="mdiMapMarker"
-            />
-            Localização
-          </h1>
-        </template>
-
-        <template #default>
-          <div>
-            <CustomSelect
-              class="mb-5"
-              name="localizacao.pais"
-              label="País"
-              :options="countries"
-              v-model:value="pais"
-              @change="pais = $event"
-              required
-            />
-
-            <CustomSelect
-              class="mb-5"
-              name="localizacao.estado"
-              label="Estado"
-              :options="states"
-              v-model:value="estado"
-              @change="estado = $event"
-              required
-            />
-
-            <CustomSelect
-              name="localizacao.cidade"
-              label="Cidade"
-              :options="cities"
-              required
-            />
+          <div class="mb-5 text-sm font-semibold text-cyan-600">
+            Localização:
           </div>
+
+          <CustomSelect
+            class="mb-5"
+            name="carreira.pais"
+            label="País"
+            :options="countries"
+            v-model:value="pais"
+            @change="pais = $event"
+            :disabled="area === 'Desempregado'"
+          />
+
+          <CustomSelect
+            class="mb-5"
+            name="carreira.estado"
+            label="Estado"
+            :options="states"
+            v-model:value="estado"
+            @change="estado = $event"
+            :disabled="area === 'Desempregado'"
+          />
+
+          <CustomSelect
+            name="carreira.cidade"
+            label="Cidade"
+            :options="cities"
+            :disabled="area === 'Desempregado'"
+          />
         </template>
       </FolderSection>
 
@@ -539,7 +525,6 @@ import {
   mdiBriefcase,
   mdiEmail,
   mdiLinkedin,
-  mdiMapMarker,
   mdiMessage,
   mdiSchool,
   mdiTwitter,
@@ -689,7 +674,11 @@ async function handleSubmit (values: any) {
         faixaSalarialId: values.carreira.faixaSalarial ? parseInt(values.carreira.faixaSalarial) : null,
         setorAtuacao: values.carreira.setor,
         nome: values.carreira.empresa,
-        endereco: values.localizacao
+        endereco: {
+          pais: values.carreira.pais,
+          estado: values.carreira.estado,
+          cidade: values.carreira.cidade
+        }
       }
     : null
 
@@ -848,12 +837,16 @@ const schema = object().shape({
     }),
     faixaSalarial: string().when('area', ([area], schema) => {
       return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    pais: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    estado: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    cidade: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     })
-  }),
-  localizacao: object({
-    pais: string().required('Campo obrigatório'),
-    estado: string().required('Campo obrigatório'),
-    cidade: string().required('Campo obrigatório')
   }),
   adicionais: object({
     palestras: boolean(),
