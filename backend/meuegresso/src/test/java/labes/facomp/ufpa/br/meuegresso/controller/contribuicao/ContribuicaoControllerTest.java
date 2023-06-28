@@ -88,22 +88,22 @@ class ContribuicaoControllerTest {
         @BeforeAll
         void setUp() throws Exception {
 
-                final String senha = "teste123";
+                final String plainPass = "teste123";
 
-                usuarioModel = new UsuarioModel();
-                usuarioModel.setUsername(USERNAME);
-                usuarioModel.setNome("nome test");
-                usuarioModel.setEmail("teste@gmail.com");
-                usuarioModel.setPassword(senha);
-                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+		usuarioModel = new UsuarioModel();
+		usuarioModel.setUsername("username");
+		usuarioModel.setNome("nome test");
+		usuarioModel.setEmail("teste@gmail.com");
+		usuarioModel.setPassword(passwordEncoder.encode(plainPass));
+		usuarioModel.setEmailVerificado(true);
+		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+		usuarioModel.setAtivo(true);
 
-                usuarioModel.setPassword(passwordEncoder.encode(usuarioModel.getPassword()));
+		usuarioRepository.save(usuarioModel);
 
-                usuarioRepository.save(usuarioModel);
-
-                AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-                authenticationRequest.setUsername(usuarioModel.getUsername());
-                authenticationRequest.setPassword(senha);
+		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+		authenticationRequest.setUsername(usuarioModel.getUsername());
+		authenticationRequest.setPassword(plainPass);
                 String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
                 MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")

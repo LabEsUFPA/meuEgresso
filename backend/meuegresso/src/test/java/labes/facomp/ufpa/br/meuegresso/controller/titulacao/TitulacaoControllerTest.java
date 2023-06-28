@@ -72,21 +72,23 @@ class TitulacaoControllerTest {
 	@BeforeAll
 	void setUp() throws Exception {
 
+		final String plainPass = "teste123";
+
 		usuarioModel = new UsuarioModel();
-		usuarioModel.setUsername("usernameeee");
+		usuarioModel.setUsername("username");
 		usuarioModel.setNome("nome test");
-		usuarioModel.setEmail("teste123@example.com");
+		usuarioModel.setEmail("teste@gmail.com");
+		usuarioModel.setPassword(passwordEncoder.encode(plainPass));
+		usuarioModel.setEmailVerificado(true);
 		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+		usuarioModel.setAtivo(true);
 
-		final String plainTextPassword = "teste123";
-		final String encodedPassword = passwordEncoder.encode(plainTextPassword);
-
-		usuarioModel.setPassword(encodedPassword);
 		usuarioRepository.save(usuarioModel);
 
 		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
 		authenticationRequest.setUsername(usuarioModel.getUsername());
-		authenticationRequest.setPassword(plainTextPassword);
+		authenticationRequest.setPassword(plainPass);
+
 		String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
 		MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
@@ -163,7 +165,7 @@ class TitulacaoControllerTest {
 						.content(objectMapper.writeValueAsString(titulacaoDTO))
 						.header("Authorization", "Bearer " + this.token))
 				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isAccepted())
+				.andExpect(status().isCreated())
 				.andReturn();
 		String retornoString = resposta.getResponse().getContentAsString();
 		assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);

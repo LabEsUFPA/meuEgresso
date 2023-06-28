@@ -78,21 +78,22 @@ class EnderecoControllerTest {
         @BeforeAll
         void setUp() throws Exception {
 
-                usuarioModel = new UsuarioModel();
-                usuarioModel.setUsername(USERNAME);
-                usuarioModel.setNome("nome test");
-                usuarioModel.setEmail("teste@gmail.com");
-                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+                final String plainPass = "teste123";
 
-                final String plainTextPassword = "teste123";
-                final String encodedPassword = passwordEncoder.encode(plainTextPassword);
+		usuarioModel = new UsuarioModel();
+		usuarioModel.setUsername("username");
+		usuarioModel.setNome("nome test");
+		usuarioModel.setEmail("teste@gmail.com");
+		usuarioModel.setPassword(passwordEncoder.encode(plainPass));
+		usuarioModel.setEmailVerificado(true);
+		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+		usuarioModel.setAtivo(true);
 
-                usuarioModel.setPassword(encodedPassword);
-                usuarioRepository.save(usuarioModel);
+		usuarioRepository.save(usuarioModel);
 
-                AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-                authenticationRequest.setUsername(usuarioModel.getUsername());
-                authenticationRequest.setPassword(plainTextPassword);
+		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+		authenticationRequest.setUsername(usuarioModel.getUsername());
+		authenticationRequest.setPassword(plainPass);
 
                 String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 

@@ -70,22 +70,22 @@ class CotaControllerTest {
         @BeforeAll
         void setUp() throws Exception {
 
-                usuarioModel = new UsuarioModel();
-                usuarioModel.setUsername("username_test");
-                usuarioModel.setNome("nome test");
-                usuarioModel.setEmail("teste@gmail.com");
-                usuarioModel.setPassword("teste123");
-                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+                final String plainPass = "teste123";
 
-                final String plainTextPassword = "teste123";
-                final String encodedPassword = passwordEncoder.encode(plainTextPassword);
+		usuarioModel = new UsuarioModel();
+		usuarioModel.setUsername("username");
+		usuarioModel.setNome("nome test");
+		usuarioModel.setEmail("teste@gmail.com");
+		usuarioModel.setPassword(passwordEncoder.encode(plainPass));
+		usuarioModel.setEmailVerificado(true);
+		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+		usuarioModel.setAtivo(true);
 
-                usuarioModel.setPassword(encodedPassword);
-                usuarioRepository.save(usuarioModel);
+		usuarioRepository.save(usuarioModel);
 
-                AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-                authenticationRequest.setUsername(usuarioModel.getUsername());
-                authenticationRequest.setPassword(plainTextPassword);
+		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+		authenticationRequest.setUsername(usuarioModel.getUsername());
+		authenticationRequest.setPassword(plainPass);
 
                 String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
@@ -148,7 +148,7 @@ class CotaControllerTest {
                                                 .content(objectMapper.writeValueAsString(cotaDTO))
                                                 .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isAccepted()).andReturn();
+                                .andExpect(status().isCreated()).andReturn();
 
                 String resp = resposta.getResponse().getContentAsString();
                 assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), resp);

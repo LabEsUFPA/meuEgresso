@@ -141,21 +141,23 @@ class EgressoEmpresaControllerTest {
 	void setUp() throws Exception {
 		ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
+		final String plainPass = "teste123";
+
 		usuarioModel = new UsuarioModel();
-		usuarioModel.setUsername(USERNAME);
+		usuarioModel.setUsername("username");
 		usuarioModel.setNome("nome test");
 		usuarioModel.setEmail("teste@gmail.com");
+		usuarioModel.setPassword(passwordEncoder.encode(plainPass));
+		usuarioModel.setEmailVerificado(true);
 		usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+		usuarioModel.setAtivo(true);
 
-		final String plainTextPassword = "teste123";
-		final String encodedPassword = passwordEncoder.encode(plainTextPassword);
-
-		usuarioModel.setPassword(encodedPassword);
 		usuarioRepository.save(usuarioModel);
 
 		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
 		authenticationRequest.setUsername(usuarioModel.getUsername());
-		authenticationRequest.setPassword(plainTextPassword);
+		authenticationRequest.setPassword(plainPass);
+		
 		String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
 		/* Gênero */
