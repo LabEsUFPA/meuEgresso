@@ -68,7 +68,7 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	private String nome;
 
 	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
-	private transient EgressoModel egresso;
+	private EgressoModel egresso;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "grupo", unique = false, nullable = false, length = 10)
