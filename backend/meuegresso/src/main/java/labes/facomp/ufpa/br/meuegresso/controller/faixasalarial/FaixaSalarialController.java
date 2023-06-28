@@ -98,7 +98,7 @@ public class FaixaSalarialController {
     public String atualizarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO,
             JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
-        if (faixaSalarialService.existsByIdAndCreatedById(faixaSalarialDTO.getId(), jwtService.getIdUsuario(token))) {
+        if (faixaSalarialService.existsByIdAndCreatedBy(faixaSalarialDTO.getId(), jwtService.getIdUsuario(token))) {
             FaixaSalarialModel faixaSalarialModel = mapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
             faixaSalarialService.update(faixaSalarialModel);
             return ResponseType.SUCCESS_UPDATE.getMessage();

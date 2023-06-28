@@ -86,7 +86,7 @@ public class TitulacaoController {
      * @param titulacaoDTO Estrutura de dados contendo as informações necessárias
      *                     para
      *                     atualizar uma Titulacao.
-     * @param token login para ter a permissão para atualizar a titulacao
+     * @param token        login para ter a permissão para atualizar a titulacao
      * @return {@link String} Mensagem de confirmacao.
      * @author Bruno Eiki
      * @since 21/04/2023
@@ -96,7 +96,7 @@ public class TitulacaoController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarTitulacao(@RequestBody @Valid TitulacaoDTO titulacaoDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
-        if (titulacaoService.existsByIdAndCreatedById(titulacaoDTO.getId(), jwtService.getIdUsuario(token))) {
+        if (titulacaoService.existsByIdAndCreatedBy(titulacaoDTO.getId(), jwtService.getIdUsuario(token))) {
             TitulacaoModel titulacaoModel = mapper.map(titulacaoDTO, TitulacaoModel.class);
             titulacaoService.update(titulacaoModel);
             return ResponseType.SUCCESS_UPDATE.getMessage();

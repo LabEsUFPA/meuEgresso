@@ -114,7 +114,7 @@ public class DepoimentoController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarDepoimento(@RequestBody @Valid DepoimentoDTO depoimentoDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (depoimentoService.existsByIdAndCreatedById(depoimentoDTO.getId(), jwtService.getIdUsuario(token))) {
+		if (depoimentoService.existsByIdAndCreatedBy(depoimentoDTO.getId(), jwtService.getIdUsuario(token))) {
 			DepoimentoModel depoimentoModel = mapper.map(depoimentoDTO, DepoimentoModel.class);
 			depoimentoService.update(depoimentoModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();

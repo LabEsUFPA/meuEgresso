@@ -40,11 +40,13 @@
               required
             />
 
-            <CustomInput
+            <CustomDatepicker
               class="mb-5"
               name="geral.nascimento"
               type="date"
               label="Data de Nascimento"
+              :max-date="eighteenYearsAgo"
+              :min-date="minDate"
               :max-length="10"
               required
             />
@@ -71,7 +73,7 @@
             <CustomInput
               class="mb-5"
               name="geral.linkedin"
-              label="linkedIn"
+              label="LinkedIn"
               :icon-path="svgPath.linkedin"
             />
 
@@ -425,6 +427,10 @@
           text="Campos inválidos ou faltando"
           class="mb-3"
         />
+        <InvalidInsert
+          :text="errorText"
+          :show-alert="error"
+        />
 
         <CustomButton
           color="emerald"
@@ -436,7 +442,7 @@
     </Form>
     <CustomDialog
       v-model="dialogSucesso"
-      @close="$router.push('/egresso')"
+      @close="$route.params.id !== undefined ? $router.push('/painel-admin') : $router.push('/egresso')"
     >
       <div class="h-full flex justify-center items-center">
         <div class="flex flex-col full items-center justify-center gap-y-3 sm:gap-y-7">
@@ -545,6 +551,7 @@ import CustomButton from 'src/components/CustomButton.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import CustomInput from 'src/components/CustomInput.vue'
+import CustomDatepicker from 'src/components/CustomDatepicker.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import FolderSection from 'src/components/FolderSection.vue'
 import FotoInput from 'src/pages/CadastroEgresso/components/FotoInput.vue'
@@ -556,11 +563,13 @@ import { Form } from 'vee-validate'
 import { computed, onMounted, ref, watch } from 'vue'
 import { boolean, mixed, object, string } from 'yup'
 import VueScrollTo from 'vue-scrollto'
+import { useRoute } from 'vue-router'
 
 const baseURL = 'https://egressos.computacao.ufpa.br/'
 const $storeCadastro = useCadastroEgressoStore()
 useLoginStore()
 const storage = new LocalStorage()
+const $route = useRoute()
 
 $storeCadastro.fetchAll()
 
@@ -576,6 +585,12 @@ const estado = ref('')
 const area = ref('')
 const temFoto = ref(false)
 const form = ref<typeof Form | null>(null)
+const errorText = ref('')
+const error = ref(false)
+
+const minDate = ref(new Date(-8640000000000000))
+const eighteenYearsAgo = ref(new Date())
+eighteenYearsAgo.value.setFullYear(eighteenYearsAgo.value.getFullYear() - 18)
 
 const bools = ref({
   cotista: false,
@@ -694,11 +709,13 @@ async function handleSubmit (values: any) {
   const formData = new FormData()
   formData.append('arquivo', values.geral.foto)
 
-  const status = await $storeCadastro.cadastrarEgresso({
+  const isAdm = $route.params.id !== undefined
+
+  const response = await $storeCadastro.cadastrarEgresso({
     temFoto: temFoto.value, // false por padrao
     foto: formData
   }, {
-    nascimento: values.geral.nascimento.toString(),
+    nascimento: values.geral.nascimento,
     generoId: parseInt(values.geral.genero),
     matricula: values.academico.matricula || null,
     cotista: Boolean(values.academico.cotista.value),
@@ -720,10 +737,12 @@ async function handleSubmit (values: any) {
     bolsaId: values.academico.bolsista.tipo ? parseInt(values.academico.bolsista.tipo) : null,
     empresa,
     titulacao
-  })
+  }, isAdm, isAdm ? Number($route.params.id) : null)
 
-  if (status !== 201) {
+  if (response.status !== 201) {
     dialogFalha.value = true
+    errorText.value = response.data?.technicalMessage ? response.data?.technicalMessage : 'Ocorreu um problema na requisição'
+    error.value = true
   } else {
     dialogSucesso.value = true
     const token = storage.getToken()
@@ -736,6 +755,7 @@ async function handleSubmit (values: any) {
 
 function handleFail (e: any) {
   camposFaltosos.value = true
+
   const incorrectElements = Object.keys(e.errors)
   const el = document.querySelector(`#${incorrectElements[0].replaceAll('.', '-')}`)
   VueScrollTo.scrollTo(el, 800, { offset: -300 })
@@ -756,14 +776,9 @@ const schema = object().shape({
     nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
       if (value) {
         const date = value.split('/').reverse().join('-')
-        const minDate = new Date('1940-01-01')
-        const maxDate = new Date('2023-12-31')
         const inputDate = new Date(date)
 
-        const eighteenYearsAgo = new Date()
-        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
-
-        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo
+        return inputDate >= minDate.value && inputDate <= eighteenYearsAgo.value
       }
       return true
     }),
@@ -850,7 +865,7 @@ const schema = object().shape({
   })
 })
 
-onMounted(() => {
+onMounted(async () => {
   const estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
   const cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
   watch(pais, () => {
@@ -877,11 +892,18 @@ onMounted(() => {
     }
   })
 
-  if (storage.has('loggedUser')) {
+  if (storage.has('loggedUser') && $route.params.id === undefined) {
     const userData = JSON.parse(storage.get('loggedUser'))
 
     form.value?.setFieldValue('geral.email', userData.email)
     form.value?.setFieldValue('geral.nome', userData.nomeCompleto)
+  } else if ($route.params.id !== undefined) {
+    const userData = await $storeCadastro.fetchUserData(Number($route.params.id))
+
+    if (typeof userData !== 'number') {
+      form.value?.setFieldValue('geral.email', userData.email)
+      form.value?.setFieldValue('geral.nome', userData.nome)
+    }
   }
 })
 

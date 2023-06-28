@@ -120,7 +120,7 @@ public class EgressoTitulacaoController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarEgressoTitulacao(@RequestBody @Valid EgressoTitulacaoDTO egressoTitulacaoDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (egressoTitulacaoService.existsByIdAndCreatedById(egressoTitulacaoDTO.getId(),
+		if (egressoTitulacaoService.existsByIdAndCreatedBy(egressoTitulacaoDTO.getId(),
 				jwtService.getIdUsuario(token))) {
 			EgressoTitulacaoModel egressoTitulacaoModel = mapper.map(egressoTitulacaoDTO, EgressoTitulacaoModel.class);
 			egressoTitulacaoService.update(egressoTitulacaoModel);

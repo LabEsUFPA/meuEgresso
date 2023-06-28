@@ -146,6 +146,7 @@ class MapaControllerTest extends Configuracao {
 
                 mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                                 .contentType(MediaType.APPLICATION_JSON)
+                                .header("Host", "localhost:15000")
                                 .content(objectMapper.writeValueAsString(usuarioModel)))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isCreated())

@@ -58,8 +58,8 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-        return empresaRepository.existsByIdAndCreatedById(id, createdBy);
+    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+        return empresaRepository.existsByIdAndCreatedBy(id, createdBy);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
-    public void deleteAll(){
+    public void deleteAll() {
         empresaRepository.deleteAll();
     }
 

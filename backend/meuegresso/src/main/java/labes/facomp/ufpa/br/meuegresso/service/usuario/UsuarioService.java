@@ -39,6 +39,10 @@ public interface UsuarioService extends UserDetailsService {
 	 */
 	public UsuarioModel findById(Integer idUsuario);
 
+
+	public UsuarioModel findByEmail(String email);
+
+
 	/**
 	 * Método responsável por encontrar todos os usuários cadastrados.
 	 *
@@ -77,9 +81,11 @@ public interface UsuarioService extends UserDetailsService {
 	 * @param createdBy
 	 * @return {@link boolean}
 	 */
-	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	public boolean existsByUsername(String username);
+
+	public boolean existsByEmail(String email);
 
 	public Map<String, LocalDateTime> findByAtivo();
 
@@ -93,7 +99,8 @@ public interface UsuarioService extends UserDetailsService {
 	 * @author Bruno Eiki
 	 */
 
-	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size, String ordenacao);
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size,
+			String ordenacao);
 
 	/**
 	 * Método responsável por retornar um mapa com informações

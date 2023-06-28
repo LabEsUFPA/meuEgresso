@@ -95,7 +95,7 @@ public class GeneroController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarGenero(@RequestBody @Valid GeneroDTO generoDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
-        if (generoService.existsByIdAndCreatedById(generoDTO.getId(), jwtService.getIdUsuario(token))) {
+        if (generoService.existsByIdAndCreatedBy(generoDTO.getId(), jwtService.getIdUsuario(token))) {
             GeneroModel generoModel = mapper.map(generoDTO, GeneroModel.class);
             generoService.update(generoModel);
             return ResponseType.SUCCESS_UPDATE.getMessage();

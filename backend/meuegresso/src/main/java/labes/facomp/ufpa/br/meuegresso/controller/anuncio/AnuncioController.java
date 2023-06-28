@@ -128,7 +128,7 @@ public class AnuncioController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarAnuncio(@RequestBody @Valid AnuncioDTO anuncioDTO, JwtAuthenticationToken token)
 			throws UnauthorizedRequestException, InvalidRequestException {
-		if (anuncioService.existsByIdAndCreatedById(anuncioDTO.getId(), jwtService.getIdUsuario(token))) {
+		if (anuncioService.existsByIdAndCreatedBy(anuncioDTO.getId(), jwtService.getIdUsuario(token))) {
 			AnuncioModel anuncioModel = mapper.map(anuncioDTO, AnuncioModel.class);
 			anuncioService.update(anuncioModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();
@@ -136,12 +136,11 @@ public class AnuncioController {
 		throw new UnauthorizedRequestException();
 	}
 
-
 	/**
 	 * Endpoint responsavel por deletar o
 	 * anuncio do egresso apenas por quem o criou.
 	 *
-	 * @param id id do anuncio a ser deletado
+	 * @param id    id do anuncio a ser deletado
 	 * @param token autenticação para deletar anúncio por quem o criou
 	 * @return {@link boolean} Mensagem de confirmacao.
 	 * @author Bruno Eiki, Lucas Cantão
@@ -152,7 +151,7 @@ public class AnuncioController {
 	@PreAuthorize("hasRole('EGRESSO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(@PathVariable Integer id, JwtAuthenticationToken token) {
-		if(anuncioService.existsByIdAndCreatedById(id, jwtService.getIdUsuario(token))){
+		if (anuncioService.existsByIdAndCreatedBy(id, jwtService.getIdUsuario(token))) {
 			return anuncioService.deleteById(id);
 		}
 		return false;

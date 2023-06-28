@@ -114,7 +114,7 @@ public class PalestraController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarPalestra(@RequestBody @Valid PalestraDTO palestraDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (palestraService.existsByIdAndCreatedById(palestraDTO.getId(), jwtService.getIdUsuario(token))) {
+		if (palestraService.existsByIdAndCreatedBy(palestraDTO.getId(), jwtService.getIdUsuario(token))) {
 			PalestraModel palestraModel = palestraService.findByEgressoUsuarioId(jwtService.getIdUsuario(token));
 			palestraModel.setDescricao(palestraDTO.getDescricao());
 			palestraService.update(palestraModel);

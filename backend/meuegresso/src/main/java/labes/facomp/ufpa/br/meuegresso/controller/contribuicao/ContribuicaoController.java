@@ -114,7 +114,7 @@ public class ContribuicaoController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (contribuicaoService.existsByIdAndCreatedById(contribuicaoDTO.getId(), jwtService.getIdUsuario(token))) {
+		if (contribuicaoService.existsByIdAndCreatedBy(contribuicaoDTO.getId(), jwtService.getIdUsuario(token))) {
 			ContribuicaoModel contribuicaoModel = contribuicaoService
 					.findByEgressoUsuarioId(jwtService.getIdUsuario(token));
 			contribuicaoModel.setDescricao(contribuicaoDTO.getDescricao());

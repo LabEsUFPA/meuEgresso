@@ -97,7 +97,7 @@ public class TipoBolsaController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarTipoBolsa(@RequestBody @Valid TipoBolsaDTO tipoBolsaDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
-        if (tipoBolsaService.existsByIdAndCreatedById(tipoBolsaDTO.getId(), jwtService.getIdUsuario(token))) {
+        if (tipoBolsaService.existsByIdAndCreatedBy(tipoBolsaDTO.getId(), jwtService.getIdUsuario(token))) {
             TipoBolsaModel tipoBolsaModel = mapper.map(tipoBolsaDTO, TipoBolsaModel.class);
             tipoBolsaService.update(tipoBolsaModel);
             return ResponseType.SUCCESS_UPDATE.getMessage();

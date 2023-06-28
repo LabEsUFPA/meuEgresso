@@ -10,8 +10,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 import labes.facomp.ufpa.br.meuegresso.enumeration.JwtUtils;
-import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -26,10 +24,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuditConfig {
 
-	private final UsuarioRepository userRepository;
-
 	@Bean
-	public AuditorAware<UsuarioModel> auditorAware() {
+	public AuditorAware<Integer> auditorAware() {
 		return () -> {
 			JwtAuthenticationToken authToken = SecurityContextHolder.getContext()
 					.getAuthentication() instanceof JwtAuthenticationToken
@@ -37,8 +33,9 @@ public class AuditConfig {
 							: null;
 
 			if (authToken != null) {
-				Integer userId = Integer.parseInt(authToken.getTokenAttributes().get(JwtUtils.USER_ID.getPropriedade()).toString());
-				return Optional.of(userRepository.findById(userId).orElse(null));
+				Integer userId = Integer
+						.parseInt(authToken.getTokenAttributes().get(JwtUtils.USER_ID.getPropriedade()).toString());
+				return Optional.of(userId);
 			} else
 				return Optional.ofNullable(null);
 		};
