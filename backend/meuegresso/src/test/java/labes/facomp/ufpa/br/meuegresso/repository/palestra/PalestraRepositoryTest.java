@@ -18,7 +18,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
@@ -74,9 +73,7 @@ class PalestraRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        generoModel = new GeneroModel();
-        generoModel.setId(1);
-        generoModel.setNome("Masculino");
+        generoModel = GeneroModel.builder().id(ID).nome("Masculino").build();
         generoModel = generoRepository.save(generoModel);
 
         usuarioModel = UsuarioModel.builder()
@@ -99,19 +96,21 @@ class PalestraRepositoryTest {
                 .linkedin("null")
                 .usuario(usuarioModel)
                 .build();
-        egressoModel.setCreatedBy(usuarioModel.getId());
-
-        egressoModel = egressoRepository.save(egressoModel);
-
+                
         palestraModel = PalestraModel.builder()
             .id(ID)
             .descricao(DESCRICAO)
             .egresso(egressoModel)
             .build();
-
+            
+        egressoModel.setCreatedBy(usuarioModel.getId());
         palestraModel.setCreatedBy(usuarioModel.getId());
-
+        
+        egressoModel.setPalestras(palestraModel);
+        
+        egressoModel = egressoRepository.save(egressoModel);
         palestraModel = palestraRepository.save(palestraModel);
+        
     }
 
     /**
