@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 import Api from 'src/services/api'
 import { type models } from 'src/@types'
 
-interface ProfileRegisterModel extends models.ProfileRegisterModel {}
+interface UserProfileRegisterModel extends models.UserProfileRegisterModel {}
+interface AdminProfileRegisterModel extends models.AdminProfileRegisterModel {}
 
 interface ValidateEgress extends models.ValidateEgress {}
 
@@ -66,7 +67,7 @@ export const useCadastroPerfilStore = defineStore('CadastroPerfilStore', {
       nome: string,
       registration?: string
     ) {
-      const data: ProfileRegisterModel = {
+      const data: UserProfileRegisterModel = {
         username,
         password,
         email,
@@ -91,17 +92,15 @@ export const useCadastroPerfilStore = defineStore('CadastroPerfilStore', {
 
     async registrationByAdmin (
       username: string,
-      password: string,
       email: string,
       nome: string,
-      accessLevel: string
+      grupos: string[]
     ) {
-      const data: ProfileRegisterModel = {
+      const data: AdminProfileRegisterModel = {
         username,
-        password,
         email,
         nome,
-        grupos: [accessLevel]
+        grupos
       }
 
       const response = await Api.request({
