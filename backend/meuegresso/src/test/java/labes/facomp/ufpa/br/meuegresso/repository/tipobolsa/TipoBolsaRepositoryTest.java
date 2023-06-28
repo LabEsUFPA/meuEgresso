@@ -84,7 +84,7 @@ class TipoBolsaRepositoryTest {
                 .linkedin("null")
                 .usuario(usuarioModel)
                 .build();
-        egressoModel.setCreatedBy(usuarioModel);
+        egressoModel.setCreatedBy(usuarioModel.getId());
 
         egressoModel = egressoRepository.save(egressoModel);
 
@@ -93,7 +93,7 @@ class TipoBolsaRepositoryTest {
             .nome(NOME)
             .build();
         
-        tipoBolsaModel.setCreatedBy(usuarioModel);
+        tipoBolsaModel.setCreatedBy(usuarioModel.getId());
 
         tipoBolsaModel = tipoBolsaRepository.save(tipoBolsaModel);
     }
@@ -120,7 +120,7 @@ class TipoBolsaRepositoryTest {
 
     @Test
     void testExistsByIdAndCreatedById() {
-        Boolean response = tipoBolsaRepository.existsByIdAndCreatedById(tipoBolsaModel.getId(), usuarioModel.getId());
+        Boolean response = tipoBolsaRepository.existsByIdAndCreatedBy(tipoBolsaModel.getId(), usuarioModel.getId());
 
         assertNotNull(response);
         assertTrue(response);

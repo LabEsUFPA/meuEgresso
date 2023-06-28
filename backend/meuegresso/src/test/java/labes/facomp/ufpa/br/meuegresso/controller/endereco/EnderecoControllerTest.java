@@ -183,10 +183,10 @@ class EnderecoControllerTest {
         void testAtualizarEndereco() throws Exception {
 
                 MvcResult resposta = mockMvc.perform(
-                                MockMvcRequestBuilders.put("/endereco")
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .content(objectMapper.writeValueAsString(enderecoDTO))
-                                                .header("Authorization", "Bearer " + this.token))
+                        MockMvcRequestBuilders.put("/endereco")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(enderecoDTO))
+                                .header("Authorization", "Bearer " + this.token))
                                 .andDo(MockMvcResultHandlers.print())
                                 .andExpect(status().isCreated())
                                 .andReturn();

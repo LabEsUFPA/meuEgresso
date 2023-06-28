@@ -101,7 +101,7 @@ public class AnuncioRepositoryTest
                         .linkedin("null")
                         .usuario(usuario)
                         .build();
-                egresso.setCreatedBy(usuario);
+                egresso.setCreatedBy(usuario.getId());
 
                 egresso = egressoRepository.save(egresso);
 
@@ -150,7 +150,7 @@ public class AnuncioRepositoryTest
         @Order(3)
         void testExistsByIdAndCreatedById() {
 
-                Boolean response = anuncioRepository.existsByIdAndCreatedById(1, 1);
+                Boolean response = anuncioRepository.existsByIdAndCreatedBy(1, 1);
                 assertTrue(response);
         }
 
@@ -199,7 +199,7 @@ public class AnuncioRepositoryTest
                                 .dataExpiracao(LocalDate.parse("2024-06-20"))
                                 .link("http://vagas.com.br")
                                 .build();
-                anuncio.setCreatedBy(usuario);
+                anuncio.setCreatedBy(usuario.getId());
                 return anuncio;
         }
 
@@ -213,7 +213,7 @@ public class AnuncioRepositoryTest
                                 .dataExpiracao(LocalDate.parse("2022-05-05"))
                                 .link("http://vagas.com.br")
                                 .build();
-                anuncio.setCreatedBy(usuario);
+                anuncio.setCreatedBy(usuario.getId());
                 return anuncio;
         }
 
@@ -227,7 +227,7 @@ public class AnuncioRepositoryTest
                                 .salario("10000")
                                 .link("http://vagas.com.br")
                                 .build();
-                anuncio.setCreatedBy(usuario);
+                anuncio.setCreatedBy(usuario.getId());
                 return anuncio;
         }
 

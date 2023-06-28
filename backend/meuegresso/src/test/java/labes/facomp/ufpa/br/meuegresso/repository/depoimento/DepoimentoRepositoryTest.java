@@ -90,7 +90,7 @@ class DepoimentoRepositoryTest {
                 .linkedin("null")
                 .usuario(usuarioModel)
                 .build();
-        egressoModel.setCreatedBy(usuarioModel);
+        egressoModel.setCreatedBy(usuarioModel.getId());
 
         egressoModel = egressoRepository.save(egressoModel);
 
@@ -100,7 +100,7 @@ class DepoimentoRepositoryTest {
             .egresso(egressoModel)
             .build();
 
-        depoimentoModel.setCreatedBy(usuarioModel);
+        depoimentoModel.setCreatedBy(usuarioModel.getId());
 
         depoimentoModel = depoimentoRepository.save(depoimentoModel);
     }
@@ -122,7 +122,7 @@ class DepoimentoRepositoryTest {
 
     @Test
     void testExistsByIdAndCreatedById() {
-        Boolean response = depoimentoRepository.existsByIdAndCreatedById(depoimentoModel.getId(), usuarioModel.getId());
+        Boolean response = depoimentoRepository.existsByIdAndCreatedBy(depoimentoModel.getId(), usuarioModel.getId());
 
         assertNotNull(response);
         assertTrue(response);

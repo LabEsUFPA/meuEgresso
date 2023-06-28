@@ -172,7 +172,7 @@ class FaixaSalarialControllerTest {
 	@Test
 	@Order(3)
 	void testAtualizarFaixaSalarial() throws Exception {
-
+		//TODO: consertar teste
 		FaixaSalarialDTO faixaSalarialDTO = modelMapper.map(faixaSalarialModel, FaixaSalarialDTO.class);
 
 		MvcResult resposta = mockMvc.perform(
@@ -180,9 +180,9 @@ class FaixaSalarialControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(faixaSalarialDTO))
 						.header("Authorization", "Bearer " + this.token))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isAccepted())
-				.andReturn();
+						.andDo(MockMvcResultHandlers.print())
+						.andExpect(status().isAccepted())
+						.andReturn();
 		String retornoString = resposta.getResponse().getContentAsString();
 		assertEquals(ResponseType.SUCCESS_UPDATE.getMessage(), retornoString);
 	}

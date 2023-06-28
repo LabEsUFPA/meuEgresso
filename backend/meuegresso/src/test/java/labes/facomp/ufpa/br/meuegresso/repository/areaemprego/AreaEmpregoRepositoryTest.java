@@ -60,14 +60,14 @@ public class AreaEmpregoRepositoryTest {
                 .nome(NOME)
                 .build();
 
-        areaEmpregoModel.setCreatedBy(usuarioModel);
+        areaEmpregoModel.setCreatedBy(usuarioModel.getId());
         areaEmpregoModel = areaEmpregoRepository.save(areaEmpregoModel);
     }
 
     @Test
     void testExistsByIdAndCreatedById() {
-        Boolean response = areaEmpregoRepository.existsByIdAndCreatedById(areaEmpregoModel.getId(),
-                areaEmpregoModel.getCreatedBy().getId());
+        Boolean response = areaEmpregoRepository.existsByIdAndCreatedBy(areaEmpregoModel.getId(),
+                areaEmpregoModel.getCreatedBy());
         assertTrue(response);
 
     }

@@ -121,7 +121,7 @@ class EgressoEmpresaRepositoryTest {
                 .linkedin("null")
                 .usuario(usuarioModel)
                 .build();
-        egressoModel.setCreatedBy(usuarioModel);
+        egressoModel.setCreatedBy(usuarioModel.getId());
 
         egressoModel = egressoRepository.save(egressoModel);
 
@@ -164,7 +164,7 @@ class EgressoEmpresaRepositoryTest {
         egressoEmpresaModel.setFaixaSalarial(faixaSalarialModel);
         egressoEmpresaModel.setAreaAtuacao(areaAtuacaoModel);
         egressoEmpresaModel.setSetorAtuacao(setorAtuacaoModel);
-        egressoEmpresaModel.setCreatedBy(usuarioModel);
+        egressoEmpresaModel.setCreatedBy(usuarioModel.getId());
 
         egressoEmpresaModel = egressoEmpresaRepository.save(egressoEmpresaModel);
     }

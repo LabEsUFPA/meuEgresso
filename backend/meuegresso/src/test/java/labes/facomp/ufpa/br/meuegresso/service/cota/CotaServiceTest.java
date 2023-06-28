@@ -154,10 +154,10 @@ class CotaServiceTest {
     @Order(5)
     void testExistsByIdAndCreatedById() {
 
-        BDDMockito.given(cotaService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+        BDDMockito.given(cotaService.existsByIdAndCreatedBy(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = cotaService.existsByIdAndCreatedById(ID, ID);
+        Boolean response = cotaService.existsByIdAndCreatedBy(ID, ID);
         assertTrue(response);
     }
 

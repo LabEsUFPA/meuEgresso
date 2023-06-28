@@ -155,7 +155,7 @@ class PalestraServiceTest {
         @Test
         void testExistsByIdAndCreatedById() {
 
-                BDDMockito.given(palestraRepository.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+                BDDMockito.given(palestraRepository.existsByIdAndCreatedBy(Mockito.anyInt(), Mockito.anyInt()))
                                 .willReturn(true);
 
                 UsuarioModel usuarioModel = new UsuarioModel();
@@ -164,15 +164,15 @@ class PalestraServiceTest {
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
-                PalestraModel curso = getMockPalestra();
-                curso.setCreatedBy(usuarioModel);
-
+                PalestraModel palestraModel = getMockPalestra();
                 usuarioService.save(usuarioModel);
-                palestraService.save(curso);
+                
+                palestraModel.setCreatedBy(usuarioModel.getId());
+                palestraService.save(palestraModel);
 
-                Boolean response = palestraService.existsByIdAndCreatedById(
-                                curso.getId(),
-                                curso.getCreatedBy().getId());
+                Boolean response = palestraService.existsByIdAndCreatedBy(
+                                palestraModel.getId(),
+                                palestraModel.getCreatedBy());
                 assertTrue(response);
         }
 

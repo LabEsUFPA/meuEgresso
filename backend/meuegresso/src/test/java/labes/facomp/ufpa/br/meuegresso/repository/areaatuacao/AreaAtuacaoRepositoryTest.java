@@ -59,7 +59,7 @@ public class AreaAtuacaoRepositoryTest {
         .nome(NOME)
         .build();
 
-        areaAtuacaoModel.setCreatedBy(usuarioModel);
+        areaAtuacaoModel.setCreatedBy(usuarioModel.getId());
 
         areaAtuacaoModel = areaAtuacaoRepository.save(areaAtuacaoModel);
     }

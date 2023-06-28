@@ -141,11 +141,11 @@ class EgressoTitulacaoServiceTest {
     @Test
     void testExistsByIdAndCreatedById() {
 
-        BDDMockito.given(repository.existsByIdAndCreatedById(Mockito.any(
+        BDDMockito.given(repository.existsByIdAndCreatedBy(Mockito.any(
                 EgressoTitulacaoModelId.class), Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = EgressoTitulacaoService.existsByIdAndCreatedById(ID, 1);
+        Boolean response = EgressoTitulacaoService.existsByIdAndCreatedBy(ID, 1);
         assertTrue(response);
     }
 

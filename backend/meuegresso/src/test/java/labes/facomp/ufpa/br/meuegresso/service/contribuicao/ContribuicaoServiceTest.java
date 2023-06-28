@@ -166,7 +166,7 @@ class ContribuicaoServiceTest {
         @Order(6)
         void testExistsByIdAndCreatedById() {
 
-                BDDMockito.given(contribuicaoRepository.existsByIdAndCreatedById(ID, ID))
+                BDDMockito.given(contribuicaoRepository.existsByIdAndCreatedBy(ID, ID))
                                 .willReturn(true);
 
                 UsuarioModel usuarioModel = new UsuarioModel();
@@ -175,15 +175,15 @@ class ContribuicaoServiceTest {
                 usuarioModel.setEmail("teste@gmail.com");
                 usuarioModel.setPassword("teste123");
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
-                ContribuicaoModel curso = getMockContribuicao();
-                curso.setCreatedBy(usuarioModel);
-
+                ContribuicaoModel contribuicaoModel = getMockContribuicao();
                 userService.save(usuarioModel);
-                contribuicaoService.save(curso);
+                
+                contribuicaoModel.setCreatedBy(usuarioModel.getId());
+                contribuicaoService.save(contribuicaoModel);
 
-                Boolean response = contribuicaoService.existsByIdAndCreatedById(
-                                curso.getId(),
-                                curso.getCreatedBy().getId());
+                Boolean response = contribuicaoService.existsByIdAndCreatedBy(
+                                contribuicaoModel.getId(),
+                                contribuicaoModel.getCreatedBy());
                 assertTrue(response);
         }
 

@@ -96,10 +96,10 @@ public class AreaEmpregoServiceTest {
     @Test
     @Order(6)
     void testExistsByIdAndCreatedById() {
-        BDDMockito.given(areaEmpregoRepository.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+        BDDMockito.given(areaEmpregoRepository.existsByIdAndCreatedBy(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = areaEmpregoService.existsByIdAndCreatedById(1,1);
+        Boolean response = areaEmpregoService.existsByIdAndCreatedBy(1,1);
         assertTrue(response);
     }
 

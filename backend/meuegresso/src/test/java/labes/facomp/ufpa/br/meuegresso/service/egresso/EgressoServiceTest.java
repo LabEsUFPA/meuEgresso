@@ -76,7 +76,7 @@ class EgressoServiceTest {
         BDDMockito.given(egressoRepository.findByUsuarioId(Mockito.anyInt()))
                 .willReturn(Optional.ofNullable(getMockEgresso()));
 
-        BDDMockito.given(egressoRepository.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
+        BDDMockito.given(egressoRepository.existsByIdAndCreatedBy(Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
 
         BDDMockito.given(egressoService.deleteById(Mockito.anyInt()))
@@ -164,11 +164,11 @@ class EgressoServiceTest {
     @Test
     @Order(5)
     void testExistsByIdAndCreatedById() {
-        BDDMockito.given(egressoRepository.existsByIdAndCreatedById(
+        BDDMockito.given(egressoRepository.existsByIdAndCreatedBy(
                 Mockito.anyInt(), Mockito.anyInt()))
                 .willReturn(true);
 
-        Boolean response = egressoService.existsByIdAndCreatedById(ID, ID);
+        Boolean response = egressoService.existsByIdAndCreatedBy(ID, ID);
         assertTrue(response);
     }
 

@@ -95,7 +95,7 @@ class ContribuicaoRepositoryTest {
                 .linkedin("null")
                 .usuario(usuarioModel)
                 .build();
-        egressoModel.setCreatedBy(usuarioModel);
+        egressoModel.setCreatedBy(usuarioModel.getId());
 
         egressoModel = egressoRepository.save(egressoModel);
 
@@ -104,7 +104,7 @@ class ContribuicaoRepositoryTest {
             .descricao(DESCRICAO)
             .build();
 
-        contribuicaoModel.setCreatedBy(usuarioModel);
+        contribuicaoModel.setCreatedBy(usuarioModel.getId());
         contribuicaoModel.setEgresso(egressoModel);
 
         contribuicaoModel = contribuicaoRepository.save(contribuicaoModel);
@@ -141,7 +141,7 @@ class ContribuicaoRepositoryTest {
 
     @Test
     void testExistsByIdAndCreatedById() {
-        Boolean response = contribuicaoRepository.existsByIdAndCreatedById(contribuicaoModel.getId(), usuarioModel.getId());
+        Boolean response = contribuicaoRepository.existsByIdAndCreatedBy(contribuicaoModel.getId(), usuarioModel.getId());
 
         assertNotNull(response);
         assertTrue(response);

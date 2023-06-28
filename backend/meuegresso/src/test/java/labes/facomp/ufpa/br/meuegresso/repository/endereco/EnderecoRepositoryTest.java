@@ -98,7 +98,7 @@ class EnderecoRepositoryTest {
                 .linkedin("null")
                 .usuario(usuarioModel)
                 .build();
-        egressoModel.setCreatedBy(usuarioModel);
+        egressoModel.setCreatedBy(usuarioModel.getId());
 
         egressoModel = egressoRepository.save(egressoModel);
 
@@ -109,7 +109,7 @@ class EnderecoRepositoryTest {
             .pais(PAIS)
             .build();
 
-        enderecoModel.setCreatedBy(usuarioModel);
+        enderecoModel.setCreatedBy(usuarioModel.getId());
 
         enderecoModel = enderecoRepository.save(enderecoModel);
     }
@@ -138,7 +138,7 @@ class EnderecoRepositoryTest {
     
     @Test
     void testExistsByIdAndCreatedById() {
-        Boolean response = enderecoRepository.existsByIdAndCreatedById(enderecoModel.getId(), enderecoModel.getCreatedBy().getId());
+        Boolean response = enderecoRepository.existsByIdAndCreatedBy(enderecoModel.getId(), enderecoModel.getCreatedBy());
 
         assertNotNull(response);
         assertTrue(response);

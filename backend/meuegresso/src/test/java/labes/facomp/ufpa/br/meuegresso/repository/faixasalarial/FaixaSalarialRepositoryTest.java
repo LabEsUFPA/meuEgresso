@@ -89,7 +89,7 @@ class FaixaSalarialRepositoryTest {
                 .linkedin("null")
                 .usuario(usuarioModel)
                 .build();
-        egressoModel.setCreatedBy(usuarioModel);
+        egressoModel.setCreatedBy(usuarioModel.getId());
 
         egressoModel = egressoRepository.save(egressoModel);
 
@@ -98,7 +98,7 @@ class FaixaSalarialRepositoryTest {
             .faixa(FAIXA)
             .build();
 
-        faixaSalarialModel.setCreatedBy(usuarioModel);
+        faixaSalarialModel.setCreatedBy(usuarioModel.getId());
 
         faixaSalarialModel = faixaSalarialRepository.save(faixaSalarialModel);
     }
@@ -120,7 +120,7 @@ class FaixaSalarialRepositoryTest {
 
     @Test
     void testExistsByIdAndCreatedById() {
-        Boolean response = faixaSalarialRepository.existsByIdAndCreatedById(faixaSalarialModel.getId(), usuarioModel.getId());
+        Boolean response = faixaSalarialRepository.existsByIdAndCreatedBy(faixaSalarialModel.getId(), usuarioModel.getId());
 
         assertNotNull(response);
         assertTrue(response);

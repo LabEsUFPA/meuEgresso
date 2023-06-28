@@ -83,7 +83,7 @@ class AnuncioControllerTest extends Configuracao {
 
         @BeforeAll
         void setUp() throws Exception {
-
+                //TODO: consertar teste setup
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 /* Usuario */
@@ -241,7 +241,7 @@ class AnuncioControllerTest extends Configuracao {
 
         @Order(5)
         @Test
-        void findByTitulo() throws Exception {
+        void testfindByTitulo() throws Exception {
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(
@@ -263,7 +263,7 @@ class AnuncioControllerTest extends Configuracao {
 
         @Order(6)
         @Test
-        void findByAreaEmprego() throws Exception {
+        void testfindByAreaEmprego() throws Exception {
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
                 MvcResult resposta = mockMvc.perform(

@@ -71,7 +71,7 @@ class EgressoRepositoryTest {
                 .linkedin("null")
                 .usuario(usuarioModel)
                 .build();
-        egressoModel.setCreatedBy(usuarioModel);
+        egressoModel.setCreatedBy(usuarioModel.getId());
 
         egressoModel = egressoRepository.save(egressoModel);
 
@@ -92,8 +92,8 @@ class EgressoRepositoryTest {
     @Test
     void testExistsByIdAndCreatedById() {
 
-        Boolean response = egressoRepository.existsByIdAndCreatedById(
-                egressoModel.getId(), egressoModel.getCreatedBy().getId());
+        Boolean response = egressoRepository.existsByIdAndCreatedBy(
+                egressoModel.getId(), egressoModel.getCreatedBy());
 
         assertTrue(response);
     }

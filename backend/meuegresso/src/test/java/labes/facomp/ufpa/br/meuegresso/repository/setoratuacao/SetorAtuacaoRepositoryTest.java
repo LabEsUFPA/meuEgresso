@@ -96,7 +96,7 @@ class SetorAtuacaoRepositoryTest {
                 .linkedin("null")
                 .usuario(usuarioModel)
                 .build();
-        egressoModel.setCreatedBy(usuarioModel);
+        egressoModel.setCreatedBy(usuarioModel.getId());
 
         egressoModel = egressoRepository.save(egressoModel);
 
@@ -105,7 +105,7 @@ class SetorAtuacaoRepositoryTest {
             .nome(SETOR)
             .build();
 
-        setorAtuacaoModel.setCreatedBy(usuarioModel);
+        setorAtuacaoModel.setCreatedBy(usuarioModel.getId());
 
         setorAtuacaoModel = setorAtuacaoRepository.save(setorAtuacaoModel);
     }
