@@ -53,6 +53,7 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public MensagemStatusDTO consultarStatusMensagens() {
 		return agendamentoService.getMensagensStatus();
@@ -67,6 +68,7 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@GetMapping(value = "/consultarMensagens")
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public List<MensagemDTO> consultarMensagens() {
 		return mapper.map(mailService.findAll(), new TypeToken<List<MensagemDTO>>() {
@@ -100,8 +102,8 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@DeleteMapping
-	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteById(@PathVariable(name = "id") Integer id) {
 		if (mailService.deleteById(id)) {
 			return ResponseType.SUCCESS_DELETE.getMessage();
@@ -120,8 +122,8 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@PostMapping
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public String save(@RequestBody @Valid MensagemDTO mensagemDTO) {
 		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
 		mailService.save(mensagemModel);
