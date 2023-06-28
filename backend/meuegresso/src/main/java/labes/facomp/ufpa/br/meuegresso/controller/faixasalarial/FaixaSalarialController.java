@@ -93,7 +93,7 @@ public class FaixaSalarialController {
      * @since 21/04/2023
      */
     @PutMapping
-    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO,
             JwtAuthenticationToken token)

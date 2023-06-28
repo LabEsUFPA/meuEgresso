@@ -56,6 +56,7 @@ public class EnderecoController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<EnderecoDTO> consultarEnderecos() {
 		return mapper.map(enderecoService.findAll(), new TypeToken<List<EnderecoDTO>>() {
@@ -131,6 +132,7 @@ public class EnderecoController {
 	 * @since 17/04/2023
 	 */
 	@DeleteMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(Integer id) {
