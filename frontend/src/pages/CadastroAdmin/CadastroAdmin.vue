@@ -12,6 +12,7 @@
     />
   </OLoading>
   <Form
+    ref="form"
     @submit="handleSubmit"
     @invalid-submit="onInvalid"
     :validation-schema="schema"
@@ -69,38 +70,13 @@
                 :max-length="50"
               />
             </div>
-            <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
-              <CustomInput
-                name="password"
-                label="Senha"
-                :type="showPassword? 'text' : 'password'"
-                helper-text="Use oito ou mais caracteres com uma combinação de letras, números e símbolos"
-                class-helper-text="text-gray-600"
-                :required="true"
-                :icon-path="mdiLock"
-                :max-length="80"
-              />
-              <CustomInput
-                name="confirmationPassword"
-                label="Confirmar senha"
-                :type="showPassword? 'text' : 'password'"
-                :required="true"
-                :icon-path="mdiLock"
-                :max-length="80"
-              />
-            </div>
-            <CustomCheckbox
-              class="mt-2"
-              label="Visualizar senhas"
-              name="showPassword"
-              @update:value="toggleShowPassword"
-            />
           </div>
           <p class="text-blue-400 text-base font-bold mb-5 mt-7">
             Selecione o nível de acesso:
           </p>
           <div class="flex flex-col gap-y-2">
             <CustomSelect
+              ref="selectAccessLevel"
               label="Nível de Acesso"
               name="accessLevel"
               placeholder="Selecionar"
@@ -141,42 +117,36 @@
 import { onMounted, ref } from 'vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiAccount, mdiEmail, mdiLock, mdiLoading } from '@mdi/js'
+import { mdiAccount, mdiEmail, mdiLoading } from '@mdi/js'
 import { Form } from 'vee-validate'
 import { object, string, ref as refYup } from 'yup'
 import { OLoading } from '@oruga-ui/oruga-next'
 import CustomButton from 'src/components/CustomButton.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
-import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 import { useLoginStore } from 'src/store/LoginStore'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import { models } from 'src/@types'
-interface ProfileRegisterModel extends models.ProfileRegisterModel {}
+interface AdminProfileRegisterModel extends models.AdminProfileRegisterModel {}
 
+const form = ref<typeof Form | null>(null)
 const error = ref(false)
 const errorText = ref('')
 const submitSuccess = ref(false)
 const username = ref('')
-const showPassword = ref(false)
 const $store = useCadastroPerfilStore()
 const accessLevel = ref(useLoginStore().userData?.scope)
 const loading = ref(false)
+const selectAccessLevel = ref()
 
 const schema = object().shape({
   nome: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
-  username: string().required('Informe um nome de usuário').trim().matches(/^[A-Za-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
-  email: string().required('Informe um email').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))/, 'Email inválido'),
+  username: string().required('Informe um nome de usuário').min(4, 'Nome de usuário pequeno').max(15, 'Nome de usuário muito grande').trim().matches(/^[A-Za-z0-9_.-]+$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
+  email: string().optional().matches(/^([A-Za-z\d]+([._][A-Za-z\d]+)*@[A-Za-z\d]+(.[A-Za-z\d]+)*(.[A-z]{2,}))?$/, 'Email inválido'),
   confirmationEmail: string().email().required('Confirme o email').oneOf([refYup('email')], 'Os e-mails informados são diferentes'),
-  password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida'),
-  confirmationPassword: string().required('Confirme a senha').oneOf([refYup('password')], 'As senhas informadas são diferentes').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida'),
-  accessLevel: string().required('Selecione o nível de acesso')
+  accessLevel: string().required('Informe o nível de acesso')
 })
-
-const toggleShowPassword = () => {
-  showPassword.value = !showPassword.value
-}
 
 const mapAccessLevel = (accessLevel: string | undefined) => {
   if (accessLevel === 'Administrador') return 'ADMIN'
@@ -185,15 +155,14 @@ const mapAccessLevel = (accessLevel: string | undefined) => {
 }
 
 const handleSubmit = async (submitData: any) => {
-  const profileData: ProfileRegisterModel = submitData
+  const profileData: AdminProfileRegisterModel = submitData
 
   loading.value = true
   const response = await $store.registrationByAdmin(
     profileData.username,
-    profileData.password,
     profileData.email,
     profileData.nome,
-    mapAccessLevel(profileData.accessLevel)
+    [mapAccessLevel(profileData.accessLevel)]
   )
 
   if (response.status === 201) {
@@ -213,6 +182,7 @@ const onInvalid = (e: any) => {
 
 onMounted(() => {
   window.scrollTo(0, 0)
+  selectAccessLevel.value.setInitialValues('Egresso')
 })
 
 </script>
