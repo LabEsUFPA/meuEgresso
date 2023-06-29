@@ -4,6 +4,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -75,7 +77,7 @@ public class AnuncioController {
 	 * @author Alfredo Gabriel, Marcus Maciel Oliveira
 	 * @since 21/04/2023
 	 */
-	@GetMapping
+	@GetMapping()
 	@ResponseStatus(code = HttpStatus.OK)
 	public Page<AnuncioDTO> consultarAnuncios(
 			@RequestParam(defaultValue = "0", required = false) Integer page,
@@ -88,8 +90,14 @@ public class AnuncioController {
 			UsuarioDTO usuarioCriouAnuncio = mapper.map(usuarioService.findById(anuncio.getCreatedBy()),
 					UsuarioDTO.class);
 			if (usuarioCriouAnuncio != null) {
-				EgressoModel egressoAssociado = egressoService.findByUsuarioId(anuncio.getCreatedBy());
+				Optional<EgressoModel> optionalEgressoAssociado = Optional.empty();
+				try {
+					optionalEgressoAssociado = Optional.of(egressoService.findByUsuarioId(anuncio.getCreatedBy()));
+				} catch (NoSuchElementException e) {
+					logger.info("Usuário sem egresso associado", e);
+				}
 
+				EgressoModel egressoAssociado = optionalEgressoAssociado.orElse(null);
 				if (egressoAssociado != null) {
 					EgressoAnuncioDTO egresso = mapper.map(egressoAssociado,
 							EgressoAnuncioDTO.class);
@@ -137,8 +145,14 @@ public class AnuncioController {
 			UsuarioDTO usuarioCriouAnuncio = mapper.map(usuarioService.findById(anuncio.getCreatedBy()),
 					UsuarioDTO.class);
 			if (usuarioCriouAnuncio != null) {
-				EgressoModel egressoAssociado = egressoService.findByUsuarioId(anuncio.getCreatedBy());
+				Optional<EgressoModel> optionalEgressoAssociado = Optional.empty();
+				try {
+					optionalEgressoAssociado = Optional.of(egressoService.findByUsuarioId(anuncio.getCreatedBy()));
+				} catch (NoSuchElementException e) {
+					logger.info("Usuário sem egresso associado", e);
+				}
 
+				EgressoModel egressoAssociado = optionalEgressoAssociado.orElse(null);
 				if (egressoAssociado != null) {
 					EgressoAnuncioDTO egresso = mapper.map(egressoAssociado,
 							EgressoAnuncioDTO.class);
