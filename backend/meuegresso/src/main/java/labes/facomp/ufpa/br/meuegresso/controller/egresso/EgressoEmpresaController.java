@@ -48,7 +48,6 @@ public class EgressoEmpresaController {
 	private final ModelMapper mapper;
 
 	private final JwtService jwtService;
-
 	/**
 	 * Endpoint responsável por retornar a lista de egressoEmpresa cadastrados no
 	 * banco de dados.
@@ -73,15 +72,11 @@ public class EgressoEmpresaController {
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
-	@GetMapping(params = { "egressoId", "empresaId" })
+	@GetMapping(params = { "egressoId", "empresaId", "enderecoId" })
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public EgressoEmpresaDTO findById(@RequestParam(required = false) Integer egressoId,
-			@RequestParam(required = false) Integer empresaId) {
-		return mapper.map(
-				egressoEmpresaService
-						.findById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).build()),
-				EgressoEmpresaDTO.class);
+	public EgressoEmpresaDTO findById(@RequestParam(required = false) Integer egressoId, @RequestParam(required = false) Integer empresaId, @RequestParam(required = false) Integer enderecoId) {
+		return mapper.map(egressoEmpresaService.findById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).enderecoId(enderecoId).build()),EgressoEmpresaDTO.class);
 	}
 
 	/**
@@ -137,14 +132,12 @@ public class EgressoEmpresaController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping(params = { "egressoId", "empresaId" })
+	@DeleteMapping(params = { "egressoId", "empresaId", "enderecoId" })
 	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(@RequestParam(required = false) Integer egressoId,
-			@RequestParam(required = false) Integer empresaId) {
-		return egressoEmpresaService
-				.deleteById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).build());
+	public boolean deleteById(@RequestParam(required = false) Integer egressoId,@RequestParam(required = false) Integer empresaId, @RequestParam(required = false) Integer enderecoId) {
+		return egressoEmpresaService.deleteById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).enderecoId(enderecoId).build());
 	}
 
 }

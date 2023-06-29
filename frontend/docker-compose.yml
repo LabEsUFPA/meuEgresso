@@ -7,6 +7,8 @@ services:
     image: alverad/meu-egresso-front:develop-latest
     env_file:
       - .env
+    environment:
+      - TZ=America/Belem
     ports:
       - 8500:80
     networks:

@@ -83,9 +83,9 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	private Boolean valido = true;
 
 	@Builder.Default
-	@ColumnDefault(value = "TRUE")
+	@ColumnDefault(value = "FALSE")
 	@Column(name = "email_verificado_usuario", nullable = false)
-	private Boolean emailVerificado = true;
+	private Boolean emailVerificado = false;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

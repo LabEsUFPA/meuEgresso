@@ -5,6 +5,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,7 +58,7 @@ public class FaixaSalarialController {
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public List<FaixaSalarialDTO> buscarFaixaSalarials() {
+    public List<FaixaSalarialDTO> buscarFaixaSalarial() {
 
         return mapper.map(faixaSalarialService.findAll(), new TypeToken<List<FaixaSalarialDTO>>() {
         }.getType());
@@ -75,6 +76,7 @@ public class FaixaSalarialController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
     public String cadastrarFaixaSalarial(
             @RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO) {
         FaixaSalarialModel faixaSalarialModel = mapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
@@ -89,12 +91,13 @@ public class FaixaSalarialController {
      *                         necessárias para atualizar uma faixa salarial.
      * @return {@link String} Mensagem de confirmacao.
      * @author Bruno Eiki
-     * @throws UnauthorizedRequestException
+     * @throws InvalidRequestException
      * @since 21/04/2023
      */
     @PutMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
     public String atualizarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO,
             JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
@@ -118,6 +121,7 @@ public class FaixaSalarialController {
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
     public String deletarFaixaSalarial(@RequestBody @Valid FaixaSalarialDTO faixaSalarialDTO) {
 
         FaixaSalarialModel faixaSalarialModel = mapper.map(faixaSalarialDTO, FaixaSalarialModel.class);
