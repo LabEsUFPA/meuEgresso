@@ -47,7 +47,7 @@ public class EgressoPubController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<EgressoDTO> consultarEgressos() {
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return mapper.map(egressoService.findAll(), new TypeToken<List<EgressoDTO>>() {
+		return mapper.map(egressoService.findAllByUsuarioValidoIsTrue(), new TypeToken<List<EgressoDTO>>() {
 		}.getType());
 	}
 
@@ -63,7 +63,7 @@ public class EgressoPubController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public EgressoDTO findById(@PathVariable Integer id) {
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return mapper.map(egressoService.findById(id), EgressoDTO.class);
+		return mapper.map(egressoService.findByIdAndUsuarioValidoIsTrue(id), EgressoDTO.class);
 	}
 
 	/**

@@ -73,16 +73,25 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/administrador/egresso")
 public class EgressoAdmController {
 
-    private final EgressoService egressoService;
-    private final UsuarioService usuarioService;
-    private final EmpresaService empresaService;
-    private final SetorAtuacaoService setorAtuacaoService;
+    private final ModelMapper mapper;
+
     private final CursoService cursoService;
+
+    private final EgressoService egressoService;
+
+    private final UsuarioService usuarioService;
+
+    private final EmpresaService empresaService;
+
     private final EnderecoService enderecoService;
-    private final AreaAtuacaoService areaAtuacaoService;
+
     private final TitulacaoService titulacaoService;
 
-    private final ModelMapper mapper;
+    private final AreaAtuacaoService areaAtuacaoService;
+
+    private final SetorAtuacaoService setorAtuacaoService;
+
+    private final StatusUsuarioService statusUsuarioService;
 
     /**
      * Endpoint responsavel por buscar o egresso.
@@ -203,6 +212,11 @@ public class EgressoAdmController {
         egresso.getUsuario().setAtivo(egresso.getUsuario().getValido());
         egressoService.adicionarEgresso(egresso);
 
+        statusUsuarioService
+                .save(StatusUsuarioModel.builder().usuarioId(egresso.getUsuario().getId())
+                        .nome(egresso.getUsuario().getNome()).status(UsuarioStatus.COMPLETO)
+                        .build());
+
         return ResponseType.SUCCESS_SAVE.getMessage();
     }
 
@@ -288,8 +302,6 @@ public class EgressoAdmController {
 
         return ResponseType.SUCCESS_UPDATE.getMessage();
     }
-
-    private final StatusUsuarioService statusUsuarioService;
 
     /**
      * Endpoint responsavel por deletar o egresso.

@@ -68,6 +68,11 @@ public class EgressoEmpresaServiceImpl implements EgressoEmpresaService {
     }
 
     @Override
+    public List<EgressoEmpresaModel> findAllByEgressoUsuarioValidoIsTrue() {
+        return egressoEmpresaRepository.findAllByEgressoUsuarioValidoIsTrue();
+    }
+
+    @Override
     public List<EmpresaGraficoDTO> countEgressoByEmpresas() {
         return egressoEmpresaRepository.countEgressoByEmpresas();
     }
