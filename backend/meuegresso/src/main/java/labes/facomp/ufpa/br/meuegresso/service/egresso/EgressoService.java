@@ -38,6 +38,10 @@ public interface EgressoService {
 
 	public List<EgressoModel> findAll();
 
+	public List<EgressoModel> findAllByUsuarioValidoIsTrue();
+
+	public EgressoModel findByIdAndUsuarioValidoIsTrue(Integer id);
+
 	public EgressoModel adicionarEgresso(EgressoModel egresso);
 
 	/**

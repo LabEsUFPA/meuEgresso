@@ -40,6 +40,9 @@ public interface EgressoEmpresaService {
 	 */
 	public List<EgressoEmpresaModel> findAll();
 
+	public List<EgressoEmpresaModel> findAllByEgressoUsuarioValidoIsTrue();
+
+
 	/**
 	 * Método responsável por atualizar dados de um egressoEmpresa cadastrado.
 	 *

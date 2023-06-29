@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -66,7 +67,13 @@ public class EgressoServiceImpl implements EgressoService {
 		return egressoRepository.findById(idEgresso).orElseThrow();
 	}
 
+
 	@Override
+    public EgressoModel findByIdAndUsuarioValidoIsTrue(Integer id) {
+        return egressoRepository.findByIdAndUsuarioValidoIsTrue(id).orElseThrow();
+    }
+
+    @Override
 	public List<EgressoModel> findAll() {
 		return egressoRepository.findAll();
 	}
@@ -87,6 +94,11 @@ public class EgressoServiceImpl implements EgressoService {
 			idades.add(Period.between(lista.get(i).getNascimento(), LocalDate.now()).getYears());
 		}
 		return idades;
+	}
+
+	@Override
+	public List<EgressoModel> findAllByUsuarioValidoIsTrue() {
+		return egressoRepository.findAllByUsuarioValidoIsTrue();
 	}
 
 	/**
