@@ -25,7 +25,7 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
         >
-          <h1 class=" absolute flex flex-auto top-[15px] right-[10px] sm:right-[20%]">
+          <h1 class="absolute flex flex-auto top-[15px] right-[10px] sm:right-[20%]">
             <ButtonEdit
               label="Editar"
               icon-path="/img/edit.svg"
@@ -365,17 +365,24 @@
                   placeholder="Selecione"
                   icon-path=""
                 />
-
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  :vmodel="dataEgresso.academico.posGrad.curso"
-                  name="academico.posGrad.curso"
-                  label="Curso"
-                  placeholder="Curso de pós-graduação"
+                  :vmodel="dataEgresso.academico.bolsista.tipo"
+                  name="academico.bolsista.tipo"
+                  label="Tipo de Bolsa"
+                  placeholder="Selecione"
                   icon-path=""
                 />
-
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="'R$ ' + dataEgresso.academico.bolsista.remuneracao"
+                  name="academico.bolsista.remuneracao"
+                  label="Remuneração da bolsa"
+                  placeholder="Selecione"
+                  icon-path=""
+                />
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
@@ -385,14 +392,13 @@
                   placeholder="Local da pós-graduação"
                   icon-path=""
                 />
-
                 <CustomPerfilData
                   type="text"
-                  class="mb-1"
-                  :vmodel="dataEgresso.academico.bolsista.tipo"
-                  name="academico.bolsista.tipo"
-                  label="Bolsa"
-                  placeholder="Bolsa"
+                  class="mb-5"
+                  :vmodel="dataEgresso.academico.posGrad.curso"
+                  name="academico.posGrad.curso"
+                  label="Curso"
+                  placeholder="Curso de pós-graduação"
                   icon-path=""
                 />
               </div>
@@ -463,7 +469,7 @@
                     :disabled="!bools.cotista"
                   />
                   <CustomCheckbox
-                    class="mb-5"
+                    class="mb-6"
                     name="academico.cotista.tipos.pcd"
                     label="PCD"
                     :required="bools.cotista"
@@ -500,7 +506,7 @@
                 />
 
                 <CustomInput
-                  class="mb-5"
+                  class="mb-7"
                   name="academico.bolsista.remuneracao"
                   label="Remuneração da bolsa"
                   type="number"
@@ -513,14 +519,14 @@
                 />
 
                 <CustomCheckbox
-                  class="mb-5"
+                  class="mb-[-14px]"
                   name="academico.posGrad.value"
                   v-model:value="bools.posGrad"
                   label="Pós-graduação"
                 />
 
                 <CustomInput
-                  class="mb-5"
+                  class="mb-2"
                   name="academico.posGrad.local"
                   label="Instituição da pós-graduação"
                   :max-length="100"
@@ -587,7 +593,7 @@
               <template #NonInputData>
                 <CustomPerfilData
                   type="text"
-                  class="mb-10"
+                  class="mb-7"
                   :vmodel="dataEgresso.carreira.area"
                   name="carreira.area"
                   label="Área de Atuação"
@@ -597,7 +603,7 @@
 
                 <CustomPerfilData
                   type="text"
-                  class="mb-10"
+                  class="mb-7"
                   :vmodel="dataEgresso.carreira.setor"
                   name="carreira.setor"
                   label="Setor de Atuação"
@@ -607,10 +613,19 @@
 
                 <CustomPerfilData
                   type="text"
-                  class="mb-5"
+                  class="mb-7"
                   :vmodel="dataEgresso.carreira.empresa"
                   name="carreira.empresa"
                   label="Empresa Atual"
+                  placeholder="Empresa"
+                  icon-path=""
+                />
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.carreira.faixaSalarial"
+                  name="carreira.faixaSalarial"
+                  label="Faixa Salarial"
                   placeholder="Empresa"
                   icon-path=""
                 />
@@ -805,6 +820,18 @@
                 </h1>
               </template>
               <template #NonInputData>
+                <CustomPerfilData
+                  type="text"
+                  class="flex-auto mb-5"
+                  :vmodel="dataEgresso.adicionais.assuntosPalestras"
+                  name="adicionais.palestras"
+                  label="Assuntos Palestras"
+                  placeholder="Lorem ipsum dolor sit amet, consect
+                  etur adipiscing elit, sed do eiusmod tempor incididun
+                  t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                  ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                  icon-path=""
+                />
                 <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"
