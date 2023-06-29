@@ -20,26 +20,16 @@
 
         <div class="flex w-20 h-20 justify-center object-cover items-center rounded-full bg-cyan-800 overflow-hidden">
           <img
-            v-if="fotoUsuario !== '' && $store.anuncio.createdByUser.foto"
-            @error="fotoUsuario = ''"
+            v-if="fotoUsuario"
+            @error="!fotoUsuario"
             :src="fotoUsuario"
-            class="w-21 h-21 object-cover rounded-full border-2"
+            class="w-20 h-20 object-cover rounded-full border-2 border-sky-200/80"
           >
-
           <img
             v-else
-            v-show="tipoUsuario === 'ADMIN' || tipoUsuario === 'SECRETARIO' "
             :src="eagle"
-            class="w-24 h-24 p-2 rounded-full flex items-center justify-center shrink-0 bg-sky-200"
+            class="w-20 h-20 p-2 rounded-full flex items-center justify-center shrink-0 bg-sky-200"
           >
-
-          <SvgIcon
-            v-show="fotoUsuario == ''"
-            type="mdi"
-            class="inline text-white"
-            size="40"
-            :path="mdiAccount"
-          />
         </div>
 
         <div class="flex flex-col text-cyan-800">
@@ -201,7 +191,7 @@
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiChevronLeft, mdiBullhorn, mdiOpenInNew, mdiAccount, mdiDelete, mdiDeleteForever } from '@mdi/js'
+import { mdiChevronLeft, mdiBullhorn, mdiOpenInNew, mdiDelete, mdiDeleteForever } from '@mdi/js'
 
 import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
 import { useLoginStore } from 'src/store/LoginStore'
@@ -216,7 +206,6 @@ const { id } = $route.params
 $store.getAnuncioId(parseInt(id.toString()))
 const $loginStore = useLoginStore()
 const tipoUsuario = ref('')
-const iconSemFoto = ref('')
 const userId = ref(0)
 const fotoUsuario = ref($store.anuncio.createdByUser.foto)
 
@@ -226,7 +215,6 @@ onMounted(() => {
   }
   if (tipoUsuario.value === 'EGRESSO') {
     userId.value = $loginStore.getUserData()?.idUsuario ?? 0
-    iconSemFoto.value = mdiAccount
   }
 })
 
