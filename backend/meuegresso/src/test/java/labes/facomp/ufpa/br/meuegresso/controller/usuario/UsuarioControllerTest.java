@@ -3,6 +3,8 @@ package labes.facomp.ufpa.br.meuegresso.controller.usuario;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,8 +34,10 @@ import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 @SpringBootTest
 @DirtiesContext
@@ -44,6 +49,12 @@ class UsuarioControllerTest extends Configuracao {
 
         @Autowired
         MockMvc mockMvc;
+
+        @Autowired
+        PasswordEncoder encoder;
+
+        @Autowired
+        UsuarioRepository usuarioRepository;
 
         String token;
 
@@ -58,21 +69,23 @@ class UsuarioControllerTest extends Configuracao {
         void setUp() throws Exception {
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
+                final String plainText = "teste123";
+
+                /* Usuario */
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
-                usuarioModel.setNome("nome_test");
+                usuarioModel.setNome("nome_test asdsad");
                 usuarioModel.setEmail("teste@gmail.com");
-                usuarioModel.setPassword("teste123");
-                mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(usuarioModel)))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isCreated())
-                                .andReturn();
+                usuarioModel.setPassword(encoder.encode(plainText));
+                usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+                usuarioModel.setEmailVerificado(true);
+                usuarioModel.setAtivo(true);
+
+                usuarioModel = usuarioRepository.save(usuarioModel);
 
                 AuthenticationRequest authenticationRequest = new AuthenticationRequest();
                 authenticationRequest.setUsername(usuarioModel.getUsername());
-                authenticationRequest.setPassword(usuarioModel.getPassword());
+                authenticationRequest.setPassword(plainText);
                 String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
                 MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")

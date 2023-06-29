@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 import jakarta.persistence.Tuple;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.projections.usuario.RecoveryPasswordProjection;
 
 /**
  * Interface utilizada para realizar a comunicação entre a aplicação é o banco
@@ -25,11 +24,13 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	List<UsuarioModel> findAll();
 
-	Optional<RecoveryPasswordProjection> findByEmailIgnoreCase(String email);
+	<T> Optional<T> findByEmailIgnoreCase(String email, Class<T> type);
 
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	boolean existsByUsernameIgnoreCase(String username);
+
+	boolean existsByEmail(String email);
 
 	@Query(nativeQuery = true, value = """
 			SELECT u.email, u.created_date
@@ -85,8 +86,8 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			END) in (:status)
 			AND u.nome_usuario ilike %:nomeUsuario%
 			ORDER BY
-				CASE WHEN :ordenacao = 'ASC'  THEN u.created_date END ASC,
-			    CASE WHEN :ordenacao = 'DESC' THEN u.created_date END DESC
+			CASE WHEN :ordenacao = 'ASC'  THEN u.created_date END ASC,
+			CASE WHEN :ordenacao = 'DESC' THEN u.created_date END DESC
 			""")
 	List<Tuple> findBySearch(
 			@Param("nomeUsuario") String nomeUsuario,

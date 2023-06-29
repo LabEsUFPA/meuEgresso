@@ -57,13 +57,14 @@ public class EnderecoServiceImpl implements EnderecoService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-        return enderecoRepository.existsByIdAndCreatedById(id, createdBy);
+    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+        return enderecoRepository.existsByIdAndCreatedBy(id, createdBy);
     }
 
     @Override
     public EnderecoModel findByCidadeAndEstadoAndPais(String cidade, String estado, String pais) {
-        return enderecoRepository.findByCidadeIgnoreCaseAndEstadoIgnoreCaseAndPaisIgnoreCase(cidade, estado, pais).orElse(null);
+        return enderecoRepository.findByCidadeIgnoreCaseAndEstadoIgnoreCaseAndPaisIgnoreCase(cidade, estado, pais)
+                .orElse(null);
     }
 
 }

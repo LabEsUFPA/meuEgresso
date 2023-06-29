@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.dto.cota;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
  * @version 1.1
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CotaDTO {

@@ -37,6 +37,7 @@
                 label="Título da vaga"
                 placeholder="Ex: Vaga no PCT-Guamá"
                 :required="true"
+                :max-length="80"
               />
               <CustomSelect
                 class="mb-5"
@@ -72,11 +73,15 @@
                 :required="true"
                 :icon-path="mdiLink"
               />
-              <CustomInput
+              <CustomDatepicker
+                class="mb-5"
                 name="dataExpiracao"
                 type="date"
                 label="Data de expiração"
-                :required="true"
+                :max-date="maxDate"
+                :min-date="minDate"
+                :max-length="10"
+                required
               />
             </div>
           </div>
@@ -151,6 +156,7 @@ import CustomButton from 'src/components/CustomButton.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import CustomDatepicker from 'src/components/CustomDatepicker.vue'
 import { Form } from 'vee-validate'
 import { object, string } from 'yup'
 import { mdiCheckCircle, mdiBullhorn, mdiLink, mdiCloseCircle } from '@mdi/js'
@@ -165,6 +171,10 @@ const error = ref(false)
 const errorText = ref('')
 const submitSuccess = ref(false)
 const submitError = ref(false)
+const minDate = ref(new Date())
+const maxDate = ref(new Date())
+minDate.value.setDate(minDate.value.getDate())
+maxDate.value.setFullYear(maxDate.value.getFullYear() + 1)
 
 const retornaFeed = () => {
   router.push({ path: '/vagas' })
@@ -175,20 +185,20 @@ $store.fetchAreasEmprego()
 const schema = object().shape({
   titulo: string().required('O título é um campo obrigatório').trim().matches(/^[\w\s\d\SÀ-ÿ]+$/, 'Somente letras e números.'),
   areasEmprego: string().required('A área da emprego é um campo obrigatório.'),
-  dataExpiracao: string().required('Campo obrigatório').test('Data', 'Data deve ser sempre no futuro', (value) => {
-    if (value) {
-      const date = value.split('/').reverse().join('-') // Converte data para (YYYY-MM-DD)
-      const minDate = new Date()
-      const maxDate = new Date((minDate.getFullYear() + 1).toString() + '-12-31')
-      const inputDate = new Date(date)
-      return inputDate >= minDate && inputDate <= maxDate
-    }
-    return true
-  }),
+  dataExpiracao: string().required('Campo obrigatório'),
   salario: string().max(12),
   link: string().required('O link para contato é um campo obrigatório.').trim().matches(/^(http|https):\/\/[a-zA-Z0-9\-.]+\.[a-zA-Z]{2,}(\/\S*)?$/, 'Deve ser um formato de link válido em http ou https.'),
   descricao: string().required('A descrição é um campo obrigatório.')
 })
+
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString)
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const year = String(date.getFullYear())
+
+  return `${year}-${month}-${day}`
+}
 
 // Post Anuncio
 const handleSubmit = async (submitData: any) => {
@@ -198,7 +208,7 @@ const handleSubmit = async (submitData: any) => {
       id: submitData.areasEmprego,
       nome: ''
     },
-    dataExpiracao: submitData.dataExpiracao.toString(),
+    dataExpiracao: formatDate(submitData.dataExpiracao.toString()),
     salario: submitData.salario,
     link: submitData.link,
     descricao: submitData.descricao

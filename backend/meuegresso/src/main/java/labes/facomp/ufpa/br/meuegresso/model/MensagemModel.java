@@ -23,7 +23,7 @@ public class MensagemModel {
     @Column(name = "id_mensagem", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "corpo_mensagem", unique = false, nullable = false, length = 1000)
+    @Column(name = "corpo_mensagem", unique = false, nullable = false, length = 5000)
     private String corpo;
 
     @Column(name = "escopo_mensagem", unique = false, nullable = false)
@@ -34,6 +34,9 @@ public class MensagemModel {
 
     @Column(name = "data_mensagem", unique = false, nullable = false)
     private LocalDateTime dataEnvio;
+
+    @Column(name = "data_enviada_mensagem", unique = false, nullable = true)
+    private LocalDateTime dataEnviada;
 
     @Builder.Default
     @Column(name = "frequente_mensagem", unique = false, nullable = true)

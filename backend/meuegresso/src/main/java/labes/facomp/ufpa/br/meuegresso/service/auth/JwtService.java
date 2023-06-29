@@ -2,6 +2,8 @@ package labes.facomp.ufpa.br.meuegresso.service.auth;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
+import java.util.function.Consumer;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -30,6 +32,10 @@ public class JwtService {
         return jwtDecoder.decode(token).getSubject();
     }
 
+    public Map<String, Object> extractClains(String token) {
+        return jwtDecoder.decode(token).getClaims();
+    }
+
     public String generateToken(UsuarioModel userModel, String scope) {
         Instant now = Instant.now();
         var jwtClaimsSet = JwtClaimsSet.builder()
@@ -44,7 +50,24 @@ public class JwtService {
                 .claim(JwtUtils.EGRESSO.getPropriedade(), egressoRepository.existsByUsuarioId(userModel.getId()))
                 .claim(JwtUtils.SCOPE.getPropriedade(), scope);
         return jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet.build())).getTokenValue();
+    }
 
+    /**
+     * Recebe os dados, quanto tempo a partir de agora vai expirar e a unidade que vai ser acrescentada
+     *
+     * @param claims
+     * @param expireAt
+     * @param unidadeTempo
+     * @return
+     */
+    public String generateToken(Map<String, Object> claims, Integer expireAt, ChronoUnit unidadeTempo) {
+        Instant now = Instant.now();
+        var jwtClaimsSet = JwtClaimsSet.builder()
+                .issuer("API Meu Egresso - UFPA")
+                .issuedAt(now)
+                .expiresAt(now.plus(expireAt, unidadeTempo))
+                .claims(toClaimsConsumer(claims));
+        return jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet.build())).getTokenValue();
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -74,6 +97,16 @@ public class JwtService {
         } else {
             return true;
         }
+    }
+
+    private static Consumer<Map<String, Object>> toClaimsConsumer(Map<String, Object> claims) {
+        return map -> {
+            for (Map.Entry<String, Object> entry : claims.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                map.put(key, value);
+            }
+        };
     }
 
 }

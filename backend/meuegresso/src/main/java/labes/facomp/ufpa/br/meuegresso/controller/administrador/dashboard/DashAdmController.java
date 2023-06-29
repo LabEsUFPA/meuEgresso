@@ -6,8 +6,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +45,10 @@ import labes.facomp.ufpa.br.meuegresso.dto.administradores.notificacao.Notificac
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroAnualGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroDiaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EgressoCadastroMensalGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
+import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -63,6 +68,7 @@ public class DashAdmController {
 
 	private final UsuarioService usuarioService;
 	private final EgressoService egressoService;
+	private final StatusUsuarioService statusUsuarioService;
 
 	/**
 	 * Endpoint responsável por retornar uma lista de egressoDashDTO para
@@ -109,10 +115,15 @@ public class DashAdmController {
 	 * @since 11/06/2023
 	 */
 	@GetMapping("/export")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
+	// @PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public ResponseEntity<byte[]> exportarPDF() throws DocumentException {
+		LocalDateTime localDate = LocalDateTime.now();
+		DateTimeFormatter brHora = DateTimeFormatter.ofPattern("HH:mm:ss", new Locale("pt", "BR"));
+		DateTimeFormatter brData = DateTimeFormatter.ofPattern("dd/MM/yyyy", new Locale("pt", "BR"));
+		String horaFormatado = localDate.format(brHora);
+		String dataFormatado = localDate.format(brData);
 
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
@@ -130,7 +141,7 @@ public class DashAdmController {
 		document.add(new Paragraph("UNIVERSIDADE FEDERAL DO PARÁ"));
 		document.add(new Paragraph("Listagem de Egressos", bold));
 		document.add(new Paragraph(
-				"Data: " + LocalDateTime.now().toLocalDate() + "\nHorário: " + LocalDateTime.now().toLocalTime(),
+				"Data: " + dataFormatado + "\nHorário: " + horaFormatado,
 				bold));
 		document.add(new Paragraph("\n\n"));
 
@@ -166,7 +177,7 @@ public class DashAdmController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		headers.setContentDisposition(ContentDisposition.builder("attachment")
-				.filename("listagem-egresso-" + LocalDateTime.now().toLocalDate().toString() + ".pdf").build());
+				.filename("listagem-egresso-" + localDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy", new Locale("pt", "BR"))) + ".pdf").build());
 
 		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
 	}
@@ -179,24 +190,28 @@ public class DashAdmController {
 	 * @author Eude Monteiro
 	 * @since 12/06/2023
 	 */
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@GetMapping(value = "/notificacaoStatus")
 	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<NotificacaoDTO> getStatus(
 			@RequestParam(name = "nome", defaultValue = "", required = false) String nome,
-			@RequestParam(name = "status", defaultValue = "", required = false) String status,
+			@RequestParam(name = "status", defaultValue = "", required = false) Optional<UsuarioStatus[]> status,
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
 
-		return usuarioService.getStatus(nome, status, page, size, direction);
+		return statusUsuarioService.findBySearch(nome, status.orElse(UsuarioStatus.values()), page, size, direction)
+				.map(e -> NotificacaoDTO.builder().nome(e.getNome())
+						.usuarioId(e.getUsuarioId()).dataModificacao(e.getDataModificacao())
+						.status(e.getStatus().toString().toLowerCase())
+						.build());
 
 	}
 
 	@GetMapping(value = "/cadastro/dia")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoCadastroDiaGraficoDTO getCadastroEgressoDiario() {
 		Map<LocalDate, Long> egressoCadDia = egressoService.countEgressoPorData();
@@ -205,8 +220,8 @@ public class DashAdmController {
 	}
 
 	@GetMapping(value = "/cadastro/mes")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoCadastroMensalGraficoDTO getCadastroEgressoMensal() {
 		Map<LocalDate, Long> egressoCadMes = egressoService.countEgressoPorMesEAno();
@@ -215,8 +230,8 @@ public class DashAdmController {
 	}
 
 	@GetMapping(value = "/cadastro/ano")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoCadastroAnualGraficoDTO getCadastroEgressoAno() {
 		Map<Integer, Long> egressoCadAno = egressoService.countEgressoPorAno();

@@ -56,6 +56,7 @@ public class EmpresaController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<EmpresaBasicDTO> consultarEmpresas() {
 		return mapper.map(empresaService.findAll(), new TypeToken<List<EmpresaBasicDTO>>() {
@@ -112,7 +113,7 @@ public class EmpresaController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarEmpresa(@RequestBody @Valid EmpresaBasicDTO empresaDTO,
 			JwtAuthenticationToken token) throws InvalidRequestException, UnauthorizedRequestException {
-		if (empresaService.existsByIdAndCreatedById(empresaDTO.getId(), jwtService.getIdUsuario(token))) {
+		if (empresaService.existsByIdAndCreatedBy(empresaDTO.getId(), jwtService.getIdUsuario(token))) {
 			EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);
 			empresaService.update(empresaModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();
@@ -128,11 +129,15 @@ public class EmpresaController {
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
 	 */
-	@DeleteMapping
+	@DeleteMapping(value = "/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(Integer id) {
-		return empresaService.deleteById(id);
+	public String deleteById(@PathVariable Integer id) {
+		if (empresaService.deleteById(id)) {
+			return ResponseType.SUCCESS_DELETE.getMessage();
+		}
+		return ResponseType.FAIL_DELETE.getMessage();
 	}
 
 }

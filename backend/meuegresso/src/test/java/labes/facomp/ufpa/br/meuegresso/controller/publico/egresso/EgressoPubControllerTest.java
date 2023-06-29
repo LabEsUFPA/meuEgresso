@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import labes.facomp.ufpa.br.meuegresso.dto.contribuicao.ContribuicaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.depoimento.DepoimentoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.genero.GeneroDTO;
-import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
@@ -66,15 +66,12 @@ class EgressoPubControllerTest {
 
 	@BeforeAll
 	void setUp() throws Exception {
-		GeneroDTO genero = new GeneroDTO(1, "TRANSSEXUAL");
-		DepoimentoDTO depoimento = new DepoimentoDTO(1, "TextoDepoimento");
-		ContribuicaoDTO contribuicao = new ContribuicaoDTO(1, "TextoContribuicao");
+		GeneroDTO genero = GeneroDTO.builder().id(1).nome("TRANSSEXUAL").build();
+		DepoimentoDTO depoimento = DepoimentoDTO.builder().id(1).descricao("TextoDepoimento").build();
+		ContribuicaoDTO contribuicao = ContribuicaoDTO.builder().id(1).descricao("TextoContribuicao").build();
 
 		UsuarioDTO usuario = UsuarioDTO.builder()
-				.username("username")
-				.nome("nome_test")
-				.email("teste@gmail.com")
-				.password("teste123")
+				.nome("nome test")
 				.build();
 
 		egressoModel.setId(1);
@@ -92,7 +89,7 @@ class EgressoPubControllerTest {
 
 	@Test
 	void testConsultarEgressos() throws Exception {
-		Mockito.when(egressoService.findAll()).thenReturn(egressosModel);
+		Mockito.when(egressoService.findAllByUsuarioValidoIsTrue()).thenReturn(egressosModel);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/publico/egresso"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$").value(Matchers.hasSize(2)))
@@ -109,16 +106,14 @@ class EgressoPubControllerTest {
 						.value(egressoModel.getDepoimento().getDescricao()))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].contribuicao.descricao")
 						.value(egressoModel.getContribuicao().getDescricao()))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].usuario.email")
-						.value(egressoModel.getUsuario().getEmail()))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 
-		Mockito.verify(egressoService).findAll();
+		Mockito.verify(egressoService).findAllByUsuarioValidoIsTrue();
 	}
 
 	@Test
 	void testFindById() throws Exception {
-		Mockito.when(egressoService.findById(anyInt())).thenReturn(egressoModel);
+		Mockito.when(egressoService.findByIdAndUsuarioValidoIsTrue(anyInt())).thenReturn(egressoModel);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/publico/egresso/1"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.usuario.nome")
@@ -134,10 +129,8 @@ class EgressoPubControllerTest {
 						.value(egressoModel.getDepoimento().getDescricao()))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.contribuicao.descricao")
 						.value(egressoModel.getContribuicao().getDescricao()))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.usuario.email")
-						.value(egressoModel.getUsuario().getEmail()))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 
-		Mockito.verify(egressoService).findById(anyInt());
+		Mockito.verify(egressoService).findByIdAndUsuarioValidoIsTrue(anyInt());
 	}
 }

@@ -13,7 +13,7 @@ public interface AnuncioRepository extends CrudRepository<AnuncioModel, Integer>
 
     Page<AnuncioModel> findAll(Pageable page);
 
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+    boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
     @Query(value = """
             select a

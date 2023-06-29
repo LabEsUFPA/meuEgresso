@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.administradores.notificacao;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotificacaoDTO {
-    
+
     private String nome;
 
     private Integer usuarioId;
-    
+
     private String status;
-    
-    private LocalDate dataModificacao;
+
+    private LocalDateTime dataModificacao;
 }

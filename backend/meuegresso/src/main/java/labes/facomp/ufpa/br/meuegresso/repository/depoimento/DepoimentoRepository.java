@@ -10,5 +10,5 @@ public interface DepoimentoRepository extends CrudRepository<DepoimentoModel, In
 
     List<DepoimentoModel> findAll();
 
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+    boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 }

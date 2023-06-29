@@ -59,11 +59,11 @@ public interface PalestraService {
 	 * @param createdBy
 	 * @return
 	 */
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
-
+	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	/**
-	 * Método responsável por encontrar um determinado contribuicao pelo seu egresso.
+	 * Método responsável por encontrar um determinado contribuicao pelo seu
+	 * egresso.
 	 *
 	 * @param id ID de um contribuicao
 	 * @return
@@ -71,7 +71,8 @@ public interface PalestraService {
 	public PalestraModel findByEgressoId(Integer idEgresso);
 
 	/**
-	 * Método responsável por encontrar um determinado contribuicao pelo seu egresso.
+	 * Método responsável por encontrar um determinado contribuicao pelo seu
+	 * egresso.
 	 *
 	 * @param id ID de um contribuicao
 	 * @return

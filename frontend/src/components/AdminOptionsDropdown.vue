@@ -22,18 +22,17 @@
       v-for="(opcao, index) in opcoesAdmin.filter(op => op.status.includes(status) && op.habilitado)"
       :key="index"
       aria-role="listitem"
+      role="button"
       override
       :item-class="classNames({
-        ['text-sm text-cyan-600 p-2 hover:bg-sky-300/30 rounded']: true,
-        ['text-red-500 hover:bg-red-300/30 rounded'] : opcao.titulo === 'Excluir cadastro',
-        ['text-emerald-500 hover:bg-red-emerald/30 rounded'] : opcao.titulo === 'Aprovar cadastro',
+        ['text-sm p-2 pr-8 rounded']: true,
+        ['text-cyan-600 hover:bg-sky-300/30']: opcao.titulo !== 'Excluir cadastro' && opcao.titulo !== 'Aprovar cadastro',
+        ['text-red-500 hover:bg-red-300/30']: opcao.titulo === 'Excluir cadastro',
+        ['text-emerald-500 hover:bg-emerald-200/50']: opcao.titulo === 'Aprovar cadastro'
       })"
+      @click="() => escolheAcao(opcao.titulo)"
     >
-      <button
-        @click="() => escolheAcao(opcao.titulo)"
-      >
-        {{ opcao.titulo }}
-      </button>
+      {{ opcao.titulo }}
     </ODropdownItem>
   </ODropdown>
 
@@ -154,12 +153,12 @@ import { usePainelStore } from 'src/store/PainelStore'
 import { useLoginStore } from 'src/store/LoginStore'
 
 const props = defineProps<{
-    id: number
-    idEgresso?: number
-    nome?: string
-    status: string
-    email: string
-    }
+  id: number
+  idEgresso?: number
+  nome?: string
+  status: string
+  email: string
+  }
 >()
 
 const $emits = defineEmits(['updateData'])
@@ -196,7 +195,12 @@ async function aprovaCadastro () {
 }
 
 function editaCadastro () {
-  $router.push(`/egresso/${props.idEgresso}`)
+  if (props.status !== 'incompleto') {
+    $router.push(`/egresso/${props.idEgresso}`)
+    return
+  }
+
+  $router.push(`/cadastro/${props.id}`)
 }
 
 async function excluiCadastro () {
@@ -204,23 +208,9 @@ async function excluiCadastro () {
 
   if (props.idEgresso) {
     const codeDelete = await $store.deleteUsuario(props.idEgresso)
-
-    if (props.status === 'completo') {
-      // Desvalida o usuário completo
-      const codeDesvalida = await $store.toggleValidacaoUsuario(props.id)
-
-      if (codeDelete === 200 && codeDesvalida === 201) {
-        $emits('updateData')
-        isLoadingAction.value = false
-      }
-    } else {
-      // Desativa o usuário pendente
-      const codeDesativa = await $store.toggleAtivacaoUsuario(props.id)
-
-      if (codeDelete === 200 && codeDesativa === 201) {
-        $emits('updateData')
-        isLoadingAction.value = false
-      }
+    if (codeDelete === 204 || codeDelete === 200) {
+      $emits('updateData')
+      isLoadingAction.value = false
     }
   }
 }
@@ -232,7 +222,7 @@ function enviaEmail () {
 
 const opcoesAdmin = [
   { titulo: 'Aprovar cadastro', status: ['pendente'], click: aprovaCadastro, habilitado: true },
-  { titulo: 'Editar cadastro', status: ['completo', 'pendente'], click: editaCadastro, habilitado: true },
+  { titulo: 'Editar cadastro', status: ['incompleto', 'completo', 'pendente'], click: editaCadastro, habilitado: true },
   { titulo: 'Enviar e-mail', status: ['incompleto', 'completo', 'pendente'], click: enviaEmail, habilitado: true },
   { titulo: 'Excluir cadastro', status: ['completo', 'pendente'], click: excluiCadastro, habilitado: userScope.value === 'ADMIN' }
 ]

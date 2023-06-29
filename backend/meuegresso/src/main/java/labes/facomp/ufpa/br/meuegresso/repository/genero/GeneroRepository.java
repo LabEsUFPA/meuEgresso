@@ -20,7 +20,7 @@ public interface GeneroRepository extends CrudRepository<GeneroModel, Integer> {
 
     List<GeneroModel> findAll();
 
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+    boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
     @Query(value = "SELECT g.nome, COUNT(e.id) FROM genero g LEFT JOIN egresso e ON e.genero.id = g.id GROUP BY g.nome")
 

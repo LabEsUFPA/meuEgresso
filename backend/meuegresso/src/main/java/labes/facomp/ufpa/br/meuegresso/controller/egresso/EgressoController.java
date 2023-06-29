@@ -26,7 +26,10 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
+import labes.facomp.ufpa.br.meuegresso.exceptions.MatriculaAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
@@ -40,6 +43,7 @@ import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.model.FaixaSalarialModel;
 import labes.facomp.ufpa.br.meuegresso.model.PalestraModel;
 import labes.facomp.ufpa.br.meuegresso.model.SetorAtuacaoModel;
+import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
@@ -48,6 +52,7 @@ import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
 import labes.facomp.ufpa.br.meuegresso.service.endereco.EnderecoService;
 import labes.facomp.ufpa.br.meuegresso.service.setoratuacao.SetorAtuacaoService;
+import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.titulacao.TitulacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +77,7 @@ public class EgressoController {
     private final EnderecoService enderecoService;
     private final TitulacaoService titulacaoService;
     private final AreaAtuacaoService areaAtuacaoService;
+    private final StatusUsuarioService statusUsuarioService;
 
     private final ModelMapper mapper;
 
@@ -93,7 +99,14 @@ public class EgressoController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarEgressoPrimeiroCadastro(@RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO,
-            JwtAuthenticationToken token) {
+            JwtAuthenticationToken token) throws MatriculaAlreadyExistsException {
+
+        if (egressoCadastroDTO.getMatricula() != null
+                && egressoService.existsMatricula(egressoCadastroDTO.getMatricula())) {
+            throw new MatriculaAlreadyExistsException(
+                    String.format(ErrorType.REPORT_007.getMessage(), egressoCadastroDTO.getMatricula()),
+                    ErrorType.REPORT_007.getInternalCode());
+        }
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
 
@@ -139,10 +152,10 @@ public class EgressoController {
             empresa = empresaService.findByNome(empresaDTO.getNome());
             if (empresa == null) {
                 empresa = mapper.map(empresaDTO, EmpresaModel.class);
-                empresa.setEndereco(enderecoEmpresa);
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
+                    .endereco(enderecoEmpresa)
                     .faixaSalarial(FaixaSalarialModel.builder().id(empresaDTO.getFaixaSalarialId()).build()).build());
             validaSetorAtuacao(empresaDTO.getSetorAtuacao(), egresso);
             validaAreaAtuacao(empresaDTO.getAreaAtuacao(), egresso);
@@ -160,8 +173,13 @@ public class EgressoController {
         ContribuicaoModel contribuicao = egresso.getContribuicao();
         depoimento.setEgresso(egresso);
         contribuicao.setEgresso(egresso);
+
         egresso.getUsuario().setAtivo(egresso.getUsuario().getValido());
         egressoService.adicionarEgresso(egresso);
+        statusUsuarioService
+                .save(StatusUsuarioModel.builder().usuarioId(egresso.getUsuario().getId())
+                        .nome(egresso.getUsuario().getNome()).status(UsuarioStatus.PENDENTE)
+                        .build());
 
         return ResponseType.SUCCESS_SAVE.getMessage();
     }
@@ -200,8 +218,20 @@ public class EgressoController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(
             @RequestBody EgressoDTO egresso, JwtAuthenticationToken token)
-            throws UnauthorizedRequestException {
-        if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
+            throws MatriculaAlreadyExistsException {
+
+        // Se a matricula passada for diferente da matricula que a pessoa já tinha,
+        // checar se é duplicado.
+        if (egresso.getMatricula() != null
+                && !egresso.getMatricula().equals(egressoService.findById(egresso.getId()).getMatricula())
+                && egressoService.existsMatricula(egresso.getMatricula())) {
+            throw new MatriculaAlreadyExistsException(
+                    String.format(ErrorType.REPORT_007.getMessage(), egresso.getMatricula()),
+                    ErrorType.REPORT_007.getInternalCode());
+        }
+
+        if (egressoService.existsByIdAndCreatedBy(egresso.getId(), jwtService.getIdUsuario(token))) {
+
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
             if (egressoModel.getContribuicao() != null) {
@@ -213,14 +243,16 @@ public class EgressoController {
             if (egressoModel.getEmprego() != null) {
                 EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
                 egressoEmpresaModel.setEgresso(egressoModel);
-                EnderecoModel enderecoModel = egressoEmpresaModel.getEmpresa().getEndereco();
+                EnderecoModel enderecoModel = egressoEmpresaModel.getEndereco();
                 EnderecoModel enderecoModelNoBanco = enderecoService.findByCidadeAndEstadoAndPais(
                         enderecoModel.getCidade(), enderecoModel.getEstado(),
                         enderecoModel.getPais());
                 if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
-                    egressoEmpresaModel.getEmpresa().setEndereco(enderecoModelNoBanco);
+                    egressoEmpresaModel.setEndereco(enderecoModelNoBanco);
+                    egressoEmpresaModel.getId().setEnderecoId(enderecoModelNoBanco.getId());
                 } else if (enderecoModelNoBanco == null) {
-                    egressoEmpresaModel.getEmpresa()
+                    egressoEmpresaModel.getId().setEnderecoId(null);
+                    egressoEmpresaModel
                             .setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
                                     .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
                 }
@@ -242,9 +274,10 @@ public class EgressoController {
                 egressoModel.getTitulacao().setEgresso(egressoModel);
             }
             egressoService.updateEgresso(egressoModel);
-            return ResponseType.SUCCESS_UPDATE.getMessage();
+        } else {
+            return ResponseType.EGRESSO_NAO_ENCONTRADO.getMessage();
         }
-        throw new UnauthorizedRequestException();
+        return ResponseType.SUCCESS_UPDATE.getMessage();
     }
 
     /**

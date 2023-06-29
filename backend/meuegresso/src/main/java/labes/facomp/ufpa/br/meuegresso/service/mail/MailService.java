@@ -1,11 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.service.mail;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
 
-import labes.facomp.ufpa.br.meuegresso.dto.mensagem.MensagemStatusDTO;
 import labes.facomp.ufpa.br.meuegresso.model.MensagemModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 
@@ -26,7 +22,7 @@ public interface MailService {
     * @since 11/06/2023
     */
     public void sendEmail(String to, String subject, String text);
-    
+
     /**
     * metodo para enviar o email para um usuario.
     *
@@ -34,7 +30,7 @@ public interface MailService {
     * @author Alfredo Gabriel
     * @since 11/06/2023
     */
-    public void usuarioCadastrado(UsuarioModel usuario);
+    public void usuarioCadastrado(UsuarioModel usuario, String redirect);
 
     /**
     * metodo para salvar a mensagem de email.
@@ -45,6 +41,8 @@ public interface MailService {
     * @since 16/06/2023
     */
     public MensagemModel save(MensagemModel mensagemModel);
+
+    public void reenviarValidacaoEmail(UsuarioModel usuario, String redirect);
 
     /**
     * metodo para atualizar a mensagem de email.
@@ -85,62 +83,5 @@ public interface MailService {
     * @since 16/06/2023
     */
     public boolean deleteById(Integer idMensagem);
-
-    /**
-    * metodo para buscar uma lista de mensagens e apresentar os status dela.
-    *
-	* @return {@link MensagemStatusDTO} Dados após serem gravados no banco de dados.
-    * @author Pedro Inácio
-    * @since 17/06/2023
-    */
-    public MensagemStatusDTO getMensagensStatus();
-    
-    /**
-    * metodo para enviar a mensagem de email agendada pelo id.
-    *
-    * @author Pedro Inácio
-    * @since 16/06/2023
-    */
-    public void scheduledSendEmail();
-
-    /**
-    * metodo para agendar a mensagem de email pelo id.
-    *
-    * @param tasklet instancia de classe {@link MailServiceIml} a rodar as tarefas agendadas.
-    * @param dateTime data de envio da mensagem.
-    * @param frequente booleano de frequencia de envio da mensagem de email.
-    * @param anual booleano de anualidade, true para anual, false para semestral.
-    * @param mensagemModel Dados da mensagem.
-    * @author Pedro Inácio
-    * @since 16/06/2023
-    */
-    public void setScheduleATask(Runnable tasklet, LocalDateTime dateTime, boolean frequente, boolean anual, MensagemModel mensagemModel);
-
-    /**
-    * metodo para remover a mensagem agendada de email pelo id.
-    *
-    * @param mensagemModel Dados da mensagem.
-    * @author Pedro Inácio
-    * @since 16/06/2023
-    */
-    public void removeScheduledTask(MensagemModel mensagemModel);
-
-    /**
-    * metodo para estabelecer a mensagem anual de email pelo id.
-    *
-    * @param tasklet instancia de classe {@link MailServiceIml} a rodar as tarefas agendadas.
-    * @author Pedro Inácio
-    * @since 16/06/2023
-    */
-    public void setEmailAnualCadastro(Runnable tasklet, MensagemModel mensagemModel);
-
-    /**
-    * metodo para buscar os agendamentos de mensagens de email pelo id.
-    *
-	* @return {@link Map<String, ScheduledFuture<?>>} Dados de status retornados.
-    * @author Pedro Inácio
-    * @since 16/06/2023
-    */
-    public Map<String, ScheduledFuture<?>> getTasks();
 
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +40,7 @@ import lombok.extern.log4j.Log4j2;
  * @version 1.0
  */
 @Log4j2
+@Primary
 @Service
 @RequiredArgsConstructor
 public class UsuarioServiceImpl implements UsuarioService {
@@ -71,6 +73,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
+	public boolean existsByEmail(String email) {
+		return usuarioRepository.existsByEmail(email);
+	}
+
+	@Override
 	public UsuarioModel findById(Integer idUsuario) {
 		return usuarioRepository.findById(idUsuario).orElseThrow();
 	}
@@ -87,7 +94,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	public UsuarioModel update(UsuarioModel usuario) throws InvalidRequestException {
 		if (usuario.getId() != null) {
-			usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 			return usuarioRepository.save(usuario);
 		} else {
 			throw new InvalidRequestException();
@@ -103,8 +109,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-		return usuarioRepository.existsByIdAndCreatedById(id, createdBy);
+	public UsuarioModel findByEmail(String email) {
+		return usuarioRepository.findByEmailIgnoreCase(email, UsuarioModel.class).orElseThrow();
+	}
+
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+		return usuarioRepository.existsByIdAndCreatedBy(id, createdBy);
 	}
 
 	@Override
@@ -117,7 +127,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	// PageRequest.of(page, size, Sort.by(direction, "u.created_date")
 	@Override
-	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size, String ordenacao) {
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size,
+			String ordenacao) {
 
 		List<Tuple> tupla = usuarioRepository.findBySearch(nomeUsuario, status, ordenacao);
 
@@ -148,7 +159,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 						.nome(e.get(0, String.class))
 						.usuarioId(e.get(1, Integer.class))
 						.status(e.get(2, String.class))
-						.dataModificacao(e.get(3, Timestamp.class).toLocalDateTime().toLocalDate())
+						.dataModificacao(e.get(3, Timestamp.class).toLocalDateTime())
 						.build()));
 
 		Pageable paging = PageRequest.of(page, size, Sort.by(direction, "u.last_modified_date"));

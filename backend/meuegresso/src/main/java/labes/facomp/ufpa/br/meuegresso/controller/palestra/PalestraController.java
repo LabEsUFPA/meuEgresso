@@ -56,6 +56,7 @@ public class PalestraController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<PalestraDTO> consultarPalestras() {
 		return mapper.map(palestraService.findAll(), new TypeToken<List<PalestraDTO>>() {
@@ -113,7 +114,7 @@ public class PalestraController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarPalestra(@RequestBody @Valid PalestraDTO palestraDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (palestraService.existsByIdAndCreatedById(palestraDTO.getId(), jwtService.getIdUsuario(token))) {
+		if (palestraService.existsByIdAndCreatedBy(palestraDTO.getId(), jwtService.getIdUsuario(token))) {
 			PalestraModel palestraModel = palestraService.findByEgressoUsuarioId(jwtService.getIdUsuario(token));
 			palestraModel.setDescricao(palestraDTO.getDescricao());
 			palestraService.update(palestraModel);
@@ -131,11 +132,15 @@ public class PalestraController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping
+	@DeleteMapping(value = "/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(Integer id) {
-		return palestraService.deleteById(id);
+	public String deleteById(@PathVariable Integer id) {
+		if(palestraService.deleteById(id)){
+			return ResponseType.SUCCESS_DELETE.getMessage();
+		}
+		return ResponseType.FAIL_DELETE.getMessage();
 	}
 
 }
