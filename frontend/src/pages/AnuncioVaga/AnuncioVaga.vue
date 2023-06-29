@@ -18,19 +18,27 @@
           </button>
         </RouterLink>
 
-        <div class="shrink-0 p-2 bg-cyan-800 rounded-3xl text-white">
+        <div class="flex w-20 h-20 justify-center object-cover items-center rounded-full bg-cyan-800 overflow-hidden">
           <img
             v-if="fotoUsuario !== '' && $store.anuncio.createdByUser.foto"
             @error="fotoUsuario = ''"
             :src="fotoUsuario"
+            class="w-21 h-21 object-cover rounded-full border-2"
+          >
+
+          <img
+            v-else
+            v-show="tipoUsuario === 'ADMIN' || tipoUsuario === 'SECRETARIO' "
+            :src="eagle"
+            class="w-24 h-24 p-2 rounded-full flex items-center justify-center shrink-0 bg-sky-200"
           >
 
           <SvgIcon
-            v-else
+            v-show="fotoUsuario == ''"
             type="mdi"
-            size="21"
+            class="inline text-white"
+            size="40"
             :path="mdiAccount"
-            class="text-white"
           />
         </div>
 
@@ -129,7 +137,7 @@
               Vaga disponível até {{ $store.anuncio.dataExpiracao.split('-').reverse().join('/') }}
             </p>
             <CustomButton
-              v-show="tipoUsuario === 'ADMIN' || userEmail === $store.anuncio.createdByUser.nome"
+              v-show="tipoUsuario === 'ADMIN' || userId === $store.anuncio.createdByUser.id"
               type="button"
               color="red"
               variant="flat"
@@ -199,6 +207,7 @@ import { useAnuncioVagaStore } from 'src/store/AnuncioVagaStore'
 import { useLoginStore } from 'src/store/LoginStore'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
+import eagle from 'src/assets/eagle.svg'
 
 const $store = useAnuncioVagaStore()
 const $route = useRoute()
@@ -207,18 +216,17 @@ const { id } = $route.params
 $store.getAnuncioId(parseInt(id.toString()))
 const $loginStore = useLoginStore()
 const tipoUsuario = ref('')
-const userEmail = ref('')
+const iconSemFoto = ref('')
+const userId = ref(0)
 const fotoUsuario = ref($store.anuncio.createdByUser.foto)
-
-console.log('salário:', $store.anuncio.salario)
 
 onMounted(() => {
   if ($loginStore.loggedIn) {
     tipoUsuario.value = $loginStore.getUserData()?.scope ?? ''
   }
-  // Corrigir isso em casa
-  if (tipoUsuario.value !== 'ADMIN') {
-    userEmail.value = ($loginStore.getUserData() as any)?.email ?? ''
+  if (tipoUsuario.value === 'EGRESSO') {
+    userId.value = $loginStore.getUserData()?.idUsuario ?? 0
+    iconSemFoto.value = mdiAccount
   }
 })
 

@@ -1,19 +1,27 @@
 <template>
   <div class="flex flex-col w-[960px] bg-white rounded-2xl mx-4 sm:mx-6">
     <div class="flex gap-4 px-6 sm:px-8 pt-6 sm:pt-8 pb-4 items-center border-b-[1px] border-b-gray-200">
-      <div class="shrink-0 p-2 bg-cyan-800 rounded-3xl text-white">
+      <div class="flex w-8 h-8 justify-center object-cover items-center bg-cyan-800 rounded-full overflow-hidden">
         <img
           v-if="fotoUsuario !== '' && foto"
           @error="fotoUsuario = ''"
           :src="fotoUsuario"
+          class="w-8 h-8 object-cover rounded-full border-2"
+        >
+
+        <img
+          v-else
+          v-show="tipoUsuario === 'ADMIN' || tipoUsuario === 'SECRETARIO' "
+          :src="eagle"
+          class="w-24 h-24 p-2 rounded-full flex items-center justify-center shrink-0 bg-sky-200"
         >
 
         <SvgIcon
-          v-else
+          v-show="fotoUsuario === ''"
           type="mdi"
-          size="21"
+          class="inline text-white"
+          size="20"
           :path="mdiAccount"
-          class="text-white"
         />
       </div>
 
@@ -82,9 +90,13 @@
 
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiAccount, mdiBullhorn, mdiChevronRight } from '@mdi/js'
+import { useLoginStore } from 'src/store/LoginStore'
 import { ref } from 'vue'
-
 import CustomButton from 'src/components/CustomButton.vue'
+import eagle from 'src/assets/eagle.svg'
+
+const tipoUsuario = ref('')
+const $loginStore = useLoginStore()
 
 const props = defineProps<{
   id: number,
@@ -99,7 +111,6 @@ const props = defineProps<{
 const fotoUsuario = ref(props.foto)
 
 const formataSalario = (value:String) => {
-  console.log(value)
   const valueConvertido = parseFloat(value.toString())
   const formattedValue = valueConvertido.toLocaleString('pt-BR', {
     style: 'currency',
@@ -109,6 +120,10 @@ const formataSalario = (value:String) => {
     return formattedValue
   }
   return ''
+}
+
+if ($loginStore.loggedIn) {
+  tipoUsuario.value = $loginStore.getUserData()?.scope ?? ''
 }
 
 </script>

@@ -47,38 +47,6 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
   }),
 
   actions: {
-    async fetchAnuncios () {
-      const response = await Api.request({
-        method: 'get',
-        route: '/anuncio'
-      })
-
-      if (response?.status === 200) {
-        this.totalPages = response.data?.totalPages
-        this.anuncios = response.data?.content.map((elem: any) => ({
-          id: elem.id,
-          titulo: elem.titulo,
-          areaEmprego: {
-            id: elem.areaEmprego.id,
-            nome: elem.areaEmprego.nome
-          },
-          descricao: elem.descricao,
-          dataExpiracao: elem.dataExpiracao,
-          link: elem.link,
-          salario: elem.salario,
-          createdBy: elem.createdBy,
-          createdByUser: {
-            id: elem.createdByUser.id,
-            nome: elem.createdByUser.nome,
-            egresso: {
-              id: elem.createdByUser.egresso.id
-            },
-            foto: elem.createdByUser.foto
-          }
-        }))
-      }
-    },
-
     async deleteAnuncioAdmin (id: number) {
       const response = await Api.request({
         method: 'delete',
@@ -114,27 +82,33 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
 
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
-        this.anuncios = response.data?.content.map((elem: any) => ({
-          id: elem.id,
-          titulo: elem.titulo,
-          areaEmprego: {
-            id: elem.areaEmprego.id,
-            nome: elem.areaEmprego.nome
-          },
-          descricao: elem.descricao,
-          dataExpiracao: elem.dataExpiracao,
-          link: elem.link,
-          salario: elem.salario,
-          createdBy: elem.createdBy,
-          createdByUser: {
-            id: elem.createdByUser.id,
-            nome: elem.createdByUser.nome,
-            egresso: {
-              id: elem.createdByUser.egresso.id
+        this.anuncios = response.data?.content.map((elem: any) => {
+          const createdByUserId = elem.createdByUser?.id ?? 'valor_padrao_id'
+          const egressoId = elem.createdByUser?.egresso?.id ?? 'valor_padrao_egresso_id'
+          const foto = elem.createdByUser?.foto ?? 'valor_padrao_foto'
+
+          return {
+            id: elem.id,
+            titulo: elem.titulo,
+            areaEmprego: {
+              id: elem.areaEmprego?.id,
+              nome: elem.areaEmprego?.nome
             },
-            foto: elem.createdByUser.foto
+            descricao: elem.descricao,
+            dataExpiracao: elem.dataExpiracao,
+            link: elem.link,
+            salario: elem.salario,
+            createdBy: elem.createdBy,
+            createdByUser: {
+              id: createdByUserId,
+              nome: elem.createdByUser?.nome,
+              egresso: {
+                id: egressoId
+              },
+              foto
+            }
           }
-        }))
+        })
       }
     },
 
@@ -147,27 +121,33 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       })
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
-        this.anuncios = response.data?.content.map((elem: any) => ({
-          id: elem.id,
-          titulo: elem.titulo,
-          areaEmprego: {
-            id: elem.areaEmprego.id,
-            nome: elem.areaEmprego.nome
-          },
-          descricao: elem.descricao,
-          dataExpiracao: elem.dataExpiracao,
-          link: elem.link,
-          salario: elem.salario,
-          createdBy: elem.createdBy,
-          createdByUser: {
-            id: elem.createdByUser.id,
-            nome: elem.createdByUser.nome,
-            egresso: {
-              id: elem.createdByUser.egresso.id
+        this.anuncios = response.data?.content.map((elem: any) => {
+          const createdByUserId = elem.createdByUser?.id ?? 'valor_padrao_id'
+          const egressoId = elem.createdByUser?.egresso?.id ?? 'valor_padrao_egresso_id'
+          const foto = elem.createdByUser?.foto ?? 'valor_padrao_foto'
+
+          return {
+            id: elem.id,
+            titulo: elem.titulo,
+            areaEmprego: {
+              id: elem.areaEmprego?.id,
+              nome: elem.areaEmprego?.nome
             },
-            foto: elem.createdByUser.foto
+            descricao: elem.descricao,
+            dataExpiracao: elem.dataExpiracao,
+            link: elem.link,
+            salario: elem.salario,
+            createdBy: elem.createdBy,
+            createdByUser: {
+              id: createdByUserId,
+              nome: elem.createdByUser?.nome,
+              egresso: {
+                id: egressoId
+              },
+              foto
+            }
           }
-        }))
+        })
       }
     },
 

@@ -98,6 +98,7 @@
             :area="anuncio.areaEmprego.nome"
             :descricao="anuncio.descricao"
             :salario="anuncio.salario"
+            :foto="anuncio.createdByUser.foto"
           />
         </div>
       </div>
