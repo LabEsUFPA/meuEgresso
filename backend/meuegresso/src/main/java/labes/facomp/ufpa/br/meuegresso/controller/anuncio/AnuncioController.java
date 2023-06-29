@@ -36,8 +36,10 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.anuncio.AnuncioService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -56,6 +58,8 @@ public class AnuncioController {
 	private static final Logger logger = LoggerFactory.getLogger(AnuncioController.class);
 
 	private final UsuarioService usuarioService;
+
+	private final EgressoService egressoService;
 
 	private final AnuncioService anuncioService;
 
@@ -84,8 +88,11 @@ public class AnuncioController {
 			UsuarioDTO usuarioCriouAnuncio = mapper.map(usuarioService.findById(anuncio.getCreatedBy()),
 					UsuarioDTO.class);
 			if (usuarioCriouAnuncio != null) {
-				EgressoAnuncioDTO egresso = usuarioCriouAnuncio.getEgresso();
-				if (egresso != null) {
+				EgressoModel egressoAssociado = egressoService.findByUsuarioId(anuncio.getCreatedBy());
+
+				if (egressoAssociado != null) {
+					EgressoAnuncioDTO egresso = mapper.map(egressoAssociado,
+							EgressoAnuncioDTO.class);
 					try {
 						usuarioCriouAnuncio.setFoto(linkTo(methodOn(
 								EgressoPubController.class).getFotoEgresso(
@@ -130,8 +137,11 @@ public class AnuncioController {
 			UsuarioDTO usuarioCriouAnuncio = mapper.map(usuarioService.findById(anuncio.getCreatedBy()),
 					UsuarioDTO.class);
 			if (usuarioCriouAnuncio != null) {
-				EgressoAnuncioDTO egresso = usuarioCriouAnuncio.getEgresso();
-				if (egresso != null) {
+				EgressoModel egressoAssociado = egressoService.findByUsuarioId(anuncio.getCreatedBy());
+
+				if (egressoAssociado != null) {
+					EgressoAnuncioDTO egresso = mapper.map(egressoAssociado,
+							EgressoAnuncioDTO.class);
 					try {
 						usuarioCriouAnuncio.setFoto(linkTo(methodOn(
 								EgressoPubController.class).getFotoEgresso(
