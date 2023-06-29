@@ -52,7 +52,7 @@
         v-show="salario"
         class="text-neutral-900 font-medium"
       >
-        {{ formataSalario(salario) }}
+        {{ salario }}
       </p>
     </div>
 
@@ -81,7 +81,7 @@
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiBullhorn, mdiChevronRight } from '@mdi/js'
 import { useLoginStore } from 'src/store/LoginStore'
-import { ref } from 'vue'
+import { ref, defineProps } from 'vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import eagle from 'src/assets/eagle.svg'
 
@@ -99,18 +99,6 @@ const props = defineProps<{
 }>()
 
 const fotoUsuario = ref(props.foto)
-
-const formataSalario = (value:String) => {
-  const valueConvertido = parseFloat(value.toString())
-  const formattedValue = valueConvertido.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  })
-  if (valueConvertido !== 0.00) {
-    return formattedValue
-  }
-  return ''
-}
 
 if ($loginStore.loggedIn) {
   tipoUsuario.value = $loginStore.getUserData()?.scope ?? ''
