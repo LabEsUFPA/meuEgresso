@@ -138,7 +138,8 @@ public class EgressoAdmController {
             throw new InvalidRequestException();
         }
 
-        if (egressoService.existsMatricula(egressoCadastroDTO.getMatricula())) {
+        if (egressoCadastroDTO.getMatricula() != null
+                && egressoService.existsMatricula(egressoCadastroDTO.getMatricula())) {
             throw new MatriculaAlreadyExistsException(
                     String.format(ErrorType.REPORT_007.getMessage(), egressoCadastroDTO.getMatricula()),
                     ErrorType.REPORT_007.getInternalCode());
