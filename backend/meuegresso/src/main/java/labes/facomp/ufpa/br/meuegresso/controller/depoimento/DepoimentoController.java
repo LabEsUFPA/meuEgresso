@@ -131,12 +131,15 @@ public class DepoimentoController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping
+	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(Integer id) {
-		return depoimentoService.deleteById(id);
+	public String deleteById(@PathVariable Integer id) {
+		if(depoimentoService.deleteById(id)){
+			return ResponseType.SUCCESS_DELETE.getMessage();
+		}
+		return ResponseType.FAIL_DELETE.getMessage();
 	}
 
 }

@@ -77,4 +77,5 @@ public interface EgressoEmpresaService {
 	 * @return List<EmpresaGraficoDTO>
 	 */
 	public List<EmpresaGraficoDTO> countEgressoByEmpresas();
+
 }
