@@ -78,7 +78,7 @@
             />
 
             <CustomInput
-              label="Curriculo Lattes"
+              label="Currículo Lattes"
               name="geral.lattes"
               icon-path="/img/lattesCinza.svg"
               img-icon

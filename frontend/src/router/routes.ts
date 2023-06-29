@@ -59,7 +59,10 @@ export default [
       },
       {
         path: '/conta',
-        component: async () => await import('src/pages/EdicaoConta/EdicaoConta.vue')
+        component: async () => await import('src/pages/EdicaoConta/EdicaoConta.vue'),
+        meta: {
+          requiresAuth: true
+        }
       },
       {
         path: '/graficos',
