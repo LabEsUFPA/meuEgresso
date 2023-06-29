@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -55,7 +54,16 @@ public class DepoimentoController {
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
 	 */
+	
 	@GetMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public List<DepoimentoDTO> consultarDepoimentosEgresso() {
+		return mapper.map(depoimentoService.findAllAtivos(), new TypeToken<List<DepoimentoDTO>>() {
+		}.getType());
+	}
+
+	@GetMapping(value = "/administrador")
+	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<DepoimentoDTO> consultarDepoimentos() {
 		return mapper.map(depoimentoService.findAll(), new TypeToken<List<DepoimentoDTO>>() {
@@ -119,6 +127,42 @@ public class DepoimentoController {
 			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
+	}
+
+	@GetMapping(value = "/habilitar/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public String HabilitarDepoimento(@PathVariable Integer id,
+			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
+			
+			DepoimentoModel depoimentoModel = depoimentoService.findById(id);
+
+			if(depoimentoModel == null){
+				return ResponseType.FAIL_UPDATE.getMessage();
+			}
+			
+			depoimentoModel.setAtivo(true);
+			depoimentoService.update(depoimentoModel);
+			return ResponseType.SUCCESS_UPDATE.getMessage();
+	}
+
+	@GetMapping(value = "/desabilitar/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public String DesabilitarDepoimento(@PathVariable Integer id,
+			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
+			
+			DepoimentoModel depoimentoModel = depoimentoService.findById(id);
+			
+			if(depoimentoModel == null){
+				return ResponseType.FAIL_UPDATE.getMessage();
+			}
+
+			depoimentoModel.setAtivo(false);
+			depoimentoService.update(depoimentoModel);
+			return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 	/**
