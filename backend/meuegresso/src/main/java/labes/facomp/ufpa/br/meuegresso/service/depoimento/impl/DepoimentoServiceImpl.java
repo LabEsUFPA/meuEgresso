@@ -33,9 +33,15 @@ public class DepoimentoServiceImpl implements DepoimentoService {
     }
 
     @Override
+    public List<DepoimentoModel> findAllAtivos() {
+        return depoimentoRepository.findAllByAtivoTrue();
+    }
+
+    @Override
     public List<DepoimentoModel> findAll() {
         return depoimentoRepository.findAll();
     }
+
 
     @Override
     public DepoimentoModel findById(Integer id) {

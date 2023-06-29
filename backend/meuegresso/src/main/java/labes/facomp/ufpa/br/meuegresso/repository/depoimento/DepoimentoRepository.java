@@ -9,6 +9,6 @@ import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
 public interface DepoimentoRepository extends CrudRepository<DepoimentoModel, Integer> {
 
     List<DepoimentoModel> findAll();
-
+    List<DepoimentoModel> findAllByAtivoTrue();
     boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }

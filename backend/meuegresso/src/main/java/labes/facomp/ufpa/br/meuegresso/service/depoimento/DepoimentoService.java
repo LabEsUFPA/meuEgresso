@@ -37,6 +37,8 @@ public interface DepoimentoService {
 	 */
 	public List<DepoimentoModel> findAll();
 
+	public List<DepoimentoModel> findAllAtivos();
+
 	/**
 	 * Método responsável por atualizar dados de um depoimento cadastrado.
 	 *
