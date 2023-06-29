@@ -24,4 +24,6 @@ public class DepoimentoDTO {
     @NotBlank(message = "Informe o conteudo do depoimento.")
     private String descricao;
 
+    private Integer egressoId;
+
 }

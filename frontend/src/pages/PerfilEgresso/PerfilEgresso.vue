@@ -1460,9 +1460,9 @@ async function fetchUpdateEgresso () {
     },
     localizacao: {
       cep: '',
-      pais: json.emprego?.empresa?.endereco?.pais || '',
-      estado: json.emprego?.empresa?.endereco?.estado || '',
-      cidade: json.emprego?.empresa?.endereco?.cidade || '',
+      pais: json.emprego?.endereco?.pais || '',
+      estado: json.emprego?.endereco?.estado || '',
+      cidade: json.emprego?.endereco?.cidade || '',
       isInput: false
     },
     academico: {
