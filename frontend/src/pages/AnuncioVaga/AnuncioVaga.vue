@@ -18,17 +18,17 @@
           </button>
         </RouterLink>
 
-        <div class="flex w-20 h-20 justify-center object-cover items-center rounded-full bg-cyan-800 overflow-hidden">
+        <div class="flex w-12 h-12 justify-center object-cover items-center rounded-full bg-cyan-800 overflow-hidden">
           <img
             v-if="fotoUsuario"
             @error="!fotoUsuario"
             :src="fotoUsuario"
-            class="w-20 h-20 object-cover rounded-full border-2 border-sky-200/80"
+            class="w-12 h-12 object-cover rounded-full border-2 border-sky-200/80"
           >
           <img
             v-else
             :src="eagle"
-            class="w-20 h-20 p-2 rounded-full flex items-center justify-center shrink-0 bg-sky-200"
+            class="w-12 h-12 p-2 rounded-full flex items-center justify-center shrink-0 bg-sky-200"
           >
         </div>
 
