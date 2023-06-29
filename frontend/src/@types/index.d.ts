@@ -359,9 +359,14 @@ export namespace models {
     dataExpiracao: string
     link: string
     salario: string
-    createdBy: {
-      email: string
+    createdBy: number
+    createdByUser: {
+      id: number
       nome: string
+      egresso: {
+        id: number
+      }
+      foto: string
     }
   }
   export interface AnuncioModelPost {
