@@ -1,6 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.dto.empresa;
 
-import labes.facomp.ufpa.br.meuegresso.dto.administradores.endereco.EnderecoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.endereco.EnderecoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

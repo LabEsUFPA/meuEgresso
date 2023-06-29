@@ -127,109 +127,111 @@
     </main>
     <footer>
       <div class="flex flex-col bg-gradient-to-br from-pacific-cyan to-bondi-blue text-white items-start px-14 py-8">
-        <div class="flex flex-col sm:flex-row w-full gap-4 items-center justify-between border-b-[1px] border-sky-200/20 pb-4 sm:pb-8">
-          <div class="flex gap-8 items-center">
-            <img
-              class="w-14 self-center"
-              src="src/assets/brasão.png"
-              alt="Brasão"
-            >
-            <div class="flex flex-col gap-2 font-semibold">
-              <div>Universidade Federal do Pará</div>
-              <div class="text-sm">
-                Faculdade de Computação
+        <div class="flex flex-col sm:flex-row w-full flex-wrap gap-8 items-start pb-4 sm:pb-8">
+          <div class="flex flex-col gap-4">
+            <div class="flex gap-8 items-center">
+              <img
+                class="w-12 self-center"
+                src="src/assets/brasão.png"
+                alt="Brasão"
+              >
+              <div class="flex flex-col gap-2 text-sm font-semibold">
+                <div>Universidade Federal do Pará</div>
+                <div class="text-xs font-medium">
+                  Faculdade de Computação
+                </div>
               </div>
             </div>
+
+            <CustomButton
+              tag="a"
+              color="blue"
+              link="https://www.ppgcc.propesp.ufpa.br/index.php/br/"
+              target="_blank"
+            >
+              <div class="p-2 text-xs font-medium mr-3">
+                Conheça o Programa de Pós-graduação
+              </div>
+              <SvgIcon
+                type="mdi"
+                size="16"
+                :path="mdiOpenInNew"
+                class="shrink-0"
+              />
+            </CustomButton>
           </div>
 
-          <CustomButton
-            tag="a"
-            color="blue"
-            link="https://www.ppgcc.propesp.ufpa.br/index.php/br/"
-            target="_blank"
-          >
-            <div class="p-2 text-xs font-medium mr-3">
-              Conheça o Programa de Pós-graduação
+          <div class="flex flex-col flex-1 sm:flex-row gap-8 items-start justify-evenly">
+            <div class="flex flex-col gap-4">
+              <div class="flex gap-4 items-center">
+                <div class="w-fit rounded-lg p-2 bg-cyan-800/30">
+                  <SvgIcon
+                    type="mdi"
+                    size="16"
+                    :path="mdiMapMarker"
+                    class="shrink-0"
+                  />
+                </div>
+
+                <div class="font-medium text-sm">
+                  Endereço
+                </div>
+              </div>
+              <div class="flex flex-col gap-1 text-xs">
+                <div>Rua Augusto Corrêa, 01</div>
+                <div>Campus Universitário do Guamá</div>
+                <div>Belém, Pará, Brasil</div>
+                <div>CEP 66075-110</div>
+              </div>
             </div>
-            <SvgIcon
-              type="mdi"
-              size="16"
-              :path="mdiOpenInNew"
-              class="shrink-0"
-            />
-          </CustomButton>
+
+            <div class="flex flex-col gap-4">
+              <div class="flex gap-4 items-center">
+                <div class="w-fit rounded-lg p-2 bg-cyan-800/30">
+                  <SvgIcon
+                    type="mdi"
+                    size="16"
+                    :path="mdiPhone"
+                    class="shrink-0"
+                  />
+                </div>
+                <div class="text-sm font-medium">
+                  Telefones
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-1 text-xs">
+                <div>+55 (91) 3201-7405</div>
+                <div>+55 (91) 3201-7409 / 7835</div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-4">
+              <div class="flex gap-4 items-center">
+                <div class="w-fit rounded-lg p-2 bg-cyan-800/30">
+                  <SvgIcon
+                    type="mdi"
+                    size="16"
+                    :path="mdiEmail"
+                    class="shrink-0"
+                  />
+                </div>
+                <div class="font-medium text-sm">
+                  E-mail
+                </div>
+              </div>
+
+              <a
+                href="mailto:egressocomp@ufpa.br"
+                class="flex flex-col gap-1 text-xs"
+              >
+                egressocomp@ufpa.br
+              </a>
+            </div>
+          </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-4 sm:gap-32 w-full items-start py-4 sm:py-8">
-          <div class="flex flex-col gap-4">
-            <div class="flex gap-4 items-center">
-              <div class="w-fit rounded-lg p-2 bg-cyan-800/30">
-                <SvgIcon
-                  type="mdi"
-                  size="16"
-                  :path="mdiMapMarker"
-                  class="shrink-0"
-                />
-              </div>
-
-              <div class="font-medium text-normal">
-                Endereço
-              </div>
-            </div>
-            <div class="flex flex-col gap-1 text-sm">
-              <div>Rua Augusto Corrêa, 01</div>
-              <div>Campus Universitário do Guamá</div>
-              <div>Belém, Pará, Brasil</div>
-              <div>CEP 66075-110</div>
-            </div>
-          </div>
-
-          <div class="flex flex-col gap-4">
-            <div class="flex gap-4 items-center">
-              <div class="w-fit rounded-lg p-2 bg-cyan-800/30">
-                <SvgIcon
-                  type="mdi"
-                  size="16"
-                  :path="mdiPhone"
-                  class="shrink-0"
-                />
-              </div>
-              <div class="font-medium text-normal">
-                Telefones
-              </div>
-            </div>
-
-            <div class="flex flex-col gap-1 text-sm">
-              <div>+55 (91) 3201-7405</div>
-              <div>+55 (91) 3201-7409 / 7835</div>
-            </div>
-          </div>
-
-          <div class="flex flex-col gap-4">
-            <div class="flex gap-4 items-center">
-              <div class="w-fit rounded-lg p-2 bg-cyan-800/30">
-                <SvgIcon
-                  type="mdi"
-                  size="16"
-                  :path="mdiEmail"
-                  class="shrink-0"
-                />
-              </div>
-              <div class="font-medium text-normal">
-                E-mail
-              </div>
-            </div>
-
-            <a
-              href="mailto:egressocomp@ufpa.br"
-              class="flex flex-col gap-1 text-sm"
-            >
-              egressocomp@ufpa.br
-            </a>
-          </div>
-        </div>
-
-        <div class="flex gap-2 bg-cyan-800/30 text-sm py-2 px-4 rounded-lg self-center">
+        <div class="flex gap-2 bg-cyan-800/30 text-xs py-2 px-4 rounded-lg self-center">
           <div>
             Desenvolvido com 💖 por discentes
           </div>
@@ -250,13 +252,11 @@ import CustomButton from 'src/components/CustomButton.vue'
 import UserDropdownMenu from './UserDropdownMenu.vue'
 import NavbarDrawer from './NavbarDrawer.vue'
 import CustomDialog from './CustomDialog.vue'
-import CookieService from 'src/services/cookieService'
 
 const $store = useLoginStore()
 const loggedIn = ref($store.loggedIn)
 const $router = useRouter()
 const showEgressNotRegisteredModal = ref(false)
-const cookieService = new CookieService()
 
 onMounted(() => {
   checkEgressRegistration()
@@ -264,7 +264,6 @@ onMounted(() => {
 
 watch(() => $store.loggedIn, () => {
   loggedIn.value = $store.loggedIn
-
   if (loggedIn.value) {
     checkEgressRegistration()
   }
@@ -272,13 +271,13 @@ watch(() => $store.loggedIn, () => {
 
 const checkEgressRegistration = () => {
   const userData = $store.getUserData()
-  const isFirstAccess = cookieService.get('isFirstAccess')
-
-  if (
-    userData?.scope === 'EGRESSO' &&
-    !userData?.isEgresso &&
-    isFirstAccess !== 'yes'
-  ) showEgressNotRegisteredModal.value = true
+  if ($store.isFirstAccess === 'yes') showEgressNotRegisteredModal.value = false
+  else {
+    if (
+      userData?.scope === 'EGRESSO' &&
+      !userData?.isEgresso
+    ) showEgressNotRegisteredModal.value = true
+  }
 }
 
 </script>

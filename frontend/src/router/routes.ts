@@ -58,12 +58,8 @@ export default [
         component: async () => await import('src/pages/PerfilEgresso/PerfilEgresso.vue')
       },
       {
-        path: '/conta-egresso',
-        component: async () => await import('src/pages/EdicaoContaEgresso/EdicaoContaEgresso.vue')
-      },
-      {
-        path: '/conta-admin',
-        component: async () => await import('src/pages/EdicaoContaAdmin/EdicaoContaAdmin.vue')
+        path: '/conta',
+        component: async () => await import('src/pages/EdicaoConta/EdicaoConta.vue')
       },
       {
         path: '/graficos',
@@ -104,6 +100,10 @@ export default [
       {
         path: 'redefinir-senha',
         component: async () => await import('src/pages/RedefinirSenha/RedefinirSenha.vue')
+      },
+      {
+        path: 'validar-email',
+        component: async () => await import('src/pages/ValidarEmail/ValidarEmail.vue')
       }
     ]
   },

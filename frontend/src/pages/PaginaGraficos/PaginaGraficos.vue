@@ -67,8 +67,8 @@
       />
       <CustomPieGraph
         v-show="filters.all || filters.career"
-        legend="Área de atuação"
-        info="Quantidade de egressos por cada área de atuação"
+        legend="Setor de atuação"
+        info="Quantidade de egressos por cada setor de atuação"
         :loading="loadedData.sector ? false : true"
         :data="loadedData.sector"
       />

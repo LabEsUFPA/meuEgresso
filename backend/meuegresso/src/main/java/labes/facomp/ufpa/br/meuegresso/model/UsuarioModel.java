@@ -82,6 +82,11 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Column(name = "valido_usuario", nullable = false)
 	private Boolean valido = true;
 
+	@Builder.Default
+	@ColumnDefault(value = "FALSE")
+	@Column(name = "email_verificado_usuario", nullable = false)
+	private Boolean emailVerificado = false;
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.grupos;
@@ -94,7 +99,7 @@ public class UsuarioModel extends Auditable implements UserDetails {
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return this.emailVerificado;
 	}
 
 	@Override

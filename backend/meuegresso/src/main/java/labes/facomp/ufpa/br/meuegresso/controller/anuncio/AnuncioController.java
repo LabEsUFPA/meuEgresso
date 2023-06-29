@@ -203,6 +203,7 @@ public class AnuncioController {
 	 * @since 17/06/2023
 	 */
 	@DeleteMapping(value = "/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('EGRESSO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public boolean deleteById(@PathVariable Integer id, JwtAuthenticationToken token) {
