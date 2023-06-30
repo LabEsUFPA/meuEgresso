@@ -26,9 +26,9 @@
       override
       :item-class="classNames({
         ['text-sm p-2 pr-8 rounded']: true,
-        ['text-cyan-600 hover:bg-sky-300/30']: opcao.titulo !== 'Excluir cadastro' && opcao.titulo !== 'Aprovar cadastro',
+        ['text-cyan-600 hover:bg-sky-300/30']: opcao.titulo === 'Editar cadastro' || opcao.titulo === 'Enviar e-mail',
         ['text-red-500 hover:bg-red-300/30']: opcao.titulo === 'Excluir cadastro',
-        ['text-emerald-500 hover:bg-emerald-200/50']: opcao.titulo === 'Aprovar cadastro'
+        ['text-emerald-500 hover:bg-emerald-200/50']: opcao.titulo === 'Aprovar cadastro' || opcao.titulo === 'Preencher cadastro'
       })"
       @click="() => escolheAcao(opcao.titulo)"
     >
@@ -194,24 +194,21 @@ async function aprovaCadastro () {
   }
 }
 
-function editaCadastro () {
-  if (props.status !== 'incompleto') {
-    $router.push(`/egresso/${props.idEgresso}`)
-    return
-  }
-
+function finalizarCadastro () {
   $router.push(`/cadastro/${props.id}`)
+}
+
+function editaCadastro () {
+  $router.push(`/egresso/${props.idEgresso}`)
 }
 
 async function excluiCadastro () {
   isLoadingAction.value = true
 
-  if (props.idEgresso) {
-    const codeDelete = await $store.deleteUsuario(props.idEgresso)
-    if (codeDelete === 204 || codeDelete === 200) {
-      $emits('updateData')
-      isLoadingAction.value = false
-    }
+  const codeDelete = await $store.deleteUsuario(props.id)
+  if (codeDelete === 204 || codeDelete === 200) {
+    $emits('updateData')
+    isLoadingAction.value = false
   }
 }
 
@@ -222,9 +219,10 @@ function enviaEmail () {
 
 const opcoesAdmin = [
   { titulo: 'Aprovar cadastro', status: ['pendente'], click: aprovaCadastro, habilitado: true },
-  { titulo: 'Editar cadastro', status: ['incompleto', 'completo', 'pendente'], click: editaCadastro, habilitado: true },
+  { titulo: 'Preencher cadastro', status: ['incompleto'], click: finalizarCadastro, habilitado: true },
+  { titulo: 'Editar cadastro', status: ['completo', 'pendente'], click: editaCadastro, habilitado: true },
   { titulo: 'Enviar e-mail', status: ['incompleto', 'completo', 'pendente'], click: enviaEmail, habilitado: true },
-  { titulo: 'Excluir cadastro', status: ['completo', 'pendente'], click: excluiCadastro, habilitado: userScope.value === 'ADMIN' }
+  { titulo: 'Excluir cadastro', status: ['incompleto', 'completo', 'pendente'], click: excluiCadastro, habilitado: userScope.value === 'ADMIN' }
 ]
 
 const mensagemDialog: any = {
