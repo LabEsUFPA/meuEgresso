@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.controller.administrador.usuario;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.modelmapper.ModelMapper;
@@ -32,12 +33,15 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnalthorizedRegisterException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoValidoModel;
 import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoValidoService;
+import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -56,6 +60,8 @@ public class UsuarioAdmController {
 	private final UsuarioService usuarioService;
 
 	private final StatusUsuarioService statusUsuarioService;
+
+	private final EgressoValidoService egressosValidosService;
 
 	private final ModelMapper mapper;
 
@@ -95,21 +101,24 @@ public class UsuarioAdmController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,JwtAuthenticationToken token)
+	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,
+			JwtAuthenticationToken token)
 			throws NameAlreadyExistsException, UnalthorizedRegisterException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
 			throw new NameAlreadyExistsException(
-					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),ErrorType.USER_001.getInternalCode());
+					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),
+					ErrorType.USER_001.getInternalCode());
 		}
 
 		UsuarioModel usuarioModelTeste = usuarioService.findById(jwtService.getIdUsuario(token));
 		Set<Grupos> gruposUsuario = usuarioModelTeste.getGrupos();
 
-		if(!gruposUsuario.contains(Grupos.ADMIN)){
+		if (!gruposUsuario.contains(Grupos.ADMIN)) {
 			Set<Grupos> grupos = usuarioDTO.getGrupos();
-			for(Grupos grupo :grupos){
+			for (Grupos grupo : grupos) {
 				if (grupo.getAuthority().equals("ROLE_ADMIN")) {
-					throw new UnalthorizedRegisterException(String.format(ErrorType.UNAUTHORIZED_REGISTER.getMessage()),ErrorType.UNAUTHORIZED_REGISTER.getInternalCode());
+					throw new UnalthorizedRegisterException(String.format(ErrorType.UNAUTHORIZED_REGISTER.getMessage()),
+							ErrorType.UNAUTHORIZED_REGISTER.getInternalCode());
 				}
 			}
 		}
@@ -117,7 +126,23 @@ public class UsuarioAdmController {
 
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 
-		usuarioService.save(usuarioModel);
+		EgressoValidoModel egressoValido;
+		try {
+			egressoValido = egressosValidosService.validarEgresso(Optional.ofNullable(usuarioDTO.getRegistration()),
+					Optional.ofNullable(usuarioDTO.getNome()), Optional.ofNullable(usuarioDTO.getEmail()));
+			mapper.map(egressoValido, usuarioModel);
+		} catch (NotValidEgressoException e) {
+			usuarioModel.setValido(false);
+		}
+
+		usuarioModel.setEmailVerificado(true);
+		// mailService.usuarioCadastrado(usuarioModel,
+		// usuarioDTO.getRedirect().orElse(String.format(REDIRECT, host)));
+		usuarioModel = usuarioService.save(usuarioModel);
+		statusUsuarioService
+				.save(StatusUsuarioModel.builder().usuarioId(usuarioModel.getId())
+						.nome(usuarioModel.getNome()).status(UsuarioStatus.INCOMPLETO).build());
+
 		return new ResponseEntity<>(ResponseType.SUCCESS_SAVE.getMessage(), null, HttpStatus.CREATED);
 	}
 
