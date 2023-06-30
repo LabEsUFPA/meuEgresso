@@ -116,9 +116,17 @@ public class GraficoPubController {
 		Map<Integer, Integer> idadesContagens = egressoService.countAgeFromEgressos();
 
 		Double media = 0.0;
+		Integer total = 0;
 		for (Entry<Integer, Integer> entry : idadesContagens.entrySet()) {
 			media += entry.getKey() * entry.getValue();
+			total += entry.getValue();
 		}
+		for (Entry<Integer, Integer> entry : idadesContagens.entrySet()) {
+			if(entry.getValue() <= total*0.05){
+				idadesContagens.remove(entry.getKey());
+			}
+		}
+
 		return new IdadesGraficoDTO(media,idadesContagens);
 	}
 
@@ -135,6 +143,12 @@ public class GraficoPubController {
 	public GenerosGraficoDTO getGeneros() {
 		Map<String, Integer> generosContagens = generoService.countEgressoByGenero();
 
+		for (Entry<String, Integer> entry : generosContagens.entrySet()) {
+			if(entry.getValue() == 0){
+				generosContagens.remove(entry.getKey());
+			}
+		}
+
 		return new GenerosGraficoDTO(generosContagens);
 	}
 
@@ -150,6 +164,12 @@ public class GraficoPubController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public SalarioGraficoDTO getSalarios() {
 		Map<String, Integer> salariosContagens = faixaSalarialService.countEgressoInFaixa();
+
+		for (Entry<String, Integer> entry : salariosContagens.entrySet()) {
+			if(entry.getValue() == 0){
+				salariosContagens.remove(entry.getKey());
+			}
+		}
 
 		return new SalarioGraficoDTO(salariosContagens);
 	}
@@ -168,6 +188,12 @@ public class GraficoPubController {
 
 		Map<String, Integer> tipoAluno = egressoService.countTipoAluno();
 
+		for (Entry<String, Integer> entry : tipoAluno.entrySet()) {
+			if(entry.getValue() == 0){
+				tipoAluno.remove(entry.getKey());
+			}
+		}
+
 		return new TipoAlunoGraficoDTO(tipoAluno);
 	}
 
@@ -184,6 +210,12 @@ public class GraficoPubController {
 	public BolsistasGraficoDTO getBolsistas() {
 		Map<String, Integer> bolsistasContagens = egressoService.countBolsista();
 
+		for (Entry<String, Integer> entry : bolsistasContagens.entrySet()) {
+			if(entry.getValue() == 0){
+				bolsistasContagens.remove(entry.getKey());
+			}
+		}
+
 		return new BolsistasGraficoDTO(bolsistasContagens);
 	}
 
@@ -198,6 +230,12 @@ public class GraficoPubController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public TipoBolsaGraficoDTO getTipoBolsa() {
 		Map<String, Integer> tipoBolsaContagens = tipoBolsaService.countEgressoForBolsa();
+
+		for (Entry<String, Integer> entry : tipoBolsaContagens.entrySet()) {
+			if(entry.getValue() == 0){
+				tipoBolsaContagens.remove(entry.getKey());
+			}
+		}
 
 		return new TipoBolsaGraficoDTO(tipoBolsaContagens);
 	}
@@ -216,6 +254,24 @@ public class GraficoPubController {
 	public RemuneracaoGraficoDTO getRemuneracao() {
 		Map<Double, Integer> remuneracaoContagem = egressoService.countRemuneracaoBolsa();
 
+		
+		long total = 0;
+		for (Entry<Double, Integer> entry : remuneracaoContagem.entrySet()) {
+			total += entry.getValue();
+		}
+		Double mediaOutros = 0.0;
+		long outros = 0;
+		for (Entry<Double, Integer> entry : remuneracaoContagem.entrySet()) {
+			if(entry.getValue() <= total*0.05){
+				outros += entry.getValue();
+				mediaOutros += entry.getKey() * entry.getValue();
+				remuneracaoContagem.remove(entry.getKey());
+			}
+		}
+		if(outros<0){
+			remuneracaoContagem.put(mediaOutros, (int) outros);
+		}
+
 		return new RemuneracaoGraficoDTO(remuneracaoContagem);
 	}
 
@@ -232,6 +288,12 @@ public class GraficoPubController {
 	public CotistaGraficoDTO getCotista() {
 		Map<String, Integer> cotistaContagem = egressoService.countCotista();
 
+		for (Entry<String, Integer> entry : cotistaContagem.entrySet()) {
+			if(entry.getValue() == 0){
+				cotistaContagem.remove(entry.getKey());
+			}
+		}
+
 		return new CotistaGraficoDTO(cotistaContagem);
 	}
 
@@ -245,7 +307,24 @@ public class GraficoPubController {
 	@GetMapping(value = "/localPos")
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<LocalPosGraficoDTO> getLocalPos() {
-		return empresaService.countEgressoByPos();
+		List<LocalPosGraficoDTO> locais = empresaService.countEgressoByPos();
+		
+		long total = 0;
+		for (LocalPosGraficoDTO entry : locais) {
+			total += entry.getQuantidade();
+		}
+		long outros = 0;
+		for (LocalPosGraficoDTO entry : locais) {
+			if(entry.getQuantidade() <= total*0.05){
+				outros += entry.getQuantidade();
+				locais.remove(entry);
+			}
+		}
+		if(outros<0){
+			LocalPosGraficoDTO outroLocal = new LocalPosGraficoDTO("Outros", outros);
+			locais.add(outroLocal);
+		}
+		return locais;
 	}
 
 	/**
@@ -258,6 +337,23 @@ public class GraficoPubController {
 	@GetMapping(value = "/cursos")
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<CursosGraficoDTO> getCursos() {
+		List<CursosGraficoDTO> cursos = cursoService.countEgressoByCurso();
+
+		long total = 0;
+		for (CursosGraficoDTO entry : cursos) {
+			total += entry.getQuantidade();
+		}
+		long outros = 0;
+		for (CursosGraficoDTO entry : cursos) {
+			if(entry.getQuantidade() <= total*0.05){
+				outros += entry.getQuantidade();
+				cursos.remove(entry);
+			}
+		}
+		if(outros<0){
+			CursosGraficoDTO outrosCursos = new CursosGraficoDTO("Outros", outros);
+			cursos.add(outrosCursos);
+		}
 		return cursoService.countEgressoByCurso();
 	}
 
@@ -274,6 +370,12 @@ public class GraficoPubController {
 	public InteresseEmPosGraficoDTO getInteresseEmPos() {
 		Map<String, Integer> interesseContagens = egressoService.countInteressePos();
 
+		for (Entry<String, Integer> entry : interesseContagens.entrySet()) {
+			if(entry.getValue() == 0){
+				interesseContagens.remove(entry.getKey());
+			}
+		}
+
 		return new InteresseEmPosGraficoDTO(interesseContagens);
 	}
 
@@ -288,7 +390,24 @@ public class GraficoPubController {
 	@GetMapping(value = "/empresas")
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<EmpresaGraficoDTO> getEmpresas() {
-		return egressoEmpresaService.countEgressoByEmpresas();
+		List<EmpresaGraficoDTO> empresas = egressoEmpresaService.countEgressoByEmpresas();
+
+		long total = 0;
+		for (EmpresaGraficoDTO entry : empresas) {
+			total += entry.getQuantidade();
+		}
+		long outros = 0;
+		for (EmpresaGraficoDTO entry : empresas) {
+			if(entry.getQuantidade() <= total*0.05){
+				outros += entry.getQuantidade();
+				empresas.remove(entry);
+			}
+		}
+		if(outros<0){
+			EmpresaGraficoDTO outrasEmpresas = new EmpresaGraficoDTO("Outros", outros);
+			empresas.add(outrasEmpresas);
+		}
+		return empresas;
 	}
 
 	/**
@@ -303,6 +422,12 @@ public class GraficoPubController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public CotaGraficoDTO getCotas() {
 		Map<String, Integer> cotasContagens = cotaService.countEgressoByCota();
+
+		for (Entry<String, Integer> entry : cotasContagens.entrySet()) {
+			if(entry.getValue() == 0){
+				cotasContagens.remove(entry.getKey());
+			}
+		}
 
 		return new CotaGraficoDTO(cotasContagens);
 	}
@@ -319,6 +444,12 @@ public class GraficoPubController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public AreaAtuacaoGraficoDTO getAtuacao() {
 		Map<String, Integer> areaAtuacao = areaAtuacaoService.countEgressoByAreaAtuacao();
+
+		for (Entry<String, Integer> entry : areaAtuacao.entrySet()) {
+			if(entry.getValue() == 0){
+				areaAtuacao.remove(entry.getKey());
+			}
+		}
 
 		return new AreaAtuacaoGraficoDTO(areaAtuacao);
 	}
@@ -337,6 +468,12 @@ public class GraficoPubController {
 	public SetorAtuacaoGraficoDTO getSetor() {
 		Map<String, Integer> setorAtuacaoContagens = setorAtuacaoService.countEgressoBySetorAtuacao();
 
+		for (Entry<String, Integer> entry : setorAtuacaoContagens.entrySet()) {
+			if(entry.getValue() == 0){
+				setorAtuacaoContagens.remove(entry.getKey());
+			}
+		}
+
 		return new SetorAtuacaoGraficoDTO(setorAtuacaoContagens);
 	}
 
@@ -352,6 +489,12 @@ public class GraficoPubController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public PosGraduacaoGraficoDTO getPos() {
 		Map<String, Integer> posGradContagens = egressoService.countFezPos();
+
+		for (Entry<String, Integer> entry : posGradContagens.entrySet()) {
+			if(entry.getValue() == 0){
+				posGradContagens.remove(entry.getKey());
+			}
+		}
 
 		return new PosGraduacaoGraficoDTO(posGradContagens);
 	}
