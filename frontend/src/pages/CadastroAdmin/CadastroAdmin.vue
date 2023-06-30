@@ -170,7 +170,7 @@ const handleSubmit = async (submitData: any) => {
     error.value = false
     submitSuccess.value = true
   } else if (response.status !== 201) {
-    errorText.value = response.data.technicalMessage ? response.data.technicalMessage : 'Requisição não aceita.'
+    errorText.value = response.data?.message ? response.data.message : 'Requisição não aceita.'
     error.value = true
   }
   loading.value = false

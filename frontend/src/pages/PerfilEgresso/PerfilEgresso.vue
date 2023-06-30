@@ -1013,7 +1013,7 @@ function handleStatus (response: any, folderLocation: string) {
   if (response.status !== 201) {
     console.log(response.status)
     dialogFalha.value = true
-    errorText.value = response.data?.technicalMessage ? response.data?.technicalMessage : 'Ocorreu um problema na requisição'
+    errorText.value = response.data?.message ? response.data.message : 'Ocorreu um problema na requisição'
     error.value = true
     errorLocation.value = folderLocation
     return false
@@ -1051,7 +1051,7 @@ async function handleSubmitHeader (values: any) {
     toggleIsInput('profileHead')
     await fetchUpdateEgresso()
   } else {
-    errorText.value = response.data?.technicalMessage ? response.data?.technicalMessage : 'Ocorreu um problema na requisição'
+    errorText.value = response.data?.message ? response.data?.message : 'Ocorreu um problema na requisição'
     error.value = true
     errorLocation.value = 'header'
     dialogFalha.value = true

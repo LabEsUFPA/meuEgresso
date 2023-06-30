@@ -208,11 +208,7 @@ const handleSubmit = async (submitData: any) => {
     loading.value = false
     showRegistrationModal.value = true
   } else if (response.status !== 201) {
-    if (response.data?.technicalMessage) {
-      errorText.value = response.data.technicalMessage
-    } else {
-      errorText.value = 'Requisição não aceita'
-    }
+    errorText.value = response.data?.message ? response.data.message : 'Requisição não aceita.'
     error.value = true
     loading.value = false
   }

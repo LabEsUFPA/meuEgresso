@@ -109,11 +109,7 @@ const handleSubmit = async (submitData: any) => {
     error.value = false
     $router.push('/')
   } else if (response.status !== 200) {
-    if (response.data?.technicalMessage) {
-      errorText.value = response.data?.technicalMessage
-    } else {
-      errorText.value = 'Requisição não aceita'
-    }
+    errorText.value = response.data?.message ? response.data.message : 'Requisição não aceita.'
     error.value = true
   }
 }
