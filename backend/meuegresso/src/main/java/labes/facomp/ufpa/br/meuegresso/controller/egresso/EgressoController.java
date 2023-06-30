@@ -175,7 +175,7 @@ public class EgressoController {
         contribuicao.setEgresso(egresso);
 
         egresso.getUsuario().setAtivo(egresso.getUsuario().getValido());
-        egressoService.adicionarEgresso(egresso);
+        egressoService.save(egresso);
         statusUsuarioService
                 .save(StatusUsuarioModel.builder().usuarioId(egresso.getUsuario().getId())
                         .nome(egresso.getUsuario().getNome()).status(UsuarioStatus.PENDENTE)
@@ -273,7 +273,7 @@ public class EgressoController {
                 validaInstituicao(egresso.getTitulacao().getEmpresa().getNome(), egressoModel);
                 egressoModel.getTitulacao().setEgresso(egressoModel);
             }
-            egressoService.updateEgresso(egressoModel);
+            egressoService.update(egressoModel);
         } else {
             return ResponseType.EGRESSO_NAO_ENCONTRADO.getMessage();
         }
@@ -299,7 +299,7 @@ public class EgressoController {
             egressoService.deleteFile(egressoModel.getFotoNome());
         }
         egressoModel.setFotoNome(fileCode);
-        egressoService.updateEgresso(egressoModel);
+        egressoService.update(egressoModel);
         egressoService.saveFoto(fileCode, arquivo);
         return ResponseType.SUCCESS_IMAGE_SAVE.getMessage();
     }
@@ -322,7 +322,7 @@ public class EgressoController {
         if (egressoModel.getFotoNome() != null) {
             egressoService.deleteFile(egressoModel.getFotoNome());
             egressoModel.setFotoNome(null);
-            egressoService.updateEgresso(egressoModel);
+            egressoService.update(egressoModel);
             return ResponseEntity.ok(ResponseType.SUCCESS_IMAGE_DELETE.getMessage());
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseType.FAIL_IMAGE_DELETE.getMessage());
