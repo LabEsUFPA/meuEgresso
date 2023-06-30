@@ -57,7 +57,7 @@
                      z-5
                      w-[120px]
                      h-[120px]
-                    rounded-full"
+                    object-cover rounded-full border-2 border-sky-200/80"
         :src="imgDefault"
         alt=""
       >
@@ -67,7 +67,7 @@
                      z-5
                      w-[120px]
                      h-[120px]
-                    rounded-full"
+                    object-cover rounded-full border-2 border-sky-200/80"
         :src="imgUrl.value"
         alt=""
       >
@@ -83,7 +83,7 @@
             z-0
             w-[120px]
             h-[120px]
-            rounded-full"
+            object-cover rounded-full border-2 border-sky-200/80"
             :src="getObjectURL(file)"
             alt=""
           >
@@ -169,7 +169,7 @@ async function imageUploadBackAdmin (egressoId : number) {
 }
 
 const styleImageInput = computed(() => {
-  const imageStyle = [' hover:duration-200 w-[120px] h-[120px] absolute z-5 rounded-full']
+  const imageStyle = [' hover:duration-200 w-[120px] h-[120px] absolute z-5 object-cover rounded-full border-2 border-sky-200/80']
   if (props.isInput) {
     imageStyle.push('bg-gray-700/70 hover:bg-gray-700/50')
   }
