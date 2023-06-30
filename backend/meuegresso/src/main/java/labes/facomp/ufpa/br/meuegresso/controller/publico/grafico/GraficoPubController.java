@@ -1,6 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.controller.publico.grafico;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -121,11 +122,8 @@ public class GraficoPubController {
 			media += entry.getKey() * entry.getValue();
 			total += entry.getValue();
 		}
-		for (Entry<Integer, Integer> entry : idadesContagens.entrySet()) {
-			if(entry.getValue() <= total*0.05){
-				idadesContagens.remove(entry.getKey());
-			}
-		}
+		final Integer totalTwo = total;
+		idadesContagens.entrySet().removeIf(entry -> entry.getValue() <= totalTwo*0.05);
 
 		return new IdadesGraficoDTO(media,idadesContagens);
 	}
@@ -143,11 +141,7 @@ public class GraficoPubController {
 	public GenerosGraficoDTO getGeneros() {
 		Map<String, Integer> generosContagens = generoService.countEgressoByGenero();
 
-		for (Entry<String, Integer> entry : generosContagens.entrySet()) {
-			if(entry.getValue() == 0){
-				generosContagens.remove(entry.getKey());
-			}
-		}
+		generosContagens.entrySet().removeIf(entry -> entry.getValue() == 0);
 
 		return new GenerosGraficoDTO(generosContagens);
 	}
@@ -165,11 +159,7 @@ public class GraficoPubController {
 	public SalarioGraficoDTO getSalarios() {
 		Map<String, Integer> salariosContagens = faixaSalarialService.countEgressoInFaixa();
 
-		for (Entry<String, Integer> entry : salariosContagens.entrySet()) {
-			if(entry.getValue() == 0){
-				salariosContagens.remove(entry.getKey());
-			}
-		}
+		salariosContagens.entrySet().removeIf(entry -> entry.getValue() == 0);
 
 		return new SalarioGraficoDTO(salariosContagens);
 	}
@@ -188,11 +178,7 @@ public class GraficoPubController {
 
 		Map<String, Integer> tipoAluno = egressoService.countTipoAluno();
 
-		for (Entry<String, Integer> entry : tipoAluno.entrySet()) {
-			if(entry.getValue() == 0){
-				tipoAluno.remove(entry.getKey());
-			}
-		}
+		tipoAluno.entrySet().removeIf(entry -> entry.getValue() == 0);
 
 		return new TipoAlunoGraficoDTO(tipoAluno);
 	}
@@ -210,11 +196,7 @@ public class GraficoPubController {
 	public BolsistasGraficoDTO getBolsistas() {
 		Map<String, Integer> bolsistasContagens = egressoService.countBolsista();
 
-		for (Entry<String, Integer> entry : bolsistasContagens.entrySet()) {
-			if(entry.getValue() == 0){
-				bolsistasContagens.remove(entry.getKey());
-			}
-		}
+		bolsistasContagens.entrySet().removeIf(entry -> entry.getValue() == 0);
 
 		return new BolsistasGraficoDTO(bolsistasContagens);
 	}
@@ -231,11 +213,7 @@ public class GraficoPubController {
 	public TipoBolsaGraficoDTO getTipoBolsa() {
 		Map<String, Integer> tipoBolsaContagens = tipoBolsaService.countEgressoForBolsa();
 
-		for (Entry<String, Integer> entry : tipoBolsaContagens.entrySet()) {
-			if(entry.getValue() == 0){
-				tipoBolsaContagens.remove(entry.getKey());
-			}
-		}
+		tipoBolsaContagens.entrySet().removeIf(entry -> entry.getValue() == 0);
 
 		return new TipoBolsaGraficoDTO(tipoBolsaContagens);
 	}
@@ -261,13 +239,15 @@ public class GraficoPubController {
 		}
 		Double mediaOutros = 0.0;
 		long outros = 0;
-		for (Entry<Double, Integer> entry : remuneracaoContagem.entrySet()) {
-			if(entry.getValue() <= total*0.05){
+		for(Iterator<Map.Entry<Double, Integer>> it = remuneracaoContagem.entrySet().iterator(); it.hasNext(); ) {
+			Map.Entry<Double, Integer> entry = it.next();
+			if(entry.getValue() <= total*0.05) {
 				outros += entry.getValue();
 				mediaOutros += entry.getKey() * entry.getValue();
-				remuneracaoContagem.remove(entry.getKey());
+				it.remove();
 			}
 		}
+
 		if(outros<0){
 			remuneracaoContagem.put(mediaOutros, (int) outros);
 		}
@@ -288,11 +268,7 @@ public class GraficoPubController {
 	public CotistaGraficoDTO getCotista() {
 		Map<String, Integer> cotistaContagem = egressoService.countCotista();
 
-		for (Entry<String, Integer> entry : cotistaContagem.entrySet()) {
-			if(entry.getValue() == 0){
-				cotistaContagem.remove(entry.getKey());
-			}
-		}
+		cotistaContagem.entrySet().removeIf(entry -> entry.getValue() == 0);
 
 		return new CotistaGraficoDTO(cotistaContagem);
 	}
@@ -370,11 +346,7 @@ public class GraficoPubController {
 	public InteresseEmPosGraficoDTO getInteresseEmPos() {
 		Map<String, Integer> interesseContagens = egressoService.countInteressePos();
 
-		for (Entry<String, Integer> entry : interesseContagens.entrySet()) {
-			if(entry.getValue() == 0){
-				interesseContagens.remove(entry.getKey());
-			}
-		}
+		interesseContagens.entrySet().removeIf(entry -> entry.getValue() == 0);
 
 		return new InteresseEmPosGraficoDTO(interesseContagens);
 	}
@@ -423,11 +395,7 @@ public class GraficoPubController {
 	public CotaGraficoDTO getCotas() {
 		Map<String, Integer> cotasContagens = cotaService.countEgressoByCota();
 
-		for (Entry<String, Integer> entry : cotasContagens.entrySet()) {
-			if(entry.getValue() == 0){
-				cotasContagens.remove(entry.getKey());
-			}
-		}
+		cotasContagens.entrySet().removeIf(entry -> entry.getValue() == 0);
 
 		return new CotaGraficoDTO(cotasContagens);
 	}
@@ -445,11 +413,7 @@ public class GraficoPubController {
 	public AreaAtuacaoGraficoDTO getAtuacao() {
 		Map<String, Integer> areaAtuacao = areaAtuacaoService.countEgressoByAreaAtuacao();
 
-		for (Entry<String, Integer> entry : areaAtuacao.entrySet()) {
-			if(entry.getValue() == 0){
-				areaAtuacao.remove(entry.getKey());
-			}
-		}
+		areaAtuacao.entrySet().removeIf(entry -> entry.getValue() == 0);
 
 		return new AreaAtuacaoGraficoDTO(areaAtuacao);
 	}
@@ -468,11 +432,7 @@ public class GraficoPubController {
 	public SetorAtuacaoGraficoDTO getSetor() {
 		Map<String, Integer> setorAtuacaoContagens = setorAtuacaoService.countEgressoBySetorAtuacao();
 
-		for (Entry<String, Integer> entry : setorAtuacaoContagens.entrySet()) {
-			if(entry.getValue() == 0){
-				setorAtuacaoContagens.remove(entry.getKey());
-			}
-		}
+		setorAtuacaoContagens.entrySet().removeIf(entry -> entry.getValue() == 0);
 
 		return new SetorAtuacaoGraficoDTO(setorAtuacaoContagens);
 	}
@@ -490,11 +450,7 @@ public class GraficoPubController {
 	public PosGraduacaoGraficoDTO getPos() {
 		Map<String, Integer> posGradContagens = egressoService.countFezPos();
 
-		for (Entry<String, Integer> entry : posGradContagens.entrySet()) {
-			if(entry.getValue() == 0){
-				posGradContagens.remove(entry.getKey());
-			}
-		}
+		posGradContagens.entrySet().removeIf(entry -> entry.getValue() == 0);
 
 		return new PosGraduacaoGraficoDTO(posGradContagens);
 	}
