@@ -729,7 +729,8 @@
                   />
                 </div>
               </template>
-            </FolderSection>
+              </FolderSection>
+            </foldercarreira>
           </Form>
           <Form
             ref="formLocalizacao"

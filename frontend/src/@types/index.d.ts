@@ -136,10 +136,13 @@ export namespace models {
       faixaSalarialId?: id | null
       setorAtuacao?: string
       nome?: string
-      endereco?: {
-        pais: string
-        estado: string
-        cidade: string
+      empresaAndEndereco?: {
+        id: number
+        endereco: {
+          pais: string
+          estado: string
+          cidade: string
+        }
       }
     } | null
     titulacao?: {

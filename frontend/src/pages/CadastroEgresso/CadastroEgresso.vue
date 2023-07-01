@@ -307,16 +307,28 @@
               :disabled="area === 'Desempregado'"
             />
 
-            <CustomInput
-              class="mb-5"
+            <CustomSelect
+              class="mb-1"
               name="carreira.empresa"
               label="Empresa"
-              ref="inputEmpresa"
-              placeholder="Ex: Google"
+              placeholder="Selecione"
+              :options="$storeCadastro.empresas"
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
-              :max-length="130"
+              :is-fetching="$storeCadastro.isFetchingEmpresas"
+              @typing="$storeCadastro.fetchEmpresasAsync($event, true)"
+              @infinite-scroll="$storeCadastro.fetchMoreEmpresasAsync"
+              infinite
             />
+
+            <button
+              type="button"
+              class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
+              :disabled="area === 'Desempregado'"
+              @click="dialogEmpresa = true"
+            >
+              Não encontrou sua empresa? Clique aqui
+            </button>
 
             <CustomSelect
               class="mb-5"
@@ -327,56 +339,13 @@
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
             />
-          </div>
 
-          <div class="mb-5 text-sm font-semibold text-cyan-600">
-            <SvgIcon
-              type="mdi"
-              size="20"
-              class="inline mr-2"
-              :path="mdiMapMarker"
+            <LocalizacaoSelect
+              pais-holder="Selecione"
+              estado-holder="Selecione"
+              cidade-holder="Selectione"
             />
-            Localização
-          </h1>
-        </template>
-
-        <template #default>
-          <div>
-            <LocalizacaoSelect />
           </div>
-
-          <CustomSelect
-            class="mb-5"
-            name="carreira.pais"
-            label="País"
-            ref="selectPais"
-            :options="countries"
-            v-model:value="pais"
-            @change="pais = $event"
-            :disabled="area === 'Desempregado'"
-            :required="area !== 'Desempregado'"
-          />
-
-          <CustomSelect
-            class="mb-5"
-            name="carreira.estado"
-            label="Estado"
-            ref="selectEstado"
-            :options="states"
-            v-model:value="estado"
-            @change="estado = $event"
-            :disabled="area === 'Desempregado'"
-            :required="area !== 'Desempregado'"
-          />
-
-          <CustomSelect
-            name="carreira.cidade"
-            label="Cidade"
-            ref="selectCidade"
-            :options="cities"
-            :disabled="area === 'Desempregado'"
-            :required="area !== 'Desempregado'"
-          />
         </template>
       </FolderSection>
 
@@ -608,6 +577,33 @@
         </Form>
       </div>
     </CustomDialog>
+
+    <CustomDialog v-model="dialogEmpresa">
+      <div class="h-full flex justify-center gap-1 flex-col items-center">
+        <div class="text-2xl font-semibold text-cyan-800">
+          Cadastrar empresa
+        </div>
+
+        <Form
+          :validation-schema="empresaSchema"
+          @submit="handleNewEmpresa"
+          class="flex flex-col items-center gap-1.5 mt-[-5px]"
+        >
+          <CustomInput
+            name="nome"
+            label="Nome da empresa"
+            placeholder="Google"
+          />
+          <LocalizacaoSelect
+            class="mb-1"
+          />
+
+          <CustomButton type="submit">
+            Cadastrar
+          </CustomButton>
+        </Form>
+      </div>
+    </CustomDialog>
   </div>
 </template>
 
@@ -622,8 +618,7 @@ import {
   mdiMessage,
   mdiSchool,
   mdiTwitter,
-  mdiWhatsapp,
-  mdiMapMarker
+  mdiWhatsapp
 } from '@mdi/js'
 import svgPath from 'src/assets/svgPaths.json'
 import CustomButton from 'src/components/CustomButton.vue'
@@ -658,11 +653,12 @@ const mensagemShare = `🎉%20Acabei%20de%20me%20cadastrar%20na%20plataforma%20M
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const dialogInstituicao = ref(false)
+const dialogEmpresa = ref(false)
 const dialogCurso = ref(false)
 const camposFaltosos = ref(false)
 const missingDigits = ref(0)
-const paisChange = ref(false)
-const estadoChange = ref(false)
+// const paisChange = ref(false)
+// const estadoChange = ref(false)
 
 const area = ref('')
 const temFoto = ref(false)
@@ -672,10 +668,10 @@ const error = ref(false)
 
 const selectSetor = ref()
 const selectFaixa = ref()
-const inputEmpresa = ref()
+// const inputEmpresa = ref()
 const selectPais = ref()
-const selectEstado = ref()
-const selectCidade = ref()
+// const selectEstado = ref()
+// const selectCidade = ref()
 
 const minDate = ref(new Date(-8640000000000000))
 const eighteenYearsAgo = ref(new Date())
@@ -736,17 +732,16 @@ async function handleSubmit (values: any) {
     cotas = null
   }
 
+  const dadosEmpresa = await $storeCadastro.fetchEmpresa(values.carreira.empresa)
+
+  console.log(dadosEmpresa)
+
   const empresa = values.carreira.area !== 'Desempregado'
     ? {
         areaAtuacao: values.carreira.area,
         faixaSalarialId: values.carreira.faixaSalarial ? parseInt(values.carreira.faixaSalarial) : null,
         setorAtuacao: values.carreira.setor,
-        nome: values.carreira.empresa,
-        endereco: {
-          pais: values.carreira.pais,
-          estado: values.carreira.estado,
-          cidade: values.carreira.cidade
-        }
+        enderecoAndEmpresa: dadosEmpresa
       }
     : null
 
@@ -767,6 +762,8 @@ async function handleSubmit (values: any) {
   formData.append('arquivo', values.geral.foto)
 
   const isAdm = $route.params.id !== undefined
+
+  // const status = 201
 
   const response = await $storeCadastro.cadastrarEgresso({
     temFoto: temFoto.value, // false por padrao
@@ -827,6 +824,15 @@ async function handleNewInstituicao (event: any) {
   }
 }
 
+async function handleNewEmpresa (event: any) {
+  const response = await $storeCadastro.cadastrarEmpresa(event.nome, event.pais, event.estado, event.cidade)
+
+  if (response?.status === 201) {
+    alert('Empresa cadastrada com sucesso.')
+    dialogEmpresa.value = false
+  }
+}
+
 async function handleNewCurso (event: any) {
   const response = await $storeCadastro.cadastrarCurso(event.nome)
 
@@ -842,6 +848,13 @@ const instituicaoSchema = object().shape({
 
 const cursoSchema = object().shape({
   nome: string().required('Insira o nome do curso')
+})
+
+const empresaSchema = object().shape({
+  nome: string().required('Insira o nome da empresa'),
+  pais: string().required('Campo obrigatório').default('a'),
+  estado: string().required('Campo obrigatório').default('a'),
+  cidade: string().required('Campo obrigatório').default('a')
 })
 
 const schema = object().shape({
@@ -953,15 +966,15 @@ const schema = object().shape({
 })
 
 onMounted(async () => {
-  watch(pais, () => {
-    selectEstado.value.setInitialValues('')
-    form.value.setFieldTouched('carreira.estado', false)
-  })
+  // watch(pais, () => {
+  //   selectEstado.value.setInitialValues('')
+  //   form.value.setFieldTouched('carreira.estado', false)
+  // })
 
-  watch(estado, () => {
-    selectCidade.value.setInitialValues('')
-    form.value.setFieldTouched('carreira.cidade', false)
-  })
+  // watch(estado, () => {
+  //   selectCidade.value.setInitialValues('')
+  //   form.value.setFieldTouched('carreira.cidade', false)
+  // })
 
   watch(compCotista, (_, oldVal) => {
     if (oldVal) {

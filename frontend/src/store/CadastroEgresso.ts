@@ -12,10 +12,15 @@ interface State {
   tiposCota: ComplexOpts[]
   instituicoes: ComplexOpts[]
   cursos: ComplexOpts[]
-  page: number
-  query: string
-  totalPages: number
+  pageInstituicao: number
+  queryInstituicao: string
+  totalPagesInstituicao: number
   isFetchingUniversidades: boolean
+  empresas: ComplexOpts[]
+  pageEmpresas: number
+  queryEmpresas: string
+  totalPagesEmpresas: number
+  isFetchingEmpresas: boolean
   areasAtuacao: ComplexOpts[]
 }
 
@@ -34,10 +39,15 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
     tiposBolsa: [],
     tiposCota: [],
     instituicoes: [],
+    empresas: [],
+    pageEmpresas: 0,
+    queryEmpresas: '',
+    totalPagesEmpresas: -1,
+    isFetchingEmpresas: false,
     cursos: [],
-    page: 0,
-    query: '',
-    totalPages: -1,
+    pageInstituicao: 0,
+    queryInstituicao: '',
+    totalPagesInstituicao: -1,
     isFetchingUniversidades: false,
     areasAtuacao: []
   }),
@@ -133,28 +143,28 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
     async fetchUniversidadesAsync (query: string, clean: boolean) {
       if (clean) {
         this.instituicoes = []
-        this.page = 0
-        this.totalPages = -1
+        this.pageInstituicao = 0
+        this.totalPagesInstituicao = -1
         if (query === 'event') {
           query = ' '
         }
       }
 
-      this.query = query
-      if (this.page === this.totalPages) {
+      this.queryInstituicao = query
+      if (this.pageInstituicao === this.totalPagesInstituicao) {
         return
       }
 
-      this.isFetchingUniversidades = true
+      this.isFetchingEmpresas = true
       const response = await Api.request({
         method: 'get',
-        route: `/empresa?page=${this.page}&size=15&direction=ASC${query !== '' ? '&nome=' + query : ''}`
+        route: `/empresa/universidade?page=${this.pageInstituicao}&size=15&direction=ASC${query !== '' ? '&nome=' + query : ''}`
       })
-      this.isFetchingUniversidades = false
+      this.isFetchingEmpresas = false
 
       if (response?.status === 200 && response.data != null) {
-        this.page += 1
-        this.totalPages = response.data.totalPages
+        this.pageInstituicao += 1
+        this.totalPagesInstituicao = response.data.totalPages
 
         this.instituicoes = [...this.instituicoes, ...response.data.content.map((elem: any) => {
           return {
@@ -163,12 +173,62 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
           }
         })]
       }
-
-      console.log(response)
     },
 
     async fetchMoreUniversidadesAsync () {
-      await this.fetchUniversidadesAsync(this.query, false)
+      await this.fetchUniversidadesAsync(this.queryInstituicao, false)
+    },
+
+    async fetchEmpresasAsync (query: string, clean: boolean) {
+      if (clean) {
+        this.empresas = []
+        this.pageEmpresas = 0
+        this.totalPagesEmpresas = -1
+        if (query === 'event') {
+          query = ' '
+        }
+      }
+
+      this.queryEmpresas = query
+      if (this.pageEmpresas === this.totalPagesEmpresas) {
+        return
+      }
+
+      this.isFetchingEmpresas = true
+      const response = await Api.request({
+        method: 'get',
+        route: `/empresa/empresa?page=${this.pageEmpresas}&size=15&direction=ASC${query !== '' ? '&nome=' + query : ''}`
+      })
+      this.isFetchingEmpresas = false
+
+      if (response?.status === 200 && response.data != null) {
+        this.pageInstituicao += 1
+        this.totalPagesInstituicao = response.data.totalPages
+
+        this.empresas = [...this.empresas, ...response.data.content.map((elem: any) => {
+          return {
+            value: elem.id,
+            label: elem.nome
+          }
+        })]
+      }
+    },
+
+    async fetchMoreEmpresasAsync () {
+      await this.fetchEmpresasAsync(this.queryInstituicao, false)
+    },
+
+    async fetchEmpresa (id: number) {
+      const response = await Api.request({
+        method: 'GET',
+        route: `/empresa/${id}`
+      })
+
+      if (response?.status !== 200) {
+        return null
+      } else {
+        return response.data
+      }
     },
 
     async fetchAll () {
@@ -209,9 +269,7 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
         route: '/empresa',
         body: {
           nome,
-
           isEmprego: false // tirar duvidas
-
         }
       })
     },

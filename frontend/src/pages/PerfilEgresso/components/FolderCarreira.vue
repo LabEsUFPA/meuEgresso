@@ -55,7 +55,7 @@
           :disabled="area === 'Desempregado'"
           :pre-filled="true"
         />
-        
+
         <div class="mb-5 text-sm font-semibold text-cyan-600">
           <SvgIcon
             type="mdi"

@@ -26,6 +26,7 @@
       @infinite-scroll="fetchMoreStates"
       infinite
       required
+      ref="selectEstado"
       :placeholder="placeHolder.estadoHolder"
     />
     <CustomSelect
@@ -39,6 +40,7 @@
       @infinite-scroll="fetchMoreCities"
       infinite
       required
+      ref="selectCidade"
       :placeholder="placeHolder.cidadeHolder"
     />
   </div>
@@ -60,6 +62,8 @@ const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 const paisChange = ref(false)
 const estadoChange = ref(false)
+const selectEstado = ref()
+const selectCidade = ref()
 
 // const $emit = defineEmits(['paisChange', 'estadoChange'])
 
@@ -87,12 +91,12 @@ const cidade = ref({
   query: ''
 })
 
-  interface Props {
-    isInput?: boolean
-    paisHolder?: string
-    estadoHolder?: string
-    cidadeHolder?: string
-  }
+interface Props {
+  isInput?: boolean
+  paisHolder?: string
+  estadoHolder?: string
+  cidadeHolder?: string
+}
 
 const props = withDefaults(defineProps<Props>(), {
   isInput: true,
@@ -113,23 +117,24 @@ const placeHolder = ref({
 })
 
 async function handleChangeLocal (name: string, event: any) {
-  console.log('handleChange')
   switch (name) {
     case 'pais':
       paisChange.value = !paisChange.value
       pais.value.id = event
-
-      console.log('local')
-      console.log(pais.value)
-      fetchMoreStates()
+      estado.value.query = ''
+      cidade.value.query = ''
+      fetchMoreStates(true)
+      selectEstado.value.setInitialValues('')
+      selectCidade.value.setInitialValues('')
 
       // $emit('paisChange')
       break
     case 'estado':
       estadoChange.value = !estadoChange.value
       estado.value.id = event
-      console.log('state')
-      fetchMoreCities()
+      cidade.value.query = ''
+      fetchMoreCities(true)
+      selectCidade.value.setInitialValues('')
       // $emit('estadoChange')
       break
   }
@@ -148,10 +153,9 @@ async function fetchCountries (query: string, clean: boolean) {
     }
   }
 
-  console.log(pais.value)
   pais.value.query = query
   pais.value.isFetching = true
-  const response = await apiEnderecos.getPaises(query, pais.value.page)
+  const response = await apiEnderecos.getPaises(pais.value.query, pais.value.page)
   pais.value.isFetching = false
 
   if (response.status === 200) {
@@ -179,7 +183,7 @@ async function fetchStates (query: string, clean: boolean) {
 
   estado.value.query = query
   estado.value.isFetching = true
-  const response = await apiEnderecos.getEstados(query, pais.value.id, estado.value.page)
+  const response = await apiEnderecos.getEstados(estado.value.query, pais.value.id, estado.value.page)
   estado.value.isFetching = false
 
   if (response.status === 200) {
@@ -188,8 +192,8 @@ async function fetchStates (query: string, clean: boolean) {
   }
 }
 
-async function fetchMoreStates () {
-  fetchStates(estado.value.query, false)
+async function fetchMoreStates (clean = false) {
+  fetchStates(estado.value.query, clean)
 }
 const cities = ref<ComplexOpts[]>([])
 async function fetchCities (query: string, clean: boolean) {
@@ -204,7 +208,7 @@ async function fetchCities (query: string, clean: boolean) {
 
   cidade.value.query = query
   cidade.value.isFetching = true
-  const response = await apiEnderecos.getCidades(query, estado.value.id, cidade.value.page)
+  const response = await apiEnderecos.getCidades(cidade.value.query, estado.value.id, cidade.value.page)
   cidade.value.isFetching = false
 
   if (response.status === 200) {
@@ -213,9 +217,8 @@ async function fetchCities (query: string, clean: boolean) {
   }
 }
 
-async function fetchMoreCities () {
-  console.log('123')
-  fetchCities(cidade.value.query, false)
+async function fetchMoreCities (clean = false) {
+  fetchCities(cidade.value.query, clean)
 }
 
 onMounted(() => {
