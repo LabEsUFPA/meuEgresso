@@ -43,74 +43,65 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 	/**
 	 * Método responsável por retornar dados para o EgressoDashDTO
 	 *
-	 * @author Eude Monteiro
-	 * @return Um objeto map com informações sobre o nome do usuário,
-	 *         seu status de cadastro e data de modificação.
+	 * @author Bruno Eiki
+	 * @return Um objeto com informações sobre o id do usuário e do egresso,
+	 * nome do usuário, seu status de cadastro, nome da empresa, e-mail, data
+	 * de criação e foto.
 	 * @since 12/06/2023
 	 */
 	@Query(nativeQuery = true, value = """
-			with lista_egresso as
-				(select
-					u.id_usuario,
-					e.id_egresso,
-					u.nome_usuario,
-					empr.nome_empresa,
-					u.email,
-					u.created_date,
-					e.foto_egresso,
-					su.status,
-					su.mudanca
-				from
-					usuario_grupo ug
-					LEFT JOIN egresso e ON ug.id_usuario = e.usuario_id
-					JOIN usuario u ON ug.id_usuario = u.id_usuario
-					JOIN status_usuario su ON su.usuario_id_status_usuario = ug.id_usuario
-					LEFT JOIN egresso_empresa ee ON ee.egresso_id_egresso = e.id_egresso
-					LEFT JOIN empresa empr ON ee.empresa_id_empresa = empr.id_empresa
-				WHERE
-					ug.grupo = 'EGRESSO'
-					AND LOWER(su.status) IN :status
-					AND u.nome_usuario ilike %:nomeUsuario%
-				ORDER BY
-					su.mudanca DESC
-				)
-				select
-					id_usuario,
-					id_egresso,
-					upper(nome_usuario),
-					nome_empresa,
-					email,
-					created_date,
-					foto_egresso,
-					lower(status)
-				from
-					(
-					select
-						distinct on (id_usuario)
-						id_usuario,
-						id_egresso,
-						nome_usuario,
-						nome_empresa,
-						email,
-						created_date,
-						foto_egresso,
-						status,
-						mudanca
-					from
-						lista_egresso
-					ORDER BY
-			          	id_usuario,
-			          	mudanca DESC
-					) t
-				ORDER BY
-					CASE WHEN :ordenacao = 'ASC'  THEN created_date END ASC,
-					CASE WHEN :ordenacao = 'DESC' THEN created_date END desc
+			SELECT
+			u.id_usuario,
+			e.id_egresso,
+			upper(u.nome_usuario),
+			empr.nome_empresa,
+			u.email,
+			u.created_date,
+			e.foto_egresso,
+			CASE
+			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
+			CASE
+			WHEN u.valido_usuario = FALSE THEN 'pendente'
+			WHEN u.valido_usuario = TRUE THEN 'completo'
+			END
+			ELSE 'incompleto'
+			END AS status
+			FROM
+			usuario_grupo ug
+			LEFT JOIN egresso e ON ug.id_usuario = e.usuario_id
+			JOIN usuario u ON ug.id_usuario = u.id_usuario
+			LEFT JOIN egresso_empresa ee ON ee.egresso_id_egresso = e.id_egresso
+			LEFT JOIN empresa empr ON ee.empresa_id_empresa = empr.id_empresa
+			WHERE
+			ug.grupo = 'EGRESSO'
+			AND (
+			CASE
+			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
+			CASE
+			WHEN u.valido_usuario = TRUE THEN 'completo'
+			WHEN u.valido_usuario = FALSE THEN 'pendente'
+			END
+			ELSE 'incompleto'
+			END) in (:status)
+			AND u.nome_usuario ilike %:nomeUsuario%
+			ORDER BY
+			CASE WHEN :ordenacao = 'ASC'  THEN u.created_date END ASC,
+			CASE WHEN :ordenacao = 'DESC' THEN u.created_date END DESC
 			""")
 	List<Tuple> findBySearch(
 			@Param("nomeUsuario") String nomeUsuario,
 			@Param("status") String[] status,
 			@Param("ordenacao") String ordenacao);
 
+
+	/**
+	 * Método responsável por retornar dados para notificação do status
+	 *
+	 * @author AlfredoGabriel, Eude Monteiro
+	 * @return Um objeto map com informações sobre o nome do usuário,
+	 *         seu status de cadastro e data de modificação.
+	 * @since 12/06/2023
+	 */
 	@Query(value = """
 			WITH usuario_status AS (
 			SELECT

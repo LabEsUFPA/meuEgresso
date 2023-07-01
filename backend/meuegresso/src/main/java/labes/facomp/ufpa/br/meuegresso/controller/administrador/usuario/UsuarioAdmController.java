@@ -1,7 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.administrador.usuario;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.modelmapper.ModelMapper;
@@ -34,10 +33,8 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
-import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnalthorizedRegisterException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoValidoModel;
 import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
@@ -62,8 +59,6 @@ public class UsuarioAdmController {
 	private final UsuarioService usuarioService;
 
 	private final StatusUsuarioService statusUsuarioService;
-
-	private final EgressoValidoService egressosValidosService;
 
 	private final ModelMapper mapper;
 
@@ -140,6 +135,9 @@ public class UsuarioAdmController {
 		mailService.sendEmail(usuarioModel.getEmail(), "Cadastro no sistema de Egresso por um Administrador.",
 				"Seu cadastro no Sistema de Egresso foi realizado com sucesso pela administração. Sua senha é " + password);
 
+		/* Se o adm cria não precisa passar pela aprovação */
+		usuarioModel.setAtivo(true);
+		usuarioModel.setValido(true);
 
 		usuarioService.save(usuarioModel);
 
