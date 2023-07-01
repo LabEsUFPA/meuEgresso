@@ -60,13 +60,51 @@ public class EmpresaController {
 	 * @author Alfredo Gabriel, Marcus Maciel
 	 * @since 21/04/2023
 	 */
-	@GetMapping
+	@GetMapping()
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public Page<EmpresaBasicDTO> consultarEmpresas(
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "15", required = false) Integer size,
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
 		return empresaService.findAll(page, size, direction).map(e -> mapper.map(e, EmpresaBasicDTO.class));
+	}
+
+	/**
+	 * Endpoint responsável por retornar a lista de empresa cadastrados no banco de
+	 * dados.
+	 *
+	 * @return {@link EmpresaBasicDTO} Lista de empresa cadastrados, ordenadas em
+	 *         ordem crescente
+	 * @author Alfredo Gabriel, Marcus Maciel
+	 * @since 21/04/2023
+	 */
+	@GetMapping("/empresa")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public Page<EmpresaBasicDTO> consultarEmpresasEmprego(
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "15", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
+		return empresaService.findAllByIsEmpregoTrue(page, size, direction)
+				.map(e -> mapper.map(e, EmpresaBasicDTO.class));
+	}
+
+	/**
+	 * Endpoint responsável por retornar a lista de empresa cadastrados no banco de
+	 * dados.
+	 *
+	 * @return {@link EmpresaBasicDTO} Lista de empresa cadastrados, ordenadas em
+	 *         ordem crescente
+	 * @author Marcus Maciel
+	 * @since 01/07/2023
+	 */
+	@GetMapping("/universidade")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public Page<EmpresaBasicDTO> consultarUniversidades(
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "15", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
+		return empresaService.findAllByIsEmpregoFalse(page, size, direction)
+				.map(e -> mapper.map(e, EmpresaBasicDTO.class));
 	}
 
 	/**

@@ -43,6 +43,16 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
+    public Page<EmpresaModel> findAllByIsEmpregoTrue(Integer page, Integer size, Direction direction) {
+        return empresaRepository.findAllByIsEmpregoTrue(PageRequest.of(page, size, Sort.by(direction, "nome")));
+    }
+
+    @Override
+    public Page<EmpresaModel> findAllByIsEmpregoFalse(Integer page, Integer size, Direction direction) {
+        return empresaRepository.findAllByIsEmpregoFalse(PageRequest.of(page, size, Sort.by(direction, "nome")));
+    }
+
+    @Override
     public EmpresaModel findById(Integer id) {
         return empresaRepository.findById(id).orElseThrow();
     }

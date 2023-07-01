@@ -42,6 +42,21 @@ public interface EmpresaService {
 	public Page<EmpresaModel> findAll(Integer page, Integer size, Direction direction);
 
 	/**
+	 * Método responsável por encontrar todos os empresas referentes à empresa
+	 * cadastrados.
+	 *
+	 * @return Lista de objetos da classe EmpresaModel.
+	 */
+	public Page<EmpresaModel> findAllByIsEmpregoTrue(Integer page, Integer size, Direction direction);
+
+	/**
+	 * Método responsável por encontrar todos as universidades cadastrados.
+	 *
+	 * @return Lista de objetos da classe EmpresaModel.
+	 */
+	public Page<EmpresaModel> findAllByIsEmpregoFalse(Integer page, Integer size, Direction direction);
+
+	/**
 	 * Método responsável por atualizar dados de um empresa cadastrado.
 	 *
 	 * @param empresa objeto empresa
