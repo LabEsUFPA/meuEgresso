@@ -102,7 +102,7 @@
           </div>
         </div>
         <CustomButton type="submit">
-          Cadastrar
+          Cadastrar-se
         </CustomButton>
         <p class="mt-9">
           Já possui conta?
@@ -114,7 +114,7 @@
           </RouterLink>
         </p>
         <p class="mt-2 w-64 text-sm text-center">
-          Ao clicar em Cadastre-se, você concorda com nossa
+          Ao clicar em Cadastrar-se, você concorda com nossa
           <RouterLink
             to="/privacidade"
             class="text-sky-600"
