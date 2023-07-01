@@ -77,5 +77,5 @@ public interface ContribuicaoService {
 	 * @param createdBy
 	 * @return
 	 */
-	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 }

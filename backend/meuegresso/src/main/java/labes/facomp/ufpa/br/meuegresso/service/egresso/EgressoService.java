@@ -38,6 +38,10 @@ public interface EgressoService {
 
 	public List<EgressoModel> findAll();
 
+	public List<EgressoModel> findAllByUsuarioValidoIsTrue();
+
+	public EgressoModel findByIdAndUsuarioValidoIsTrue(Integer id);
+
 	public EgressoModel adicionarEgresso(EgressoModel egresso);
 
 	/**
@@ -49,16 +53,6 @@ public interface EgressoService {
 	 * @since 16/04/2023
 	 */
 	public EgressoModel updateEgresso(EgressoModel egresso);
-
-	/**
-	 * Metodo responsavel por deletar informacoes do egresso no banco de dados.
-	 *
-	 * @param egresso Dados do egresso
-	 * @return Mensagem de confirmacao
-	 * @author Bruno Eiki
-	 * @since 17/04/2023
-	 */
-	public boolean deletarEgresso(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por verificar se egresso existe no banco de dados.
@@ -79,7 +73,7 @@ public interface EgressoService {
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
-	public void deleteById(Integer id);
+	public boolean deleteById(Integer id);
 
 	/**
 	 * Método responsável por verificar se existe um determinado elemento.

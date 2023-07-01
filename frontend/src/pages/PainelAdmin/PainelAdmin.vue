@@ -78,7 +78,7 @@
 
             <CustomButton
               tag="router"
-              link="/conta-admin"
+              link="/conta"
               variant="flat"
             >
               <SvgIcon
@@ -477,4 +477,3 @@ onMounted(async () => {
 })
 
 </script>
-

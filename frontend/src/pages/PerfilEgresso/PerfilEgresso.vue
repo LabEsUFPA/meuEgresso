@@ -25,7 +25,7 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
         >
-          <h1 class=" absolute flex flex-auto top-[15px] right-[10px] sm:right-[20%]">
+          <h1 class="absolute flex flex-auto top-[15px] right-[10px] sm:right-[20%]">
             <ButtonEdit
               label="Editar"
               icon-path="/img/edit.svg"
@@ -275,13 +275,14 @@
                   :max-length="50"
                   required
                 />
-                <CustomInput
+                <CustomDatepicker
                   class="mb-5"
                   name="geral.nascimento"
-                  :value="dataEgresso.geral.nascimento"
-                  label="Data de Nascimento"
-                  :max-length="10"
-                  type="date"
+                  :icon-path="mdiCalendarEdit"
+                  :max-date="eighteenYearsAgo"
+                  :min-date="minDate"
+                  custom-label
+                  required
                 />
               </div>
             </template>
@@ -365,17 +366,24 @@
                   placeholder="Selecione"
                   icon-path=""
                 />
-
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  :vmodel="dataEgresso.academico.posGrad.curso"
-                  name="academico.posGrad.curso"
-                  label="Curso"
-                  placeholder="Curso de pós-graduação"
+                  :vmodel="dataEgresso.academico.bolsista.tipo"
+                  name="academico.bolsista.tipo"
+                  label="Tipo de Bolsa"
+                  placeholder="Selecione"
                   icon-path=""
                 />
-
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="'R$ ' + dataEgresso.academico.bolsista.remuneracao"
+                  name="academico.bolsista.remuneracao"
+                  label="Remuneração da bolsa"
+                  placeholder="Selecione"
+                  icon-path=""
+                />
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
@@ -385,14 +393,13 @@
                   placeholder="Local da pós-graduação"
                   icon-path=""
                 />
-
                 <CustomPerfilData
                   type="text"
-                  class="mb-1"
-                  :vmodel="dataEgresso.academico.bolsista.tipo"
-                  name="academico.bolsista.tipo"
-                  label="Bolsa"
-                  placeholder="Bolsa"
+                  class="mb-5"
+                  :vmodel="dataEgresso.academico.posGrad.curso"
+                  name="academico.posGrad.curso"
+                  label="Curso"
+                  placeholder="Curso de pós-graduação"
                   icon-path=""
                 />
               </div>
@@ -463,7 +470,7 @@
                     :disabled="!bools.cotista"
                   />
                   <CustomCheckbox
-                    class="mb-5"
+                    class="mb-6"
                     name="academico.cotista.tipos.pcd"
                     label="PCD"
                     :required="bools.cotista"
@@ -500,7 +507,7 @@
                 />
 
                 <CustomInput
-                  class="mb-5"
+                  class="mb-7"
                   name="academico.bolsista.remuneracao"
                   label="Remuneração da bolsa"
                   type="number"
@@ -513,14 +520,14 @@
                 />
 
                 <CustomCheckbox
-                  class="mb-5"
+                  class="mb-[-14px]"
                   name="academico.posGrad.value"
                   v-model:value="bools.posGrad"
                   label="Pós-graduação"
                 />
 
                 <CustomInput
-                  class="mb-5"
+                  class="mb-2"
                   name="academico.posGrad.local"
                   label="Instituição da pós-graduação"
                   :max-length="100"
@@ -587,7 +594,7 @@
               <template #NonInputData>
                 <CustomPerfilData
                   type="text"
-                  class="mb-10"
+                  class="mb-7"
                   :vmodel="dataEgresso.carreira.area"
                   name="carreira.area"
                   label="Área de Atuação"
@@ -597,7 +604,7 @@
 
                 <CustomPerfilData
                   type="text"
-                  class="mb-10"
+                  class="mb-7"
                   :vmodel="dataEgresso.carreira.setor"
                   name="carreira.setor"
                   label="Setor de Atuação"
@@ -607,10 +614,19 @@
 
                 <CustomPerfilData
                   type="text"
-                  class="mb-5"
+                  class="mb-7"
                   :vmodel="dataEgresso.carreira.empresa"
                   name="carreira.empresa"
                   label="Empresa Atual"
+                  placeholder="Empresa"
+                  icon-path=""
+                />
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="dataEgresso.carreira.faixaSalarial"
+                  name="carreira.faixaSalarial"
+                  label="Faixa Salarial"
                   placeholder="Empresa"
                   icon-path=""
                 />
@@ -808,6 +824,18 @@
                 <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"
+                  :vmodel="dataEgresso.adicionais.assuntosPalestras"
+                  name="adicionais.palestras"
+                  label="Assuntos Palestras"
+                  placeholder="Lorem ipsum dolor sit amet, consect
+                  etur adipiscing elit, sed do eiusmod tempor incididun
+                  t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                  ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                  icon-path=""
+                />
+                <CustomPerfilData
+                  type="text"
+                  class="flex-auto mb-5"
                   :vmodel="dataEgresso.adicionais.experiencias"
                   name="adicionais.experiencias"
                   label="Depoimento"
@@ -882,6 +910,7 @@ import ButtonEdit from './components/ButtonEdit.vue'
 import FolderSection from 'src/components/FolderSection.vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
+import CustomDatepicker from 'src/components/CustomDatepicker.vue'
 
 import CustomPerfilData from './components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
@@ -912,7 +941,8 @@ import {
   mdiMapMarker,
   mdiAlertCircleOutline,
   mdiSchool,
-  mdiLoading
+  mdiLoading,
+  mdiCalendarEdit
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
 const dialogSucesso = ref(false)
@@ -933,8 +963,11 @@ const loading = ref(true)
 
 const error = ref(false)
 const errorLocation = ref('')
-
 const errorText = ref('')
+
+const minDate = ref(new Date(-8640000000000000))
+const eighteenYearsAgo = ref(new Date())
+eighteenYearsAgo.value.setFullYear(eighteenYearsAgo.value.getFullYear() - 18)
 
 const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
@@ -1253,7 +1286,6 @@ async function handleSubmitAdicionais (values: any) {
 
 let isInputLocal = false
 function toggleIsInput (FolderLabel: string) {
-  console.log('toggole')
   switch (FolderLabel) {
     case 'profileHead':
       dataEgresso.value.profileHead.isInput = !dataEgresso.value.profileHead.isInput
@@ -1460,9 +1492,9 @@ async function fetchUpdateEgresso () {
     },
     localizacao: {
       cep: '',
-      pais: json.emprego?.empresa?.endereco?.pais || '',
-      estado: json.emprego?.empresa?.endereco?.estado || '',
-      cidade: json.emprego?.empresa?.endereco?.cidade || '',
+      pais: json.emprego?.endereco?.pais || '',
+      estado: json.emprego?.endereco?.estado || '',
+      cidade: json.emprego?.endereco?.cidade || '',
       isInput: false
     },
     academico: {
@@ -1554,8 +1586,14 @@ async function fetchUpdateEgresso () {
     'geral.linkedin': dataEgresso.value.profileHead.linkedin,
     'geral.lattes': dataEgresso.value.profileHead.lattes
   })
+  const dateParts = dataEgresso.value.geral.nascimento.split('-')
+  const year = parseInt(dateParts[0])
+  const month = parseInt(dateParts[1]) - 1
+  const day = parseInt(dateParts[2])
+
   formGeral.value?.setValues({
-    'geral.nascimento': dataEgresso.value.geral.nascimento,
+
+    'geral.nascimento': new Date(year, month, day),
     'geral.email': dataEgresso.value.geral.email,
     // passa Id para o select
     'geral.genero': dataEgresso.value.generoId
@@ -1641,16 +1679,10 @@ const schemaGeral = object().shape({
   geral: object({
     nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
       if (value) {
-        const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
-        const minDate = new Date('1940-01-01')
-        const maxDate = new Date('2023-12-31')
+        const date = value.split('/').reverse().join('-')
         const inputDate = new Date(date)
 
-        // Check if the person is at least 18 years old
-        const eighteenYearsAgo = new Date()
-        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
-
-        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo
+        return inputDate >= minDate.value && inputDate <= eighteenYearsAgo.value
       }
       return true
     }),

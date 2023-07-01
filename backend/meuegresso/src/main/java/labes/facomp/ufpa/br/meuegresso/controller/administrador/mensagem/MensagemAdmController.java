@@ -6,7 +6,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +56,7 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public MensagemStatusDTO consultarStatusMensagens() {
 		return agendamentoService.getMensagensStatus();
@@ -71,6 +71,7 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@GetMapping(value = "/consultarMensagens")
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public List<MensagemDTO> consultarMensagens() {
 		return mapper.map(mailService.findAll(), new TypeToken<List<MensagemDTO>>() {
@@ -94,7 +95,6 @@ public class MensagemAdmController {
 		MensagemModel resposta = mailService.update(mapper.map(mensagemDTO, MensagemModel.class));
 		if (resposta == null) {
 			throw new EmailMensagemNotFoundException(String.format(ErrorType.DATABASE_003.getMessage()),ErrorType.DATABASE_003.getInternalCode());
-			//throw new EmailMensagemNotFoundException();
 		}
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
@@ -108,13 +108,12 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@DeleteMapping
-	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteById(@PathVariable(name = "id") Integer id) throws EmailMensagemNotFoundException {
 		if (mailService.deleteById(id)) {
 			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
-		///return ResponseType.FAIL_DELETE.getMessage(); ///
 		throw new EmailMensagemNotFoundException(String.format(ErrorType.DATABASE_004.getMessage()),ErrorType.DATABASE_004.getInternalCode());
 	}
 
@@ -129,7 +128,6 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@PostMapping
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public String save(@RequestBody @Valid MensagemDTO mensagemDTO)throws EmailMessageNotValidException {
 		try{

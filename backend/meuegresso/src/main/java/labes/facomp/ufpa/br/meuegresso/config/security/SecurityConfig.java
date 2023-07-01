@@ -23,6 +23,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import labes.facomp.ufpa.br.meuegresso.config.properties.CorsProperties;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -59,7 +60,8 @@ public class SecurityConfig {
 						.permitAll()
 						.requestMatchers(HttpMethod.GET, "/anuncio**/**")
 						.permitAll()
-						.anyRequest().authenticated())
+						.anyRequest().hasAnyAuthority(Grupos.ADMIN.getAuthority(), Grupos.SECRETARIO.getAuthority(),
+								Grupos.EGRESSO.getAuthority()))
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
 				.sessionManagement(session -> session
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

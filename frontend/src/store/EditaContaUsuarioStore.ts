@@ -17,6 +17,7 @@ export const useEditaContaUsuarioStore = defineStore('EditaContaUsuario', {
         route: '/usuario'
 
       })
+      console.log(response)
       if (response?.status === 200) {
         this.usuario.nomeCompleto = response.data?.nome
         this.usuario.email = response.data?.email
@@ -38,6 +39,31 @@ export const useEditaContaUsuarioStore = defineStore('EditaContaUsuario', {
         email,
         nome,
         password
+      }
+
+      const response = await Api.request({
+        method: 'put',
+        route: '/usuario',
+        body: dataUsuario
+      })
+
+      return {
+        status: (response?.status) !== undefined ? response.status : 500,
+        data: (response?.data !== undefined) ? response?.data : null
+      }
+    },
+
+    async updateContaSemSenha (
+      id: number,
+      username: string,
+      email: string,
+      nome: string
+    ) {
+      const dataUsuario = {
+        id,
+        username,
+        email,
+        nome
       }
 
       const response = await Api.request({
