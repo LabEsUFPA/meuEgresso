@@ -24,10 +24,8 @@ public class DepoimentoDTO {
     @NotBlank(message = "Informe o conteudo do depoimento.")
     private String descricao;
 
-    @Builder.Default
-    private Boolean ativo = false;
+    private Boolean ativo;
     
-    @Builder.Default
-    private Boolean favorito = false;
+    private Boolean favorito;
 
 }
