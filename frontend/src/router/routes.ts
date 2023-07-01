@@ -59,7 +59,10 @@ export default [
       },
       {
         path: '/conta',
-        component: async () => await import('src/pages/EdicaoConta/EdicaoConta.vue')
+        component: async () => await import('src/pages/EdicaoConta/EdicaoConta.vue'),
+        meta: {
+          requiresAuth: true
+        }
       },
       {
         path: '/graficos',
@@ -104,6 +107,10 @@ export default [
       {
         path: 'validar-email',
         component: async () => await import('src/pages/ValidarEmail/ValidarEmail.vue')
+      },
+      {
+        path: 'privacidade',
+        component: async () => await import('src/pages/PoliticaPrivacidade/PoliticaPrivacidade.vue')
       }
     ]
   },

@@ -28,6 +28,8 @@ public class AnuncioServiceImpl implements AnuncioService {
 
     private final AnuncioRepository anuncioRepository;
 
+    private static final String SORT_FIELD = "titulo";
+
     @Override
     public boolean deleteById(Integer id) {
         if (anuncioRepository.existsById(id)) {
@@ -39,7 +41,7 @@ public class AnuncioServiceImpl implements AnuncioService {
 
     @Override
     public Page<AnuncioModel> findAll(Integer page, Integer size, Direction direction) {
-        return anuncioRepository.findAll(PageRequest.of(page, size, Sort.by(direction, "titulo")));
+        return anuncioRepository.findAll(PageRequest.of(page, size, Sort.by(direction, SORT_FIELD)));
     }
 
     @Override
@@ -47,7 +49,7 @@ public class AnuncioServiceImpl implements AnuncioService {
     public Page<AnuncioModel> findBySearch(String tituloAnuncio, Integer[] areaEmpregoIds, Integer page, Integer size,
             Direction direction) {
         return anuncioRepository.findBySearch("%" + tituloAnuncio + "%",
-                areaEmpregoIds, PageRequest.of(page, size, Sort.by(direction, "titulo")));
+                areaEmpregoIds, PageRequest.of(page, size, Sort.by(direction, SORT_FIELD)));
     }
 
     @Override
@@ -79,7 +81,7 @@ public class AnuncioServiceImpl implements AnuncioService {
     public Page<AnuncioModel> findByDataExpiracaoAfter(LocalDate dataExpiracao, Integer page, Integer size,
             Direction direction) {
         return anuncioRepository.findByDataExpiracaoAfter(dataExpiracao,
-                PageRequest.of(page, size, Sort.by(direction, "titulo")));
+                PageRequest.of(page, size, Sort.by(direction, SORT_FIELD)));
     }
 
 }

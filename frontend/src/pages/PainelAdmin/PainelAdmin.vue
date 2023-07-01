@@ -405,6 +405,7 @@ const graphData = computed(() => ({
   series: {
     x: Object.keys($painelStore.graficos[selectedString.value]).map((key: any) => {
       if (selectedString.value === 'ano') {
+        console.log('aq')
         return key
       } else {
         // key: YYYY-MM-DD

@@ -335,23 +335,7 @@ async function handleCancel (e: any) {
   fetchUpdateEmail()
 }
 
-// let jsonResponse : any
-// console.log(jsonResponse)
-
 async function fetchUpdateEmail () {
-  // const responseBack = await emailStore.fetchEmail()
-  // const jsonEmail = JSON.parse(responseBack)
-  // jsonResponse = jsonEmail
-
-  // // const message = jsonEmail.corpo
-  // if (jsonEmail.length > 1) {
-  //   form.value?.setFieldValue('corpo', jsonEmail[0].corpo)
-  //   form.value?.setFieldValue('escopo', jsonEmail[0].escopo)
-  // } else {
-  //   form.value?.setFieldValue('corpo', jsonEmail.corpo)
-  //   form.value?.setFieldValue('escopo', jsonEmail.escopo)
-  // }
-
   const message = `Prezado(a),
 
   Espero que esta mensagem o encontre bem. Gostaríamos de lembrá-lo(a) da importância de manter seu cadastro atualizado em nosso portal Meu Egresso.
@@ -380,7 +364,6 @@ async function fetchUpdateEmail () {
   }
 }
 onMounted(() => {
-  // router.push({ name: 'email', params: { destino: 'kalilsaldanha@gmail.com' } })
   fetchUpdateEmail()
 })
 </script>

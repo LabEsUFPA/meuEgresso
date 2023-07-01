@@ -15,13 +15,15 @@ import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
@@ -35,12 +37,10 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
  * @since 27/04/2023
  * @version 1.0.1
  */
-@SpringBootTest
-@DirtiesContext
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@RunWith(SpringRunner.class)
+@DataJpaTest
 @ActiveProfiles("test")
-// @AutoConfigureMockMvc
-// @TestInstance(Lifecycle.PER_CLASS)
-// @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
 class UsuarioRepositoryTest {
 

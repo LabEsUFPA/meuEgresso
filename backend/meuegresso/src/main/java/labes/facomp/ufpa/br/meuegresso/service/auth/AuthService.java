@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.service.auth;
 
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +20,9 @@ public class AuthService {
                 .map(GrantedAuthority::toString)
                 .collect(Collectors.joining(" "));
         return tokenService.generateToken(usuarioModel, scope);
+    }
+
+    public String randomPassword() {
+        return RandomStringUtils.randomAlphanumeric(8);
     }
 }

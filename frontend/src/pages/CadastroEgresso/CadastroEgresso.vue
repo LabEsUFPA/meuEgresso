@@ -78,7 +78,7 @@
             />
 
             <CustomInput
-              label="Curriculo Lattes"
+              label="Currículo Lattes"
               name="geral.lattes"
               icon-path="/img/lattesCinza.svg"
               img-icon
@@ -463,7 +463,7 @@
           <div class="flex flex-row justify-center gap-2">
             <CustomButton
               tag="a"
-              link="https://www.linkedin.com/sharing/share-offsite/?url=https://meuegresso.alverad.com.br"
+              :link="`https://www.linkedin.com/sharing/share-offsite/?url=${baseURL}`"
               target="_blank"
             >
               <SvgIcon
@@ -753,7 +753,7 @@ async function handleSubmit (values: any) {
 
   if (response.status !== 201) {
     dialogFalha.value = true
-    errorText.value = response.data?.technicalMessage ? response.data?.technicalMessage : 'Ocorreu um problema na requisição'
+    errorText.value = response.data?.message ? response.data.message : 'Ocorreu um problema na requisição'
     error.value = true
   } else {
     dialogSucesso.value = true

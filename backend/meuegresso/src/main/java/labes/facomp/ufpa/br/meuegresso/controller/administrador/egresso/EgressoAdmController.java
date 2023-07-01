@@ -73,16 +73,25 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/administrador/egresso")
 public class EgressoAdmController {
 
-    private final EgressoService egressoService;
-    private final UsuarioService usuarioService;
-    private final EmpresaService empresaService;
-    private final SetorAtuacaoService setorAtuacaoService;
+    private final ModelMapper mapper;
+
     private final CursoService cursoService;
+
+    private final EgressoService egressoService;
+
+    private final UsuarioService usuarioService;
+
+    private final EmpresaService empresaService;
+
     private final EnderecoService enderecoService;
-    private final AreaAtuacaoService areaAtuacaoService;
+
     private final TitulacaoService titulacaoService;
 
-    private final ModelMapper mapper;
+    private final AreaAtuacaoService areaAtuacaoService;
+
+    private final SetorAtuacaoService setorAtuacaoService;
+
+    private final StatusUsuarioService statusUsuarioService;
 
     /**
      * Endpoint responsavel por buscar o egresso.
@@ -129,7 +138,8 @@ public class EgressoAdmController {
             throw new InvalidRequestException();
         }
 
-        if (egressoService.existsMatricula(egressoCadastroDTO.getMatricula())) {
+        if (egressoCadastroDTO.getMatricula() != null
+                && egressoService.existsMatricula(egressoCadastroDTO.getMatricula())) {
             throw new MatriculaAlreadyExistsException(
                     String.format(ErrorType.REPORT_007.getMessage(), egressoCadastroDTO.getMatricula()),
                     ErrorType.REPORT_007.getInternalCode());
@@ -201,7 +211,12 @@ public class EgressoAdmController {
         depoimento.setEgresso(egresso);
         contribuicao.setEgresso(egresso);
         egresso.getUsuario().setAtivo(egresso.getUsuario().getValido());
-        egressoService.adicionarEgresso(egresso);
+        egressoService.save(egresso);
+
+        statusUsuarioService
+                .save(StatusUsuarioModel.builder().usuarioId(egresso.getUsuario().getId())
+                        .nome(egresso.getUsuario().getNome()).status(UsuarioStatus.COMPLETO)
+                        .build());
 
         return ResponseType.SUCCESS_SAVE.getMessage();
     }
@@ -284,12 +299,10 @@ public class EgressoAdmController {
 
         egressoModel.setId(id);
 
-        egressoService.updateEgresso(egressoModel);
+        egressoService.update(egressoModel);
 
         return ResponseType.SUCCESS_UPDATE.getMessage();
     }
-
-    private final StatusUsuarioService statusUsuarioService;
 
     /**
      * Endpoint responsavel por deletar o egresso.
@@ -338,7 +351,7 @@ public class EgressoAdmController {
                 egressoService.deleteFile(egressoModel.getFotoNome());
             }
             egressoModel.setFotoNome(fileCode);
-            egressoService.updateEgresso(egressoModel);
+            egressoService.update(egressoModel);
             egressoService.saveFoto(fileCode, arquivo);
             return ResponseType.SUCCESS_IMAGE_SAVE.getMessage();
         }
@@ -364,7 +377,7 @@ public class EgressoAdmController {
         if (egressoModel.getFotoNome() != null) {
             egressoService.deleteFile(egressoModel.getFotoNome());
             egressoModel.setFotoNome(null);
-            egressoService.updateEgresso(egressoModel);
+            egressoService.update(egressoModel);
             return ResponseType.SUCCESS_IMAGE_DELETE.getMessage();
         }
         return ResponseType.FAIL_IMAGE_DELETE.getMessage();
