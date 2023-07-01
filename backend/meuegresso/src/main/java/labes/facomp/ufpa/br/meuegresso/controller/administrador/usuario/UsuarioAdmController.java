@@ -39,7 +39,9 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
+import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
+import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
 import labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha.RecuperacaoSenhaService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +67,10 @@ public class UsuarioAdmController {
 	private final JwtService jwtService;
 
 	private final RecuperacaoSenhaService recuperacaoSenhaService;
+
+	private final AuthService authService;
+
+	private final MailService mailService;
 
 	/**
 	 * Endpoint responsável por retornar a lista de usuários cadastrados no banco de
@@ -92,6 +98,7 @@ public class UsuarioAdmController {
 	 * @throws NotFoundException
 	 * @throws NameAlreadyExistsException
 	 * @throws UnalthorizedRegisterException
+	 * @throws InvalidRequestException
 	 * @see {@link UsuarioDTO}
 	 * @since 20/06/2023
 	 */
@@ -101,7 +108,7 @@ public class UsuarioAdmController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,JwtAuthenticationToken token, 
 		@RequestHeader("Host") String host)
-			throws NameAlreadyExistsException, UnalthorizedRegisterException {
+			throws NameAlreadyExistsException, UnalthorizedRegisterException, InvalidRequestException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
 			throw new NameAlreadyExistsException(
 					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),ErrorType.USER_001.getInternalCode());
@@ -122,12 +129,19 @@ public class UsuarioAdmController {
 
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 
+		String password = authService.randomPassword();
+
+		usuarioModel.setPassword(password);
+
+		mailService.sendEmail(usuarioModel.getEmail(), "Cadastro no sistema de Egresso.",
+				"Seu cadastro no Sistema de Egresso foi realizado com sucesso. Sua senha é " + password);
+
+
 		usuarioService.save(usuarioModel);
 
-		AuthRecoveryPasswordRequest authPassReq = new AuthRecoveryPasswordRequest();
-		authPassReq.setEmail(usuarioModel.getEmail());
-		recuperacaoSenhaService.cadastrarSolicitacaoRecuperacao(authPassReq.getEmail(),
-				authPassReq.getRedirect().orElse("https://" + host));
+		usuarioModel.setEmailVerificado(true);
+
+		usuarioService.update(usuarioModel);
 
 		return new ResponseEntity<>(ResponseType.SUCCESS_SAVE.getMessage(), null, HttpStatus.CREATED);
 	}
