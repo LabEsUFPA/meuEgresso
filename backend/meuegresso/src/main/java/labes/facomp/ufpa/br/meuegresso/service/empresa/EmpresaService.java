@@ -95,4 +95,12 @@ public interface EmpresaService {
 	public Page<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(Integer page, Integer size,
 			Direction direction,
 			String nome);
+
+	public Page<EmpresaModel> findByNomeContainsIgnoreCaseAndIsEmpregoTrueOrderByNomeAsc(Integer page, Integer size,
+			Direction direction,
+			String nome);
+
+	public Page<EmpresaModel> findByNomeContainsIgnoreCaseAndIsEmpregoFalseOrderByNomeAsc(Integer page, Integer size,
+			Direction direction,
+			String nome);
 }

@@ -129,6 +129,28 @@ public class EmpresaController {
 				.map(e -> mapper.map(e, EmpresaBasicDTO.class));
 	}
 
+	@GetMapping(value = "/empresa", params = { "nome" })
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public Page<EmpresaBasicDTO> consultarEmpresasEmpregoContainsNome(
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "15", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction,
+			@RequestParam(defaultValue = "", required = false) String nome) {
+		return empresaService.findByNomeContainsIgnoreCaseAndIsEmpregoTrueOrderByNomeAsc(page, size, direction, nome)
+				.map(e -> mapper.map(e, EmpresaBasicDTO.class));
+	}
+
+	@GetMapping(value = "/universidade", params = { "nome" })
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public Page<EmpresaBasicDTO> consultarUniversidadesContainsNome(
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "15", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction,
+			@RequestParam(defaultValue = "", required = false) String nome) {
+		return empresaService.findByNomeContainsIgnoreCaseAndIsEmpregoFalseOrderByNomeAsc(page, size, direction, nome)
+				.map(e -> mapper.map(e, EmpresaBasicDTO.class));
+	}
+
 	/**
 	 * Endpoint responsável por retornar um empresa por sua ID.
 	 *

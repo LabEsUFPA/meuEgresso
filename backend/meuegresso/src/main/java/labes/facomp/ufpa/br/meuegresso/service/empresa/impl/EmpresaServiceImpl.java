@@ -82,6 +82,22 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
+    public Page<EmpresaModel> findByNomeContainsIgnoreCaseAndIsEmpregoTrueOrderByNomeAsc(Integer page, Integer size,
+            Direction direction,
+            String nome) {
+        return empresaRepository.findByNomeContainsIgnoreCaseAndIsEmpregoTrueOrderByNomeAsc(
+                PageRequest.of(page, size, Sort.by(direction, "nome")), nome);
+    }
+
+    @Override
+    public Page<EmpresaModel> findByNomeContainsIgnoreCaseAndIsEmpregoFalseOrderByNomeAsc(Integer page, Integer size,
+            Direction direction,
+            String nome) {
+        return empresaRepository.findByNomeContainsIgnoreCaseAndIsEmpregoFalseOrderByNomeAsc(
+                PageRequest.of(page, size, Sort.by(direction, "nome")), nome);
+    }
+
+    @Override
     public Page<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(Integer page, Integer size,
             Direction direction,
             String nome) {

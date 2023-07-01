@@ -25,6 +25,10 @@ public interface EmpresaRepository extends CrudRepository<EmpresaModel, Integer>
 
     Page<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(Pageable page, String nome);
 
+    Page<EmpresaModel> findByNomeContainsIgnoreCaseAndIsEmpregoTrueOrderByNomeAsc(Pageable page, String nome);
+
+    Page<EmpresaModel> findByNomeContainsIgnoreCaseAndIsEmpregoFalseOrderByNomeAsc(Pageable page, String nome);
+
     @Query(value = "select new labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.LocalPosGraficoDTO(e.nome instituicao, count(eg) quantidadeEgresso) from empresa e inner join egresso_titulacao et on et.empresa = e.id inner join egresso eg on eg.id = et.id.egressoId group by e.nome")
     List<LocalPosGraficoDTO> countEgressoByPos();
 
