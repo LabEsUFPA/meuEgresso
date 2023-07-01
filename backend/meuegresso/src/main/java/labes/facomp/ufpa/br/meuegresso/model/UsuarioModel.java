@@ -9,6 +9,7 @@ import org.hibernate.envers.Audited;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -67,7 +68,7 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Column(name = "nome_usuario", nullable = false, unique = false, length = 100)
 	private String nome;
 
-	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
+	@OneToOne(mappedBy = "usuario",fetch = FetchType.EAGER, cascade = CascadeType.REMOVE , orphanRemoval = true)
 	private transient EgressoModel egresso;
 
 	@Enumerated(EnumType.STRING)

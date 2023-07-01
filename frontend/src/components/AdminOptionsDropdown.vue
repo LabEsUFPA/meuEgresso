@@ -206,8 +206,8 @@ function editaCadastro () {
 async function excluiCadastro () {
   isLoadingAction.value = true
 
-  if (props.idEgresso) {
-    const codeDelete = await $store.deleteUsuario(props.idEgresso)
+  if (props.id) {
+    const codeDelete = await $store.deleteUsuario(props.id)
     if (codeDelete === 204 || codeDelete === 200) {
       $emits('updateData')
       isLoadingAction.value = false
