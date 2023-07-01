@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioRegistro;
+import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthRecoveryPasswordRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
@@ -38,6 +40,7 @@ import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
+import labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha.RecuperacaoSenhaService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -60,6 +63,8 @@ public class UsuarioAdmController {
 	private final ModelMapper mapper;
 
 	private final JwtService jwtService;
+
+	private final RecuperacaoSenhaService recuperacaoSenhaService;
 
 	/**
 	 * Endpoint responsável por retornar a lista de usuários cadastrados no banco de
@@ -94,7 +99,8 @@ public class UsuarioAdmController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,JwtAuthenticationToken token)
+	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,JwtAuthenticationToken token, 
+		@RequestHeader("Host") String host)
 			throws NameAlreadyExistsException, UnalthorizedRegisterException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
 			throw new NameAlreadyExistsException(
@@ -117,6 +123,12 @@ public class UsuarioAdmController {
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 
 		usuarioService.save(usuarioModel);
+
+		AuthRecoveryPasswordRequest authPassReq = new AuthRecoveryPasswordRequest();
+		authPassReq.setEmail(usuarioModel.getEmail());
+		recuperacaoSenhaService.cadastrarSolicitacaoRecuperacao(authPassReq.getEmail(),
+				authPassReq.getRedirect().orElse("https://" + host));
+
 		return new ResponseEntity<>(ResponseType.SUCCESS_SAVE.getMessage(), null, HttpStatus.CREATED);
 	}
 
