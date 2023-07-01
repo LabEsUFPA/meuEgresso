@@ -133,8 +133,8 @@ public class UsuarioAdmController {
 
 		usuarioModel.setPassword(password);
 
-		mailService.sendEmail(usuarioModel.getEmail(), "Cadastro no sistema de Egresso.",
-				"Seu cadastro no Sistema de Egresso foi realizado com sucesso. Sua senha é " + password);
+		mailService.sendEmail(usuarioModel.getEmail(), "Cadastro no sistema de Egresso por um Administrador.",
+				"Seu cadastro no Sistema de Egresso foi realizado com sucesso pela administração. Sua senha é " + password);
 
 
 		usuarioService.save(usuarioModel);
