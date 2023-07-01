@@ -88,7 +88,7 @@ class EgressoServiceTest {
     @Order(1)
     void testAdicionarEgresso() {
 
-        EgressoModel response = egressoService.adicionarEgresso(new EgressoModel());
+        EgressoModel response = egressoService.save(new EgressoModel());
 
         assertNotNull(response);
         assertEquals(ID, response.getId());
@@ -147,7 +147,7 @@ class EgressoServiceTest {
                     EgressoModel.class)))
                     .willReturn(getMockEgresso());
 
-            EgressoModel response = egressoService.updateEgresso(getMockEgresso());
+            EgressoModel response = egressoService.update(getMockEgresso());
             assertNotNull(response);
             assertEquals(getMockEgresso(), response);
         } catch (Exception e) {

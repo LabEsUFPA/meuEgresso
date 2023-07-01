@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,8 +40,9 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoValidoModel;
 import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
+import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
-import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoValidoService;
+import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
 import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +68,10 @@ public class UsuarioAdmController {
 	private final ModelMapper mapper;
 
 	private final JwtService jwtService;
+
+	private final AuthService authService;
+
+	private final MailService mailService;
 
 	/**
 	 * Endpoint responsável por retornar a lista de usuários cadastrados no banco de
@@ -94,6 +100,7 @@ public class UsuarioAdmController {
 	 * @throws NotFoundException
 	 * @throws NameAlreadyExistsException
 	 * @throws UnalthorizedRegisterException
+	 * @throws InvalidRequestException
 	 * @see {@link UsuarioDTO}
 	 * @since 20/06/2023
 	 */
@@ -101,9 +108,9 @@ public class UsuarioAdmController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,
-			JwtAuthenticationToken token)
-			throws NameAlreadyExistsException, UnalthorizedRegisterException {
+	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,JwtAuthenticationToken token, 
+		@RequestHeader("Host") String host)
+			throws NameAlreadyExistsException, UnalthorizedRegisterException, InvalidRequestException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
 			throw new NameAlreadyExistsException(
 					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),
@@ -126,22 +133,19 @@ public class UsuarioAdmController {
 
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 
-		EgressoValidoModel egressoValido;
-		try {
-			egressoValido = egressosValidosService.validarEgresso(Optional.ofNullable(usuarioDTO.getRegistration()),
-					Optional.ofNullable(usuarioDTO.getNome()), Optional.ofNullable(usuarioDTO.getEmail()));
-			mapper.map(egressoValido, usuarioModel);
-		} catch (NotValidEgressoException e) {
-			usuarioModel.setValido(false);
-		}
+		String password = authService.randomPassword();
+
+		usuarioModel.setPassword(password);
+
+		mailService.sendEmail(usuarioModel.getEmail(), "Cadastro no sistema de Egresso por um Administrador.",
+				"Seu cadastro no Sistema de Egresso foi realizado com sucesso pela administração. Sua senha é " + password);
+
+
+		usuarioService.save(usuarioModel);
 
 		usuarioModel.setEmailVerificado(true);
-		// mailService.usuarioCadastrado(usuarioModel,
-		// usuarioDTO.getRedirect().orElse(String.format(REDIRECT, host)));
-		usuarioModel = usuarioService.save(usuarioModel);
-		statusUsuarioService
-				.save(StatusUsuarioModel.builder().usuarioId(usuarioModel.getId())
-						.nome(usuarioModel.getNome()).status(UsuarioStatus.INCOMPLETO).build());
+
+		usuarioService.update(usuarioModel);
 
 		return new ResponseEntity<>(ResponseType.SUCCESS_SAVE.getMessage(), null, HttpStatus.CREATED);
 	}

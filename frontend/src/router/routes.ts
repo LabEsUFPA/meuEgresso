@@ -107,6 +107,10 @@ export default [
       {
         path: 'validar-email',
         component: async () => await import('src/pages/ValidarEmail/ValidarEmail.vue')
+      },
+      {
+        path: 'privacidade',
+        component: async () => await import('src/pages/PoliticaPrivacidade/PoliticaPrivacidade.vue')
       }
     ]
   },

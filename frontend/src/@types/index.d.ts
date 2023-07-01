@@ -37,7 +37,7 @@ export namespace models {
     password: string
   }
 
-  export interface ProfileRegisterModel {
+  export interface UserProfileRegisterModel {
     nome: string
     username: string
     registration?: string
@@ -47,6 +47,15 @@ export namespace models {
     confirmationPassword?: string
     accessLevel?: string
     grupos?: string[]
+  }
+
+  export interface AdminProfileRegisterModel {
+    nome: string
+    username: string
+    email: string
+    confirmationEmail?: string
+    accessLevel?: string
+    grupos: string[]
   }
 
   export interface UserModel {

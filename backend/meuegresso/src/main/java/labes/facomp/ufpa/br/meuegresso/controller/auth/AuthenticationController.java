@@ -219,7 +219,6 @@ public class AuthenticationController {
 
 	@PostMapping(value = "/recoveryPassword/{token}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-
 	public void recuperarSenha(@PathVariable String token, @RequestBody AuthNewPasswordRequest authNewPassReq)
 			throws UnauthorizedRequestException, ExpireRequestException {
 		RecuperacaoSenhaModel recuperacaoSenha = recuperacaoSenhaService.tokenValido(UUID.fromString(token));

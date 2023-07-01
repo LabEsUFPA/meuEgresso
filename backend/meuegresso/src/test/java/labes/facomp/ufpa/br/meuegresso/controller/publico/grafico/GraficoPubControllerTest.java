@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.publico.grafico;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -427,9 +428,9 @@ class GraficoPubControllerTest extends Configuracao {
                                 BolsistasGraficoDTO.class);
 
                 assertNotNull(bolsistasGraficoDTO);
-                assertEquals(2, bolsistasGraficoDTO.getBolsistasContagem().size());
+                assertEquals(1, bolsistasGraficoDTO.getBolsistasContagem().size());
                 assertEquals(1, bolsistasGraficoDTO.getBolsistasContagem().get("Bolsistas"));
-                assertEquals(0, bolsistasGraficoDTO.getBolsistasContagem().get("Não Bolsistas"));
+                assertNull(bolsistasGraficoDTO.getBolsistasContagem().get("Não Bolsistas"));
         }
 
         @Test
@@ -464,9 +465,9 @@ class GraficoPubControllerTest extends Configuracao {
                                 InteresseEmPosGraficoDTO.class);
 
                 assertNotNull(interesseEmPosGraficoDTO);
-                assertEquals(2, interesseEmPosGraficoDTO.getInteresseContagem().size());
+                assertEquals(1, interesseEmPosGraficoDTO.getInteresseContagem().size());
                 assertEquals(1, interesseEmPosGraficoDTO.getInteresseContagem().get("Sim"));
-                assertEquals(0, interesseEmPosGraficoDTO.getInteresseContagem().get("Não"));
+                assertNull(interesseEmPosGraficoDTO.getInteresseContagem().get("Não"));
         }
 
         @Test
@@ -483,9 +484,9 @@ class GraficoPubControllerTest extends Configuracao {
                                 PosGraduacaoGraficoDTO.class);
 
                 assertNotNull(posGraduacaoGraficoDTO);
-                assertEquals(2, posGraduacaoGraficoDTO.getPosGraduacaoContagem().size());
+                assertEquals(1, posGraduacaoGraficoDTO.getPosGraduacaoContagem().size());
                 assertEquals(1, posGraduacaoGraficoDTO.getPosGraduacaoContagem().get("Fez"));
-                assertEquals(0, posGraduacaoGraficoDTO.getPosGraduacaoContagem().get("Não fez"));
+                assertNull(posGraduacaoGraficoDTO.getPosGraduacaoContagem().get("Não fez"));
         }
 
         @Test
@@ -502,9 +503,9 @@ class GraficoPubControllerTest extends Configuracao {
                                 CotistaGraficoDTO.class);
 
                 assertNotNull(cotistaGraficoDTO);
-                assertEquals(2, cotistaGraficoDTO.getCotistasEnumerados().size());
+                assertEquals(1, cotistaGraficoDTO.getCotistasEnumerados().size());
                 assertEquals(1, cotistaGraficoDTO.getCotistasEnumerados().get("Cotista"));
-                assertEquals(0, cotistaGraficoDTO.getCotistasEnumerados().get("Não Cotista"));
+                assertNull(cotistaGraficoDTO.getCotistasEnumerados().get("Não Cotista"));
         }
 
         @Test
@@ -538,8 +539,8 @@ class GraficoPubControllerTest extends Configuracao {
                                 TipoAlunoGraficoDTO.class);
 
                 assertNotNull(tipoAlunoGraficoDTO);
-                assertEquals(2, tipoAlunoGraficoDTO.getTipoAlunos().size());
-                assertEquals(0, tipoAlunoGraficoDTO.getTipoAlunos().get(TITULACAO_NOME));
+                assertEquals(1, tipoAlunoGraficoDTO.getTipoAlunos().size());
+                assertNull(tipoAlunoGraficoDTO.getTipoAlunos().get(TITULACAO_NOME));
         }
 
         @Test

@@ -211,7 +211,7 @@ public class EgressoAdmController {
         depoimento.setEgresso(egresso);
         contribuicao.setEgresso(egresso);
         egresso.getUsuario().setAtivo(egresso.getUsuario().getValido());
-        egressoService.adicionarEgresso(egresso);
+        egressoService.save(egresso);
 
         statusUsuarioService
                 .save(StatusUsuarioModel.builder().usuarioId(egresso.getUsuario().getId())
@@ -299,7 +299,7 @@ public class EgressoAdmController {
 
         egressoModel.setId(id);
 
-        egressoService.updateEgresso(egressoModel);
+        egressoService.update(egressoModel);
 
         return ResponseType.SUCCESS_UPDATE.getMessage();
     }
@@ -351,7 +351,7 @@ public class EgressoAdmController {
                 egressoService.deleteFile(egressoModel.getFotoNome());
             }
             egressoModel.setFotoNome(fileCode);
-            egressoService.updateEgresso(egressoModel);
+            egressoService.update(egressoModel);
             egressoService.saveFoto(fileCode, arquivo);
             return ResponseType.SUCCESS_IMAGE_SAVE.getMessage();
         }
@@ -377,7 +377,7 @@ public class EgressoAdmController {
         if (egressoModel.getFotoNome() != null) {
             egressoService.deleteFile(egressoModel.getFotoNome());
             egressoModel.setFotoNome(null);
-            egressoService.updateEgresso(egressoModel);
+            egressoService.update(egressoModel);
             return ResponseType.SUCCESS_IMAGE_DELETE.getMessage();
         }
         return ResponseType.FAIL_IMAGE_DELETE.getMessage();
