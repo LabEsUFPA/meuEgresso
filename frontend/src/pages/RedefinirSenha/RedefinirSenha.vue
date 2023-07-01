@@ -313,7 +313,7 @@ const handleSubmit = async (data: any) => {
     if (response?.status === 204) {
       showResetDoneModal.value = true
     } else if (response?.status === 401) {
-      errorText.value = response.data?.technicalMessage
+      errorText.value = response.data.message ? response.data.message : 'Requisição não aceita.'
       error.value = true
     }
   } else {

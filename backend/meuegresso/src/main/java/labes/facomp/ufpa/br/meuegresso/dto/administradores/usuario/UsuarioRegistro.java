@@ -19,8 +19,8 @@ public class UsuarioRegistro {
     @NotBlank(message = "Informe um usuário.")
     private String username;
 
-    @NotBlank(message = "Informe uma senha.")
-    private String password;
+    //@NotBlank(message = "Informe uma senha.")
+    //private String password;
 
     @Email(message = "Informe um e-mail valido.")
     @NotBlank(message = "Informe um email.")

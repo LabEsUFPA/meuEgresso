@@ -173,7 +173,7 @@ import CustomDialog from 'src/components/CustomDialog.vue'
 import { useCadastroPerfilStore } from 'src/store/CadastroPerfilStore'
 import { OLoading } from '@oruga-ui/oruga-next'
 import { models } from 'src/@types'
-interface ProfileRegisterModel extends models.ProfileRegisterModel { }
+interface UserProfileRegisterModel extends models.UserProfileRegisterModel { }
 
 const error = ref(false)
 const errorText = ref('')
@@ -186,7 +186,7 @@ const showRegistrationModal = ref(false)
 
 const schema = object().shape({
   nome: string().required('Informe nome e sobrenome').trim().matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/, 'Informe nome e sobrenome'),
-  username: string().required('Informe um nome de usuário').trim().matches(/^[A-Za-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
+  username: string().required('Informe um nome de usuário').min(4, 'Nome de usuário pequeno').max(15, 'Nome de usuário muito grande').trim().matches(/^[A-Za-z0-9_.-]+$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
   registration: string().max(12).matches(/^(\d{12})?$/),
   email: string().optional().matches(/^([A-Za-z\d]+([._][A-Za-z\d]+)*@[A-Za-z\d]+(.[A-Za-z\d]+)*(.[A-z]{2,}))?$/, 'Email inválido'),
   password: string().required('Informe uma senha').matches(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/, 'Senha inválida'),
@@ -202,7 +202,7 @@ const toggleShowPassword = () => {
 }
 
 const handleSubmit = async (submitData: any) => {
-  const profileData: ProfileRegisterModel = submitData
+  const profileData: UserProfileRegisterModel = submitData
   loading.value = true
   const response = await $store.userProfileRegister(
     profileData.username,
@@ -217,11 +217,7 @@ const handleSubmit = async (submitData: any) => {
     loading.value = false
     showRegistrationModal.value = true
   } else if (response.status !== 201) {
-    if (response.data?.technicalMessage) {
-      errorText.value = response.data.technicalMessage
-    } else {
-      errorText.value = 'Requisição não aceita'
-    }
+    errorText.value = response.data?.message ? response.data.message : 'Requisição não aceita.'
     error.value = true
     loading.value = false
   }
