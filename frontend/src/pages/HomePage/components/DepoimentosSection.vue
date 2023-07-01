@@ -1,44 +1,37 @@
 <template>
-  <div class="flex flex-col items-center my-16">
-    <div class="w-[1728px] bg-gradient-to-b from-sky-200 to-indigo-200 rounded-2xl">
-      <div v-if="depoimentosMock.length > 0">
-        <div class="flex flex-wrap justify-center my-8 mx-9">
-          <div class="flex w-full items-center justify-between p-6 sm:p-8">
-            <div class="flex items-center gap-2">
-              <div class="w-[32px] p-2 text-cyan-800">
-                <SvgIcon
-                  type="mdi"
-                  size="24"
-                  :path="mdiMessageText"
-                />
-              </div>
-              <h1 class="text-cyan-800 text-xl sm:text-2xl font-bold">
-                Depoimentos
-              </h1>
-            </div>
-            <div>
-              <CustomButton
-                tag="router"
-                variant="standard"
-                color="blue"
-              >
-                <div>
-                  Envie seu depoimento
-                </div>
-              </CustomButton>
-            </div>
-          </div>
-          <div class="flex flex-row flex-wrap justify-center w-full">
-            <ItemDepoimento
-              v-for="depoimento in depoimentosMock"
-              :key="depoimento.id"
-              :id="depoimento.id"
-              :nome="depoimento.nome"
-              :descricao="depoimento.descricao"
-              :foto="depoimento.foto"
-            />
-          </div>
+  <div v-show="depoimentosMock.length > 0">
+    <div class="flex flex-col gap-4 sm:gap-8 items-center bg-gradient-to-b from-sky-200 to-indigo-200 rounded-2xl mx-2 my-6 p-4 sm:p-8">
+      <div class="flex flex-col sm:flex-row gap-4 w-full justify-between items-start sm:items-center">
+        <div class="flex gap-3 sm:gap-6 justify-center">
+          <SvgIcon
+            type="mdi"
+            size="32"
+            :path="mdiMessageText"
+            class="text-cyan-800"
+          />
+          <h1 class="text-cyan-800 text-xl sm:text-2xl font-bold">
+            Depoimentos
+          </h1>
         </div>
+
+        <CustomButton
+          tag="router"
+          link="/entrar"
+          variant="standard"
+          color="blue"
+        >
+          Envie seu depoimento
+        </CustomButton>
+      </div>
+      <div class="flex flex-wrap flex-col md:flex-row justify-center w-full gap-4 sm:gap-8">
+        <ItemDepoimento
+          v-for="depoimento in depoimentosMock"
+          :key="depoimento.id"
+          :id="depoimento.id"
+          :nome="depoimento.nome"
+          :descricao="depoimento.descricao"
+          :foto="depoimento.foto"
+        />
       </div>
     </div>
   </div>

@@ -1,21 +1,16 @@
 <template>
-  <div class="flex flex-col w-[500px] bg-white rounded-2xl mx-4 my-4 sm:mx-6">
-    <div class="flex gap-4 px-6 sm:px-8 pt-6 sm:pt-8 pb-4 items-center border-b-[1px] border-b-gray-200">
-      <div class="flex flex-col gap-4 p-6 sm:p-8">
-        <p class="text-neutral-900">
-          {{ descricao }}
-        </p>
-      </div>
+  <div class="flex flex-1 flex-col bg-white rounded-2xl">
+    <div class="flex gap-4 p-4 sm:p-6 items-center border-b-[1px] border-b-gray-200">
+      <p class="text-neutral-900">
+        {{ descricao }}
+      </p>
     </div>
-    <div class="flex flex-row gap-4 p-6 sm:p-8">
-      <div class="shrink-0 p-2 bg-cyan-800 rounded-3xl text-white">
-        <SvgIcon
-          type="mdi"
-          size="21"
-          :path="mdiAccount"
-        />
-      </div>
-      <h1 class="text-cyan-600 text-xl sm:text-2xl font-bold">
+    <div class="flex flex-row gap-4 p-4 sm:p-6 items-center">
+      <img
+        :src="eagle"
+        class="w-10 h-10 p-2 rounded-full flex items-center justify-center shrink-0 bg-sky-200"
+      >
+      <h1 class="text-cyan-600 text-sm sm:text-base font-semibold">
         {{ nome }}
       </h1>
     </div>
@@ -24,8 +19,7 @@
 
 <script setup lang="ts">
 
-import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiAccount } from '@mdi/js'
+import eagle from 'src/assets/eagle.svg'
 
 defineProps<
     {
