@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -284,23 +285,22 @@ public class GraficoPubController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<LocalPosGraficoDTO> getLocalPos() {
 		List<LocalPosGraficoDTO> locais = empresaService.countEgressoByPos();
-		
-		long total = 0;
-		for (LocalPosGraficoDTO entry : locais) {
-			total += entry.getQuantidade();
-		}
-		long outros = 0;
-		for (LocalPosGraficoDTO entry : locais) {
-			if(entry.getQuantidade() <= total*0.05){
-				outros += entry.getQuantidade();
-				locais.remove(entry);
+
+		if(locais.size() >= 10){
+			List<LocalPosGraficoDTO> locaisDez = locais.stream().limit(9).collect(Collectors.toList());
+			long outros = 0;
+			for(int i=10; i <= locais.size(); i++){
+				outros += locais.get(i).getQuantidade();
 			}
+			if(outros > 0){
+				LocalPosGraficoDTO outroslocais = new LocalPosGraficoDTO("Outros", outros);
+				locaisDez.add(outroslocais);
+			}
+			return locaisDez;
 		}
-		if(outros<0){
-			LocalPosGraficoDTO outroLocal = new LocalPosGraficoDTO("Outros", outros);
-			locais.add(outroLocal);
+		else{
+			return locais;
 		}
-		return locais;
 	}
 
 	/**
@@ -315,22 +315,21 @@ public class GraficoPubController {
 	public List<CursosGraficoDTO> getCursos() {
 		List<CursosGraficoDTO> cursos = cursoService.countEgressoByCurso();
 
-		long total = 0;
-		for (CursosGraficoDTO entry : cursos) {
-			total += entry.getQuantidade();
-		}
-		long outros = 0;
-		for (CursosGraficoDTO entry : cursos) {
-			if(entry.getQuantidade() <= total*0.05){
-				outros += entry.getQuantidade();
-				cursos.remove(entry);
+		if(cursos.size() >= 10){
+			List<CursosGraficoDTO> cursosDez = cursos.stream().limit(9).collect(Collectors.toList());
+			long outros = 0;
+			for(int i=10; i <= cursos.size(); i++){
+				outros += cursos.get(i).getQuantidade();
 			}
+			if(outros > 0){
+				CursosGraficoDTO outrosCursos = new CursosGraficoDTO("Outros", outros);
+				cursosDez.add(outrosCursos);
+			}
+			return cursosDez;
 		}
-		if(outros<0){
-			CursosGraficoDTO outrosCursos = new CursosGraficoDTO("Outros", outros);
-			cursos.add(outrosCursos);
+		else{
+			return cursos;
 		}
-		return cursoService.countEgressoByCurso();
 	}
 
 	/**
@@ -363,23 +362,23 @@ public class GraficoPubController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<EmpresaGraficoDTO> getEmpresas() {
 		List<EmpresaGraficoDTO> empresas = egressoEmpresaService.countEgressoByEmpresas();
-
-		long total = 0;
-		for (EmpresaGraficoDTO entry : empresas) {
-			total += entry.getQuantidade();
-		}
-		long outros = 0;
-		for (EmpresaGraficoDTO entry : empresas) {
-			if(entry.getQuantidade() <= total*0.05){
-				outros += entry.getQuantidade();
-				empresas.remove(entry);
+		
+		if(empresas.size() >= 10){
+			List<EmpresaGraficoDTO> empresasDez = empresas.stream().limit(9).collect(Collectors.toList());
+			long outros = 0;
+			for(int i=10; i <= empresas.size(); i++){
+				outros += empresas.get(i).getQuantidade();
 			}
+			if(outros > 0){
+				EmpresaGraficoDTO outrasEmpresas = new EmpresaGraficoDTO("Outros", outros);
+				empresasDez.add(outrasEmpresas);
+			}
+			return empresasDez;
 		}
-		if(outros<0){
-			EmpresaGraficoDTO outrasEmpresas = new EmpresaGraficoDTO("Outros", outros);
-			empresas.add(outrasEmpresas);
+		else{
+			return empresas;
 		}
-		return empresas;
+
 	}
 
 	/**
