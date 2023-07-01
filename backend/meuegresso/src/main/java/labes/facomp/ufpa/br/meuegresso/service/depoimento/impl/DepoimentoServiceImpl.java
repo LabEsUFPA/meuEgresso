@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.depoimento.DepoimentoRepository;
 import labes.facomp.ufpa.br.meuegresso.service.depoimento.DepoimentoService;
@@ -67,4 +68,42 @@ public class DepoimentoServiceImpl implements DepoimentoService {
         return depoimentoRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
+    @Override
+    public List<DepoimentoModel> findAllFavoritos() {
+        return depoimentoRepository.findAllByFavoritoTrue();
+    }
+
+    @Override
+    public boolean toggleAtivo(Integer id) throws NotFoundException {
+        if (!depoimentoRepository.existsById(id)) {
+			throw new NotFoundException();
+		}
+		DepoimentoModel depoimento = depoimentoRepository.findById(id).orElseThrow();
+		depoimento.setAtivo(!depoimento.getAtivo());
+
+        if(!depoimento.getAtivo())
+        {
+            depoimento.setFavorito(false);
+        }
+        
+        depoimentoRepository.save(depoimento);
+        return true;
+    }
+
+    @Override
+    public boolean toggleFavoritos(Integer id) throws NotFoundException {
+        if (!depoimentoRepository.existsById(id)) {
+			throw new NotFoundException();
+		}
+		DepoimentoModel depoimento = depoimentoRepository.findById(id).orElseThrow();
+		
+        if(depoimento.getAtivo())
+        {            
+            depoimento.setFavorito(!depoimento.getFavorito());
+            depoimentoRepository.save(depoimento);
+            return true;
+        }
+
+        return false;
+    }
 }

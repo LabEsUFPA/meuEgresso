@@ -62,14 +62,6 @@ public class DepoimentoController {
 		}.getType());
 	}
 
-	@GetMapping(value = "/administrador")
-	@PreAuthorize("hasRole('ADMIN')")
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<DepoimentoDTO> consultarDepoimentos() {
-		return mapper.map(depoimentoService.findAll(), new TypeToken<List<DepoimentoDTO>>() {
-		}.getType());
-	}
-
 	/**
 	 * Endpoint responsável por retornar um depoimento por sua ID.
 	 *
@@ -100,6 +92,8 @@ public class DepoimentoController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarDepoimento(@RequestBody @Valid DepoimentoDTO depoimentoDTO) {
 		DepoimentoModel depoimentoModel = mapper.map(depoimentoDTO, DepoimentoModel.class);
+		depoimentoModel.setAtivo(false);
+		
 		depoimentoService.save(depoimentoModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
@@ -117,52 +111,20 @@ public class DepoimentoController {
 	 * @since 16/04/2023
 	 */
 	@PutMapping
-	@ResponseStatus(code = HttpStatus.CREATED)
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarDepoimento(@RequestBody @Valid DepoimentoDTO depoimentoDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
 		if (depoimentoService.existsByIdAndCreatedById(depoimentoDTO.getId(), jwtService.getIdUsuario(token))) {
 			DepoimentoModel depoimentoModel = mapper.map(depoimentoDTO, DepoimentoModel.class);
+			
+			depoimentoModel.setAtivo(false);
+			depoimentoModel.setFavorito(false);
+
 			depoimentoService.update(depoimentoModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
-	}
-
-	@GetMapping(value = "/habilitar/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	@ResponseStatus(code = HttpStatus.CREATED)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String HabilitarDepoimento(@PathVariable Integer id,
-			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-			
-			DepoimentoModel depoimentoModel = depoimentoService.findById(id);
-
-			if(depoimentoModel == null){
-				return ResponseType.FAIL_UPDATE.getMessage();
-			}
-			
-			depoimentoModel.setAtivo(true);
-			depoimentoService.update(depoimentoModel);
-			return ResponseType.SUCCESS_UPDATE.getMessage();
-	}
-
-	@GetMapping(value = "/desabilitar/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	@ResponseStatus(code = HttpStatus.CREATED)
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String DesabilitarDepoimento(@PathVariable Integer id,
-			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-			
-			DepoimentoModel depoimentoModel = depoimentoService.findById(id);
-			
-			if(depoimentoModel == null){
-				return ResponseType.FAIL_UPDATE.getMessage();
-			}
-
-			depoimentoModel.setAtivo(false);
-			depoimentoService.update(depoimentoModel);
-			return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 	/**
