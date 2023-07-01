@@ -195,11 +195,18 @@ function handleEmit (option: IOpts) {
       $emit('change', selected.value.value)
       return
     }
-
-    handleChange(selected.value)
-    $emit('change', selected.value)
   }
+
+  handleChange(selected.value)
+  $emit('change', selected.value)
 }
+
+const setInitialValues = (value: string) => {
+  handleChange(value)
+  model.value = value
+}
+
+defineExpose({ setInitialValues })
 
 onMounted(() => {
   if (props.preFilled) {
@@ -214,6 +221,7 @@ onMounted(() => {
   watch(focusInput, () => {
     if (model.value !== '') {
       model.value = ''
+      handleChange('')
     }
     if (input.value) {
       input.value.focus()

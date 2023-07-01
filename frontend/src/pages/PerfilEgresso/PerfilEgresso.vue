@@ -275,13 +275,14 @@
                   :max-length="50"
                   required
                 />
-                <CustomInput
+                <CustomDatepicker
                   class="mb-5"
                   name="geral.nascimento"
-                  :value="dataEgresso.geral.nascimento"
-                  label="Data de Nascimento"
-                  :max-length="10"
-                  type="date"
+                  :icon-path="mdiCalendarEdit"
+                  :max-date="eighteenYearsAgo"
+                  :min-date="minDate"
+                  custom-label
+                  required
                 />
               </div>
             </template>
@@ -620,15 +621,36 @@
                   placeholder="Empresa"
                   icon-path=""
                 />
+
                 <CustomPerfilData
                   type="text"
-                  class="mb-5"
-                  :vmodel="dataEgresso.carreira.faixaSalarial"
-                  name="carreira.faixaSalarial"
-                  label="Faixa Salarial"
-                  placeholder="Empresa"
-                  icon-path=""
+                  class="mb-7"
+                  :vmodel="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
+                  name="carreira.pais"
+                  placeholder="Brasil"
+                  label="País"
+                  :icon-path="mdiWeb"
                 />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-7"
+                  :vmodel="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
+                  name="carreira.estado"
+                  label="Estado"
+                  placeholder="Pará"
+                  :icon-path="mdiMapOutline"
+                />
+
+                <CustomPerfilData
+                  type="text"
+                  class="mb-7"
+                  :vmodel="dataEgresso.localizacao.cidade"
+                  label="Cidade"
+                  placeholder="Belém"
+                  :icon-path="mdiMapMarkerRadius"
+                />
+
                 <div v-if="dataEgresso.carreira.area === '' ">
                   <div>
                     <div class="text-gray-400 text-center mb-6 mt-12">
@@ -645,141 +667,44 @@
                   </div>
                 </div>
               </template>
-            </FolderCarreira>
-          </Form>
-          <Form
-            ref="formLocalizacao"
-            @submit="handleSubmitLocalizacao"
-            @invalid-submit="onInvalid"
-            :validation-schema="schemaLocalizacao"
-          >
-            <div class="flex justify-center items-center h-full">
-              <div
-                class="flex flex-col items-center  mx-auto z-10"
-                v-if="errorLocation === 'localizacao'"
-              >
-                <InvalidInsert
-                  :text="errorText"
-                  :show-alert="error"
+              <template #local>
+                <CustomSelect
+                  class="mb-5"
+                  name="carreira.pais"
+                  label="País"
+                  :options="countries"
+                  v-model:value="dataEgresso.localizacao.pais"
+                  @change="dataEgresso.localizacao.pais = $event"
+
+                  :placeholder="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
+                  :pre-filled="true"
+                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
                 />
-              </div>
-            </div>
-            <FolderSection class="mt-6">
-              <template #EditButton>
-                <h1 class="relative">
-                  <ButtonEdit
-                    label="Editar"
-                    icon-path="/img/edit.svg"
-                    icon-path2="/img/wcheck.svg"
-                    color="invisiblesky"
-                    color2="emerald"
-                    classimg="sky-600"
-                    :has-shadow="false"
-                    @toggle="toggleIsInput('localizacao')"
-                    :is-input="dataEgresso.localizacao.isInput"
-                    v-if="!isPublic || isSuperUser"
-                  />
-                </h1>
+
+                <CustomSelect
+                  class="mb-5"
+                  name="carreira.estado"
+                  label="Estado"
+                  :options="states"
+                  v-model:value="dataEgresso.localizacao.estado"
+                  @change="dataEgresso.localizacao.estado = $event"
+                  :placeholder="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
+                  :pre-filled="true"
+                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
+                />
+
+                <CustomSelect
+                  name="carreira.cidade"
+                  label="Cidade"
+                  :options="cities"
+                  v-model:value="dataEgresso.localizacao.cidade"
+
+                  :pre-filled="true"
+                  :placeholder="dataEgresso.localizacao.cidade"
+                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
+                />
               </template>
-              <template #title>
-                <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
-                  <SvgIcon
-                    type="mdi"
-                    size="20"
-                    class="inline mr-2"
-                    :path="mdiMapMarker"
-                  />
-                  Localização
-                </h1>
-              </template>
-
-              <template #default>
-                <div v-if="!dataEgresso.localizacao.isInput">
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-5"
-                    :vmodel="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
-                    name="localizacao.pais"
-                    placeholder="Brasil"
-                    label="País"
-                    :icon-path="mdiWeb"
-                  />
-
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-5"
-                    :vmodel="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
-                    name="localizacao.estado"
-                    label="Estado"
-                    placeholder="Pará"
-                    :icon-path="mdiMapOutline"
-                  />
-
-                  <CustomPerfilData
-                    type="text"
-                    class="mb-1"
-                    :vmodel="dataEgresso.localizacao.cidade"
-                    name="localizacao.cidade"
-                    label="Cidade"
-                    placeholder="Belém"
-                    :icon-path="mdiMapMarkerRadius"
-                  />
-                  <div v-if="dataEgresso.localizacao.pais === '' ">
-                    <div>
-                      <div class="text-gray-400 text-center mb-6 mt-12">
-                        <SvgIcon
-                          type="mdi"
-                          size="30"
-                          class="inline"
-                          :path="mdiAlertCircleOutline"
-                        />
-                        <div class="mt-4">
-                          Sem dados cadastrados
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div v-show="dataEgresso.localizacao.isInput">
-                  <div>
-                    <CustomSelect
-                      class="mb-5"
-                      name="localizacao.pais"
-                      label="País"
-                      :options="countries"
-                      v-model:value="dataEgresso.localizacao.pais"
-                      @change="dataEgresso.localizacao.pais = $event"
-                      required
-                      :placeholder="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
-                      :pre-filled="true"
-                    />
-
-                    <CustomSelect
-                      class="mb-5"
-                      name="localizacao.estado"
-                      label="Estado"
-                      :options="states"
-                      v-model:value="dataEgresso.localizacao.estado"
-                      @change="dataEgresso.localizacao.estado = $event"
-                      required
-                      :placeholder="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
-                      :pre-filled="true"
-                    />
-
-                    <CustomSelect
-                      name="localizacao.cidade"
-                      label="Cidade"
-                      :options="cities"
-                      v-model:value="dataEgresso.localizacao.cidade"
-                      required
-                      :pre-filled="true"
-                      :placeholder="dataEgresso.localizacao.cidade"
-                    />
-                  </div>
-                </div>
-              </template>
-            </FolderSection>
+            </FolderCarreira>
           </Form>
           <Form
             ref="formAdicionais"
@@ -909,6 +834,7 @@ import ButtonEdit from './components/ButtonEdit.vue'
 import FolderSection from 'src/components/FolderSection.vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
+import CustomDatepicker from 'src/components/CustomDatepicker.vue'
 
 import CustomPerfilData from './components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
@@ -936,10 +862,10 @@ import {
   mdiLinkVariant,
   mdiCheckCircle,
   mdiAlertCircle,
-  mdiMapMarker,
   mdiAlertCircleOutline,
   mdiSchool,
-  mdiLoading
+  mdiLoading,
+  mdiCalendarEdit
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
 const dialogSucesso = ref(false)
@@ -953,15 +879,17 @@ const formHeader = ref<typeof Form | null>(null)
 const formGeral = ref<typeof Form | null>(null)
 const formAcademico = ref<typeof Form | null>(null)
 const formCarreira = ref<typeof Form | null>(null)
-const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 const missingDigits = ref(0)
 const loading = ref(true)
 
 const error = ref(false)
 const errorLocation = ref('')
-
 const errorText = ref('')
+
+const minDate = ref(new Date(-8640000000000000))
+const eighteenYearsAgo = ref(new Date())
+eighteenYearsAgo.value.setFullYear(eighteenYearsAgo.value.getFullYear() - 18)
 
 const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
@@ -1040,7 +968,7 @@ function handleStatus (response: any, folderLocation: string) {
   if (response.status !== 201) {
     console.log(response.status)
     dialogFalha.value = true
-    errorText.value = response.data?.technicalMessage ? response.data?.technicalMessage : 'Ocorreu um problema na requisição'
+    errorText.value = response.data?.message ? response.data.message : 'Ocorreu um problema na requisição'
     error.value = true
     errorLocation.value = folderLocation
     return false
@@ -1078,7 +1006,7 @@ async function handleSubmitHeader (values: any) {
     toggleIsInput('profileHead')
     await fetchUpdateEgresso()
   } else {
-    errorText.value = response.data?.technicalMessage ? response.data?.technicalMessage : 'Ocorreu um problema na requisição'
+    errorText.value = response.data?.message ? response.data?.message : 'Ocorreu um problema na requisição'
     error.value = true
     errorLocation.value = 'header'
     dialogFalha.value = true
@@ -1186,16 +1114,7 @@ async function handleSubmitAcademico (values: any) {
     await fetchUpdateEgresso()
   }
 }
-async function handleSubmitLocalizacao (values: any) {
-  jsonResponse.emprego.endereco = values.localizacao
-  // delete jsonResponse.emprego.empresa.endereco.id
 
-  const status = await atualizarEgresso(jsonResponse)
-  if (handleStatus(status, 'localizacao')) {
-    toggleIsInput('localizacao')
-    await fetchUpdateEgresso()
-  }
-}
 async function handleSubmitCarreira (values: any) {
   if (jsonResponse.emprego === undefined) {
     jsonResponse.emprego = {
@@ -1235,16 +1154,15 @@ async function handleSubmitCarreira (values: any) {
   if (values.carreira.area !== 'Desempregado') {
     jsonResponse.emprego.empresa.nome = values.carreira.empresa
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
-    // let areaNome = ''
-    // $store.areasAtuacao.forEach(option => {
-    //   if (option.value === values.carreira.area) {
-    //     areaNome = option.label
-    //     console.log(areaNome)
-    //   }
-    // })
-    // jsonResponse.emprego.areaAtuacao.nome = areaNome
+
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
+    const endereco = {
+      pais: values.carreira.pais,
+      estado: values.carreira.estado,
+      cidade: values.carreira.cidade
+    }
+    jsonResponse.emprego.endereco = endereco
   } else {
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego = null
@@ -1280,7 +1198,6 @@ async function handleSubmitAdicionais (values: any) {
 
 let isInputLocal = false
 function toggleIsInput (FolderLabel: string) {
-  console.log('toggole')
   switch (FolderLabel) {
     case 'profileHead':
       dataEgresso.value.profileHead.isInput = !dataEgresso.value.profileHead.isInput
@@ -1487,9 +1404,9 @@ async function fetchUpdateEgresso () {
     },
     localizacao: {
       cep: '',
-      pais: json.emprego?.endereco?.pais || '',
-      estado: json.emprego?.endereco?.estado || '',
-      cidade: json.emprego?.endereco?.cidade || '',
+      pais: json.emprego?.empresa?.endereco?.pais || json.emprego?.endereco?.pais || '',
+      estado: json.emprego?.empresa?.endereco?.estado || json.emprego?.endereco?.estado || '',
+      cidade: json.emprego?.empresa?.endereco?.cidade || json.emprego?.endereco?.cidade || '',
       isInput: false
     },
     academico: {
@@ -1581,41 +1498,50 @@ async function fetchUpdateEgresso () {
     'geral.linkedin': dataEgresso.value.profileHead.linkedin,
     'geral.lattes': dataEgresso.value.profileHead.lattes
   })
+  const dateParts = dataEgresso.value.geral.nascimento.split('-')
+  const year = parseInt(dateParts[0])
+  const month = parseInt(dateParts[1]) - 1
+  const day = parseInt(dateParts[2])
+
   formGeral.value?.setValues({
-    'geral.nascimento': dataEgresso.value.geral.nascimento,
+
+    'geral.nascimento': new Date(year, month, day),
     'geral.email': dataEgresso.value.geral.email,
     // passa Id para o select
     'geral.genero': dataEgresso.value.generoId
   })
-  // passa o nome para o placeholder
-  // dataEgresso.value.geral.genero
-  formLocalizacao.value?.setValues({
-    localizacao: dataEgresso.value.localizacao
-  })
+
   formAcademico.value?.setValues({
     academico: dataEgresso.value.academico,
     'academico.bolsista.tipo': dataEgresso.value.bolsaId
   })
   formCarreira.value?.setValues({
     carreira: dataEgresso.value.carreira,
-    'carreira.faixaSalarial': dataEgresso.value.faixaSalarialId
+    'carreira.faixaSalarial': dataEgresso.value.faixaSalarialId,
+    'carreira.pais': dataEgresso.value.localizacao.pais,
+    'carreira.estado': dataEgresso.value.localizacao.estado,
+    'carreira.cidade': dataEgresso.value.localizacao.cidade
   })
+
   formAdicionais.value?.setValues({
     adicionais: dataEgresso.value.adicionais
   })
   return json
 }
-let estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
-let cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
+let estadoInput = document.querySelector('.carreira-estado') as HTMLInputElement
+let cidadeInput = document.querySelector('.carreira-cidade') as HTMLInputElement
 
 onMounted(() => {
-  estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
+  estadoInput = document.querySelector('.carreira-estado') as HTMLInputElement
 
-  cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
+  cidadeInput = document.querySelector('.carreira-cidade') as HTMLInputElement
+  console.log(cidadeInput)
   watch(() => dataEgresso.value.localizacao.pais, (newValue) => {
-    formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
-    formLocalizacao.value?.setFieldValue('localizacao.estado', '')
-    if (formLocalizacao.value) {
+    console.log(cidadeInput)
+
+    formCarreira.value?.setFieldValue('carreira.cidade', '')
+    formCarreira.value?.setFieldValue('carreira.estado', '')
+    if (formCarreira.value) {
       dataEgresso.value.localizacao.cidade = ''
     }
     setTimeout(() => {
@@ -1627,8 +1553,8 @@ onMounted(() => {
   })
 
   watch(() => dataEgresso.value.localizacao.estado, (newValue) => {
-    formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
-    if (formLocalizacao.value) {
+    formCarreira.value?.setFieldValue('carreira.cidade', '')
+    if (formCarreira.value) {
       dataEgresso.value.localizacao.cidade = ''
     }
     setTimeout(() => {
@@ -1668,16 +1594,10 @@ const schemaGeral = object().shape({
   geral: object({
     nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
       if (value) {
-        const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
-        const minDate = new Date('1940-01-01')
-        const maxDate = new Date('2023-12-31')
+        const date = value.split('/').reverse().join('-')
         const inputDate = new Date(date)
 
-        // Check if the person is at least 18 years old
-        const eighteenYearsAgo = new Date()
-        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
-
-        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo
+        return inputDate >= minDate.value && inputDate <= eighteenYearsAgo.value
       }
       return true
     }),
@@ -1728,24 +1648,27 @@ const schemaAcademico = object().shape({
 const schemaCarreira = object().shape({
   carreira: object({
     area: string().required('Campo obrigatório'),
-    setor: string().when('area', ([area], schemaCarreira) => {
-      return area !== 'Desempregado' ? schemaCarreira.required('Campo obrigatório') : schemaCarreira.notRequired()
+    setor: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     }),
-    empresa: string().when('area', ([area], schemaCarreira) => {
-      return area !== 'Desempregado' ? schemaCarreira.required('Campo obrigatório') : schemaCarreira.notRequired()
+    empresa: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     }),
-    faixaSalarial: string().when('area', ([area], schemaCarreira) => {
-      return area !== 'Desempregado' ? schemaCarreira.required('Campo obrigatório') : schemaCarreira.notRequired()
+    faixaSalarial: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    pais: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    estado: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    cidade: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     })
   })
 })
-const schemaLocalizacao = object().shape({
-  localizacao: object({
-    pais: string().required('Campo obrigatório'),
-    estado: string().required('Campo obrigatório'),
-    cidade: string().required('Campo obrigatório')
-  })
-})
+
 const schemaAdicionais = object().shape({
   adicionais: object({
     palestras: boolean(),

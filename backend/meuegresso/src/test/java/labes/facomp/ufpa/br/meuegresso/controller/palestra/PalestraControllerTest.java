@@ -143,7 +143,7 @@ class PalestraControllerTest {
 				.usuario(usuarioModel)
 				.build();
 
-		egressoModel = egressoService.adicionarEgresso(egressoModel);
+		egressoModel = egressoService.save(egressoModel);
 	}
 
 	@Test

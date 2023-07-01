@@ -276,6 +276,7 @@
               name="carreira.setor"
               label="Setor de Atuação"
               placeholder="Selecione"
+              ref="selectSetor"
               :options="selectOpts.setorAtuacao"
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
@@ -285,6 +286,7 @@
               class="mb-5"
               name="carreira.empresa"
               label="Empresa"
+              ref="inputEmpresa"
               placeholder="Ex: Google"
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
@@ -295,56 +297,55 @@
               class="mb-5"
               name="carreira.faixaSalarial"
               label="Faixa Salarial"
+              ref="selectFaixa"
               :options="$storeCadastro.faixasSalariais"
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
             />
           </div>
-        </template>
-      </FolderSection>
 
-      <FolderSection class="mt-6">
-        <template #title>
-          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
+          <div class="mb-5 text-sm font-semibold text-cyan-600">
             <SvgIcon
               type="mdi"
               size="20"
               class="inline mr-2"
               :path="mdiMapMarker"
             />
-            Localização
-          </h1>
-        </template>
-
-        <template #default>
-          <div>
-            <CustomSelect
-              class="mb-5"
-              name="localizacao.pais"
-              label="País"
-              :options="countries"
-              v-model:value="pais"
-              @change="pais = $event"
-              required
-            />
-
-            <CustomSelect
-              class="mb-5"
-              name="localizacao.estado"
-              label="Estado"
-              :options="states"
-              v-model:value="estado"
-              @change="estado = $event"
-              required
-            />
-
-            <CustomSelect
-              name="localizacao.cidade"
-              label="Cidade"
-              :options="cities"
-              required
-            />
+            Localização:
           </div>
+
+          <CustomSelect
+            class="mb-5"
+            name="carreira.pais"
+            label="País"
+            ref="selectPais"
+            :options="countries"
+            v-model:value="pais"
+            @change="pais = $event"
+            :disabled="area === 'Desempregado'"
+            :required="area !== 'Desempregado'"
+          />
+
+          <CustomSelect
+            class="mb-5"
+            name="carreira.estado"
+            label="Estado"
+            ref="selectEstado"
+            :options="states"
+            v-model:value="estado"
+            @change="estado = $event"
+            :disabled="area === 'Desempregado'"
+            :required="area !== 'Desempregado'"
+          />
+
+          <CustomSelect
+            name="carreira.cidade"
+            label="Cidade"
+            ref="selectCidade"
+            :options="cities"
+            :disabled="area === 'Desempregado'"
+            :required="area !== 'Desempregado'"
+          />
         </template>
       </FolderSection>
 
@@ -462,7 +463,7 @@
           <div class="flex flex-row justify-center gap-2">
             <CustomButton
               tag="a"
-              link="https://www.linkedin.com/sharing/share-offsite/?url=https://meuegresso.alverad.com.br"
+              :link="`https://www.linkedin.com/sharing/share-offsite/?url=${baseURL}`"
               target="_blank"
             >
               <SvgIcon
@@ -539,11 +540,11 @@ import {
   mdiBriefcase,
   mdiEmail,
   mdiLinkedin,
-  mdiMapMarker,
   mdiMessage,
   mdiSchool,
   mdiTwitter,
-  mdiWhatsapp
+  mdiWhatsapp,
+  mdiMapMarker
 } from '@mdi/js'
 import { City, Country, State } from 'country-state-city'
 import svgPath from 'src/assets/svgPaths.json'
@@ -584,9 +585,16 @@ const pais = ref('')
 const estado = ref('')
 const area = ref('')
 const temFoto = ref(false)
-const form = ref<typeof Form | null>(null)
+const form = ref()
 const errorText = ref('')
 const error = ref(false)
+
+const selectSetor = ref()
+const selectFaixa = ref()
+const inputEmpresa = ref()
+const selectPais = ref()
+const selectEstado = ref()
+const selectCidade = ref()
 
 const minDate = ref(new Date(-8640000000000000))
 const eighteenYearsAgo = ref(new Date())
@@ -689,7 +697,11 @@ async function handleSubmit (values: any) {
         faixaSalarialId: values.carreira.faixaSalarial ? parseInt(values.carreira.faixaSalarial) : null,
         setorAtuacao: values.carreira.setor,
         nome: values.carreira.empresa,
-        endereco: values.localizacao
+        endereco: {
+          pais: values.carreira.pais,
+          estado: values.carreira.estado,
+          cidade: values.carreira.cidade
+        }
       }
     : null
 
@@ -741,7 +753,7 @@ async function handleSubmit (values: any) {
 
   if (response.status !== 201) {
     dialogFalha.value = true
-    errorText.value = response.data?.technicalMessage ? response.data?.technicalMessage : 'Ocorreu um problema na requisição'
+    errorText.value = response.data?.message ? response.data.message : 'Ocorreu um problema na requisição'
     error.value = true
   } else {
     dialogSucesso.value = true
@@ -848,12 +860,16 @@ const schema = object().shape({
     }),
     faixaSalarial: string().when('area', ([area], schema) => {
       return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    pais: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    estado: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    cidade: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     })
-  }),
-  localizacao: object({
-    pais: string().required('Campo obrigatório'),
-    estado: string().required('Campo obrigatório'),
-    cidade: string().required('Campo obrigatório')
   }),
   adicionais: object({
     palestras: boolean(),
@@ -866,43 +882,48 @@ const schema = object().shape({
 })
 
 onMounted(async () => {
-  const estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
-  const cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
   watch(pais, () => {
-    form.value?.setFieldValue('localizacao.cidade', '')
-    form.value?.setFieldValue('localizacao.estado', '')
-    setTimeout(() => {
-      estadoInput.value = ''
-      cidadeInput.value = ''
-    }, 10)
+    selectEstado.value.setInitialValues('')
+    form.value.setFieldTouched('carreira.estado', false)
   })
 
   watch(estado, () => {
-    form.value?.setFieldValue('localizacao.cidade', '')
-    setTimeout(() => {
-      cidadeInput.value = ''
-    }, 10)
+    selectCidade.value.setInitialValues('')
+    form.value.setFieldTouched('carreira.cidade', false)
   })
 
   watch(compCotista, (_, oldVal) => {
     if (oldVal) {
       ['renda', 'escola', 'raca', 'quilombolaIndigena', 'pcd'].forEach(field => {
-        form.value?.setFieldValue(`academico.cotista.tipos.${field}`, false)
+        form.value.setFieldValue(`academico.cotista.tipos.${field}`, false)
       })
+    }
+  })
+
+  watch(area, (newVal) => {
+    if (newVal === 'Desempregado') {
+      selectSetor.value.setInitialValues('')
+      form.value.setFieldTouched('carreira.setor', false)
+      selectFaixa.value.setInitialValues('')
+      form.value.setFieldTouched('carreira.faixaSalarial', false)
+      form.value.setFieldValue('carreira.empresa', '')
+      form.value.setFieldTouched('carreira.empresa', false)
+      selectPais.value.setInitialValues('')
+      form.value.setFieldTouched('carreira.pais', false)
     }
   })
 
   if (storage.has('loggedUser') && $route.params.id === undefined) {
     const userData = JSON.parse(storage.get('loggedUser'))
 
-    form.value?.setFieldValue('geral.email', userData.email)
-    form.value?.setFieldValue('geral.nome', userData.nomeCompleto)
+    form.value.setFieldValue('geral.email', userData.email)
+    form.value.setFieldValue('geral.nome', userData.nomeCompleto)
   } else if ($route.params.id !== undefined) {
     const userData = await $storeCadastro.fetchUserData(Number($route.params.id))
 
     if (typeof userData !== 'number') {
-      form.value?.setFieldValue('geral.email', userData.email)
-      form.value?.setFieldValue('geral.nome', userData.nome)
+      form.value.setFieldValue('geral.email', userData.email)
+      form.value.setFieldValue('geral.nome', userData.nome)
     }
   }
 })

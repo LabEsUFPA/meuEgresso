@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,10 +35,14 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnalthorizedRegisterException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
+import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
+import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
+import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -55,11 +60,17 @@ public class UsuarioAdmController {
 
 	private final UsuarioService usuarioService;
 
+	private final EgressoService egressoService;
+
 	private final StatusUsuarioService statusUsuarioService;
 
 	private final ModelMapper mapper;
 
 	private final JwtService jwtService;
+
+	private final AuthService authService;
+
+	private final MailService mailService;
 
 	/**
 	 * Endpoint responsável por retornar a lista de usuários cadastrados no banco de
@@ -88,6 +99,7 @@ public class UsuarioAdmController {
 	 * @throws NotFoundException
 	 * @throws NameAlreadyExistsException
 	 * @throws UnalthorizedRegisterException
+	 * @throws InvalidRequestException
 	 * @see {@link UsuarioDTO}
 	 * @since 20/06/2023
 	 */
@@ -95,21 +107,25 @@ public class UsuarioAdmController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,JwtAuthenticationToken token)
-			throws NameAlreadyExistsException, UnalthorizedRegisterException {
+	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,
+			JwtAuthenticationToken token,
+			@RequestHeader("Host") String host)
+			throws NameAlreadyExistsException, UnalthorizedRegisterException, InvalidRequestException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
 			throw new NameAlreadyExistsException(
-					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),ErrorType.USER_001.getInternalCode());
+					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),
+					ErrorType.USER_001.getInternalCode());
 		}
 
 		UsuarioModel usuarioModelTeste = usuarioService.findById(jwtService.getIdUsuario(token));
 		Set<Grupos> gruposUsuario = usuarioModelTeste.getGrupos();
 
-		if(!gruposUsuario.contains(Grupos.ADMIN)){
+		if (!gruposUsuario.contains(Grupos.ADMIN)) {
 			Set<Grupos> grupos = usuarioDTO.getGrupos();
-			for(Grupos grupo :grupos){
+			for (Grupos grupo : grupos) {
 				if (grupo.getAuthority().equals("ROLE_ADMIN")) {
-					throw new UnalthorizedRegisterException(String.format(ErrorType.UNAUTHORIZED_REGISTER.getMessage()),ErrorType.UNAUTHORIZED_REGISTER.getInternalCode());
+					throw new UnalthorizedRegisterException(String.format(ErrorType.UNAUTHORIZED_REGISTER.getMessage()),
+							ErrorType.UNAUTHORIZED_REGISTER.getInternalCode());
 				}
 			}
 		}
@@ -117,7 +133,20 @@ public class UsuarioAdmController {
 
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
 
+		String password = authService.randomPassword();
+
+		usuarioModel.setPassword(password);
+
+		mailService.sendEmail(usuarioModel.getEmail(), "Cadastro no sistema de Egresso por um Administrador.",
+				"Seu cadastro no Sistema de Egresso foi realizado com sucesso pela administração. Sua senha é "
+						+ password);
+
 		usuarioService.save(usuarioModel);
+
+		usuarioModel.setEmailVerificado(true);
+
+		usuarioService.update(usuarioModel);
+
 		return new ResponseEntity<>(ResponseType.SUCCESS_SAVE.getMessage(), null, HttpStatus.CREATED);
 	}
 
@@ -178,12 +207,22 @@ public class UsuarioAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String deleteById(@PathVariable(name = "id") Integer id) {
-		UsuarioModel usuarioModel = usuarioService.findById(id);
-		if (usuarioService.deleteById(id)) {
-			statusUsuarioService.save(StatusUsuarioModel.builder().usuarioId(usuarioModel.getId())
-					.nome(usuarioModel.getNome())
-					.status(UsuarioStatus.EXCLUIDO).build());
-			return ResponseType.SUCCESS_DELETE.getMessage();
+		if (egressoService.existsByUsuarioId(id)) {
+			EgressoModel egressoModel = egressoService.findByUsuarioId(id);
+			if (egressoService.deleteById(egressoModel.getId())) {
+				statusUsuarioService.save(StatusUsuarioModel.builder().usuarioId(egressoModel.getUsuario().getId())
+						.nome(egressoModel.getUsuario().getNome())
+						.status(UsuarioStatus.EXCLUIDO).build());
+				return ResponseType.SUCCESS_DELETE.getMessage();
+			}
+		} else {
+			UsuarioModel usuarioModel = usuarioService.findById(id);
+			if (usuarioService.deleteById(id)) {
+				statusUsuarioService.save(StatusUsuarioModel.builder().usuarioId(usuarioModel.getId())
+						.nome(usuarioModel.getNome())
+						.status(UsuarioStatus.EXCLUIDO).build());
+				return ResponseType.SUCCESS_DELETE.getMessage();
+			}
 		}
 		return ResponseType.FAIL_DELETE.getMessage();
 	}

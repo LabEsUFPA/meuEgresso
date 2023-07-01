@@ -146,7 +146,7 @@ class DepoimentoControllerTest {
 				.usuario(usuarioModel)
 				.build();
 
-		egressoModel = egressoService.adicionarEgresso(egressoModel);
+		egressoModel = egressoService.save(egressoModel);
 
 	}
 
