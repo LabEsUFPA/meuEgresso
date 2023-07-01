@@ -42,7 +42,7 @@ public interface EgressoService {
 
 	public EgressoModel findByIdAndUsuarioValidoIsTrue(Integer id);
 
-	public EgressoModel adicionarEgresso(EgressoModel egresso);
+	public EgressoModel save(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por atualizar informacoes do egresso no banco de dados.
@@ -52,7 +52,7 @@ public interface EgressoService {
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
-	public EgressoModel updateEgresso(EgressoModel egresso);
+	public EgressoModel update(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por verificar se egresso existe no banco de dados.

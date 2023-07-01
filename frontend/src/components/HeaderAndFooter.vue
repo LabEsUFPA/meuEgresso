@@ -105,7 +105,7 @@
               :path="mdiAlertCircle"
             />
           </div>
-          <div class="flex flex-col w-full h-[230px] items-center justify-center sm:h-full">
+          <div class="flex flex-col w-full h-[230px] items-center p-0 sm:p-4 justify-center sm:h-full">
             <div class="flex flex-col h-full items-center justify-center text-center gap-y-8">
               <h1 class="font-bold text-amber-500 text-3xl sm:text-5xl">
                 Cadastro pendente!

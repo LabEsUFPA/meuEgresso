@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -52,7 +51,7 @@ public class EgressoServiceImpl implements EgressoService {
 	private String uploadDirectory;
 
 	@Override
-	public EgressoModel adicionarEgresso(EgressoModel egressoModel) {
+	public EgressoModel save(EgressoModel egressoModel) {
 		return egressoRepository.save(egressoModel);
 	}
 
@@ -111,7 +110,7 @@ public class EgressoServiceImpl implements EgressoService {
 	 */
 	@Override
 	@Transactional
-	public EgressoModel updateEgresso(EgressoModel egresso) {
+	public EgressoModel update(EgressoModel egresso) {
 		if (egresso.getId() != null) {
 			return egressoRepository.save(egresso);
 		}
