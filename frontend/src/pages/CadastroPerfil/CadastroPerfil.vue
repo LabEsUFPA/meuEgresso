@@ -102,7 +102,7 @@
           </div>
         </div>
         <CustomButton type="submit">
-          Enviar
+          Cadastrar
         </CustomButton>
         <p class="mt-9">
           Já possui conta?
@@ -111,6 +111,15 @@
             class="text-sky-600"
           >
             Entre
+          </RouterLink>
+        </p>
+        <p class="mt-2 w-64 text-sm text-center">
+          Ao clicar em Cadastre-se, você concorda com nossa
+          <RouterLink
+            to="/privacidade"
+            class="text-sky-600"
+          >
+            Política de Privacidade.
           </RouterLink>
         </p>
       </div>
@@ -234,11 +243,6 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
   /* <-- Apparently some margin are still there even though it's hidden */
-}
-
-input[type="number"] {
-  -moz-appearance: textfield;
-  /* Firefox */
 }
 
 input::-ms-reveal,
