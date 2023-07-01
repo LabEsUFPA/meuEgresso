@@ -305,6 +305,12 @@
           </div>
 
           <div class="mb-5 text-sm font-semibold text-cyan-600">
+            <SvgIcon
+              type="mdi"
+              size="20"
+              class="inline mr-2"
+              :path="mdiMapMarker"
+            />
             Localização:
           </div>
 
@@ -537,7 +543,8 @@ import {
   mdiMessage,
   mdiSchool,
   mdiTwitter,
-  mdiWhatsapp
+  mdiWhatsapp,
+  mdiMapMarker
 } from '@mdi/js'
 import { City, Country, State } from 'country-state-city'
 import svgPath from 'src/assets/svgPaths.json'
