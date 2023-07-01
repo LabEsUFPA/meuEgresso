@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-1 flex-col bg-white rounded-2xl">
-    <div class="flex gap-4 p-4 sm:p-6 items-center border-b-[1px] border-b-gray-200">
+    <div class="flex h-full gap-4 p-4 sm:p-6 border-b-[1px] border-b-gray-200">
       <p class="text-neutral-900">
         {{ descricao }}
       </p>
