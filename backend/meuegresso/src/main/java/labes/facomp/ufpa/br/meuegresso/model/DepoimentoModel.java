@@ -1,5 +1,7 @@
 package labes.facomp.ufpa.br.meuegresso.model;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,4 +37,8 @@ public class DepoimentoModel extends Auditable {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "egresso_id", unique = true, nullable = false)
     private EgressoModel egresso;
+
+    @ColumnDefault(value = "FALSE")
+	@Column(name = "favorito", nullable = false)
+	protected Boolean favorito = false;
 }

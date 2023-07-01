@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import labes.facomp.ufpa.br.meuegresso.dto.publico.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import lombok.RequiredArgsConstructor;
 
@@ -47,8 +48,16 @@ public class EgressoPubController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<EgressoDTO> consultarEgressos() {
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return mapper.map(egressoService.findAll(), new TypeToken<List<EgressoDTO>>() {
-		}.getType());
+		
+		List<EgressoModel> egressos = egressoService.findAll();
+    
+		for (EgressoModel egresso : egressos) {
+			if (!egresso.getDepoimento().getAtivo()) {
+				egresso.setDepoimento(null);
+			}
+		}
+    
+    return mapper.map(egressos, new TypeToken<List<EgressoDTO>>() {}.getType());
 	}
 
 	/**
@@ -64,7 +73,13 @@ public class EgressoPubController {
 
 	public EgressoDTO findById(@PathVariable Integer id) {
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return mapper.map(egressoService.findById(id), EgressoDTO.class);
+		var egresso = egressoService.findById(id);
+		
+		if(!egresso.getDepoimento().getAtivo())
+			egresso.setDepoimento(null);
+		return mapper.map(egresso,new TypeToken<EgressoDTO>() {
+		}.getType());
+	
 	}
 
 	/**

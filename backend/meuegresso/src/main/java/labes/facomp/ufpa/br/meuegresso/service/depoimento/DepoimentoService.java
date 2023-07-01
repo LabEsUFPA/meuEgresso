@@ -3,6 +3,7 @@ package labes.facomp.ufpa.br.meuegresso.service.depoimento;
 import java.util.List;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.model.DepoimentoModel;
 
 /**
@@ -39,6 +40,13 @@ public interface DepoimentoService {
 
 	public List<DepoimentoModel> findAllAtivos();
 
+	public List<DepoimentoModel> findAllFavoritos();
+
+	public boolean toggleAtivo(Integer id) throws NotFoundException;
+
+	public boolean toggleFavoritos(Integer id) throws NotFoundException;
+
+	
 	/**
 	 * Método responsável por atualizar dados de um depoimento cadastrado.
 	 *
