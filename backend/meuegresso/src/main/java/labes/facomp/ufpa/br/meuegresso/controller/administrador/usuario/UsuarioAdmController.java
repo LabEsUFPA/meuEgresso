@@ -25,7 +25,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario.UsuarioRegistro;
-import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthRecoveryPasswordRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
@@ -38,11 +37,10 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.UnalthorizedRegisterException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
-import labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha.RecuperacaoSenhaService;
+import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -65,8 +63,6 @@ public class UsuarioAdmController {
 	private final ModelMapper mapper;
 
 	private final JwtService jwtService;
-
-	private final RecuperacaoSenhaService recuperacaoSenhaService;
 
 	private final AuthService authService;
 
