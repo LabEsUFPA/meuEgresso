@@ -1,9 +1,10 @@
 package labes.facomp.ufpa.br.meuegresso.dto.publico.usuario;
 
+import jakarta.validation.Valid;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.egresso.EgressoAnuncioDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -18,11 +19,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 public class UsuarioDTO {
 
 	private Integer id;
 
 	private String nome;
+
+	@Valid
+	private EgressoAnuncioDTO egresso;
+
+	private String foto;
 
 }

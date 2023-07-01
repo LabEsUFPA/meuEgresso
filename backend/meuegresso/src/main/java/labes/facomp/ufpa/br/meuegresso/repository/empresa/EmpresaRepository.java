@@ -14,12 +14,14 @@ import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
 public interface EmpresaRepository extends CrudRepository<EmpresaModel, Integer> {
 
     Page<EmpresaModel> findAll(Pageable page);
+ 
+    List<EmpresaModel> findAll();
 
     Page<EmpresaModel> findAllByIsEmpregoTrue(Pageable page);
 
     Page<EmpresaModel> findAllByIsEmpregoFalse(Pageable page);
 
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+    boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
     Optional<EmpresaModel> findByNome(String nome);
 

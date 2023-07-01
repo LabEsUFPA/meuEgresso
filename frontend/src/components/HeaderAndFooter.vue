@@ -100,12 +100,12 @@
           <div class="flex flex-col items-center">
             <SvgIcon
               type="mdi"
-              size="110"
+              size="90"
               class="text-amber-500 absolute bottom-[13rem] bg-white rounded-full sm:bottom-[21rem]"
               :path="mdiAlertCircle"
             />
           </div>
-          <div class="flex flex-col w-full h-full items-center justify-center">
+          <div class="flex flex-col w-full h-[230px] items-center p-0 sm:p-4 justify-center sm:h-full">
             <div class="flex flex-col h-full items-center justify-center text-center gap-y-8">
               <h1 class="font-bold text-amber-500 text-3xl sm:text-5xl">
                 Cadastro pendente!
@@ -115,7 +115,7 @@
               </p>
             </div>
             <CustomButton
-              class="mb-2"
+              text-class="text-white font-bold text-lg p-20 py-2"
               @click="() => {showEgressNotRegisteredModal = false}"
             >
               Finalizar Cadastro
@@ -126,24 +126,115 @@
       </div>
     </main>
     <footer>
-      <div class="bg-gradient-to-br h-24 from-pacific-cyan to-bondi-blue flex flex-row items-center justify-start pl-20">
-        <div class="mr-10">
-          <img
-            class="w-14"
-            src="src/assets/brasão.png"
-            alt="Brasão"
-          >
-        </div>
-        <div class="text-white font-semibold">
-          <div class="text-lg mb-1">
-            Contato
+      <div class="flex flex-col bg-gradient-to-br from-pacific-cyan to-bondi-blue text-white items-start px-14 py-8">
+        <div class="flex flex-col sm:flex-row w-full flex-wrap gap-8 items-start pb-4 sm:pb-8">
+          <div class="flex flex-col gap-4">
+            <div class="flex gap-8 items-center">
+              <img
+                class="w-12 self-center"
+                src="src/assets/brasão.png"
+                alt="Brasão"
+              >
+              <div class="flex flex-col gap-2 text-sm font-semibold">
+                <div>Universidade Federal do Pará</div>
+                <div class="text-xs font-medium">
+                  Faculdade de Computação
+                </div>
+              </div>
+            </div>
+
+            <CustomButton
+              tag="a"
+              color="blue"
+              link="https://www.ppgcc.propesp.ufpa.br/index.php/br/"
+              target="_blank"
+            >
+              <div class="p-2 text-xs font-medium mr-3">
+                Conheça o Programa de Pós-graduação
+              </div>
+              <SvgIcon
+                type="mdi"
+                size="16"
+                :path="mdiOpenInNew"
+                class="shrink-0"
+              />
+            </CustomButton>
           </div>
-          <ul class="text-sm">
-            <li>0000-0000</li>
-            <li>
-              <a href="mailto:email@email.com"> email@email.com </a>
-            </li>
-          </ul>
+
+          <div class="flex flex-col flex-1 sm:flex-row gap-8 items-start justify-evenly">
+            <div class="flex flex-col gap-4">
+              <div class="flex gap-4 items-center">
+                <div class="w-fit rounded-lg p-2 bg-cyan-800/30">
+                  <SvgIcon
+                    type="mdi"
+                    size="16"
+                    :path="mdiMapMarker"
+                    class="shrink-0"
+                  />
+                </div>
+
+                <div class="font-medium text-sm">
+                  Endereço
+                </div>
+              </div>
+              <div class="flex flex-col gap-1 text-xs">
+                <div>Rua Augusto Corrêa, 01</div>
+                <div>Campus Universitário do Guamá</div>
+                <div>Belém, Pará, Brasil</div>
+                <div>CEP 66075-110</div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-4">
+              <div class="flex gap-4 items-center">
+                <div class="w-fit rounded-lg p-2 bg-cyan-800/30">
+                  <SvgIcon
+                    type="mdi"
+                    size="16"
+                    :path="mdiPhone"
+                    class="shrink-0"
+                  />
+                </div>
+                <div class="text-sm font-medium">
+                  Telefones
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-1 text-xs">
+                <div>+55 (91) 3201-7405</div>
+                <div>+55 (91) 3201-7409 / 7835</div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-4">
+              <div class="flex gap-4 items-center">
+                <div class="w-fit rounded-lg p-2 bg-cyan-800/30">
+                  <SvgIcon
+                    type="mdi"
+                    size="16"
+                    :path="mdiEmail"
+                    class="shrink-0"
+                  />
+                </div>
+                <div class="font-medium text-sm">
+                  E-mail
+                </div>
+              </div>
+
+              <a
+                href="mailto:egressocomp@ufpa.br"
+                class="flex flex-col gap-1 text-xs"
+              >
+                egressocomp@ufpa.br
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-2 bg-cyan-800/30 text-xs py-2 px-4 rounded-lg self-center">
+          <div>
+            Desenvolvido com 💖 por discentes
+          </div>
         </div>
       </div>
     </footer>
@@ -154,20 +245,18 @@
 import { RouterLink, useRouter } from 'vue-router'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { watch, ref, onMounted } from 'vue'
-import { mdiAlertCircle } from '@mdi/js'
+import { mdiAlertCircle, mdiEmail, mdiMapMarker, mdiOpenInNew, mdiPhone } from '@mdi/js'
 
 import { useLoginStore } from 'src/store/LoginStore'
 import CustomButton from 'src/components/CustomButton.vue'
 import UserDropdownMenu from './UserDropdownMenu.vue'
 import NavbarDrawer from './NavbarDrawer.vue'
 import CustomDialog from './CustomDialog.vue'
-import CookieService from 'src/services/cookieService'
 
 const $store = useLoginStore()
 const loggedIn = ref($store.loggedIn)
 const $router = useRouter()
 const showEgressNotRegisteredModal = ref(false)
-const cookieService = new CookieService()
 
 onMounted(() => {
   checkEgressRegistration()
@@ -175,7 +264,6 @@ onMounted(() => {
 
 watch(() => $store.loggedIn, () => {
   loggedIn.value = $store.loggedIn
-
   if (loggedIn.value) {
     checkEgressRegistration()
   }
@@ -183,13 +271,13 @@ watch(() => $store.loggedIn, () => {
 
 const checkEgressRegistration = () => {
   const userData = $store.getUserData()
-  const isFirstAccess = cookieService.get('isFirstAccess')
-
-  if (
-    userData?.scope === 'EGRESSO' &&
-    !userData?.isEgresso &&
-    isFirstAccess !== 'yes'
-  ) showEgressNotRegisteredModal.value = true
+  if ($store.isFirstAccess === 'yes') showEgressNotRegisteredModal.value = false
+  else {
+    if (
+      userData?.scope === 'EGRESSO' &&
+      !userData?.isEgresso
+    ) showEgressNotRegisteredModal.value = true
+  }
 }
 
 </script>

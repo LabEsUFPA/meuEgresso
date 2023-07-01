@@ -13,28 +13,35 @@ public enum ErrorType {
 
     REPORT_005("Erro no JSON do corpo da requisição.", "RP-005"),
 
-    REPORT_006("Erro ao enviar o email.", "RP-006"),
-
+    REPORT_006("Erro ao salvar o e-mail devido tamanho do corpo.", "RP-006"),
+    
+    REPORT_007("Matrícula duplicada.", "RP-007"),
+    
     REPORT_009("Não é permitido enviar lista vazia no corpo da requisição!", "RP-009"),
 
     DATABASE_001("Falha ao tentar salvar no banco de dados.", "DB-001"),
 
-    DATABASE_002("Nenhuma mensagem de email do tipo %s cadastrada.", "DB-002"),
+    DATABASE_002("Nenhuma mensagem de e-mail do tipo %s cadastrada.", "DB-002"),
+    
+    DATABASE_003("Email não encontrado para atualizar", "DB-003"), ////
+    
+    DATABASE_004("Email não encontrado para apagar","DB-004"), ////
 
-    UNAUTHORIZED_TRANSACTION("Permisões insuficientes para realizar esta transação", "SECURITY-001"),
+    UNAUTHORIZED_TRANSACTION("Permissões insuficientes para realizar esta transação", "SECURITY-001"),
 
     UNAUTHORIZED_REGISTER("Credenciais insuficientes", "SECURITY-002"),
 
-    USER_001("Usuário %s ja existe.", "US-001"),
+    USER_001("Usuário %s já existe.", "US-001"),
 
-    USER_002("Usuario ou Senha inválida.", "US-002"),
+    USER_002("Usuário ou Senha inválida.", "US-002"),
 
-    USER_003("Usuario desabilitado.", "US-003"),
+    USER_003("Usuário desabilitado.", "US-003"),
 
-    EGRESSO_NAO_VALIDO("Usuario não cadastrado pela faculdade", "EV-001"),
+    USER_004("E-mail já utilizado.", "US-004"),
+
+    EGRESSO_NAO_VALIDO("Usuário não cadastrado pela faculdade", "EV-001"),
 
     SOLICITACAO_EXPIRADA("Solicitação Expirada", "SE-001"),
-
 
     FOTO_NAO_ENCONTRADA("Egresso não possui foto","E-001");
 

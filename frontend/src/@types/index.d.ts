@@ -37,7 +37,7 @@ export namespace models {
     password: string
   }
 
-  export interface ProfileRegisterModel {
+  export interface UserProfileRegisterModel {
     nome: string
     username: string
     registration?: string
@@ -47,6 +47,15 @@ export namespace models {
     confirmationPassword?: string
     accessLevel?: string
     grupos?: string[]
+  }
+
+  export interface AdminProfileRegisterModel {
+    nome: string
+    username: string
+    email: string
+    confirmationEmail?: string
+    accessLevel?: string
+    grupos: string[]
   }
 
   export interface UserModel {
@@ -148,14 +157,14 @@ export namespace models {
     empresa: {
       id: number
       nome: string
-      endereco: {
-        id: number
-        cidade: string
-        estado: string
-        pais: string
-        latitude: number
-        longitude: number
-      }
+    }
+    endereco: {
+      id: number
+      cidade: string
+      estado: string
+      pais: string
+      latitude: number
+      longitude: number
     }
   }
 
@@ -359,9 +368,14 @@ export namespace models {
     dataExpiracao: string
     link: string
     salario: string
-    createdBy: {
-      email: string
+    createdBy: number
+    createdByUser: {
+      id: number
       nome: string
+      egresso: {
+        id: number
+      }
+      foto: string
     }
   }
   export interface AnuncioModelPost {

@@ -1,8 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.administrador.mensagem;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -21,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.mensagem.MensagemDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.mensagem.MensagemStatusDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.exceptions.EmailMensagemNotFoundException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.EmailMessageNotValidException;
 import labes.facomp.ufpa.br.meuegresso.model.MensagemModel;
 import labes.facomp.ufpa.br.meuegresso.service.agendamento.AgendamentoService;
-import labes.facomp.ufpa.br.meuegresso.service.agendamento.impl.AgendamentoServiceImpl;
 import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
 import lombok.RequiredArgsConstructor;
 
@@ -44,8 +44,6 @@ public class MensagemAdmController {
 
 	private final AgendamentoService agendamentoService;
 
-	private final AgendamentoServiceImpl agendamentoServiceImpl;
-
 	private final ModelMapper mapper;
 
 	/**
@@ -58,25 +56,10 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public MensagemStatusDTO consultarStatusMensagens() {
 		return agendamentoService.getMensagensStatus();
-	}
-
-	/**
-	 * Endpoint responsável por retornar a lista com o agendamento de tarefas das
-	 * mensagens no banco de
-	 * dados.
-	 *
-	 * @return {@link Map<String, ScheduledFuture<?>>} Lista de tarefas agendadas de
-	 *         mensagens salvos com seus status;
-	 * @author Pedro Inácio
-	 * @since 18/06/2023
-	 */
-	@GetMapping(value = "/tarefasMensagens")
-	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
-	public Map<String, ScheduledFuture<?>> consultarTarefasMensagens() {
-		return 	agendamentoService.getTasks();
 	}
 
 	/**
@@ -88,6 +71,7 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@GetMapping(value = "/consultarMensagens")
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
 	public List<MensagemDTO> consultarMensagens() {
 		return mapper.map(mailService.findAll(), new TypeToken<List<MensagemDTO>>() {
@@ -107,8 +91,11 @@ public class MensagemAdmController {
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
-	public String atualizarMensagem(@RequestBody @Valid MensagemDTO mensagemDTO) {
-		mailService.update(mapper.map(mensagemDTO, MensagemModel.class));
+	public String atualizarMensagem(@RequestBody @Valid MensagemDTO mensagemDTO) throws EmailMensagemNotFoundException {
+		MensagemModel resposta = mailService.update(mapper.map(mensagemDTO, MensagemModel.class));
+		if (resposta == null) {
+			throw new EmailMensagemNotFoundException(String.format(ErrorType.DATABASE_003.getMessage()),ErrorType.DATABASE_003.getInternalCode());
+		}
 		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
@@ -121,16 +108,13 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@DeleteMapping
-	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.OK)
-	public String deleteById(@PathVariable(name = "id") Integer id) {
+	@PreAuthorize("hasRole('ADMIN')")
+	public String deleteById(@PathVariable(name = "id") Integer id) throws EmailMensagemNotFoundException {
 		if (mailService.deleteById(id)) {
-			if(mailService.findAll().isEmpty() && !agendamentoService.getTasks().isEmpty()){
-				agendamentoService.removeScheduledTask();
-			}
 			return ResponseType.SUCCESS_DELETE.getMessage();
 		}
-		return ResponseType.FAIL_DELETE.getMessage();
+		throw new EmailMensagemNotFoundException(String.format(ErrorType.DATABASE_004.getMessage()),ErrorType.DATABASE_004.getInternalCode());
 	}
 
 	/**
@@ -144,15 +128,15 @@ public class MensagemAdmController {
 	 * @since 15/06/2023
 	 */
 	@PostMapping
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public String save(@RequestBody @Valid MensagemDTO mensagemDTO) {
-		MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
-		if(mailService.findAll().isEmpty() || agendamentoService.getTasks().isEmpty()){
-			agendamentoService.setScheduleATask(agendamentoServiceImpl);
+	public String save(@RequestBody @Valid MensagemDTO mensagemDTO)throws EmailMessageNotValidException {
+		try{
+			MensagemModel mensagemModel = mapper.map(mensagemDTO, MensagemModel.class);
+			mailService.save(mensagemModel);
+			return ResponseType.SUCCESS_UPDATE.getMessage();
+		} catch (Exception e) {
+			throw new EmailMessageNotValidException(String.format(ErrorType.REPORT_006.getMessage()),ErrorType.REPORT_006.getInternalCode());
 		}
-		mailService.save(mensagemModel);
-		return ResponseType.SUCCESS_UPDATE.getMessage();
 	}
 
 }

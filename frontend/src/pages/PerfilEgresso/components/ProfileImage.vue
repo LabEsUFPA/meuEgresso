@@ -1,12 +1,14 @@
 <template>
   <section>
     <o-field
+      override
       class="file"
       :root-class="classNames({
         ['outline outline-red-500']: !isValid
       })"
     >
       <o-upload
+        override
         :disabled="!isInput"
         v-model="file"
         drag-drop
@@ -24,7 +26,7 @@
               class="ml-6"
               width="30"
               height="30"
-              src="/src/assets/round-upload.svg"
+              src="/img/round-upload.svg"
               alt="Ícone Usuário"
             >
 
@@ -33,6 +35,7 @@
             </h1>
           </div>
           <o-button
+            override
             tag="a"
             variant="primary"
             rounded
@@ -44,7 +47,7 @@
           v-if="!isValid.value"
           class="text-red-500 absolute ml-[-60px] mt-[-5px]"
         >
-          O arquivo deve ser menor que 5 MB
+          <!-- O arquivo deve ser menor que 5 MB -->
           <!-- {{ meta.valid ? null : errorMessage }} -->
         </div>
       </template>
@@ -54,7 +57,7 @@
                      z-5
                      w-[120px]
                      h-[120px]
-                    rounded-full"
+                    object-cover rounded-full border-2 border-sky-200/80"
         :src="imgDefault"
         alt=""
       >
@@ -64,7 +67,7 @@
                      z-5
                      w-[120px]
                      h-[120px]
-                    rounded-full"
+                    object-cover rounded-full border-2 border-sky-200/80"
         :src="imgUrl.value"
         alt=""
       >
@@ -80,7 +83,7 @@
             z-0
             w-[120px]
             h-[120px]
-            rounded-full"
+            object-cover rounded-full border-2 border-sky-200/80"
             :src="getObjectURL(file)"
             alt=""
           >
@@ -92,7 +95,7 @@
   <ButtonActionIcon
     v-if="isInput"
     class="buttonTrash absolute z-5 ml-[90px] mt-[90px] rounded-full"
-    icon-path="/src/assets/trashCan.svg"
+    icon-path="/img/trashCan.svg"
     icon-size="20"
     custom-style="px-2 py-2"
     color="whiteDanger"
@@ -166,7 +169,7 @@ async function imageUploadBackAdmin (egressoId : number) {
 }
 
 const styleImageInput = computed(() => {
-  const imageStyle = [' hover:duration-200 w-[120px] h-[120px] absolute z-5 rounded-full']
+  const imageStyle = [' hover:duration-200 w-[120px] h-[120px] absolute z-5 object-cover rounded-full border-2 border-sky-200/80']
   if (props.isInput) {
     imageStyle.push('bg-gray-700/70 hover:bg-gray-700/50')
   }

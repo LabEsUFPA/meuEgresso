@@ -55,7 +55,20 @@
           :disabled="area === 'Desempregado'"
           :pre-filled="true"
         />
+        
+        <div class="mb-5 text-sm font-semibold text-cyan-600">
+          <SvgIcon
+            type="mdi"
+            size="20"
+            class="inline mr-2"
+            :path="mdiMapMarker"
+          />
+          Localização:
+        </div>
+
+        <slot name="local" />
       </div>
+
       <div v-else>
         <slot name="NonInputData" />
       </div>
@@ -72,7 +85,7 @@ import CustomSelect from 'src/components/CustomSelect.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Form } from 'vee-validate'
 import { ref, watch, onMounted } from 'vue'
-import { mdiBriefcase } from '@mdi/js'
+import { mdiBriefcase, mdiMapMarker } from '@mdi/js'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import LocalStorage from 'src/services/localStorage'
 const $store = useCadastroEgressoStore()
@@ -114,12 +127,12 @@ const placeHolders = ref({
 
 onMounted(() => {
   watch(pais, () => {
-    form.value?.setFieldValue('localizacao.cidade', '')
-    form.value?.setFieldValue('localizacao.estado', '')
+    form.value?.setFieldValue('carreira.cidade', '')
+    form.value?.setFieldValue('carreira.estado', '')
   })
 
   watch(estado, () => {
-    form.value?.setFieldValue('localizacao.cidade', '')
+    form.value?.setFieldValue('carreira.cidade', '')
   })
 
   if (storage.has('loggedUser')) {

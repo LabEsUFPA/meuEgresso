@@ -26,8 +26,10 @@ import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoPublicDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
+import labes.facomp.ufpa.br.meuegresso.exceptions.MatriculaAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
@@ -102,7 +104,13 @@ public class EgressoController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<String> cadastrarEgressoPrimeiroCadastro(
             @RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO,
-            JwtAuthenticationToken token) {
+            JwtAuthenticationToken token) throws MatriculaAlreadyExistsException {
+        if (egressoCadastroDTO.getMatricula() != null
+                && egressoService.existsMatricula(egressoCadastroDTO.getMatricula())) {
+            throw new MatriculaAlreadyExistsException(
+                    String.format(ErrorType.REPORT_007.getMessage(), egressoCadastroDTO.getMatricula()),
+                    ErrorType.REPORT_007.getInternalCode());
+        }
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
 
@@ -122,7 +130,8 @@ public class EgressoController {
         egressoModel.getUsuario().setNome(egressoCadastroDTO.getNome());
         egressoModel.getUsuario().setAtivo(egressoModel.getUsuario().isEnabled());
 
-        egressoService.adicionarEgresso(egressoModel);
+        egressoService.save(egressoModel);
+        egressoModel.getUsuario().setAtivo(egressoModel.getUsuario().getValido());
         statusUsuarioService
                 .save(StatusUsuarioModel.builder().usuarioId(egressoModel.getUsuario().getId())
                         .nome(egressoModel.getUsuario().getNome()).status(UsuarioStatus.PENDENTE)
@@ -165,8 +174,20 @@ public class EgressoController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<String> atualizarEgresso(
             @RequestBody EgressoDTO egresso, JwtAuthenticationToken token)
-            throws UnauthorizedRequestException {
-        if (egressoService.existsByIdAndCreatedById(egresso.getId(), jwtService.getIdUsuario(token))) {
+            throws MatriculaAlreadyExistsException {
+
+        // Se a matricula passada for diferente da matricula que a pessoa já tinha,
+        // checar se é duplicado.
+        if (egresso.getMatricula() != null
+                && !egresso.getMatricula().equals(egressoService.findById(egresso.getId()).getMatricula())
+                && egressoService.existsMatricula(egresso.getMatricula())) {
+            throw new MatriculaAlreadyExistsException(
+                    String.format(ErrorType.REPORT_007.getMessage(), egresso.getMatricula()),
+                    ErrorType.REPORT_007.getInternalCode());
+        }
+
+        if (egressoService.existsByIdAndCreatedBy(egresso.getId(), jwtService.getIdUsuario(token))) {
+
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
 
@@ -182,11 +203,11 @@ public class EgressoController {
 
             egressoModel.getUsuario()
                     .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
-            egressoService.updateEgresso(egressoModel);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(ResponseType.SUCCESS_UPDATE.getMessage());
+            egressoService.update(egressoModel);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseType.EGRESSO_NAO_ENCONTRADO.getMessage());
         }
-        throw new UnauthorizedRequestException();
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseType.SUCCESS_UPDATE.getMessage());
     }
 
     /**
@@ -229,7 +250,7 @@ public class EgressoController {
         if (egressoModel.getFotoNome() != null) {
             egressoService.deleteFile(egressoModel.getFotoNome());
             egressoModel.setFotoNome(null);
-            egressoService.updateEgresso(egressoModel);
+            egressoService.update(egressoModel);
             return ResponseEntity.ok(ResponseType.SUCCESS_IMAGE_DELETE.getMessage());
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseType.FAIL_IMAGE_DELETE.getMessage());
@@ -255,7 +276,7 @@ public class EgressoController {
             egressoService.deleteFile(egressoModel.getFotoNome());
         }
         egressoModel.setFotoNome(fileCode);
-        egressoService.updateEgresso(egressoModel);
+        egressoService.update(egressoModel);
         egressoService.saveFoto(fileCode, arquivo);
         return ResponseType.SUCCESS_IMAGE_SAVE.getMessage();
     }
@@ -271,6 +292,7 @@ public class EgressoController {
             egressoModel.getPalestras().setEgresso(egressoModel);
         }
     }
+    
 
     private boolean validaCarreiraLocalizacao(EgressoModel egressoModel) {
         if (egressoModel.getEmprego() != null) {

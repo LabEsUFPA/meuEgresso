@@ -25,7 +25,7 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaHeader"
         >
-          <h1 class=" absolute flex flex-auto top-[15px] right-[10px] sm:right-[20%]">
+          <h1 class="absolute flex flex-auto top-[15px] right-[10px] sm:right-[20%]">
             <ButtonEdit
               label="Editar"
               icon-path="/img/edit.svg"
@@ -37,6 +37,20 @@
               v-if="!isPublic || isSuperUser"
             />
           </h1>
+
+          <div
+            class="absolute flex flex-auto justify-center items-center top-[-15px] mb-12 left-[41.5%]"
+            v-if="errorLocation === 'header'"
+          >
+            <div
+              class="flex flex-col items-center mx-auto z-10 "
+            >
+              <InvalidInsert
+                :text="errorText"
+                :show-alert="error"
+              />
+            </div>
+          </div>
           <div class="flex flex-auto justify-center mt-[-0.25rem] ">
             <div
               class="mt-[37px] flex flex-col items-center justify-center"
@@ -165,7 +179,20 @@
           @invalid-submit="onInvalid"
           :validation-schema="schemaGeral"
         >
-          <FolderSection>
+          <div class="flex justify-center items-center h-full">
+            <div
+              class="flex flex-col items-center  mx-auto z-10"
+              v-if="errorLocation === 'geral'"
+            >
+              <InvalidInsert
+                :text="errorText"
+                :show-alert="error"
+              />
+            </div>
+          </div>
+          <FolderSection
+            class="mb-5"
+          >
             <template #EditButton>
               <h1 class="relative">
                 <ButtonEdit
@@ -248,13 +275,14 @@
                   :max-length="50"
                   required
                 />
-                <CustomInput
+                <CustomDatepicker
                   class="mb-5"
                   name="geral.nascimento"
-                  :value="dataEgresso.geral.nascimento"
-                  label="Data de Nascimento"
-                  :max-length="10"
-                  type="date"
+                  :icon-path="mdiCalendarEdit"
+                  :max-date="eighteenYearsAgo"
+                  :min-date="minDate"
+                  custom-label
+                  required
                 />
               </div>
             </template>
@@ -267,9 +295,21 @@
           :validation-schema="schemaAcademico"
           v-slot="{ values }"
         >
+          <div class="flex justify-center items-center h-full">
+            <div
+              class="flex flex-col items-center  mx-auto z-10"
+              v-if="errorLocation === 'academico'"
+            >
+              <InvalidInsert
+                :text="errorText"
+                :show-alert="error"
+              />
+            </div>
+          </div>
+
           <FolderSection>
             <template #EditButton>
-              <h1 class="relative">
+              <h1 class="relative static">
                 <ButtonEdit
                   label="Editar"
                   icon-path="/img/edit.svg"
@@ -326,17 +366,24 @@
                   placeholder="Selecione"
                   icon-path=""
                 />
-
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  :vmodel="dataEgresso.academico.posGrad.curso"
-                  name="academico.posGrad.curso"
-                  label="Curso"
-                  placeholder="Curso de pós-graduação"
+                  :vmodel="dataEgresso.academico.bolsista.tipo"
+                  name="academico.bolsista.tipo"
+                  label="Tipo de Bolsa"
+                  placeholder="Selecione"
                   icon-path=""
                 />
-
+                <CustomPerfilData
+                  type="text"
+                  class="mb-5"
+                  :vmodel="'R$ ' + dataEgresso.academico.bolsista.remuneracao"
+                  name="academico.bolsista.remuneracao"
+                  label="Remuneração da bolsa"
+                  placeholder="Selecione"
+                  icon-path=""
+                />
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
@@ -346,14 +393,13 @@
                   placeholder="Local da pós-graduação"
                   icon-path=""
                 />
-
                 <CustomPerfilData
                   type="text"
-                  class="mb-1"
-                  :vmodel="dataEgresso.academico.bolsista.tipo"
-                  name="academico.bolsista.tipo"
-                  label="Bolsa"
-                  placeholder="Bolsa"
+                  class="mb-5"
+                  :vmodel="dataEgresso.academico.posGrad.curso"
+                  name="academico.posGrad.curso"
+                  label="Curso"
+                  placeholder="Curso de pós-graduação"
                   icon-path=""
                 />
               </div>
@@ -424,7 +470,7 @@
                     :disabled="!bools.cotista"
                   />
                   <CustomCheckbox
-                    class="mb-5"
+                    class="mb-6"
                     name="academico.cotista.tipos.pcd"
                     label="PCD"
                     :required="bools.cotista"
@@ -461,7 +507,7 @@
                 />
 
                 <CustomInput
-                  class="mb-5"
+                  class="mb-7"
                   name="academico.bolsista.remuneracao"
                   label="Remuneração da bolsa"
                   type="number"
@@ -474,14 +520,14 @@
                 />
 
                 <CustomCheckbox
-                  class="mb-5"
+                  class="mb-[-14px]"
                   name="academico.posGrad.value"
                   v-model:value="bools.posGrad"
                   label="Pós-graduação"
                 />
 
-                <CustomSelect
-                  class="mb-1"
+                <CustomInput
+                  class="mb-2"
                   name="academico.posGrad.local"
                   label="Instituição da pós-graduação"
                   :placeholder="dataEgresso.academico.posGrad.local"
@@ -535,7 +581,23 @@
             @invalid-submit="onInvalid"
             :validation-schema="schemaCarreira"
           >
-            <FolderSection class="mt-6">
+            <div class="flex justify-center items-center h-full">
+              <div
+                class="flex flex-col items-center  mx-auto z-10"
+                v-if="errorLocation === 'carreira'"
+              >
+                <InvalidInsert
+                  :text="errorText"
+                  :show-alert="error"
+                />
+              </div>
+            </div>
+            <FolderCarreira
+              :is-input="dataEgresso.carreira.isInput"
+              :area-atuacao-holder="placeHolders.areaAtuacao"
+              :setor-atuacao-holder="placeHolders.setorAtuacao"
+              :faixa-salarial-holder="placeHolders.faixaSalarial"
+            >
               <template #EditButton>
                 <h1 class="relative">
                   <ButtonEdit
@@ -772,6 +834,18 @@
             @invalid-submit="onInvalid"
             :validation-schema="schemaAdicionais"
           >
+            <div class="flex justify-center items-center h-full">
+              <div
+                class="flex flex-col items-center  mx-auto z-10"
+                v-if="errorLocation === 'adicionais'"
+              >
+                <InvalidInsert
+                  :text="errorText"
+                  :show-alert="error"
+                />
+              </div>
+            </div>
+
             <FolderAdicionais
               :is-input="dataEgresso.adicionais.isInput"
               :bools="bools"
@@ -793,6 +867,18 @@
                 </h1>
               </template>
               <template #NonInputData>
+                <CustomPerfilData
+                  type="text"
+                  class="flex-auto mb-5"
+                  :vmodel="dataEgresso.adicionais.assuntosPalestras"
+                  name="adicionais.palestras"
+                  label="Assuntos Palestras"
+                  placeholder="Lorem ipsum dolor sit amet, consect
+                  etur adipiscing elit, sed do eiusmod tempor incididun
+                  t ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n
+                  ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                  icon-path=""
+                />
                 <CustomPerfilData
                   type="text"
                   class="flex-auto mb-5"
@@ -947,6 +1033,7 @@ import ButtonEdit from './components/ButtonEdit.vue'
 import FolderSection from 'src/components/FolderSection.vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
+import CustomDatepicker from 'src/components/CustomDatepicker.vue'
 
 import CustomPerfilData from './components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
@@ -961,7 +1048,9 @@ import { object, string, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
+import InvalidInsert from 'src/components/InvalidInsert.vue'
 
+import FolderCarreira from './components/FolderCarreira.vue'
 import FolderAdicionais from './components/FolderAdicionais.vue'
 import ProfileImage from './components/ProfileImage.vue'
 import {
@@ -974,11 +1063,10 @@ import {
   mdiLinkVariant,
   mdiCheckCircle,
   mdiAlertCircle,
-  mdiMapMarker,
   mdiAlertCircleOutline,
   mdiSchool,
   mdiLoading,
-  mdiBriefcase
+  mdiCalendarEdit
 } from '@mdi/js'
 import { useRoute } from 'vue-router'
 
@@ -996,7 +1084,6 @@ const formHeader = ref<typeof Form | null>(null)
 const formGeral = ref<typeof Form | null>(null)
 const formAcademico = ref<typeof Form | null>(null)
 const formCarreira = ref<typeof Form | null>(null)
-const formLocalizacao = ref<typeof Form | null>(null)
 const formAdicionais = ref<typeof Form | null>(null)
 const missingDigits = ref(0)
 const loading = ref(true)
@@ -1005,6 +1092,14 @@ const estadoChange = ref(false)
 const area = ref('')
 
 const localCarreira = ref<typeof LocalizacaoSelect | null>(null)
+
+const error = ref(false)
+const errorLocation = ref('')
+const errorText = ref('')
+
+const minDate = ref(new Date(-8640000000000000))
+const eighteenYearsAgo = ref(new Date())
+eighteenYearsAgo.value.setFullYear(eighteenYearsAgo.value.getFullYear() - 18)
 
 const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
@@ -1029,8 +1124,6 @@ const isSuperUser = computed(() => {
   return false
 })
 const isPublic = computed(() => {
-  console.log('route')
-  console.log(Number($route.params.id))
   if (storage.has('loggedUser') && storage.has('loggedEgresso')) {
     const logEgresso = JSON.parse(storage.get('loggedEgresso'))
     return (Object.keys($route.params).length === 1 && logEgresso.id !== Number($route.params.id))
@@ -1045,9 +1138,13 @@ watch(() => $route.params, async () => {
   loading.value = false
 })
 
-function handleStatus (status: any) {
-  if (status !== 201) {
+function handleStatus (response: any, folderLocation: string) {
+  if (response.status !== 201) {
+    console.log(response.status)
     dialogFalha.value = true
+    errorText.value = response.data?.message ? response.data.message : 'Ocorreu um problema na requisição'
+    error.value = true
+    errorLocation.value = folderLocation
     return false
   } else {
     dialogSucesso.value = true
@@ -1079,7 +1176,7 @@ async function handleSubmitHeader (values: any) {
     jsonResponse.lattes = null
   }
 
-  const status = await atualizarEgresso(jsonResponse)
+  const response = await atualizarEgresso(jsonResponse)
   let responseImage: any
   if (stagedChanges.value.profileHead.removedImage) {
     responseImage = await removeImageEgresso()
@@ -1089,12 +1186,15 @@ async function handleSubmitHeader (values: any) {
     responseImage = await profileImageSave()
   }
 
-  if (status === 201 && (responseImage === 201 || responseImage === 200 || responseImage === 204)) {
+  if (response.status === 201 && (responseImage === 201 || responseImage === 200 || responseImage === 204)) {
     dialogSucesso.value = true
 
     toggleIsInput('profileHead')
     await fetchUpdateEgresso()
   } else {
+    errorText.value = response.data?.message ? response.data?.message : 'Ocorreu um problema na requisição'
+    error.value = true
+    errorLocation.value = 'header'
     dialogFalha.value = true
   }
 }
@@ -1105,11 +1205,10 @@ async function handleSubmitGeral (values: any) {
   jsonResponse.genero.id = values.geral.genero
   jsonResponse.nascimento = values.geral.nascimento
   const status = await atualizarEgresso(jsonResponse)
-  if (handleStatus(status)) {
+  if (handleStatus(status, 'geral')) {
     toggleIsInput('geral')
+    await fetchUpdateEgresso()
   }
-
-  fetchUpdateEgresso()
 }
 
 async function handleSubmitAcademico (values: any) {
@@ -1202,23 +1301,12 @@ async function handleSubmitAcademico (values: any) {
 
   const status = await atualizarEgresso(jsonResponse)
 
-  if (handleStatus(status)) {
+  if (handleStatus(status, 'academico')) {
     toggleIsInput('academico')
+    await fetchUpdateEgresso()
   }
-
-  fetchUpdateEgresso()
 }
-async function handleSubmitLocalizacao (values: any) {
-  jsonResponse.emprego.endereco = values.localizacao
-  // delete jsonResponse.emprego.empresa.endereco.id
 
-  const status = await atualizarEgresso(jsonResponse)
-  if (handleStatus(status)) {
-    toggleIsInput('localizacao')
-  }
-
-  fetchUpdateEgresso()
-}
 async function handleSubmitCarreira (values: any) {
   if (jsonResponse.emprego === undefined) {
     jsonResponse.emprego = {
@@ -1244,29 +1332,27 @@ async function handleSubmitCarreira (values: any) {
     }
   }
   if (values.carreira.area !== 'Desempregado') {
-    // jsonResponse.emprego.empresa.nome = values.carreira.empresa
-    // jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
-    // let areaNome = ''
-    // $store.areasAtuacao.forEach(option => {
-    //   if (option.value === values.carreira.area) {
-    //     areaNome = option.label
-    //     console.log(areaNome)
-    //   }
-    // })
-    // jsonResponse.emprego.areaAtuacao.nome = areaNome
-    // jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
-    // jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
+    jsonResponse.emprego.empresa.nome = values.carreira.empresa
+    jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
+
+    jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
+    jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
+    const endereco = {
+      pais: values.carreira.pais,
+      estado: values.carreira.estado,
+      cidade: values.carreira.cidade
+    }
+    jsonResponse.emprego.endereco = endereco
   } else {
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego = null
   }
 
   const status = await atualizarEgresso(jsonResponse)
-  if (handleStatus(status)) {
+  if (handleStatus(status, 'carreira')) {
     toggleIsInput('carreira')
+    await fetchUpdateEgresso()
   }
-
-  fetchUpdateEgresso()
 }
 async function handleSubmitAdicionais (values: any) {
   jsonResponse.depoimento.descricao = values.adicionais.experiencias
@@ -1284,10 +1370,10 @@ async function handleSubmitAdicionais (values: any) {
     jsonResponse.palestras = null
   }
   const status = await atualizarEgresso(jsonResponse)
-  if (handleStatus(status)) {
+  if (handleStatus(status, 'adicionais')) {
     toggleIsInput('adicionais')
+    await fetchUpdateEgresso()
   }
-  fetchUpdateEgresso()
 }
 
 let isInputLocal = false
@@ -1317,7 +1403,7 @@ function toggleIsInput (FolderLabel: string) {
     case 'adicionais':
       dataEgresso.value.adicionais.isInput = !dataEgresso.value.adicionais.isInput
   }
-
+  errorLocation.value = ''
   isInputLocal = !isInputLocal
 }
 
@@ -1502,9 +1588,9 @@ async function fetchUpdateEgresso () {
     },
     localizacao: {
       cep: '',
-      pais: json.emprego?.endereco.pais || '',
-      estado: json.emprego?.endereco.estado || '',
-      cidade: json.emprego?.endereco.cidade || '',
+      pais: json.emprego?.empresa?.endereco?.pais || json.emprego?.endereco?.pais || '',
+      estado: json.emprego?.empresa?.endereco?.estado || json.emprego?.endereco?.estado || '',
+      cidade: json.emprego?.empresa?.endereco?.cidade || json.emprego?.endereco?.cidade || '',
       isInput: false
     },
     academico: {
@@ -1596,17 +1682,19 @@ async function fetchUpdateEgresso () {
     'geral.linkedin': dataEgresso.value.profileHead.linkedin,
     'geral.lattes': dataEgresso.value.profileHead.lattes
   })
+  const dateParts = dataEgresso.value.geral.nascimento.split('-')
+  const year = parseInt(dateParts[0])
+  const month = parseInt(dateParts[1]) - 1
+  const day = parseInt(dateParts[2])
+
   formGeral.value?.setValues({
-    'geral.nascimento': dataEgresso.value.geral.nascimento,
+
+    'geral.nascimento': new Date(year, month, day),
     'geral.email': dataEgresso.value.geral.email,
     // passa Id para o select
     'geral.genero': dataEgresso.value.generoId
   })
-  // passa o nome para o placeholder
-  // dataEgresso.value.geral.genero
-  formLocalizacao.value?.setValues({
-    localizacao: dataEgresso.value.localizacao
-  })
+
   formAcademico.value?.setValues({
     academico: dataEgresso.value.academico,
     'academico.bolsista.tipo': dataEgresso.value.bolsaId,
@@ -1615,26 +1703,32 @@ async function fetchUpdateEgresso () {
   })
   formCarreira.value?.setValues({
     carreira: dataEgresso.value.carreira,
-    'carreira.faixaSalarial': dataEgresso.value.faixaSalarialId
+    'carreira.faixaSalarial': dataEgresso.value.faixaSalarialId,
+    'carreira.pais': dataEgresso.value.localizacao.pais,
+    'carreira.estado': dataEgresso.value.localizacao.estado,
+    'carreira.cidade': dataEgresso.value.localizacao.cidade
   })
+
   formAdicionais.value?.setValues({
     adicionais: dataEgresso.value.adicionais
   })
   return json
 }
-let estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
-let cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
+let estadoInput = document.querySelector('.carreira-estado') as HTMLInputElement
+let cidadeInput = document.querySelector('.carreira-cidade') as HTMLInputElement
 
 onMounted(() => {
-  estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
+  estadoInput = document.querySelector('.carreira-estado') as HTMLInputElement
 
-  cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
-
-  watch(paisChange, () => {
+  cidadeInput = document.querySelector('.carreira-cidade') as HTMLInputElement
+  console.log(cidadeInput)
+  watch(() => dataEgresso.value.localizacao.pais, (newValue) => {
     console.log('changepais1')
-    formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
-    formLocalizacao.value?.setFieldValue('localizacao.estado', '')
-    if (formLocalizacao.value) {
+    console.log(cidadeInput)
+
+    formCarreira.value?.setFieldValue('carreira.cidade', '')
+    formCarreira.value?.setFieldValue('carreira.estado', '')
+    if (formCarreira.value) {
       dataEgresso.value.localizacao.cidade = ''
     }
     setTimeout(() => {
@@ -1645,11 +1739,11 @@ onMounted(() => {
     }, 10)
   })
 
-  watch(estadoChange, () => {
+  watch(() => dataEgresso.value.localizacao.estado, (newValue) => {
     console.log('changeestado1')
     localCarreira?.value?.fetchMoreStates()
-    formLocalizacao.value?.setFieldValue('localizacao.cidade', '')
-    if (formLocalizacao.value) {
+    formCarreira.value?.setFieldValue('carreira.cidade', '')
+    if (formCarreira.value) {
       dataEgresso.value.localizacao.cidade = ''
     }
     setTimeout(() => {
@@ -1714,16 +1808,10 @@ const schemaGeral = object().shape({
   geral: object({
     nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
       if (value) {
-        const date = value.split('/').reverse().join('-') // Convert date to ISO format (YYYY-MM-DD)
-        const minDate = new Date('1940-01-01')
-        const maxDate = new Date('2023-12-31')
+        const date = value.split('/').reverse().join('-')
         const inputDate = new Date(date)
 
-        // Check if the person is at least 18 years old
-        const eighteenYearsAgo = new Date()
-        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
-
-        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo
+        return inputDate >= minDate.value && inputDate <= eighteenYearsAgo.value
       }
       return true
     }),
@@ -1785,24 +1873,27 @@ const empresaSchema = object().shape({
 const schemaCarreira = object().shape({
   carreira: object({
     area: string().required('Campo obrigatório'),
-    setor: string().when('area', ([area], schemaCarreira) => {
-      return area !== 'Desempregado' ? schemaCarreira.required('Campo obrigatório') : schemaCarreira.notRequired()
+    setor: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     }),
-    empresa: string().when('area', ([area], schemaCarreira) => {
-      return area !== 'Desempregado' ? schemaCarreira.required('Campo obrigatório') : schemaCarreira.notRequired()
+    empresa: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     }),
-    faixaSalarial: string().when('area', ([area], schemaCarreira) => {
-      return area !== 'Desempregado' ? schemaCarreira.required('Campo obrigatório') : schemaCarreira.notRequired()
+    faixaSalarial: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    pais: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    estado: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    cidade: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     })
   })
 })
-const schemaLocalizacao = object().shape({
-  localizacao: object({
-    pais: string().required('Campo obrigatório'),
-    estado: string().required('Campo obrigatório'),
-    cidade: string().required('Campo obrigatório')
-  })
-})
+
 const schemaAdicionais = object().shape({
   adicionais: object({
     palestras: boolean(),

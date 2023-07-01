@@ -84,14 +84,16 @@
           />
           <OInput
             v-else
+            override
             :root-class="classNames({
               ['col-span-7']: iconPath,
               ['col-span-8']: !iconPath
             })"
             :input-class="classNames({
-              ['focus:outline-none bg-transparent']: true,
+              ['focus:outline-none bg-transparent w-full']: true,
               ['cursor-not-allowed']: disabled
             })"
+            :status-icon="false"
             :placeholder="placeholder"
             :disabled="disabled"
             :type="type"

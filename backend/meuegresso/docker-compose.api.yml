@@ -13,14 +13,7 @@ services:
     volumes:
       - ./meuEgressoFotos:/fotos
     environment:
-      - POSTGRES_HOST=10.16.1.28
-      - POSTGRES_USER=meuegresso
-      - POSTGRES_PASSWORD=4aB@EtGJW64@
-      - POSTGRES_DB=meuegresso
-      - POSTGRES_PORT=5432
-      - EMAIL_USERNAME=email
-      - EMAIL_PASSWORD=senhadoAPP
-      - APP_PORT=80
+      - TZ=America/Belem
     deploy:
 
       labels:

@@ -1,5 +1,6 @@
 package labes.facomp.ufpa.br.meuegresso.controller.publico.grafico;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -90,6 +92,7 @@ import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.setoratuacao.SetorAtuacaoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.tipobolsa.TipoBolsaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
+import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 /**
  * Teste unitario para o Grafico
@@ -187,6 +190,12 @@ class GraficoPubControllerTest extends Configuracao {
         @Autowired
         MockMvc mockMvc;
 
+        @Autowired
+        PasswordEncoder encoder;
+
+        @Autowired
+        UsuarioRepository usuarioRepository;
+
         String token;
 
         UsuarioModel usuarioModel;
@@ -227,23 +236,23 @@ class GraficoPubControllerTest extends Configuracao {
         @BeforeAll
         void setUp() throws Exception {
 
+                final String plainText = "teste123";
+
+                /* Usuario */
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
                 usuarioModel.setNome("nome_test asdsad");
                 usuarioModel.setEmail("teste@gmail.com");
-                usuarioModel.setPassword("teste123");
+                usuarioModel.setPassword(encoder.encode(plainText));
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
+                usuarioModel.setEmailVerificado(true);
+                usuarioModel.setAtivo(true);
 
-                mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(usuarioModel)))
-                                .andDo(MockMvcResultHandlers.print())
-                                .andExpect(status().isCreated())
-                                .andReturn();
+                usuarioModel = usuarioRepository.save(usuarioModel);
 
                 AuthenticationRequest authenticationRequest = new AuthenticationRequest();
                 authenticationRequest.setUsername(usuarioModel.getUsername());
-                authenticationRequest.setPassword(usuarioModel.getPassword());
+                authenticationRequest.setPassword(plainText);
                 String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
                 MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
@@ -419,9 +428,9 @@ class GraficoPubControllerTest extends Configuracao {
                                 BolsistasGraficoDTO.class);
 
                 assertNotNull(bolsistasGraficoDTO);
-                assertEquals(2, bolsistasGraficoDTO.getBolsistasContagem().size());
+                assertEquals(1, bolsistasGraficoDTO.getBolsistasContagem().size());
                 assertEquals(1, bolsistasGraficoDTO.getBolsistasContagem().get("Bolsistas"));
-                assertEquals(0, bolsistasGraficoDTO.getBolsistasContagem().get("Não Bolsistas"));
+                assertNull(bolsistasGraficoDTO.getBolsistasContagem().get("Não Bolsistas"));
         }
 
         @Test
@@ -456,9 +465,9 @@ class GraficoPubControllerTest extends Configuracao {
                                 InteresseEmPosGraficoDTO.class);
 
                 assertNotNull(interesseEmPosGraficoDTO);
-                assertEquals(2, interesseEmPosGraficoDTO.getInteresseContagem().size());
+                assertEquals(1, interesseEmPosGraficoDTO.getInteresseContagem().size());
                 assertEquals(1, interesseEmPosGraficoDTO.getInteresseContagem().get("Sim"));
-                assertEquals(0, interesseEmPosGraficoDTO.getInteresseContagem().get("Não"));
+                assertNull(interesseEmPosGraficoDTO.getInteresseContagem().get("Não"));
         }
 
         @Test
@@ -475,9 +484,9 @@ class GraficoPubControllerTest extends Configuracao {
                                 PosGraduacaoGraficoDTO.class);
 
                 assertNotNull(posGraduacaoGraficoDTO);
-                assertEquals(2, posGraduacaoGraficoDTO.getPosGraduacaoContagem().size());
+                assertEquals(1, posGraduacaoGraficoDTO.getPosGraduacaoContagem().size());
                 assertEquals(1, posGraduacaoGraficoDTO.getPosGraduacaoContagem().get("Fez"));
-                assertEquals(0, posGraduacaoGraficoDTO.getPosGraduacaoContagem().get("Não fez"));
+                assertNull(posGraduacaoGraficoDTO.getPosGraduacaoContagem().get("Não fez"));
         }
 
         @Test
@@ -494,9 +503,9 @@ class GraficoPubControllerTest extends Configuracao {
                                 CotistaGraficoDTO.class);
 
                 assertNotNull(cotistaGraficoDTO);
-                assertEquals(2, cotistaGraficoDTO.getCotistasEnumerados().size());
+                assertEquals(1, cotistaGraficoDTO.getCotistasEnumerados().size());
                 assertEquals(1, cotistaGraficoDTO.getCotistasEnumerados().get("Cotista"));
-                assertEquals(0, cotistaGraficoDTO.getCotistasEnumerados().get("Não Cotista"));
+                assertNull(cotistaGraficoDTO.getCotistasEnumerados().get("Não Cotista"));
         }
 
         @Test
@@ -530,8 +539,8 @@ class GraficoPubControllerTest extends Configuracao {
                                 TipoAlunoGraficoDTO.class);
 
                 assertNotNull(tipoAlunoGraficoDTO);
-                assertEquals(2, tipoAlunoGraficoDTO.getTipoAlunos().size());
-                assertEquals(0, tipoAlunoGraficoDTO.getTipoAlunos().get(TITULACAO_NOME));
+                assertEquals(1, tipoAlunoGraficoDTO.getTipoAlunos().size());
+                assertNull(tipoAlunoGraficoDTO.getTipoAlunos().get(TITULACAO_NOME));
         }
 
         @Test

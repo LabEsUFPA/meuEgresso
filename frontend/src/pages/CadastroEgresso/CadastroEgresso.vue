@@ -40,11 +40,13 @@
               required
             />
 
-            <CustomInput
+            <CustomDatepicker
               class="mb-5"
               name="geral.nascimento"
               type="date"
               label="Data de Nascimento"
+              :max-date="eighteenYearsAgo"
+              :min-date="minDate"
               :max-length="10"
               required
             />
@@ -71,12 +73,12 @@
             <CustomInput
               class="mb-5"
               name="geral.linkedin"
-              label="linkedIn"
+              label="LinkedIn"
               :icon-path="svgPath.linkedin"
             />
 
             <CustomInput
-              label="Curriculo Lattes"
+              label="Currículo Lattes"
               name="geral.lattes"
               icon-path="/img/lattesCinza.svg"
               img-icon
@@ -299,6 +301,7 @@
               name="carreira.setor"
               label="Setor de Atuação"
               placeholder="Selecione"
+              ref="selectSetor"
               :options="selectOpts.setorAtuacao"
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
@@ -308,6 +311,7 @@
               class="mb-5"
               name="carreira.empresa"
               label="Empresa"
+              ref="inputEmpresa"
               placeholder="Ex: Google"
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
@@ -318,17 +322,14 @@
               class="mb-5"
               name="carreira.faixaSalarial"
               label="Faixa Salarial"
+              ref="selectFaixa"
               :options="$storeCadastro.faixasSalariais"
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
             />
           </div>
-        </template>
-      </FolderSection>
 
-      <FolderSection class="mt-6">
-        <template #title>
-          <h1 class="text-lg text-cyan-800 font-semibold flex flex-row items-center">
+          <div class="mb-5 text-sm font-semibold text-cyan-600">
             <SvgIcon
               type="mdi"
               size="20"
@@ -343,6 +344,39 @@
           <div>
             <LocalizacaoSelect />
           </div>
+
+          <CustomSelect
+            class="mb-5"
+            name="carreira.pais"
+            label="País"
+            ref="selectPais"
+            :options="countries"
+            v-model:value="pais"
+            @change="pais = $event"
+            :disabled="area === 'Desempregado'"
+            :required="area !== 'Desempregado'"
+          />
+
+          <CustomSelect
+            class="mb-5"
+            name="carreira.estado"
+            label="Estado"
+            ref="selectEstado"
+            :options="states"
+            v-model:value="estado"
+            @change="estado = $event"
+            :disabled="area === 'Desempregado'"
+            :required="area !== 'Desempregado'"
+          />
+
+          <CustomSelect
+            name="carreira.cidade"
+            label="Cidade"
+            ref="selectCidade"
+            :options="cities"
+            :disabled="area === 'Desempregado'"
+            :required="area !== 'Desempregado'"
+          />
         </template>
       </FolderSection>
 
@@ -425,6 +459,10 @@
           text="Campos inválidos ou faltando"
           class="mb-3"
         />
+        <InvalidInsert
+          :text="errorText"
+          :show-alert="error"
+        />
 
         <CustomButton
           color="emerald"
@@ -436,7 +474,7 @@
     </Form>
     <CustomDialog
       v-model="dialogSucesso"
-      @close="$router.push('/egresso')"
+      @close="$route.params.id !== undefined ? $router.push('/painel-admin') : $router.push('/egresso')"
     >
       <div class="h-full flex justify-center items-center">
         <div class="flex flex-col full items-center justify-center gap-y-3 sm:gap-y-7">
@@ -581,17 +619,18 @@ import {
   mdiBriefcase,
   mdiEmail,
   mdiLinkedin,
-  mdiMapMarker,
   mdiMessage,
   mdiSchool,
   mdiTwitter,
-  mdiWhatsapp
+  mdiWhatsapp,
+  mdiMapMarker
 } from '@mdi/js'
 import svgPath from 'src/assets/svgPaths.json'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import CustomDialog from 'src/components/CustomDialog.vue'
 import CustomInput from 'src/components/CustomInput.vue'
+import CustomDatepicker from 'src/components/CustomDatepicker.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
 import LocalizacaoSelect from 'src/components/LocalizacaoSelect.vue'
 import FolderSection from 'src/components/FolderSection.vue'
@@ -604,11 +643,13 @@ import { Form } from 'vee-validate'
 import { computed, onMounted, ref, watch } from 'vue'
 import VueScrollTo from 'vue-scrollto'
 import { boolean, mixed, object, string } from 'yup'
+import { useRoute } from 'vue-router'
 
 const baseURL = 'https://egressos.computacao.ufpa.br/'
 const $storeCadastro = useCadastroEgressoStore()
 useLoginStore()
 const storage = new LocalStorage()
+const $route = useRoute()
 
 $storeCadastro.fetchAll()
 
@@ -625,7 +666,20 @@ const estadoChange = ref(false)
 
 const area = ref('')
 const temFoto = ref(false)
-const form = ref<typeof Form | null>(null)
+const form = ref()
+const errorText = ref('')
+const error = ref(false)
+
+const selectSetor = ref()
+const selectFaixa = ref()
+const inputEmpresa = ref()
+const selectPais = ref()
+const selectEstado = ref()
+const selectCidade = ref()
+
+const minDate = ref(new Date(-8640000000000000))
+const eighteenYearsAgo = ref(new Date())
+eighteenYearsAgo.value.setFullYear(eighteenYearsAgo.value.getFullYear() - 18)
 
 const bools = ref({
   cotista: false,
@@ -688,7 +742,11 @@ async function handleSubmit (values: any) {
         faixaSalarialId: values.carreira.faixaSalarial ? parseInt(values.carreira.faixaSalarial) : null,
         setorAtuacao: values.carreira.setor,
         nome: values.carreira.empresa,
-        endereco: values.localizacao
+        endereco: {
+          pais: values.carreira.pais,
+          estado: values.carreira.estado,
+          cidade: values.carreira.cidade
+        }
       }
     : null
 
@@ -708,11 +766,13 @@ async function handleSubmit (values: any) {
   const formData = new FormData()
   formData.append('arquivo', values.geral.foto)
 
-  const status = await $storeCadastro.cadastrarEgresso({
+  const isAdm = $route.params.id !== undefined
+
+  const response = await $storeCadastro.cadastrarEgresso({
     temFoto: temFoto.value, // false por padrao
     foto: formData
   }, {
-    nascimento: values.geral.nascimento.toString(),
+    nascimento: values.geral.nascimento,
     generoId: parseInt(values.geral.genero),
     matricula: values.academico.matricula || null,
     cotista: Boolean(values.academico.cotista.value),
@@ -734,10 +794,12 @@ async function handleSubmit (values: any) {
     bolsaId: values.academico.bolsista.tipo ? parseInt(values.academico.bolsista.tipo) : null,
     empresa,
     titulacao
-  })
+  }, isAdm, isAdm ? Number($route.params.id) : null)
 
-  if (status !== 201) {
+  if (response.status !== 201) {
     dialogFalha.value = true
+    errorText.value = response.data?.message ? response.data.message : 'Ocorreu um problema na requisição'
+    error.value = true
   } else {
     dialogSucesso.value = true
     const token = storage.getToken()
@@ -750,6 +812,7 @@ async function handleSubmit (values: any) {
 
 function handleFail (e: any) {
   camposFaltosos.value = true
+
   const incorrectElements = Object.keys(e.errors)
   const el = document.querySelector(`#${incorrectElements[0].replaceAll('.', '-')}`)
   VueScrollTo.scrollTo(el, 800, { offset: -300 })
@@ -796,14 +859,9 @@ const schema = object().shape({
     nascimento: string().required('Campo obrigatório').test('Data', 'Data inválida', (value) => {
       if (value) {
         const date = value.split('/').reverse().join('-')
-        const minDate = new Date('1940-01-01')
-        const maxDate = new Date('2023-12-31')
         const inputDate = new Date(date)
 
-        const eighteenYearsAgo = new Date()
-        eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
-
-        return inputDate >= minDate && inputDate <= maxDate && inputDate <= eighteenYearsAgo
+        return inputDate >= minDate.value && inputDate <= eighteenYearsAgo.value
       }
       return true
     }),
@@ -873,12 +931,16 @@ const schema = object().shape({
     }),
     faixaSalarial: string().when('area', ([area], schema) => {
       return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    pais: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    estado: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
+    }),
+    cidade: string().when('area', ([area], schema) => {
+      return area !== 'Desempregado' ? schema.required('Campo obrigatório') : schema.notRequired()
     })
-  }),
-  localizacao: object({
-    pais: string().required('Campo obrigatório'),
-    estado: string().required('Campo obrigatório'),
-    cidade: string().required('Campo obrigatório')
   }),
   adicionais: object({
     palestras: boolean(),
@@ -890,39 +952,50 @@ const schema = object().shape({
   })
 })
 
-onMounted(() => {
-  const estadoInput = document.querySelector('.localizacao-estado') as HTMLInputElement
-  const cidadeInput = document.querySelector('.localizacao-cidade') as HTMLInputElement
-
-  watch(paisChange, () => {
-    form.value?.setFieldValue('localizacao.cidade', '')
-    form.value?.setFieldValue('localizacao.estado', '')
-    setTimeout(() => {
-      estadoInput.value = ''
-      cidadeInput.value = ''
-    }, 10)
+onMounted(async () => {
+  watch(pais, () => {
+    selectEstado.value.setInitialValues('')
+    form.value.setFieldTouched('carreira.estado', false)
   })
 
-  watch(estadoChange, () => {
-    form.value?.setFieldValue('localizacao.cidade', '')
-    setTimeout(() => {
-      cidadeInput.value = ''
-    }, 10)
+  watch(estado, () => {
+    selectCidade.value.setInitialValues('')
+    form.value.setFieldTouched('carreira.cidade', false)
   })
 
   watch(compCotista, (_, oldVal) => {
     if (oldVal) {
       ['renda', 'escola', 'raca', 'quilombolaIndigena', 'pcd'].forEach(field => {
-        form.value?.setFieldValue(`academico.cotista.tipos.${field}`, false)
+        form.value.setFieldValue(`academico.cotista.tipos.${field}`, false)
       })
     }
   })
 
-  if (storage.has('loggedUser')) {
+  watch(area, (newVal) => {
+    if (newVal === 'Desempregado') {
+      selectSetor.value.setInitialValues('')
+      form.value.setFieldTouched('carreira.setor', false)
+      selectFaixa.value.setInitialValues('')
+      form.value.setFieldTouched('carreira.faixaSalarial', false)
+      form.value.setFieldValue('carreira.empresa', '')
+      form.value.setFieldTouched('carreira.empresa', false)
+      selectPais.value.setInitialValues('')
+      form.value.setFieldTouched('carreira.pais', false)
+    }
+  })
+
+  if (storage.has('loggedUser') && $route.params.id === undefined) {
     const userData = JSON.parse(storage.get('loggedUser'))
 
-    form.value?.setFieldValue('geral.email', userData.email)
-    form.value?.setFieldValue('geral.nome', userData.nomeCompleto)
+    form.value.setFieldValue('geral.email', userData.email)
+    form.value.setFieldValue('geral.nome', userData.nomeCompleto)
+  } else if ($route.params.id !== undefined) {
+    const userData = await $storeCadastro.fetchUserData(Number($route.params.id))
+
+    if (typeof userData !== 'number') {
+      form.value.setFieldValue('geral.email', userData.email)
+      form.value.setFieldValue('geral.nome', userData.nome)
+    }
   }
 })
 

@@ -76,7 +76,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         response.data?.forEach((item: { empresa: string, quantidade: number }) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item.empresa })
+          values.push({ value: item.quantidade, name: item.empresa })
           legend.push(item.empresa)
         })
       }
@@ -98,7 +98,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         response.data?.forEach((item: { curso: string, quantidade: number }) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item.curso })
+          values.push({ value: item.quantidade, name: item.curso })
           legend.push(item.curso)
         })
       }
@@ -120,7 +120,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         response.data?.forEach((item: { instituicao: string, quantidade: number }) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item.instituicao })
+          values.push({ value: item.quantidade, name: item.instituicao })
           legend.push(item.instituicao)
         })
       }
@@ -142,7 +142,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         Object.keys(response.data?.tipoBolsas).forEach((item) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          values.push({ value: response.data.tipoBolsas[item], name: item })
           legend.push(item)
         })
       }
@@ -186,7 +186,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         Object.keys(response.data?.interesseContagem).forEach((item) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          values.push({ value: response.data.interesseContagem[item], name: item })
           legend.push(item)
         })
       }
@@ -208,7 +208,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         Object.keys(response.data?.areaAtuacao).forEach((item) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          values.push({ value: response.data.areaAtuacao[item], name: item })
           legend.push(item)
         })
       }
@@ -230,7 +230,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         Object.keys(response.data?.bolsistasContagem).forEach((item) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          values.push({ value: response.data.bolsistasContagem[item], name: item })
           legend.push(item)
         })
       }
@@ -252,7 +252,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         Object.keys(response.data?.cotaAtuacao).forEach((item) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          values.push({ value: response.data.cotaAtuacao[item], name: item })
           legend.push(item)
         })
       }
@@ -274,7 +274,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         Object.keys(response.data?.cotistasEnumerados).forEach((item) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          values.push({ value: response.data.cotistasEnumerados[item], name: item })
           legend.push(item)
         })
       }
@@ -296,7 +296,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         Object.keys(response.data?.posGraduacaoContagem).forEach((item) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          values.push({ value: response.data.posGraduacaoContagem[item], name: item })
           legend.push(item)
         })
       }
@@ -318,7 +318,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         Object.keys(response.data?.tipoAlunos).forEach((item) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          values.push({ value: response.data.tipoAlunos[item], name: item })
           legend.push(item)
         })
       }
@@ -340,7 +340,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         Object.keys(response.data?.salarios).forEach((item) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          values.push({ value: response.data.salarios[item], name: item })
           legend.push(item)
         })
       }
@@ -362,7 +362,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         Object.keys(response.data?.setorAtuacao).forEach((item) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          values.push({ value: response.data.setorAtuacao[item], name: item })
           legend.push(item)
         })
       }
@@ -384,7 +384,7 @@ export const useGraficoStore = defineStore('GraficoStore', {
 
       if ((response?.status) === 200) {
         Object.keys(response.data?.generos).forEach((item) => {
-          values.push({ value: Math.floor(Math.random() * 100), name: item })
+          values.push({ value: response.data.generos[item], name: item })
           legend.push(item)
         })
       }

@@ -38,7 +38,11 @@ public interface EgressoService {
 
 	public List<EgressoModel> findAll();
 
-	public EgressoModel adicionarEgresso(EgressoModel egresso);
+	public List<EgressoModel> findAllByUsuarioValidoIsTrue();
+
+	public EgressoModel findByIdAndUsuarioValidoIsTrue(Integer id);
+
+	public EgressoModel save(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por atualizar informacoes do egresso no banco de dados.
@@ -48,17 +52,7 @@ public interface EgressoService {
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
-	public EgressoModel updateEgresso(EgressoModel egresso);
-
-	/**
-	 * Metodo responsavel por deletar informacoes do egresso no banco de dados.
-	 *
-	 * @param egresso Dados do egresso
-	 * @return Mensagem de confirmacao
-	 * @author Bruno Eiki
-	 * @since 17/04/2023
-	 */
-	public boolean deletarEgresso(EgressoModel egresso);
+	public EgressoModel update(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por verificar se egresso existe no banco de dados.
@@ -79,7 +73,7 @@ public interface EgressoService {
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
-	public void deleteById(Integer id);
+	public boolean deleteById(Integer id);
 
 	/**
 	 * Método responsável por verificar se existe um determinado elemento.
@@ -88,7 +82,7 @@ public interface EgressoService {
 	 * @param createdBy
 	 * @return boolean
 	 */
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	/**
 	 * Método responsável pelo retorno do caminho da foto como um URI
@@ -122,6 +116,16 @@ public interface EgressoService {
 	 * @since 07/05/2023
 	 */
 	public void saveFoto(String nomeAnexo, MultipartFile arquivo) throws IOException;
+
+	/**
+	 * Método responsável por verificar se matrícula já está associada a um egresso
+	 *
+	 * @param matricula
+	 * @return True caso matricula exista, false do contrario.
+	 * @author Bruno Eiki
+	 * @since 21/06/2023
+	 */
+	public boolean existsMatricula(String matricula);
 
 	public Map<Integer, Integer> countAgeFromEgressos();
 

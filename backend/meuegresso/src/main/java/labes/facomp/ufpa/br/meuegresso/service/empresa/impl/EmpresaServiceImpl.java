@@ -72,13 +72,8 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-        return empresaRepository.existsByIdAndCreatedById(id, createdBy);
-    }
-
-    @Override
     public EmpresaModel findByNome(String nome) {
-        return empresaRepository.findByNome(nome).orElse(null);
+        return empresaRepository.findByNomeIgnoreCase(nome).orElse(null);
     }
 
     @Override
@@ -108,6 +103,11 @@ public class EmpresaServiceImpl implements EmpresaService {
     @Override
     public List<LocalPosGraficoDTO> countEgressoByPos() {
         return empresaRepository.countEgressoByPos();
+    }
+
+    @Override
+    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+        return empresaRepository.existsByIdAndCreatedBy(id, createdBy);
     }
 
 }

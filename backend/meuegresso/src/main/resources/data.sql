@@ -1,25 +1,9 @@
 -- Usuario Padrão
-INSERT INTO usuario (email, nome_usuario, senha_usuario, login_usuario)
-VALUES (
-        'admin@admin.com',
-        'ADMIN ADMIN',
-        '{bcrypt}$2a$10$vh9/MkL4XQyd.fqkQdnWSelTUxPBpDb6qL5W2uWLxLUN0JR9vwRZm',
-        'ADMIN'
-    ) ON CONFLICT DO NOTHING;
-INSERT INTO usuario (email, nome_usuario, senha_usuario, login_usuario)
-VALUES (
-        'secretario@secretario.com',
-        'SECRETARIO SECRETARIO',
-        '{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy',
-        'SECRETARIO'
-    ) ON CONFLICT DO NOTHING;
-INSERT INTO usuario (email, nome_usuario, senha_usuario, login_usuario)
-VALUES (
-        'egresso@egresso.com',
-        'EGRESSO EGRESSO',
-        '{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO',
-        'EGRESSO'
-    ) ON CONFLICT DO NOTHING;
+
+INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario, email_verificado_usuario) VALUES ('admin@admin.com','ADMIN ADMIN','{bcrypt}$2a$10$vh9/MkL4XQyd.fqkQdnWSelTUxPBpDb6qL5W2uWLxLUN0JR9vwRZm','ADMIN', true) ON CONFLICT DO NOTHING;
+INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario, email_verificado_usuario) VALUES ('secretario@secretario.com','SECRETARIO SECRETARIO','{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy','SECRETARIO', true) ON CONFLICT DO NOTHING;
+INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario, email_verificado_usuario) VALUES ('egresso@egresso.com','EGRESSO EGRESSO','{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO','EGRESSO', true) ON CONFLICT DO NOTHING;
+
 -- Usuarios por Grupo
 INSERT INTO public.usuario_grupo
 VALUES (1, 'ADMIN') ON CONFLICT DO NOTHING;
@@ -38680,4684 +38664,1125 @@ VALUES ('Analista de QA', 1) ON CONFLICT DO NOTHING;
 INSERT INTO public.area_emprego (nome_area_emprego, created_by)
 VALUES ('Outros', 1) ON CONFLICT DO NOTHING;
 --- Egressos Validos (Dados pela Marcele)
-insert into egresso_valido (
-        nome_egresso_valido,
-        matricula_egresso_valido,
-        email_egresso_valido
-    )
-values (
-        'ADALBERTO DOS REMEDIOS SILVA JUNIOR',
-        '200411140009',
-        null
-    ),
-    (
-        'ADONIAS PINHEIRO PIRES',
-        '200511140025',
-        'quase_4ever@yahoo.com.br'
-    ),
-    ('ADRIANA MENDONCA GARCES', '200311140030', null),
-    (
-        'ADRIANO ANDRADE SILVA',
-        '200511140017',
-        'adrianocbsi05@gmail.com'
-    ),
-    ('ALAYR MAUES MELO SOBRINHO', '200311140009', null),
-    (
-        'ALBERTO WILLIAMS CORREA FERREIRA',
-        '200411140017',
-        null
-    ),
-    (
-        'ALESSANDRO PEDRO DA CUNHA',
-        '200711140025',
-        'alessandrocunha1@gmail.com'
-    ),
-    (
-        'ALEXANDRE BRITO CARDIAS JUNIOR',
-        '200611140006',
-        'alexandrecjr@ufpa.br'
-    ),
-    (
-        'ALEXANDRE TELES BASTOS',
-        '200811140014',
-        'alexandretelesbastos@gmail.com'
-    ),
-    ('ALEXSANDER HAGE DE MELO', '200411140008', null),
-    (
-        'ALISON COSTA DA CONCEICAO',
-        '200811140007',
-        'alisoncosta@globo.com'
-    ),
-    (
-        'ALISSON PAULO SOUSA SIQUEIRA',
-        '200511140033',
-        'apbelem@bol.com.br'
-    ),
-    (
-        'ALLAN DA SILVA ALCANTARA',
-        '201311140010',
-        'allan.pa.br@gmail.com'
-    ),
-    (
-        'ALLE HEDEN TRINDADE DE SOUZA',
-        '200811140040',
-        'jardim-do-heden@hotmail.com'
-    ),
-    (
-        'ALTIERE COSTA DE SOUZA',
-        '200311140004',
-        'altisouza@gmail.com'
-    ),
-    (
-        'ANDERSON COSTA NOVAES DE OLIVEIRA',
-        '201111140034',
-        'anovaes27@gmail.com'
-    ),
-    (
-        'ANDERSON JORGE SANTOS FERREIRA',
-        '201111140018',
-        'andufpa@gmail.com'
-    ),
-    (
-        'ANDERSON JUNIOR PARAENSE DA SILVA',
-        '200311140029',
-        'andsilvapara@bol.com.br'
-    ),
-    (
-        'ANDERSON NAZARENO ALCANTARA DE OLIVEIRA',
-        '201111140007',
-        'andervilo@hotmail.com'
-    ),
-    (
-        'ANDRÉ AVELINO DA SILVA NETO',
-        '201211140004',
-        'andre.n.los@gmail.com'
-    ),
-    (
-        'ANDRE DEFREMONT',
-        '201311140016',
-        'andre.def93@gmail.com'
-    ),
-    (
-        'ANDRE LUIZ COELHO PINHEIRO',
-        '200711140013',
-        'acgrafic@gmail.com'
-    ),
-    (
-        'ANDRE LUIZ DE GUSMAO',
-        '200811140002',
-        'andredgusmao@gmail.com'
-    ),
-    (
-        'ANDRESSA MYRTYS PEREIRA NOWACZYK',
-        '200911140012',
-        'andressa.myrtys@gmail.com'
-    ),
-    (
-        'ANDRE THIAGO SANTANA FERNANDES',
-        '200211140003',
-        null
-    ),
-    (
-        'ANTONILSON DA SILVA ALCANTARA',
-        '201211140014',
-        'antonilsonalcantara@gmail.com'
-    ),
-    (
-        'ANTONIO ALAN MENEZES DA SILVA',
-        '200911140029',
-        'alan.menezes@yahoo.com.br'
-    ),
-    (
-        'ANTONIO NICOLAU MAIA JUNIOR',
-        '200211140020',
-        null
-    ),
-    (
-        'ARLEM ANTONIO PEREIRA LEMOS',
-        '200411140016',
-        null
-    ),
-    (
-        'BELARDIM BERTON LOPES ARAUJO',
-        '200211140032',
-        'berton28@hotmail.com'
-    ),
-    (
-        'BERNARDO JOSE DA SILVA ESTACIO',
-        '200711140015',
-        null
-    ),
-    (
-        'BRENO BRUNO VIEIRA DE CAMPOS',
-        '200711140017',
-        'brenobcampos@gmail.com'
-    ),
-    (
-        'BRUNA JULLY NEVES NUNES',
-        '200911140031',
-        'bjullynn@gmail.com'
-    ),
-    (
-        'BRUNO BOTELHO CARDOSO',
-        '200311140035',
-        'botabotelho@hotmail.com'
-    ),
-    (
-        'BRUNO LIMA MARTINS',
-        '201011140026',
-        'brunolmartins@gmail.com'
-    ),
-    (
-        'CARLOS DOS SANTOS PORTELA',
-        '200611140025',
-        'csp@ufpa.br'
-    ),
-    (
-        'CARMEN LUCIA MARTINS DO NASCIMENTO',
-        '200511140024',
-        null
-    ),
-    ('CECIL CORDEIRO DA SILVA', '200311140024', null),
-    (
-        'CLEBER ROBSON DA SILVA GOMES',
-        '201211140034',
-        'crsg.si.2012@gmail.com'
-    ),
-    ('DACIO PANTOJA SILVA', '200411140023', null),
-    (
-        'DANGELO WESLEY OLIVEIRA MENDES',
-        '201011140021',
-        'dangelomendes10@gmail.com'
-    ),
-    (
-        'DANIEL BERG SOUZA DE OLIVEIRA',
-        '200511140036',
-        null
-    ),
-    ('DANIELLE GONCALVES BARROS', '200211140015', null),
-    (
-        'DANILO ANDERSON PALHANO PINTO',
-        '200411140019',
-        'danilopinto@museu-goeldi.br'
-    ),
-    (
-        'DANILO HENRIQUE SOUSA MARTINS',
-        '200411140005',
-        null
-    ),
-    (
-        'DANILO MATOS DA SILVA',
-        '200811140023',
-        'danilomatosdasilva@gmail.com'
-    ),
-    (
-        'DANILO SOUZA DUARTE',
-        '201611140020',
-        'danilosduarte5@gmail.com'
-    ),
-    (
-        'DAVID BARROS DE OLIVEIRA JUNIOR',
-        '201111140037',
-        'david.barros.j@gmail.com'
-    ),
-    (
-        'DEBORA DA SILVA CUENTRO',
-        '201011140007',
-        'cuentrosilva@gmail.com'
-    ),
-    (
-        'DEBORA EMERIQUE DE LIMA',
-        '201111140005',
-        'deboraelima58@gmail.com'
-    ),
-    (
-        'DENER MAUES NEGRAO',
-        '201511140004',
-        'denermaues@gmail.com'
-    ),
-    (
-        'DENISSON RONEY ALVES REIS',
-        '201111140039',
-        'denisson_roney@hotmail.com'
-    ),
-    (
-        'DIEGO ASSIS DA SILVA LISBOA',
-        '200711140027',
-        'diegolisboa@ufpa.br'
-    ),
-    (
-        'DIEGO RODRIGUES DE SOUZA',
-        '200911140008',
-        'diego.souza@icen.ufpa.br'
-    ),
-    (
-        'DIEGO SAMPAIO PANTOJA',
-        '200711140022',
-        'diegofuture@yahoo.com.br'
-    ),
-    (
-        'DIELLE DA SILVA CORREA FRANCO',
-        '200211140004',
-        'diellefranco@yahoo.com.br'
-    ),
-    (
-        'DIOGO ADRIEL LIMA FERREIRA',
-        '201011140022',
-        'cetlho@gmail.com'
-    ),
-    (
-        'DIOGO MARINHO ALMEIDA',
-        '200411140002',
-        'diogo.marinho@gmail.com'
-    ),
-    (
-        'DIORGINO RIGLES ALVES REIS',
-        '201011140023',
-        'diorgino@gmail.com'
-    ),
-    (
-        'DIOVANNI MORAES DE ARAUJO',
-        '200611140021',
-        'diovanini@gmail.com'
-    ),
-    (
-        'EDGAR EGUCHI ALVES',
-        '200611140033',
-        'edgar.eguchi@gmail.com'
-    ),
-    (
-        'EDILSON ALVARO CUSTODIO JUNIOR',
-        '200411140015',
-        null
-    ),
-    (
-        'EDNELSON SILVA DE SOUSA',
-        '200511140020',
-        'ednssousa@yahoo.com.br'
-    ),
-    (
-        'EDSON GOMES DE AGUIAR SILVA',
-        '200411140027',
-        null
-    ),
-    ('EDUARDO SOUSA DE ARAUJO', '200311140008', null),
-    (
-        'EDWIN VIANA CHAGAS',
-        '201511140005',
-        'edwinchagas@ufpa.br'
-    ),
-    (
-        'ELDER BRUNO EVARISTO CORREA',
-        '201211140035',
-        'ebec2012@gmail.com'
-    ),
-    (
-        'ELDER THIAGO COSTA MOREIRA',
-        '201111140031',
-        'thiagom@ufpa.br'
-    ),
-    (
-        'ELIEL DOS SANTOS BENTES',
-        '201111140019',
-        'elielsbentes@hotmail.com'
-    ),
-    (
-        'ELIENE DE NAZARE NASCIMENTO PAIXAO',
-        '200411140012',
-        'elienenb@yahoo.com.br'
-    ),
-    (
-        'ELIWELTON GOMES PAES',
-        '201311140007',
-        'eliwelton.g.p@gmail.com'
-    ),
-    (
-        'ELTON SARMANHO SIQUEIRA',
-        '200611140008',
-        'eltonsarmanho@gmail.com'
-    ),
-    (
-        'ELVIS THERMO CARVALHO MIRANDA',
-        '201611140041',
-        'elvisthermo@hotmail.com'
-    ),
-    (
-        'ERICK CARDOSO SYADE',
-        '201311140005',
-        'e.syadetbo@gmail.com'
-    ),
-    (
-        'ERIKA MAIA LIMA',
-        '200611140019',
-        'erikasoueu@gmail.com'
-    ),
-    ('EUDO NEVES PRIMO', '200411140035', null),
-    (
-        'EVANDRO DE SOUZA MONTEIRO',
-        '201211140005',
-        'evandroofox@gmail.com'
-    ),
-    (
-        'EWERTOM MOZART MORAES DE MIRANDA',
-        '201311140004',
-        'ewertom.moraes@gmail.com'
-    ),
-    (
-        'EXPEDITO AUGUSTO CARDOSO NOBRE FILHO',
-        '201311140031',
-        'expeditonobrefilho@gmail.com'
-    ),
-    (
-        'FABIO LUIZ CORDEIRO REZENDE',
-        '200411140034',
-        null
-    ),
-    (
-        'FABRICIO ALMEIDA ARAUJO',
-        '200711140024',
-        'araujopa@gmail.com'
-    ),
-    ('FABRICIO BRAGA DE SOUZA', '200611140013', null),
-    (
-        'FAUSTINO FIRMINO DE CARVALHO JUNIOR',
-        '200711140019',
-        null
-    ),
-    (
-        'FELIPE LEITE DE NAZARETH',
-        '200811140009',
-        'felipe.leite.nazareth@gmail.com'
-    ),
-    (
-        'FERNANDO CESAR CHAVES ALVES JUNIOR',
-        '201411140003',
-        'fernandoaj@ufpa.br'
-    ),
-    (
-        'FERNANDO FABIO DIAS GAMA DA MATA',
-        '201011140028',
-        'f.fabiogama88@gmail.com'
-    ),
-    (
-        'FERNANDO LUIZ DE SIQUEIRA CARDOSO',
-        '200811140010',
-        'fernandols.cardoso@gmail.com'
-    ),
-    (
-        'FERNANDO WAGNER ASSUNCAO TEIXEIRA',
-        '200811140024',
-        'flash104@gmail.com'
-    ),
-    (
-        'FLAVIO AUGUSTO SANTOS DE OLIVEIRA',
-        '200511140018',
-        'flavio.oliveira@ica.ufpa.br'
-    ),
-    (
-        'FRANCIELLEM MAYARA PONTES BEZERRA',
-        '201211140015',
-        'franccy.b@gmail.com'
-    ),
-    (
-        'FRANCIELMA DOS SANTOS ASSUNCAO',
-        '201611140010',
-        'assuncao.francielma@gmail.com'
-    ),
-    (
-        'FRANCISCO BANDEIRA BRITO JUNIOR',
-        '200711140010',
-        null
-    ),
-    (
-        'FRANCISCO CARLOS GUALBERTO DOS SANTOS JUNIOR',
-        '200911140027',
-        'jramlen@gmail.com'
-    ),
-    (
-        'FRANCISCO PAULO BRITO BORGES',
-        '200311140033',
-        null
-    ),
-    ('FRANKNALDO TORRES GOMES', '200211140031', null),
-    (
-        'GABRIEL CRUZ SOARES GOMES',
-        '201611140012',
-        'ggomes873@gmail.com'
-    ),
-    (
-        'GABRIEL MEDEIROS DA SILVA',
-        '201111140025',
-        'gabrielmedsilva@hotmail.com'
-    ),
-    (
-        'GEDEAN GONCALVES CARVALHO',
-        '201011140002',
-        'gedean.carvalho@hotmail.com'
-    ),
-    ('GENE SHUCHIN WEN', '200311140001', null),
-    (
-        'GEORGE GILSON OLIVEIRA DOS REIS',
-        '200511140008',
-        null
-    ),
-    (
-        'GEOVANI OLIVEIRA CABRAL DA PAZ',
-        '201211140009',
-        'geovanipaz7@gmail.com'
-    ),
-    (
-        'GERSON SOUZA DA SILVA',
-        '201111140012',
-        'gersonsouza2@gmail.com'
-    ),
-    (
-        'GILBERTO NERINO DE SOUZA JUNIOR',
-        '200611140023',
-        'gilbertojr@ufpa.br'
-    ),
-    (
-        'GIOVANNI ASSUMPCAO MAGNO',
-        '200711140033',
-        'assumpcaogiovanni@yahoo.com.br'
-    ),
-    (
-        'GIOVANNI AUGUSTO MELO PINHEIRO',
-        '200611140005',
-        'g3oaugusto@gmail.com'
-    ),
-    (
-        'GLEIDSON FELIPE PEREIRA DA SILVA',
-        '200711140035',
-        null
-    ),
-    (
-        'GLEISE PINHEIRO BALDEZ',
-        '200711140001',
-        'gleisebaldez@gmail.com'
-    ),
-    ('GLEYDSON DA COSTA FERREIRA', '200311140010', null),
-    ('GLEYSON MIRANDA MELO', '200311140011', null),
-    (
-        'GUSTAVO MAUES DE OLIVEIRA LOBATO',
-        '200311140005',
-        'gustavomaues@ufpa.br'
-    ),
-    (
-        'HANA GABRIELLE DOS SANTOS BARATA',
-        '201711140009',
-        'hanagabrielle@outlook.com'
-    ),
-    (
-        'HANS WILLIAM DOS SANTOS SILVA',
-        '201011140010',
-        'hans.w.santos@gmail.com'
-    ),
-    (
-        'HEGON HENRIQUE CORREA DA SILVA',
-        '200511140022',
-        'hegoncbsi@yahoo.com.br'
-    ),
-    (
-        'HERBERTH MENDES DE ALMEIDA',
-        '200811140031',
-        'herberthalmeida@hotmail.com'
-    ),
-    (
-        'HIEDA ADRIANA NASCIMENTO SILVA',
-        '200211140009',
-        'hieda@ufpa.br'
-    ),
-    (
-        'HUGO BISPO SANTOS DO NASCIMENTO',
-        '200711140011',
-        'hbsnhugo@gmail.com'
-    ),
-    (
-        'HUGO RONALDO GONZALEZ NOGUEIRA',
-        '200311140032',
-        null
-    ),
-    (
-        'IDERALDO CARLOS PAVESI',
-        '200611140010',
-        'ideraldo_carlos@hotmail.com'
-    ),
-    ('IGOR BARBOSA DE CARVALHO', '200811140041', null),
-    (
-        'INGRID MOREIRA MIRANDA DA SILVA',
-        '201511140003',
-        'i.moreiragt@gmail.com'
-    ),
-    (
-        'ISAAC SOUZA ELGRABLY',
-        '201111140020',
-        'isaacelgrably@hotmail.com'
-    ),
-    (
-        'IURI IGONEZ SILVA RAIOL',
-        '200911140006',
-        'iuriraiol@gmail.com'
-    ),
-    (
-        'JACKSON PEREIRA DA SILVA CRUZ',
-        '200411140011',
-        'jacksonpscruz@outlook.com'
-    ),
-    (
-        'JADIR HORACIO SARMENTO PINTO JUNIOR',
-        '200911140023',
-        'jadirjunior@ufpa.br'
-    ),
-    (
-        'JAILSON MARTINS TOLOSA',
-        '201111140014',
-        'jailsontolosa@gmail.com'
-    ),
-    (
-        'JAIRO DE JESUS NASCIMENTO DA SILVA JUNIOR',
-        '200811140039',
-        'junior.jairo1@gmail.com'
-    ),
-    (
-        'JAMYSON DA SILVA MATOSO',
-        '200911140011',
-        'jamysonmatoso@yahoo.com.br'
-    ),
-    ('JANDER DE SOUZA E SILVA', '200211140010', null),
-    (
-        'JEFFERSON KLISTER DUARTE DA SILVA JUNIOR',
-        '201311140001',
-        'jeffklister@gmail.com'
-    ),
-    (
-        'JESSÉ DA COSTA ROCHA',
-        '201111140001',
-        'jesserocha2012@gmail.com'
-    ),
-    (
-        'JESSICA DE PAULA FIGUEIRA RIBEIRO',
-        '201411140036',
-        'jessicadepaula.stm@gmail.com'
-    ),
-    (
-        'JHONATHAS SOUSA DOS SANTOS',
-        '200611140012',
-        'j0g4d0r1@hotmail.com'
-    ),
-    (
-        'JHOVAN OBEDE TERRA DA SILVA',
-        '200211140028',
-        null
-    ),
-    (
-        'JOAO LUIS DOS REIS LIMA',
-        '200911140002',
-        'joaoamil@hotmail.com'
-    ),
-    (
-        'JOAO VICTOR PATERNOSTRO CORREA',
-        '201211140003',
-        'jvpaternostroc2@gmail.com'
-    ),
-    (
-        'JOSE AUGUSTO DE SENA QUARESMA',
-        '201111140011',
-        'jq.quaresma12@gmail.com'
-    ),
-    (
-        'JOSE BRICIO MACHADO CARDOSO NETO',
-        '200711140020',
-        null
-    ),
-    (
-        'JOSE DEIVISON VIEIRA XAVIER',
-        '201311140026',
-        'deivisonvx@gmail.com'
-    ),
-    (
-        'JOSE HIRVALDO LOBO MONTEIRO',
-        '200211140012',
-        null
-    ),
-    (
-        'JOSE RAMON DA CONCEIÇAO MONTEIRO',
-        '201411140019',
-        'jose.monteiro@icen.ufpa.br'
-    ),
-    (
-        'JOYCE ANNE PINTO RODRIGUES',
-        '200311140015',
-        'joycesinfo03@yahoo.com.br'
-    ),
-    (
-        'JULIO DE PADUA LOPES MENEZES',
-        '201311140036',
-        'julio.menezesi2013@gmail.com'
-    ),
-    (
-        'JULIO EDUARDO BITTENCOURT DA SILVA',
-        '200711140014',
-        'julioebs20@hotmail.com'
-    ),
-    (
-        'JULIO FRANCISCO COUTO DE CARVALHO',
-        '201011140033',
-        'juliusufpa2010@gmail.com'
-    ),
-    (
-        'JULIO RAMON NOGUEIRA LISBOA',
-        '200811140025',
-        'julioramonufpa@gmail.com'
-    ),
-    (
-        'KAIO SERGIO DA MOTTA VALENTE',
-        '200711140004',
-        null
-    ),
-    (
-        'KALILL CORDEIRO LAMEIRA',
-        '201411140013',
-        'kalill.lameira@gmail.com'
-    ),
-    ('KAMILA BALTAZAR CORREIA', '200611140029', null),
-    (
-        'KATYA KEILA COSTA ASSIS',
-        '200511140031',
-        'katyakeila@gmail.com'
-    ),
-    (
-        'KELVIN TEIXEIRA VIEIRA',
-        '201111140016',
-        'kelvintvieira@hotmail.com'
-    ),
-    (
-        'KLEOSON BRUNO CORREA DOS SANTOS',
-        '200811140013',
-        'brunocorrea@ufpa.br'
-    ),
-    (
-        'LAERTE GUEDES MONTEIRO',
-        '200911140001',
-        'laerte-gm@hotmail.com'
-    ),
-    (
-        'LAERTH LASERINO PINTO MONTEIRO',
-        '201011140034',
-        'laertthpotter@hotmail.com'
-    ),
-    (
-        'LAIS CONCEICAO RIBEIRO',
-        '200811140019',
-        'laissribeiro@gmail.com'
-    ),
-    ('LARISSA DE SOUZA CARNEIRO', '200511140027', null),
-    (
-        'LEANDRO GOMES DE MOURA',
-        '200911140033',
-        'leandro.goms.moura@gmail.com'
-    ),
-    ('LEANDRO HERNANDEZ ALMEIDA', '200411140004', null),
-    (
-        'LEIDIEL ARAUJO DE OLIVEIRA',
-        '200611140003',
-        'leidiel@ufpa.br'
-    ),
-    (
-        'LEONARDO ANDRE SILVA DOS SANTOS',
-        '201111140010',
-        'leonardoandre27@gmail.com'
-    ),
-    (
-        'LEONARDO BARBOSA DA COSTA',
-        '201011140001',
-        'barbosleonardo@gmail.com'
-    ),
-    (
-        'LEONARDO DA COSTA FIGUEIREDO',
-        '201411140011',
-        'leonardofig88@gmail.com'
-    ),
-    (
-        'LEONARDO DIAS MARTINS',
-        '201111140008',
-        'leo_dm@live.it'
-    ),
-    ('LEONARDO FERREIRA E SILVA', '200911140015', null),
-    (
-        'LEONARDO HERNANDEZ ALMEIDA',
-        '200411140020',
-        'leofozzy@yahoo.com.br'
-    ),
-    (
-        'LEO SANTOS DE LIMA',
-        '200511140002',
-        'leo-sdl@hotmail.br'
-    ),
-    ('LEYRILANE DE SOUZA', '200511140015', null),
-    (
-        'LOURDILENE SILVA DE SOUZA',
-        '201011140031',
-        'lourdilene.souza@gmail.com'
-    ),
-    (
-        'LOURIVAL DA CONCEICAO PEREIRA JUNIOR',
-        '200311140013',
-        null
-    ),
-    (
-        'LUAN DOS SANTOS OLIVEIRA',
-        '201411140029',
-        'luanoliveira35@hotmail.com'
-    ),
-    (
-        'LUAN FELIPE BRITTO ALVES',
-        '201611140015',
-        'akaluan.la@gmail.com'
-    ),
-    ('LUCIANA NEVES BENTES', '200611140031', null),
-    ('LUCIANE FARIAS SOARES', '200411140025', null),
-    (
-        'LUIZ ALESSANDRO LOPES FEITOSA',
-        '200511140009',
-        'alelibbra@hotmail.com'
-    ),
-    (
-        'LUIZ ANTONIO ANDRADE DE SOUSA',
-        '201311140013',
-        'luizdsousa@gmail.com'
-    ),
-    (
-        'LUIZ EDUARDO ALVES DE ALCANTARA',
-        '201111140006',
-        'eduardo@alcantara.net.br'
-    ),
-    (
-        'LUIZ FELIPPH CALADO SOSINHO',
-        '201211140006',
-        'luizfelipph@gmail.com'
-    ),
-    (
-        'LUIZ OTAVIO DANIN DE LIMA',
-        '200911140021',
-        'otaviodanin@gmail.com'
-    ),
-    ('LUZIANA BRAGA CORREA', '200311140026', null),
-    ('LYNDON JOHNSON BRITO SOUSA', '200411140003', null),
-    (
-        'MABEL PILAR NASCIMENTO DUARTE',
-        '200211140013',
-        'mpillar@yahoo.com.br'
-    ),
-    (
-        'MANOEL VICTOR RODRIGUES LEITE',
-        '201211140022',
-        'victor.ufpaa@gmail.com'
-    ),
-    (
-        'MANUELY BARBOSA GUEDES',
-        '201011140020',
-        'manuely.guedes@icen.ufpa.br'
-    ),
-    (
-        'MARCELA SANTIAGO DOS SANTOS',
-        '200211140007',
-        null
-    ),
-    (
-        'MARCELO DA SILVA MORAES',
-        '200411140029',
-        'marcelo@ufpa.br'
-    ),
-    (
-        'MARCELO SARRAF PINHO',
-        '200211140006',
-        'marcelosarraf@gmail.com'
-    ),
-    (
-        'MARCIO JOSE MOUTINHO DA PONTE',
-        '200211140014',
-        'marcio.ponte@ufopa.edu.br'
-    ),
-    (
-        'MARCIO NUNES GOMES',
-        '200311140016',
-        'marciogomes@mpf.mp.br'
-    ),
-    (
-        'MARCO AURELIO CAPELA',
-        '200411140032',
-        'macapela@ufpa.br'
-    ),
-    (
-        'MARCOS ALMEIDA DA COSTA',
-        '201511140034',
-        'almeidmar@gmail.com'
-    ),
-    (
-        'MARCOS AUGUSTO BARATA DA SILVA',
-        '200411140030',
-        null
-    ),
-    (
-        'MARCOS PAULO FERREIRA COSTA',
-        '201311140034',
-        'marcsi2320@gmail.com'
-    ),
-    (
-        'MARCOS PAULO NASCIMENTO SILVA',
-        '200411140024',
-        null
-    ),
-    (
-        'MARCOS VALERIO DA SILVA RENDEIRO',
-        '200611140020',
-        null
-    ),
-    (
-        'MARIANO JEFFERSON BATISTA GOMES JUNIOR',
-        '200711140021',
-        'marianojefferson@hotmail.com'
-    ),
-    (
-        'MARIO ANTONIO PEREIRA DE OLIVEIRA',
-        '201011140039',
-        'mario_oliveira10@yahoo.com.br'
-    ),
-    (
-        'MARIO BASTOS DE BRITO JUNIOR',
-        '200211140017',
-        null
-    ),
-    (
-        'MARLON SILVA PIMENTEL CRUZ',
-        '201211140028',
-        'marlonufpasi@gmail.com'
-    ),
-    (
-        'MARLON WILSON SANTOS DOS SANTOS',
-        '201511140006',
-        'marlon.santos.santos@icen.ufpa.br'
-    ),
-    (
-        'MARTA JODYE BORDO DA CONCEICAO',
-        '200511140019',
-        'jodye_st@hotmail.com'
-    ),
-    (
-        'MATHEUS SEABRA DE CARVALHO VIEIRA COELHO',
-        '201311140021',
-        'matheusvieiracoelho@gmail.com'
-    ),
-    (
-        'MAURICIO MARTINS RIBEIRO',
-        '201811140014',
-        'mauricio.si.ufpa@gmail.com'
-    ),
-    (
-        'MAURO AUGUSTO BARROS FERREIRA',
-        '201111140048',
-        'mauroabferreira@yahoo.com.br'
-    ),
-    (
-        'MAXIMIANO DAVES DA COSTA VIEIRA',
-        '200411140026',
-        null
-    ),
-    (
-        'MAX WANDERSON DE ARAUJO FAVACHO',
-        '200511140010',
-        null
-    ),
-    (
-        'MAYKON ARAUJO DE SOUZA',
-        '201311140018',
-        'maykonaraujo23@gmail.com'
-    ),
-    (
-        'MICHEL FEU CASTRO GONDIM',
-        '200511140034',
-        'michelgondim@yahoo.com.br'
-    ),
-    ('MICHEL PEREIRA MARQUES', '200711140008', null),
-    (
-        'NILTON RODRIGUES DE ASSIS JUNIOR',
-        '200611140028',
-        'NILJUNIOR@GMAIL.COM                                                             '
-    ),
-    (
-        'ODIRLEY PINHEIRO DE MATOS',
-        '201211140008',
-        'odirley007@yahoo.com.br'
-    ),
-    (
-        'ORLANDO DO NASCIMENTO TAVARES FILHO',
-        '200811140026',
-        'ontf.filho@gmail.com'
-    ),
-    ('OTAVIO DUTRA LEITE', '200211140022', null),
-    (
-        'PATRICIA PINTO DINIZ',
-        '200411140010',
-        'patricia.diniz@tucurui.ufpa.br'
-    ),
-    (
-        'PAULEANDRO SILVA NUNES',
-        '200811140030',
-        'psn_leandro@hotmail.com'
-    ),
-    (
-        'PAULO ALBERTO LIMA PRADO',
-        '200611140026',
-        'paulo_alp19@hotmail.com'
-    ),
-    (
-        'PAULO ANDRE MOREIRA CARVALHO',
-        '200211140008',
-        null
-    ),
-    (
-        'PAULO HENRIQUE AMORIM PEREIRA',
-        '201211140025',
-        'paulohenriq10@gmail.com'
-    ),
-    (
-        'PAULO VITOR CHAVES DE LIMA',
-        '201111140024',
-        'pv.lima05@gmail.com'
-    ),
-    (
-        'PAULO VITOR RODRIGUES CARDOSO',
-        '200811140008',
-        'paulocardoso.dev@gmail.com'
-    ),
-    (
-        'PAULO WESKLEY DE ALMEIDA FERREIRA',
-        '201011140032',
-        'weskleyalmeida.si@gmail.com'
-    ),
-    (
-        'PEDRO ESTEVAO DA CONCEICAO MOUTINHO JUNIOR',
-        '200611140002',
-        'pedro_cabeludow@hotmail.com'
-    ),
-    (
-        'RAFAELA CARDOSO MOUTINHO',
-        '200511140012',
-        'rafmout@yahoo.com.br'
-    ),
-    (
-        'RAFAEL BRUNO PECCATIELLO',
-        '200511140007',
-        'peccatiello@ig.com.br'
-    ),
-    ('RAFAEL DANTAS CARVALHO', '200711140031', null),
-    (
-        'RAFAEL DE SOUZA CAVALHEIRO',
-        '201211140030',
-        'rafcavalheiro@gmail.com'
-    ),
-    (
-        'RAFAEL FERREIRA DE SOUZA',
-        '201011140005',
-        'desouza.timao@gmail.com'
-    ),
-    (
-        'RAFAEL GOMES SOUSA',
-        '200711140032',
-        'rafael.sousa@ifpa.edu.br'
-    ),
-    (
-        'RAIMUNDO NORBERTO LAMEIRA JUNIOR',
-        '200211140021',
-        'raimundonorberto@yahoo.com.br'
-    ),
-    (
-        'RAPHAEL DA SILVA AZEVEDO',
-        '200511140011',
-        'razeved@yahoo.com.br'
-    ),
-    ('RAPHAEL ROGERIO MOUTA', '200911140025', null),
-    (
-        'RAUL CESAR MONTEIRO DA SILVA',
-        '200811140018',
-        'fa15698@yahoo.com.br'
-    ),
-    (
-        'RENAN EDUARDO SOARES RODRIGUES',
-        '201011140016',
-        'renaneduardorodrigues@gmail.com'
-    ),
-    (
-        'RENATA RODRIGUES DE CARVALHO',
-        '200511140032',
-        null
-    ),
-    (
-        'RICARDO ANDERSON MUNIZ SARMANHO',
-        '201411140007',
-        'ricardosarmanho@hotmail.com'
-    ),
-    (
-        'RICARDO ARAUJO FEIO',
-        '200611140018',
-        'rafeio@bol.com.br'
-    ),
-    ('RICARDO PAES ALMEIDA', '200411140007', null),
-    (
-        'ROBERTO BARBOSA DE ALMEIDA JUNIOR',
-        '201311140002',
-        'roberto.almeida@icen.ufpa.br'
-    ),
-    (
-        'ROBERTO BRITO XAVIER JUNIOR',
-        '201211140019',
-        'rbxjunior@gmail.com'
-    ),
-    (
-        'ROBERTO FELIX',
-        '201011140014',
-        'bob.felix89@gmail.com'
-    ),
-    (
-        'ROBSON DOS SANTOS SILVA',
-        '201011140015',
-        'rsantsil@gmail.com'
-    ),
-    (
-        'RODRIGO BEZERRA BRASIL',
-        '200711140002',
-        'rodrigobbrasil@gmail.com'
-    ),
-    (
-        'RODRIGO DO CARMO VIANA',
-        '201011140030',
-        'rodrigoviana@ufpa.br'
-    ),
-    (
-        'RODRIGO VIDAL MIRANDA',
-        '200811140027',
-        'rvidalth@yahoo.com.br'
-    ),
-    (
-        'ROGERIO LIMA CARNEIRO',
-        '200211140019',
-        'rlimac@gmail.com'
-    ),
-    (
-        'ROMAO SOUZA SILVA',
-        '200411140022',
-        'rjsilva@ufpa.br'
-    ),
-    ('ROSANE DA SILVA SIQUEIRA', '200311140025', null),
-    (
-        'ROSANGELA SOUSA RAIOL',
-        '200211140026',
-        'zanraiol@gmail.com'
-    ),
-    (
-        'ROSIVALDO FONSECA GOMES JUNIOR',
-        '200911140020',
-        'rfgomesjr@gmail.com'
-    ),
-    (
-        'ROUSEVELT RODRIGUES DE ALMEIDA',
-        '200811140032',
-        null
-    ),
-    ('RUMENIGG NOGUEIRA VIEIRA', '200211140018', null),
-    (
-        'SAMARA FERNANDES PIMENTEL',
-        '201511140002',
-        'samwallflowergirl@gmail.com'
-    ),
-    (
-        'SAMUEL LINHARES SANTANA',
-        '200911140014',
-        'ifpa.santana@gmail.com'
-    ),
-    (
-        'SANDRO ALAN DE SOUZA MONTEIRO',
-        '200711140006',
-        null
-    ),
-    (
-        'SEBASTIAO GILBERTO LOPES VAZ',
-        '200511140035',
-        null
-    ),
-    (
-        'SERGIO EWERTON MACIEL RODES',
-        '201111140030',
-        'sergio_ewr17@hotmail.com'
-    ),
-    (
-        'SILVIO BRUNO PAIVA COSTA',
-        '200511140014',
-        'sbpaco@gmail.com'
-    ),
-    (
-        'SIMON AFONSO CORREA LOBATO',
-        '200511140004',
-        'simondelarocha@yahoo.com.br'
-    ),
-    (
-        'SIVALDO DE OLIVEIRA BARBOSA',
-        '200711140007',
-        null
-    ),
-    (
-        'TALITA DE CACIA SOUSA TRAVASSOS',
-        '201411140025',
-        'talitatravassos.tt@gmail.com'
-    ),
-    ('TAMARA CUNHA MENDES', '200211140016', null),
-    (
-        'TATIANE BOTELHO BORGES',
-        '200811140015',
-        'tatianejbm@yahoo.com.br'
-    ),
-    (
-        'THIAGO BENICIO MACEDO',
-        '201611140002',
-        'thiagobm01@hotmail.com'
-    ),
-    (
-        'THIAGO CORDEIRO COSTA DA SILVA',
-        '201211140010',
-        'tsilva0891@gmail.com'
-    ),
-    ('THIAGO DA SILVA GILLA', '200211140001', null),
-    ('THIAGO DE LIMA ARAUJO', '200311140020', null),
-    (
-        'THIAGO DE MATOS BEZERRA',
-        '200911140017',
-        'thiagomatos99@hotmail.com'
-    ),
-    ('THIAGO MODESTO DIAS', '200711140023', null),
-    (
-        'THIAGO SALES SANTOS',
-        '200711140034',
-        'ioritss@hotmail.com'
-    ),
-    (
-        'TIAGO ANTERO DE SOUSA ALVES',
-        '201011140012',
-        'jvantero@gmail.com'
-    ),
-    (
-        'TIAGO PORTO SANTOS DO NASCIMENTO',
-        '200311140003',
-        null
-    ),
-    (
-        'VERONICA COSTA PANTOJA',
-        '200311140017',
-        'VCPSINFO@YAHOO.COM.BR'
-    ),
-    (
-        'VICTOR GUSTAVO DE MELLO GONCALVES',
-        '200511140016',
-        null
-    ),
-    (
-        'VICTOR HUGO AZEVEDO FERREIRA',
-        '201711140002',
-        'victorhugo543af@gmail.com'
-    ),
-    (
-        'VINICIUS FAVACHO QUEIROZ',
-        '201611140031',
-        'viniciusqquei@gmail.com'
-    ),
-    (
-        'VITOR CIRILO ARAUJO SANTOS',
-        '201011140003',
-        'vitor.cirilo3@gmail.com'
-    ),
-    (
-        'VITOR DE SOUZA CASTRO',
-        '200711140003',
-        'vitor@ufpa.br'
-    ),
-    (
-        'WALBERT CUNHA MONTEIRO',
-        '200511140021',
-        'walbert.monteiro@ifpa.edu.br'
-    ),
-    (
-        'WALBERT EMANUEL DA SILVA NASCIMENTO',
-        '201011140009',
-        'walbertsilva5@gmail.com'
-    ),
-    (
-        'WALDER LOBO MARQUES',
-        '201111140038',
-        'walderwolf.tm@gmail.com'
-    ),
-    (
-        'WALERIA PAULA DA LUZ MOURA SOUZA',
-        '200511140028',
-        'waleriamoura@gmail.com'
-    ),
-    (
-        'WANDERSON AUGUSTO DE SOUZA PEREIRA',
-        '200311140034',
-        null
-    ),
-    ('WELLINGTON CARDOSO COSTA', '200311140007', null),
-    (
-        'WELLINGTON SOUZA MORAES',
-        '200811140003',
-        'engwillsm@yahoo.com.br'
-    ),
-    (
-        'WESLEY ANDERSON OLIVEIRA DE MELO',
-        '200911140032',
-        'wesleyandmelo@gmail.com'
-    ),
-    (
-        'WESLEY DE OLIVEIRA BARBOSA',
-        '201011140013',
-        'wesley.tadsi@yahoo.com.br'
-    ),
-    ('WILLIAM CAPELA CARDOSO', '200511140029', null),
-    (
-        'WILLIAM SAWAKI DE MELO E SILVA',
-        '201011140006',
-        'williamsawaki@gmail.com'
-    ),
-    (
-        'WILLY CLEYBER ALMEIDA SILVA',
-        '200411140033',
-        null
-    ),
-    (
-        'WILTON CESAR NASCIMENTO DA SILVA',
-        '200511140037',
-        'wilton.cns@gmail.com'
-    ),
-    (
-        'YASMIN VIEIRA DE MELO KOURY',
-        '200311140018',
-        null
-    ),
-    (
-        'YURI MELO E SILVA DO ESPIRITO SANTO',
-        '201611140027',
-        'yurimelo89@gmail.com'
-    ),
-    (
-        'ABEL BRUNO NASCIMENTO SILVA',
-        '200804940012',
-        'abelbruno@hotmail.com'
-    ),
-    (
-        'ABNATAL PEREIRA CORDOVIL JUNIOR',
-        '199904940002',
-        null
-    ),
-    (
-        'ABNER CARDOSO DA SILVA',
-        '201604940029',
-        'abner.cardo@gmail.com'
-    ),
-    (
-        'ABNER GILLET FARIAS',
-        '201304940017',
-        'abnergillet16@gmail.com'
-    ),
-    (
-        'ABRAHAM LINCOLN RABELO DE SOUSA',
-        '199504940031',
-        null
-    ),
-    (
-        'ACZA LIRA SILVA',
-        '201704940024',
-        'acza.silva@icen.ufpa.br'
-    ),
-    (
-        'ADAILTON MAGALHAES LIMA',
-        '200204940003',
-        'adailton@ufpa.br'
-    ),
-    (
-        'ADEILSON NAZARENO ARAUJO PINHEIRO',
-        '200304940019',
-        null
-    ),
-    ('ADELMO FREIRES GOMES', '199104940049', null),
-    (
-        'ADENILTON CORECHA DE SOUZA',
-        '200904940039',
-        'adcorecha@gmail.com'
-    ),
-    ('ADERBAL MOURA SANTOS', '199104940090', null),
-    ('ADEVALDO QUEIROZ DA SILVA', '200104940034', null),
-    (
-        'ADIEL DOS SANTOS NASCIMENTO',
-        '201504940002',
-        'adieltab16@gmail.com'
-    ),
-    (
-        'ADILSON FRANCISCO FERREIRA SOUSA',
-        '200904940009',
-        'adilson.sousa@icen.ufpa.br'
-    ),
-    ('ADRIANA LEITE DE ALCANTARA', '199304940001', null),
-    ('ADRIANA NUNES TELES', '199904940016', null),
-    (
-        'ADRIANO DE AGUIAR RIBEIRO',
-        '200204940036',
-        'ribeiroadrianno@ig.com.br'
-    ),
-    (
-        'ADRIANO DE OLIVEIRA MARTINS',
-        '200004940020',
-        null
-    ),
-    ('ADRIANO LUIZ PINTO SOBRAL', '199404940002', null),
-    (
-        'ADRIANO SILVA BARRETO',
-        '201304940025',
-        'adriano.sbarreto@hotmail.com'
-    ),
-    (
-        'AIAN SHAY BENTES DAMASCENO CARDOSO',
-        '201704940041',
-        'aianshay@gmail.com'
-    ),
-    ('AILTO LORASCHI', '200004940046', null),
-    (
-        'AIRTON NOBUMASA ISHIMORI',
-        '200604940031',
-        'airton@ufpa.br'
-    ),
-    (
-        'ALAN TONY SOUZA VELOSO',
-        '201504940009',
-        'aveloso@ufpa.br'
-    ),
-    (
-        'ALBERTO DA CRUZ LIMA SOBRINHO',
-        '201704940019',
-        'aclsobrinho@gmail.com'
-    ),
-    ('ALBERTO SHINTA KURODA', '199104940107', null),
-    (
-        'ALCYR DA COSTA ALMEIDA JUNIOR',
-        '201204940025',
-        'almeida.alcyr@gmail.com'
-    ),
-    (
-        'ALEKSANDRA DO SOCORRO DA SILVA',
-        '199104940108',
-        null
-    ),
-    (
-        'ALESSANDRA CAROLINE DOS SANTOS NASCIMENTO',
-        '200404940026',
-        null
-    ),
-    ('ALESSANDRA DA SILVA GOMES', '200104940011', null),
-    ('ALESSANDRA FONTEL POMPEU', '199104940050', null),
-    (
-        'ALESSANDRA PANTOJA DE ARAUJO',
-        '201204940027',
-        'alessandra.araujo@icen.ufpa.br'
-    ),
-    (
-        'ALESSANDRA PRISCILA ALVES DE OLIVEIRA',
-        '201004940012',
-        'alessandrapriscila.alves@gmail.com'
-    ),
-    (
-        'ALETEIA PATRICIA FAVACHO DE ARAUJO',
-        '199304940002',
-        null
-    ),
-    ('ALEXANDER RICHARD VINSON', '200004940013', null),
-    (
-        'ALEXANDRE ABREU DE FREITAS',
-        '201104940039',
-        'alexandre.freytas@gmail.com'
-    ),
-    (
-        'ALEXANDRE ALVAREZ MARTINI SANTOS',
-        '199504940001',
-        null
-    ),
-    (
-        'ALEXANDRE CARLOS BEZERRA MACEDO',
-        '199304940004',
-        null
-    ),
-    ('ALEXANDRE MELO BRAGA', '199204940001', null),
-    (
-        'ALEXANDRE MONASSA MOREIRA',
-        '200504940011',
-        'alexandre.monassa@gmail.com'
-    ),
-    (
-        'ALEXANDRE RODRIGUES GOMES',
-        '201004940020',
-        'gomes.bcc@gmail.com'
-    ),
-    ('ALEX YUICHI YOKOKURA', '200004940016', null),
-    (
-        'ALFREDO LIMA DA COSTA JUNIOR',
-        '201104940033',
-        'jrcdz01@gmail.com'
-    ),
-    (
-        'ALINE CLAIREFONT TAVARES MELO',
-        '199704940017',
-        null
-    ),
-    ('ALINE DE OLIVEIRA SILVA', '200304940005', null),
-    (
-        'ALINE PATRICIA DA SILVA PIMENTEL',
-        '200204940047',
-        'apssig@ig.com.br'
-    ),
-    (
-        'ALINE REGINA DE OLIVEIRA MIRANDA',
-        '199404940045',
-        null
-    ),
-    (
-        'ALISON RICARDO SANTOS DA SILVA',
-        '200304940003',
-        'alisonricss@yahoo.com.br'
-    ),
-    (
-        'ALLINE DE MELO LEMOS',
-        '200204940007',
-        'allinelemos@gmail.com'
-    ),
-    (
-        'ALLINE DE OLIVEIRA PEIXOTO',
-        '200104940049',
-        'alline_peixoto@yahoo.com.br'
-    ),
-    (
-        'ALLISFRANK DOS SANTOS',
-        '200904940031',
-        'allisknarf@gmail.com'
-    ),
-    (
-        'ALUIZIO RAMOS PEREIRA NETO',
-        '201004940028',
-        'aluizio.ramos.adv@gmail.com'
-    ),
-    ('AMANDA NOBRE COSTA', '200204940060', null),
-    (
-        'ANA CARLA MACEDO DA SILVA',
-        '199104940001',
-        'acms@ufpa.br'
-    ),
-    (
-        'ANA CAROLINA DE ARAUJO BARBOSA',
-        '200204940055',
-        'carolufpa@gmail.com'
-    ),
-    (
-        'ANA IDALINA TENORIO PIEDADE',
-        '200204940046',
-        'idabiap@yahoo.com.br'
-    ),
-    (
-        'ANA ISABELA MANITO RAMOS',
-        '201404940021',
-        'aisabelamr@gmail.com'
-    ),
-    (
-        'ANA KARLA MIRANDA DE OLIVEIRA',
-        '199204940044',
-        null
-    ),
-    (
-        'ANA VITORIA DE BACELAR MACHADO E SILVA',
-        '201704940008',
-        'av503vitoria@gmail.com'
-    ),
-    ('ANDERSON BAIA MAIA', '199804940029', null),
-    (
-        'ANDERSON DE OLIVEIRA BANDEIRA',
-        '200504940036',
-        null
-    ),
-    (
-        'ANDERSON FURTADO DE NAZARE',
-        '200904940015',
-        'anderson.fn88@gmail.com'
-    ),
-    (
-        'ANDERSON JONES SILVA DE JESUS',
-        '199704940007',
-        null
-    ),
-    (
-        'ANDERSON JORGE SERRA DA COSTA',
-        '200204940052',
-        'andersonjsc@gmail.com'
-    ),
-    (
-        'ANDERSON MARQUES MORAIS',
-        '200904940016',
-        'andersonoanjo18@gmail.com'
-    ),
-    (
-        'ANDERSON RAIOL RODRIGUES',
-        '199504940002',
-        'arr@ufpa.br'
-    ),
-    (
-        'ANDERSON SILVA DE OLIVEIRA GÓES',
-        '200304940016',
-        'agoes@ufpa.br'
-    ),
-    (
-        'ANDRE LUIS MACHADO DE VASCONCELOS',
-        '200804940001',
-        'andre.cbcc@gmail.com'
-    ),
-    (
-        'ANDRE MIGUEL PENA BAHIA',
-        '200804940022',
-        'andrebahia.cbcc@gmail.com'
-    ),
-    (
-        'ANDRE MIRANDA PINHEIRO',
-        '201604940032',
-        'andremirandap93@gmail.com'
-    ),
-    ('ANDRE RICARDO FARIA GOMES', '199504940032', null),
-    (
-        'ANDREY DE MACEDO SOUSA',
-        '200904940014',
-        'andreymacedo06@hotmail.com'
-    ),
-    (
-        'ANE MARGARETH MONTE VERDE SILVA',
-        '199104940052',
-        null
-    ),
-    ('ANETE HIROMI HASHIMOTO', '199104940053', null),
-    (
-        'ANGELA CRISTINA SOUZA DE AQUINO',
-        '199304940006',
-        null
-    ),
-    (
-        'ANGELA MARIA TRINDADE AMADOR',
-        '201104940028',
-        'angelaamador@ufpa.br'
-    ),
-    (
-        'ANGELO DE BARROS BRAGA',
-        '200104940031',
-        '3390955@gmail.com'
-    ),
-    (
-        'ANGELO LUIZ DA CRUZ OLIVEIRA',
-        '201004940045',
-        'angeloluizz@gmail.com'
-    ),
-    (
-        'ANTONIO ANDRE CUNHA DA SILVA',
-        '201004940031',
-        'aandrecunhas@gmail.com'
-    ),
-    (
-        'ANTONIO FABIO RODRIGUES DOS SANTOS',
-        '199604940015',
-        null
-    ),
-    (
-        'ANTONIO JOSE CASTRO DE ALMEIDA JUNIOR',
-        '199104940110',
-        'antonio.almeida.negocios@gamial.com'
-    ),
-    (
-        'ANTONIO MARCOS FERREIRA DE SOUZA',
-        '200204940048',
-        'amsouzapa2@gmail.com'
-    ),
-    ('ANTONIO SOARES LOBATO', '199904940023', null),
-    (
-        'ARIANE ELIZABETH NUNES GARCIA',
-        '201204940030',
-        'aeng.garcia@gmail.com'
-    ),
-    (
-        'AROLDO CRISTIANO GUERREIRO LEAL',
-        '199604940006',
-        null
-    ),
-    (
-        'ARTHUR IVSON XAVIER DE MORAES BATISTA',
-        '201204940014',
-        'ivson.ma@gmail.com'
-    ),
-    (
-        'ARTHUR MASAHIRO YOSHINO',
-        '201104940003',
-        'arthur_masahiro@hotmail.com'
-    ),
-    (
-        'ARTHUR TAKESHI NORONHA YOSHIKAWA',
-        '201704940039',
-        'arthur.yoshikawa@icen.ufpa.br'
-    ),
-    (
-        'ARUANDA SIMOES GONCALVES  MEIGUINS',
-        '199404940005',
-        'aruandasimoes@gmail.com'
-    ),
-    (
-        'AUGUSTO FARIAS CRAVO',
-        '201404940003',
-        'augusto.f.cravo@gmail.com'
-    ),
-    (
-        'BARBARA CONCEICAO DE OLIVEIRA BARBOSA',
-        '199104940111',
-        null
-    ),
-    (
-        'BERNARDO LOBATO DOS SANTOS NETO',
-        '200304940021',
-        null
-    ),
-    (
-        'BILLY ANDERSON PINHEIRO',
-        '200204940054',
-        'haquiticos@gmail.com'
-    ),
-    (
-        'BLENO WILSON FRANKLIN VALE DA SILVA',
-        '201204940035',
-        'blenofvale@gmail.com'
-    ),
-    (
-        'BRENO BERNARD NICOLAU DE FRANCA',
-        '200204940005',
-        'brenofranca@yahoo.com.br'
-    ),
-    (
-        'BRENO CRISTOVAO RODRIGUES PINTO',
-        '200004940043',
-        null
-    ),
-    (
-        'BRUNELLI PINTO MIRANDA',
-        '201104940015',
-        'brunelli.miranda@gmail.com'
-    ),
-    (
-        'BRUNO AKIRA FUKUSHIMA MURAKAMI',
-        '201204940005',
-        'murakami.bruno@gmail.com'
-    ),
-    ('BRUNO BITAR MORHY', '199504940004', null),
-    ('BRUNO DA COSTA BARROSO', '200104940029', null),
-    (
-        'BRUNO DO NASCIMENTO MONTEIRO',
-        '200704940029',
-        'bnmonteiro2@gmail.com'
-    ),
-    (
-        'CAIO MARCOS FLEXA RODRIGUES',
-        '201204940010',
-        'caiomfrodrigues@gmail.com'
-    ),
-    (
-        'CAIO PINHEIRO DE CARVALHO',
-        '201304940006',
-        'caiocarvalho1996@hotmail.com'
-    ),
-    (
-        'CAIO SHIMADA RABELLO',
-        '201604940020',
-        'xcaiosr@gmail.com'
-    ),
-    ('CALADO PEREIRA FIJAMO', '199104940048', null),
-    ('CAMILA MARINHO ALMEIDA', '200004940039', null),
-    (
-        'CARLA ALESSANDRA GOMES DE LIMA',
-        '199104940054',
-        null
-    ),
-    (
-        'CARLA CRISTINA DA CRUZ ARAUJO',
-        '200804940032',
-        'alrac.cruz@gmail.com'
-    ),
-    ('CARLA MARINA COSTA PAXIUBA', '199904940035', null),
-    (
-        'CARLOS ALBERTO LEITE MENDES',
-        '199104940112',
-        null
-    ),
-    (
-        'CARLOS ALEXANDRE LOURINHO GOMES',
-        '199904940060',
-        null
-    ),
-    ('CARLOS ANDRE NEVES DO VALE', '200004940058', null),
-    (
-        'CARLOS DIEGO NASCIMENTO DAMASCENO',
-        '200804940017',
-        'carlos.damasceno@icen.ufpa.br'
-    ),
-    (
-        'CARLOS EDUARDO COSTEIRA CALDAS',
-        '200104940017',
-        null
-    ),
-    (
-        'CARLOS EDUARDO MARINHO GOMES',
-        '200804940014',
-        'kadu-marinho@hotmail.com'
-    ),
-    (
-        'CARLOS EDUARDO RIBEIRO BASTOS',
-        '199304940007',
-        null
-    ),
-    (
-        'CARLOS GUSTAVO RESQUE DOS SANTOS',
-        '201004940024',
-        'gustavoresqueufpa@gmail.com'
-    ),
-    (
-        'CARLOS HENRIQUE RIBEIRO CARDOSO',
-        '201604940014',
-        'carlos.h.cardoso140@gmail.com'
-    ),
-    (
-        'CARLOS MARCIO JORGE SARAIVA',
-        '199604940034',
-        null
-    ),
-    (
-        'CARLOS RENATO LISBOA FRANCES',
-        '199104940004',
-        null
-    ),
-    (
-        'CASSIO ALEXANDRE TEIXEIRA MENEZES',
-        '200004940026',
-        null
-    ),
-    ('CIDIANE ARACATY LOBATO', '199804940001', null),
-    (
-        'CINTIA KELLI CABRAL RODRIGUES',
-        '200104940023',
-        null
-    ),
-    (
-        'CIRNEY RICARDO J B CARNEIRO',
-        '199104940005',
-        null
-    ),
-    (
-        'CLARICE MORAES FERREIRA',
-        '200904940035',
-        'claricemoraesf@gmail.com'
-    ),
-    ('CLARK DA CUNHA SA', '199104940114', null),
-    (
-        'CLAUDIA MYLENE DA SILVA PINHEIRO',
-        '199904940031',
-        null
-    ),
-    (
-        'CLAUDIO ANTONIO DA SILVA CAVALCANTI',
-        '199904940057',
-        null
-    ),
-    (
-        'CLAUDIO DIEGO TEIXEIRA DE SOUZA',
-        '201004940007',
-        'diegodisouzza@gmail.com'
-    ),
-    (
-        'CLAUDIO KENJI KAWAMURA DA SILVA',
-        '199704940025',
-        null
-    ),
-    (
-        'CLEBER ROBERTO PAES DA ROCHA',
-        '199604940018',
-        null
-    ),
-    (
-        'CLEBERSON MALCHER GUERREIRO',
-        '200204940032',
-        'cmguerreiro2@gmail.com'
-    ),
-    (
-        'CLEIDSON RONALD BOTELHO DE SOUZA',
-        '199104940008',
-        null
-    ),
-    (
-        'CLEIDYR DA SILVA LIMA',
-        '201004940049',
-        'cleidyr.system@gmail.com'
-    ),
-    (
-        'CLODOALDO ESTUMANO DA SILVA',
-        '200304940018',
-        null
-    ),
-    (
-        'CLOVIS DA PAZ TAVARES JUNIOR',
-        '199104940105',
-        null
-    ),
-    (
-        'CRISTIANE DO SOCORRO PIRES ALMEIDA',
-        '200104940019',
-        null
-    ),
-    ('CRISTIANE MARQUES DA SILVA', '200104940024', null),
-    ('CRYS SAYURI GOTO', '200304940007', null),
-    (
-        'CYNTHIA MARA FONSECA DE OLIVEIRA',
-        '199104940009',
-        null
-    ),
-    (
-        'DANIELA KARINE MARAVALHO AVELAR',
-        '200904940022',
-        'donk14@gmail.com'
-    ),
-    (
-        'DANIELA NAZARE MAIA DA CONCEICAO',
-        '199104940093',
-        null
-    ),
-    (
-        'DANIEL DE JESUS TAVARES',
-        '200704940023',
-        'djtavaresieq@gmail.com'
-    ),
-    (
-        'DANIEL DIAS DE CARVALHO',
-        '200304940035',
-        'danieldiascv@gmail.com'
-    ),
-    (
-        'DANIELE MOURA DE QUEIROZ',
-        '200504940034',
-        'daniqueiroz.bt@gmail.com'
-    ),
-    ('DANIEL HENRIQUES MOREIRA', '200104940001', null),
-    (
-        'DANIELLE DA SILVA COSTA NUNES',
-        '200304940029',
-        'danicostas@yahoo.com.br'
-    ),
-    (
-        'DANIELLE DE MICHELI PALHANO PINTO',
-        '200204940053',
-        null
-    ),
-    (
-        'DANIELLE FURTADO DOS SANTOS',
-        '200004940025',
-        null
-    ),
-    ('DANIEL LIMA BRASIL', '199904940010', null),
-    (
-        'DANIELL SOARES CAVALCANTI VIEIRA',
-        '201204940018',
-        'daniellcavalcanti@bol.com.br'
-    ),
-    (
-        'DANIEL ORLANDO SERPA DA SILVA',
-        '199204940004',
-        'dosdasilva@hotmail.com'
-    ),
-    ('DANIEL SANTOS RODRIGUES', '199504940005', null),
-    (
-        'DANILO DO CARMO QUADROS CABRAL',
-        '200104940046',
-        'cabraldanilo@yahoo.com.br'
-    ),
-    (
-        'DAN JHONATAN DA SILVA TEIXEIRA',
-        '201204940020',
-        'danjsteixeira@gmail.com'
-    ),
-    (
-        'DARLENE DOS REIS SOARES GONCALVES',
-        '199104940056',
-        null
-    ),
-    (
-        'DAUCIKELEM BRAGA DOS SANTOS',
-        '199504940006',
-        null
-    ),
-    (
-        'DAVID LEONARDO MIRANDA BENTOLILA',
-        '200404940017',
-        null
-    ),
-    (
-        'DAVID SAMUEL BELICHA ISRAEL',
-        '200004940057',
-        null
-    ),
-    (
-        'DAVI MITSUO DA SILVA SHIBAYAMA',
-        '199604940031',
-        null
-    ),
-    (
-        'DAVISON HOLANDA PACHECO',
-        '200704940024',
-        'davisonph@ufpa.br'
-    ),
-    ('DEDIER GOMES MERCES LIMA', '200204940061', null),
-    (
-        'DEIVID TINOCO LEMOS',
-        '200304940034',
-        'detilufpa@yahoo.com.br'
-    ),
-    (
-        'DELCIO NONATO ARAUJO DA SILVA',
-        '199204940006',
-        null
-    ),
-    (
-        'DELIANE DE JESUS ALVES DE ANDRADE',
-        '199904940042',
-        null
-    ),
-    ('DENIS TAVARES SILVA', '199804940019', null),
-    (
-        'DERICK EDUARDO DIAS ROSA',
-        '201004940001',
-        'derickedu@gmail.com'
-    ),
-    ('DEUZINEI PINHEIRO MIRANDA', '200004940032', null),
-    ('DIEGO JOSE CUNHA QUEIROZ', '200104940021', null),
-    (
-        'DIEGO OLIVEIRA ABREU',
-        '201204940013',
-        'diegooabreu@gmail.com'
-    ),
-    ('DILMA FARIAS VIANA', '199104940010', null),
-    ('DOGEVAL AUGUSTO SACHETT', '199504940007', null),
-    (
-        'DOUGLAS BRITO DAMALIO',
-        '200304940032',
-        'ddamalio@yahoo.com.br'
-    ),
-    ('DOUGLAS CARDOSO PINHEIRO', '200204940069', null),
-    (
-        'DURVAL CASTRO DE BASTOS JUNIOR',
-        '199604940014',
-        null
-    ),
-    (
-        'EDER CRUZ BARBOSA',
-        '200304940012',
-        'ponto_flutuante@yahoo.com.br'
-    ),
-    ('EDER TAVEIRA DOS SANTOS', '200504940038', null),
-    ('EDGAR ALMEIDA MANESCHY', '200204940043', null),
-    ('EDGARD ASSUNCAO ARAUJO', '199604940025', null),
-    ('EDILA MARTA MIRANDA LOBO', '199204940007', null),
-    ('EDMAR LUIZ DA COSTA BENTES', '199104940095', null),
-    (
-        'EDSON ALESSANDRO FAGUNDES COSTA',
-        '201404940001',
-        'ale-remo@hotmail.com'
-    ),
-    (
-        'EDSON COSTA DIAS',
-        '200304940015',
-        'ecdias@ufpa.br'
-    ),
-    (
-        'EDSON EUSTACHIO OLIVEIRA DE AZEVEDO',
-        '199404940006',
-        null
-    ),
-    (
-        'EDSON PRESTES E SILVA JUNIOR',
-        '199304940009',
-        null
-    ),
-    ('EDSON SILVA DOS SANTOS', '199204940008', null),
-    (
-        'EDUARDO COSTA DE CARVALHO',
-        '200704940030',
-        'duducostacarvalho@gmail.com'
-    ),
-    ('EDUARDO DE CARVALHO LEITE', '199704940014', null),
-    ('EDUARDO LEAL GUERRA', '199804940003', null),
-    (
-        'EDVIRGES MARIA DA SILVA NASCIMENTO',
-        '199204940009',
-        null
-    ),
-    (
-        'EHILTON KAZUO CHIBA YOSHIDOME',
-        '201104940006',
-        'ekcy00@gmail.com'
-    ),
-    (
-        'ELAINE DO SOCORRO FURRIEL AMANAJAS',
-        '199204940010',
-        null
-    ),
-    (
-        'ELDER DE JESUS FERREIRA DA SILVA',
-        '201004940006',
-        'elderferreirass@gmail.com'
-    ),
-    (
-        'ELENILTON ALEX SANTOS DA COSTA',
-        '200004940055',
-        null
-    ),
-    (
-        'ELIAS SENA MORAES',
-        '201304940023',
-        'eliassm.ufpa@gmail.com'
-    ),
-    ('ELINETE NUNES FREITAS', '199104940057', null),
-    (
-        'ELISANGELA SANTANA AGUIAR',
-        '199504940009',
-        'eaguiar@ufpa.br'
-    ),
-    ('ELIZEL PINHEIRO LEAL', '200304940033', null),
-    (
-        'ELLTON SALES BARROS',
-        '201004940026',
-        'elltonsalesbarros@gmail.com'
-    ),
-    (
-        'ELTON JHON DIAS GONCALVES',
-        '200704940032',
-        'elton.private@gmail.com'
-    ),
-    (
-        'ELTON PENICHE QUARESMA',
-        '201504940035',
-        'eltonpeniche14@gmail.com'
-    ),
-    (
-        'EMANUEL ESTUMANO SANTOS',
-        '200104940042',
-        'emanuel.estumano@gmail.com'
-    ),
-    ('EMANUEL NUNES REIS', '200304940017', null),
-    (
-        'EMERSON JOSE SILVEIRA DA COSTA',
-        '199104940058',
-        null
-    ),
-    ('EMILIO JUN NAGAHAMA', '199204940011', null),
-    (
-        'ERIC FELIPE DE OLIVEIRA PEREIRA',
-        '201104940012',
-        'eric.cbcc@gmail.com'
-    ),
-    (
-        'ERLON FONSECA PINHEIRO',
-        '201604940045',
-        'erlon.fpinheiro@gmail.com'
-    ),
-    (
-        'ERNANI DE OLIVEIRA SALES',
-        '200204940006',
-        'ernani@ufpa.br'
-    ),
-    (
-        'ESTHER CARDOSO DA SILVA',
-        '201404940009',
-        'esther.cardoso.silva@gmail.com'
-    ),
-    ('EURICO OLIVEIRA DA ROCHA', '199104940115', null),
-    (
-        'EVANDRO KOUJI DA SILVA TORII',
-        '200404940008',
-        null
-    ),
-    ('EVERTON MEIRELES COSTA', '199904940050', null),
-    (
-        'EWELTON YOSHIO CHIBA YOSHIDOME',
-        '200504940019',
-        'ewelton.yoshio@gmail.com'
-    ),
-    ('EWERTON ALMEIDA SILVA', '200504940004', null),
-    ('EWERTON DA COSTA VAZ', '199304940010', null),
-    (
-        'EWERTON DAVID MARTINS LEITE',
-        '199404940009',
-        null
-    ),
-    (
-        'EZEQUIAS CARLOS FERREIRA DA SILVA',
-        '199304940011',
-        null
-    ),
-    (
-        'FABIANA RODRIGUES DE GÓES',
-        '200904940024',
-        'fabil.goes@gmail.com'
-    ),
-    (
-        'FABIO ALEX MENDES CAMPOS VASCONCELOS',
-        '201504940030',
-        'fa.vasconc@gmail.com'
-    ),
-    (
-        'FABIO AUGUSTO DAS DORES SILVA',
-        '199304940012',
-        null
-    ),
-    (
-        'FABIO AUGUSTO GUIMARAES TEIXEIRA',
-        '200004940001',
-        null
-    ),
-    (
-        'FABIO BRAGA DOS SANTOS',
-        '200304940026',
-        'fbragas@ufpa.br'
-    ),
-    ('FABIO CARVALHO DA COSTA', '199104940012', null),
-    ('FABIO DE LIMA BEZERRA', '199604940009', null),
-    ('FABIO DE OLIVEIRA FERREIRA', '199704940005', null),
-    (
-        'FABIO DE SOUZA MIRANDA',
-        '201704940029',
-        'fabiosouza21777@gmail.com'
-    ),
-    ('FABIOLA PANTOJA OLIVEIRA', '199304940013', null),
-    (
-        'FABIO MALCHER MIRANDA',
-        '201104940008',
-        'miranda.fmm@gmail.com'
-    ),
-    ('FABIO MENDES MONTEIRO', '199904940030', null),
-    (
-        'FABIO REIS SIZO NASCIMENTO',
-        '200304940027',
-        'fabiosizo@yahoo.com.br'
-    ),
-    (
-        'FABIO YU NAGAHAMA',
-        '199704940012',
-        'nagahama@yahoo.com'
-    ),
-    ('FABRICIO JOSE UCHOA CORREA', '199504940011', null),
-    (
-        'FABRICIO SILVA DE MAGALHAES',
-        '199804940011',
-        null
-    ),
-    (
-        'FAGNER LEAL PANTOJA',
-        '200904940002',
-        'fagnerleal@ufpa.br'
-    ),
-    (
-        'FELIPE DE MELO RODRIGUES E OLIVEIRA',
-        '201704940017',
-        'sem.ideias.na.hora@gmail.com'
-    ),
-    (
-        'FELIPE ELIASQUEVICI',
-        '201304940003',
-        'felipe.quevici@gmail.com'
-    ),
-    (
-        'FELIPE GUSMAO ARAUJO',
-        '201604940033',
-        'shinakuma3000@hotmail.com'
-    ),
-    (
-        'FELIPE LEITE DA SILVA',
-        '200804940010',
-        'felipe.leite3@gmail.com'
-    ),
-    (
-        'FERNANDO CESAR SILVA DE MENEZES',
-        '199104940059',
-        null
-    ),
-    ('FERNANDO MENEZES MATOS', '199604940012', null),
-    (
-        'FERNANDO SILVA VILA NOVA',
-        '200104940058',
-        'fernando.vilanova@gmail.com'
-    ),
-    (
-        'FILIPE DAMASCENO COELHO',
-        '201304940029',
-        'filipecoelho@ufpa.br'
-    ),
-    ('FLAVIA COELHO PINHEIRO', '200204940051', null),
-    (
-        'FLAVIO DIAS DE ASSUNCAO',
-        '200504940003',
-        'flavio.dias@yahoo.com.br'
-    ),
-    ('FLAVIO JOSE FERRO BARROS', '199204940012', null),
-    (
-        'FRANCISCO CARRERA NASCIMENTO JUNIOR',
-        '201304940028',
-        'francisco_nascimento@outlook.com.br'
-    ),
-    (
-        'FRANCISCO CESAR DE JESUS SILVA',
-        '199904940033',
-        null
-    ),
-    (
-        'FRANCISCO COSTA COELHO JUNIOR',
-        '199504940012',
-        null
-    ),
-    (
-        'FRANCISCO DEMARIM DE AGUIAR JUNIOR',
-        '201004940027',
-        'junior.demarimm@gmail.com'
-    ),
-    (
-        'FRANCISCO WERTHER SILVA DE SANTANA JUNIOR',
-        '200704940025',
-        'wertherjr@gmail.com'
-    ),
-    (
-        'FRANCIS JAMES VIANA RIBEIRO',
-        '199804940028',
-        null
-    ),
-    ('FRANK DA SILVA MALCHER', '200104940008', null),
-    (
-        'FRANKLIM HARRISON MOREIRA DOS SANTOS',
-        '200204940027',
-        null
-    ),
-    ('FREDERICO NOBRE REIS', '199904940020', null),
-    (
-        'GABRIELA FONSECA ANDRADE',
-        '200304940011',
-        'andrade.f.gabriela@gmail.com'
-    ),
-    ('GABRIELA NUNES CAMPOS', '199104940060', null),
-    (
-        'GABRIEL BELTRAO DE ABREU',
-        '201404940017',
-        'gab.abreu23@gmail.com'
-    ),
-    (
-        'GABRIEL DE MAGALHAES ESCUDEIRO',
-        '201304940019',
-        'gabrielescudeiro1@gmail.com'
-    ),
-    ('GABRIEL DE SOUSA ARAUJO', '200404940014', null),
-    (
-        'GABRIEL NUNES CRISPINO',
-        '201304940010',
-        'gabriel.crispino@hotmail.com'
-    ),
-    (
-        'GARDENIA VIEIRA DE ALBUQUERQUE',
-        '199104940015',
-        null
-    ),
-    (
-        'GEORGE TASSIANO MELO PEREIRA',
-        '201304940008',
-        'george.melo7@gmail.com'
-    ),
-    (
-        'GESSICA PINHEIRO DE MORAES BATISTA',
-        '201204940022',
-        'gesspinhero@gmail.com'
-    ),
-    ('GHISLENE BRITO DE FREITAS', '199104940016', null),
-    (
-        'GILBERT ASDRUBAL HERNANDEZ LOURENCO',
-        '199204940041',
-        null
-    ),
-    ('GILMARA SANTOS DA SILVA', '199704940015', null),
-    ('GILSON TAVARES QUEIROZ', '199704940022', null),
-    (
-        'GIORDANNA DE GREGORIIS',
-        '201304940009',
-        'gior.grs@gmail.com'
-    ),
-    ('GIOVANI FONTENELLE COSTA', '199104940062', null),
-    (
-        'GISSELEN RENEE DE OLIVEIRA SOUZA',
-        '200004940038',
-        null
-    ),
-    ('GLAUCO ESTACIO GONCALVES', '200004940005', null),
-    ('GLEFSON FRANCO CARNEIRO', '200304940030', null),
-    (
-        'GLENON MATEUS BARBOSA ARAUJO',
-        '200704940017',
-        'glenonmateus@gmail.com'
-    ),
-    (
-        'GLEYSON DO NASCIMENTO GAMA',
-        '200604940035',
-        'gleysongama@gmail.com.br'
-    ),
-    (
-        'GUILHERME AUGUSTO BARROS CONDE',
-        '199304940015',
-        null
-    ),
-    (
-        'GUILHERME FARIAS LIMA',
-        '201004940036',
-        'guilhermef.bcc@gmail.com'
-    ),
-    (
-        'GUILHERME SMETHURST ALBUQUERQUE',
-        '201604940009',
-        'guitrompa1@gmail.com'
-    ),
-    (
-        'GUSTAVO HENRIQUE SAMPAIO COUTO',
-        '199404940010',
-        null
-    ),
-    (
-        'HAMILTON DA SILVA CAVALCANTE',
-        '200704940015',
-        'hamiltoncavalcante@gmail.com'
-    ),
-    (
-        'HAMILTON JOSE MORAES DE ALBUQUERQUE',
-        '200104940027',
-        null
-    ),
-    (
-        'HAMILTON LUIZ RODRIGUES DE OLIVEIRA',
-        '199604940024',
-        null
-    ),
-    (
-        'HEITOR DE OLIVEIRA MACEDO',
-        '201004940013',
-        'heitorom9@gmail.com'
-    ),
-    (
-        'HELDER KLEMP CORREA DA SILVA',
-        '200104940004',
-        null
-    ),
-    (
-        'HELDER LUIZ BEZERRA DE OLIVEIRA GARCIA',
-        '199104940096',
-        null
-    ),
-    ('HELIO CARVALHO OLIVEIRA', '199304940016', null),
-    (
-        'HELIO MARCOS PAZ DE ALMEIDA',
-        '199904940048',
-        null
-    ),
-    ('HENLY KOUICHI TSUCHIYA', '199204940014', null),
-    (
-        'HERESSON JOÃO PAMPOLHA DE SIQUEIRA MENDES',
-        '200504940006',
-        'heresson@gmail.com'
-    ),
-    ('HERIVELTON BARBOSA LIMA', '199604940011', null),
-    (
-        'HUGO BRITO LIMA',
-        '201104940023',
-        'hugo141592@gmail.com'
-    ),
-    (
-        'HUGO CEZAR DO NASCIMENTO GOES',
-        '200104940052',
-        null
-    ),
-    (
-        'HUGO PEREIRA KURIBAYASHI',
-        '200204940022',
-        'hugo@unifesspa.edu.br'
-    ),
-    (
-        'HUGO SAWADA TODA',
-        '200104940012',
-        'hogotoda@gmail.com'
-    ),
-    (
-        'HYAGO PINHEIRO COSTA OLIVEIRA',
-        '201004940015',
-        'hyagogow@gmail.com'
-    ),
-    (
-        'IAN CAMPOS BEZERRA REGO',
-        '201604940043',
-        'iancamposcc@gmail.com'
-    ),
-    ('IGOR DE SOUZA ALMEIDA', '200104940013', null),
-    (
-        'IGOR FURTADO CARVALHO',
-        '200604940011',
-        'igfuca@gmail.com'
-    ),
-    (
-        'IGOR MATHEUS SOUZA MOREIRA',
-        '201704940007',
-        'imatheus.sm@gmail.com'
-    ),
-    (
-        'IGOR SAMUEL MOREIRA DE MELO',
-        '200404940024',
-        'ivoquimico@gmail.com'
-    ),
-    (
-        'INGRID FURTADO RAIOL',
-        '201504940028',
-        'ingrid.frcomp@gmail.com'
-    ),
-    (
-        'IRAQUITAN CORDEIRO FILHO',
-        '200804940006',
-        'iraquitanfilho@gmail.com'
-    ),
-    ('IROMAR GOMES DA SILVA', '199104940116', null),
-    (
-        'ISABELA LOPES MAUES BATISTA',
-        '201704940005',
-        'maues.isa@gmail.com'
-    ),
-    (
-        'ISRAEL SEWANOU HOUNSOU',
-        '201504940001',
-        'hisara3@gmail.com'
-    ),
-    (
-        'ITALO RAMON DA COSTA CAMPOS',
-        '201504940012',
-        'italo.campos@icen.ufpa.br'
-    ),
-    ('IVANDILSON DE SOUZA DUARTE', '199804940017', null),
-    ('IVAN DOS SANTOS MELLO', '199104940017', null),
-    ('JAIME DE MELO SABAT NETO', '199304940017', null),
-    (
-        'JAIME NAZARENO DA SILVA SOARES JUNIOR',
-        '199104940019',
-        null
-    ),
-    (
-        'JAIR DA SILVA FERREIRA JUNIOR',
-        '199504940013',
-        null
-    ),
-    (
-        'JAIRO NASCIMENTO DE SOUSA FILHO',
-        '201604940016',
-        'jairofilho79@gmail.com'
-    ),
-    (
-        'JANAINA DE FATIMA ROLLA FERREIRA',
-        '199404940013',
-        null
-    ),
-    (
-        'JANAINA DJENANE SOUZA CATETE',
-        '199104940117',
-        null
-    ),
-    (
-        'JANNE YUKIKO YOSHIKAWA OEIRAS',
-        '199204940016',
-        null
-    ),
-    (
-        'JANYNNE STEPHANIE DE OLIVEIRA PALHETA',
-        '201104940030',
-        'janynnepalheta@gmail.com'
-    ),
-    (
-        'JAYME DA COSTA CABRAL JUNIOR',
-        '201504940005',
-        'jaymejunior@yahoo.com.br'
-    ),
-    (
-        'JEAN CARNEIRO DO NASCIMENTO',
-        '201004940008',
-        'jeancnasc@hotmail.com'
-    ),
-    ('JEAN MARCEL DOS REIS COSTA', '200404940002', null),
-    (
-        'JEANNE DE OLIVEIRA PEREIRA',
-        '201304940002',
-        'jeanneop22@gmail.com'
-    ),
-    (
-        'JEFERSON MARCELO DE OLIVEIRA CAMARA',
-        '200004940031',
-        null
-    ),
-    (
-        'JEFFERSON FERREIRA DE FIGUEIREDO JUNIOR',
-        '201004940014',
-        'jefjr2504@gmail.com'
-    ),
-    (
-        'JEFFERSON MIGUEL GONCALVES FERREIRA',
-        '199704940023',
-        null
-    ),
-    (
-        'JEFFSON CELEIRO SOUSA',
-        '201504940027',
-        'jeffson.celeiro@gmail.com'
-    ),
-    ('JESSE DE SOUZA SOARES', '200004940002', null),
-    (
-        'JNANE DE SOUSA NEIVA',
-        '200004940022',
-        'jnane@ufpa.br'
-    ),
-    ('JOAO CALDAS JUNIOR', '199104940063', null),
-    (
-        'JOAO DE DEUS FERREIRA FILHO',
-        '201504940020',
-        'lubien1996@gmail.com'
-    ),
-    (
-        'JOAO JOSE CORSI FILHO',
-        '201004940018',
-        'jjcf_cc_ufpa@hotmail.com'
-    ),
-    (
-        'JOÃO JÚLIO SALVATTI NETO',
-        '200104940050',
-        'salvatti@ufpa.br'
-    ),
-    (
-        'JOAO MARCELO FREITAS DE ALMEIDA',
-        '201704940004',
-        'jmfda00@gmail.com'
-    ),
-    (
-        'JOAO MAURICIO SILVA DE CARVALHO',
-        '200004940047',
-        null
-    ),
-    (
-        'JOAO PAULO SOUZA ALVES DE SOUZA',
-        '199904940043',
-        null
-    ),
-    (
-        'JOAO PEDRO MOREIRA MORAES',
-        '201504940006',
-        'joaopedromoraes@outlook.com'
-    ),
-    (
-        'JOAO ROBERTO PINHEIRO DA CRUZ',
-        '199104940064',
-        null
-    ),
-    (
-        'JOAO VICTOR DA SILVA DIAS CANAVARRO',
-        '201704940015',
-        'jvcanavarro@gmail.com'
-    ),
-    (
-        'JOAQUIM MAGNO CUNHA',
-        '199904940019',
-        'jmcpa1982@gmail.com'
-    ),
-    ('JOEL COSTA DE OLIVEIRA', '199504940014', null),
-    ('JOERCIO DE SENA RODRIGUES', '199404940014', null),
-    ('JOGINETE PEREIRA ACRIAO', '199304940018', null),
-    (
-        'JONATHAN TRINDADE DO NASCIMENTO',
-        '200004940017',
-        null
-    ),
-    ('JONATHAS REIS DA SILVA', '199604940030', null),
-    ('JONE KAZUKI YAMAGUCHI', '200104940045', null),
-    ('JORGE LUIS MORAES VALENTE', '199104940065', null),
-    (
-        'JORGE LUIZ VASCONCELOS DE LIMA',
-        '200904940023',
-        'jorgedelima911@gmail.com'
-    ),
-    (
-        'JOSÉ AILTON SOARES VALADARES JÚNIOR',
-        '200404940023',
-        'ailtonvaladares@yahoo.com.br'
-    ),
-    (
-        'JOSE ALBERTO DE ANDRADE AVILA',
-        '200504940028',
-        'zeavila@gmail.com'
-    ),
-    ('JOSE ALEX AIRES DOS SANTOS', '199604940010', null),
-    (
-        'JOSEANE DE CASSIA DA SILVA VIANA',
-        '200204940037',
-        null
-    ),
-    (
-        'JOSE ANTONIO SARMANHO DOS SANTOS FREIRE',
-        '199304940019',
-        'josesarmanho@ufpa.br'
-    ),
-    (
-        'JOSE CORREA DA SILVA JUNIOR',
-        '200904940028',
-        'correasjunior@gmail.com'
-    ),
-    (
-        'JOSE ENDERSON FERREIRA RODRIGUES',
-        '200104940041',
-        null
-    ),
-    (
-        'JOSÉ FLÁVIO DE SOUZA DIAS JÚNIOR',
-        '200404940035',
-        'contato@joseflavio.com'
-    ),
-    (
-        'JOSE MARIA DE OLIVEIRA JUNIOR',
-        '200604940037',
-        null
-    ),
-    (
-        'JOSE RAIMUNDO FREITAS DE MENESES',
-        '199604940037',
-        null
-    ),
-    (
-        'JOSE RICARDO SIQUEIRA DE MIRANDA',
-        '199204940018',
-        null
-    ),
-    ('JOSUE PEREIRA DE CASTRO', '199104940069', null),
-    ('JO UEYAMA', '199204940017', null),
-    (
-        'JOYCE CRISTINA SOUZA BASTOS',
-        '200604940023',
-        'joyce.csb@gmail.com'
-    ),
-    ('JOZENILDO SOARES DE SOUZA', '199204940019', null),
-    (
-        'JULIANO KAZUKI MATSUZAKI OYA',
-        '199804940004',
-        null
-    ),
-    (
-        'JULIO VALENTE DA COSTA JUNIOR',
-        '199304940021',
-        null
-    ),
-    ('JUSSARA ALEIXO SILVA SOUSA', '200004940014', null),
-    (
-        'KAE UCHOA SARMANHO',
-        '201304940012',
-        'kaeuchoa@hotmail.com'
-    ),
-    (
-        'KARLA NAZARE FERREIRA DAMASCENO',
-        '199804940021',
-        null
-    ),
-    (
-        'KARLA SANTOS DE OLIVEIRA',
-        '200104940055',
-        'karla.santoli@gmail.com'
-    ),
-    (
-        'KARLYANNE PAOOLA SILVA BRAGA',
-        '201004940029',
-        'braga.paoola@gmail.com'
-    ),
-    (
-        'KAZUSHIGE BATISTA MATSUMOTO',
-        '199204940020',
-        null
-    ),
-    ('KEISE BARBOSA PEIXOTO', '199704940003', null),
-    (
-        'KELLY DO SOCORRO SILVA DA COSTA',
-        '201604940040',
-        'kellydosocorro@gmail.com'
-    ),
-    (
-        'KELLY ROBERTA TORRES GUIMARAES',
-        '200104940032',
-        null
-    ),
-    ('KELVIN LOPES DIAS', '199104940021', null),
-    ('KIWAKO BATISTA MATSUMOTO', '199304940022', null),
-    ('KIZZY BEZERRA THE', '199704940024', null),
-    (
-        'KLEBER MENDONCA DE MELO',
-        '200904940036',
-        'kleber.mendonca@hotmail.com'
-    ),
-    ('KLEBER PALHETA SILVA', '199504940034', null),
-    ('KLEDER MIRANDA GONCALVES', '199804940023', null),
-    ('KLESSIS LOPES DIAS', '199804940025', null),
-    (
-        'KLEVERTON CARLOS MACEDO DE OLIVEIRA',
-        '200704940021',
-        'kleverton.macedo@gmail.com'
-    ),
-    ('KLISSIOMARA LOPES DIAS', '199504940016', null),
-    ('KYLME IKEGAMI SAKIYAMA', '199704940029', null),
-    (
-        'LANA PRISCILA DA SILVA FERREIRA',
-        '201204940009',
-        'lanapsf@gmail.com'
-    ),
-    ('LANA RAQUEL SOUZA DE SOUZA', '199404940017', null),
-    (
-        'LARISSA FERNANDES CHAGAS',
-        '200504940030',
-        'alilari@uol.com.br'
-    ),
-    (
-        'LAUDEMIRA PACHECO FARIAS',
-        '200204940033',
-        'laudafarias@yahoo.com.br'
-    ),
-    ('LEANDRO BEZERRA COUTINHO', '200704940034', null),
-    (
-        'LEANDRO HENRIQUE SANTOS CORREA',
-        '200804940008',
-        'hscleandro@gmail.com'
-    ),
-    (
-        'LEANDRO LAGES DE CARVALHO FARIA',
-        '199904940012',
-        null
-    ),
-    (
-        'LEANDRO ORLANDO SOUSA DA SILVA',
-        '201404940031',
-        'le-an-dro95@hotmail.com'
-    ),
-    ('LEANDRO PANTOJA PEREIRA', '200204940039', null),
-    (
-        'LEDA MARA SOUZA DE OLIVEIRA MONTEIRO',
-        '199104940121',
-        'ledaoliveiramonteiro@gmail.com'
-    ),
-    ('LENON JOSE COSTA RAIOL', '199804940012', null),
-    (
-        'LEOMARIO SILVA MACHADO',
-        '200604940025',
-        'leomarioguitarr@yahoo.com.br'
-    ),
-    (
-        'LEONAM GAMA DA SILVA',
-        '200904940033',
-        'leohenryster@gmail.com'
-    ),
-    (
-        'LEONARDO ATHANAZIO DE CERQUEIRA GATTI',
-        '199804940026',
-        null
-    ),
-    (
-        'LEONARDO AUGUSTO SOUZA AFONSO',
-        '201204940026',
-        'nardoasafonso@gmail.com'
-    ),
-    (
-        'LEONARDO BARBOSA FURTADO',
-        '201604940024',
-        'srleonardofurtado@gmail.com'
-    ),
-    (
-        'LEONARDO CHRISTIAN FERREIRA DA COSTA',
-        '201504940019',
-        'leonardo.chfc@gmail.com'
-    ),
-    ('LEONARDO CORREA BAIMA', '200104940009', null),
-    (
-        'LEONARDO DE SOUSA RAMOS',
-        '200904940007',
-        'leosr89@gmail.com'
-    ),
-    (
-        'LEONARDO HIROKAZU DE SOUZA HAMADA',
-        '199704940008',
-        null
-    ),
-    (
-        'LEONARDO JUNQUEIRA DA SILVA VALENTE',
-        '200104940048',
-        'leonardovalente@gmail.com'
-    ),
-    (
-        'LEONARDO PATRICIO FERREIRA BARBOSA',
-        '200304940004',
-        'leonardopfb@gmail.com'
-    ),
-    (
-        'LEONARDO SANTOS FORMENTO',
-        '201104940007',
-        'leonardo.santos.formento@gmail.com'
-    ),
-    (
-        'LEONARDO SARRAFF NUNES DE MORAES',
-        '200704940005',
-        'leonardosarraff@gmail.com'
-    ),
-    ('LEONARDO YOICHI FEIO OKADA', '200104940014', null),
-    (
-        'LICIA CRISTINA BRITO DE CARVALHO',
-        '199404940041',
-        null
-    ),
-    ('LIDIANE PARENTE ANDRADE', '200004940007', null),
-    ('LIGEIA DE ALMEIDA ALENCAR', '199404940018', null),
-    (
-        'LIKEN IU MATSUMOTO CORREIA LIMA',
-        '200404940025',
-        'liken_iu@yahoo.com.br'
-    ),
-    (
-        'LILIAN SANTOS FERREIRA DA SILVA',
-        '200904940017',
-        'lilianferreira@ufpa.br'
-    ),
-    (
-        'LINDALVO GONZAGA DE ALCANTARA NETO',
-        '199104940023',
-        null
-    ),
-    (
-        'LIS WEIJI KANASHIRO PEREIRA',
-        '200304940001',
-        null
-    ),
-    (
-        'LIVIA RENATA VALE FRANCO DE SA',
-        '199804940006',
-        null
-    ),
-    (
-        'LOUISE GONCALVES DE BARROS',
-        '200404940012',
-        'louisebarros@yahoo.com.br'
-    ),
-    (
-        'LUCAS DE MELO SILVA',
-        '200804940007',
-        'lucasmelo@ufpa.br'
-    ),
-    (
-        'LUCAS FELIPE FERRARO CARDOSO',
-        '201604940042',
-        'luks.ferraro@gmail.com'
-    ),
-    (
-        'LUCAS GABRIEL DE SOUZA',
-        '201604940039',
-        'lucassouzaufpa@gmail.com'
-    ),
-    (
-        'LUCAS RODRIGUES GUIMARAES',
-        '201404940005',
-        'lucasrodriguesgui@hotmail.com'
-    ),
-    (
-        'LUCAS TAVARES MONTEIRO',
-        '201404940026',
-        'tavares.lucas1996@gmail.com'
-    ),
-    (
-        'LUCELIA PEREIRA GONCALVES',
-        '200304940006',
-        'luceliapgoncalves@gmail.com'
-    ),
-    ('LUCIANA CRISTINA MARTINS', '199304940023', null),
-    (
-        'LUCIANA DE NAZARE PAIVA NUNES',
-        '199604940013',
-        'paiva@ufpa.br'
-    ),
-    (
-        'LUCIANA LIMA BRITO',
-        '201204940031',
-        'lucianabrito@openmailbox.org'
-    ),
-    (
-        'LUCIANA MARIA AZEVEDO NASCIMENTO',
-        '199904940026',
-        'luma@ufpa.br'
-    ),
-    ('LUCIANA TOUREIRO HAGE', '199104940024', null),
-    ('LUCIENE PEREIRA COSTA', '199404940020', null),
-    ('LUCIO EDUARDO SOLANO REIS', '199104940071', null),
-    (
-        'LUIS MIGUEL FONSECA DE MORAIS',
-        '199504940030',
-        null
-    ),
-    (
-        'LUIZ ACACIO CENTENO CORDEIRO JUNIOR',
-        '199904940029',
-        null
-    ),
-    ('LUIZ ALANO ALEXANDRE LOPES', '199404940021', null),
-    (
-        'LUIZ ALBERTO DA SILVA FILHO',
-        '200204940017',
-        'lasf_bel@yahoo.com.br'
-    ),
-    ('LUIZ ALBUQUERQUE LEAO', '199604940022', null),
-    (
-        'LUIZ AUGUSTO MONTEIRO ROSO DANIN',
-        '201104940004',
-        'luizdanin@gmail.com'
-    ),
-    ('LUIZ DANIEL CREAO AUGUSTO', '200104940005', null),
-    (
-        'LUIZ DOURADO DIAS JUNIOR',
-        '199904940015',
-        'ldourado1980@globo.com'
-    ),
-    (
-        'LUIZ GUSTAVO COSTA CARVALHO',
-        '200004940037',
-        null
-    ),
-    (
-        'LUIZ OTAVIO DA SILVA BARATA',
-        '200104940030',
-        null
-    ),
-    (
-        'LUIZ TOME VILHENA DANTAS NETO',
-        '200004940035',
-        null
-    ),
-    (
-        'LUIZ WALDOMIRO MONTEIRO NETO',
-        '199104940072',
-        null
-    ),
-    (
-        'LUZIO SANTANA DA SILVA FILHO',
-        '200204940042',
-        'filholuzio@gmail.com'
-    ),
-    ('LUZONILDO LEAO DA SILVA', '199204940021', null),
-    (
-        'MANOEL AFONSO PEREIRA DE LIMA FILHO',
-        '201004940009',
-        'manoel.afonsoo@gmail.com'
-    ),
-    (
-        'MANOEL FREDERICO BELTRAO ROSAS JUNIOR',
-        '199504940018',
-        null
-    ),
-    (
-        'MANUELA DE JESUS SEMBLANO BITTENCOURT',
-        '199704940010',
-        null
-    ),
-    ('MARCEL ABREU DA MOTA', '200004940050', null),
-    ('MARCELA PIEDADE DO AMARAL', '199104940026', null),
-    ('MARCELIO D OLIVEIRA LEAL', '200004940029', null),
-    (
-        'MARCELLA LETICIA DE SOUZA COSTA',
-        '200004940008',
-        null
-    ),
-    (
-        'MARCELLE PEREIRA MOTA',
-        '200304940014',
-        'mpmota@ufpa.br'
-    ),
-    (
-        'MARCELLO ADOLFO VELOSO DA SILVA',
-        '199504940035',
-        null
-    ),
-    (
-        'MARCELO ALMEIDA DA SILVA',
-        '200204940013',
-        'mas@ufpa.br'
-    ),
-    (
-        'MARCELO ANDRADE DA GAMA MALCHER',
-        '200004940028',
-        null
-    ),
-    ('MARCELO ANDRADE PEREIRA', '200204940019', null),
-    (
-        'MARCELO ANTONIO ALVES ALENCAR',
-        '201404940014',
-        'marceloalves@ufpa.br'
-    ),
-    ('MARCELO DE BRITO GARCIA', '199704940004', null),
-    (
-        'MARCELO MAIA DA SILVA',
-        '200904940027',
-        'mmaia.cc@gmail.com'
-    ),
-    ('MARCELO NASCIMENTO COSTA', '199404940022', null),
-    ('MARCELO RIBEIRO ALBERNAZ', '200204940050', null),
-    (
-        'MARCELO SAMUEL DA COSTA MAGALHAES',
-        '199504940019',
-        null
-    ),
-    (
-        'MARCIA ANDREA DE CARVALHO FREITAS',
-        '199204940022',
-        null
-    ),
-    (
-        'MARCIA CRISTINA MONTEIRO DE MORAES',
-        '199804940002',
-        null
-    ),
-    (
-        'MARCIA MARIA DA SILVA AMARAL',
-        '199504940020',
-        null
-    ),
-    (
-        'MARCIO AMAZON KOHLER DA C KURIBAYASHI',
-        '199104940123',
-        null
-    ),
-    (
-        'MARCIO AUGUSTO PEREIRA BAILOSA',
-        '199104940098',
-        null
-    ),
-    ('MARCIO BRAGA DOS SANTOS', '200204940035', null),
-    (
-        'MARCIO FREITAS CABRAL DA LUZ',
-        '199604940003',
-        null
-    ),
-    ('MARCIO KUROKI GONCALVES', '200204940031', null),
-    (
-        'MARCO ANTONIO FAGUNDES DE MORAES',
-        '199204940023',
-        null
-    ),
-    (
-        'MARCOS AURELIO TRAJANO DE ASSIS',
-        '199104940027',
-        null
-    ),
-    (
-        'MARCOS ROMERO GONZAGA DE ALMEIDA',
-        '199904940005',
-        null
-    ),
-    (
-        'MARCOS SENNA BENAION LEAL',
-        '201204940019',
-        'marcosbenaion@gmail.com'
-    ),
-    ('MARCUS DE BARROS BRAGA', '199104940106', null),
-    (
-        'MARIA ADALZIRA SEIXAS LOPES',
-        '199204940024',
-        null
-    ),
-    (
-        'MARIA ANDRÉIA RODRIGUES DOS SANTOS',
-        '199504940021',
-        'mariaandreia@ufpa.br'
-    ),
-    (
-        'MARIANA DE NAZARE DOS ANJOS LIMA',
-        '200004940011',
-        null
-    ),
-    ('MARINA ATSUMI OIKAWA', '200104940007', null),
-    ('MARINA NERY BRACCHI', '199404940025', null),
-    (
-        'MARIO DO SOCORRO JARDIM MONTEIRO',
-        '200004940030',
-        null
-    ),
-    (
-        'MARISSA BRASIL DE CARVALHO',
-        '201104940005',
-        'marissabc@ufpa.br'
-    ),
-    (
-        'MARJORIE PEREIRA MARQUES',
-        '201004940010',
-        'marjoriepmarques@gmail.com'
-    ),
-    (
-        'MARLOS BATISTA FERREIRA',
-        '200204940026',
-        'marlos_ferreira@yahoo.com.br'
-    ),
-    (
-        'MARLOS DE MORAES TAVARES',
-        '200604940027',
-        'marlos1415@gmail.com'
-    ),
-    (
-        'MARTHA CASTELLO BRANCO DE MELLO',
-        '199104940124',
-        null
-    ),
-    (
-        'MARYANNE PACHECO SOEIRO DE BARROS',
-        '200304940031',
-        null
-    ),
-    ('MASAO IIDA', '199704940021', null),
-    (
-        'MATEUS PINTO RODRIGUES',
-        '201204940006',
-        'mprodrigues@openmailbox.org'
-    ),
-    (
-        'MATHEUS FERREIRA FREIRE',
-        '201104940020',
-        'matheusfreire.cbcc@gmail.com'
-    ),
-    (
-        'MATHEUS OLIVEIRA LEITE DE SA',
-        '201504940018',
-        'sa.matheus.leite@gmail.com'
-    ),
-    ('MAURICIO PIO DE LACERDA', '199904940025', null),
-    (
-        'MAURICIO RONNY DE ALMEIDA SOUZA',
-        '200504940015',
-        'mauricio.ronny@ufla.br'
-    ),
-    ('MAX HIDEYUKI MATSUZAKI', '199304940028', null),
-    (
-        'MAXWEL MACEDO DIAS',
-        '200404940028',
-        'maxwelmdias@gmail.com'
-    ),
-    (
-        'MAYARA COSTA FIGUEIREDO',
-        '200404940001',
-        'mcfigueiredo@ufpa.br'
-    ),
-    (
-        'MELINA DE VASCONCELOS ALBERIO',
-        '199804940022',
-        null
-    ),
-    ('MELISSA SA OTERO', '199304940029', null),
-    (
-        'MICHELL COSTA OLIVEIRA DA CRUZ',
-        '201104940035',
-        'michellkruz@gmail.com'
-    ),
-    (
-        'MICHEL PENA DOS SANTOS NERY',
-        '200004940049',
-        null
-    ),
-    (
-        'MIGUEL FORMIGOSA SIQUEIRA',
-        '199904940047',
-        'migsiq2@gmail.com'
-    ),
-    (
-        'MIGUEL JOSE DE ALMEIDA PERNAMBUCO FILHO',
-        '200504940016',
-        'mp_godan@hotmail.com'
-    ),
-    ('MIGUEL PEREIRA MARQUES', '199404940026', null),
-    (
-        'MILENA HELLEM BEZERRA DA SILVA',
-        '199604940027',
-        null
-    ),
-    (
-        'MILENA RAYANE DOS SANTOS GALVAO',
-        '200904940030',
-        'milenarayane@ufpa.br'
-    ),
-    (
-        'MIZAEL PANTOJA MONTEIRO',
-        '200604940020',
-        'mizaelm2@yahoo.com.br'
-    ),
-    (
-        'MOISES BEN HUR SOUSA SEIFFERT SIMOES',
-        '199604940016',
-        null
-    ),
-    (
-        'MOISES FELIPE MELLO DA SILVA',
-        '201204940021',
-        'moises.silva@icen.ufpa.br'
-    ),
-    (
-        'MONICA DE NAZARE TAVARES DE PAULA GOYANA',
-        '199304940030',
-        null
-    ),
-    ('MONICA FERNANDES DA SILVA', '199604940004', null),
-    (
-        'MOSHE DAYAN SOUSA RIBEIRO',
-        '200504940008',
-        'mosheribeiro@yahoo.com.br'
-    ),
-    (
-        'MURILO FARIAS SALES',
-        '200204940045',
-        'murilosalles@yahoo.com.br'
-    ),
-    ('NATALIA COUTO DIAS', '200104940056', null),
-    (
-        'NAYME CRISTHINA GOMES DE ALMEIDA',
-        '199104940036',
-        null
-    ),
-    (
-        'NELSON BRAZAO MACIEL JUNIOR',
-        '199304940031',
-        null
-    ),
-    (
-        'NICOLI DA SILVA PEREIRA DE SOUZA',
-        '201104940037',
-        'nickspsouza@gmail.com'
-    ),
-    (
-        'NIKOLAS JORGE SANTIAGO CARNEIRO',
-        '201104940009',
-        'nikolas.carneiro@gmail.com'
-    ),
-    (
-        'NILSON JOSE MENDES DA COSTA FILHO',
-        '199904940040',
-        null
-    ),
-    ('NOEL BASTOS GONZAGA', '199404940027', null),
-    (
-        'ODNALRO CRUZ VIDEIRA JUNIOR',
-        '200004940009',
-        null
-    ),
-    ('OLINDA MIOKA CHUBACHI', '199104940028', null),
-    (
-        'OSIEL MARLON NEGRAO DA SILVA',
-        '199704940011',
-        null
-    ),
-    (
-        'OTÁVIO NOURA TEIXEIRA',
-        '199504940023',
-        'onoura@gmail.com'
-    ),
-    (
-        'OTAVIO RODRIGUES JUNIOR',
-        '200004940053',
-        'orvoltz@gmail.com'
-    ),
-    (
-        'PATRICIA MATIAS LOPES',
-        '200404940011',
-        'patriciaufpa@gmail.com'
-    ),
-    (
-        'PAULA DANIELE DE OLIVEIRA MOREIRA',
-        '200204940021',
-        'pdanni@gmail.com'
-    ),
-    ('PAULA JOSIANE DE SA SANTOS', '199104940100', null),
-    (
-        'PAULO ANDRE EVANGELISTA DA SILVA',
-        '199304940032',
-        null
-    ),
-    (
-        'PAULO CLEITON VIEIRA DA SILVA',
-        '200304940036',
-        'paulocleiton@ufpa.br'
-    ),
-    (
-        'PAULO FERNANDO SOUZA RODRIGUES JUNIOR',
-        '200504940031',
-        'pjpaulor@gmail.com'
-    ),
-    (
-        'PAULO GLEIDSON RISUENHO PEINADO',
-        '199704940019',
-        null
-    ),
-    (
-        'PAULO GUILHERME DOS SANTOS NASCIMENTO',
-        '199104940087',
-        null
-    ),
-    ('PAULO JORGE OLIVEIRA BRAGA', '199104940101', null),
-    (
-        'PAULO NAZARENO MAIA SAMPAIO',
-        '199104940128',
-        null
-    ),
-    (
-        'PAULO ROBERTO SILVA CHAGAS JUNIOR',
-        '201104940001',
-        'paulo.robertojr100@gmail.com'
-    ),
-    (
-        'PAULO ROBSON CAMPELO MALCHER',
-        '200804940027',
-        'prcmalcher@gmail.com'
-    ),
-    (
-        'PAULO RUDOLPH DA SILVA NASCIMENTO',
-        '200504940009',
-        'paulorudolph07@gmail.com'
-    ),
-    (
-        'PAULO SENA FERREIRA FILHO',
-        '201404940044',
-        'paulosena99@gmail.com'
-    ),
-    (
-        'PAULO SERGIO DOS SANTOS COSTA',
-        '199104940029',
-        null
-    ),
-    (
-        'PAULO SERGIO LAMEIRA SANTOS',
-        '199104940075',
-        null
-    ),
-    (
-        'PAULO SERGIO SILVA RODRIGUES',
-        '199304940033',
-        null
-    ),
-    ('PAULO TAKASHI SAWAKI FILHO', '199404940029', null),
-    (
-        'PAULO VICTOR DE LIMA SFAIR ALVARES',
-        '201304940021',
-        'pvsfair@gmail.com'
-    ),
-    (
-        'PAULUS ROBERTO GUEIROS ANGLADA',
-        '200204940010',
-        'paulusanglada@hotmail.com'
-    ),
-    (
-        'PEDRO AFONSO NASCIMENTO DE AVIZ',
-        '200804940021',
-        null
-    ),
-    (
-        'PEDRO NOLASCO FERREIRA NETO',
-        '200104940060',
-        null
-    ),
-    (
-        'PEDRO VICTOR AROUCK MELO',
-        '201704940003',
-        'ppvitorr@gmail.com'
-    ),
-    ('PRISCILA CORREA SABOIA', '199904940007', null),
-    ('PRISCILA GOES BURLE', '200204940009', null),
-    (
-        'PRISCILLA LANNE CORDEIRO DE LEAO',
-        '199404940042',
-        null
-    ),
-    ('RAFAELA DA SILVA LOBO', '200104940040', null),
-    ('RAFAEL DA SILVA TAKASHIMA', '200304940009', null),
-    ('RAFAEL FREITAS DE MORAIS', '200304940028', null),
-    (
-        'RAFAEL LOPES GOMES',
-        '200504940018',
-        'rafaellgom@gmail.com'
-    ),
-    (
-        'RAFAEL MARTINS FEITOSA',
-        '200404940007',
-        'rafaelmf@ufpa.br'
-    ),
-    (
-        'RAFAEL MESQUITA DO MAR',
-        '200804940029',
-        'rafamesquita89@gmail.com'
-    ),
-    (
-        'RAFAEL NASCIMENTO DE SOUSA',
-        '201604940041',
-        'rafaelsousa2187@gmail.com'
-    ),
-    (
-        'RAFAEL NASCIMENTO DE SOUZA',
-        '200904940012',
-        'nascimento.rsouza@gmail.com'
-    ),
-    ('RAFAEL PEREIRA ESTEVES', '200204940001', null),
-    (
-        'RAFAEL VERAS GUIMARAES',
-        '200604940002',
-        'rafaveguim@gmail.com'
-    ),
-    (
-        'RAIMUNDO FERNANDO BENTES DAS CHAGAS JUNIOR',
-        '201504940004',
-        'rfbcj@hotmail.com'
-    ),
-    (
-        'RAISSA LORENA SILVA DA SILVA',
-        '201104940013',
-        'r.lorenna@gmail.com'
-    ),
-    (
-        'RAMIRO LUZ VERGOLINO ZAHLOUTH',
-        '201004940040',
-        'ramiroserge@gmail.com'
-    ),
-    (
-        'RAMON DA GAMA CORDEIRO',
-        '201304940013',
-        'ramonestii@gmail.com'
-    ),
-    (
-        'RAMON FALSONI',
-        '200704940011',
-        'ramonfalsoni@hotmail.com'
-    ),
-    (
-        'RAMON TORRES CRUZ',
-        '200604940009',
-        'ramontcruz@gmail.com'
-    ),
-    (
-        'RANIERI BARROS TEIXEIRA',
-        '200604940024',
-        'ranieri@ufpa.br'
-    ),
-    ('RAPHAEL BRITO DE PAIVA', '200504940033', null),
-    ('REGIANE ANDRADE BRITO', '199904940003', null),
-    ('REGIANE LIMA DE SOUSA', '199804940024', null),
-    (
-        'REGIANE YUMIKO DA SILVA KAWASAKI',
-        '199104940032',
-        null
-    ),
-    (
-        'REGINALDO CORDEIRO DOS SANTOS FILHO',
-        '201004940002',
-        'regicsf2010@gmail.com'
-    ),
-    (
-        'REGINALDO TERUYOSHI HAMAGUCHI',
-        '199204940031',
-        null
-    ),
-    ('REGINA NAOMI TANAKA', '199204940029', null),
-    (
-        'REINALDO GIL LIMA DE CARVALHO',
-        '200104940057',
-        'reinaldoc@gmail.com'
-    ),
-    (
-        'RENAN FILIP COSTA BALIEIRO',
-        '201304940011',
-        'Renanf016@gmail.com'
-    ),
-    (
-        'RENAN FONSECA CUNHA',
-        '201704940034',
-        'renancunhafonseca@hotmail.com'
-    ),
-    (
-        'RENAN LOBO DUARTE',
-        '201504940029',
-        'renan.leviathan@gmail.com'
-    ),
-    (
-        'RENAN SALES BARROS',
-        '200604940010',
-        'renan3mf@hotmail.com'
-    ),
-    (
-        'RENAN THIAGO DA SILVA ROSA',
-        '201304940032',
-        'renannojosa@gmail.com'
-    ),
-    ('RENATA PEREIRA BAENA', '200304940002', null),
-    ('RENATO FIGUEIRO MAIA', '199704940006', null),
-    (
-        'RENATO JOSE LIMA MOTA',
-        '201704940001',
-        'Rjlmota@gmail.com'
-    ),
-    (
-        'RENATO PENNAFORT ROCHA',
-        '200604940007',
-        'pennafort22@gmail.com'
-    ),
-    (
-        'RENATO RENISON MOREIRA OLIVEIRA',
-        '201004940011',
-        'renato.renison@gmail.com'
-    ),
-    (
-        'RENATO WILSON SOUZA DE OLIVEIRA',
-        '199704940035',
-        null
-    ),
-    (
-        'RICARDO ANDRE CAVALCANTE DE SOUZA',
-        '199304940034',
-        null
-    ),
-    (
-        'RICARDO BASTOS ARRAES',
-        '201304940001',
-        'ricardo@vfatec.com.br'
-    ),
-    ('RICARDO CARVALHO DE SOUZA', '200004940015', null),
-    (
-        'RICARDO CESAR FREITAS DE SOUZA',
-        '199904940011',
-        null
-    ),
-    ('RICARDO DE FARIAS SANTOS', '199304940035', null),
-    ('RICARDO IUNES COSTA', '199804940020', null),
-    ('RICHARD DIAS DA COSTA', '199304940036', null),
-    (
-        'RITA DE CASSIA DAVID DAS NEVES',
-        '199404940031',
-        null
-    ),
-    (
-        'ROBERTA DE OLIVEIRA CAVALCANTE',
-        '199304940037',
-        null
-    ),
-    (
-        'ROBERTA MACHADO BRASIL DE LIMA ARAUJO',
-        '199404940032',
-        'robertaba@gmail.com'
-    ),
-    ('ROBERTA VILHENA VIEIRA', '199104940076', null),
-    ('ROBERTO DE ARAUJO MOURA', '199704940002', null),
-    (
-        'ROBERTO FRANKLIN MOREIRA CARDOSO',
-        '200404940030',
-        null
-    ),
-    ('ROBERTO NOGUEIRA LIMA', '199104940102', null),
-    (
-        'ROBERTO PINHEIRO DA FONSECA',
-        '200804940033',
-        'roberto.pinheiro@hotmail.com.br'
-    ),
-    (
-        'ROBERTSON DIOGO DE MORAES BANDEIRA',
-        '200104940037',
-        null
-    ),
-    (
-        'ROBSON DA SILVA AGUIAR',
-        '200404940018',
-        'robsonaguiar@ufpa.br'
-    ),
-    (
-        'RODOLFO FIEL DE SOUSA',
-        '200304940023',
-        'rodolfo_fiel@yahoo.com.br'
-    ),
-    (
-        'RODOLFO MOACIR SEABRA JUNIOR',
-        '199604940029',
-        null
-    ),
-    (
-        'RODRIGO ARAUJO BARBALHO',
-        '200604940044',
-        'rodbarbalho@gmail.com'
-    ),
-    ('RODRIGO CUNHA MENDES', '199504940026', null),
-    (
-        'RODRIGO DE BRITTO PONTES RODRIGUES PARA',
-        '200904940003',
-        'rodrigopara@gmail.com'
-    ),
-    ('RODRIGO DE FREITAS VALE', '199404940033', null),
-    (
-        'RODRIGO HENRIQUE BARBOSA MONTEIRO',
-        '201404940012',
-        'rodrigo99monteiro@gmail.com'
-    ),
-    ('RODRIGO PINTO CARDOSO', '199904940014', null),
-    ('RODRIGO QUITES REIS', '199104940077', null),
-    ('RODRIGO SILVA PINTO', '199904940058', null),
-    (
-        'ROGERIO FIGUEIREDO DE BRITO',
-        '199104940078',
-        null
-    ),
-    (
-        'ROMULO PINTO DE ALBUQUERQUE',
-        '200504940022',
-        'albuquerque@ufpa.br'
-    ),
-    (
-        'RONALD ASSUNCAO SOUZA',
-        '201104940029',
-        'ronaldsouza16@hotmail.com'
-    ),
-    (
-        'RONALDD PATRIK SILVA PINHO',
-        '201704940035',
-        'RONALDPPINHO@GMAIL.COM'
-    ),
-    ('RONALDO CUNHA GOMES', '200504940047', null),
-    (
-        'RONALD RIBEIRO SILVA',
-        '200904940019',
-        'ronaldsilva852@gmail.com'
-    ),
-    (
-        'ROSANA CERES EVANGELISTA KALIL',
-        '200104940036',
-        null
-    ),
-    (
-        'ROSANA DE NAZARE MENEZES MATOS',
-        '199104940079',
-        null
-    ),
-    (
-        'ROSARINA MARIA PINHEIRO RODRIGUES',
-        '199104940046',
-        null
-    ),
-    ('ROSSANA DA CUNHA SILVA', '199804940010', null),
-    (
-        'RUBENS FERNANDES ROCHA',
-        '200504940045',
-        'profrubensfr@ig.com.br'
-    ),
-    (
-        'RUBIA CRISTIANE BORGES CASTRO',
-        '199704940026',
-        null
-    ),
-    ('RUI DE ALMEIDA MACOLA', '199104940080', null),
-    (
-        'SALOMAO FERNANDES DE FREITAS JUNIOR',
-        '199204940033',
-        null
-    ),
-    ('SAMIRA MARIA LUZ CARMO', '199204940034', null),
-    (
-        'SAMUEL FELIX DE SOUSA JUNIOR',
-        '200504940007',
-        'sfelixjr@gmail.com'
-    ),
-    (
-        'SAMUEL MARQUES CAMPOS',
-        '200004940042',
-        'samcampos81@gmail.com'
-    ),
-    (
-        'SANDRO MARCELO ATI TADAIESKY',
-        '199204940035',
-        null
-    ),
-    (
-        'SANDY ANDRADE FARO',
-        '201604940027',
-        'sandyfaro0@gmail.com'
-    ),
-    (
-        'SANDY EVELON CUNHA DAS NEVES',
-        '200004940034',
-        null
-    ),
-    (
-        'SAUL CAMPOS BERARDO',
-        '200404940005',
-        'saul.berardo@gmail.com'
-    ),
-    (
-        'SAVANA CECILIA PARGA CARNEIRO',
-        '200104940003',
-        null
-    ),
-    (
-        'SCHUBERT RIBEIRO DE CARVALHO',
-        '199604940021',
-        null
-    ),
-    (
-        'SEBASTIAO ALESSANDRO LINHARES DOS SANTOS',
-        '199204940036',
-        null
-    ),
-    (
-        'SEBASTIAO ANTONIO V DE FARIAS JUNIOR',
-        '199904940038',
-        null
-    ),
-    (
-        'SEBASTIAO BORGES FONSECA',
-        '199904940004',
-        'sababorges@gmail.com'
-    ),
-    (
-        'SEBASTIAO DE SOUSA MESQUITA',
-        '199404940034',
-        null
-    ),
-    ('SERGIO ANGELO CAMPOS ALVES', '199104940081', null),
-    (
-        'SERGIO RICARDO LIMA DA SILVA',
-        '199204940038',
-        null
-    ),
-    (
-        'SHIRLEY DOS SANTOS SALES BAIMA PINTO',
-        '199104940047',
-        null
-    ),
-    ('SIDNEY MASAHARU MATSUNAGA', '200104940025', null),
-    ('SILVANA ROSSY DE BRITO', '199104940132', null),
-    (
-        'SILVIA CRISTINA NUNES DAS DORES',
-        '200704940018',
-        null
-    ),
-    ('SILVIA DAS DORES RISSINO', '199104940133', null),
-    (
-        'SILVIO CARLOS AZEVEDO ANDRADE',
-        '199504940033',
-        null
-    ),
-    ('SIMEAO SANTOS DAS DORES', '199404940035', null),
-    ('SIMONE BACELLAR LOPES', '200104940002', null),
-    (
-        'SIMONE FONSECA FERREIRA',
-        '200304940013',
-        'simonefonseca@yahoo.com.br'
-    ),
-    (
-        'SIMONE NAYARA COSTA CARNEIRO',
-        '200604940014',
-        'simone.nara@gmail.com'
-    ),
-    (
-        'SUELEN BRAGA BRABO',
-        '200804940036',
-        'suelenbbrabo@gmail.com'
-    ),
-    (
-        'SUELLEN PATRICIA SILVESTRE RIBEIRO ALBERNAZ',
-        '200404940021',
-        'SUELLENPSR@UFPA.BR'
-    ),
-    (
-        'TACIO VINICIUS BERNARDES RIBEIRO',
-        '200204940014',
-        'tacio@ufpa.br'
-    ),
-    (
-        'TAINA INAIE DOS SANTOS DA SILVA',
-        '201504940007',
-        'taina.inaie@gmail.com'
-    ),
-    (
-        'TALES CHENE DE MIRANDA',
-        '200704940008',
-        'tales.miranda84@gmail.com'
-    ),
-    ('TALITA VIEIRA RIBEIRO', '200704940004', null),
-    (
-        'TALVANE GLAUBER LOPES DE LIMA',
-        '201104940031',
-        'talvane.glauber@gmail.com'
-    ),
-    ('TAYANA UCHOA CONTE', '199104940035', null),
-    (
-        'TEOFILO AUGUSTO BORDALO DE SOUZA VIEIRA',
-        '200804940002',
-        'teo@ufpa.br'
-    ),
-    (
-        'TEREZA CONCEICAO AKI BARROS KANZAKI',
-        '199104940103',
-        null
-    ),
-    (
-        'THALES SILVA DE SOUSA',
-        '201304940014',
-        'thales_cross@hotmail.com'
-    ),
-    (
-        'THAYS DHANDARAH RODRIGUES SA',
-        '201404940010',
-        'dhandarah1996@gmail.com'
-    ),
-    ('THIAGO FONSECA DE ANDRADE', '200304940025', null),
-    (
-        'THIAGO JORGE ALMEIDA DOS SANTOS',
-        '200704940006',
-        'thiago.tjas@gmail.com'
-    ),
-    (
-        'THIAGO RUBENI ALVES DA SILVA',
-        '200104940054',
-        null
-    ),
-    (
-        'THIAGO SYLAS ANTUNES DA COSTA',
-        '201004940022',
-        'tsylasac@gmail.com'
-    ),
-    (
-        'TIAGO DAVI OLIVEIRA DE ARAUJO',
-        '201104940024',
-        'tiagodavi70@gmail.com'
-    ),
-    (
-        'TUBY D OLIVEIRA NETO',
-        '201704940006',
-        'netotuby@gmail.com'
-    ),
-    ('ULISSES MARTINS DIAS', '200004940004', null),
-    (
-        'URIEL FERREIRA CAMPOS',
-        '201504940023',
-        'urielfcampos95@gmail.com'
-    ),
-    (
-        'VAGNER NOGUEIRA SILVA',
-        '200404940013',
-        'vagner.nogueira@gmail.com'
-    ),
-    ('VALERIA FREITAS SOUSA', '199904940049', null),
-    (
-        'VALERIA GOMES DA CAMARA CORECHA BASTOS',
-        '199104940104',
-        'valeria@ufpa.br'
-    ),
-    (
-        'VANA DO CARMO CARVALHO PEREIRA',
-        '199104940082',
-        null
-    ),
-    ('VANDERLENE COVRE ROCHA', '200004940019', null),
-    ('VICTOR AMARANTE DE BARROS', '199104940083', null),
-    (
-        'VICTOR ESPINDOLA MARTINS',
-        '200404940004',
-        'ccvem@yahoo.com.br'
-    ),
-    (
-        'VICTOR LOURENCO GARCIA DA CUNHA',
-        '200104940044',
-        null
-    ),
-    (
-        'VICTOR LUIZ SANTOS NEGRAO',
-        '200904940006',
-        'victorlsn@gmail.com'
-    ),
-    ('VINICIUS LIMA DA SILVA', '199804940009', null),
-    (
-        'VITOR LIMA COELHO',
-        '200804940004',
-        'vitorlimac2@gmail.com'
-    ),
-    (
-        'VITOR NOVAES CANTAO',
-        '201704940018',
-        'vitornovaes.cantao@gmail.com'
-    ),
-    (
-        'VITOR PINHEIRO FEITOSA',
-        '200504940001',
-        'vfeitosa86@hotmail.com'
-    ),
-    ('VIVIANE SOARES GRIECO', '200104940018', null),
-    (
-        'WAGNER FELIDRE NEGRAO DA SILVA',
-        '201704940043',
-        'wagnerfelidre@gmail.com'
-    ),
-    (
-        'WALISSON CARDOSO GOMES',
-        '201204940001',
-        'walissoncardosogomes@gmail.com'
-    ),
-    ('WALLACE MICHEL PINTO LIRA', '200504940005', null),
-    (
-        'WALLACE PACHECO PEREIRA',
-        '201404940028',
-        'wallacecovic@yahoo.com.br'
-    ),
-    (
-        'WALMIR PORTAL DOS SANTOS JUNIOR',
-        '200704940031',
-        'walmir.psj@gmail.com'
-    ),
-    (
-        'WANESSA MELO DA SILVA',
-        '200604940029',
-        'wnessms@hotmail.com'
-    ),
-    (
-        'WANILSON MIRANDA DE FIGUEIREDO',
-        '199304940040',
-        null
-    ),
-    (
-        'WANJA DANIELLE DA SILVA MOTA',
-        '199504940028',
-        null
-    ),
-    (
-        'WASHINGTON NEVES DE ALMEIDA',
-        '199504940029',
-        null
-    ),
-    ('WEILA SHEYLA DE MELO BRITO', '199404940038', null),
-    (
-        'WELLSON SERGIO BITENCOURT DOS SANTOS',
-        '200804940009',
-        'fmwellson@yahoo.com.br'
-    ),
-    (
-        'WENDEL RENAN MACEDO DOS SANTOS',
-        '201104940017',
-        'wendelrenann@gmail.com'
-    ),
-    (
-        'WESCLEY PIMENTEL FONTES',
-        '199804940008',
-        'wescley.fontes@gmail.com'
-    ),
-    (
-        'WESLEY HANANI PINTO DO CARMO',
-        '200104940061',
-        'wesleyhanani@yahoo.com.br'
-    ),
-    (
-        'WEVERTON LUIS DA COSTA CORDEIRO',
-        '200204940016',
-        'wevertoncordeiro@gmail.com'
-    ),
-    (
-        'WILLIS DO SOCORRO A DE CAMPOS',
-        '199104940084',
-        null
-    ),
-    (
-        'YANN FABRICIO CARDOSO DE FIGUEIREDO',
-        '201704940026',
-        'yann.fabricio@hotmail.com'
-    ),
-    (
-        'YASMIN LUANA SALES DA PAZ',
-        '201304940005',
-        'paz.yasminl@gmail.com'
-    ),
-    (
-        'YOSSEF GABRIEL OLIVEIRA CASTELO',
-        '200504940035',
-        'castelo@ufpa.br'
-    ),
-    (
-        'YVAN PEREIRA DOS SANTOS BRITO',
-        '201304940016',
-        'yvanbrito96@gmail.com'
-    ),
-    (
-        'Abraham Lincoln Rabelo De Sousa',
-        null,
-        'rabelo.lincoln@gmail.com'
-    ),
-    (
-        'ADAILTON MAGALHAES LIMA',
-        null,
-        'adailtulima@gmail.com'
-    ),
-    (
-        'Adalberto Cavalcante de Melo',
-        null,
-        'adalbertocmelo@gmail.com'
-    ),
-    (
-        'Adrianne Veras de Almeida',
-        null,
-        'adrianne.veras@outlook.com'
-    ),
-    ('Alen Costa Vieira', null, 'alencv@gmail.com'),
-    (
-        'Allan Douglas Bento da Costa',
-        null,
-        'allandoug@gmail.com'
-    ),
-    (
-        'Ana Larissa da Silva Dias',
-        null,
-        'larissa.engcomp@gmail.com'
-    ),
-    (
-        'Anderson Gregório Marques Soares',
-        null,
-        'andersonsoares@ufra.edu.br'
-    ),
-    (
-        'Anderson Gregório Marques Soares',
-        null,
-        'anderson.gmarques@gmail.com'
-    ),
-    (
-        'Anderson Trindade Maia',
-        null,
-        'anderson_detran@hotmail.com'
-    ),
-    (
-        'André de Jesus Araújo Ramos',
-        null,
-        'andre.rammos7@gmail.com'
-    ),
-    (
-        'André Figueira Riker',
-        null,
-        'andre.riker@gmail.com'
-    ),
-    (
-        'Benedito de Souza Ribeiro Neto',
-        null,
-        'ditoneto@gmail.com'
-    ),
-    (
-        'Breno Bernard Nicolau de França',
-        null,
-        'bfranca@unicamp.br'
-    ),
-    (
-        'Bruno Garcia da Costa',
-        null,
-        'upbrunogc@gmail.com'
-    ),
-    ('Bruno Pereira Brito', null, 'britodi@gmail.com'),
-    (
-        'Carlos Gustavo Resque dos Santos',
-        null,
-        'gustavo.cbcc@gmail.com'
-    ),
-    (
-        'Carlos Takeshi Kudo Yasojima',
-        null,
-        'takeshiyasojima@gmail.com'
-    ),
-    (
-        'Cassio Trindade Batista',
-        null,
-        'cassio.batista.13@gmail.com'
-    ),
-    (
-        'Cesar Siqueira de Oliveira',
-        null,
-        'avcesar@gmail.com'
-    ),
-    (
-        'Claudomir Cardoso de Carvalho Junior',
-        null,
-        'claudomir.junior@ifma.edu.br'
-    ),
-    (
-        'Clay Palmeira da Silva',
-        null,
-        'dom.clay@yahoo.com.br'
-    ),
-    (
-        'Cleyton Aparecido Dim',
-        null,
-        'cleytondim@ufpa.br'
-    ),
-    (
-        'Cynthya Letícia Teles De Oliveira',
-        null,
-        'cynthya.telles@gmail.com'
-    ),
-    (
-        'Daniel Leal Souza',
-        null,
-        'daniel.leal.souza@gmail.com'
-    ),
-    (
-        'Danileno Meireles do Rosario',
-        null,
-        'lenomeireles@gmail.com'
-    ),
-    (
-        'Diego Bento Aires Teixeira',
-        null,
-        'diegoaires@gmail.com'
-    ),
-    (
-        'Diego Hortêncio dos Santos',
-        null,
-        'hortencio1983@gmail.com'
-    ),
-    (
-        'Diego Oliveira Abreu',
-        null,
-        'diegoabreuengcomp@gmail.com'
-    ),
-    (
-        'Eddas Josue Bertrand Martinez',
-        null,
-        'eddasjbertrand@gmail.com'
-    ),
-    (
-        'Edian Franklin Franco De Los Santos',
-        null,
-        'edianfranklin@gmail.com'
-    ),
-    (
-        'Edinaldo João Costa de La-roque',
-        null,
-        'edinaldo.laroque@gmail.com'
-    ),
-    (
-        'Edson Koiti Kudo Yasojima',
-        null,
-        'koitiyasojima@gmail.com'
-    ),
-    (
-        'Eduardo Gabriel Lima da Silva',
-        null,
-        'eduardolima.ufpa@gmail.com'
-    ),
-    (
-        'Eduardo Paulo Marques Raiol',
-        null,
-        'marquesraiol@gmail.com'
-    ),
-    (
-        'Edwin Jahir Rueda Rojas',
-        null,
-        'ejrueda95g@gmail.com'
-    ),
-    (
-        'Elisiane Monteiro Soares',
-        null,
-        'elismclean@gmail.com'
-    ),
-    (
-        'Elziane Monteiro Soares',
-        null,
-        'msoares.elziane@gmail.com'
-    ),
-    (
-        'Emanuel Montero Espaillat',
-        null,
-        'emanuel.montero.e@gmail.com'
-    ),
-    (
-        'Erick Modesto Campos',
-        null,
-        'erick.c.modesto@gmail.com'
-    ),
-    (
-        'Ericson Sarmento Costa',
-        null,
-        'ericsonsarmento+ppgcc@gmail.com'
-    ),
-    (
-        'Estêvão Damasceno Santos',
-        null,
-        'estevaosantos265@gmail.com'
-    ),
-    ('Fabio Malcher Miranda', null, 'fabiomm@ufmg.br'),
-    (
-        'Fabio Rocha de Araujo',
-        null,
-        'fabioaraujo289@gmail.com'
-    ),
-    (
-        'Fabricio wickey da silva garcia',
-        null,
-        'fabriciogarcia@ufpa.br'
-    ),
-    (
-        'Fabricio Wickey da Silva Garcia',
-        null,
-        'fabriciowsgarcia@gmail.com'
-    ),
-    (
-        'Felipe Rocha de Araújo',
-        null,
-        'felipearaujo289@gmail.com'
-    ),
-    (
-        'Fernando Nazareno Nascimento Farias',
-        null,
-        'fernnf@gmail.com'
-    ),
-    (
-        'Gilson Rocha Silva',
-        null,
-        'gilsonrocha@gmail.com'
-    ),
-    (
-        'Hernan Dario Carreño Laguado',
-        null,
-        'hernan.laguado@gmail.com'
-    ),
-    (
-        'Hilton Prado de Castro Junior',
-        null,
-        'hilton.castro@ifap.edu.br'
-    ),
-    ('Hugo Brito Lima', null, 'hugoblim@gmail.com'),
-    (
-        'Iago Lins de Medeiros',
-        null,
-        'iagolmedeiros@gmail.com'
-    ),
-    (
-        'Igor da Penha Natal',
-        null,
-        'igorpnatal@gmail.com'
-    ),
-    (
-        'Igor Ernesto Ferreira Costa',
-        null,
-        'IGGOR16@GMAIL.COM'
-    ),
-    (
-        'Isadora Mendes dos Santos',
-        null,
-        'isadoramsantos@gmail.com'
-    ),
-    (
-        'Ivo de Abreu Araújo',
-        null,
-        'ivoabreu94@gmail.com'
-    ),
-    (
-        'Jadielly Fernandes Oliveira Treccani',
-        null,
-        'jadielly.oliveira@gmail.com'
-    ),
-    (
-        'Jailton Wagner Rodrigues Tavares',
-        null,
-        'jwagner28@gmail.com'
-    ),
-    (
-        'Jair da Silva Ferreira Junior',
-        null,
-        'jair.jr.j2@gmail.com'
-    ),
-    (
-        'Jean Carlos Arouche Freire',
-        null,
-        'jeanarouche@gmail.com'
-    ),
-    (
-        'Jefferson Magalhães de Morais',
-        null,
-        'jeffersonmorais@gmail.com'
-    ),
-    (
-        'Joahannes Bruno Dias da Costa',
-        null,
-        'joahannes@gmail.com'
-    ),
-    (
-        'João Júlio Salvatti Neto',
-        null,
-        'salvatti@gmail.com'
-    ),
-    (
-        'Jonathas Pinheiro Trindade',
-        null,
-        'jonathasp6@gmail.com'
-    ),
-    (
-        'José de Sousa Ribeiro Filho',
-        null,
-        'jose.sousa.filho@gmail.com'
-    ),
-    (
-        'José Flávio de Souza Dias Júnior',
-        null,
-        'joseflaviojr@gmail.com'
-    ),
-    (
-        'Julio Cezar Costa Furtado',
-        null,
-        'furtado@unifap.br'
-    ),
-    (
-        'Karla Suely Diniz da Costa',
-        null,
-        'k_info_04@yahoo.com.br'
-    ),
-    (
-        'Larissa Monteiro Pimentel',
-        null,
-        'larissamonteiropimentel@gmail.com'
-    ),
-    (
-        'Lena Patrícia Souza Rodrigues',
-        null,
-        'patricia.souza@ufra.edu.br'
-    ),
-    (
-        'Lennon Sales Furtado',
-        null,
-        'lennonsfurtado@gmail.com'
-    ),
-    (
-        'Leonardo Hirokazu de Souza Hamada',
-        null,
-        'hamadaleonardo@gmail.com'
-    ),
-    (
-        'Leonardo Sarraff Nunes de Moraes',
-        null,
-        'matakura@gmail.com'
-    ),
-    (
-        'Lucas de Melo Silva',
-        null,
-        'lucas.melo04@gmail.com'
-    ),
-    (
-        'Lucelia Pereira Goncalves',
-        null,
-        'lucelia.matsumoto@serpro.gov.br'
-    ),
-    (
-        'Luciana Abdon Almeida',
-        null,
-        'lu.abdon.si@gmail.com'
-    ),
-    (
-        'LUCIANO RIBEIRO DUARTE',
-        null,
-        'duartelucianoribeiro@gmail.com'
-    ),
-    (
-        'Marcelle Pereira Mota',
-        null,
-        'cellemota@gmail.com'
-    ),
-    (
-        'Marcia Priscila Furtado Pantoja',
-        null,
-        'marciapantoja13@gmail.com'
-    ),
-    (
-        'Marcio Goes do Nascimento',
-        null,
-        'goes.nascimento@gmail.com'
-    ),
-    (
-        'Márcio José Moutinho da Ponte',
-        null,
-        'mjmponte@gmail.com'
-    ),
-    (
-        'Marco Antonio Balieiro Da Silva',
-        null,
-        'ma.balieiro@gmail.com'
-    ),
-    (
-        'Marcos César da Rocha Seruffo',
-        null,
-        'marcos.seruffo@gmail.com'
-    ),
-    (
-        'Marcos Felipe Carvalho Nazario',
-        null,
-        'carvalhonazario@yahoo.com.br'
-    ),
-    (
-        'Marisa Cristina Moreno Alves de Andrade',
-        null,
-        'mm.marisamoreno@gmail.com'
-    ),
-    (
-        'Mauricio Ronny de Almeida Souza',
-        null,
-        'mauricio.ronny@gmail.com'
-    ),
-    (
-        'Mauro Rodrigo Larrat Frota e Silva',
-        null,
-        'maurolarrat@ufpa.br'
-    ),
-    (
-        'Mayara Costa Figueiredo',
-        null,
-        'mayfigueiredo@gmail.com'
-    ),
-    (
-        'Mireille Pinheiro Moreira Balieiro',
-        null,
-        'mireillepm@gmail.com'
-    ),
-    (
-        'Müller Gabriel Da Silva Miranda',
-        null,
-        'mulgsm@gmail.com'
-    ),
-    (
-        'Nágila Natália Torres Vale',
-        null,
-        'nagila.ufpa@gmail.com'
-    ),
-    (
-        'Nielsen Alves Gonçalves',
-        null,
-        'engenilk@gmail.com'
-    ),
-    (
-        'Olavo Nylander Brito Neto',
-        null,
-        'olavo.nylander@gmail.com'
-    ),
-    (
-        'Paulo Igor Alves Godinho',
-        null,
-        'piagodinho@gmail.com'
-    ),
-    (
-        'Paulo Vitor Rodrigues Cardoso',
-        null,
-        'paulo.cardoso12@gmail.com'
-    ),
-    (
-        'Pedro Alberto Bento Gomes',
-        null,
-        'pedroabg@gmail.com'
-    ),
-    (
-        'Pedro Luiz Magalhães Cumino',
-        null,
-        'pedro.cumino@gmail.com'
-    ),
-    (
-        'Pedro Montibeler Salvador',
-        null,
-        'pedro.montibeler@gmail.com'
-    ),
-    (
-        'Phelipe Luiz Dias Feio',
-        null,
-        'phelipefeio09@gmail.com'
-    ),
-    (
-        'Rafael Martins Feitosa',
-        null,
-        'rafael.feito@gmail.com'
-    ),
-    (
-        'Rafael Pereira Esteves',
-        null,
-        'rafesteves@gmail.com'
-    ),
-    (
-        'Rafael Santana Oliveira',
-        null,
-        'rafaelstnoliveira@gmail.com'
-    ),
-    (
-        'Reinaldo Junior Lopes Cardoso',
-        null,
-        'reinald28@gmail.com'
-    ),
-    (
-        'Renata Kelly Dantas Cascaes',
-        null,
-        'renatadcascaes@gmail.com'
-    ),
-    (
-        'Renato de Pina Ferreira',
-        null,
-        'renpina@gmail.com'
-    ),
-    (
-        'Renato Hidaka Torres',
-        null,
-        'renatohidaka@gmail.com'
-    ),
-    (
-        'Rennan Jose Maia da Silva',
-        null,
-        'rennanmaia@gmail.com'
-    ),
-    (
-        'Ricardo Rodrigo Marinho Melo',
-        null,
-        'ricardorodrigomm@gmail.com'
-    ),
-    (
-        'Roberto Yuri da Silva Franco',
-        null,
-        'roberto.yuri.franco@gmail.com'
-    ),
-    (
-        'Rodrigo Santos do Amor Divino Lima',
-        null,
-        'rodrigo.sad.lima@gmail.com'
-    ),
-    (
-        'Romulo Silva Pinheiro',
-        null,
-        'romulo.s.pinheiro@gmail.com'
-    ),
-    (
-        'Sandro de Paula Mendonça ',
-        null,
-        'sandrodpm@gmail.com'
-    ),
-    (
-        'Sara das Merces Silva',
-        null,
-        'maru.merces18@gmail.com'
-    ),
-    (
-        'Saul Campos Berardo',
-        null,
-        'saulberardo@gmail.com'
-    ),
-    (
-        'sebastião rodrigues da costa neto',
-        null,
-        's.rodriguescn@gmail.com'
-    ),
-    (
-        'Silvério Sirotheau Corrêa Neto',
-        null,
-        'silverio@ufpa.br'
-    ),
-    (
-        'Silvério Sirotheau Corrêa Neto',
-        null,
-        'ssirotheau@gmail.com'
-    ),
-    (
-        'Suelene de Jesus do Carmo Corrêa ',
-        null,
-        'suelene.correa@ifpa.edu.br'
-    ),
-    (
-        'Thiago Antônio Sidônio Coqueiro',
-        null,
-        'tcoqueiro@hotmail.com'
-    ),
-    (
-        'Vagner de Brito Nascimento',
-        null,
-        'vagner@ufpa.br'
-    ),
-    (
-        'Vitor de Souza Castro',
-        null,
-        'vitor@unifesspa.edu.br'
-    ),
-    (
-        'Walbert Cunha Monteiro',
-        null,
-        'walbertcm@gmail.com'
-    ),
-    (
-        'Wendy Mendes Galeno',
-        null,
-        'wendymgaleno@gmail.com'
-    ),
-    (
-        'Wilson Luiz da Silva Farias',
-        null,
-        'wilsonluiz.dsf@gmail.com'
-    ),
-    (
-        'Yuri Lima Cavalcante',
-        null,
-        'yurilimacavalcante@gmail.com'
-    ),
-    (
-        'Yuri Santa Rosa Nassar dos Santos',
-        null,
-        'yuri.nassar@gmail.com'
-    ) ON CONFLICT DO NOTHING;
+
+insert into egresso_valido (nome_egresso_valido , matricula_egresso_valido , email_egresso_valido) values
+('ADALBERTO DOS REMEDIOS SILVA JUNIOR','200411140009',null),
+('ADONIAS PINHEIRO PIRES','200511140025','quase_4ever@yahoo.com.br'),
+('ADRIANA MENDONCA GARCES','200311140030',null),
+('ADRIANO ANDRADE SILVA','200511140017','adrianocbsi05@gmail.com'),
+('ALAYR MAUES MELO SOBRINHO','200311140009',null),
+('ALBERTO WILLIAMS CORREA FERREIRA','200411140017',null),
+('ALESSANDRO PEDRO DA CUNHA','200711140025','alessandrocunha1@gmail.com'),
+('ALEXANDRE BRITO CARDIAS JUNIOR','200611140006','alexandrecjr@ufpa.br'),
+('ALEXANDRE TELES BASTOS','200811140014','alexandretelesbastos@gmail.com'),
+('ALEXSANDER HAGE DE MELO','200411140008',null),
+('ALISON COSTA DA CONCEICAO','200811140007','alisoncosta@globo.com'),
+('ALISSON PAULO SOUSA SIQUEIRA','200511140033','apbelem@bol.com.br'),
+('ALLAN DA SILVA ALCANTARA','201311140010','allan.pa.br@gmail.com'),
+('ALLE HEDEN TRINDADE DE SOUZA','200811140040','jardim-do-heden@hotmail.com'),
+('ALTIERE COSTA DE SOUZA','200311140004','altisouza@gmail.com'),
+('ANDERSON COSTA NOVAES DE OLIVEIRA','201111140034','anovaes27@gmail.com'),
+('ANDERSON JORGE SANTOS FERREIRA','201111140018','andufpa@gmail.com'),
+('ANDERSON JUNIOR PARAENSE DA SILVA','200311140029','andsilvapara@bol.com.br'),
+('ANDERSON NAZARENO ALCANTARA DE OLIVEIRA','201111140007','andervilo@hotmail.com'),
+('ANDRÉ AVELINO DA SILVA NETO','201211140004','andre.n.los@gmail.com'),
+('ANDRE DEFREMONT','201311140016','andre.def93@gmail.com'),
+('ANDRE LUIZ COELHO PINHEIRO','200711140013','acgrafic@gmail.com'),
+('ANDRE LUIZ DE GUSMAO','200811140002','andredgusmao@gmail.com'),
+('ANDRESSA MYRTYS PEREIRA NOWACZYK','200911140012','andressa.myrtys@gmail.com'),
+('ANDRE THIAGO SANTANA FERNANDES','200211140003',null),
+('ANTONILSON DA SILVA ALCANTARA','201211140014','antonilsonalcantara@gmail.com'),
+('ANTONIO ALAN MENEZES DA SILVA','200911140029','alan.menezes@yahoo.com.br'),
+('ANTONIO NICOLAU MAIA JUNIOR','200211140020',null),
+('ARLEM ANTONIO PEREIRA LEMOS','200411140016',null),
+('BELARDIM BERTON LOPES ARAUJO','200211140032','berton28@hotmail.com'),
+('BERNARDO JOSE DA SILVA ESTACIO','200711140015',null),
+('BRENO BRUNO VIEIRA DE CAMPOS','200711140017','brenobcampos@gmail.com'),
+('BRUNA JULLY NEVES NUNES','200911140031','bjullynn@gmail.com'),
+('BRUNO BOTELHO CARDOSO','200311140035','botabotelho@hotmail.com'),
+('BRUNO LIMA MARTINS','201011140026','brunolmartins@gmail.com'),
+('CARLOS DOS SANTOS PORTELA','200611140025','csp@ufpa.br'),
+('CARMEN LUCIA MARTINS DO NASCIMENTO','200511140024',null),
+('CECIL CORDEIRO DA SILVA','200311140024',null),
+('CLEBER ROBSON DA SILVA GOMES','201211140034','crsg.si.2012@gmail.com'),
+('DACIO PANTOJA SILVA','200411140023',null),
+('DANGELO WESLEY OLIVEIRA MENDES','201011140021','dangelomendes10@gmail.com'),
+('DANIEL BERG SOUZA DE OLIVEIRA','200511140036',null),
+('DANIELLE GONCALVES BARROS','200211140015',null),
+('DANILO ANDERSON PALHANO PINTO','200411140019','danilopinto@museu-goeldi.br'),
+('DANILO HENRIQUE SOUSA MARTINS','200411140005',null),
+('DANILO MATOS DA SILVA','200811140023','danilomatosdasilva@gmail.com'),
+('DANILO SOUZA DUARTE','201611140020','danilosduarte5@gmail.com'),
+('DAVID BARROS DE OLIVEIRA JUNIOR','201111140037','david.barros.j@gmail.com'),
+('DEBORA DA SILVA CUENTRO','201011140007','cuentrosilva@gmail.com'),
+('DEBORA EMERIQUE DE LIMA','201111140005','deboraelima58@gmail.com'),
+('DENER MAUES NEGRAO','201511140004','denermaues@gmail.com'),
+('DENISSON RONEY ALVES REIS','201111140039','denisson_roney@hotmail.com'),
+('DIEGO ASSIS DA SILVA LISBOA','200711140027','diegolisboa@ufpa.br'),
+('DIEGO RODRIGUES DE SOUZA','200911140008','diego.souza@icen.ufpa.br'),
+('DIEGO SAMPAIO PANTOJA','200711140022','diegofuture@yahoo.com.br'),
+('DIELLE DA SILVA CORREA FRANCO','200211140004','diellefranco@yahoo.com.br'),
+('DIOGO ADRIEL LIMA FERREIRA','201011140022','cetlho@gmail.com'),
+('DIOGO MARINHO ALMEIDA','200411140002','diogo.marinho@gmail.com'),
+('DIORGINO RIGLES ALVES REIS','201011140023','diorgino@gmail.com'),
+('DIOVANNI MORAES DE ARAUJO','200611140021','diovanini@gmail.com'),
+('EDGAR EGUCHI ALVES','200611140033','edgar.eguchi@gmail.com'),
+('EDILSON ALVARO CUSTODIO JUNIOR','200411140015',null),
+('EDNELSON SILVA DE SOUSA','200511140020','ednssousa@yahoo.com.br'),
+('EDSON GOMES DE AGUIAR SILVA','200411140027',null),
+('EDUARDO SOUSA DE ARAUJO','200311140008',null),
+('EDWIN VIANA CHAGAS','201511140005','edwinchagas@ufpa.br'),
+('ELDER BRUNO EVARISTO CORREA','201211140035','ebec2012@gmail.com'),
+('ELDER THIAGO COSTA MOREIRA','201111140031','thiagom@ufpa.br'),
+('ELIEL DOS SANTOS BENTES','201111140019','elielsbentes@hotmail.com'),
+('ELIENE DE NAZARE NASCIMENTO PAIXAO','200411140012','elienenb@yahoo.com.br'),
+('ELIWELTON GOMES PAES','201311140007','eliwelton.g.p@gmail.com'),
+('ELTON SARMANHO SIQUEIRA','200611140008','eltonsarmanho@gmail.com'),
+('ELVIS THERMO CARVALHO MIRANDA','201611140041','elvisthermo@hotmail.com'),
+('ERICK CARDOSO SYADE','201311140005','e.syadetbo@gmail.com'),
+('ERIKA MAIA LIMA','200611140019','erikasoueu@gmail.com'),
+('EUDO NEVES PRIMO','200411140035',null),
+('EVANDRO DE SOUZA MONTEIRO','201211140005','evandroofox@gmail.com'),
+('EWERTOM MOZART MORAES DE MIRANDA','201311140004','ewertom.moraes@gmail.com'),
+('EXPEDITO AUGUSTO CARDOSO NOBRE FILHO','201311140031','expeditonobrefilho@gmail.com'),
+('FABIO LUIZ CORDEIRO REZENDE','200411140034',null),
+('FABRICIO ALMEIDA ARAUJO','200711140024','araujopa@gmail.com'),
+('FABRICIO BRAGA DE SOUZA','200611140013',null),
+('FAUSTINO FIRMINO DE CARVALHO JUNIOR','200711140019',null),
+('FELIPE LEITE DE NAZARETH','200811140009','felipe.leite.nazareth@gmail.com'),
+('FERNANDO CESAR CHAVES ALVES JUNIOR','201411140003','fernandoaj@ufpa.br'),
+('FERNANDO FABIO DIAS GAMA DA MATA','201011140028','f.fabiogama88@gmail.com'),
+('FERNANDO LUIZ DE SIQUEIRA CARDOSO','200811140010','fernandols.cardoso@gmail.com'),
+('FERNANDO WAGNER ASSUNCAO TEIXEIRA','200811140024','flash104@gmail.com'),
+('FLAVIO AUGUSTO SANTOS DE OLIVEIRA','200511140018','flavio.oliveira@ica.ufpa.br'),
+('FRANCIELLEM MAYARA PONTES BEZERRA','201211140015','franccy.b@gmail.com'),
+('FRANCIELMA DOS SANTOS ASSUNCAO','201611140010','assuncao.francielma@gmail.com'),
+('FRANCISCO BANDEIRA BRITO JUNIOR','200711140010',null),
+('FRANCISCO CARLOS GUALBERTO DOS SANTOS JUNIOR','200911140027','jramlen@gmail.com'),
+('FRANCISCO PAULO BRITO BORGES','200311140033',null),
+('FRANKNALDO TORRES GOMES','200211140031',null),
+('GABRIEL CRUZ SOARES GOMES','201611140012','ggomes873@gmail.com'),
+('GABRIEL MEDEIROS DA SILVA','201111140025','gabrielmedsilva@hotmail.com'),
+('GEDEAN GONCALVES CARVALHO','201011140002','gedean.carvalho@hotmail.com'),
+('GENE SHUCHIN WEN','200311140001',null),
+('GEORGE GILSON OLIVEIRA DOS REIS','200511140008',null),
+('GEOVANI OLIVEIRA CABRAL DA PAZ','201211140009','geovanipaz7@gmail.com'),
+('GERSON SOUZA DA SILVA','201111140012','gersonsouza2@gmail.com'),
+('GILBERTO NERINO DE SOUZA JUNIOR','200611140023','gilbertojr@ufpa.br'),
+('GIOVANNI ASSUMPCAO MAGNO','200711140033','assumpcaogiovanni@yahoo.com.br'),
+('GIOVANNI AUGUSTO MELO PINHEIRO','200611140005','g3oaugusto@gmail.com'),
+('GLEIDSON FELIPE PEREIRA DA SILVA','200711140035',null),
+('GLEISE PINHEIRO BALDEZ','200711140001','gleisebaldez@gmail.com'),
+('GLEYDSON DA COSTA FERREIRA','200311140010',null),
+('GLEYSON MIRANDA MELO','200311140011',null),
+('GUSTAVO MAUES DE OLIVEIRA LOBATO','200311140005','gustavomaues@ufpa.br'),
+('HANA GABRIELLE DOS SANTOS BARATA','201711140009','hanagabrielle@outlook.com'),
+('HANS WILLIAM DOS SANTOS SILVA','201011140010','hans.w.santos@gmail.com'),
+('HEGON HENRIQUE CORREA DA SILVA','200511140022','hegoncbsi@yahoo.com.br'),
+('HERBERTH MENDES DE ALMEIDA','200811140031','herberthalmeida@hotmail.com'),
+('HIEDA ADRIANA NASCIMENTO SILVA','200211140009','hieda@ufpa.br'),
+('HUGO BISPO SANTOS DO NASCIMENTO','200711140011','hbsnhugo@gmail.com'),
+('HUGO RONALDO GONZALEZ NOGUEIRA','200311140032',null),
+('IDERALDO CARLOS PAVESI','200611140010','ideraldo_carlos@hotmail.com'),
+('IGOR BARBOSA DE CARVALHO','200811140041',null),
+('INGRID MOREIRA MIRANDA DA SILVA','201511140003','i.moreiragt@gmail.com'),
+('ISAAC SOUZA ELGRABLY','201111140020','isaacelgrably@hotmail.com'),
+('IURI IGONEZ SILVA RAIOL','200911140006','iuriraiol@gmail.com'),
+('JACKSON PEREIRA DA SILVA CRUZ','200411140011','jacksonpscruz@outlook.com'),
+('JADIR HORACIO SARMENTO PINTO JUNIOR','200911140023','jadirjunior@ufpa.br'),
+('JAILSON MARTINS TOLOSA','201111140014','jailsontolosa@gmail.com'),
+('JAIRO DE JESUS NASCIMENTO DA SILVA JUNIOR','200811140039','junior.jairo1@gmail.com'),
+('JAMYSON DA SILVA MATOSO','200911140011','jamysonmatoso@yahoo.com.br'),
+('JANDER DE SOUZA E SILVA','200211140010',null),
+('JEFFERSON KLISTER DUARTE DA SILVA JUNIOR','201311140001','jeffklister@gmail.com'),
+('JESSÉ DA COSTA ROCHA','201111140001','jesserocha2012@gmail.com'),
+('JESSICA DE PAULA FIGUEIRA RIBEIRO','201411140036','jessicadepaula.stm@gmail.com'),
+('JHONATHAS SOUSA DOS SANTOS','200611140012','j0g4d0r1@hotmail.com'),
+('JHOVAN OBEDE TERRA DA SILVA','200211140028',null),
+('JOAO LUIS DOS REIS LIMA','200911140002','joaoamil@hotmail.com'),
+('JOAO VICTOR PATERNOSTRO CORREA','201211140003','jvpaternostroc2@gmail.com'),
+('JOSE AUGUSTO DE SENA QUARESMA','201111140011','jq.quaresma12@gmail.com'),
+('JOSE BRICIO MACHADO CARDOSO NETO','200711140020',null),
+('JOSE DEIVISON VIEIRA XAVIER','201311140026','deivisonvx@gmail.com'),
+('JOSE HIRVALDO LOBO MONTEIRO','200211140012',null),
+('JOSE RAMON DA CONCEIÇAO MONTEIRO','201411140019','jose.monteiro@icen.ufpa.br'),
+('JOYCE ANNE PINTO RODRIGUES','200311140015','joycesinfo03@yahoo.com.br'),
+('JULIO DE PADUA LOPES MENEZES','201311140036','julio.menezesi2013@gmail.com'),
+('JULIO EDUARDO BITTENCOURT DA SILVA','200711140014','julioebs20@hotmail.com'),
+('JULIO FRANCISCO COUTO DE CARVALHO','201011140033','juliusufpa2010@gmail.com'),
+('JULIO RAMON NOGUEIRA LISBOA','200811140025','julioramonufpa@gmail.com'),
+('KAIO SERGIO DA MOTTA VALENTE','200711140004',null),
+('KALILL CORDEIRO LAMEIRA','201411140013','kalill.lameira@gmail.com'),
+('KAMILA BALTAZAR CORREIA','200611140029',null),
+('KATYA KEILA COSTA ASSIS','200511140031','katyakeila@gmail.com'),
+('KELVIN TEIXEIRA VIEIRA','201111140016','kelvintvieira@hotmail.com'),
+('KLEOSON BRUNO CORREA DOS SANTOS','200811140013','brunocorrea@ufpa.br'),
+('LAERTE GUEDES MONTEIRO','200911140001','laerte-gm@hotmail.com'),
+('LAERTH LASERINO PINTO MONTEIRO','201011140034','laertthpotter@hotmail.com'),
+('LAIS CONCEICAO RIBEIRO','200811140019','laissribeiro@gmail.com'),
+('LARISSA DE SOUZA CARNEIRO','200511140027',null),
+('LEANDRO GOMES DE MOURA','200911140033','leandro.goms.moura@gmail.com'),
+('LEANDRO HERNANDEZ ALMEIDA','200411140004',null),
+('LEIDIEL ARAUJO DE OLIVEIRA','200611140003','leidiel@ufpa.br'),
+('LEONARDO ANDRE SILVA DOS SANTOS','201111140010','leonardoandre27@gmail.com'),
+('LEONARDO BARBOSA DA COSTA','201011140001','barbosleonardo@gmail.com'),
+('LEONARDO DA COSTA FIGUEIREDO','201411140011','leonardofig88@gmail.com'),
+('LEONARDO DIAS MARTINS','201111140008','leo_dm@live.it'),
+('LEONARDO FERREIRA E SILVA','200911140015',null),
+('LEONARDO HERNANDEZ ALMEIDA','200411140020','leofozzy@yahoo.com.br'),
+('LEO SANTOS DE LIMA','200511140002','leo-sdl@hotmail.br'),
+('LEYRILANE DE SOUZA','200511140015',null),
+('LOURDILENE SILVA DE SOUZA','201011140031','lourdilene.souza@gmail.com'),
+('LOURIVAL DA CONCEICAO PEREIRA JUNIOR','200311140013',null),
+('LUAN DOS SANTOS OLIVEIRA','201411140029','luanoliveira35@hotmail.com'),
+('LUAN FELIPE BRITTO ALVES','201611140015','akaluan.la@gmail.com'),
+('LUCIANA NEVES BENTES','200611140031',null),
+('LUCIANE FARIAS SOARES','200411140025',null),
+('LUIZ ALESSANDRO LOPES FEITOSA','200511140009','alelibbra@hotmail.com'),
+('LUIZ ANTONIO ANDRADE DE SOUSA','201311140013','luizdsousa@gmail.com'),
+('LUIZ EDUARDO ALVES DE ALCANTARA','201111140006','eduardo@alcantara.net.br'),
+('LUIZ FELIPPH CALADO SOSINHO','201211140006','luizfelipph@gmail.com'),
+('LUIZ OTAVIO DANIN DE LIMA','200911140021','otaviodanin@gmail.com'),
+('LUZIANA BRAGA CORREA','200311140026',null),
+('LYNDON JOHNSON BRITO SOUSA','200411140003',null),
+('MABEL PILAR NASCIMENTO DUARTE','200211140013','mpillar@yahoo.com.br'),
+('MANOEL VICTOR RODRIGUES LEITE','201211140022','victor.ufpaa@gmail.com'),
+('MANUELY BARBOSA GUEDES','201011140020','manuely.guedes@icen.ufpa.br'),
+('MARCELA SANTIAGO DOS SANTOS','200211140007',null),
+('MARCELO DA SILVA MORAES','200411140029','marcelo@ufpa.br'),
+('MARCELO SARRAF PINHO','200211140006','marcelosarraf@gmail.com'),
+('MARCIO JOSE MOUTINHO DA PONTE','200211140014','marcio.ponte@ufopa.edu.br'),
+('MARCIO NUNES GOMES','200311140016','marciogomes@mpf.mp.br'),
+('MARCO AURELIO CAPELA','200411140032','macapela@ufpa.br'),
+('MARCOS ALMEIDA DA COSTA','201511140034','almeidmar@gmail.com'),
+('MARCOS AUGUSTO BARATA DA SILVA','200411140030',null),
+('MARCOS PAULO FERREIRA COSTA','201311140034','marcsi2320@gmail.com'),
+('MARCOS PAULO NASCIMENTO SILVA','200411140024',null),
+('MARCOS VALERIO DA SILVA RENDEIRO','200611140020',null),
+('MARIANO JEFFERSON BATISTA GOMES JUNIOR','200711140021','marianojefferson@hotmail.com'),
+('MARIO ANTONIO PEREIRA DE OLIVEIRA','201011140039','mario_oliveira10@yahoo.com.br'),
+('MARIO BASTOS DE BRITO JUNIOR','200211140017',null),
+('MARLON SILVA PIMENTEL CRUZ','201211140028','marlonufpasi@gmail.com'),
+('MARLON WILSON SANTOS DOS SANTOS','201511140006','marlon.santos.santos@icen.ufpa.br'),
+('MARTA JODYE BORDO DA CONCEICAO','200511140019','jodye_st@hotmail.com'),
+('MATHEUS SEABRA DE CARVALHO VIEIRA COELHO','201311140021','matheusvieiracoelho@gmail.com'),
+('MAURICIO MARTINS RIBEIRO','201811140014','mauricio.si.ufpa@gmail.com'),
+('MAURO AUGUSTO BARROS FERREIRA','201111140048','mauroabferreira@yahoo.com.br'),
+('MAXIMIANO DAVES DA COSTA VIEIRA','200411140026',null),
+('MAX WANDERSON DE ARAUJO FAVACHO','200511140010',null),
+('MAYKON ARAUJO DE SOUZA','201311140018','maykonaraujo23@gmail.com'),
+('MICHEL FEU CASTRO GONDIM','200511140034','michelgondim@yahoo.com.br'),
+('MICHEL PEREIRA MARQUES','200711140008',null),
+('NILTON RODRIGUES DE ASSIS JUNIOR','200611140028','NILJUNIOR@GMAIL.COM                                                             '),
+('ODIRLEY PINHEIRO DE MATOS','201211140008','odirley007@yahoo.com.br'),
+('ORLANDO DO NASCIMENTO TAVARES FILHO','200811140026','ontf.filho@gmail.com'),
+('OTAVIO DUTRA LEITE','200211140022',null),
+('PATRICIA PINTO DINIZ','200411140010','patricia.diniz@tucurui.ufpa.br'),
+('PAULEANDRO SILVA NUNES','200811140030','psn_leandro@hotmail.com'),
+('PAULO ALBERTO LIMA PRADO','200611140026','paulo_alp19@hotmail.com'),
+('PAULO ANDRE MOREIRA CARVALHO','200211140008',null),
+('PAULO HENRIQUE AMORIM PEREIRA','201211140025','paulohenriq10@gmail.com'),
+('PAULO VITOR CHAVES DE LIMA','201111140024','pv.lima05@gmail.com'),
+('PAULO VITOR RODRIGUES CARDOSO','200811140008','paulocardoso.dev@gmail.com'),
+('PAULO WESKLEY DE ALMEIDA FERREIRA','201011140032','weskleyalmeida.si@gmail.com'),
+('PEDRO ESTEVAO DA CONCEICAO MOUTINHO JUNIOR','200611140002','pedro_cabeludow@hotmail.com'),
+('RAFAELA CARDOSO MOUTINHO','200511140012','rafmout@yahoo.com.br'),
+('RAFAEL BRUNO PECCATIELLO','200511140007','peccatiello@ig.com.br'),
+('RAFAEL DANTAS CARVALHO','200711140031',null),
+('RAFAEL DE SOUZA CAVALHEIRO','201211140030','rafcavalheiro@gmail.com'),
+('RAFAEL FERREIRA DE SOUZA','201011140005','desouza.timao@gmail.com'),
+('RAFAEL GOMES SOUSA','200711140032','rafael.sousa@ifpa.edu.br'),
+('RAIMUNDO NORBERTO LAMEIRA JUNIOR','200211140021','raimundonorberto@yahoo.com.br'),
+('RAPHAEL DA SILVA AZEVEDO','200511140011','razeved@yahoo.com.br'),
+('RAPHAEL ROGERIO MOUTA','200911140025',null),
+('RAUL CESAR MONTEIRO DA SILVA','200811140018','fa15698@yahoo.com.br'),
+('RENAN EDUARDO SOARES RODRIGUES','201011140016','renaneduardorodrigues@gmail.com'),
+('RENATA RODRIGUES DE CARVALHO','200511140032',null),
+('RICARDO ANDERSON MUNIZ SARMANHO','201411140007','ricardosarmanho@hotmail.com'),
+('RICARDO ARAUJO FEIO','200611140018','rafeio@bol.com.br'),
+('RICARDO PAES ALMEIDA','200411140007',null),
+('ROBERTO BARBOSA DE ALMEIDA JUNIOR','201311140002','roberto.almeida@icen.ufpa.br'),
+('ROBERTO BRITO XAVIER JUNIOR','201211140019','rbxjunior@gmail.com'),
+('ROBERTO FELIX','201011140014','bob.felix89@gmail.com'),
+('ROBSON DOS SANTOS SILVA','201011140015','rsantsil@gmail.com'),
+('RODRIGO BEZERRA BRASIL','200711140002','rodrigobbrasil@gmail.com'),
+('RODRIGO DO CARMO VIANA','201011140030','rodrigoviana@ufpa.br'),
+('RODRIGO VIDAL MIRANDA','200811140027','rvidalth@yahoo.com.br'),
+('ROGERIO LIMA CARNEIRO','200211140019','rlimac@gmail.com'),
+('ROMAO SOUZA SILVA','200411140022','rjsilva@ufpa.br'),
+('ROSANE DA SILVA SIQUEIRA','200311140025',null),
+('ROSANGELA SOUSA RAIOL','200211140026','zanraiol@gmail.com'),
+('ROSIVALDO FONSECA GOMES JUNIOR','200911140020','rfgomesjr@gmail.com'),
+('ROUSEVELT RODRIGUES DE ALMEIDA','200811140032',null),
+('RUMENIGG NOGUEIRA VIEIRA','200211140018',null),
+('SAMARA FERNANDES PIMENTEL','201511140002','samwallflowergirl@gmail.com'),
+('SAMUEL LINHARES SANTANA','200911140014','ifpa.santana@gmail.com'),
+('SANDRO ALAN DE SOUZA MONTEIRO','200711140006',null),
+('SEBASTIAO GILBERTO LOPES VAZ','200511140035',null),
+('SERGIO EWERTON MACIEL RODES','201111140030','sergio_ewr17@hotmail.com'),
+('SILVIO BRUNO PAIVA COSTA','200511140014','sbpaco@gmail.com'),
+('SIMON AFONSO CORREA LOBATO','200511140004','simondelarocha@yahoo.com.br'),
+('SIVALDO DE OLIVEIRA BARBOSA','200711140007',null),
+('TALITA DE CACIA SOUSA TRAVASSOS','201411140025','talitatravassos.tt@gmail.com'),
+('TAMARA CUNHA MENDES','200211140016',null),
+('TATIANE BOTELHO BORGES','200811140015','tatianejbm@yahoo.com.br'),
+('THIAGO BENICIO MACEDO','201611140002','thiagobm01@hotmail.com'),
+('THIAGO CORDEIRO COSTA DA SILVA','201211140010','tsilva0891@gmail.com'),
+('THIAGO DA SILVA GILLA','200211140001',null),
+('THIAGO DE LIMA ARAUJO','200311140020',null),
+('THIAGO DE MATOS BEZERRA','200911140017','thiagomatos99@hotmail.com'),
+('THIAGO MODESTO DIAS','200711140023',null),
+('THIAGO SALES SANTOS','200711140034','ioritss@hotmail.com'),
+('TIAGO ANTERO DE SOUSA ALVES','201011140012','jvantero@gmail.com'),
+('TIAGO PORTO SANTOS DO NASCIMENTO','200311140003',null),
+('VERONICA COSTA PANTOJA','200311140017','VCPSINFO@YAHOO.COM.BR'),
+('VICTOR GUSTAVO DE MELLO GONCALVES','200511140016',null),
+('VICTOR HUGO AZEVEDO FERREIRA','201711140002','victorhugo543af@gmail.com'),
+('VINICIUS FAVACHO QUEIROZ','201611140031','viniciusqquei@gmail.com'),
+('VITOR CIRILO ARAUJO SANTOS','201011140003','vitor.cirilo3@gmail.com'),
+('VITOR DE SOUZA CASTRO','200711140003','vitor@ufpa.br'),
+('WALBERT CUNHA MONTEIRO','200511140021','walbert.monteiro@ifpa.edu.br'),
+('WALBERT EMANUEL DA SILVA NASCIMENTO','201011140009','walbertsilva5@gmail.com'),
+('WALDER LOBO MARQUES','201111140038','walderwolf.tm@gmail.com'),
+('WALERIA PAULA DA LUZ MOURA SOUZA','200511140028','waleriamoura@gmail.com'),
+('WANDERSON AUGUSTO DE SOUZA PEREIRA','200311140034',null),
+('WELLINGTON CARDOSO COSTA','200311140007',null),
+('WELLINGTON SOUZA MORAES','200811140003','engwillsm@yahoo.com.br'),
+('WESLEY ANDERSON OLIVEIRA DE MELO','200911140032','wesleyandmelo@gmail.com'),
+('WESLEY DE OLIVEIRA BARBOSA','201011140013','wesley.tadsi@yahoo.com.br'),
+('WILLIAM CAPELA CARDOSO','200511140029',null),
+('WILLIAM SAWAKI DE MELO E SILVA','201011140006','williamsawaki@gmail.com'),
+('WILLY CLEYBER ALMEIDA SILVA','200411140033',null),
+('WILTON CESAR NASCIMENTO DA SILVA','200511140037','wilton.cns@gmail.com'),
+('YASMIN VIEIRA DE MELO KOURY','200311140018',null),
+('YURI MELO E SILVA DO ESPIRITO SANTO','201611140027','yurimelo89@gmail.com'),
+('ABEL BRUNO NASCIMENTO SILVA','200804940012','abelbruno@hotmail.com'),
+('ABNATAL PEREIRA CORDOVIL JUNIOR','199904940002',null),
+('ABNER CARDOSO DA SILVA','201604940029','abner.cardo@gmail.com'),
+('ABNER GILLET FARIAS','201304940017','abnergillet16@gmail.com'),
+('ABRAHAM LINCOLN RABELO DE SOUSA','199504940031',null),
+('ACZA LIRA SILVA','201704940024','acza.silva@icen.ufpa.br'),
+('ADAILTON MAGALHAES LIMA','200204940003','adailton@ufpa.br'),
+('ADEILSON NAZARENO ARAUJO PINHEIRO','200304940019',null),
+('ADELMO FREIRES GOMES','199104940049',null),
+('ADENILTON CORECHA DE SOUZA','200904940039','adcorecha@gmail.com'),
+('ADERBAL MOURA SANTOS','199104940090',null),
+('ADEVALDO QUEIROZ DA SILVA','200104940034',null),
+('ADIEL DOS SANTOS NASCIMENTO','201504940002','adieltab16@gmail.com'),
+('ADILSON FRANCISCO FERREIRA SOUSA','200904940009','adilson.sousa@icen.ufpa.br'),
+('ADRIANA LEITE DE ALCANTARA','199304940001',null),
+('ADRIANA NUNES TELES','199904940016',null),
+('ADRIANO DE AGUIAR RIBEIRO','200204940036','ribeiroadrianno@ig.com.br'),
+('ADRIANO DE OLIVEIRA MARTINS','200004940020',null),
+('ADRIANO LUIZ PINTO SOBRAL','199404940002',null),
+('ADRIANO SILVA BARRETO','201304940025','adriano.sbarreto@hotmail.com'),
+('AIAN SHAY BENTES DAMASCENO CARDOSO','201704940041','aianshay@gmail.com'),
+('AILTO LORASCHI','200004940046',null),
+('AIRTON NOBUMASA ISHIMORI','200604940031','airton@ufpa.br'),
+('ALAN TONY SOUZA VELOSO','201504940009','aveloso@ufpa.br'),
+('ALBERTO DA CRUZ LIMA SOBRINHO','201704940019','aclsobrinho@gmail.com'),
+('ALBERTO SHINTA KURODA','199104940107',null),
+('ALCYR DA COSTA ALMEIDA JUNIOR','201204940025','almeida.alcyr@gmail.com'),
+('ALEKSANDRA DO SOCORRO DA SILVA','199104940108',null),
+('ALESSANDRA CAROLINE DOS SANTOS NASCIMENTO','200404940026',null),
+('ALESSANDRA DA SILVA GOMES','200104940011',null),
+('ALESSANDRA FONTEL POMPEU','199104940050',null),
+('ALESSANDRA PANTOJA DE ARAUJO','201204940027','alessandra.araujo@icen.ufpa.br'),
+('ALESSANDRA PRISCILA ALVES DE OLIVEIRA','201004940012','alessandrapriscila.alves@gmail.com'),
+('ALETEIA PATRICIA FAVACHO DE ARAUJO','199304940002',null),
+('ALEXANDER RICHARD VINSON','200004940013',null),
+('ALEXANDRE ABREU DE FREITAS','201104940039','alexandre.freytas@gmail.com'),
+('ALEXANDRE ALVAREZ MARTINI SANTOS','199504940001',null),
+('ALEXANDRE CARLOS BEZERRA MACEDO','199304940004',null),
+('ALEXANDRE MELO BRAGA','199204940001',null),
+('ALEXANDRE MONASSA MOREIRA','200504940011','alexandre.monassa@gmail.com'),
+('ALEXANDRE RODRIGUES GOMES','201004940020','gomes.bcc@gmail.com'),
+('ALEX YUICHI YOKOKURA','200004940016',null),
+('ALFREDO LIMA DA COSTA JUNIOR','201104940033','jrcdz01@gmail.com'),
+('ALINE CLAIREFONT TAVARES MELO','199704940017',null),
+('ALINE DE OLIVEIRA SILVA','200304940005',null),
+('ALINE PATRICIA DA SILVA PIMENTEL','200204940047','apssig@ig.com.br'),
+('ALINE REGINA DE OLIVEIRA MIRANDA','199404940045',null),
+('ALISON RICARDO SANTOS DA SILVA','200304940003','alisonricss@yahoo.com.br'),
+('ALLINE DE MELO LEMOS','200204940007','allinelemos@gmail.com'),
+('ALLINE DE OLIVEIRA PEIXOTO','200104940049','alline_peixoto@yahoo.com.br'),
+('ALLISFRANK DOS SANTOS','200904940031','allisknarf@gmail.com'),
+('ALUIZIO RAMOS PEREIRA NETO','201004940028','aluizio.ramos.adv@gmail.com'),
+('AMANDA NOBRE COSTA','200204940060',null),
+('ANA CARLA MACEDO DA SILVA','199104940001','acms@ufpa.br'),
+('ANA CAROLINA DE ARAUJO BARBOSA','200204940055','carolufpa@gmail.com'),
+('ANA IDALINA TENORIO PIEDADE','200204940046','idabiap@yahoo.com.br'),
+('ANA ISABELA MANITO RAMOS','201404940021','aisabelamr@gmail.com'),
+('ANA KARLA MIRANDA DE OLIVEIRA','199204940044',null),
+('ANA VITORIA DE BACELAR MACHADO E SILVA','201704940008','av503vitoria@gmail.com'),
+('ANDERSON BAIA MAIA','199804940029',null),
+('ANDERSON DE OLIVEIRA BANDEIRA','200504940036',null),
+('ANDERSON FURTADO DE NAZARE','200904940015','anderson.fn88@gmail.com'),
+('ANDERSON JONES SILVA DE JESUS','199704940007',null),
+('ANDERSON JORGE SERRA DA COSTA','200204940052','andersonjsc@gmail.com'),
+('ANDERSON MARQUES MORAIS','200904940016','andersonoanjo18@gmail.com'),
+('ANDERSON RAIOL RODRIGUES','199504940002','arr@ufpa.br'),
+('ANDERSON SILVA DE OLIVEIRA GÓES','200304940016','agoes@ufpa.br'),
+('ANDRE LUIS MACHADO DE VASCONCELOS','200804940001','andre.cbcc@gmail.com'),
+('ANDRE MIGUEL PENA BAHIA','200804940022','andrebahia.cbcc@gmail.com'),
+('ANDRE MIRANDA PINHEIRO','201604940032','andremirandap93@gmail.com'),
+('ANDRE RICARDO FARIA GOMES','199504940032',null),
+('ANDREY DE MACEDO SOUSA','200904940014','andreymacedo06@hotmail.com'),
+('ANE MARGARETH MONTE VERDE SILVA','199104940052',null),
+('ANETE HIROMI HASHIMOTO','199104940053',null),
+('ANGELA CRISTINA SOUZA DE AQUINO','199304940006',null),
+('ANGELA MARIA TRINDADE AMADOR','201104940028','angelaamador@ufpa.br'),
+('ANGELO DE BARROS BRAGA','200104940031','3390955@gmail.com'),
+('ANGELO LUIZ DA CRUZ OLIVEIRA','201004940045','angeloluizz@gmail.com'),
+('ANTONIO ANDRE CUNHA DA SILVA','201004940031','aandrecunhas@gmail.com'),
+('ANTONIO FABIO RODRIGUES DOS SANTOS','199604940015',null),
+('ANTONIO JOSE CASTRO DE ALMEIDA JUNIOR','199104940110','antonio.almeida.negocios@gamial.com'),
+('ANTONIO MARCOS FERREIRA DE SOUZA','200204940048','amsouzapa2@gmail.com'),
+('ANTONIO SOARES LOBATO','199904940023',null),
+('ARIANE ELIZABETH NUNES GARCIA','201204940030','aeng.garcia@gmail.com'),
+('AROLDO CRISTIANO GUERREIRO LEAL','199604940006',null),
+('ARTHUR IVSON XAVIER DE MORAES BATISTA','201204940014','ivson.ma@gmail.com'),
+('ARTHUR MASAHIRO YOSHINO','201104940003','arthur_masahiro@hotmail.com'),
+('ARTHUR TAKESHI NORONHA YOSHIKAWA','201704940039','arthur.yoshikawa@icen.ufpa.br'),
+('ARUANDA SIMOES GONCALVES  MEIGUINS','199404940005','aruandasimoes@gmail.com'),
+('AUGUSTO FARIAS CRAVO','201404940003','augusto.f.cravo@gmail.com'),
+('BARBARA CONCEICAO DE OLIVEIRA BARBOSA','199104940111',null),
+('BERNARDO LOBATO DOS SANTOS NETO','200304940021',null),
+('BILLY ANDERSON PINHEIRO','200204940054','haquiticos@gmail.com'),
+('BLENO WILSON FRANKLIN VALE DA SILVA','201204940035','blenofvale@gmail.com'),
+('BRENO BERNARD NICOLAU DE FRANCA','200204940005','brenofranca@yahoo.com.br'),
+('BRENO CRISTOVAO RODRIGUES PINTO','200004940043',null),
+('BRUNELLI PINTO MIRANDA','201104940015','brunelli.miranda@gmail.com'),
+('BRUNO AKIRA FUKUSHIMA MURAKAMI','201204940005','murakami.bruno@gmail.com'),
+('BRUNO BITAR MORHY','199504940004',null),
+('BRUNO DA COSTA BARROSO','200104940029',null),
+('BRUNO DO NASCIMENTO MONTEIRO','200704940029','bnmonteiro2@gmail.com'),
+('CAIO MARCOS FLEXA RODRIGUES','201204940010','caiomfrodrigues@gmail.com'),
+('CAIO PINHEIRO DE CARVALHO','201304940006','caiocarvalho1996@hotmail.com'),
+('CAIO SHIMADA RABELLO','201604940020','xcaiosr@gmail.com'),
+('CALADO PEREIRA FIJAMO','199104940048',null),
+('CAMILA MARINHO ALMEIDA','200004940039',null),
+('CARLA ALESSANDRA GOMES DE LIMA','199104940054',null),
+('CARLA CRISTINA DA CRUZ ARAUJO','200804940032','alrac.cruz@gmail.com'),
+('CARLA MARINA COSTA PAXIUBA','199904940035',null),
+('CARLOS ALBERTO LEITE MENDES','199104940112',null),
+('CARLOS ALEXANDRE LOURINHO GOMES','199904940060',null),
+('CARLOS ANDRE NEVES DO VALE','200004940058',null),
+('CARLOS DIEGO NASCIMENTO DAMASCENO','200804940017','carlos.damasceno@icen.ufpa.br'),
+('CARLOS EDUARDO COSTEIRA CALDAS','200104940017',null),
+('CARLOS EDUARDO MARINHO GOMES','200804940014','kadu-marinho@hotmail.com'),
+('CARLOS EDUARDO RIBEIRO BASTOS','199304940007',null),
+('CARLOS GUSTAVO RESQUE DOS SANTOS','201004940024','gustavoresqueufpa@gmail.com'),
+('CARLOS HENRIQUE RIBEIRO CARDOSO','201604940014','carlos.h.cardoso140@gmail.com'),
+('CARLOS MARCIO JORGE SARAIVA','199604940034',null),
+('CARLOS RENATO LISBOA FRANCES','199104940004',null),
+('CASSIO ALEXANDRE TEIXEIRA MENEZES','200004940026',null),
+('CIDIANE ARACATY LOBATO','199804940001',null),
+('CINTIA KELLI CABRAL RODRIGUES','200104940023',null),
+('CIRNEY RICARDO J B CARNEIRO','199104940005',null),
+('CLARICE MORAES FERREIRA','200904940035','claricemoraesf@gmail.com'),
+('CLARK DA CUNHA SA','199104940114',null),
+('CLAUDIA MYLENE DA SILVA PINHEIRO','199904940031',null),
+('CLAUDIO ANTONIO DA SILVA CAVALCANTI','199904940057',null),
+('CLAUDIO DIEGO TEIXEIRA DE SOUZA','201004940007','diegodisouzza@gmail.com'),
+('CLAUDIO KENJI KAWAMURA DA SILVA','199704940025',null),
+('CLEBER ROBERTO PAES DA ROCHA','199604940018',null),
+('CLEBERSON MALCHER GUERREIRO','200204940032','cmguerreiro2@gmail.com'),
+('CLEIDSON RONALD BOTELHO DE SOUZA','199104940008',null),
+('CLEIDYR DA SILVA LIMA','201004940049','cleidyr.system@gmail.com'),
+('CLODOALDO ESTUMANO DA SILVA','200304940018',null),
+('CLOVIS DA PAZ TAVARES JUNIOR','199104940105',null),
+('CRISTIANE DO SOCORRO PIRES ALMEIDA','200104940019',null),
+('CRISTIANE MARQUES DA SILVA','200104940024',null),
+('CRYS SAYURI GOTO','200304940007',null),
+('CYNTHIA MARA FONSECA DE OLIVEIRA','199104940009',null),
+('DANIELA KARINE MARAVALHO AVELAR','200904940022','donk14@gmail.com'),
+('DANIELA NAZARE MAIA DA CONCEICAO','199104940093',null),
+('DANIEL DE JESUS TAVARES','200704940023','djtavaresieq@gmail.com'),
+('DANIEL DIAS DE CARVALHO','200304940035','danieldiascv@gmail.com'),
+('DANIELE MOURA DE QUEIROZ','200504940034','daniqueiroz.bt@gmail.com'),
+('DANIEL HENRIQUES MOREIRA','200104940001',null),
+('DANIELLE DA SILVA COSTA NUNES','200304940029','danicostas@yahoo.com.br'),
+('DANIELLE DE MICHELI PALHANO PINTO','200204940053',null),
+('DANIELLE FURTADO DOS SANTOS','200004940025',null),
+('DANIEL LIMA BRASIL','199904940010',null),
+('DANIELL SOARES CAVALCANTI VIEIRA','201204940018','daniellcavalcanti@bol.com.br'),
+('DANIEL ORLANDO SERPA DA SILVA','199204940004','dosdasilva@hotmail.com'),
+('DANIEL SANTOS RODRIGUES','199504940005',null),
+('DANILO DO CARMO QUADROS CABRAL','200104940046','cabraldanilo@yahoo.com.br'),
+('DAN JHONATAN DA SILVA TEIXEIRA','201204940020','danjsteixeira@gmail.com'),
+('DARLENE DOS REIS SOARES GONCALVES','199104940056',null),
+('DAUCIKELEM BRAGA DOS SANTOS','199504940006',null),
+('DAVID LEONARDO MIRANDA BENTOLILA','200404940017',null),
+('DAVID SAMUEL BELICHA ISRAEL','200004940057',null),
+('DAVI MITSUO DA SILVA SHIBAYAMA','199604940031',null),
+('DAVISON HOLANDA PACHECO','200704940024','davisonph@ufpa.br'),
+('DEDIER GOMES MERCES LIMA','200204940061',null),
+('DEIVID TINOCO LEMOS','200304940034','detilufpa@yahoo.com.br'),
+('DELCIO NONATO ARAUJO DA SILVA','199204940006',null),
+('DELIANE DE JESUS ALVES DE ANDRADE','199904940042',null),
+('DENIS TAVARES SILVA','199804940019',null),
+('DERICK EDUARDO DIAS ROSA','201004940001','derickedu@gmail.com'),
+('DEUZINEI PINHEIRO MIRANDA','200004940032',null),
+('DIEGO JOSE CUNHA QUEIROZ','200104940021',null),
+('DIEGO OLIVEIRA ABREU','201204940013','diegooabreu@gmail.com'),
+('DILMA FARIAS VIANA','199104940010',null),
+('DOGEVAL AUGUSTO SACHETT','199504940007',null),
+('DOUGLAS BRITO DAMALIO','200304940032','ddamalio@yahoo.com.br'),
+('DOUGLAS CARDOSO PINHEIRO','200204940069',null),
+('DURVAL CASTRO DE BASTOS JUNIOR','199604940014',null),
+('EDER CRUZ BARBOSA','200304940012','ponto_flutuante@yahoo.com.br'),
+('EDER TAVEIRA DOS SANTOS','200504940038',null),
+('EDGAR ALMEIDA MANESCHY','200204940043',null),
+('EDGARD ASSUNCAO ARAUJO','199604940025',null),
+('EDILA MARTA MIRANDA LOBO','199204940007',null),
+('EDMAR LUIZ DA COSTA BENTES','199104940095',null),
+('EDSON ALESSANDRO FAGUNDES COSTA','201404940001','ale-remo@hotmail.com'),
+('EDSON COSTA DIAS','200304940015','ecdias@ufpa.br'),
+('EDSON EUSTACHIO OLIVEIRA DE AZEVEDO','199404940006',null),
+('EDSON PRESTES E SILVA JUNIOR','199304940009',null),
+('EDSON SILVA DOS SANTOS','199204940008',null),
+('EDUARDO COSTA DE CARVALHO','200704940030','duducostacarvalho@gmail.com'),
+('EDUARDO DE CARVALHO LEITE','199704940014',null),
+('EDUARDO LEAL GUERRA','199804940003',null),
+('EDVIRGES MARIA DA SILVA NASCIMENTO','199204940009',null),
+('EHILTON KAZUO CHIBA YOSHIDOME','201104940006','ekcy00@gmail.com'),
+('ELAINE DO SOCORRO FURRIEL AMANAJAS','199204940010',null),
+('ELDER DE JESUS FERREIRA DA SILVA','201004940006','elderferreirass@gmail.com'),
+('ELENILTON ALEX SANTOS DA COSTA','200004940055',null),
+('ELIAS SENA MORAES','201304940023','eliassm.ufpa@gmail.com'),
+('ELINETE NUNES FREITAS','199104940057',null),
+('ELISANGELA SANTANA AGUIAR','199504940009','eaguiar@ufpa.br'),
+('ELIZEL PINHEIRO LEAL','200304940033',null),
+('ELLTON SALES BARROS','201004940026','elltonsalesbarros@gmail.com'),
+('ELTON JHON DIAS GONCALVES','200704940032','elton.private@gmail.com'),
+('ELTON PENICHE QUARESMA','201504940035','eltonpeniche14@gmail.com'),
+('EMANUEL ESTUMANO SANTOS','200104940042','emanuel.estumano@gmail.com'),
+('EMANUEL NUNES REIS','200304940017',null),
+('EMERSON JOSE SILVEIRA DA COSTA','199104940058',null),
+('EMILIO JUN NAGAHAMA','199204940011',null),
+('ERIC FELIPE DE OLIVEIRA PEREIRA','201104940012','eric.cbcc@gmail.com'),
+('ERLON FONSECA PINHEIRO','201604940045','erlon.fpinheiro@gmail.com'),
+('ERNANI DE OLIVEIRA SALES','200204940006','ernani@ufpa.br'),
+('ESTHER CARDOSO DA SILVA','201404940009','esther.cardoso.silva@gmail.com'),
+('EURICO OLIVEIRA DA ROCHA','199104940115',null),
+('EVANDRO KOUJI DA SILVA TORII','200404940008',null),
+('EVERTON MEIRELES COSTA','199904940050',null),
+('EWELTON YOSHIO CHIBA YOSHIDOME','200504940019','ewelton.yoshio@gmail.com'),
+('EWERTON ALMEIDA SILVA','200504940004',null),
+('EWERTON DA COSTA VAZ','199304940010',null),
+('EWERTON DAVID MARTINS LEITE','199404940009',null),
+('EZEQUIAS CARLOS FERREIRA DA SILVA','199304940011',null),
+('FABIANA RODRIGUES DE GÓES','200904940024','fabil.goes@gmail.com'),
+('FABIO ALEX MENDES CAMPOS VASCONCELOS','201504940030','fa.vasconc@gmail.com'),
+('FABIO AUGUSTO DAS DORES SILVA','199304940012',null),
+('FABIO AUGUSTO GUIMARAES TEIXEIRA','200004940001',null),
+('FABIO BRAGA DOS SANTOS','200304940026','fbragas@ufpa.br'),
+('FABIO CARVALHO DA COSTA','199104940012',null),
+('FABIO DE LIMA BEZERRA','199604940009',null),
+('FABIO DE OLIVEIRA FERREIRA','199704940005',null),
+('FABIO DE SOUZA MIRANDA','201704940029','fabiosouza21777@gmail.com'),
+('FABIOLA PANTOJA OLIVEIRA','199304940013',null),
+('FABIO MALCHER MIRANDA','201104940008','miranda.fmm@gmail.com'),
+('FABIO MENDES MONTEIRO','199904940030',null),
+('FABIO REIS SIZO NASCIMENTO','200304940027','fabiosizo@yahoo.com.br'),
+('FABIO YU NAGAHAMA','199704940012','nagahama@yahoo.com'),
+('FABRICIO JOSE UCHOA CORREA','199504940011',null),
+('FABRICIO SILVA DE MAGALHAES','199804940011',null),
+('FAGNER LEAL PANTOJA','200904940002','fagnerleal@ufpa.br'),
+('FELIPE DE MELO RODRIGUES E OLIVEIRA','201704940017','sem.ideias.na.hora@gmail.com'),
+('FELIPE ELIASQUEVICI','201304940003','felipe.quevici@gmail.com'),
+('FELIPE GUSMAO ARAUJO','201604940033','shinakuma3000@hotmail.com'),
+('FELIPE LEITE DA SILVA','200804940010','felipe.leite3@gmail.com'),
+('FERNANDO CESAR SILVA DE MENEZES','199104940059',null),
+('FERNANDO MENEZES MATOS','199604940012',null),
+('FERNANDO SILVA VILA NOVA','200104940058','fernando.vilanova@gmail.com'),
+('FILIPE DAMASCENO COELHO','201304940029','filipecoelho@ufpa.br'),
+('FLAVIA COELHO PINHEIRO','200204940051',null),
+('FLAVIO DIAS DE ASSUNCAO','200504940003','flavio.dias@yahoo.com.br'),
+('FLAVIO JOSE FERRO BARROS','199204940012',null),
+('FRANCISCO CARRERA NASCIMENTO JUNIOR','201304940028','francisco_nascimento@outlook.com.br'),
+('FRANCISCO CESAR DE JESUS SILVA','199904940033',null),
+('FRANCISCO COSTA COELHO JUNIOR','199504940012',null),
+('FRANCISCO DEMARIM DE AGUIAR JUNIOR','201004940027','junior.demarimm@gmail.com'),
+('FRANCISCO WERTHER SILVA DE SANTANA JUNIOR','200704940025','wertherjr@gmail.com'),
+('FRANCIS JAMES VIANA RIBEIRO','199804940028',null),
+('FRANK DA SILVA MALCHER','200104940008',null),
+('FRANKLIM HARRISON MOREIRA DOS SANTOS','200204940027',null),
+('FREDERICO NOBRE REIS','199904940020',null),
+('GABRIELA FONSECA ANDRADE','200304940011','andrade.f.gabriela@gmail.com'),
+('GABRIELA NUNES CAMPOS','199104940060',null),
+('GABRIEL BELTRAO DE ABREU','201404940017','gab.abreu23@gmail.com'),
+('GABRIEL DE MAGALHAES ESCUDEIRO','201304940019','gabrielescudeiro1@gmail.com'),
+('GABRIEL DE SOUSA ARAUJO','200404940014',null),
+('GABRIEL NUNES CRISPINO','201304940010','gabriel.crispino@hotmail.com'),
+('GARDENIA VIEIRA DE ALBUQUERQUE','199104940015',null),
+('GEORGE TASSIANO MELO PEREIRA','201304940008','george.melo7@gmail.com'),
+('GESSICA PINHEIRO DE MORAES BATISTA','201204940022','gesspinhero@gmail.com'),
+('GHISLENE BRITO DE FREITAS','199104940016',null),
+('GILBERT ASDRUBAL HERNANDEZ LOURENCO','199204940041',null),
+('GILMARA SANTOS DA SILVA','199704940015',null),
+('GILSON TAVARES QUEIROZ','199704940022',null),
+('GIORDANNA DE GREGORIIS','201304940009','gior.grs@gmail.com'),
+('GIOVANI FONTENELLE COSTA','199104940062',null),
+('GISSELEN RENEE DE OLIVEIRA SOUZA','200004940038',null),
+('GLAUCO ESTACIO GONCALVES','200004940005',null),
+('GLEFSON FRANCO CARNEIRO','200304940030',null),
+('GLENON MATEUS BARBOSA ARAUJO','200704940017','glenonmateus@gmail.com'),
+('GLEYSON DO NASCIMENTO GAMA','200604940035','gleysongama@gmail.com.br'),
+('GUILHERME AUGUSTO BARROS CONDE','199304940015',null),
+('GUILHERME FARIAS LIMA','201004940036','guilhermef.bcc@gmail.com'),
+('GUILHERME SMETHURST ALBUQUERQUE','201604940009','guitrompa1@gmail.com'),
+('GUSTAVO HENRIQUE SAMPAIO COUTO','199404940010',null),
+('HAMILTON DA SILVA CAVALCANTE','200704940015','hamiltoncavalcante@gmail.com'),
+('HAMILTON JOSE MORAES DE ALBUQUERQUE','200104940027',null),
+('HAMILTON LUIZ RODRIGUES DE OLIVEIRA','199604940024',null),
+('HEITOR DE OLIVEIRA MACEDO','201004940013','heitorom9@gmail.com'),
+('HELDER KLEMP CORREA DA SILVA','200104940004',null),
+('HELDER LUIZ BEZERRA DE OLIVEIRA GARCIA','199104940096',null),
+('HELIO CARVALHO OLIVEIRA','199304940016',null),
+('HELIO MARCOS PAZ DE ALMEIDA','199904940048',null),
+('HENLY KOUICHI TSUCHIYA','199204940014',null),
+('HERESSON JOÃO PAMPOLHA DE SIQUEIRA MENDES','200504940006','heresson@gmail.com'),
+('HERIVELTON BARBOSA LIMA','199604940011',null),
+('HUGO BRITO LIMA','201104940023','hugo141592@gmail.com'),
+('HUGO CEZAR DO NASCIMENTO GOES','200104940052',null),
+('HUGO PEREIRA KURIBAYASHI','200204940022','hugo@unifesspa.edu.br'),
+('HUGO SAWADA TODA','200104940012','hogotoda@gmail.com'),
+('HYAGO PINHEIRO COSTA OLIVEIRA','201004940015','hyagogow@gmail.com'),
+('IAN CAMPOS BEZERRA REGO','201604940043','iancamposcc@gmail.com'),
+('IGOR DE SOUZA ALMEIDA','200104940013',null),
+('IGOR FURTADO CARVALHO','200604940011','igfuca@gmail.com'),
+('IGOR MATHEUS SOUZA MOREIRA','201704940007','imatheus.sm@gmail.com'),
+('IGOR SAMUEL MOREIRA DE MELO','200404940024','ivoquimico@gmail.com'),
+('INGRID FURTADO RAIOL','201504940028','ingrid.frcomp@gmail.com'),
+('IRAQUITAN CORDEIRO FILHO','200804940006','iraquitanfilho@gmail.com'),
+('IROMAR GOMES DA SILVA','199104940116',null),
+('ISABELA LOPES MAUES BATISTA','201704940005','maues.isa@gmail.com'),
+('ISRAEL SEWANOU HOUNSOU','201504940001','hisara3@gmail.com'),
+('ITALO RAMON DA COSTA CAMPOS','201504940012','italo.campos@icen.ufpa.br'),
+('IVANDILSON DE SOUZA DUARTE','199804940017',null),
+('IVAN DOS SANTOS MELLO','199104940017',null),
+('JAIME DE MELO SABAT NETO','199304940017',null),
+('JAIME NAZARENO DA SILVA SOARES JUNIOR','199104940019',null),
+('JAIR DA SILVA FERREIRA JUNIOR','199504940013',null),
+('JAIRO NASCIMENTO DE SOUSA FILHO','201604940016','jairofilho79@gmail.com'),
+('JANAINA DE FATIMA ROLLA FERREIRA','199404940013',null),
+('JANAINA DJENANE SOUZA CATETE','199104940117',null),
+('JANNE YUKIKO YOSHIKAWA OEIRAS','199204940016',null),
+('JANYNNE STEPHANIE DE OLIVEIRA PALHETA','201104940030','janynnepalheta@gmail.com'),
+('JAYME DA COSTA CABRAL JUNIOR','201504940005','jaymejunior@yahoo.com.br'),
+('JEAN CARNEIRO DO NASCIMENTO','201004940008','jeancnasc@hotmail.com'),
+('JEAN MARCEL DOS REIS COSTA','200404940002',null),
+('JEANNE DE OLIVEIRA PEREIRA','201304940002','jeanneop22@gmail.com'),
+('JEFERSON MARCELO DE OLIVEIRA CAMARA','200004940031',null),
+('JEFFERSON FERREIRA DE FIGUEIREDO JUNIOR','201004940014','jefjr2504@gmail.com'),
+('JEFFERSON MIGUEL GONCALVES FERREIRA','199704940023',null),
+('JEFFSON CELEIRO SOUSA','201504940027','jeffson.celeiro@gmail.com'),
+('JESSE DE SOUZA SOARES','200004940002',null),
+('JNANE DE SOUSA NEIVA','200004940022','jnane@ufpa.br'),
+('JOAO CALDAS JUNIOR','199104940063',null),
+('JOAO DE DEUS FERREIRA FILHO','201504940020','lubien1996@gmail.com'),
+('JOAO JOSE CORSI FILHO','201004940018','jjcf_cc_ufpa@hotmail.com'),
+('JOÃO JÚLIO SALVATTI NETO','200104940050','salvatti@ufpa.br'),
+('JOAO MARCELO FREITAS DE ALMEIDA','201704940004','jmfda00@gmail.com'),
+('JOAO MAURICIO SILVA DE CARVALHO','200004940047',null),
+('JOAO PAULO SOUZA ALVES DE SOUZA','199904940043',null),
+('JOAO PEDRO MOREIRA MORAES','201504940006','joaopedromoraes@outlook.com'),
+('JOAO ROBERTO PINHEIRO DA CRUZ','199104940064',null),
+('JOAO VICTOR DA SILVA DIAS CANAVARRO','201704940015','jvcanavarro@gmail.com'),
+('JOAQUIM MAGNO CUNHA','199904940019','jmcpa1982@gmail.com'),
+('JOEL COSTA DE OLIVEIRA','199504940014',null),
+('JOERCIO DE SENA RODRIGUES','199404940014',null),
+('JOGINETE PEREIRA ACRIAO','199304940018',null),
+('JONATHAN TRINDADE DO NASCIMENTO','200004940017',null),
+('JONATHAS REIS DA SILVA','199604940030',null),
+('JONE KAZUKI YAMAGUCHI','200104940045',null),
+('JORGE LUIS MORAES VALENTE','199104940065',null),
+('JORGE LUIZ VASCONCELOS DE LIMA','200904940023','jorgedelima911@gmail.com'),
+('JOSÉ AILTON SOARES VALADARES JÚNIOR','200404940023','ailtonvaladares@yahoo.com.br'),
+('JOSE ALBERTO DE ANDRADE AVILA','200504940028','zeavila@gmail.com'),
+('JOSE ALEX AIRES DOS SANTOS','199604940010',null),
+('JOSEANE DE CASSIA DA SILVA VIANA','200204940037',null),
+('JOSE ANTONIO SARMANHO DOS SANTOS FREIRE','199304940019','josesarmanho@ufpa.br'),
+('JOSE CORREA DA SILVA JUNIOR','200904940028','correasjunior@gmail.com'),
+('JOSE ENDERSON FERREIRA RODRIGUES','200104940041',null),
+('JOSÉ FLÁVIO DE SOUZA DIAS JÚNIOR','200404940035','contato@joseflavio.com'),
+('JOSE MARIA DE OLIVEIRA JUNIOR','200604940037',null),
+('JOSE RAIMUNDO FREITAS DE MENESES','199604940037',null),
+('JOSE RICARDO SIQUEIRA DE MIRANDA','199204940018',null),
+('JOSUE PEREIRA DE CASTRO','199104940069',null),
+('JO UEYAMA','199204940017',null),
+('JOYCE CRISTINA SOUZA BASTOS','200604940023','joyce.csb@gmail.com'),
+('JOZENILDO SOARES DE SOUZA','199204940019',null),
+('JULIANO KAZUKI MATSUZAKI OYA','199804940004',null),
+('JULIO VALENTE DA COSTA JUNIOR','199304940021',null),
+('JUSSARA ALEIXO SILVA SOUSA','200004940014',null),
+('KAE UCHOA SARMANHO','201304940012','kaeuchoa@hotmail.com'),
+('KARLA NAZARE FERREIRA DAMASCENO','199804940021',null),
+('KARLA SANTOS DE OLIVEIRA','200104940055','karla.santoli@gmail.com'),
+('KARLYANNE PAOOLA SILVA BRAGA','201004940029','braga.paoola@gmail.com'),
+('KAZUSHIGE BATISTA MATSUMOTO','199204940020',null),
+('KEISE BARBOSA PEIXOTO','199704940003',null),
+('KELLY DO SOCORRO SILVA DA COSTA','201604940040','kellydosocorro@gmail.com'),
+('KELLY ROBERTA TORRES GUIMARAES','200104940032',null),
+('KELVIN LOPES DIAS','199104940021',null),
+('KIWAKO BATISTA MATSUMOTO','199304940022',null),
+('KIZZY BEZERRA THE','199704940024',null),
+('KLEBER MENDONCA DE MELO','200904940036','kleber.mendonca@hotmail.com'),
+('KLEBER PALHETA SILVA','199504940034',null),
+('KLEDER MIRANDA GONCALVES','199804940023',null),
+('KLESSIS LOPES DIAS','199804940025',null),
+('KLEVERTON CARLOS MACEDO DE OLIVEIRA','200704940021','kleverton.macedo@gmail.com'),
+('KLISSIOMARA LOPES DIAS','199504940016',null),
+('KYLME IKEGAMI SAKIYAMA','199704940029',null),
+('LANA PRISCILA DA SILVA FERREIRA','201204940009','lanapsf@gmail.com'),
+('LANA RAQUEL SOUZA DE SOUZA','199404940017',null),
+('LARISSA FERNANDES CHAGAS','200504940030','alilari@uol.com.br'),
+('LAUDEMIRA PACHECO FARIAS','200204940033','laudafarias@yahoo.com.br'),
+('LEANDRO BEZERRA COUTINHO','200704940034',null),
+('LEANDRO HENRIQUE SANTOS CORREA','200804940008','hscleandro@gmail.com'),
+('LEANDRO LAGES DE CARVALHO FARIA','199904940012',null),
+('LEANDRO ORLANDO SOUSA DA SILVA','201404940031','le-an-dro95@hotmail.com'),
+('LEANDRO PANTOJA PEREIRA','200204940039',null),
+('LEDA MARA SOUZA DE OLIVEIRA MONTEIRO','199104940121','ledaoliveiramonteiro@gmail.com'),
+('LENON JOSE COSTA RAIOL','199804940012',null),
+('LEOMARIO SILVA MACHADO','200604940025','leomarioguitarr@yahoo.com.br'),
+('LEONAM GAMA DA SILVA','200904940033','leohenryster@gmail.com'),
+('LEONARDO ATHANAZIO DE CERQUEIRA GATTI','199804940026',null),
+('LEONARDO AUGUSTO SOUZA AFONSO','201204940026','nardoasafonso@gmail.com'),
+('LEONARDO BARBOSA FURTADO','201604940024','srleonardofurtado@gmail.com'),
+('LEONARDO CHRISTIAN FERREIRA DA COSTA','201504940019','leonardo.chfc@gmail.com'),
+('LEONARDO CORREA BAIMA','200104940009',null),
+('LEONARDO DE SOUSA RAMOS','200904940007','leosr89@gmail.com'),
+('LEONARDO HIROKAZU DE SOUZA HAMADA','199704940008',null),
+('LEONARDO JUNQUEIRA DA SILVA VALENTE','200104940048','leonardovalente@gmail.com'),
+('LEONARDO PATRICIO FERREIRA BARBOSA','200304940004','leonardopfb@gmail.com'),
+('LEONARDO SANTOS FORMENTO','201104940007','leonardo.santos.formento@gmail.com'),
+('LEONARDO SARRAFF NUNES DE MORAES','200704940005','leonardosarraff@gmail.com'),
+('LEONARDO YOICHI FEIO OKADA','200104940014',null),
+('LICIA CRISTINA BRITO DE CARVALHO','199404940041',null),
+('LIDIANE PARENTE ANDRADE','200004940007',null),
+('LIGEIA DE ALMEIDA ALENCAR','199404940018',null),
+('LIKEN IU MATSUMOTO CORREIA LIMA','200404940025','liken_iu@yahoo.com.br'),
+('LILIAN SANTOS FERREIRA DA SILVA','200904940017','lilianferreira@ufpa.br'),
+('LINDALVO GONZAGA DE ALCANTARA NETO','199104940023',null),
+('LIS WEIJI KANASHIRO PEREIRA','200304940001',null),
+('LIVIA RENATA VALE FRANCO DE SA','199804940006',null),
+('LOUISE GONCALVES DE BARROS','200404940012','louisebarros@yahoo.com.br'),
+('LUCAS DE MELO SILVA','200804940007','lucasmelo@ufpa.br'),
+('LUCAS FELIPE FERRARO CARDOSO','201604940042','luks.ferraro@gmail.com'),
+('LUCAS GABRIEL DE SOUZA','201604940039','lucassouzaufpa@gmail.com'),
+('LUCAS RODRIGUES GUIMARAES','201404940005','lucasrodriguesgui@hotmail.com'),
+('LUCAS TAVARES MONTEIRO','201404940026','tavares.lucas1996@gmail.com'),
+('LUCELIA PEREIRA GONCALVES','200304940006','luceliapgoncalves@gmail.com'),
+('LUCIANA CRISTINA MARTINS','199304940023',null),
+('LUCIANA DE NAZARE PAIVA NUNES','199604940013','paiva@ufpa.br'),
+('LUCIANA LIMA BRITO','201204940031','lucianabrito@openmailbox.org'),
+('LUCIANA MARIA AZEVEDO NASCIMENTO','199904940026','luma@ufpa.br'),
+('LUCIANA TOUREIRO HAGE','199104940024',null),
+('LUCIENE PEREIRA COSTA','199404940020',null),
+('LUCIO EDUARDO SOLANO REIS','199104940071',null),
+('LUIS MIGUEL FONSECA DE MORAIS','199504940030',null),
+('LUIZ ACACIO CENTENO CORDEIRO JUNIOR','199904940029',null),
+('LUIZ ALANO ALEXANDRE LOPES','199404940021',null),
+('LUIZ ALBERTO DA SILVA FILHO','200204940017','lasf_bel@yahoo.com.br'),
+('LUIZ ALBUQUERQUE LEAO','199604940022',null),
+('LUIZ AUGUSTO MONTEIRO ROSO DANIN','201104940004','luizdanin@gmail.com'),
+('LUIZ DANIEL CREAO AUGUSTO','200104940005',null),
+('LUIZ DOURADO DIAS JUNIOR','199904940015','ldourado1980@globo.com'),
+('LUIZ GUSTAVO COSTA CARVALHO','200004940037',null),
+('LUIZ OTAVIO DA SILVA BARATA','200104940030',null),
+('LUIZ TOME VILHENA DANTAS NETO','200004940035',null),
+('LUIZ WALDOMIRO MONTEIRO NETO','199104940072',null),
+('LUZIO SANTANA DA SILVA FILHO','200204940042','filholuzio@gmail.com'),
+('LUZONILDO LEAO DA SILVA','199204940021',null),
+('MANOEL AFONSO PEREIRA DE LIMA FILHO','201004940009','manoel.afonsoo@gmail.com'),
+('MANOEL FREDERICO BELTRAO ROSAS JUNIOR','199504940018',null),
+('MANUELA DE JESUS SEMBLANO BITTENCOURT','199704940010',null),
+('MARCEL ABREU DA MOTA','200004940050',null),
+('MARCELA PIEDADE DO AMARAL','199104940026',null),
+('MARCELIO D OLIVEIRA LEAL','200004940029',null),
+('MARCELLA LETICIA DE SOUZA COSTA','200004940008',null),
+('MARCELLE PEREIRA MOTA','200304940014','mpmota@ufpa.br'),
+('MARCELLO ADOLFO VELOSO DA SILVA','199504940035',null),
+('MARCELO ALMEIDA DA SILVA','200204940013','mas@ufpa.br'),
+('MARCELO ANDRADE DA GAMA MALCHER','200004940028',null),
+('MARCELO ANDRADE PEREIRA','200204940019',null),
+('MARCELO ANTONIO ALVES ALENCAR','201404940014','marceloalves@ufpa.br'),
+('MARCELO DE BRITO GARCIA','199704940004',null),
+('MARCELO MAIA DA SILVA','200904940027','mmaia.cc@gmail.com'),
+('MARCELO NASCIMENTO COSTA','199404940022',null),
+('MARCELO RIBEIRO ALBERNAZ','200204940050',null),
+('MARCELO SAMUEL DA COSTA MAGALHAES','199504940019',null),
+('MARCIA ANDREA DE CARVALHO FREITAS','199204940022',null),
+('MARCIA CRISTINA MONTEIRO DE MORAES','199804940002',null),
+('MARCIA MARIA DA SILVA AMARAL','199504940020',null),
+('MARCIO AMAZON KOHLER DA C KURIBAYASHI','199104940123',null),
+('MARCIO AUGUSTO PEREIRA BAILOSA','199104940098',null),
+('MARCIO BRAGA DOS SANTOS','200204940035',null),
+('MARCIO FREITAS CABRAL DA LUZ','199604940003',null),
+('MARCIO KUROKI GONCALVES','200204940031',null),
+('MARCO ANTONIO FAGUNDES DE MORAES','199204940023',null),
+('MARCOS AURELIO TRAJANO DE ASSIS','199104940027',null),
+('MARCOS ROMERO GONZAGA DE ALMEIDA','199904940005',null),
+('MARCOS SENNA BENAION LEAL','201204940019','marcosbenaion@gmail.com'),
+('MARCUS DE BARROS BRAGA','199104940106',null),
+('MARIA ADALZIRA SEIXAS LOPES','199204940024',null),
+('MARIA ANDRÉIA RODRIGUES DOS SANTOS','199504940021','mariaandreia@ufpa.br'),
+('MARIANA DE NAZARE DOS ANJOS LIMA','200004940011',null),
+('MARINA ATSUMI OIKAWA','200104940007',null),
+('MARINA NERY BRACCHI','199404940025',null),
+('MARIO DO SOCORRO JARDIM MONTEIRO','200004940030',null),
+('MARISSA BRASIL DE CARVALHO','201104940005','marissabc@ufpa.br'),
+('MARJORIE PEREIRA MARQUES','201004940010','marjoriepmarques@gmail.com'),
+('MARLOS BATISTA FERREIRA','200204940026','marlos_ferreira@yahoo.com.br'),
+('MARLOS DE MORAES TAVARES','200604940027','marlos1415@gmail.com'),
+('MARTHA CASTELLO BRANCO DE MELLO','199104940124',null),
+('MARYANNE PACHECO SOEIRO DE BARROS','200304940031',null),
+('MASAO IIDA','199704940021',null),
+('MATEUS PINTO RODRIGUES','201204940006','mprodrigues@openmailbox.org'),
+('MATHEUS FERREIRA FREIRE','201104940020','matheusfreire.cbcc@gmail.com'),
+('MATHEUS OLIVEIRA LEITE DE SA','201504940018','sa.matheus.leite@gmail.com'),
+('MAURICIO PIO DE LACERDA','199904940025',null),
+('MAURICIO RONNY DE ALMEIDA SOUZA','200504940015','mauricio.ronny@ufla.br'),
+('MAX HIDEYUKI MATSUZAKI','199304940028',null),
+('MAXWEL MACEDO DIAS','200404940028','maxwelmdias@gmail.com'),
+('MAYARA COSTA FIGUEIREDO','200404940001','mcfigueiredo@ufpa.br'),
+('MELINA DE VASCONCELOS ALBERIO','199804940022',null),
+('MELISSA SA OTERO','199304940029',null),
+('MICHELL COSTA OLIVEIRA DA CRUZ','201104940035','michellkruz@gmail.com'),
+('MICHEL PENA DOS SANTOS NERY','200004940049',null),
+('MIGUEL FORMIGOSA SIQUEIRA','199904940047','migsiq2@gmail.com'),
+('MIGUEL JOSE DE ALMEIDA PERNAMBUCO FILHO','200504940016','mp_godan@hotmail.com'),
+('MIGUEL PEREIRA MARQUES','199404940026',null),
+('MILENA HELLEM BEZERRA DA SILVA','199604940027',null),
+('MILENA RAYANE DOS SANTOS GALVAO','200904940030','milenarayane@ufpa.br'),
+('MIZAEL PANTOJA MONTEIRO','200604940020','mizaelm2@yahoo.com.br'),
+('MOISES BEN HUR SOUSA SEIFFERT SIMOES','199604940016',null),
+('MOISES FELIPE MELLO DA SILVA','201204940021','moises.silva@icen.ufpa.br'),
+('MONICA DE NAZARE TAVARES DE PAULA GOYANA','199304940030',null),
+('MONICA FERNANDES DA SILVA','199604940004',null),
+('MOSHE DAYAN SOUSA RIBEIRO','200504940008','mosheribeiro@yahoo.com.br'),
+('MURILO FARIAS SALES','200204940045','murilosalles@yahoo.com.br'),
+('NATALIA COUTO DIAS','200104940056',null),
+('NAYME CRISTHINA GOMES DE ALMEIDA','199104940036',null),
+('NELSON BRAZAO MACIEL JUNIOR','199304940031',null),
+('NICOLI DA SILVA PEREIRA DE SOUZA','201104940037','nickspsouza@gmail.com'),
+('NIKOLAS JORGE SANTIAGO CARNEIRO','201104940009','nikolas.carneiro@gmail.com'),
+('NILSON JOSE MENDES DA COSTA FILHO','199904940040',null),
+('NOEL BASTOS GONZAGA','199404940027',null),
+('ODNALRO CRUZ VIDEIRA JUNIOR','200004940009',null),
+('OLINDA MIOKA CHUBACHI','199104940028',null),
+('OSIEL MARLON NEGRAO DA SILVA','199704940011',null),
+('OTÁVIO NOURA TEIXEIRA','199504940023','onoura@gmail.com'),
+('OTAVIO RODRIGUES JUNIOR','200004940053','orvoltz@gmail.com'),
+('PATRICIA MATIAS LOPES','200404940011','patriciaufpa@gmail.com'),
+('PAULA DANIELE DE OLIVEIRA MOREIRA','200204940021','pdanni@gmail.com'),
+('PAULA JOSIANE DE SA SANTOS','199104940100',null),
+('PAULO ANDRE EVANGELISTA DA SILVA','199304940032',null),
+('PAULO CLEITON VIEIRA DA SILVA','200304940036','paulocleiton@ufpa.br'),
+('PAULO FERNANDO SOUZA RODRIGUES JUNIOR','200504940031','pjpaulor@gmail.com'),
+('PAULO GLEIDSON RISUENHO PEINADO','199704940019',null),
+('PAULO GUILHERME DOS SANTOS NASCIMENTO','199104940087',null),
+('PAULO JORGE OLIVEIRA BRAGA','199104940101',null),
+('PAULO NAZARENO MAIA SAMPAIO','199104940128',null),
+('PAULO ROBERTO SILVA CHAGAS JUNIOR','201104940001','paulo.robertojr100@gmail.com'),
+('PAULO ROBSON CAMPELO MALCHER','200804940027','prcmalcher@gmail.com'),
+('PAULO RUDOLPH DA SILVA NASCIMENTO','200504940009','paulorudolph07@gmail.com'),
+('PAULO SENA FERREIRA FILHO','201404940044','paulosena99@gmail.com'),
+('PAULO SERGIO DOS SANTOS COSTA','199104940029',null),
+('PAULO SERGIO LAMEIRA SANTOS','199104940075',null),
+('PAULO SERGIO SILVA RODRIGUES','199304940033',null),
+('PAULO TAKASHI SAWAKI FILHO','199404940029',null),
+('PAULO VICTOR DE LIMA SFAIR ALVARES','201304940021','pvsfair@gmail.com'),
+('PAULUS ROBERTO GUEIROS ANGLADA','200204940010','paulusanglada@hotmail.com'),
+('PEDRO AFONSO NASCIMENTO DE AVIZ','200804940021',null),
+('PEDRO NOLASCO FERREIRA NETO','200104940060',null),
+('PEDRO VICTOR AROUCK MELO','201704940003','ppvitorr@gmail.com'),
+('PRISCILA CORREA SABOIA','199904940007',null),
+('PRISCILA GOES BURLE','200204940009',null),
+('PRISCILLA LANNE CORDEIRO DE LEAO','199404940042',null),
+('RAFAELA DA SILVA LOBO','200104940040',null),
+('RAFAEL DA SILVA TAKASHIMA','200304940009',null),
+('RAFAEL FREITAS DE MORAIS','200304940028',null),
+('RAFAEL LOPES GOMES','200504940018','rafaellgom@gmail.com'),
+('RAFAEL MARTINS FEITOSA','200404940007','rafaelmf@ufpa.br'),
+('RAFAEL MESQUITA DO MAR','200804940029','rafamesquita89@gmail.com'),
+('RAFAEL NASCIMENTO DE SOUSA','201604940041','rafaelsousa2187@gmail.com'),
+('RAFAEL NASCIMENTO DE SOUZA','200904940012','nascimento.rsouza@gmail.com'),
+('RAFAEL PEREIRA ESTEVES','200204940001',null),
+('RAFAEL VERAS GUIMARAES','200604940002','rafaveguim@gmail.com'),
+('RAIMUNDO FERNANDO BENTES DAS CHAGAS JUNIOR','201504940004','rfbcj@hotmail.com'),
+('RAISSA LORENA SILVA DA SILVA','201104940013','r.lorenna@gmail.com'),
+('RAMIRO LUZ VERGOLINO ZAHLOUTH','201004940040','ramiroserge@gmail.com'),
+('RAMON DA GAMA CORDEIRO','201304940013','ramonestii@gmail.com'),
+('RAMON FALSONI','200704940011','ramonfalsoni@hotmail.com'),
+('RAMON TORRES CRUZ','200604940009','ramontcruz@gmail.com'),
+('RANIERI BARROS TEIXEIRA','200604940024','ranieri@ufpa.br'),
+('RAPHAEL BRITO DE PAIVA','200504940033',null),
+('REGIANE ANDRADE BRITO','199904940003',null),
+('REGIANE LIMA DE SOUSA','199804940024',null),
+('REGIANE YUMIKO DA SILVA KAWASAKI','199104940032',null),
+('REGINALDO CORDEIRO DOS SANTOS FILHO','201004940002','regicsf2010@gmail.com'),
+('REGINALDO TERUYOSHI HAMAGUCHI','199204940031',null),
+('REGINA NAOMI TANAKA','199204940029',null),
+('REINALDO GIL LIMA DE CARVALHO','200104940057','reinaldoc@gmail.com'),
+('RENAN FILIP COSTA BALIEIRO','201304940011','Renanf016@gmail.com'),
+('RENAN FONSECA CUNHA','201704940034','renancunhafonseca@hotmail.com'),
+('RENAN LOBO DUARTE','201504940029','renan.leviathan@gmail.com'),
+('RENAN SALES BARROS','200604940010','renan3mf@hotmail.com'),
+('RENAN THIAGO DA SILVA ROSA','201304940032','renannojosa@gmail.com'),
+('RENATA PEREIRA BAENA','200304940002',null),
+('RENATO FIGUEIRO MAIA','199704940006',null),
+('RENATO JOSE LIMA MOTA','201704940001','Rjlmota@gmail.com'),
+('RENATO PENNAFORT ROCHA','200604940007','pennafort22@gmail.com'),
+('RENATO RENISON MOREIRA OLIVEIRA','201004940011','renato.renison@gmail.com'),
+('RENATO WILSON SOUZA DE OLIVEIRA','199704940035',null),
+('RICARDO ANDRE CAVALCANTE DE SOUZA','199304940034',null),
+('RICARDO BASTOS ARRAES','201304940001','ricardo@vfatec.com.br'),
+('RICARDO CARVALHO DE SOUZA','200004940015',null),
+('RICARDO CESAR FREITAS DE SOUZA','199904940011',null),
+('RICARDO DE FARIAS SANTOS','199304940035',null),
+('RICARDO IUNES COSTA','199804940020',null),
+('RICHARD DIAS DA COSTA','199304940036',null),
+('RITA DE CASSIA DAVID DAS NEVES','199404940031',null),
+('ROBERTA DE OLIVEIRA CAVALCANTE','199304940037',null),
+('ROBERTA MACHADO BRASIL DE LIMA ARAUJO','199404940032','robertaba@gmail.com'),
+('ROBERTA VILHENA VIEIRA','199104940076',null),
+('ROBERTO DE ARAUJO MOURA','199704940002',null),
+('ROBERTO FRANKLIN MOREIRA CARDOSO','200404940030',null),
+('ROBERTO NOGUEIRA LIMA','199104940102',null),
+('ROBERTO PINHEIRO DA FONSECA','200804940033','roberto.pinheiro@hotmail.com.br'),
+('ROBERTSON DIOGO DE MORAES BANDEIRA','200104940037',null),
+('ROBSON DA SILVA AGUIAR','200404940018','robsonaguiar@ufpa.br'),
+('RODOLFO FIEL DE SOUSA','200304940023','rodolfo_fiel@yahoo.com.br'),
+('RODOLFO MOACIR SEABRA JUNIOR','199604940029',null),
+('RODRIGO ARAUJO BARBALHO','200604940044','rodbarbalho@gmail.com'),
+('RODRIGO CUNHA MENDES','199504940026',null),
+('RODRIGO DE BRITTO PONTES RODRIGUES PARA','200904940003','rodrigopara@gmail.com'),
+('RODRIGO DE FREITAS VALE','199404940033',null),
+('RODRIGO HENRIQUE BARBOSA MONTEIRO','201404940012','rodrigo99monteiro@gmail.com'),
+('RODRIGO PINTO CARDOSO','199904940014',null),
+('RODRIGO QUITES REIS','199104940077',null),
+('RODRIGO SILVA PINTO','199904940058',null),
+('ROGERIO FIGUEIREDO DE BRITO','199104940078',null),
+('ROMULO PINTO DE ALBUQUERQUE','200504940022','albuquerque@ufpa.br'),
+('RONALD ASSUNCAO SOUZA','201104940029','ronaldsouza16@hotmail.com'),
+('RONALDD PATRIK SILVA PINHO','201704940035','RONALDPPINHO@GMAIL.COM'),
+('RONALDO CUNHA GOMES','200504940047',null),
+('RONALD RIBEIRO SILVA','200904940019','ronaldsilva852@gmail.com'),
+('ROSANA CERES EVANGELISTA KALIL','200104940036',null),
+('ROSANA DE NAZARE MENEZES MATOS','199104940079',null),
+('ROSARINA MARIA PINHEIRO RODRIGUES','199104940046',null),
+('ROSSANA DA CUNHA SILVA','199804940010',null),
+('RUBENS FERNANDES ROCHA','200504940045','profrubensfr@ig.com.br'),
+('RUBIA CRISTIANE BORGES CASTRO','199704940026',null),
+('RUI DE ALMEIDA MACOLA','199104940080',null),
+('SALOMAO FERNANDES DE FREITAS JUNIOR','199204940033',null),
+('SAMIRA MARIA LUZ CARMO','199204940034',null),
+('SAMUEL FELIX DE SOUSA JUNIOR','200504940007','sfelixjr@gmail.com'),
+('SAMUEL MARQUES CAMPOS','200004940042','samcampos81@gmail.com'),
+('SANDRO MARCELO ATI TADAIESKY','199204940035',null),
+('SANDY ANDRADE FARO','201604940027','sandyfaro0@gmail.com'),
+('SANDY EVELON CUNHA DAS NEVES','200004940034',null),
+('SAUL CAMPOS BERARDO','200404940005','saul.berardo@gmail.com'),
+('SAVANA CECILIA PARGA CARNEIRO','200104940003',null),
+('SCHUBERT RIBEIRO DE CARVALHO','199604940021',null),
+('SEBASTIAO ALESSANDRO LINHARES DOS SANTOS','199204940036',null),
+('SEBASTIAO ANTONIO V DE FARIAS JUNIOR','199904940038',null),
+('SEBASTIAO BORGES FONSECA','199904940004','sababorges@gmail.com'),
+('SEBASTIAO DE SOUSA MESQUITA','199404940034',null),
+('SERGIO ANGELO CAMPOS ALVES','199104940081',null),
+('SERGIO RICARDO LIMA DA SILVA','199204940038',null),
+('SHIRLEY DOS SANTOS SALES BAIMA PINTO','199104940047',null),
+('SIDNEY MASAHARU MATSUNAGA','200104940025',null),
+('SILVANA ROSSY DE BRITO','199104940132',null),
+('SILVIA CRISTINA NUNES DAS DORES','200704940018',null),
+('SILVIA DAS DORES RISSINO','199104940133',null),
+('SILVIO CARLOS AZEVEDO ANDRADE','199504940033',null),
+('SIMEAO SANTOS DAS DORES','199404940035',null),
+('SIMONE BACELLAR LOPES','200104940002',null),
+('SIMONE FONSECA FERREIRA','200304940013','simonefonseca@yahoo.com.br'),
+('SIMONE NAYARA COSTA CARNEIRO','200604940014','simone.nara@gmail.com'),
+('SUELEN BRAGA BRABO','200804940036','suelenbbrabo@gmail.com'),
+('SUELLEN PATRICIA SILVESTRE RIBEIRO ALBERNAZ','200404940021','SUELLENPSR@UFPA.BR'),
+('TACIO VINICIUS BERNARDES RIBEIRO','200204940014','tacio@ufpa.br'),
+('TAINA INAIE DOS SANTOS DA SILVA','201504940007','taina.inaie@gmail.com'),
+('TALES CHENE DE MIRANDA','200704940008','tales.miranda84@gmail.com'),
+('TALITA VIEIRA RIBEIRO','200704940004',null),
+('TALVANE GLAUBER LOPES DE LIMA','201104940031','talvane.glauber@gmail.com'),
+('TAYANA UCHOA CONTE','199104940035',null),
+('TEOFILO AUGUSTO BORDALO DE SOUZA VIEIRA','200804940002','teo@ufpa.br'),
+('TEREZA CONCEICAO AKI BARROS KANZAKI','199104940103',null),
+('THALES SILVA DE SOUSA','201304940014','thales_cross@hotmail.com'),
+('THAYS DHANDARAH RODRIGUES SA','201404940010','dhandarah1996@gmail.com'),
+('THIAGO FONSECA DE ANDRADE','200304940025',null),
+('THIAGO JORGE ALMEIDA DOS SANTOS','200704940006','thiago.tjas@gmail.com'),
+('THIAGO RUBENI ALVES DA SILVA','200104940054',null),
+('THIAGO SYLAS ANTUNES DA COSTA','201004940022','tsylasac@gmail.com'),
+('TIAGO DAVI OLIVEIRA DE ARAUJO','201104940024','tiagodavi70@gmail.com'),
+('TUBY D OLIVEIRA NETO','201704940006','netotuby@gmail.com'),
+('ULISSES MARTINS DIAS','200004940004',null),
+('URIEL FERREIRA CAMPOS','201504940023','urielfcampos95@gmail.com'),
+('VAGNER NOGUEIRA SILVA','200404940013','vagner.nogueira@gmail.com'),
+('VALERIA FREITAS SOUSA','199904940049',null),
+('VALERIA GOMES DA CAMARA CORECHA BASTOS','199104940104','valeria@ufpa.br'),
+('VANA DO CARMO CARVALHO PEREIRA','199104940082',null),
+('VANDERLENE COVRE ROCHA','200004940019',null),
+('VICTOR AMARANTE DE BARROS','199104940083',null),
+('VICTOR ESPINDOLA MARTINS','200404940004','ccvem@yahoo.com.br'),
+('VICTOR LOURENCO GARCIA DA CUNHA','200104940044',null),
+('VICTOR LUIZ SANTOS NEGRAO','200904940006','victorlsn@gmail.com'),
+('VINICIUS LIMA DA SILVA','199804940009',null),
+('VITOR LIMA COELHO','200804940004','vitorlimac2@gmail.com'),
+('VITOR NOVAES CANTAO','201704940018','vitornovaes.cantao@gmail.com'),
+('VITOR PINHEIRO FEITOSA','200504940001','vfeitosa86@hotmail.com'),
+('VIVIANE SOARES GRIECO','200104940018',null),
+('WAGNER FELIDRE NEGRAO DA SILVA','201704940043','wagnerfelidre@gmail.com'),
+('WALISSON CARDOSO GOMES','201204940001','walissoncardosogomes@gmail.com'),
+('WALLACE MICHEL PINTO LIRA','200504940005',null),
+('WALLACE PACHECO PEREIRA','201404940028','wallacecovic@yahoo.com.br'),
+('WALMIR PORTAL DOS SANTOS JUNIOR','200704940031','walmir.psj@gmail.com'),
+('WANESSA MELO DA SILVA','200604940029','wnessms@hotmail.com'),
+('WANILSON MIRANDA DE FIGUEIREDO','199304940040',null),
+('WANJA DANIELLE DA SILVA MOTA','199504940028',null),
+('WASHINGTON NEVES DE ALMEIDA','199504940029',null),
+('WEILA SHEYLA DE MELO BRITO','199404940038',null),
+('WELLSON SERGIO BITENCOURT DOS SANTOS','200804940009','fmwellson@yahoo.com.br'),
+('WENDEL RENAN MACEDO DOS SANTOS','201104940017','wendelrenann@gmail.com'),
+('WESCLEY PIMENTEL FONTES','199804940008','wescley.fontes@gmail.com'),
+('WESLEY HANANI PINTO DO CARMO','200104940061','wesleyhanani@yahoo.com.br'),
+('WEVERTON LUIS DA COSTA CORDEIRO','200204940016','wevertoncordeiro@gmail.com'),
+('WILLIS DO SOCORRO A DE CAMPOS','199104940084',null),
+('YANN FABRICIO CARDOSO DE FIGUEIREDO','201704940026','yann.fabricio@hotmail.com'),
+('YASMIN LUANA SALES DA PAZ','201304940005','paz.yasminl@gmail.com'),
+('YOSSEF GABRIEL OLIVEIRA CASTELO','200504940035','castelo@ufpa.br'),
+('YVAN PEREIRA DOS SANTOS BRITO','201304940016','yvanbrito96@gmail.com'),
+('Abraham Lincoln Rabelo De Sousa',null,'rabelo.lincoln@gmail.com'),
+('ADAILTON MAGALHAES LIMA',null,'adailtulima@gmail.com'),
+('Adalberto Cavalcante de Melo',null,'adalbertocmelo@gmail.com'),
+('Adrianne Veras de Almeida',null,'adrianne.veras@outlook.com'),
+('Alen Costa Vieira',null,'alencv@gmail.com'),
+('Allan Douglas Bento da Costa',null,'allandoug@gmail.com'),
+('Ana Larissa da Silva Dias',null,'larissa.engcomp@gmail.com'),
+('Anderson Gregório Marques Soares',null,'andersonsoares@ufra.edu.br'),
+('Anderson Gregório Marques Soares',null,'anderson.gmarques@gmail.com'),
+('Anderson Trindade Maia',null,'anderson_detran@hotmail.com'),
+('André de Jesus Araújo Ramos',null,'andre.rammos7@gmail.com'),
+('André Figueira Riker',null,'andre.riker@gmail.com'),
+('Benedito de Souza Ribeiro Neto',null,'ditoneto@gmail.com'),
+('Breno Bernard Nicolau de França',null,'bfranca@unicamp.br'),
+('Bruno Garcia da Costa',null,'upbrunogc@gmail.com'),
+('Bruno Pereira Brito',null,'britodi@gmail.com'),
+('Carlos Gustavo Resque dos Santos',null,'gustavo.cbcc@gmail.com'),
+('Carlos Takeshi Kudo Yasojima',null,'takeshiyasojima@gmail.com'),
+('Cassio Trindade Batista',null,'cassio.batista.13@gmail.com'),
+('Cesar Siqueira de Oliveira',null,'avcesar@gmail.com'),
+('Claudomir Cardoso de Carvalho Junior',null,'claudomir.junior@ifma.edu.br'),
+('Clay Palmeira da Silva',null,'dom.clay@yahoo.com.br'),
+('Cleyton Aparecido Dim',null,'cleytondim@ufpa.br'),
+('Cynthya Letícia Teles De Oliveira',null,'cynthya.telles@gmail.com'),
+('Daniel Leal Souza',null,'daniel.leal.souza@gmail.com'),
+('Danileno Meireles do Rosario',null,'lenomeireles@gmail.com'),
+('Diego Bento Aires Teixeira',null,'diegoaires@gmail.com'),
+('Diego Hortêncio dos Santos',null,'hortencio1983@gmail.com'),
+('Diego Oliveira Abreu',null,'diegoabreuengcomp@gmail.com'),
+('Eddas Josue Bertrand Martinez',null,'eddasjbertrand@gmail.com'),
+('Edian Franklin Franco De Los Santos',null,'edianfranklin@gmail.com'),
+('Edinaldo João Costa de La-roque',null,'edinaldo.laroque@gmail.com'),
+('Edson Koiti Kudo Yasojima',null,'koitiyasojima@gmail.com'),
+('Eduardo Gabriel Lima da Silva',null,'eduardolima.ufpa@gmail.com'),
+('Eduardo Paulo Marques Raiol',null,'marquesraiol@gmail.com'),
+('Edwin Jahir Rueda Rojas',null,'ejrueda95g@gmail.com'),
+('Elisiane Monteiro Soares',null,'elismclean@gmail.com'),
+('Elziane Monteiro Soares',null,'msoares.elziane@gmail.com'),
+('Emanuel Montero Espaillat',null,'emanuel.montero.e@gmail.com'),
+('Erick Modesto Campos',null,'erick.c.modesto@gmail.com'),
+('Ericson Sarmento Costa',null,'ericsonsarmento+ppgcc@gmail.com'),
+('Estêvão Damasceno Santos',null,'estevaosantos265@gmail.com'),
+('Fabio Malcher Miranda',null,'fabiomm@ufmg.br'),
+('Fabio Rocha de Araujo',null,'fabioaraujo289@gmail.com'),
+('Fabricio wickey da silva garcia',null,'fabriciogarcia@ufpa.br'),
+('Fabricio Wickey da Silva Garcia',null,'fabriciowsgarcia@gmail.com'),
+('Felipe Rocha de Araújo',null,'felipearaujo289@gmail.com'),
+('Fernando Nazareno Nascimento Farias',null,'fernnf@gmail.com'),
+('Gilson Rocha Silva',null,'gilsonrocha@gmail.com'),
+('Hernan Dario Carreño Laguado',null,'hernan.laguado@gmail.com'),
+('Hilton Prado de Castro Junior',null,'hilton.castro@ifap.edu.br'),
+('Hugo Brito Lima',null,'hugoblim@gmail.com'),
+('Iago Lins de Medeiros',null,'iagolmedeiros@gmail.com'),
+('Igor da Penha Natal',null,'igorpnatal@gmail.com'),
+('Igor Ernesto Ferreira Costa',null,'IGGOR16@GMAIL.COM'),
+('Isadora Mendes dos Santos',null,'isadoramsantos@gmail.com'),
+('Ivo de Abreu Araújo',null,'ivoabreu94@gmail.com'),
+('Jadielly Fernandes Oliveira Treccani',null,'jadielly.oliveira@gmail.com'),
+('Jailton Wagner Rodrigues Tavares',null,'jwagner28@gmail.com'),
+('Jair da Silva Ferreira Junior',null,'jair.jr.j2@gmail.com'),
+('Jean Carlos Arouche Freire',null,'jeanarouche@gmail.com'),
+('Jefferson Magalhães de Morais',null,'jeffersonmorais@gmail.com'),
+('Joahannes Bruno Dias da Costa',null,'joahannes@gmail.com'),
+('João Júlio Salvatti Neto',null,'salvatti@gmail.com'),
+('Jonathas Pinheiro Trindade',null,'jonathasp6@gmail.com'),
+('José de Sousa Ribeiro Filho',null,'jose.sousa.filho@gmail.com'),
+('José Flávio de Souza Dias Júnior',null,'joseflaviojr@gmail.com'),
+('Julio Cezar Costa Furtado',null,'furtado@unifap.br'),
+('Karla Suely Diniz da Costa',null,'k_info_04@yahoo.com.br'),
+('Larissa Monteiro Pimentel',null,'larissamonteiropimentel@gmail.com'),
+('Lena Patrícia Souza Rodrigues',null,'patricia.souza@ufra.edu.br'),
+('Lennon Sales Furtado',null,'lennonsfurtado@gmail.com'),
+('Leonardo Hirokazu de Souza Hamada',null,'hamadaleonardo@gmail.com'),
+('Leonardo Sarraff Nunes de Moraes',null,'matakura@gmail.com'),
+('Lucas de Melo Silva',null,'lucas.melo04@gmail.com'),
+('Lucelia Pereira Goncalves',null,'lucelia.matsumoto@serpro.gov.br'),
+('Luciana Abdon Almeida',null,'lu.abdon.si@gmail.com'),
+('LUCIANO RIBEIRO DUARTE',null,'duartelucianoribeiro@gmail.com'),
+('Marcelle Pereira Mota',null,'cellemota@gmail.com'),
+('Marcia Priscila Furtado Pantoja',null,'marciapantoja13@gmail.com'),
+('Marcio Goes do Nascimento',null,'goes.nascimento@gmail.com'),
+('Márcio José Moutinho da Ponte',null,'mjmponte@gmail.com'),
+('Marco Antonio Balieiro Da Silva',null,'ma.balieiro@gmail.com'),
+('Marcos César da Rocha Seruffo',null,'marcos.seruffo@gmail.com'),
+('Marcos Felipe Carvalho Nazario',null,'carvalhonazario@yahoo.com.br'),
+('Marisa Cristina Moreno Alves de Andrade',null,'mm.marisamoreno@gmail.com'),
+('Mauricio Ronny de Almeida Souza',null,'mauricio.ronny@gmail.com'),
+('Mauro Rodrigo Larrat Frota e Silva',null,'maurolarrat@ufpa.br'),
+('Mayara Costa Figueiredo',null,'mayfigueiredo@gmail.com'),
+('Mireille Pinheiro Moreira Balieiro',null,'mireillepm@gmail.com'),
+('Müller Gabriel Da Silva Miranda',null,'mulgsm@gmail.com'),
+('Nágila Natália Torres Vale',null,'nagila.ufpa@gmail.com'),
+('Nielsen Alves Gonçalves',null,'engenilk@gmail.com'),
+('Olavo Nylander Brito Neto',null,'olavo.nylander@gmail.com'),
+('Paulo Igor Alves Godinho',null,'piagodinho@gmail.com'),
+('Paulo Vitor Rodrigues Cardoso',null,'paulo.cardoso12@gmail.com'),
+('Pedro Alberto Bento Gomes',null,'pedroabg@gmail.com'),
+('Pedro Luiz Magalhães Cumino',null,'pedro.cumino@gmail.com'),
+('Pedro Montibeler Salvador',null,'pedro.montibeler@gmail.com'),
+('Phelipe Luiz Dias Feio',null,'phelipefeio09@gmail.com'),
+('Rafael Martins Feitosa',null,'rafael.feito@gmail.com'),
+('Rafael Pereira Esteves',null,'rafesteves@gmail.com'),
+('Rafael Santana Oliveira',null,'rafaelstnoliveira@gmail.com'),
+('Reinaldo Junior Lopes Cardoso',null,'reinald28@gmail.com'),
+('Renata Kelly Dantas Cascaes',null,'renatadcascaes@gmail.com'),
+('Renato de Pina Ferreira',null,'renpina@gmail.com'),
+('Renato Hidaka Torres',null,'renatohidaka@gmail.com'),
+('Rennan Jose Maia da Silva',null,'rennanmaia@gmail.com'),
+('Ricardo Rodrigo Marinho Melo',null,'ricardorodrigomm@gmail.com'),
+('Roberto Yuri da Silva Franco',null,'roberto.yuri.franco@gmail.com'),
+('Rodrigo Santos do Amor Divino Lima',null,'rodrigo.sad.lima@gmail.com'),
+('Romulo Silva Pinheiro',null,'romulo.s.pinheiro@gmail.com'),
+('Sandro de Paula Mendonça ',null,'sandrodpm@gmail.com'),
+('Sara das Merces Silva',null,'maru.merces18@gmail.com'),
+('Saul Campos Berardo',null,'saulberardo@gmail.com'),
+('sebastião rodrigues da costa neto',null,'s.rodriguescn@gmail.com'),
+('Silvério Sirotheau Corrêa Neto',null,'silverio@ufpa.br'),
+('Silvério Sirotheau Corrêa Neto',null,'ssirotheau@gmail.com'),
+('Suelene de Jesus do Carmo Corrêa ',null,'suelene.correa@ifpa.edu.br'),
+('Thiago Antônio Sidônio Coqueiro',null,'tcoqueiro@hotmail.com'),
+('Vagner de Brito Nascimento',null,'vagner@ufpa.br'),
+('Vitor de Souza Castro',null,'vitor@unifesspa.edu.br'),
+('Walbert Cunha Monteiro',null,'walbertcm@gmail.com'),
+('Wendy Mendes Galeno',null,'wendymgaleno@gmail.com'),
+('Wilson Luiz da Silva Farias',null,'wilsonluiz.dsf@gmail.com'),
+('Yuri Lima Cavalcante',null,'yurilimacavalcante@gmail.com'),
+('Yuri Santa Rosa Nassar dos Santos',null,'yuri.nassar@gmail.com')  ON CONFLICT DO NOTHING;

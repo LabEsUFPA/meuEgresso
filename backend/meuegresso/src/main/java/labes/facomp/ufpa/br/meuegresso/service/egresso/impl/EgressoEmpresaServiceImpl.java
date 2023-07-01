@@ -59,8 +59,8 @@ public class EgressoEmpresaServiceImpl implements EgressoEmpresaService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy) {
-        return egressoEmpresaRepository.existsByIdAndCreatedById(id, createdBy);
+    public boolean existsByIdAndCreatedBy(EgressoEmpresaModelId id, Integer createdBy) {
+        return egressoEmpresaRepository.existsByIdAndCreatedBy(id, createdBy);
     }
 
     public List<EgressoEmpresaModel> findAllEgressoMapa() {
@@ -68,9 +68,13 @@ public class EgressoEmpresaServiceImpl implements EgressoEmpresaService {
     }
 
     @Override
+    public List<EgressoEmpresaModel> findAllByEgressoUsuarioValidoIsTrue() {
+        return egressoEmpresaRepository.findAllByEgressoUsuarioValidoIsTrue();
+    }
+
+    @Override
     public List<EmpresaGraficoDTO> countEgressoByEmpresas() {
         return egressoEmpresaRepository.countEgressoByEmpresas();
     }
 
-    
 }

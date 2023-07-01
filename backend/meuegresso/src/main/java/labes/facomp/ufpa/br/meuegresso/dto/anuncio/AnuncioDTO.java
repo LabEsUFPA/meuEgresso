@@ -32,6 +32,7 @@ public class AnuncioDTO {
     @NotBlank(message = "Informe uma descrição.")
     private String descricao;
 
+    @NotNull
     @Future(message = "Informe uma data futura.")
     private LocalDate dataExpiracao;
 
@@ -41,5 +42,7 @@ public class AnuncioDTO {
     @Pattern(regexp = "\\b(?:[1-9]\\d*|0)(?:\\.\\d{2})?\\b", message = "Informe um salário válido.")
     private String salario;
 
-    private UsuarioDTO createdBy;
+    private Integer createdBy;
+
+    private UsuarioDTO createdByUser;
 }

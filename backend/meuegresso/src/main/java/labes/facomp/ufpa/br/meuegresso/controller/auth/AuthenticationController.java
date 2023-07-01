@@ -2,6 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.controller.auth;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -28,16 +29,17 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.config.properties.TokenProperties;
-import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioRegistro;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthNewPasswordRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthRecoveryPasswordRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
+import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioRegistro;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.ExpireRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
@@ -86,6 +88,8 @@ public class AuthenticationController {
 	private final AuthenticationManager authenticationManager;
 
 	private final RecuperacaoSenhaService recuperacaoSenhaService;
+
+	private static final String REDIRECT = "https://%s/auth/validarEmail";
 
 	/**
 	 * Endpoint responsavel por autentica um determinado usuário.
@@ -159,7 +163,8 @@ public class AuthenticationController {
 	@PostMapping(value = "/register")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO)
+	public String cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,
+			@RequestHeader("Host") String host)
 			throws NameAlreadyExistsException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
 			throw new NameAlreadyExistsException(
@@ -180,12 +185,35 @@ public class AuthenticationController {
 		}
 
 		usuarioModel.setGrupos(Set.of(Grupos.EGRESSO));
+		mailService.usuarioCadastrado(usuarioModel,
+				usuarioDTO.getRedirect().orElse(String.format(REDIRECT, host)));
 		usuarioModel = usuarioService.save(usuarioModel);
 		statusUsuarioService
 				.save(StatusUsuarioModel.builder().usuarioId(usuarioModel.getId())
 						.nome(usuarioModel.getNome()).status(UsuarioStatus.INCOMPLETO).build());
-		mailService.usuarioCadastrado(usuarioModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
+	}
+
+	@PostMapping(value = "/validarEmail/{tokenAuth}")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void validarEmail(@PathVariable String tokenAuth)
+			throws InvalidRequestException {
+		Map<String, Object> claims = jwtService.extractClains(tokenAuth);
+		if (claims.get("recoveryPass") instanceof Boolean valor && valor.booleanValue()
+				&& claims.get("email") instanceof String email) {
+			UsuarioModel usuarioModel = usuarioService.findByEmail(email);
+			usuarioModel.setEmailVerificado(true);
+			usuarioService.update(usuarioModel);
+		}
+	}
+
+	@PostMapping(value = "/solicitarNovaValidacaoEmail")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void reenviarValidacaoEmail(@RequestBody AuthRecoveryPasswordRequest request,
+			@RequestHeader("Host") String host) {
+		UsuarioModel usuarioModel = usuarioService.findByEmail(request.getEmail());
+		mailService.reenviarValidacaoEmail(usuarioModel,
+				request.getRedirect().orElse(String.format(REDIRECT, host)));
 	}
 
 	@PostMapping(value = "/recoveryPassword/{token}")
@@ -207,9 +235,9 @@ public class AuthenticationController {
 	@PostMapping(value = "/recoveryPassword")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public ResponseType solicitacaoRecuperarSenha(@RequestBody AuthRecoveryPasswordRequest authPassReq,
-			@RequestHeader("Host") String header) {
+			@RequestHeader("Host") String host) {
 		recuperacaoSenhaService.cadastrarSolicitacaoRecuperacao(authPassReq.getEmail(),
-				authPassReq.getRedirect().orElse("https://" + header));
+				authPassReq.getRedirect().orElse("https://" + host));
 		return ResponseType.SOLICITACAO_REALIZADA_SUCESSO;
 	}
 

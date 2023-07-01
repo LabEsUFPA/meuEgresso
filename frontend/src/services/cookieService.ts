@@ -17,12 +17,12 @@ export default class CookieService {
 
   set (key: string, value: string, exp: number): void {
     const d = new Date()
-    d.setTime(d.getTime() + (exp * 3600000)) // tempo em ms
+    d.setTime(d.getTime() + (exp * 60000)) // tempo em ms
     const expires = 'expires=' + d.toUTCString()
     document.cookie = `${key}=${value};${expires};path=/`
   }
 
   remove (key: string): void {
-    document.cookie = `${key}=; Max-Age=0`
+    document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname}`
   }
 }

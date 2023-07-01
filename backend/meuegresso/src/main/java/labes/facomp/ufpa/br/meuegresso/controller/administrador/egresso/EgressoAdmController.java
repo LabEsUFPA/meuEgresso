@@ -27,10 +27,12 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
+import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.MatriculaAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
@@ -71,16 +73,25 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/administrador/egresso")
 public class EgressoAdmController {
 
-    private final EgressoService egressoService;
-    private final UsuarioService usuarioService;
-    private final EmpresaService empresaService;
-    private final SetorAtuacaoService setorAtuacaoService;
+    private final ModelMapper mapper;
+
     private final CursoService cursoService;
+
+    private final EgressoService egressoService;
+
+    private final UsuarioService usuarioService;
+
+    private final EmpresaService empresaService;
+
     private final EnderecoService enderecoService;
-    private final AreaAtuacaoService areaAtuacaoService;
+
     private final TitulacaoService titulacaoService;
 
-    private final ModelMapper mapper;
+    private final AreaAtuacaoService areaAtuacaoService;
+
+    private final SetorAtuacaoService setorAtuacaoService;
+
+    private final StatusUsuarioService statusUsuarioService;
 
     /**
      * Endpoint responsavel por buscar o egresso.
@@ -120,10 +131,18 @@ public class EgressoAdmController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarEgressoPrimeiroCadastro(
             @PathVariable Integer id,
-            @RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO) throws InvalidRequestException {
+            @RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO)
+            throws InvalidRequestException, MatriculaAlreadyExistsException {
         UsuarioModel user = usuarioService.findById(id);
         if (!user.getGrupos().contains(Grupos.EGRESSO)) {
             throw new InvalidRequestException();
+        }
+
+        if (egressoCadastroDTO.getMatricula() != null
+                && egressoService.existsMatricula(egressoCadastroDTO.getMatricula())) {
+            throw new MatriculaAlreadyExistsException(
+                    String.format(ErrorType.REPORT_007.getMessage(), egressoCadastroDTO.getMatricula()),
+                    ErrorType.REPORT_007.getInternalCode());
         }
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
@@ -192,7 +211,12 @@ public class EgressoAdmController {
         depoimento.setEgresso(egresso);
         contribuicao.setEgresso(egresso);
         egresso.getUsuario().setAtivo(egresso.getUsuario().getValido());
-        egressoService.adicionarEgresso(egresso);
+        egressoService.save(egresso);
+
+        statusUsuarioService
+                .save(StatusUsuarioModel.builder().usuarioId(egresso.getUsuario().getId())
+                        .nome(egresso.getUsuario().getNome()).status(UsuarioStatus.COMPLETO)
+                        .build());
 
         return ResponseType.SUCCESS_SAVE.getMessage();
     }
@@ -213,11 +237,21 @@ public class EgressoAdmController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(@PathVariable Integer id,
-            @RequestBody EgressoAttDTO egresso) throws InvalidRequestException {
+            @RequestBody EgressoAttDTO egresso) throws InvalidRequestException, MatriculaAlreadyExistsException {
 
         UsuarioModel user = usuarioService.findById(egresso.getUsuario().getId());
         if (!user.getGrupos().contains(Grupos.EGRESSO)) {
             throw new InvalidRequestException();
+        }
+
+        // Se a matricula passada for diferente da matricula que a pessoa já tinha,
+        // checar se é duplicado.
+        if (egresso.getMatricula() != null
+                && !egresso.getMatricula().equals(egressoService.findById(id).getMatricula())
+                && egressoService.existsMatricula(egresso.getMatricula())) {
+            throw new MatriculaAlreadyExistsException(
+                    String.format(ErrorType.REPORT_007.getMessage(), egresso.getMatricula()),
+                    ErrorType.REPORT_007.getInternalCode());
         }
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -265,12 +299,10 @@ public class EgressoAdmController {
 
         egressoModel.setId(id);
 
-        egressoService.updateEgresso(egressoModel);
+        egressoService.update(egressoModel);
 
         return ResponseType.SUCCESS_UPDATE.getMessage();
     }
-
-    private final StatusUsuarioService statusUsuarioService;
 
     /**
      * Endpoint responsavel por deletar o egresso.
@@ -282,8 +314,8 @@ public class EgressoAdmController {
      * @since 05/06/2023
      */
     @DeleteMapping(value = "/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarEgresso(@PathVariable Integer id) {
         EgressoModel egressoModel = egressoService.findById(id);
@@ -319,7 +351,7 @@ public class EgressoAdmController {
                 egressoService.deleteFile(egressoModel.getFotoNome());
             }
             egressoModel.setFotoNome(fileCode);
-            egressoService.updateEgresso(egressoModel);
+            egressoService.update(egressoModel);
             egressoService.saveFoto(fileCode, arquivo);
             return ResponseType.SUCCESS_IMAGE_SAVE.getMessage();
         }
@@ -337,15 +369,15 @@ public class EgressoAdmController {
      * @throws IOException
      */
     @DeleteMapping(value = "/foto/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deleteFotoEgresso(@PathVariable Integer id) throws IOException {
         EgressoModel egressoModel = egressoService.findById(id);
         if (egressoModel.getFotoNome() != null) {
             egressoService.deleteFile(egressoModel.getFotoNome());
             egressoModel.setFotoNome(null);
-            egressoService.updateEgresso(egressoModel);
+            egressoService.update(egressoModel);
             return ResponseType.SUCCESS_IMAGE_DELETE.getMessage();
         }
         return ResponseType.FAIL_IMAGE_DELETE.getMessage();

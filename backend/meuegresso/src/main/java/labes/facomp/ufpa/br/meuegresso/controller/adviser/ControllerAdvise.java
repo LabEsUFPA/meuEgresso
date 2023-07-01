@@ -24,11 +24,11 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.DataNotDeletedException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.DataNotSaveException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.EmptyBodyRequestListException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.MatriculaAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
-import labes.facomp.ufpa.br.meuegresso.exceptions.UnalthorizedRegisterException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 
 /**
@@ -42,10 +42,10 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 public class ControllerAdvise {
 
 	/**
-	 * Caso algum recurso não seja encontrado no banco de dados sera retornado uma
+	 * Caso algum recurso não seja encontrado no banco de dados será retornado uma
 	 * mensagem padronizada.
 	 *
-	 * @param ex Excessão capturada.
+	 * @param ex Exceção capturada.
 	 * @return Menssagem.
 	 * @author Alfredo Gabriel
 	 * @since 26/03/2023
@@ -60,10 +60,10 @@ public class ControllerAdvise {
 	}
 
 	/**
-	 * Caso alguma entidade não seja valida (dados diferentes do esperado), será
-	 * retornado o atributo e a menssagem pre definida.
+	 * Caso alguma entidade não seja válida (dados diferentes do esperado), será
+	 * retornado o atributo e a mensagem pré-definida.
 	 *
-	 * @param ex Excessão capturada.
+	 * @param ex Exceção capturada.
 	 * @return Mapa contendo atributo e mensagem de erro.
 	 * @author Alfredo Gabriel
 	 * @since 26/03/2023
@@ -83,9 +83,9 @@ public class ControllerAdvise {
 
 	/**
 	 * Caso a autenticação não seja bem sucedida, será retornado a mensagem
-	 * pre-estabelicida.
+	 * pré-estabelecida.
 	 *
-	 * @param ex Excessão capturada.
+	 * @param ex Exceção capturada.
 	 * @return Mensagem
 	 * @author Alfredo Gabriel
 	 * @since 26/03/2023
@@ -100,6 +100,16 @@ public class ControllerAdvise {
 				.build();
 	}
 
+	/**
+	 * Caso a autenticação faça uma requisição que diz respeito
+	 * a um egresso inválido.
+	 * 
+	 * @param ex Exceção capturada.
+	 * @return Mensagem
+	 * @author Alfredo Gabriel
+	 * @since 29/04/2023
+	 * @see {@link NotValidEgressoException}
+	 */
 	@ExceptionHandler(NotValidEgressoException.class)
 	@ResponseStatus(code = HttpStatus.EXPECTATION_FAILED)
 	public ErrorResponse handleNotValidEgressoException(NotValidEgressoException ex) {
@@ -112,9 +122,9 @@ public class ControllerAdvise {
 
 	/**
 	 * Caso a autenticação não seja bem sucedida, será retornado a mensagem
-	 * pre-estabelicida.
+	 * pré-estabelecida.
 	 *
-	 * @param ex Excessão capturada.
+	 * @param ex Exceção capturada.
 	 * @return Mensagem
 	 * @author Alfredo Gabriel
 	 * @since 26/03/2023
@@ -129,6 +139,15 @@ public class ControllerAdvise {
 				.build();
 	}
 
+	/**
+	 * Caso a autenticação faça uma requisição que diz respeito
+	 * a um usuário desabilitado.
+	 * 
+	 * @param ex Exceção capturada.
+	 * @return Mensagem
+	 * @author Alfredo Gabriel
+	 * @since 11/06/2023
+	 */
 	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
 	@ExceptionHandler(DisabledException.class)
 	public ErrorResponse handleDisabledException(DisabledException ex) {
@@ -140,9 +159,9 @@ public class ControllerAdvise {
 	}
 
 	/**
-	 * Caso seja realizado uma requisição invalida.
+	 * Caso seja realizada uma requisição não autorizada.
 	 *
-	 * @param ex Excessão capturada.
+	 * @param ex Exceção capturada.
 	 * @return Mensagem
 	 * @author Alfredo Gabriel
 	 * @since 26/03/2023
@@ -157,9 +176,9 @@ public class ControllerAdvise {
 	}
 
 	/**
-	 * Caso seja realizado uma requisição invalida.
+	 * Caso seja realizada uma requisição inválida.
 	 *
-	 * @param ex Excessão capturada.
+	 * @param ex Exceção capturada.
 	 * @return Mensagem
 	 * @author Alfredo Gabriel
 	 * @since 26/03/2023
@@ -176,10 +195,11 @@ public class ControllerAdvise {
 	/**
 	 * Caso seja solicitado o delete de uma entidade não existente.
 	 *
-	 * @param ex Excessão capturada.
+	 * @param ex Exceção capturada.
 	 * @return Mensagem
 	 * @author Alfredo Gabriel
 	 * @since 26/03/2023
+	 * @see {@link DataNotDeletedException}
 	 */
 	@ExceptionHandler(DataNotDeletedException.class)
 	@ResponseStatus(code = HttpStatus.UNPROCESSABLE_ENTITY)
@@ -191,9 +211,9 @@ public class ControllerAdvise {
 	}
 
 	/**
-	 * Caso a autenticação não seja encontrado nenhum elemento correspondente.
+	 * Caso a autenticação não encontre nenhum elemento correspondente.
 	 *
-	 * @param ex Excessão capturada.
+	 * @param ex Exceção capturada.
 	 * @return Mensagem
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
@@ -208,9 +228,9 @@ public class ControllerAdvise {
 	}
 
 	/**
-	 * Caso a autenticação não seja encontrado nenum exemplo de e-mail
+	 * Caso o JSON gerado pela requisição apresente problemas de leitura.
 	 *
-	 * @param ex Excessão capturada.
+	 * @param ex Exceção capturada.
 	 * @return Mensagem
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
@@ -225,10 +245,9 @@ public class ControllerAdvise {
 	}
 
 	/**
-	 * Caso a autenticação seja ja exista cadastrado um determinado marcado como
-	 * unique.
+	 * Caso seja feita uma requisição sem dados na lista esperada.
 	 *
-	 * @param ex Excessão capturada.
+	 * @param ex Exceção capturada.
 	 * @return Mensagem
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
@@ -246,9 +265,10 @@ public class ControllerAdvise {
 	}
 
 	/**
-	 * Caso seja feito uma requição sem dados na lista esperada.
+	 * Caso já exista cadastrado um determinado nome marcado como
+	 * unique.
 	 *
-	 * @param ex Excessão capturada.
+	 * @param ex Exceção capturada.
 	 * @return Mensagem
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
@@ -256,7 +276,7 @@ public class ControllerAdvise {
 	 */
 	@ExceptionHandler({ NameAlreadyExistsException.class })
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-	public ErrorResponse handleEmptyBodyRequestListException(
+	public ErrorResponse handleNameAlreadyExistsException(
 			NameAlreadyExistsException ex) {
 		return new ErrorResponse(
 				ex.getMessage(),
@@ -265,9 +285,9 @@ public class ControllerAdvise {
 	}
 
 	/**
-	 * Caso a haja problemas no envio do e-mail.
+	 * Caso haja problemas no envio do e-mail.
 	 *
-	 * @param ex Excessão capturada.
+	 * @param ex Exceção capturada.
 	 * @return Mensagem
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
@@ -284,7 +304,7 @@ public class ControllerAdvise {
 	/**
 	 * Caso haja algum problema ao salvar o dado.
 	 *
-	 * @param ex Excessão capturada.
+	 * @param ex Exceção capturada.
 	 * @return Mensagem
 	 * @author Alfredo Gabriel
 	 * @since 21/04/2023
@@ -298,6 +318,15 @@ public class ControllerAdvise {
 				ex.getInternalCode());
 	}
 
+	/**
+	 * Caso a requisição não encontre um arquivo de foto
+	 * do egresso.
+	 * 
+	 * @param ex Exceção capturada.
+	 * @return Mensagem
+	 * @author Camilo Santos
+	 * @since 20/05/2023
+	 */
 	@ExceptionHandler(NotFoundFotoEgressoException.class)
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public ErrorResponse handleNotFoundFotoEgressoException(NotFoundFotoEgressoException ex) {
@@ -307,13 +336,21 @@ public class ControllerAdvise {
 				ex.getInternalCode());
 	}
 
-	@ExceptionHandler(UnalthorizedRegisterException.class)
-	@ResponseStatus(code = HttpStatus.FORBIDDEN)
-	public ErrorResponse handleUnalthorizedRegisterException(UnalthorizedRegisterException ex) {
+	/**
+	 * Caso a matrícula já seja associada a um egresso cadastrado
+	 *
+	 * @param ex Exceção capturada.
+	 * @return Mensagem
+	 * @author Bruno Eiki
+	 * @since 21/06/2023
+	 */
+	@ResponseStatus(code = HttpStatus.CONFLICT)
+	@ExceptionHandler(MatriculaAlreadyExistsException.class)
+	public ErrorResponse handleMatriculaAlreadyExists(MatriculaAlreadyExistsException ex) {
 		return new ErrorResponse(
-				ex.getMessage(),
+				ErrorType.REPORT_007.getMessage(),
 				ex.getLocalizedMessage(),
-				ex.getInternalCode());
+				ErrorType.REPORT_007.getInternalCode());
 	}
 
 }

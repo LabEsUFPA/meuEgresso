@@ -72,12 +72,11 @@
             :data="filteredDataArray"
             :placeholder="placeholder"
             :field="typeof options[0] === 'object' ? 'label' : 'value'"
-            :required="required"
             :disabled="disabled"
             :loading="isFetching"
             :input-class="classNames({
               ['cursor-not-allowed']: disabled,
-              ['bg-transparent focus:outline-none']: true,
+              ['bg-transparent focus:outline-none border-none shadow-none h-full p-0']: true,
               [name.replaceAll('.', '-')]: true
             })"
             :root-class="classNames({
@@ -194,15 +193,20 @@ function handleEmit (option: IOpts) {
     if (typeof selected.value === 'object') {
       handleChange(selected.value.value)
       $emit('change', selected.value.value)
-      console.log('emit')
       return
     }
-    console.log('emit')
-
-    handleChange(selected.value)
-    $emit('change', selected.value)
   }
+
+  handleChange(selected.value)
+  $emit('change', selected.value)
 }
+
+const setInitialValues = (value: string) => {
+  handleChange(value)
+  model.value = value
+}
+
+defineExpose({ setInitialValues })
 
 onMounted(() => {
   if (props.preFilled) {
@@ -217,10 +221,7 @@ onMounted(() => {
   watch(focusInput, () => {
     if (model.value !== '') {
       model.value = ''
-    } else {
-      console.log('click')
-      $emit('typing', 'event')
-      $emit('change', model.value)
+      handleChange('')
     }
     if (input.value) {
       input.value.focus()

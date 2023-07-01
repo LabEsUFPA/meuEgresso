@@ -13,7 +13,7 @@ public interface CursoRepository extends CrudRepository<CursoModel, Integer> {
 
     List<CursoModel> findAll();
 
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+    boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
     Optional<CursoModel> findByNomeIgnoreCase(String nome);
 

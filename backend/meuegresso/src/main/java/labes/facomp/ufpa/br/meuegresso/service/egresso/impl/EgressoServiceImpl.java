@@ -51,7 +51,7 @@ public class EgressoServiceImpl implements EgressoService {
 	private String uploadDirectory;
 
 	@Override
-	public EgressoModel adicionarEgresso(EgressoModel egressoModel) {
+	public EgressoModel save(EgressoModel egressoModel) {
 		return egressoRepository.save(egressoModel);
 	}
 
@@ -66,7 +66,13 @@ public class EgressoServiceImpl implements EgressoService {
 		return egressoRepository.findById(idEgresso).orElseThrow();
 	}
 
+
 	@Override
+    public EgressoModel findByIdAndUsuarioValidoIsTrue(Integer id) {
+        return egressoRepository.findByIdAndUsuarioValidoIsTrue(id).orElseThrow();
+    }
+
+    @Override
 	public List<EgressoModel> findAll() {
 		return egressoRepository.findAll();
 	}
@@ -89,6 +95,11 @@ public class EgressoServiceImpl implements EgressoService {
 		return idades;
 	}
 
+	@Override
+	public List<EgressoModel> findAllByUsuarioValidoIsTrue() {
+		return egressoRepository.findAllByUsuarioValidoIsTrue();
+	}
+
 	/**
 	 *
 	 *
@@ -99,7 +110,7 @@ public class EgressoServiceImpl implements EgressoService {
 	 */
 	@Override
 	@Transactional
-	public EgressoModel updateEgresso(EgressoModel egresso) {
+	public EgressoModel update(EgressoModel egresso) {
 		if (egresso.getId() != null) {
 			return egressoRepository.save(egresso);
 		}
@@ -107,15 +118,9 @@ public class EgressoServiceImpl implements EgressoService {
 	}
 
 	@Override
-	public void deleteById(Integer id) {
-		egressoRepository.deleteById(id);
-
-	}
-
-	@Override
-	public boolean deletarEgresso(EgressoModel egresso) {
-		if (egressoRepository.existsById(egresso.getId())) {
-			egressoRepository.deleteById(egresso.getId());
+	public boolean deleteById(Integer id) {
+		if (egressoRepository.existsById(id)) {
+			egressoRepository.deleteById(id);
 			return true;
 		} else {
 			return false;
@@ -128,8 +133,8 @@ public class EgressoServiceImpl implements EgressoService {
 	}
 
 	@Override
-	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-		return egressoRepository.existsByIdAndCreatedById(id, createdBy);
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+		return egressoRepository.existsByIdAndCreatedBy(id, createdBy);
 	}
 
 	@Override
@@ -147,6 +152,11 @@ public class EgressoServiceImpl implements EgressoService {
 			throw new NotFoundFotoEgressoException();
 		}
 
+	}
+
+	@Override
+	public boolean existsMatricula(String matricula) {
+		return egressoRepository.existsByMatricula(matricula);
 	}
 
 	@Override
@@ -288,8 +298,7 @@ public class EgressoServiceImpl implements EgressoService {
 				.collect(Collectors.toMap(
 						tuple -> tuple.get(0, java.sql.Date.class).toLocalDate(),
 						tuple -> tuple.get(1, Long.class)));
-		Map<LocalDate, Long> sortedResult = new TreeMap<>(result);		
-		return sortedResult;
+		return new TreeMap<>(result);
 	}
 
 	@Override
@@ -302,10 +311,8 @@ public class EgressoServiceImpl implements EgressoService {
 								.toLocalDate()
 								.getYear(),
 						Collectors.summingLong(tuple -> tuple.get(1, Long.class))));
-	
-		Map<Integer, Long> sortedResult = new TreeMap<>(result);
 
-		return sortedResult;
+		return new TreeMap<>(result);
 	}
 
 	@Override
@@ -318,9 +325,8 @@ public class EgressoServiceImpl implements EgressoService {
 								.toLocalDate()
 								.withDayOfMonth(1),
 						Collectors.summingLong(tuple -> tuple.get(1, Long.class))));
-		
-		Map<LocalDate, Long> sortedResult = new TreeMap<>(result);		
-		return sortedResult;
+
+		return new TreeMap<>(result);
 	}
 
 	@Override

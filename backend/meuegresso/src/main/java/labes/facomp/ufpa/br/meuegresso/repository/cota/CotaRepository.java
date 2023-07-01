@@ -19,7 +19,7 @@ import labes.facomp.ufpa.br.meuegresso.model.CotaModel;
 public interface CotaRepository extends CrudRepository<CotaModel, Integer> {
     public List<CotaModel> findAll();
 
-    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+    boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
     @Query(value = "SELECT c.nome, COUNT(ec) FROM cota c LEFT JOIN egresso_cota ec ON ec.id.cotaId = c.id GROUP BY c.nome")
 
