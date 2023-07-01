@@ -250,7 +250,7 @@
           </div>
 
           <div
-            class="flex-1 flex-col gap-4 border-b flex items-center justify-center text-gray-400"
+            class="flex-1 flex-col gap-4 px-4 py-8 border-b flex items-center justify-center text-gray-400"
             v-if="$painelStore.egressos.length === 0"
           >
             <SvgIcon
@@ -258,7 +258,7 @@
               size="48"
               :path="mdiEmoticonSadOutline"
             />
-            <h1 class="text-xl sm:text-2xl font-medium">
+            <h1 class="text-md sm:text-lg font-medium">
               Nenhum egresso encontrado
             </h1>
           </div>
@@ -405,7 +405,6 @@ const graphData = computed(() => ({
   series: {
     x: Object.keys($painelStore.graficos[selectedString.value]).map((key: any) => {
       if (selectedString.value === 'ano') {
-        console.log('aq')
         return key
       } else {
         // key: YYYY-MM-DD

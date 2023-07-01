@@ -102,7 +102,6 @@ export const usePainelStore = defineStore('Painel', {
         method: 'delete',
         route: `/administrador/usuario/${id}`
       })
-
       return response?.status != null ? response.status : 500
     },
 
