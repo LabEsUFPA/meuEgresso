@@ -13,7 +13,7 @@ public enum ErrorType {
 
     REPORT_005("Erro no JSON do corpo da requisição.", "RP-005"),
 
-    REPORT_006("Erro ao enviar o e-mail.", "RP-006"),
+    REPORT_006("Erro ao salvar o e-mail devido tamanho do corpo.", "RP-006"),
     
     REPORT_007("Matrícula duplicada.", "RP-007"),
     
@@ -22,6 +22,10 @@ public enum ErrorType {
     DATABASE_001("Falha ao tentar salvar no banco de dados.", "DB-001"),
 
     DATABASE_002("Nenhuma mensagem de e-mail do tipo %s cadastrada.", "DB-002"),
+    
+    DATABASE_003("Email não encontrado para atualizar", "DB-003"), ////
+    
+    DATABASE_004("Email não encontrado para apagar","DB-004"), ////
 
     UNAUTHORIZED_TRANSACTION("Permisões insuficientes para realizar esta transação", "SECURITY-001"),
 
