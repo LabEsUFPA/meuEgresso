@@ -35,10 +35,12 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnalthorizedRegisterException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.AuthService;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
 import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
@@ -57,6 +59,8 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioAdmController {
 
 	private final UsuarioService usuarioService;
+
+	private final EgressoService egressoService;
 
 	private final StatusUsuarioService statusUsuarioService;
 
@@ -103,8 +107,9 @@ public class UsuarioAdmController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,JwtAuthenticationToken token, 
-		@RequestHeader("Host") String host)
+	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,
+			JwtAuthenticationToken token,
+			@RequestHeader("Host") String host)
 			throws NameAlreadyExistsException, UnalthorizedRegisterException, InvalidRequestException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
 			throw new NameAlreadyExistsException(
@@ -205,12 +210,22 @@ public class UsuarioAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String deleteById(@PathVariable(name = "id") Integer id) {
-		UsuarioModel usuarioModel = usuarioService.findById(id);
-		if (usuarioService.deleteById(id)) {
-			statusUsuarioService.save(StatusUsuarioModel.builder().usuarioId(usuarioModel.getId())
-					.nome(usuarioModel.getNome())
-					.status(UsuarioStatus.EXCLUIDO).build());
-			return ResponseType.SUCCESS_DELETE.getMessage();
+		if (egressoService.existsByUsuarioId(id)) {
+			EgressoModel egressoModel = egressoService.findByUsuarioId(id);
+			if (egressoService.deleteById(egressoModel.getId())) {
+				statusUsuarioService.save(StatusUsuarioModel.builder().usuarioId(egressoModel.getUsuario().getId())
+						.nome(egressoModel.getUsuario().getNome())
+						.status(UsuarioStatus.EXCLUIDO).build());
+				return ResponseType.SUCCESS_DELETE.getMessage();
+			}
+		} else {
+			UsuarioModel usuarioModel = usuarioService.findById(id);
+			if (usuarioService.deleteById(id)) {
+				statusUsuarioService.save(StatusUsuarioModel.builder().usuarioId(usuarioModel.getId())
+						.nome(usuarioModel.getNome())
+						.status(UsuarioStatus.EXCLUIDO).build());
+				return ResponseType.SUCCESS_DELETE.getMessage();
+			}
 		}
 		return ResponseType.FAIL_DELETE.getMessage();
 	}

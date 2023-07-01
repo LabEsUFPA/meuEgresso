@@ -75,6 +75,9 @@ public interface EgressoService {
 	 */
 	public boolean deleteById(Integer id);
 
+	public boolean existsByUsuarioId(Integer id);
+
+
 	/**
 	 * Método responsável por verificar se existe um determinado elemento.
 	 *
