@@ -273,15 +273,12 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
         }
       })
     },
-    async cadastrarEmpresa (nome: string, pais: number, estado: number, cidade: number) {
+    async cadastrarEmpresa (nome: string) {
       return await Api.request({
         method: 'post',
         route: '/empresa',
         body: {
           nome,
-          pais,
-          estado,
-          cidade,
           isEmprego: true
         }
       })

@@ -307,28 +307,15 @@
               :disabled="area === 'Desempregado'"
             />
 
-            <CustomSelect
+            <CustomInput
               class="mb-1"
               name="carreira.empresa"
               label="Empresa"
-              placeholder="Selecione"
+              placeholder="Google"
               :options="$storeCadastro.empresas"
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
-              :is-fetching="$storeCadastro.isFetchingEmpresas"
-              @typing="$storeCadastro.fetchEmpresasAsync($event, true)"
-              @infinite-scroll="$storeCadastro.fetchMoreEmpresasAsync"
-              infinite
             />
-
-            <button
-              type="button"
-              class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
-              :disabled="area === 'Desempregado'"
-              @click="dialogEmpresa = true"
-            >
-              Não encontrou sua empresa? Clique aqui
-            </button>
 
             <CustomSelect
               class="mb-5"
@@ -577,33 +564,6 @@
         </Form>
       </div>
     </CustomDialog>
-
-    <CustomDialog v-model="dialogEmpresa">
-      <div class="h-full flex justify-center gap-1 flex-col items-center">
-        <div class="text-2xl font-semibold text-cyan-800">
-          Cadastrar empresa
-        </div>
-
-        <Form
-          :validation-schema="empresaSchema"
-          @submit="handleNewEmpresa"
-          class="flex flex-col items-center gap-1.5 mt-[-5px]"
-        >
-          <CustomInput
-            name="nome"
-            label="Nome da empresa"
-            placeholder="Google"
-          />
-          <LocalizacaoSelect
-            class="mb-1"
-          />
-
-          <CustomButton type="submit">
-            Cadastrar
-          </CustomButton>
-        </Form>
-      </div>
-    </CustomDialog>
   </div>
 </template>
 
@@ -653,12 +613,9 @@ const mensagemShare = `🎉%20Acabei%20de%20me%20cadastrar%20na%20plataforma%20M
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const dialogInstituicao = ref(false)
-const dialogEmpresa = ref(false)
 const dialogCurso = ref(false)
 const camposFaltosos = ref(false)
 const missingDigits = ref(0)
-// const paisChange = ref(false)
-// const estadoChange = ref(false)
 
 const area = ref('')
 const temFoto = ref(false)
@@ -670,8 +627,6 @@ const selectSetor = ref()
 const selectFaixa = ref()
 // const inputEmpresa = ref()
 const selectPais = ref()
-// const selectEstado = ref()
-// const selectCidade = ref()
 
 const minDate = ref(new Date(-8640000000000000))
 const eighteenYearsAgo = ref(new Date())
@@ -732,16 +687,17 @@ async function handleSubmit (values: any) {
     cotas = null
   }
 
-  const dadosEmpresa = await $storeCadastro.fetchEmpresa(values.carreira.empresa)
-
-  console.log(dadosEmpresa)
-
   const empresa = values.carreira.area !== 'Desempregado'
     ? {
         areaAtuacao: values.carreira.area,
         faixaSalarialId: values.carreira.faixaSalarial ? parseInt(values.carreira.faixaSalarial) : null,
         setorAtuacao: values.carreira.setor,
-        enderecoAndEmpresa: dadosEmpresa
+        nome: values.carreira.empresa,
+        endereco: {
+          pais: values.carreira.pais,
+          estado: values.carreira.estado,
+          cidade: values.carreira.cidade
+        }
       }
     : null
 
@@ -765,7 +721,7 @@ async function handleSubmit (values: any) {
 
   // const status = 201
 
-  const response = await $storeCadastro.cadastrarEgresso({
+  const status = await $storeCadastro.cadastrarEgresso({
     temFoto: temFoto.value, // false por padrao
     foto: formData
   }, {
@@ -793,9 +749,8 @@ async function handleSubmit (values: any) {
     titulacao
   }, isAdm, isAdm ? Number($route.params.id) : null)
 
-  if (response.status !== 201) {
+  if (status !== 201) {
     dialogFalha.value = true
-    errorText.value = response.data?.message ? response.data.message : 'Ocorreu um problema na requisição'
     error.value = true
   } else {
     dialogSucesso.value = true
@@ -808,6 +763,7 @@ async function handleSubmit (values: any) {
 }
 
 function handleFail (e: any) {
+  console.log(e)
   camposFaltosos.value = true
 
   const incorrectElements = Object.keys(e.errors)
@@ -821,15 +777,6 @@ async function handleNewInstituicao (event: any) {
   if (response?.status === 201) {
     alert('Instituição cadastrada com sucesso.')
     dialogInstituicao.value = false
-  }
-}
-
-async function handleNewEmpresa (event: any) {
-  const response = await $storeCadastro.cadastrarEmpresa(event.nome, event.pais, event.estado, event.cidade)
-
-  if (response?.status === 201) {
-    alert('Empresa cadastrada com sucesso.')
-    dialogEmpresa.value = false
   }
 }
 
@@ -848,13 +795,6 @@ const instituicaoSchema = object().shape({
 
 const cursoSchema = object().shape({
   nome: string().required('Insira o nome do curso')
-})
-
-const empresaSchema = object().shape({
-  nome: string().required('Insira o nome da empresa'),
-  pais: string().required('Campo obrigatório').default('a'),
-  estado: string().required('Campo obrigatório').default('a'),
-  cidade: string().required('Campo obrigatório').default('a')
 })
 
 const schema = object().shape({

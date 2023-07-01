@@ -2,7 +2,7 @@
   <div>
     <CustomSelect
       class="mb-2"
-      name="localizacao.pais"
+      name="carreira.pais"
       label="País"
       :options="countries"
       v-model:value="pais"
@@ -16,7 +16,7 @@
     />
     <CustomSelect
       class="mb-2"
-      name="localizacao.estado"
+      name="carreira.estado"
       label="Estado"
       :options="states"
       v-model:value="estado"
@@ -30,7 +30,7 @@
       :placeholder="placeHolder.estadoHolder"
     />
     <CustomSelect
-      name="localizacao.cidade"
+      name="carreira.cidade"
       label="Cidade"
       :options="cities"
       v-model:value="cidade"

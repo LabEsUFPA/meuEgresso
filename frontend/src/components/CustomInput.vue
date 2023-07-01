@@ -7,7 +7,7 @@
       override
       message-class="text-xs mt-1 max-w-[250px]"
       :label-class="classNames({
-        ['text-sm ml-1']: true,
+        ['text-sm ml-1 h-fit']: true,
         ['opacity-80']: disabled
       })"
     >
