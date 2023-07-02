@@ -21,7 +21,6 @@ public interface CotaRepository extends CrudRepository<CotaModel, Integer> {
 
     boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
-    @Query(value = "SELECT c.nome, COUNT(ec) FROM cota c LEFT JOIN egresso_cota ec ON ec.id.cotaId = c.id GROUP BY c.nome")
-
+    @Query(value = "SELECT c.nome, COUNT(ec.id.egressoId) FROM cota c LEFT JOIN egresso_cota ec ON ec.id.cotaId = c.id GROUP BY c.nome")
     List<Tuple> countEgressoByCota();
 }
