@@ -22,7 +22,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
-import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
@@ -56,7 +55,6 @@ public class CursoController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
-	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<CursoDTO> consultarCursos() {
 		return mapper.map(cursoService.findAll(), new TypeToken<List<CursoDTO>>() {
@@ -105,17 +103,16 @@ public class CursoController {
 	 * @return {@link CursoDTO} Dados gravados no banco com a Id atualizada.
 	 * @author Alfredo Gabriel
 	 * @throws UnauthorizedRequestException
-	 * @throws InvalidRequestException
 	 * @since 21/04/2023
 	 */
 	@PutMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarCurso(@RequestBody @Valid CursoDTO cursoDTO, JwtAuthenticationToken token)
-			throws UnauthorizedRequestException, InvalidRequestException {
-		if (cursoService.existsByIdAndCreatedBy(cursoDTO.getId(), jwtService.getIdUsuario(token))) {
+			throws UnauthorizedRequestException {
+		if (cursoService.existsByIdAndCreatedById(cursoDTO.getId(), jwtService.getIdUsuario(token))) {
 			CursoModel cursoModel = mapper.map(cursoDTO, CursoModel.class);
-			cursoService.update(cursoModel);
+			cursoService.save(cursoModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
@@ -130,16 +127,11 @@ public class CursoController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping(value = "/{id}")
-	@ResponseStatus(code = HttpStatus.OK)
+	@DeleteMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String deleteById(@PathVariable Integer id) {
-
-		if(cursoService.deleteById(id)){
-			return ResponseType.SUCCESS_DELETE.getMessage();
-		}
-		return ResponseType.FAIL_DELETE.getMessage();
+	public boolean deleteById(Integer id) {
+		return cursoService.deleteById(id);
 	}
 
 }

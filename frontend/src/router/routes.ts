@@ -15,14 +15,6 @@ export default [
         }
       },
       {
-        path: '/cadastro/:id',
-        component: async () => await import('src/pages/CadastroEgresso/CadastroEgresso.vue'),
-        meta: {
-          requiresAuthAdmin: true,
-          allowedScopes: ['SECRETARIO', 'ADMIN']
-        }
-      },
-      {
         path: '/cadastro-perfil',
         component: async () => await import('src/pages/CadastroPerfil/CadastroPerfil.vue')
       },
@@ -58,11 +50,12 @@ export default [
         component: async () => await import('src/pages/PerfilEgresso/PerfilEgresso.vue')
       },
       {
-        path: '/conta',
-        component: async () => await import('src/pages/EdicaoConta/EdicaoConta.vue'),
-        meta: {
-          requiresAuth: true
-        }
+        path: '/conta-egresso',
+        component: async () => await import('src/pages/EdicaoContaEgresso/EdicaoContaEgresso.vue')
+      },
+      {
+        path: '/conta-admin',
+        component: async () => await import('src/pages/EdicaoContaAdmin/EdicaoContaAdmin.vue')
       },
       {
         path: '/graficos',
@@ -103,10 +96,6 @@ export default [
       {
         path: 'redefinir-senha',
         component: async () => await import('src/pages/RedefinirSenha/RedefinirSenha.vue')
-      },
-      {
-        path: 'validar-email',
-        component: async () => await import('src/pages/ValidarEmail/ValidarEmail.vue')
       }
     ]
   },

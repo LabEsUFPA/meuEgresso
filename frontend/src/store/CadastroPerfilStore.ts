@@ -31,34 +31,6 @@ export const useCadastroPerfilStore = defineStore('CadastroPerfilStore', {
       return (response?.status) !== undefined ? response.status : 500
     },
 
-    async validateEmail (tokenAuth: string) {
-      const response = await Api.request({
-        method: 'post',
-        route: `/auth/validarEmail/${tokenAuth}`
-      })
-
-      return {
-        status: (response?.status) !== undefined ? response.status : 500,
-        data: (response?.data !== undefined) ? response?.data : null
-      }
-    },
-
-    async requestNewValidation (email: string) {
-      const response = await Api.request({
-        method: 'post',
-        route: '/auth/solicitarNovaValidacaoEmail',
-        body: {
-          email,
-          redirect: 'https://egressos.computacao.ufpa.br/validar-email'
-        }
-      })
-
-      return {
-        status: (response?.status) !== undefined ? response.status : 500,
-        data: (response?.data !== undefined) ? response?.data : null
-      }
-    },
-
     async userProfileRegister (
       username: string,
       password: string,
@@ -77,10 +49,7 @@ export const useCadastroPerfilStore = defineStore('CadastroPerfilStore', {
       const response = await Api.request({
         method: 'post',
         route: '/auth/register',
-        body: {
-          ...data,
-          redirect: 'https://egressos.computacao.ufpa.br/validar-email'
-        }
+        body: data
       })
 
       return {

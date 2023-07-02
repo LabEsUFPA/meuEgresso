@@ -20,13 +20,13 @@ public interface TipoBolsaRepository extends CrudRepository<TipoBolsaModel, Inte
 
     List<TipoBolsaModel> findAll();
 
-    boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
     @Query(value = """
-                SELECT tb.nome, COUNT(e) AS total_egressos
-                    FROM tipo_bolsa tb
-                    LEFT JOIN egresso e ON e.bolsa.id = tb.id
-                    GROUP BY tb.nome
-            """)
+        SELECT tb.nome, COUNT(e) AS total_egressos
+            FROM tipo_bolsa tb
+            LEFT JOIN egresso e ON e.bolsa.id = tb.id
+            GROUP BY tb.nome
+    """)
     List<Tuple> countEgressoForBolsa();
 }

@@ -13,7 +13,7 @@ public interface EmpresaRepository extends CrudRepository<EmpresaModel, Integer>
 
     List<EmpresaModel> findAll();
 
-    boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
     Optional<EmpresaModel> findByNomeIgnoreCase(String nome);
 

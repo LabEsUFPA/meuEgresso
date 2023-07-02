@@ -159,12 +159,6 @@ const filtrosStatus = ref([
     name: 'Incompleto',
     selected: false,
     selectable: true
-  },
-  {
-    id: 4,
-    name: 'Excluído',
-    selected: false,
-    selectable: true
   }
 ])
 

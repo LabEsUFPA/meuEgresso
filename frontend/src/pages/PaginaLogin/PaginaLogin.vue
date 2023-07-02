@@ -74,7 +74,7 @@
 <script setup lang="ts">
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomButton from 'src/components/CustomButton.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, createApp } from 'vue'
 import { Form } from 'vee-validate'
 import { object, string } from 'yup'
 import { mdiAccount, mdiLock } from '@mdi/js'
@@ -82,13 +82,17 @@ import InvalidInsert from 'src/components/InvalidInsert.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import { useLoginStore } from 'src/store/LoginStore'
 import { models } from 'src/@types'
+import { createPinia } from 'pinia'
 import { useRouter } from 'vue-router'
 interface LoginModel extends models.LoginModel {}
 
+const pinia = createPinia()
+const app = createApp({})
+app.use(pinia)
 const error = ref(false)
-const $store = useLoginStore()
+const storeLogin = useLoginStore()
 const errorText = ref('Nome de usuário ou senha incorretos.')
-const $router = useRouter()
+const router = useRouter()
 
 const schema = object().shape({
   username: string().required('Informe o seu usuário'),
@@ -103,17 +107,17 @@ const toggleShowPassword = () => {
 const handleSubmit = async (submitData: any) => {
   const loginData: LoginModel = submitData
 
-  const response = await $store.userLogin(loginData.username, loginData.password)
+  if (loginData.username || loginData.password) {
+    const response = await storeLogin.userLogin(loginData.username, loginData.password)
 
-  if (response.status === 200) {
-    error.value = false
-    $router.push('/')
-  } else if (response.status !== 200) {
-    if (response.data?.technicalMessage) {
+    if (response.status === 200) {
+      error.value = false
+      router.push('/')
+    } else if (response.status !== 200) {
       errorText.value = response.data?.technicalMessage
-    } else {
-      errorText.value = 'Requisição não aceita'
+      error.value = true
     }
+  } else {
     error.value = true
   }
 }

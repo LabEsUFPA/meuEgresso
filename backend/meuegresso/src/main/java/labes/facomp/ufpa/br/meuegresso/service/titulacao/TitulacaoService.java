@@ -59,7 +59,7 @@ public interface TitulacaoService {
 	 * @param createdBy
 	 * @return
 	 */
-	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
 	public TitulacaoModel findByNome(String nome);
 

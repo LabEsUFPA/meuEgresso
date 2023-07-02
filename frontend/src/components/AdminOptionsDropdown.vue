@@ -153,12 +153,12 @@ import { usePainelStore } from 'src/store/PainelStore'
 import { useLoginStore } from 'src/store/LoginStore'
 
 const props = defineProps<{
-  id: number
-  idEgresso?: number
-  nome?: string
-  status: string
-  email: string
-  }
+    id: number
+    idEgresso?: number
+    nome?: string
+    status: string
+    email: string
+    }
 >()
 
 const $emits = defineEmits(['updateData'])
@@ -195,12 +195,7 @@ async function aprovaCadastro () {
 }
 
 function editaCadastro () {
-  if (props.status !== 'incompleto') {
-    $router.push(`/egresso/${props.idEgresso}`)
-    return
-  }
-
-  $router.push(`/cadastro/${props.id}`)
+  $router.push(`/egresso/${props.idEgresso}`)
 }
 
 async function excluiCadastro () {
@@ -208,9 +203,23 @@ async function excluiCadastro () {
 
   if (props.idEgresso) {
     const codeDelete = await $store.deleteUsuario(props.idEgresso)
-    if (codeDelete === 204 || codeDelete === 200) {
-      $emits('updateData')
-      isLoadingAction.value = false
+
+    if (props.status === 'completo') {
+      // Desvalida o usuário completo
+      const codeDesvalida = await $store.toggleValidacaoUsuario(props.id)
+
+      if (codeDelete === 200 && codeDesvalida === 201) {
+        $emits('updateData')
+        isLoadingAction.value = false
+      }
+    } else {
+      // Desativa o usuário pendente
+      const codeDesativa = await $store.toggleAtivacaoUsuario(props.id)
+
+      if (codeDelete === 200 && codeDesativa === 201) {
+        $emits('updateData')
+        isLoadingAction.value = false
+      }
     }
   }
 }
@@ -222,7 +231,7 @@ function enviaEmail () {
 
 const opcoesAdmin = [
   { titulo: 'Aprovar cadastro', status: ['pendente'], click: aprovaCadastro, habilitado: true },
-  { titulo: 'Editar cadastro', status: ['incompleto', 'completo', 'pendente'], click: editaCadastro, habilitado: true },
+  { titulo: 'Editar cadastro', status: ['completo', 'pendente'], click: editaCadastro, habilitado: true },
   { titulo: 'Enviar e-mail', status: ['incompleto', 'completo', 'pendente'], click: enviaEmail, habilitado: true },
   { titulo: 'Excluir cadastro', status: ['completo', 'pendente'], click: excluiCadastro, habilitado: userScope.value === 'ADMIN' }
 ]

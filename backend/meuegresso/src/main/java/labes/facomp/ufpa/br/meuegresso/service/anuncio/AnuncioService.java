@@ -73,7 +73,7 @@ public interface AnuncioService {
 	 * @param createdBy
 	 * @return
 	 */
-	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
 	public Page<AnuncioModel> findByDataExpiracaoAfter(LocalDate dataExpiracao, Integer page, Integer size,
 			Direction direction);

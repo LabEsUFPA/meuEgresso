@@ -30,9 +30,9 @@
               class="inline"
               size="15"
             />
-            {{ selectedMarker[0].endereco.cidade }},
-            {{ State.getStateByCodeAndCountry(selectedMarker[0].endereco.estado, selectedMarker[0].endereco.pais)?.name }},
-            {{ Country.getCountryByCode(selectedMarker[0].endereco.pais)?.name }}
+            {{ selectedMarker[0].empresa.endereco.cidade }},
+            {{ State.getStateByCodeAndCountry(selectedMarker[0].empresa.endereco.estado, selectedMarker[0].empresa.endereco.pais)?.name }},
+            {{ Country.getCountryByCode(selectedMarker[0].empresa.endereco.pais)?.name }}
           </div>
           <div class="grid grid-cols-2 gap-1 md:grid-cols-1">
             <div

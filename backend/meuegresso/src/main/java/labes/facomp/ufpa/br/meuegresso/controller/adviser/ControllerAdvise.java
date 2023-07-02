@@ -24,11 +24,11 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.DataNotDeletedException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.DataNotSaveException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.EmptyBodyRequestListException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
-import labes.facomp.ufpa.br.meuegresso.exceptions.MatriculaAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotValidEgressoException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnalthorizedRegisterException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 
 /**
@@ -42,7 +42,7 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 public class ControllerAdvise {
 
 	/**
-	 * Caso algum recurso não seja encontrado no banco de dados será retornado uma
+	 * Caso algum recurso não seja encontrado no banco de dados sera retornado uma
 	 * mensagem padronizada.
 	 *
 	 * @param ex Excessão capturada.
@@ -60,8 +60,8 @@ public class ControllerAdvise {
 	}
 
 	/**
-	 * Caso alguma entidade não seja válida (dados diferentes do esperado), será
-	 * retornado o atributo e a mensagem pré-definida.
+	 * Caso alguma entidade não seja valida (dados diferentes do esperado), será
+	 * retornado o atributo e a menssagem pre definida.
 	 *
 	 * @param ex Excessão capturada.
 	 * @return Mapa contendo atributo e mensagem de erro.
@@ -83,7 +83,7 @@ public class ControllerAdvise {
 
 	/**
 	 * Caso a autenticação não seja bem sucedida, será retornado a mensagem
-	 * pré-estabelecida.
+	 * pre-estabelicida.
 	 *
 	 * @param ex Excessão capturada.
 	 * @return Mensagem
@@ -112,7 +112,7 @@ public class ControllerAdvise {
 
 	/**
 	 * Caso a autenticação não seja bem sucedida, será retornado a mensagem
-	 * pré-estabelecida.
+	 * pre-estabelicida.
 	 *
 	 * @param ex Excessão capturada.
 	 * @return Mensagem
@@ -140,7 +140,7 @@ public class ControllerAdvise {
 	}
 
 	/**
-	 * Caso seja realizado uma requisição inválida.
+	 * Caso seja realizado uma requisição invalida.
 	 *
 	 * @param ex Excessão capturada.
 	 * @return Mensagem
@@ -208,7 +208,7 @@ public class ControllerAdvise {
 	}
 
 	/**
-	 * Caso a autenticação não seja encontrado nenhum exemplo de e-mail
+	 * Caso a autenticação não seja encontrado nenum exemplo de e-mail
 	 *
 	 * @param ex Excessão capturada.
 	 * @return Mensagem
@@ -265,7 +265,7 @@ public class ControllerAdvise {
 	}
 
 	/**
-	 * Caso haja problemas no envio do e-mail.
+	 * Caso a haja problemas no envio do e-mail.
 	 *
 	 * @param ex Excessão capturada.
 	 * @return Mensagem
@@ -307,21 +307,13 @@ public class ControllerAdvise {
 				ex.getInternalCode());
 	}
 
-	/**
-	 * Caso a matrícula já exista associada a um egresso cadastrado
-	 *
-	 * @param ex Excessão capturada.
-	 * @return Mensagem
-	 * @author Bruno Eiki
-	 * @since 21/06/2023
-	 */
-	@ResponseStatus(code = HttpStatus.CONFLICT)
-	@ExceptionHandler(MatriculaAlreadyExistsException.class)
-	public ErrorResponse handleMatriculaAlreadyExists(MatriculaAlreadyExistsException ex) {
+	@ExceptionHandler(UnalthorizedRegisterException.class)
+	@ResponseStatus(code = HttpStatus.FORBIDDEN)
+	public ErrorResponse handleUnalthorizedRegisterException(UnalthorizedRegisterException ex) {
 		return new ErrorResponse(
-				ErrorType.REPORT_007.getMessage(),
+				ex.getMessage(),
 				ex.getLocalizedMessage(),
-				ErrorType.REPORT_007.getInternalCode());
+				ex.getInternalCode());
 	}
 
 }

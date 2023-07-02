@@ -30,14 +30,9 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       dataExpiracao: '',
       link: '',
       salario: '',
-      createdBy: 0,
-      createdByUser: {
-        id: 0,
-        nome: '',
-        egresso: {
-          id: 0
-        },
-        foto: ''
+      createdBy: {
+        email: '',
+        nome: ''
       }
     },
     anuncios: [],
@@ -47,6 +42,33 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
   }),
 
   actions: {
+    async fetchAnuncios () {
+      const response = await Api.request({
+        method: 'get',
+        route: '/anuncio'
+      })
+
+      if (response?.status === 200) {
+        this.totalPages = response.data?.totalPages
+        this.anuncios = response.data?.content.map((elem: any) => ({
+          id: elem.id,
+          titulo: elem.titulo,
+          areaEmprego: {
+            id: elem.areaEmprego.id,
+            nome: elem.areaEmprego.nome
+          },
+          descricao: elem.descricao,
+          dataExpiracao: elem.dataExpiracao,
+          link: elem.link,
+          salario: elem.salario,
+          createdBy: {
+            email: elem.createdBy.email,
+            nome: elem.createdBy.nome
+          }
+        }))
+      }
+    },
+
     async deleteAnuncioAdmin (id: number) {
       const response = await Api.request({
         method: 'delete',
@@ -82,33 +104,22 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
 
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
-        this.anuncios = response.data?.content.map((elem: any) => {
-          const createdByUserId = elem.createdByUser?.id ?? 'valor_padrao_id'
-          const egressoId = elem.createdByUser?.egresso?.id ?? 'valor_padrao_egresso_id'
-          const foto = elem.createdByUser?.foto ?? 'valor_padrao_foto'
-
-          return {
-            id: elem.id,
-            titulo: elem.titulo,
-            areaEmprego: {
-              id: elem.areaEmprego?.id,
-              nome: elem.areaEmprego?.nome
-            },
-            descricao: elem.descricao,
-            dataExpiracao: elem.dataExpiracao,
-            link: elem.link,
-            salario: elem.salario,
-            createdBy: elem.createdBy,
-            createdByUser: {
-              id: createdByUserId,
-              nome: elem.createdByUser?.nome,
-              egresso: {
-                id: egressoId
-              },
-              foto
-            }
+        this.anuncios = response.data?.content.map((elem: any) => ({
+          id: elem.id,
+          titulo: elem.titulo,
+          areaEmprego: {
+            id: elem.areaEmprego.id,
+            nome: elem.areaEmprego.nome
+          },
+          descricao: elem.descricao,
+          dataExpiracao: elem.dataExpiracao,
+          link: elem.link,
+          salario: elem.salario,
+          createdBy: {
+            email: elem.createdBy.email,
+            nome: elem.createdBy.nome
           }
-        })
+        }))
       }
     },
 
@@ -121,36 +132,79 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       })
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
-        this.anuncios = response.data?.content.map((elem: any) => {
-          const createdByUserId = elem.createdByUser?.id ?? 'valor_padrao_id'
-          const egressoId = elem.createdByUser?.egresso?.id ?? 'valor_padrao_egresso_id'
-          const foto = elem.createdByUser?.foto ?? 'valor_padrao_foto'
-
-          return {
-            id: elem.id,
-            titulo: elem.titulo,
-            areaEmprego: {
-              id: elem.areaEmprego?.id,
-              nome: elem.areaEmprego?.nome
-            },
-            descricao: elem.descricao,
-            dataExpiracao: elem.dataExpiracao,
-            link: elem.link,
-            salario: elem.salario,
-            createdBy: elem.createdBy,
-            createdByUser: {
-              id: createdByUserId,
-              nome: elem.createdByUser?.nome,
-              egresso: {
-                id: egressoId
-              },
-              foto
-            }
+        this.anuncios = response.data?.content.map((elem: any) => ({
+          id: elem.id,
+          titulo: elem.titulo,
+          areaEmprego: {
+            id: elem.areaEmprego.id,
+            nome: elem.areaEmprego.nome
+          },
+          descricao: elem.descricao,
+          dataExpiracao: elem.dataExpiracao,
+          link: elem.link,
+          salario: elem.salario,
+          createdBy: {
+            email: elem.createdBy.email,
+            nome: elem.createdBy.nome
           }
-        })
+        }))
       }
     },
 
+    async fetchBuscaAnuncioTitulo (titulo: string, page: number, size: number) {
+      const response = await Api.request({
+        method: 'get',
+        route: '/anuncio/busca',
+        params: { titulo, page, size }
+      })
+      if (response?.status === 200) {
+        this.totalPages = response.data?.totalPages
+        this.anuncios = response.data?.content.map((elem: any) => ({
+          id: elem.id,
+          titulo: elem.titulo,
+          areaEmprego: {
+            id: elem.areaEmprego.id,
+            nome: elem.areaEmprego.nome
+          },
+          descricao: elem.descricao,
+          dataExpiracao: elem.dataExpiracao,
+          link: elem.link,
+          salario: elem.salario,
+          createdBy: {
+            email: elem.createdBy.email,
+            nome: elem.createdBy.nome
+          }
+        }))
+      }
+    },
+
+    async fetchBuscaAnuncioAreas (areasEmpregos: number[], page: number, size: number) {
+      const areaEmprego = areasEmpregos.join()
+      const response = await Api.request({
+        method: 'get',
+        route: '/anuncio/busca',
+        params: { areaEmprego, page, size }
+      })
+      if (response?.status === 200) {
+        this.totalPages = response.data?.totalPages
+        this.anuncios = response.data?.content.map((elem: any) => ({
+          id: elem.id,
+          titulo: elem.titulo,
+          areaEmprego: {
+            id: elem.areaEmprego.id,
+            nome: elem.areaEmprego.nome
+          },
+          descricao: elem.descricao,
+          dataExpiracao: elem.dataExpiracao,
+          link: elem.link,
+          salario: elem.salario,
+          createdBy: {
+            email: elem.createdBy.email,
+            nome: elem.createdBy.nome
+          }
+        }))
+      }
+    },
     async fetchAreasEmprego () {
       const response = await Api.request({
         method: 'get',
@@ -196,14 +250,9 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
           dataExpiracao: '',
           link: '',
           salario: '',
-          createdBy: 0,
-          createdByUser: {
-            id: 0,
-            nome: '',
-            egresso: {
-              id: 0
-            },
-            foto: ''
+          createdBy: {
+            email: '',
+            nome: ''
           }
         }
       }

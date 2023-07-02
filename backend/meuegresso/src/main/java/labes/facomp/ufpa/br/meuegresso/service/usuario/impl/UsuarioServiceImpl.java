@@ -73,11 +73,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public boolean existsByEmail(String email) {
-		return usuarioRepository.existsByEmail(email);
-	}
-
-	@Override
 	public UsuarioModel findById(Integer idUsuario) {
 		return usuarioRepository.findById(idUsuario).orElseThrow();
 	}
@@ -94,6 +89,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	public UsuarioModel update(UsuarioModel usuario) throws InvalidRequestException {
 		if (usuario.getId() != null) {
+			usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 			return usuarioRepository.save(usuario);
 		} else {
 			throw new InvalidRequestException();
@@ -109,12 +105,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public UsuarioModel findByEmail(String email) {
-		return usuarioRepository.findByEmailIgnoreCase(email, UsuarioModel.class).orElseThrow();
-	}
-
-	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
-		return usuarioRepository.existsByIdAndCreatedBy(id, createdBy);
+	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+		return usuarioRepository.existsByIdAndCreatedById(id, createdBy);
 	}
 
 	@Override
@@ -127,8 +119,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	// PageRequest.of(page, size, Sort.by(direction, "u.created_date")
 	@Override
-	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size,
-			String ordenacao) {
+	public Page<EgressoDashDTO> findBySearch(String nomeUsuario, String[] status, Integer page, Integer size, String ordenacao) {
 
 		List<Tuple> tupla = usuarioRepository.findBySearch(nomeUsuario, status, ordenacao);
 

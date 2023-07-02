@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,7 +43,6 @@ import labes.facomp.ufpa.br.meuegresso.model.AnuncioModel;
 import labes.facomp.ufpa.br.meuegresso.model.AreaEmpregoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.areaemprego.AreaEmpregoRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 @SpringBootTest
 @DirtiesContext
@@ -76,12 +74,6 @@ class AnuncioControllerTest extends Configuracao {
         UsuarioModel usuarioModel;
 
         @Autowired
-        PasswordEncoder encoder;
-
-        @Autowired
-        UsuarioRepository usuarioRepository;
-
-        @Autowired
         ModelMapper modelMapper;
 
         AnuncioModel anuncioModel;
@@ -93,18 +85,20 @@ class AnuncioControllerTest extends Configuracao {
         void setUp() throws Exception {
 
                 ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
-                final String plainPass = "teste123";
+
                 /* Usuario */
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
                 usuarioModel.setNome("nome_test asdsad");
                 usuarioModel.setEmail("teste@gmail.com");
-                usuarioModel.setPassword(encoder.encode(plainPass));
+                usuarioModel.setPassword("teste123");
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
-                usuarioModel.setEmailVerificado(true);
-                usuarioModel.setAtivo(true);
-
-                usuarioModel = usuarioRepository.save(usuarioModel);
+                mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(usuarioModel)))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isCreated())
+                                .andReturn();
 
                 /* Area Emprego */
                 areaEmprego = new AreaEmpregoModel();
@@ -135,7 +129,7 @@ class AnuncioControllerTest extends Configuracao {
                 /* Authentication */
                 AuthenticationRequest authenticationRequest = new AuthenticationRequest();
                 authenticationRequest.setUsername(usuarioModel.getUsername());
-                authenticationRequest.setPassword(plainPass);
+                authenticationRequest.setPassword(usuarioModel.getPassword());
                 String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
                 MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")

@@ -1,4 +1,3 @@
-
 package labes.facomp.ufpa.br.meuegresso.controller.usuario;
 
 import org.modelmapper.ModelMapper;
@@ -16,11 +15,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioDTO;
-import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
-import labes.facomp.ufpa.br.meuegresso.exceptions.EmailAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
-import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
@@ -76,50 +72,11 @@ public class UsuarioController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarUsuario(
 			@RequestBody @Valid UsuarioDTO usuarioDTO, JwtAuthenticationToken token)
-			throws UnauthorizedRequestException, InvalidRequestException, NameAlreadyExistsException,
-			EmailAlreadyExistsException {
+			throws UnauthorizedRequestException, InvalidRequestException {
 		if (jwtService.getIdUsuario(token).equals(usuarioDTO.getId())) {
-			UsuarioModel usuarioModelBack = usuarioService.findById(jwtService.getIdUsuario(token));
-			UsuarioModel usuarioModelFront = mapper.map(usuarioDTO, UsuarioModel.class);
-
-			if (usuarioModelFront.getNome() != null) {
-				usuarioModelBack.setNome(usuarioModelFront.getNome());
-			}
-
-			if (usuarioModelFront.getEmail() != null) {
-				// código legado por que o && nao deu bom
-				if (usuarioModelBack.getEmail().equals(usuarioModelFront.getEmail())) {
-					usuarioModelBack.setEmail(usuarioModelFront.getEmail());
-				} else {
-					if (usuarioService.existsByEmail(usuarioModelFront.getEmail())) {
-						throw new EmailAlreadyExistsException();
-					} else {
-						usuarioModelBack.setEmail(usuarioModelFront.getEmail());
-					}
-				}
-				usuarioModelBack.setEmail(usuarioModelFront.getEmail());
-			}
-
-			if (usuarioModelFront.getUsername() != null) {
-				if (usuarioModelBack.getUsername().equals(usuarioModelFront.getUsername())) {
-					usuarioModelBack.setUsername(usuarioModelFront.getUsername());
-				} else {
-					if (usuarioService.existsByUsername(usuarioModelFront.getUsername())) {
-						throw new NameAlreadyExistsException(
-								String.format(ErrorType.USER_001.getMessage(), usuarioModelFront.getUsername()),
-								ErrorType.USER_001.getInternalCode());
-					} else {
-						usuarioModelBack.setUsername(usuarioModelFront.getUsername());
-					}
-				}
-			}
-
-			if (usuarioModelFront.getPassword() != null) {
-				usuarioModelBack.setPassword(usuarioModelFront.getPassword());
-				usuarioService.save(usuarioModelBack); // salva com senha codificada
-			} else {
-				usuarioService.update(usuarioModelBack); // evita atualizar extritamente uma nova senha codificada
-			}
+			UsuarioModel usuarioModel = usuarioService.findById(jwtService.getIdUsuario(token));
+			mapper.map(usuarioDTO, usuarioModel);
+			usuarioService.update(usuarioModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();

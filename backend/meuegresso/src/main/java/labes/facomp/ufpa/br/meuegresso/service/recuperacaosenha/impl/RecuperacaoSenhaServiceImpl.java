@@ -40,7 +40,7 @@ public class RecuperacaoSenhaServiceImpl implements RecuperacaoSenhaService {
             e.setPasswordChange(true);
             recuperacaoSenhaRepository.save(e);
         });
-        Optional<RecoveryPasswordProjection> projectionOptional = usuarioRepository.findByEmailIgnoreCase(email, RecoveryPasswordProjection.class);
+        Optional<RecoveryPasswordProjection> projectionOptional = usuarioRepository.findByEmailIgnoreCase(email);
         if (projectionOptional.isPresent()) {
             RecoveryPasswordProjection projection = projectionOptional.get();
             RecuperacaoSenhaModel recuperacaoSenha = RecuperacaoSenhaModel.builder().token(UUID.randomUUID())
@@ -49,7 +49,8 @@ public class RecuperacaoSenhaServiceImpl implements RecuperacaoSenhaService {
             recuperacaoSenha = recuperacaoSenhaRepository.save(recuperacaoSenha);
             URI location = UriComponentsBuilder.fromHttpUrl(redirect)
                     .queryParam("tokenAuth", recuperacaoSenha.getToken()).build().toUri();
-            new Thread(() -> mailService.sendEmail(email, TITULO_REDEFINICAO_SENHA, String.format(MENSAGEM_REDEFINICAO, projection.getNome(), location.toString()))).start();
+            mailService.sendEmail(email, TITULO_REDEFINICAO_SENHA,
+                    String.format(MENSAGEM_REDEFINICAO, projection.getNome(), location.toString()));
             return true;
         } else {
             return false;

@@ -5,11 +5,9 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -88,17 +86,17 @@ public class TitulacaoController {
      * @param titulacaoDTO Estrutura de dados contendo as informações necessárias
      *                     para
      *                     atualizar uma Titulacao.
-     * @param token        login para ter a permissão para atualizar a titulacao
+     * @param token login para ter a permissão para atualizar a titulacao
      * @return {@link String} Mensagem de confirmacao.
      * @author Bruno Eiki
      * @since 21/04/2023
      */
     @PutMapping
-    @ResponseStatus(code = HttpStatus.CREATED)
+    @ResponseStatus(code = HttpStatus.ACCEPTED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarTitulacao(@RequestBody @Valid TitulacaoDTO titulacaoDTO, JwtAuthenticationToken token)
             throws InvalidRequestException, UnauthorizedRequestException {
-        if (titulacaoService.existsByIdAndCreatedBy(titulacaoDTO.getId(), jwtService.getIdUsuario(token))) {
+        if (titulacaoService.existsByIdAndCreatedById(titulacaoDTO.getId(), jwtService.getIdUsuario(token))) {
             TitulacaoModel titulacaoModel = mapper.map(titulacaoDTO, TitulacaoModel.class);
             titulacaoService.update(titulacaoModel);
             return ResponseType.SUCCESS_UPDATE.getMessage();
@@ -116,15 +114,13 @@ public class TitulacaoController {
      * @author Bruno Eiki
      * @since 21/04/2023
      */
-    @DeleteMapping(value = "/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping
+    @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public String deletarTitulacao(@PathVariable Integer id) {
+    public String deletarTitulacao(@RequestBody @Valid TitulacaoDTO titulacaoDTO) {
 
-        if(titulacaoService.deleteById(id)){
-            return ResponseType.SUCCESS_DELETE.getMessage();
-        }
-        return ResponseType.FAIL_DELETE.getMessage();
+        TitulacaoModel titulacaoModel = mapper.map(titulacaoDTO, TitulacaoModel.class);
+        titulacaoService.deleteById(titulacaoModel.getId());
+        return ResponseType.SUCCESS_DELETE.getMessage();
     }
-
 }

@@ -40,9 +40,6 @@ public interface EgressoEmpresaService {
 	 */
 	public List<EgressoEmpresaModel> findAll();
 
-	public List<EgressoEmpresaModel> findAllByEgressoUsuarioValidoIsTrue();
-
-
 	/**
 	 * Método responsável por atualizar dados de um egressoEmpresa cadastrado.
 	 *
@@ -65,7 +62,7 @@ public interface EgressoEmpresaService {
 	 * @param createdBy
 	 * @return boolean
 	 */
-	boolean existsByIdAndCreatedBy(EgressoEmpresaModelId id, Integer createdBy);
+	boolean existsByIdAndCreatedById(EgressoEmpresaModelId id, Integer createdBy);
 
 	/**
 	 * Método responsável por retornar os dados para o mapa sociodemográfico
@@ -80,5 +77,4 @@ public interface EgressoEmpresaService {
 	 * @return List<EmpresaGraficoDTO>
 	 */
 	public List<EmpresaGraficoDTO> countEgressoByEmpresas();
-
 }

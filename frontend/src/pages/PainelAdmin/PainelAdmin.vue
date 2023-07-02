@@ -78,7 +78,7 @@
 
             <CustomButton
               tag="router"
-              link="/conta"
+              link="/conta-admin"
               variant="flat"
             >
               <SvgIcon
@@ -421,7 +421,7 @@ const graphData = computed(() => ({
           'Setembro',
           'Outubro',
           'Novembro',
-          'Dezembro'
+          'Dezemmbro'
         ]
         if (selectedString.value === 'mes') {
           const date = new Date(key + 'T00:00:00')

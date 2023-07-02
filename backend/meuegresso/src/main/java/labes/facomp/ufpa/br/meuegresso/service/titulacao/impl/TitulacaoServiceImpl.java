@@ -57,8 +57,8 @@ public class TitulacaoServiceImpl implements TitulacaoService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
-        return titulacaoRepository.existsByIdAndCreatedBy(id, createdBy);
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return titulacaoRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
     @Override

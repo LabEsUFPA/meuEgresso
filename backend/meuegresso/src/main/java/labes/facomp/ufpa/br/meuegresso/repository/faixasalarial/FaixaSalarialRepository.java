@@ -20,14 +20,14 @@ public interface FaixaSalarialRepository extends CrudRepository<FaixaSalarialMod
 
     List<FaixaSalarialModel> findAll();
 
-    boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
     @Query(value = """
-            SELECT fs.faixa, COUNT(ee.faixaSalarial.id ) AS total_egressos
-            FROM faixa_salarial
-            fs LEFT
-            JOIN egresso_empresa
-            ee ON ee.faixaSalarial.id = fs.id GROUP BY fs.faixa
-            """)
+                SELECT fs.faixa, COUNT(ee.faixaSalarial.id ) AS total_egressos
+                FROM faixa_salarial
+                fs LEFT
+                JOIN egresso_empresa
+                ee ON ee.faixaSalarial.id = fs.id GROUP BY fs.faixa
+                """)
     List<Tuple> countEgressoInFaixa();
 }

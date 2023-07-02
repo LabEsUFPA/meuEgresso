@@ -64,8 +64,8 @@ public class DepoimentoServiceImpl implements DepoimentoService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
-        return depoimentoRepository.existsByIdAndCreatedBy(id, createdBy);
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return depoimentoRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
     @Override

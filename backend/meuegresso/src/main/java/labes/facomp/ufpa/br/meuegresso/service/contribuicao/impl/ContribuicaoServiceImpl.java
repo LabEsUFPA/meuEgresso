@@ -22,12 +22,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ContribuicaoServiceImpl implements ContribuicaoService {
 
-    private final ContribuicaoRepository contribuicaoRepository;
+    private final ContribuicaoRepository anuncioRepository;
 
     @Override
     public boolean deleteById(Integer id) {
-        if (contribuicaoRepository.existsById(id)) {
-            contribuicaoRepository.deleteById(id);
+        if (anuncioRepository.existsById(id)) {
+            anuncioRepository.deleteById(id);
             return true;
         }
         return false;
@@ -36,44 +36,44 @@ public class ContribuicaoServiceImpl implements ContribuicaoService {
     @Override
     @Transactional
     public List<ContribuicaoModel> findAll() {
-        return contribuicaoRepository.findAll();
+        return anuncioRepository.findAll();
     }
 
     @Override
     @Transactional
     public ContribuicaoModel findById(Integer id) {
-        return contribuicaoRepository.findById(id).orElseThrow();
+        return anuncioRepository.findById(id).orElseThrow();
     }
 
     @Override
     public ContribuicaoModel save(ContribuicaoModel anuncioModel) {
-        return contribuicaoRepository.save(anuncioModel);
+        return anuncioRepository.save(anuncioModel);
     }
 
     @Override
     public ContribuicaoModel update(ContribuicaoModel anuncio) throws InvalidRequestException {
         if (anuncio.getId() != null) {
-            return contribuicaoRepository.save(anuncio);
+            return anuncioRepository.save(anuncio);
         } else {
             throw new InvalidRequestException();
         }
     }
 
     @Override
-    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
-        return contribuicaoRepository.existsByIdAndCreatedBy(id, createdBy);
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return anuncioRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
     @Override
     @Transactional
     public ContribuicaoModel findByEgressoId(Integer idEgresso) {
-        return contribuicaoRepository.findByEgressoId(idEgresso).orElseThrow();
+        return anuncioRepository.findByEgressoId(idEgresso).orElseThrow();
     }
 
     @Override
     @Transactional
     public ContribuicaoModel findByEgressoUsuarioId(Integer idUsuario) {
-        return contribuicaoRepository.findByEgressoUsuarioId(idUsuario).orElseThrow();
+        return anuncioRepository.findByEgressoUsuarioId(idUsuario).orElseThrow();
     }
 
 }

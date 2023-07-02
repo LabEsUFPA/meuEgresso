@@ -22,8 +22,7 @@ export const useHomeStore = defineStore('HomeStore', {
         this.egressList = response.data?.map((elem: any) => ({
           id: elem.id,
           nomeEgresso: elem.nomeEgresso,
-          empresa: elem.empresa,
-          endereco: elem.endereco
+          empresa: elem.empresa
         }))
       }
     },

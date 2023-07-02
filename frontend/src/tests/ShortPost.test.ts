@@ -1,12 +1,8 @@
 import { mount } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
 import ShortPost from 'src/pages/FeedVagas/components/ShortPost.vue'
-import { describe, expect, it, beforeEach } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 describe('ShortPost', () => {
-  beforeEach(() => {
-    setActivePinia(createPinia())
-  })
   it('should render props', () => {
     const wrapper = mount(ShortPost, {
       props: {
@@ -15,11 +11,11 @@ describe('ShortPost', () => {
         titulo: 'Título',
         area: 'Área de emprego',
         descricao: 'Descrição da vaga',
-        salario: '10.000,00',
-        foto: ''
+        salario: '10.000,00'
       }
     })
 
+    expect(wrapper.html()).toContain(1)
     expect(wrapper.html()).toContain('Usuário')
     expect(wrapper.html()).toContain('Título')
     expect(wrapper.html()).toContain('Área de emprego')
@@ -34,8 +30,7 @@ describe('ShortPost', () => {
         titulo: 'Título',
         area: 'Área de emprego',
         descricao: 'Descrição da vaga',
-        salario: '10.000,00',
-        foto: ''
+        salario: '10.000,00'
       }
     })
 

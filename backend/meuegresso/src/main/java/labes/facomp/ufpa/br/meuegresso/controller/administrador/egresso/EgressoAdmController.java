@@ -27,12 +27,10 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
-import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
-import labes.facomp.ufpa.br.meuegresso.exceptions.MatriculaAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
@@ -73,25 +71,16 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/administrador/egresso")
 public class EgressoAdmController {
 
-    private final ModelMapper mapper;
-
-    private final CursoService cursoService;
-
     private final EgressoService egressoService;
-
     private final UsuarioService usuarioService;
-
     private final EmpresaService empresaService;
-
+    private final SetorAtuacaoService setorAtuacaoService;
+    private final CursoService cursoService;
     private final EnderecoService enderecoService;
-
+    private final AreaAtuacaoService areaAtuacaoService;
     private final TitulacaoService titulacaoService;
 
-    private final AreaAtuacaoService areaAtuacaoService;
-
-    private final SetorAtuacaoService setorAtuacaoService;
-
-    private final StatusUsuarioService statusUsuarioService;
+    private final ModelMapper mapper;
 
     /**
      * Endpoint responsavel por buscar o egresso.
@@ -131,18 +120,10 @@ public class EgressoAdmController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String cadastrarEgressoPrimeiroCadastro(
             @PathVariable Integer id,
-            @RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO)
-            throws InvalidRequestException, MatriculaAlreadyExistsException {
+            @RequestBody @Valid EgressoCadastroDTO egressoCadastroDTO) throws InvalidRequestException {
         UsuarioModel user = usuarioService.findById(id);
         if (!user.getGrupos().contains(Grupos.EGRESSO)) {
             throw new InvalidRequestException();
-        }
-
-        if (egressoCadastroDTO.getMatricula() != null
-                && egressoService.existsMatricula(egressoCadastroDTO.getMatricula())) {
-            throw new MatriculaAlreadyExistsException(
-                    String.format(ErrorType.REPORT_007.getMessage(), egressoCadastroDTO.getMatricula()),
-                    ErrorType.REPORT_007.getInternalCode());
         }
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
@@ -213,11 +194,6 @@ public class EgressoAdmController {
         egresso.getUsuario().setAtivo(egresso.getUsuario().getValido());
         egressoService.adicionarEgresso(egresso);
 
-        statusUsuarioService
-                .save(StatusUsuarioModel.builder().usuarioId(egresso.getUsuario().getId())
-                        .nome(egresso.getUsuario().getNome()).status(UsuarioStatus.COMPLETO)
-                        .build());
-
         return ResponseType.SUCCESS_SAVE.getMessage();
     }
 
@@ -237,21 +213,11 @@ public class EgressoAdmController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String atualizarEgresso(@PathVariable Integer id,
-            @RequestBody EgressoAttDTO egresso) throws InvalidRequestException, MatriculaAlreadyExistsException {
+            @RequestBody EgressoAttDTO egresso) throws InvalidRequestException {
 
         UsuarioModel user = usuarioService.findById(egresso.getUsuario().getId());
         if (!user.getGrupos().contains(Grupos.EGRESSO)) {
             throw new InvalidRequestException();
-        }
-
-        // Se a matricula passada for diferente da matricula que a pessoa já tinha,
-        // checar se é duplicado.
-        if (egresso.getMatricula() != null
-                && !egresso.getMatricula().equals(egressoService.findById(id).getMatricula())
-                && egressoService.existsMatricula(egresso.getMatricula())) {
-            throw new MatriculaAlreadyExistsException(
-                    String.format(ErrorType.REPORT_007.getMessage(), egresso.getMatricula()),
-                    ErrorType.REPORT_007.getInternalCode());
         }
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -304,6 +270,8 @@ public class EgressoAdmController {
         return ResponseType.SUCCESS_UPDATE.getMessage();
     }
 
+    private final StatusUsuarioService statusUsuarioService;
+
     /**
      * Endpoint responsavel por deletar o egresso.
      *
@@ -314,8 +282,8 @@ public class EgressoAdmController {
      * @since 05/06/2023
      */
     @DeleteMapping(value = "/{id}")
-    @ResponseStatus(code = HttpStatus.OK)
     @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deletarEgresso(@PathVariable Integer id) {
         EgressoModel egressoModel = egressoService.findById(id);
@@ -369,8 +337,8 @@ public class EgressoAdmController {
      * @throws IOException
      */
     @DeleteMapping(value = "/foto/{id}")
-    @ResponseStatus(code = HttpStatus.OK)
     @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public String deleteFotoEgresso(@PathVariable Integer id) throws IOException {
         EgressoModel egressoModel = egressoService.findById(id);

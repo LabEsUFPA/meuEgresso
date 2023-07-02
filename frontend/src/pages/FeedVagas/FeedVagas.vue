@@ -93,12 +93,11 @@
         >
           <ShortPost
             :id="anuncio.id"
-            :nome="anuncio.createdByUser.nome"
+            :nome="anuncio.createdBy.nome"
             :titulo="anuncio.titulo"
             :area="anuncio.areaEmprego.nome"
             :descricao="anuncio.descricao"
-            :salario="formataSalario(anuncio.salario)"
-            :foto="anuncio.createdByUser.foto"
+            :salario="anuncio.salario"
           />
         </div>
       </div>
@@ -195,18 +194,6 @@ const toggleFilterApplied = (id:number) => {
 
 const applyFilters = (filters:any) => {
   filtersById.value = filters.map((elem: any) => (elem.id))
-}
-
-const formataSalario = (value:String) => {
-  const valueConvertido = parseFloat(value.toString())
-  const formattedValue = valueConvertido.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  })
-  if (valueConvertido !== 0.00) {
-    return formattedValue
-  }
-  return ''
 }
 
 </script>

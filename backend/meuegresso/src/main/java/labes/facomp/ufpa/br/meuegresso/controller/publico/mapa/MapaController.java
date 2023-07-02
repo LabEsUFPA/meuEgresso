@@ -43,7 +43,7 @@ public class MapaController {
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     public List<EgressoMapaDTO> findAllEgressoMapaDTO() {
-        List<EgressoEmpresaModel> egressoEmpresaModels = egressoEmpresaService.findAllByEgressoUsuarioValidoIsTrue();
+        List<EgressoEmpresaModel> egressoEmpresaModels = egressoEmpresaService.findAllEgressoMapa();
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 

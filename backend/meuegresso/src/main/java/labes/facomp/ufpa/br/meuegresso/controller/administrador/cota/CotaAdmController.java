@@ -85,7 +85,6 @@ public class CotaAdmController {
 	 * @see {@link ResponseType}
 	 */
 	@DeleteMapping
-	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteById(Integer id) throws DataNotDeletedException {
 		if (cotaService.deleteById(id)) {

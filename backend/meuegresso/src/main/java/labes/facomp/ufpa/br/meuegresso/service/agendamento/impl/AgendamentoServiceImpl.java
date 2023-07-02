@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
 
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 
 import labes.facomp.ufpa.br.meuegresso.dto.mensagem.MensagemStatusDTO;
@@ -19,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class AgendamentoServiceImpl implements AgendamentoService {
+public class AgendamentoServiceImpl implements AgendamentoService, Runnable {
 
     private final UsuarioService usuarioService;
 
@@ -27,25 +29,82 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
     private final MensagemRepository mensagemRepository;
 
+    private Map<String, ScheduledFuture<?>> taskList = new HashMap<>();
+
+    @Autowired
+    private TaskScheduler taskScheduler;
+
+    public Integer checkData(LocalDateTime dateTime, LocalDateTime nowDateTime) {
+        Integer year = dateTime.getYear() - nowDateTime.getYear();
+        Integer month = dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue();
+        Integer day = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
+        Integer hour = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
+        Integer minute = dateTime.getMinute() - nowDateTime.getMinute();
+        if (year == 0 && month == 0 && day == 0 && hour == 0 && minute == 0) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    public Integer yearlyMessage(LocalDateTime dateTime, LocalDateTime nowDateTime) {
+        Integer month = dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue();
+        Integer day = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
+        Integer hour = dateTime.getHour() - nowDateTime.getHour();
+        Integer minute = dateTime.getMinute() - nowDateTime.getMinute();
+        if (month == 0 && day == 0 && hour == 0 && minute == 0) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    public Integer semesterMessage(LocalDateTime dateTime, LocalDateTime nowDateTime) {
+        if ((dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue()) % 6 == 0) {
+            return dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
+        } else {
+            return 1;
+        }
+    }
+
+    public Integer statusData(LocalDateTime dateTime, LocalDateTime nowDateTime) {
+        Integer year = dateTime.getYear() - nowDateTime.getYear();
+        Integer month = dateTime.getMonth().getValue() - nowDateTime.getMonth().getValue();
+        Integer day = dateTime.getDayOfMonth() - nowDateTime.getDayOfMonth();
+        Integer minute = dateTime.getMinute() - nowDateTime.getMinute();
+        if (year < 0) {
+            return 0;
+        } else if (year == 0) {
+            if (month < 0) {
+                return 0;
+            } else if (month == 0) {
+                if (day < 0) {
+                    return 0;
+                } else if (minute <= 0) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            } else {
+                return 1;
+            }
+        } else {
+            return 1;
+        }
+    }
+
     @Override
     public MensagemStatusDTO getMensagensStatus() {
         List<MensagemModel> lista = mensagemRepository.findAll();
         Map<String, Map<LocalDateTime, String>> mensagemStatus = new HashMap<>();
 
         for (MensagemModel mensagem : lista) {
-            if (mensagem.getDataEnviada() == null) {
-                final String status = "Não Enviado";
-                Map<LocalDateTime, String> mensagemDataStatus = new HashMap<>();
-                mensagemDataStatus.computeIfAbsent(mensagem.getDataEnvio(), k -> status);
-                mensagemStatus.put(mensagem.getEscopo(), mensagemDataStatus);
-            }
-            else if(mensagem.getDataEnviada() != null && Boolean.FALSE.equals(mensagem.getFrequente())){
+            if (statusData(mensagem.getDataEnvio(), LocalDateTime.now()) == 0) {
                 final String status = "Enviado";
                 Map<LocalDateTime, String> mensagemDataStatus = new HashMap<>();
                 mensagemDataStatus.computeIfAbsent(mensagem.getDataEnvio(), k -> status);
                 mensagemStatus.put(mensagem.getEscopo(), mensagemDataStatus);
-            }
-            else {
+            } else {
                 final String status = "Pendente";
                 Map<LocalDateTime, String> mensagemDataStatus = new HashMap<>();
                 mensagemDataStatus.computeIfAbsent(mensagem.getDataEnvio(), k -> status);
@@ -55,16 +114,6 @@ public class AgendamentoServiceImpl implements AgendamentoService {
         return MensagemStatusDTO.builder().mensagensStatus(mensagemStatus).build();
     }
 
-    // Expessão do crontab
-    // Sec | Min | Hora | Dia | Mês | Dia da Semana
-    // 0 0 9 ? * 2#2 -> At 09:00:00am, on the 2nd Monday of the month, every month
-    // 0 0 12 ? * MON-FRI -> Every Weekday at noon
-    // 0 0 8 5 * ? -> At 08:00:00am, on the 5th day, every month
-    // 0 0 8 5W * ? -> Every month on the nearest Weekday to the 5th of the month,
-    // at At 08:00:00am
-
-    @Async
-    @Scheduled(cron = "0 */5 * * * *")
     @Override
     public void scheduledSendEmail() {
         Map<String, LocalDateTime> emailList = usuarioService.findByAtivo();
@@ -104,5 +153,37 @@ public class AgendamentoServiceImpl implements AgendamentoService {
             mensagemSemestral.get(i).setDataEnviada(LocalDateTime.now());
             mailService.update(mensagemSemestral.get(i));
         }
+    }
+
+    @Override
+    public void run() {
+        scheduledSendEmail();
+    }
+
+    public static String toCron(final String seg, final String mins, final String hrs, final String dayOfMonth,
+            final String month) {
+        return String.format("%s %s %s %s %s *", seg, mins, hrs, dayOfMonth, month);
+    }
+
+    @Override
+    public void setScheduleATask(Runnable tasklet) {
+        ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger("0 */2 * * * *"));
+        String jobId = String.valueOf(1);
+        taskList.put(jobId, scheduledTask);
+    }
+
+    @Override
+    public void removeScheduledTask() {
+        String mensagemId = String.valueOf(1);
+        ScheduledFuture<?> scheduledTask = taskList.get(mensagemId);
+        if (scheduledTask != null) {
+            scheduledTask.cancel(true);
+            taskList.remove(mensagemId, scheduledTask);
+        }
+    }
+
+    @Override
+    public Map<String, ScheduledFuture<?>> getTasks() {
+        return taskList;
     }
 }

@@ -22,7 +22,7 @@ public interface MailService {
     * @since 11/06/2023
     */
     public void sendEmail(String to, String subject, String text);
-
+    
     /**
     * metodo para enviar o email para um usuario.
     *
@@ -30,7 +30,7 @@ public interface MailService {
     * @author Alfredo Gabriel
     * @since 11/06/2023
     */
-    public void usuarioCadastrado(UsuarioModel usuario, String redirect);
+    public void usuarioCadastrado(UsuarioModel usuario);
 
     /**
     * metodo para salvar a mensagem de email.
@@ -41,8 +41,6 @@ public interface MailService {
     * @since 16/06/2023
     */
     public MensagemModel save(MensagemModel mensagemModel);
-
-    public void reenviarValidacaoEmail(UsuarioModel usuario, String redirect);
 
     /**
     * metodo para atualizar a mensagem de email.

@@ -1,5 +1,5 @@
 <template>
-  <div :id="name.replaceAll('.', '-')">
+  <div>
     <o-field>
       <template #default>
         <o-upload

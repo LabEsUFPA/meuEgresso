@@ -70,7 +70,6 @@ public class UsuarioAdmController {
 	 * @since 18/04/2023
 	 */
 	@GetMapping
-	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize(value = "hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<UsuarioAuthDTO> consultarUsuarios() {
@@ -133,8 +132,8 @@ public class UsuarioAdmController {
 	 * @since 16/04/2023
 	 */
 	@PutMapping(value = "/{id}")
-	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
+	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public UsuarioAuthDTO atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) throws InvalidRequestException {
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
@@ -174,8 +173,8 @@ public class UsuarioAdmController {
 	 * @since 19/04/2023
 	 */
 	@DeleteMapping(value = "/{id}")
-	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String deleteById(@PathVariable(name = "id") Integer id) {
 		UsuarioModel usuarioModel = usuarioService.findById(id);

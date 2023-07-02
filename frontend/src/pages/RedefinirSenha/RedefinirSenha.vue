@@ -87,7 +87,7 @@
                 <CustomButton
                   type="submit"
                   color="emerald"
-                  text-class="text-white font-bold text-lg p-20 w-40 sm:w-56 py-2 sm:py-6"
+                  text-class="text-white font-bold text-lg p-20 w-40 sm:w-56 py-6"
                 >
                   Redefinir senha
                 </CustomButton>
@@ -127,7 +127,7 @@
           type="button"
           tag="router"
           color="emerald"
-          text-class="text-white font-bold text-lg p-20 w-64 py-2 sm:py-6"
+          text-class="text-white font-bold text-lg p-20 w-64 py-6"
           link="/entrar"
         >
           Continuar para login
@@ -215,7 +215,7 @@
                   <CustomButton
                     type="submit"
                     color="emerald"
-                    text-class="text-white font-bold text-lg p-20 w-40 sm:w-56 py-2 sm:py-6"
+                    text-class="text-white font-bold text-lg p-20 w-40 sm:w-56 py-6"
                   >
                     Enviar e-mail
                   </CustomButton>
@@ -231,7 +231,7 @@
       v-model="showSentEmailModal"
       :hide-close-button="true"
     >
-      <div class="flex flex-col h-full justify-center items-center text-center gap-y-2 sm:gap-y-6">
+      <div class="flex flex-col h-full justify-center items-center text-center gap-y-2 sm:gap-y-10">
         <div class="flex flex-col justify-center items-center gap-y-0 sm:gap-y-4">
           <SvgIcon
             type="mdi"
@@ -243,15 +243,18 @@
             Verifique seu e-mail
           </p>
         </div>
-        <div class="flex flex-col">
-          <p class="font-medium text-md max-w-lg px-8 sm:text-lg sm:px-0">
-            Se <span class="font-bold">{{ userEmail }}</span> for correspondente a uma conta válida, será enviado um e-mail para sua caixa de entrada com um link para alterar sua senha. Se não encontrar na sua caixa de entrada, procure também na sua caixa de spam ou lixo eletrônico.
+        <div class="flex flex-col gap-y-2">
+          <p class="font-medium text-md px-8 sm:text-lg sm:px-0">
+            Enviamos um link para resetar a senha para
+          </p>
+          <p class="font-bold text-lg">
+            {{ userEmail }}
           </p>
         </div>
         <CustomButton
           tag="router"
           color="emerald"
-          text-class="text-white font-bold text-lg p-20 w-28 py-2 sm:py-6"
+          text-class="text-white font-bold text-lg p-20 w-28 py-6"
           link="/"
         >
           OK

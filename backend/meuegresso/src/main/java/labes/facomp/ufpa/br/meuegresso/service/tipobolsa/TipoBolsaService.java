@@ -60,7 +60,7 @@ public interface TipoBolsaService {
 	 * @param createdBy
 	 * @return
 	 */
-	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
 	Map<String, Integer> countEgressoForBolsa();
 }

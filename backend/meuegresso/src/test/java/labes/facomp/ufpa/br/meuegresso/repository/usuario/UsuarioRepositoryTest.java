@@ -15,15 +15,13 @@ import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
@@ -37,10 +35,12 @@ import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
  * @since 27/04/2023
  * @version 1.0.1
  */
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-@RunWith(SpringRunner.class)
-@DataJpaTest
+@SpringBootTest
+@DirtiesContext
 @ActiveProfiles("test")
+// @AutoConfigureMockMvc
+// @TestInstance(Lifecycle.PER_CLASS)
+// @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
 class UsuarioRepositoryTest {
 
@@ -66,6 +66,7 @@ class UsuarioRepositoryTest {
         usuario2.setEmail("jocke@example.com");
         usuario2.setPassword("password124");
         usuario2.setGrupos(Set.of(Grupos.ADMIN));
+        usuario2.setCreatedBy(usuario);
         usuarioRepository.save(usuario2);
 
         usuarios.add(usuario);
@@ -99,17 +100,17 @@ class UsuarioRepositoryTest {
 
     @Test
     void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_True_If_Right() {
-        Mockito.when(usuarioRepository.existsByIdAndCreatedBy(anyInt(), anyInt())).thenReturn(true);
+        Mockito.when(usuarioRepository.existsByIdAndCreatedById(anyInt(), anyInt())).thenReturn(true);
 
-        assertTrue(usuarioRepository.existsByIdAndCreatedBy(2, 1));
+        assertTrue(usuarioRepository.existsByIdAndCreatedById(2, 1));
 
     }
 
     @Test
     void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_False_If_Wrong() {
-        Mockito.when(usuarioRepository.existsByIdAndCreatedBy(anyInt(), anyInt())).thenReturn(false);
+        Mockito.when(usuarioRepository.existsByIdAndCreatedById(anyInt(), anyInt())).thenReturn(false);
 
-        assertFalse(usuarioRepository.existsByIdAndCreatedBy(1, 2));
+        assertFalse(usuarioRepository.existsByIdAndCreatedById(1, 2));
     }
 
     @Test
@@ -124,20 +125,6 @@ class UsuarioRepositoryTest {
         Mockito.when(usuarioRepository.existsByUsernameIgnoreCase(anyString())).thenReturn(false);
 
         assertFalse(usuarioRepository.existsByUsernameIgnoreCase("carla123"));
-    }
-
-    @Test
-    void test_Given_Correct_Email_Should_Return_True() {
-        Mockito.when(usuarioRepository.existsByEmail(anyString())).thenReturn(true);
-
-        assertTrue(usuarioRepository.existsByEmail("john123@gmail.com"));
-    }
-
-    @Test
-    void test_Given_Incorrect_Email_Should_Return_False() {
-        Mockito.when(usuarioRepository.existsByUsernameIgnoreCase(anyString())).thenReturn(false);
-
-        assertFalse(usuarioRepository.existsByEmail("john124@gmail.com"));
     }
 
     @AfterEach

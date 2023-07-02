@@ -28,8 +28,6 @@ public class AnuncioServiceImpl implements AnuncioService {
 
     private final AnuncioRepository anuncioRepository;
 
-    private static final String SORT_FIELD = "titulo";
-
     @Override
     public boolean deleteById(Integer id) {
         if (anuncioRepository.existsById(id)) {
@@ -41,7 +39,7 @@ public class AnuncioServiceImpl implements AnuncioService {
 
     @Override
     public Page<AnuncioModel> findAll(Integer page, Integer size, Direction direction) {
-        return anuncioRepository.findAll(PageRequest.of(page, size, Sort.by(direction, SORT_FIELD)));
+        return anuncioRepository.findAll(PageRequest.of(page, size, Sort.by(direction, "titulo")));
     }
 
     @Override
@@ -49,7 +47,7 @@ public class AnuncioServiceImpl implements AnuncioService {
     public Page<AnuncioModel> findBySearch(String tituloAnuncio, Integer[] areaEmpregoIds, Integer page, Integer size,
             Direction direction) {
         return anuncioRepository.findBySearch("%" + tituloAnuncio + "%",
-                areaEmpregoIds, PageRequest.of(page, size, Sort.by(direction, SORT_FIELD)));
+                areaEmpregoIds, PageRequest.of(page, size, Sort.by(direction, "titulo")));
     }
 
     @Override
@@ -72,8 +70,8 @@ public class AnuncioServiceImpl implements AnuncioService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
-        return anuncioRepository.existsByIdAndCreatedBy(id, createdBy);
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return anuncioRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
     @Override
@@ -81,7 +79,7 @@ public class AnuncioServiceImpl implements AnuncioService {
     public Page<AnuncioModel> findByDataExpiracaoAfter(LocalDate dataExpiracao, Integer page, Integer size,
             Direction direction) {
         return anuncioRepository.findByDataExpiracaoAfter(dataExpiracao,
-                PageRequest.of(page, size, Sort.by(direction, SORT_FIELD)));
+                PageRequest.of(page, size, Sort.by(direction, "titulo")));
     }
 
 }

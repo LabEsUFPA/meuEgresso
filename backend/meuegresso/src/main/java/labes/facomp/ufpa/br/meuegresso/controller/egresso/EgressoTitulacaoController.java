@@ -24,12 +24,8 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoTitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
-import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
-import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
-import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
-import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoTitulacaoService;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +57,6 @@ public class EgressoTitulacaoController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
-	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<EgressoTitulacaoDTO> consultarEgressoTitulacaos() {
 		return mapper.map(egressoTitulacaoService.findAll(), new TypeToken<List<EgressoTitulacaoDTO>>() {
@@ -76,8 +71,8 @@ public class EgressoTitulacaoController {
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
-	@GetMapping(params = { "egressoId", "titulacaoId" })
 	@ResponseStatus(code = HttpStatus.OK)
+	@GetMapping(params = { "egressoId", "titulacaoId" })
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public EgressoTitulacaoDTO findById(@RequestParam(required = false) Integer egressoId,
 			@RequestParam(required = false) Integer titulacaoId) {
@@ -101,7 +96,7 @@ public class EgressoTitulacaoController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public String cadastrarEgressoTitulacao(@RequestBody @Valid EgressoTitulacaoDTO egressoTitulacaoDTO) {
-		EgressoTitulacaoModel egressoTitulacaoModel = toModel(egressoTitulacaoDTO);
+		EgressoTitulacaoModel egressoTitulacaoModel = mapper.map(egressoTitulacaoDTO, EgressoTitulacaoModel.class);
 		egressoTitulacaoService.save(egressoTitulacaoModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}
@@ -124,9 +119,9 @@ public class EgressoTitulacaoController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarEgressoTitulacao(@RequestBody @Valid EgressoTitulacaoDTO egressoTitulacaoDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (egressoTitulacaoService.existsByIdAndCreatedBy(egressoTitulacaoDTO.getId(),
+		if (egressoTitulacaoService.existsByIdAndCreatedById(egressoTitulacaoDTO.getId(),
 				jwtService.getIdUsuario(token))) {
-			EgressoTitulacaoModel egressoTitulacaoModel = toModel(egressoTitulacaoDTO);
+			EgressoTitulacaoModel egressoTitulacaoModel = mapper.map(egressoTitulacaoDTO, EgressoTitulacaoModel.class);
 			egressoTitulacaoService.update(egressoTitulacaoModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
@@ -142,27 +137,14 @@ public class EgressoTitulacaoController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping(params = { "egressoId", "titulacaoId" })
-	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping(params = { "egressoId", "titulacaoId" })
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String deleteById(@RequestParam(required = false) Integer egressoId,
+	public boolean deleteById(
+			@RequestParam(required = false) Integer egressoId,
 			@RequestParam(required = false) Integer titulacaoId) {
-		if (egressoTitulacaoService.deleteById(
-			EgressoTitulacaoModelId.builder().egressoId(egressoId).titulacaoId(titulacaoId).build())) {
-			return ResponseType.SUCCESS_DELETE.getMessage();
-		}
-		return ResponseType.FAIL_DELETE.getMessage();
-	}
-
-	private EgressoTitulacaoModel toModel(EgressoTitulacaoDTO egressoTitulacaoDTO) {
-		var curso = mapper.map(egressoTitulacaoDTO.getCurso(), CursoModel.class);
-		var empresa = mapper.map(egressoTitulacaoDTO.getEmpresa(), EmpresaModel.class);
-		var titulacao = mapper.map(egressoTitulacaoDTO.getTitulacao(), TitulacaoModel.class);
-		var id = egressoTitulacaoDTO.getId();
-		return EgressoTitulacaoModel.builder().id(id).curso(curso).empresa(empresa)
-				.titulacao(titulacao).egresso(EgressoModel.builder().id(id.getEgressoId()).build()).build();
-
+		return egressoTitulacaoService
+				.deleteById(EgressoTitulacaoModelId.builder().egressoId(egressoId).titulacaoId(titulacaoId).build());
 	}
 
 }

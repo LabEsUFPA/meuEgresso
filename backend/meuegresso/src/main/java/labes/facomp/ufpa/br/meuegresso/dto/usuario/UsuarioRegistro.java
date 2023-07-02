@@ -1,7 +1,5 @@
 package labes.facomp.ufpa.br.meuegresso.dto.usuario;
 
-import java.util.Optional;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -29,7 +27,5 @@ public class UsuarioRegistro {
 
     @Pattern(regexp = "[0-9]{12}|$", message = "Informe uma matrícula válida.")
     private String registration;
-
-    Optional<String> redirect = Optional.ofNullable(null);
 
 }

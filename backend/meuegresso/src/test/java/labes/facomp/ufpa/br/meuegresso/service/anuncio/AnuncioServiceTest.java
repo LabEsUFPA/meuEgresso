@@ -167,19 +167,19 @@ class AnuncioServiceTest {
         }
 
         /**
-         * Metodo para testar o existsByIdAndCreatedBy.
+         * Metodo para testar o existsByIdAndCreatedById.
          *
          * @author Bruno Eiki
          * @since 27/04/2023
          */
         @Test
         @Order(5)
-        void testexistsByIdAndCreatedBy() {
+        void testExistsByIdAndCreatedById() {
 
-                BDDMockito.given(anuncioService.existsByIdAndCreatedBy(Mockito.anyInt(), Mockito.anyInt()))
+                BDDMockito.given(anuncioService.existsByIdAndCreatedById(Mockito.anyInt(), Mockito.anyInt()))
                                 .willReturn(true);
 
-                Boolean response = anuncioService.existsByIdAndCreatedBy(1, 1);
+                Boolean response = anuncioService.existsByIdAndCreatedById(1, 1);
                 assertTrue(response);
         }
 

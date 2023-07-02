@@ -58,10 +58,11 @@ public interface EgressoTitulacaoService {
 	/**
 	 * Método responsável por verificar se existe um determinado elemento.
 	 *
-	 * @param id        de EgressoTitulacaoModelId
+	 * @param id de EgressoTitulacaoModelId
 	 * @param createdBy
 	 * @return boolean
 	 */
-	boolean existsByIdAndCreatedBy(EgressoTitulacaoModelId id, Integer createdBy);
+	boolean existsByIdAndCreatedById(EgressoTitulacaoModelId id, Integer createdBy);
+
 
 }

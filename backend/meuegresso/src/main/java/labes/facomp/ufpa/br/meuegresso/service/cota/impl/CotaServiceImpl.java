@@ -59,8 +59,8 @@ public class CotaServiceImpl implements CotaService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
-        return cotaRepository.existsByIdAndCreatedBy(id, createdBy);
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return cotaRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
     @Override
@@ -70,5 +70,6 @@ public class CotaServiceImpl implements CotaService {
                 .forEach(e -> contagem.put(e.get(0, String.class), e.get(1, Long.class).intValue()));
         return contagem;
     }
+
 
 }

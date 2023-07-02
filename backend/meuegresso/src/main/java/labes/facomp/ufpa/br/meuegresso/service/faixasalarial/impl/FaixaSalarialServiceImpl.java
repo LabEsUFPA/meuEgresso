@@ -59,15 +59,14 @@ public class FaixaSalarialServiceImpl implements FaixaSalarialService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
-        return faixaSalarialRepository.existsByIdAndCreatedBy(id, createdBy);
+    public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
+        return faixaSalarialRepository.existsByIdAndCreatedById(id, createdBy);
     }
 
     @Override
     public Map<String, Integer> countEgressoInFaixa() {
         Map<String, Integer> countFaixa = new HashMap<>(7);
-        faixaSalarialRepository.countEgressoInFaixa()
-                .forEach(e -> countFaixa.put(e.get(0, String.class), e.get(1, Long.class).intValue()));
+        faixaSalarialRepository.countEgressoInFaixa().forEach(e -> countFaixa.put(e.get(0, String.class), e.get(1, Long.class).intValue()));
         return countFaixa;
     }
 

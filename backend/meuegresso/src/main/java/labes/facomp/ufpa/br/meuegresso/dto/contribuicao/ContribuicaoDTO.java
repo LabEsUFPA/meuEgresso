@@ -24,6 +24,4 @@ public class ContribuicaoDTO {
     @NotBlank(message = "Informe a descrição da contribuição.")
     private String descricao;
 
-    private Integer egressoId;
-
 }

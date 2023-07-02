@@ -11,8 +11,7 @@ public interface EnderecoRepository extends CrudRepository<EnderecoModel, Intege
 
     List<EnderecoModel> findAll();
 
-    boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 
-    Optional<EnderecoModel> findByCidadeIgnoreCaseAndEstadoIgnoreCaseAndPaisIgnoreCase(String cidade, String estado,
-            String pais);
+    Optional<EnderecoModel> findByCidadeIgnoreCaseAndEstadoIgnoreCaseAndPaisIgnoreCase(String cidade, String estado, String pais);
 }

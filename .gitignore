@@ -67,4 +67,3 @@ postgresDB/
 .env
 
 backend/meuegresso/data/
-frontend/package-lock.json

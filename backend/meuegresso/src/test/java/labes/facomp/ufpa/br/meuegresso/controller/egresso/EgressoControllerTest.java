@@ -17,12 +17,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -45,12 +45,13 @@ import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
+import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.GeneroModel;
 import labes.facomp.ufpa.br.meuegresso.model.TitulacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.titulacao.TitulacaoRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
+import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 
 @SpringBootTest
 @DirtiesContext
@@ -67,22 +68,22 @@ class EgressoControllerTest extends Configuracao {
         private GeneroRepository generoRepository;
 
         @Autowired
-        MockMvc mockMvc;        
+        MockMvc mockMvc;
 
-        
+        @Autowired
+        ModelMapper modelMapper;
+
+        EgressoService egressoService;
+
         EgressoDTO egressoDTO;
 
         String token;
 
+        EgressoModel egressoModel;
+
         UsuarioModel usuarioModel;
 
         GeneroModel genero;
-
-        @Autowired
-        PasswordEncoder encoder;
-
-        @Autowired
-        UsuarioRepository usuarioRepository;
 
         ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
@@ -96,27 +97,26 @@ class EgressoControllerTest extends Configuracao {
 
                 titulacaoRepository.save(TitulacaoModel.builder().nome("abc").build());
                 titulacaoRepository.save(TitulacaoModel.builder().nome("123").build());
-                final String plainPass = "teste123";
-                final String USERNAME = "username_test";
 
                 genero = new GeneroModel(43, "genero X");
                 genero = generoRepository.save(genero);
 
-                /* Usuario */
                 usuarioModel = new UsuarioModel();
-                usuarioModel.setUsername(USERNAME);
+                usuarioModel.setUsername("username");
                 usuarioModel.setNome("nome_test asdsad");
                 usuarioModel.setEmail("teste@gmail.com");
-                usuarioModel.setPassword(encoder.encode(plainPass));
+                usuarioModel.setPassword("teste123");
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
-                usuarioModel.setEmailVerificado(true);
-                usuarioModel.setAtivo(true);
-
-                usuarioModel = usuarioRepository.save(usuarioModel);
+                mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(usuarioModel)))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isCreated())
+                                .andReturn();
 
                 AuthenticationRequest authenticationRequest = new AuthenticationRequest();
                 authenticationRequest.setUsername(usuarioModel.getUsername());
-                authenticationRequest.setPassword(plainPass);
+                authenticationRequest.setPassword(usuarioModel.getPassword());
                 String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
                 MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
@@ -145,7 +145,7 @@ class EgressoControllerTest extends Configuracao {
                 egressoCadastro.setNascimento(LocalDate.now());
                 egressoCadastro.setGeneroId(EGRESSO_ID);
                 egressoCadastro.setMatricula("123432312345");
-                egressoCadastro.setNome("teste nome");
+                egressoCadastro.setNome("teste_nome");
                 egressoCadastro.setContribuicao(ContribuicaoDTO.builder().descricao("ljhfdakljdljdhs").build());
                 egressoCadastro.setDepoimento(DepoimentoDTO.builder().descricao("sffsfsffd").build());
 

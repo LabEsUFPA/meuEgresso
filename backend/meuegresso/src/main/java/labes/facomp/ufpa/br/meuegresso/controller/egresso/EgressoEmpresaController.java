@@ -48,6 +48,7 @@ public class EgressoEmpresaController {
 	private final ModelMapper mapper;
 
 	private final JwtService jwtService;
+
 	/**
 	 * Endpoint responsável por retornar a lista de egressoEmpresa cadastrados no
 	 * banco de dados.
@@ -57,7 +58,6 @@ public class EgressoEmpresaController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
-	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public List<EgressoMapaDTO> consultarEgressoEmpresas() {
 		return mapper.map(egressoEmpresaService.findAll(), new TypeToken<List<EgressoEmpresaDTO>>() {
@@ -72,11 +72,15 @@ public class EgressoEmpresaController {
 	 * @author Alfredo Gabriel, Camilo Santos
 	 * @since 21/04/2023
 	 */
-	@GetMapping(params = { "egressoId", "empresaId", "enderecoId" })
 	@ResponseStatus(code = HttpStatus.OK)
+	@GetMapping(params = { "egressoId", "empresaId" })
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public EgressoEmpresaDTO findById(@RequestParam(required = false) Integer egressoId, @RequestParam(required = false) Integer empresaId, @RequestParam(required = false) Integer enderecoId) {
-		return mapper.map(egressoEmpresaService.findById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).enderecoId(enderecoId).build()),EgressoEmpresaDTO.class);
+	public EgressoEmpresaDTO findById(@RequestParam(required = false) Integer egressoId,
+			@RequestParam(required = false) Integer empresaId) {
+		return mapper.map(
+				egressoEmpresaService
+						.findById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).build()),
+				EgressoEmpresaDTO.class);
 	}
 
 	/**
@@ -115,7 +119,7 @@ public class EgressoEmpresaController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarEgressoEmpresa(@RequestBody @Valid EgressoEmpresaDTO egressoEmpresaDTO,
 			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (egressoEmpresaService.existsByIdAndCreatedBy(egressoEmpresaDTO.getId(), jwtService.getIdUsuario(token))) {
+		if (egressoEmpresaService.existsByIdAndCreatedById(egressoEmpresaDTO.getId(), jwtService.getIdUsuario(token))) {
 			EgressoEmpresaModel egressoEmpresaModel = mapper.map(egressoEmpresaDTO, EgressoEmpresaModel.class);
 			egressoEmpresaService.update(egressoEmpresaModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();
@@ -132,12 +136,13 @@ public class EgressoEmpresaController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping(params = { "egressoId", "empresaId", "enderecoId" })
-	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping(params = { "egressoId", "empresaId" })
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(@RequestParam(required = false) Integer egressoId,@RequestParam(required = false) Integer empresaId, @RequestParam(required = false) Integer enderecoId) {
-		return egressoEmpresaService.deleteById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).enderecoId(enderecoId).build());
+	public boolean deleteById(@RequestParam(required = false) Integer egressoId,
+			@RequestParam(required = false) Integer empresaId) {
+		return egressoEmpresaService
+				.deleteById(EgressoEmpresaModelId.builder().egressoId(egressoId).empresaId(empresaId).build());
 	}
 
 }

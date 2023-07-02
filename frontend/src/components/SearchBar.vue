@@ -1,7 +1,7 @@
 <template>
   <div
-    class="flex w-full gap-2 items-center outline outline-1 outline-indigo-300 p-1 rounded-md"
-    :class="{ ['outline-[2px]']: searchbarFocused }"
+    class="flex w-full gap-2 items-center border-[1px] border-indigo-300 p-1 rounded-md"
+    :class="{ ['border-[2px]']: searchbarFocused }"
   >
     <SvgIcon
       type="mdi"
@@ -10,10 +10,7 @@
       class="text-indigo-300 ml-2"
     />
 
-    <OField
-      override
-      :root-class="classNames(['flex h-full w-full'])"
-    >
+    <OField :root-class="classNames(['flex h-full w-full'])">
       <OInput
         override
         v-model="searchValue"

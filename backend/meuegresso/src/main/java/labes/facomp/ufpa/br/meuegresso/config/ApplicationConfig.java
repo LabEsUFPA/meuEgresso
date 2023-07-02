@@ -4,8 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -24,9 +22,7 @@ import lombok.RequiredArgsConstructor;
  * @since 26/03/2023
  * @version 1.0
  */
-@EnableAsync
 @Configuration
-@EnableScheduling
 @RequiredArgsConstructor
 @EnableConfigurationProperties(value = { RsaKeyProperties.class, TokenProperties.class, CorsProperties.class })
 public class ApplicationConfig {

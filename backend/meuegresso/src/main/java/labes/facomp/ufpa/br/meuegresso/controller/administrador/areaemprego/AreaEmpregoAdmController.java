@@ -69,7 +69,7 @@ public class AreaEmpregoAdmController {
 	 * @since 18/05/2023
 	 */
 	@PutMapping
-	@ResponseStatus(code = HttpStatus.CREATED)
+	@ResponseStatus(code = HttpStatus.ACCEPTED)
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SECRETARIO')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarAreaEmprego(@RequestBody @Valid AreaEmpregoDTO areaEmpregoDTO)

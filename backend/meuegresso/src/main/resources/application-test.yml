@@ -49,4 +49,4 @@ server:
 token:
   domain: teste.com
   expiresHours: 3
-fotosDir: test/java/labes/facomp/ufpa/br/meuegresso/fotosTeste/
+fotosDir: test/fotosTeste/

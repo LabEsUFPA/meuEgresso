@@ -83,8 +83,7 @@
                 <CustomDatepicker
                   name="dataEnvio"
                   :icon-path="mdiCalendarEdit"
-                  :min-date="new Date()"
-                  :max-date="new Date(8640000000000000)"
+                  :mask="['##/##/####', '##/##/##']"
                   custom-label
                   required
                 >

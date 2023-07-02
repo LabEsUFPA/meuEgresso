@@ -7,7 +7,6 @@ import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +18,6 @@ import lombok.NoArgsConstructor;
  * @version 1.1
  */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class EgressoTitulacaoDTO {

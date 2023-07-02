@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -60,7 +59,6 @@ import labes.facomp.ufpa.br.meuegresso.repository.empresa.EmpresaRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.endereco.EnderecoRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.faixasalarial.FaixaSalarialRepository;
 import labes.facomp.ufpa.br.meuegresso.repository.genero.GeneroRepository;
-import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
 
 /**
  * Teste unitario para o mapa
@@ -111,12 +109,6 @@ class MapaControllerTest extends Configuracao {
         @Autowired
         MockMvc mockMvc;
 
-        @Autowired
-        PasswordEncoder encoder;
-
-        @Autowired
-        UsuarioRepository usuarioRepository;
-
         String token;
 
         UsuarioModel usuarioModel;
@@ -145,23 +137,23 @@ class MapaControllerTest extends Configuracao {
         @BeforeAll
         void setUp() throws Exception {
 
-                final String plainText = "teste123";
-
-                /* Usuario */
                 usuarioModel = new UsuarioModel();
                 usuarioModel.setUsername(USERNAME);
                 usuarioModel.setNome("nome_test asdsad");
                 usuarioModel.setEmail("teste@gmail.com");
-                usuarioModel.setPassword(encoder.encode(plainText));
+                usuarioModel.setPassword("teste123");
                 usuarioModel.setGrupos(Set.of(Grupos.ADMIN));
-                usuarioModel.setEmailVerificado(true);
-                usuarioModel.setAtivo(true);
 
-                usuarioModel = usuarioRepository.save(usuarioModel);
+                mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(usuarioModel)))
+                                .andDo(MockMvcResultHandlers.print())
+                                .andExpect(status().isCreated())
+                                .andReturn();
 
                 AuthenticationRequest authenticationRequest = new AuthenticationRequest();
                 authenticationRequest.setUsername(usuarioModel.getUsername());
-                authenticationRequest.setPassword(plainText);
+                authenticationRequest.setPassword(usuarioModel.getPassword());
                 String objectJson = objectMapper.writeValueAsString(authenticationRequest);
 
                 MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")

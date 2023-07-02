@@ -31,8 +31,7 @@ public interface ContribuicaoService {
 	public ContribuicaoModel findById(Integer id);
 
 	/**
-	 * Método responsável por encontrar um determinado contribuicao pelo seu
-	 * egresso.
+	 * Método responsável por encontrar um determinado contribuicao pelo seu egresso.
 	 *
 	 * @param id ID de um contribuicao
 	 * @return
@@ -40,8 +39,7 @@ public interface ContribuicaoService {
 	public ContribuicaoModel findByEgressoId(Integer idEgresso);
 
 	/**
-	 * Método responsável por encontrar um determinado contribuicao pelo seu
-	 * egresso.
+	 * Método responsável por encontrar um determinado contribuicao pelo seu egresso.
 	 *
 	 * @param id ID de um contribuicao
 	 * @return
@@ -77,5 +75,5 @@ public interface ContribuicaoService {
 	 * @param createdBy
 	 * @return
 	 */
-	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
+    boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
 }
