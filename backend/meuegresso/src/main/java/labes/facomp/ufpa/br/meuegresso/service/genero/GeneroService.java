@@ -19,7 +19,7 @@ public interface GeneroService {
 	 * Método responsável por persistir determinado genero no banco de dados.
 	 *
 	 * @param generoModel Dados do genero
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link GeneroModel} Dados após serem gravados no banco de dados.
 	 */
 	public GeneroModel save(GeneroModel generoModel);
 
@@ -27,14 +27,14 @@ public interface GeneroService {
 	 * Método responsável por encontrar um determinado genero por sua ID.
 	 *
 	 * @param id ID de um genero
-	 * @return
+	 * @return {@link GeneroModel}
 	 */
 	public GeneroModel findById(Integer id);
 
 	/**
 	 * Método responsável por encontrar todos os generos cadastrados.
 	 *
-	 * @return Lista de objetos da classe GeneroModel.
+	 * @return {@link List<GeneroModel>} Lista de objetos da classe GeneroModel.
 	 */
 	public List<GeneroModel> findAll();
 
@@ -42,7 +42,8 @@ public interface GeneroService {
 	 * Método responsável por atualizar dados de um genero cadastrado.
 	 *
 	 * @param genero objeto genero
-	 * @return
+	 * @throws InvalidRequestException
+	 * @return {@link GeneroModel}
 	 */
 	public GeneroModel update(GeneroModel genero) throws InvalidRequestException;
 
@@ -50,6 +51,7 @@ public interface GeneroService {
 	 * Método responsável por deletar um genero cadastrado por sua ID.
 	 *
 	 * @param id ID de um genero
+	 * @return {@link boolean}
 	 */
 	public boolean deleteById(Integer id);
 
@@ -58,9 +60,14 @@ public interface GeneroService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return {@link boolean}
 	 */
 	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
+	/**
+	 * Método responsável por contar a quantidade de egressos por gênero.
+	 *
+	 * @return {@link Map<String, Integer>}
+	 */
 	public Map<String, Integer> countEgressoByGenero();
 }

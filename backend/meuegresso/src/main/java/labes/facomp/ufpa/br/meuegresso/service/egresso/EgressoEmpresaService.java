@@ -21,7 +21,7 @@ public interface EgressoEmpresaService {
 	 * dados.
 	 *
 	 * @param egressoEmpresaModel Dados do egressoEmpresa
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link EgressoEmpresaModel} Dados após serem gravados no banco de dados.
 	 */
 	public EgressoEmpresaModel save(EgressoEmpresaModel egressoEmpresaModel);
 
@@ -29,17 +29,22 @@ public interface EgressoEmpresaService {
 	 * Método responsável por encontrar um determinado egressoEmpresa por sua ID.
 	 *
 	 * @param id EgressoEmpresaModelId
-	 * @return EgressoEmpresaModel
+	 * @return {@link EgressoEmpresaModel} EgressoEmpresaModel
 	 */
 	public EgressoEmpresaModel findById(EgressoEmpresaModelId id);
 
 	/**
 	 * Método responsável por encontrar todos os egressoEmpresas cadastrados.
 	 *
-	 * @return Lista de objetos da classe EgressoEmpresaModel.
+	 * @return {@link List<EgressoEmpresaModel>} Lista de objetos da classe EgressoEmpresaModel.
 	 */
 	public List<EgressoEmpresaModel> findAll();
 
+	/**
+	 * Método responsável por encontrar todos os egressoEmpresas cadastrados nos quais os usuarios sejam validos.
+	 *
+	 * @return {@link List<EgressoEmpresaModel>} Lista de objetos da classe EgressoEmpresaModel.
+	 */
 	public List<EgressoEmpresaModel> findAllByEgressoUsuarioValidoIsTrue();
 
 
@@ -47,7 +52,8 @@ public interface EgressoEmpresaService {
 	 * Método responsável por atualizar dados de um egressoEmpresa cadastrado.
 	 *
 	 * @param egressoEmpresa objeto egressoEmpresa
-	 * @return EgressoEmpresaModel
+	 * @throws InvalidRequestException
+	 * @return {@link EgressoEmpresaModel} objeto de EgressoEmpresaModel
 	 */
 	public EgressoEmpresaModel update(EgressoEmpresaModel egressoEmpresa) throws InvalidRequestException;
 
@@ -55,6 +61,7 @@ public interface EgressoEmpresaService {
 	 * Método responsável por deletar um egressoEmpresa cadastrado por sua ID.
 	 *
 	 * @param id de EgressoEmpresaModelId
+	 * @return {@link boolean}
 	 */
 	public boolean deleteById(EgressoEmpresaModelId id);
 
@@ -63,21 +70,21 @@ public interface EgressoEmpresaService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return boolean
+	 * @return {@link boolean} boolean
 	 */
 	boolean existsByIdAndCreatedBy(EgressoEmpresaModelId id, Integer createdBy);
 
 	/**
 	 * Método responsável por retornar os dados para o mapa sociodemográfico
 	 *
-	 * @return List<EgressoMapaDTO>
+	 * @return {@link List<EgressoEmpresaModel>}
 	 */
 	public List<EgressoEmpresaModel> findAllEgressoMapa();
 
 	/**
 	 * Método responsável por retornar os dados para o grafico de emprego
 	 *
-	 * @return List<EmpresaGraficoDTO>
+	 * @return {@link List<EmpresaGraficoDTO>}
 	 */
 	public List<EmpresaGraficoDTO> countEgressoByEmpresas();
 

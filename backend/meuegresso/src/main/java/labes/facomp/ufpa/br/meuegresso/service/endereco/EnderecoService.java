@@ -18,7 +18,7 @@ public interface EnderecoService {
 	 * Método responsável por persistir determinado endereco no banco de dados.
 	 *
 	 * @param enderecoModel Dados do endereco
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link EnderecoModel} Dados após serem gravados no banco de dados.
 	 */
 	public EnderecoModel save(EnderecoModel enderecoModel);
 
@@ -26,14 +26,14 @@ public interface EnderecoService {
 	 * Método responsável por encontrar um determinado endereco por sua ID.
 	 *
 	 * @param id ID de um endereco
-	 * @return
+	 * @return {@link EnderecoModel}
 	 */
 	public EnderecoModel findById(Integer id);
 
 	/**
 	 * Método responsável por encontrar todos os enderecos cadastrados.
 	 *
-	 * @return Lista de objetos da classe EnderecoModel.
+	 * @return {@link List<EnderecoModel>} Lista de objetos da classe EnderecoModel.
 	 */
 	public List<EnderecoModel> findAll();
 
@@ -41,7 +41,8 @@ public interface EnderecoService {
 	 * Método responsável por atualizar dados de um endereco cadastrado.
 	 *
 	 * @param endereco objeto endereco
-	 * @return
+	 * @throws InvalidRequestException
+	 * @return {@link EnderecoModel}
 	 */
 	public EnderecoModel update(EnderecoModel endereco) throws InvalidRequestException;
 
@@ -49,6 +50,7 @@ public interface EnderecoService {
 	 * Método responsável por deletar um endereco cadastrado por sua ID.
 	 *
 	 * @param id ID de um endereco
+	 * @return {@link boolean}
 	 */
 	public boolean deleteById(Integer id);
 
@@ -57,9 +59,17 @@ public interface EnderecoService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return {@link boolean}
 	 */
 	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
+	/**
+	 * Método responsável por encontrar endereço pela cidade, estado e país.
+	 *
+	 * @param cidade
+	 * @param estado
+	 * @param pais
+	 * @return {@link EnderecoModel}
+	 */
 	EnderecoModel findByCidadeAndEstadoAndPais(String cidade, String estado, String pais);
 }

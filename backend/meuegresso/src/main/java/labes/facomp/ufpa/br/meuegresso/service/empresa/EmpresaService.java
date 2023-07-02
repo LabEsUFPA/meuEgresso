@@ -22,7 +22,7 @@ public interface EmpresaService {
 	 * Método responsável por persistir determinado empresa no banco de dados.
 	 *
 	 * @param empresaModel Dados do empresa
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link EmpresaModel} Dados após serem gravados no banco de dados.
 	 */
 	public EmpresaModel save(EmpresaModel empresaModel);
 
@@ -30,14 +30,17 @@ public interface EmpresaService {
 	 * Método responsável por encontrar um determinado empresa por sua ID.
 	 *
 	 * @param id ID de um empresa
-	 * @return
+	 * @return {@link EmpresaModel}
 	 */
 	public EmpresaModel findById(Integer id);
 
 	/**
 	 * Método responsável por encontrar todos os empresas cadastrados.
 	 *
-	 * @return Lista de objetos da classe EmpresaModel.
+	 * @param page
+	 * @param size
+	 * @param direction
+	 * @return {@link Page<EmpresaModel>} Lista de objetos da classe EmpresaModel.
 	 */
 	public Page<EmpresaModel> findAll(Integer page, Integer size, Direction direction);
 
@@ -45,14 +48,20 @@ public interface EmpresaService {
 	 * Método responsável por encontrar todos os empresas referentes à empresa
 	 * cadastrados.
 	 *
-	 * @return Lista de objetos da classe EmpresaModel.
+	 * @param page
+	 * @param size
+	 * @param direction
+	 * @return {@link Page<EmpresaModel>} Lista de objetos da classe EmpresaModel.
 	 */
 	public Page<EmpresaModel> findAllByIsEmpregoTrue(Integer page, Integer size, Direction direction);
 
 	/**
 	 * Método responsável por encontrar todos as universidades cadastrados.
 	 *
-	 * @return Lista de objetos da classe EmpresaModel.
+	 * @param page
+	 * @param size
+	 * @param direction
+	 * @return {@link Page<EmpresaModel>} Lista de objetos da classe EmpresaModel.
 	 */
 	public Page<EmpresaModel> findAllByIsEmpregoFalse(Integer page, Integer size, Direction direction);
 
@@ -60,7 +69,7 @@ public interface EmpresaService {
 	 * Método responsável por atualizar dados de um empresa cadastrado.
 	 *
 	 * @param empresa objeto empresa
-	 * @return
+	 * @return {@link EmpresaModel}
 	 */
 	public EmpresaModel update(EmpresaModel empresa) throws InvalidRequestException;
 
@@ -68,6 +77,7 @@ public interface EmpresaService {
 	 * Método responsável por deletar um empresa cadastrado por sua ID.
 	 *
 	 * @param id ID de um empresa
+	 * @return {@link boolean}
 	 */
 	public boolean deleteById(Integer id);
 
@@ -76,10 +86,16 @@ public interface EmpresaService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return {@link boolean}
 	 */
 	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento pelo nome.
+	 *
+	 * @param nome
+	 * @return {@link EmpresaModel}
+	 */
 	public EmpresaModel findByNome(String nome);
 
 	/**

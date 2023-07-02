@@ -39,9 +39,13 @@ public interface UsuarioService extends UserDetailsService {
 	 */
 	public UsuarioModel findById(Integer idUsuario);
 
-
+	/**
+	 * Método responsável por encontrar um determinado usuário por seu email.
+	 *
+	 * @param email email de um usuário
+	 * @return {@link UsuarioModel}
+	 */
 	public UsuarioModel findByEmail(String email);
-
 
 	/**
 	 * Método responsável por encontrar todos os usuários cadastrados.
@@ -75,18 +79,35 @@ public interface UsuarioService extends UserDetailsService {
 	public UsuarioModel loadUserByUsername(String username);
 
 	/**
-	 * Método responsável por verificar se existe um determinado elemento.
+	 * Método responsável por verificar se existe um usuario pela Id e pela Id de quem foi criado.
 	 *
 	 * @param id
 	 * @param createdBy
 	 * @return {@link boolean}
 	 */
 	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
-
+	
+	/**
+	 * Método responsável por verificar se existe um usuario pelo username.
+	 *
+	 * @param username
+	 * @return {@link boolean}
+	 */
 	public boolean existsByUsername(String username);
 
+	/**
+	 * Método responsável por verificar se existe um usuario pelo email.
+	 *
+	 * @param email
+	 * @return {@link boolean}
+	 */
 	public boolean existsByEmail(String email);
 
+	/**
+	 * Método responsável por retornar email e data de criacao de usuarios ativos.
+	 *
+	 * @return {@link Map<String, LocalDateTime>}
+	 */
 	public Map<String, LocalDateTime> findByAtivo();
 
 	/**
@@ -115,8 +136,20 @@ public interface UsuarioService extends UserDetailsService {
 	public Page<NotificacaoDTO> getStatus(String nome, String status, Integer page, Integer size,
 			Direction direction);
 
+	/**
+	 * Método responsável por salvar o usuario como valido.
+	 *
+	 * @param id
+	 * @return {@link boolean}
+	 */
 	public boolean toggleValido(Integer id) throws NotFoundException;
 
+	/**
+	 * Método responsável por salvar o usuario como ativo.
+	 *
+	 * @param id
+	 * @return {@link boolean}
+	 */
 	public boolean toggleAtivo(Integer id) throws NotFoundException;
 
 }
