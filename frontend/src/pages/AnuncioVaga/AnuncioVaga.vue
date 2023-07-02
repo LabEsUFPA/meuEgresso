@@ -20,9 +20,9 @@
 
         <div class="flex w-12 h-12 justify-center object-cover items-center rounded-full bg-cyan-800 overflow-hidden">
           <img
-            v-if="fotoUsuario"
-            @error="!fotoUsuario"
-            :src="fotoUsuario"
+            v-if="imageFlags.get(id)"
+            @error="imageFlags.set(id, false)"
+            :src="$store.anuncio.createdByUser.foto"
             class="w-12 h-12 object-cover rounded-full border-2 border-sky-200/80"
           >
           <img
@@ -207,7 +207,7 @@ $store.getAnuncioId(parseInt(id.toString()))
 const $loginStore = useLoginStore()
 const tipoUsuario = ref('')
 const userId = ref(0)
-const fotoUsuario = ref($store.anuncio.createdByUser.foto)
+const imageFlags = ref(new Map())
 
 onMounted(() => {
   if ($loginStore.loggedIn) {
@@ -216,6 +216,7 @@ onMounted(() => {
   if (tipoUsuario.value === 'EGRESSO') {
     userId.value = $loginStore.getUserData()?.idUsuario ?? 0
   }
+  imageFlags.value.set(id, $store.anuncio.createdByUser.foto !== undefined)
 })
 
 const openDeleteConfirmation = ref(false)

@@ -10,6 +10,7 @@
           v-if="fotoUsuario !== '' && foto"
           @error="fotoUsuario = ''"
           :src="fotoUsuario"
+          class="w-full h-full object-cover rounded-full"
         >
 
         <SvgIcon

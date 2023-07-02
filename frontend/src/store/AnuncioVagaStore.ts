@@ -83,9 +83,9 @@ export const useAnuncioVagaStore = defineStore('AnuncioVaga', {
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
         this.anuncios = response.data?.content.map((elem: any) => {
-          const createdByUserId = elem.createdByUser?.id ?? 'valor_padrao_id'
-          const egressoId = elem.createdByUser?.egresso?.id ?? 'valor_padrao_egresso_id'
-          const foto = elem.createdByUser?.foto ?? 'valor_padrao_foto'
+          const createdByUserId = elem.createdByUser?.id ?? 0
+          const egressoId = elem.createdByUser?.egresso?.id ?? 0
+          const foto = elem.createdByUser?.foto ?? ''
 
           return {
             id: elem.id,

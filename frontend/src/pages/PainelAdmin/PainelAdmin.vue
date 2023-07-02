@@ -284,6 +284,7 @@
                   v-if="imageFlags.get(egresso.id)"
                   @error="imageFlags.set(egresso.id, false)"
                   :src="egresso.foto"
+                  class="w-full h-full object-cover rounded-full"
                 >
 
                 <SvgIcon

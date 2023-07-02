@@ -3,9 +3,9 @@
     <div class="flex gap-4 px-6 sm:px-8 pt-6 sm:pt-8 pb-4 items-center border-b-[1px] border-b-gray-200">
       <div class="flex w-8 h-8 justify-center object-cover items-center bg-white rounded-full overflow-hidden">
         <img
-          v-if="fotoUsuario"
-          @error="!fotoUsuario"
-          :src="fotoUsuario"
+          v-if="imageFlags.get(id)"
+          @error="imageFlags.set(id, false)"
+          :src="foto"
           class="w-8 h-8 object-cover rounded-full border-2 border-sky-200/80"
         >
         <img
@@ -81,7 +81,7 @@
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiBullhorn, mdiChevronRight } from '@mdi/js'
 import { useLoginStore } from 'src/store/LoginStore'
-import { ref, defineProps } from 'vue'
+import { ref, defineProps, onMounted } from 'vue'
 import CustomButton from 'src/components/CustomButton.vue'
 import eagle from 'src/assets/eagle.svg'
 
@@ -98,10 +98,14 @@ const props = defineProps<{
   foto?: string
 }>()
 
+const imageFlags = ref(new Map())
 const fotoUsuario = ref(props.foto)
-
+console.log(props.nome, fotoUsuario.value)
 if ($loginStore.loggedIn) {
   tipoUsuario.value = $loginStore.getUserData()?.scope ?? ''
 }
+onMounted(async () => {
+  imageFlags.value.set(props.id, props.foto !== undefined)
+})
 
 </script>
