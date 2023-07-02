@@ -190,12 +190,10 @@ onMounted(async () => {
 
   watch(filtersByName, () => {
     currentPage.value = 0
-    console.log(filtersByName)
     $store.fetchNotificacoes(filtersByName.value, currentPage.value, size.value)
   })
 })
 const openModalFilters = () => {
-  console.log('abriu modal')
   isModalFiltersOpen.value = true
 }
 

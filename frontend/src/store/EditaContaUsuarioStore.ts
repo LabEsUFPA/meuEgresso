@@ -17,7 +17,6 @@ export const useEditaContaUsuarioStore = defineStore('EditaContaUsuario', {
         route: '/usuario'
 
       })
-      console.log(response)
       if (response?.status === 200) {
         this.usuario.nomeCompleto = response.data?.nome
         this.usuario.email = response.data?.email

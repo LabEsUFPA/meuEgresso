@@ -195,7 +195,6 @@ const schema = object().shape({
   username: string().required('Informe um nome de usuário').trim().matches(/^[A-Za-z0-9_.-]{4,}$/, 'Use apenas letras, números e os seguintes caracteres . _ -'),
   confirmationEmail: string().email().required('Confirme seu e-mail').oneOf([refYup('email')], 'E-mail diferente').matches(/^([a-zA-Z0-9]+([._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*(\.(com|br|org|jus)))?$/, 'Email inválido'),
   password: string().test('required', 'Informe uma senha', function (value) {
-    console.log(!boolSenha.value)
     if (boolSenha.value) {
       return !!value
     }

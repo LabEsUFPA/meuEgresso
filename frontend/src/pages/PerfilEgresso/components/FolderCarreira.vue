@@ -102,8 +102,8 @@ const form = ref<typeof Form | null>(null)
 
 const selectOpts = ref({
   tipoAluno: ['Graduação', 'Pós-graduação'],
-  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Programador', '', 'Outros'],
-  setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/', 'Outros']
+  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Programador', 'Analista', 'Outros'],
+  setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docência', 'Outros']
 })
 interface Props {
   isInput?: boolean

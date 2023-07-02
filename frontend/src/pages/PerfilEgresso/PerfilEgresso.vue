@@ -903,7 +903,6 @@ watch(() => $route.params, async () => {
 
 function handleStatus (response: any, folderLocation: string) {
   if (response.status !== 201) {
-    console.log(response.status)
     dialogFalha.value = true
     errorText.value = response.data?.message ? response.data.message : 'Ocorreu um problema na requisição'
     error.value = true
@@ -932,7 +931,6 @@ async function handleSubmitHeader (values: any) {
   if (stagedChanges.value.profileHead.removedImage) {
     responseImage = await removeImageEgresso()
     stagedChanges.value.profileHead.removedImage = false
-    console.log('stagedChange')
   } else {
     responseImage = await profileImageSave()
   }
@@ -1168,8 +1166,8 @@ function toggleIsInput (FolderLabel: string) {
 
 const selectOpts = ref({
   tipoAluno: ['Graduação', 'Pós-graduação'],
-  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Programador', '', 'Outros'],
-  setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/', 'Outros']
+  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Programador', 'Analista', 'Outros'],
+  setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docência', 'Outros']
 })
 function onInvalid (e: any) {
   // updateEgressoDataModel(e)
@@ -1311,9 +1309,6 @@ async function fetchUpdateEgresso () {
 
   // Cotas
   let cotasEgresso = ''
-  if (json.id === 0) {
-    console.log('wttffff')
-  }
   imageEgressoUrl = await handleEgressoImage(json.id)
   for (const element of json.cotas) {
     $store.tiposCota.forEach(option => {
@@ -1322,7 +1317,6 @@ async function fetchUpdateEgresso () {
       }
     })
   }
-  console.log(json)
   dataEgresso.value = {
     egressoId: json.id,
     generoId: json.genero.id,
@@ -1472,10 +1466,7 @@ onMounted(() => {
   estadoInput = document.querySelector('.carreira-estado') as HTMLInputElement
 
   cidadeInput = document.querySelector('.carreira-cidade') as HTMLInputElement
-  console.log(cidadeInput)
   watch(() => dataEgresso.value.localizacao.pais, (newValue) => {
-    console.log(cidadeInput)
-
     formCarreira.value?.setFieldValue('carreira.cidade', '')
     formCarreira.value?.setFieldValue('carreira.estado', '')
     if (formCarreira.value) {

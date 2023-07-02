@@ -24,7 +24,6 @@ export const useNotificacaoStore = defineStore('Notificacao', {
         route: '/administrador/dashboard/notificacaoStatus',
         params: { status, page, size, direction: 'DESC' }
       })
-      console.log(response)
       if (response?.status === 200) {
         this.totalPages = response.data?.totalPages
         this.notificacoes = response.data?.content.map((elem: any) => ({

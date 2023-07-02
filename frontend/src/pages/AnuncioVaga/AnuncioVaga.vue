@@ -235,7 +235,6 @@ const formataSalario = (value:number) => {
     style: 'currency',
     currency: 'BRL'
   })
-  console.log(value)
   return formattedValue
 }
 

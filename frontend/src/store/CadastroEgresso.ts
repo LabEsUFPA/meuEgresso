@@ -161,7 +161,6 @@ export const useCadastroEgressoStore = defineStore('CadastroEgresso', {
         route: `/empresa/universidade?page=${this.pageInstituicao}&size=15&direction=ASC${query !== '' ? '&nome=' + query : ''}`
       })
       this.isFetchingEmpresas = false
-
       if (response?.status === 200 && response.data != null) {
         this.pageInstituicao += 1
         this.totalPagesInstituicao = response.data.totalPages

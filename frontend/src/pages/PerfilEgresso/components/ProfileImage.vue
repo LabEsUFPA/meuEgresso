@@ -186,7 +186,6 @@ function cleanImageState () {
   file.value = null
   imageEgressoFile = null
   isValid.value.value = true
-  console.log('clean')
   $emit('clean')
 }
 

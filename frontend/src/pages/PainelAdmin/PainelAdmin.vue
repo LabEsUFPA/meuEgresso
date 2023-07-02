@@ -424,11 +424,9 @@ const graphData = computed(() => ({
         ]
         if (selectedString.value === 'mes') {
           const date = new Date(key + 'T00:00:00')
-          console.log(key, date.toLocaleDateString(), date.getMonth())
           return `${meses[date.getMonth()]}/${date.getFullYear()}`
         } else {
           const date = new Date(key + 'T00:00:00')
-          console.log(key, date.toLocaleDateString(), date.getMonth())
           return `${date.toLocaleDateString()}`
         }
       }

@@ -78,19 +78,16 @@ async function getCidades (query: string, idEstado: number, page: number): Promi
 
 async function getPaisById (id: number): Promise<string> {
   const pais: ResponseType = (await Axios.get(`/pais/${id}`)).data
-  console.log(pais)
   return pais.nome
 }
 
 async function getEstadoById (id: number): Promise<string> {
   const pais: ResponseType = (await Axios.get(`/estado/${id}`)).data
-  console.log(pais)
   return pais.nome
 }
 
 async function getCidadeById (id: number): Promise<string> {
   const pais: ResponseType = (await Axios.get(`/cidade/${id}`)).data
-  console.log(pais)
   return pais.nome
 }
 
