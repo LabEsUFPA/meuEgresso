@@ -63,7 +63,7 @@
               />
               <CustomInput
                 name="confirmationEmail"
-                label="Confirmar email"
+                label=""
                 type="email"
                 :required="true"
                 :icon-path="mdiEmail"

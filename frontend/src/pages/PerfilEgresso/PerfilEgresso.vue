@@ -1231,8 +1231,8 @@ function toggleIsInput (FolderLabel: string) {
 
 const selectOpts = ref({
   tipoAluno: ['Graduação', 'Pós-graduação'],
-  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Programador', 'Analísta', 'Outros'],
-  setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/Docencia', 'Outros']
+  areaAtuacao: ['Desempregado', 'Computação', 'Pesquisa', 'Programador', '', 'Outros'],
+  setorAtuacao: ['Empresarial', 'Público', 'Terceiro Setor', 'Magistério/', 'Outros']
 })
 function onInvalid (e: any) {
   // updateEgressoDataModel(e)
