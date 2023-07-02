@@ -1157,9 +1157,9 @@ async function handleSubmitCarreira (values: any) {
 
       },
       endereco: {
-        cidade: jsonResponse.emprego.empresa.cidade,
-        estado: jsonResponse.emprego.empresa.estado,
-        pais: jsonResponse.emprego.empresa.pais
+        cidade: jsonResponse.emprego?.empresa?.cidade,
+        estado: jsonResponse.emprego?.empresa?.estado,
+        pais: jsonResponse.emprego?.empresa?.pais
       },
       empresa: {
         id: 1,
