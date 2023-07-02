@@ -48,7 +48,7 @@ public class EgressoPublicDTO {
     @Pattern(regexp = "^(https?:\\/\\/)?(www\\.)?lattes\\.cnpq\\.br\\/(\\d+)$", message = "Informe um perfil Lattes válido. Ex: http://lattes.cnpq.br/0893154395471579")
     private String lattes;
 
-    @Pattern(regexp = "^https?://(www\\.)?linkedin\\.com/in/([a-zA-Z0-9_-]+)$", message = "Informe um Linkedin válido. Ex: https://www.linkedin.com/in/alfredo-gabriel-de-sousa-oliveia/")
+    @Pattern(regexp = "\\bhttps?:\\/\\/(?:www\\.)?(?:br\\.)?linkedin\\.com\\/in\\/[\\w-]+\\/?", message = "Informe um Linkedin válido. Ex: https://www.linkedin.com/in/alfredo-gabriel-de-sousa-oliveia/")
     private String linkedin;
 
     @Valid
