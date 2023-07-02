@@ -9,8 +9,9 @@
 import { ref, onMounted } from 'vue'
 import { useHomeStore } from 'src/store/HomeStore'
 import SociodemographicMap from './components/SociodemographicMap.vue'
-import { City } from 'country-state-city'
 import { type models } from 'src/@types'
+import apiEnderecos from 'src/services/apiEnderecos'
+
 interface EgressoMapa extends models.EgressoMapa {}
 
 const loading = ref(true)
@@ -27,12 +28,12 @@ const getEgresso = async () => {
   const data = store.egressList
   const filtered = new Map<string, EgressoMapa[]>()
 
-  data.forEach(egresso => {
-    const cidade = City.getCitiesOfState(egresso.endereco.pais, egresso.endereco.estado).filter(elem => elem.name === egresso.endereco.cidade)[0]
-    egresso.endereco.latitude = parseInt(String(cidade.latitude))
-    egresso.endereco.longitude = parseInt(String(cidade.longitude))
+  for (const egresso of data) {
+    const cidade = await apiEnderecos.getCidadeByIdFull(egresso.endereco.cidadeId)
+    egresso.endereco.latitude = (cidade.latitude)
+    egresso.endereco.longitude = (cidade.longitude)
 
-    const mapKey = `${egresso.endereco.latitude}:${egresso.endereco.longitude}`
+    const mapKey = `${(egresso.endereco.latitude)}:${egresso.endereco.longitude}`
     const mapElement = filtered.get(mapKey)
 
     if (mapElement) {
@@ -40,7 +41,7 @@ const getEgresso = async () => {
     } else {
       filtered.set(mapKey, [egresso])
     }
-  })
+  }
 
   markers.value = filtered
   loading.value = false

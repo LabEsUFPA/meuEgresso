@@ -31,8 +31,8 @@
               size="15"
             />
             {{ selectedMarker[0].endereco.cidade }},
-            {{ State.getStateByCodeAndCountry(selectedMarker[0].endereco.estado, selectedMarker[0].endereco.pais)?.name }},
-            {{ Country.getCountryByCode(selectedMarker[0].endereco.pais)?.name }}
+            {{ selectedMarker[0].endereco.estado }},
+            {{ selectedMarker[0].endereco.pais }}
           </div>
           <div class="grid grid-cols-2 gap-1 md:grid-cols-1">
             <div
@@ -113,7 +113,6 @@ import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import { ref, onMounted, computed, watch, createSSRApp } from 'vue'
 import { renderToString } from '@vue/server-renderer'
-import { Country, State } from 'country-state-city'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomTooltipMarker from './CustomTooltipMarker.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
@@ -140,8 +139,8 @@ function selectMarker ($event: L.LeafletEvent) {
 
 const getLatLng = (key: string) => {
   const splitKey = key.split(':')
-  const lat = parseInt(splitKey[0])
-  const lng = parseInt(splitKey[1])
+  const lat = parseFloat(splitKey[0])
+  const lng = parseFloat(splitKey[1])
 
   return L.latLng(lat, lng)
 }
@@ -178,9 +177,17 @@ const createMapLayer = async () => {
     map.panInsideBounds([[90, -180], [-90, 180]], { animate: false })
   })
 
+  const sizeMarker = (length: number) => {
+    if (length === 1) return 5
+    else if (length <= 10) return 10
+    else if (length <= 50) return 13
+    else if (length <= 100) return 15
+    else return 17
+  }
+
   const setMarkers = async () => {
     for (const [keyMapElement, valueMapElement] of props.egressList) {
-      L.circleMarker(getLatLng(keyMapElement)).addTo(map).on('click', selectMarker).bindTooltip(await componentToHtml(valueMapElement))
+      L.circleMarker(getLatLng(keyMapElement), { radius: sizeMarker(valueMapElement.length) }).addTo(map).on('click', selectMarker).bindTooltip(await componentToHtml(valueMapElement))
     }
   }
   await setMarkers()

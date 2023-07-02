@@ -8,8 +8,8 @@
         size="18"
       />
       {{ egressos[0].endereco.cidade }},
-      {{ State.getStateByCodeAndCountry(egressos[0].endereco.estado, egressos[0].endereco.pais)?.name }},
-      {{ Country.getCountryByCode(egressos[0].endereco.pais)?.name }}
+      {{ egressos[0].endereco.estado }},
+      {{ egressos[0].endereco.pais }}
     </div>
     <div class="font-bold italic text-right text-[16px]">
       {{ egressos.length }} egresso{{ egressos.length === 1 ? '' : 's' }}
@@ -23,7 +23,6 @@
 <script lang="ts" setup>
 import { mdiMapMarker } from '@mdi/js'
 import SvgIcon from '@jamescoyle/vue-icon'
-import { Country, State } from 'country-state-city'
 import { type models } from 'src/@types'
 interface EgressoMapa extends models.EgressoMapa {}
 

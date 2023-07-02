@@ -19,7 +19,7 @@ public interface SetorAtuacaoService {
 	 * Método responsável por persistir determinado setorAtuacao no banco de dados.
 	 *
 	 * @param setorAtuacao Dados do setorAtuacao
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link SetorAtuacaoModel} Dados após serem gravados no banco de dados.
 	 */
 	public SetorAtuacaoModel save(SetorAtuacaoModel setorAtuacao);
 
@@ -27,14 +27,14 @@ public interface SetorAtuacaoService {
 	 * Método responsável por encontrar um determinado setorAtuacao por sua ID.
 	 *
 	 * @param id ID de um setorAtuacao
-	 * @return
+	 * @return {@link SetorAtuacaoModel}
 	 */
 	public SetorAtuacaoModel findById(Integer id);
 
 	/**
 	 * Método responsável por encontrar todos os setor atuacao cadastrados.
 	 *
-	 * @return Lista de objetos da classe SetorAtuacaoModel.
+	 * @return {@link List<SetorAtuacaoModel>} Lista de objetos da classe SetorAtuacaoModel.
 	 */
 	public List<SetorAtuacaoModel> findAll();
 
@@ -42,7 +42,8 @@ public interface SetorAtuacaoService {
 	 * Método responsável por atualizar dados de um setorAtuacao cadastrado.
 	 *
 	 * @param setorAtuacao objeto setorAtuacao
-	 * @return
+	 * @throws InvalidRequestException
+	 * @return {@link SetorAtuacaoModel}
 	 */
 	public SetorAtuacaoModel update(SetorAtuacaoModel setorAtuacao) throws InvalidRequestException;
 
@@ -50,13 +51,31 @@ public interface SetorAtuacaoService {
 	 * Método responsável por deletar um setorAtuacao cadastrado por sua ID.
 	 *
 	 * @param id ID de um setorAtuacao
+	 * @return {@link boolean}
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável por encontrar um setorAtuacao cadastrado por seu nome.
+	 *
+	 * @param nome nome de um setorAtuacao
+	 * @return {@link boolean}
+	 */
 	public SetorAtuacaoModel findByNome(String nome);
 
+	/**
+	 * Método responsável por verificar se um setorAtuacao existe por seu nome.
+	 *
+	 * @param nome nome de um setorAtuacao
+	 * @return {@link boolean}
+	 */
 	public boolean existByNome(String nome);
 
+	/**
+	 * Método responsável por contar a quantidade de egressos por setorAtuacao.
+	 *
+	 * @return {@link Map<String, Integer>}
+	 */
  	Map<String, Integer> countEgressoBySetorAtuacao();
 
 }

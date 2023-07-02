@@ -19,7 +19,7 @@ public interface FaixaSalarialService {
 	 * Método responsável por persistir determinado faixasalarial no banco de dados.
 	 *
 	 * @param faixasalarialModel Dados do faixasalarial
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link FaixaSalarialModel} Dados após serem gravados no banco de dados.
 	 */
 	public FaixaSalarialModel save(FaixaSalarialModel faixasalarialModel);
 
@@ -27,14 +27,14 @@ public interface FaixaSalarialService {
 	 * Método responsável por encontrar um determinado faixasalarial por sua ID.
 	 *
 	 * @param id ID de um faixasalarial
-	 * @return
+	 * @return {@link FaixaSalarialModel}
 	 */
 	public FaixaSalarialModel findById(Integer id);
 
 	/**
 	 * Método responsável por encontrar todos os faixasalarials cadastrados.
 	 *
-	 * @return Lista de objetos da classe FaixaSalarialModel.
+	 * @return {@link List<FaixaSalarialModel>} Lista de objetos da classe FaixaSalarialModel.
 	 */
 	public List<FaixaSalarialModel> findAll();
 
@@ -42,7 +42,8 @@ public interface FaixaSalarialService {
 	 * Método responsável por atualizar dados de um faixasalarial cadastrado.
 	 *
 	 * @param faixasalarial objeto faixasalarial
-	 * @return
+	 * @throws InvalidRequestException
+	 * @return {@link FaixaSalarialModel}
 	 */
 	public FaixaSalarialModel update(FaixaSalarialModel faixasalarial) throws InvalidRequestException;
 
@@ -50,6 +51,7 @@ public interface FaixaSalarialService {
 	 * Método responsável por deletar um faixasalarial cadastrado por sua ID.
 	 *
 	 * @param id ID de um faixasalarial
+	 * @return {@link boolean}
 	 */
 	public boolean deleteById(Integer id);
 
@@ -58,9 +60,14 @@ public interface FaixaSalarialService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return {@link boolean}
 	 */
 	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
+	/**
+	 * Método responsável por contar os egressos por faixaSalarial.
+	 *
+	 * @return {@link Map<String, Integer>} faixaSalariais e quantidade de egressos em cada uma delas
+	 */
 	Map<String, Integer> countEgressoInFaixa();
 }

@@ -79,7 +79,7 @@
             :placeholder="new Date().toLocaleDateString()"
             :nearby-selectable-month-days="true"
             :editable="true"
-            :data-maska="['##/##/####', '##/##/##']"
+            data-maska="['##/##/####', '##/##/##']"
             :max-date="maxDate"
             :min-date="minDate"
             v-model="inputValue"

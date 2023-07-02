@@ -89,7 +89,7 @@
                   required
                 >
                   <template #label>
-                    <div class="text-lg font-medium text-neutral-900 inline">
+                    <div class="text-lg font-normal text-neutral-900 inline">
                       Data do próximo envio
                     </div>
                   </template>
@@ -103,7 +103,7 @@
                   required
                 >
                   <template #label>
-                    <div class="text-lg font-medium text-neutral-900 inline">
+                    <div class="text-lg font-normal text-neutral-900 inline">
                       Horário do próximo envio
                     </div>
                   </template>
@@ -116,7 +116,7 @@
                 />
                 <CustomInput
                   v-show="bools.destinatarioUnico"
-                  class="mt-[-1.5em] mb-5"
+                  class="mb-5"
                   name="email"
                   type="text"
                   :icon-path="mdiEmail"
@@ -126,7 +126,7 @@
                   :max-length="64"
                 >
                   <template #label>
-                    <div class="text-lg font-medium text-neutral-900 inline">
+                    <div class="text-lg font-normal text-neutral-900 inline">
                       Email
                     </div>
                   </template>
@@ -342,7 +342,7 @@ async function fetchUpdateEmail () {
 
   Para garantir que possamos manter contato com você e fornecer informações importantes sobre eventos, oportunidades de emprego, cursos e outros escopos relevantes, solicitamos que atualize suas informações pessoais e profissionais.
 
-  Pedimos que acesse o portal Meu Egresso (https://egressos.computacao.ufpa.br/) e faça login com suas credenciais. Em seguida, atualize suas informações no seu perfil.
+  Pedimos que acesse o portal Meu Egresso (${window.location.origin}) e faça login com suas credenciais. Em seguida, atualize suas informações no seu perfil.
 
   Caso tenha alguma dificuldade para acessar o portal ou atualizar suas informações, entre em contato conosco pelo e-mail egressocomp@ufpa.br ou pelo telefone 3201-7405 (Faculdade de Computação). Teremos o maior prazer em ajudá-lo(a).
 

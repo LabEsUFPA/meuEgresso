@@ -20,7 +20,7 @@ public interface EgressoTitulacaoService {
 	 * dados.
 	 *
 	 * @param egressoTitulacaoModel Dados do egressoTitulacao
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link EgressoTitulacaoModel} Dados após serem gravados no banco de dados.
 	 */
 	public EgressoTitulacaoModel save(EgressoTitulacaoModel egressoTitulacaoModel);
 
@@ -28,14 +28,14 @@ public interface EgressoTitulacaoService {
 	 * Método responsável por encontrar um determinado egressoTitulacao por sua ID.
 	 *
 	 * @param id ID de um EgressoTitulacaoModelId
-	 * @return EgressoTitulacaoModel
+	 * @return {@link EgressoTitulacaoModel}
 	 */
 	public EgressoTitulacaoModel findById(EgressoTitulacaoModelId id);
 
 	/**
 	 * Método responsável por encontrar todos os egressoTitulacaos cadastrados.
 	 *
-	 * @return Lista de objetos da classe egressoTitulacaoModel.
+	 * @return {@link List<EgressoTitulacaoModel>} Lista de objetos da classe egressoTitulacaoModel.
 	 */
 	public List<EgressoTitulacaoModel> findAll();
 
@@ -43,7 +43,7 @@ public interface EgressoTitulacaoService {
 	 * Método responsável por atualizar dados de um egressoTitulacao cadastrado.
 	 *
 	 * @param egressoTitulacao objeto egressoTitulacao
-	 * @return EgressoTitulacaoModel
+	 * @return {@link EgressoTitulacaoModel}
 	 */
 	public EgressoTitulacaoModel update(EgressoTitulacaoModel egressoTitulacao) throws InvalidRequestException;
 
@@ -51,7 +51,7 @@ public interface EgressoTitulacaoService {
 	 * Método responsável por deletar um egressoTitulacao cadastrado por sua ID.
 	 *
 	 * @param id de EgressoTitulacaoModelId
-	 * @return boolean
+	 * @return {@link boolean}
 	 */
 	public boolean deleteById(EgressoTitulacaoModelId id);
 
@@ -60,7 +60,7 @@ public interface EgressoTitulacaoService {
 	 *
 	 * @param id        de EgressoTitulacaoModelId
 	 * @param createdBy
-	 * @return boolean
+	 * @return {@link boolean}
 	 */
 	boolean existsByIdAndCreatedBy(EgressoTitulacaoModelId id, Integer createdBy);
 

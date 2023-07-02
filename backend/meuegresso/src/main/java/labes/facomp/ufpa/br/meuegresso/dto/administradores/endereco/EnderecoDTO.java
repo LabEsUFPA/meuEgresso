@@ -30,4 +30,7 @@ public class EnderecoDTO extends AuditableDTO {
 
     @NotBlank(message = "Insira o nome do país.")
     private String pais;
+
+    private Integer cidadeId;
+
 }

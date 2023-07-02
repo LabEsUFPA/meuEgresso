@@ -919,6 +919,7 @@ import {
   mdiLoading,
   mdiCalendarEdit
 } from '@mdi/js'
+
 import { useRoute } from 'vue-router'
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
@@ -1180,8 +1181,6 @@ async function handleSubmitCarreira (values: any) {
   }
 
   if (values.carreira.area !== 'Desempregado') {
-    // empresa id to null caso mude
-
     jsonResponse.emprego.empresa.nome = values.carreira.empresa
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
 

@@ -18,7 +18,7 @@ public interface ContribuicaoService {
 	 * Método responsável por persistir determinado contribuicao no banco de dados.
 	 *
 	 * @param contribuicaoModel Dados do contribuicao
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link ContribuicaoModel} Dados após serem gravados no banco de dados.
 	 */
 	public ContribuicaoModel save(ContribuicaoModel contribuicaoModel);
 
@@ -26,7 +26,7 @@ public interface ContribuicaoService {
 	 * Método responsável por encontrar um determinado contribuicao por sua ID.
 	 *
 	 * @param id ID de um contribuicao
-	 * @return
+	 * @return {@link ContribuicaoModel}
 	 */
 	public ContribuicaoModel findById(Integer id);
 
@@ -34,8 +34,8 @@ public interface ContribuicaoService {
 	 * Método responsável por encontrar um determinado contribuicao pelo seu
 	 * egresso.
 	 *
-	 * @param id ID de um contribuicao
-	 * @return
+	 * @param idEgresso ID de um contribuicao
+	 * @return {@link ContribuicaoModel}
 	 */
 	public ContribuicaoModel findByEgressoId(Integer idEgresso);
 
@@ -43,15 +43,15 @@ public interface ContribuicaoService {
 	 * Método responsável por encontrar um determinado contribuicao pelo seu
 	 * egresso.
 	 *
-	 * @param id ID de um contribuicao
-	 * @return
+	 * @param idUsuario ID de um contribuicao
+	 * @return {@link ContribuicaoModel}
 	 */
 	public ContribuicaoModel findByEgressoUsuarioId(Integer idUsuario);
 
 	/**
 	 * Método responsável por encontrar todos os contribuicaos cadastrados.
 	 *
-	 * @return Lista de objetos da classe ContribuicaoModel.
+	 * @return {@link List<ContribuicaoModel>} Lista de objetos da classe ContribuicaoModel.
 	 */
 	public List<ContribuicaoModel> findAll();
 
@@ -59,7 +59,8 @@ public interface ContribuicaoService {
 	 * Método responsável por atualizar dados de um contribuicao cadastrado.
 	 *
 	 * @param contribuicao objeto contribuicao
-	 * @return
+	 * @throws InvalidRequestException
+	 * @return {@link ContribuicaoModel}
 	 */
 	public ContribuicaoModel update(ContribuicaoModel contribuicao) throws InvalidRequestException;
 
@@ -67,6 +68,7 @@ public interface ContribuicaoService {
 	 * Método responsável por deletar um contribuicao cadastrado por sua ID.
 	 *
 	 * @param id ID de um contribuicao
+	 * @return {@link boolean}
 	 */
 	public boolean deleteById(Integer id);
 
@@ -75,7 +77,7 @@ public interface ContribuicaoService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return {@link boolean}
 	 */
 	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 }

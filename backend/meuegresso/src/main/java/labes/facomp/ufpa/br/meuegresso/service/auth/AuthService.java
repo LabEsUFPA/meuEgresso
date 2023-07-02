@@ -9,6 +9,13 @@ import org.springframework.stereotype.Service;
 import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Interface responsável por especificar os metodos a serem implementados.
+ *
+ * @author Alfredo Gabriel, Camilo Santos
+ * @since 21/04/2023
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthService {

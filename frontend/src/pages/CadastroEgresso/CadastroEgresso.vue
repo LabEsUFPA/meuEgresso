@@ -609,7 +609,7 @@ import { boolean, mixed, object, string } from 'yup'
 import { useRoute } from 'vue-router'
 import apiEnderecos from 'src/services/apiEnderecos'
 
-const baseURL = 'https://egressos.computacao.ufpa.br/'
+const baseURL = window.location.origin
 const $storeCadastro = useCadastroEgressoStore()
 useLoginStore()
 const storage = new LocalStorage()
