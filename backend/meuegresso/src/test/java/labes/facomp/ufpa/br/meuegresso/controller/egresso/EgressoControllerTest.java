@@ -143,7 +143,7 @@ class EgressoControllerTest extends Configuracao {
                 usuarioModel.setId(usuarioAuthDTO.getId());
 
                 egressoCadastro.setNascimento(LocalDate.now());
-                egressoCadastro.setGeneroId(EGRESSO_ID);
+                egressoCadastro.setGeneroId(genero.getId());
                 egressoCadastro.setMatricula("123432312345");
                 egressoCadastro.setNome("teste nome");
                 egressoCadastro.setContribuicao(ContribuicaoDTO.builder().descricao("ljhfdakljdljdhs").build());
@@ -184,7 +184,7 @@ class EgressoControllerTest extends Configuracao {
         }
 
         @Test
-        @Order(2)
+        @Order(3)
         void testSaveFotoEgresso() throws IOException, Exception {
 
                 Path path = ResourceUtils.getFile("classpath:image/imagem.jpeg").toPath();
@@ -207,7 +207,7 @@ class EgressoControllerTest extends Configuracao {
         }
 
         @Test
-        @Order(3)
+        @Order(4)
         void testGetFotoEgresso() throws Exception {
 
                 MvcResult resposta = mockMvc
@@ -221,7 +221,7 @@ class EgressoControllerTest extends Configuracao {
         }
 
         @Test
-        @Order(4)
+        @Order(5)
         void testDeleteFotoEgresso() throws Exception {
                 MvcResult resposta = mockMvc.perform(
                                 MockMvcRequestBuilders.delete("/egresso/foto")

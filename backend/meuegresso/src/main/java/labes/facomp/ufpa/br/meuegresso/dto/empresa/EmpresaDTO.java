@@ -31,4 +31,6 @@ public class EmpresaDTO {
     private Integer faixaSalarialId;
 
     private EnderecoDTO endereco;
+
+    private Boolean isEmprego;
 }

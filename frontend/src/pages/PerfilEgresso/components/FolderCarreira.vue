@@ -55,7 +55,7 @@
           :disabled="area === 'Desempregado'"
           :pre-filled="true"
         />
-        
+
         <div class="mb-5 text-sm font-semibold text-cyan-600">
           <SvgIcon
             type="mdi"
@@ -73,7 +73,6 @@
         <slot name="NonInputData" />
       </div>
     </template>
-
     <template #EditButton>
       <slot name="EditButton" />
     </template>

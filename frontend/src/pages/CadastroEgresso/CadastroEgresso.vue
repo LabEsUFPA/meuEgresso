@@ -219,23 +219,48 @@
               label="Pós-graduação"
             />
 
-            <CustomInput
-              class="mb-5"
+            <CustomSelect
+              class="mb-1"
               name="academico.posGrad.local"
               label="Instituição da pós-graduação"
-              :max-length="50"
+              placeholder="Selecione"
+              :options="$storeCadastro.instituicoes"
+              :required="bools.posGrad"
+              :disabled="!bools.posGrad"
+              :is-fetching="$storeCadastro.isFetchingUniversidades"
+              @typing="$storeCadastro.fetchUniversidadesAsync($event, true)"
+              @infinite-scroll="$storeCadastro.fetchMoreUniversidadesAsync"
+              infinite
+              id="posGradLocal"
+            />
+
+            <button
+              type="button"
+              class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
+              :disabled="!bools.posGrad"
+              @click="dialogInstituicao = true"
+            >
+              Não encontrou sua instituição? Clique aqui
+            </button>
+
+            <CustomSelect
+              class="mb-1"
+              name="academico.posGrad.curso"
+              label="Curso de pós-graduação"
+              placeholder="Selecione"
+              :options="$storeCadastro.cursos"
               :required="bools.posGrad"
               :disabled="!bools.posGrad"
             />
 
-            <CustomInput
-              class="mb-5"
-              name="academico.posGrad.curso"
-              label="Curso de pós-graduação"
-              :max-length="100"
-              :required="bools.posGrad"
+            <button
+              type="button"
+              class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
               :disabled="!bools.posGrad"
-            />
+              @click="dialogCurso = true"
+            >
+              Não encontrou seu curso? Clique aqui
+            </button>
 
             <CustomCheckbox
               name="academico.posGrad.desejaPos"
@@ -286,11 +311,10 @@
               class="mb-5"
               name="carreira.empresa"
               label="Empresa"
-              ref="inputEmpresa"
-              placeholder="Ex: Google"
+              placeholder="Google"
+              :options="$storeCadastro.empresas"
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
-              :max-length="130"
             />
 
             <CustomSelect
@@ -302,50 +326,19 @@
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
             />
-          </div>
 
-          <div class="mb-5 text-sm font-semibold text-cyan-600">
-            <SvgIcon
-              type="mdi"
-              size="20"
-              class="inline mr-2"
-              :path="mdiMapMarker"
+            <div class="mb-5 text-sm font-semibold text-cyan-600">
+              Localização:
+            </div>
+
+            <LocalizacaoSelect
+              ref="localizacao"
+              spacing="mb-5"
+              pais-holder="Selecione"
+              estado-holder="Selecione"
+              cidade-holder="Selectione"
             />
-            Localização:
           </div>
-
-          <CustomSelect
-            class="mb-5"
-            name="carreira.pais"
-            label="País"
-            ref="selectPais"
-            :options="countries"
-            v-model:value="pais"
-            @change="pais = $event"
-            :disabled="area === 'Desempregado'"
-            :required="area !== 'Desempregado'"
-          />
-
-          <CustomSelect
-            class="mb-5"
-            name="carreira.estado"
-            label="Estado"
-            ref="selectEstado"
-            :options="states"
-            v-model:value="estado"
-            @change="estado = $event"
-            :disabled="area === 'Desempregado'"
-            :required="area !== 'Desempregado'"
-          />
-
-          <CustomSelect
-            name="carreira.cidade"
-            label="Cidade"
-            ref="selectCidade"
-            :options="cities"
-            :disabled="area === 'Desempregado'"
-            :required="area !== 'Desempregado'"
-          />
         </template>
       </FolderSection>
 
@@ -529,6 +522,54 @@
         </div>
       </div>
     </CustomDialog>
+
+    <CustomDialog v-model="dialogInstituicao">
+      <div class="h-full flex justify-center gap-10 flex-col items-center">
+        <div class="text-2xl font-semibold text-cyan-800">
+          Cadastrar instituição
+        </div>
+
+        <Form
+          :validation-schema="instituicaoSchema"
+          @submit="handleNewInstituicao"
+          class="flex flex-col items-center gap-4"
+        >
+          <CustomInput
+            name="nome"
+            label="Nome da instituição de ensino"
+            placeholder="Universidade Federal do Pará (UFPA)"
+          />
+
+          <CustomButton type="submit">
+            Cadastrar
+          </CustomButton>
+        </Form>
+      </div>
+    </CustomDialog>
+
+    <CustomDialog v-model="dialogCurso">
+      <div class="h-full flex justify-center gap-10 flex-col items-center">
+        <div class="text-2xl font-semibold text-cyan-800">
+          Cadastrar curso
+        </div>
+
+        <Form
+          :validation-schema="cursoSchema"
+          @submit="handleNewCurso"
+          class="flex flex-col items-center gap-4"
+        >
+          <CustomInput
+            name="nome"
+            label="Nome da curso"
+            placeholder="Engenharia de software"
+          />
+
+          <CustomButton type="submit">
+            Cadastrar
+          </CustomButton>
+        </Form>
+      </div>
+    </CustomDialog>
   </div>
 </template>
 
@@ -543,10 +584,8 @@ import {
   mdiMessage,
   mdiSchool,
   mdiTwitter,
-  mdiWhatsapp,
-  mdiMapMarker
+  mdiWhatsapp
 } from '@mdi/js'
-import { City, Country, State } from 'country-state-city'
 import svgPath from 'src/assets/svgPaths.json'
 import CustomButton from 'src/components/CustomButton.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
@@ -554,17 +593,19 @@ import CustomDialog from 'src/components/CustomDialog.vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomDatepicker from 'src/components/CustomDatepicker.vue'
 import CustomSelect from 'src/components/CustomSelect.vue'
+import LocalizacaoSelect from 'src/components/LocalizacaoSelect.vue'
 import FolderSection from 'src/components/FolderSection.vue'
-import FotoInput from 'src/pages/CadastroEgresso/components/FotoInput.vue'
 import InvalidInsert from 'src/components/InvalidInsert.vue'
+import FotoInput from 'src/pages/CadastroEgresso/components/FotoInput.vue'
 import LocalStorage from 'src/services/localStorage'
 import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
 import { useLoginStore } from 'src/store/LoginStore'
 import { Form } from 'vee-validate'
 import { computed, onMounted, ref, watch } from 'vue'
-import { boolean, mixed, object, string } from 'yup'
 import VueScrollTo from 'vue-scrollto'
+import { boolean, mixed, object, string } from 'yup'
 import { useRoute } from 'vue-router'
+import apiEnderecos from 'src/services/apiEnderecos'
 
 const baseURL = 'https://egressos.computacao.ufpa.br/'
 const $storeCadastro = useCadastroEgressoStore()
@@ -578,11 +619,11 @@ const mensagemShare = `🎉%20Acabei%20de%20me%20cadastrar%20na%20plataforma%20M
 
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
+const dialogInstituicao = ref(false)
+const dialogCurso = ref(false)
 const camposFaltosos = ref(false)
 const missingDigits = ref(0)
 
-const pais = ref('')
-const estado = ref('')
 const area = ref('')
 const temFoto = ref(false)
 const form = ref()
@@ -591,10 +632,7 @@ const error = ref(false)
 
 const selectSetor = ref()
 const selectFaixa = ref()
-const inputEmpresa = ref()
-const selectPais = ref()
-const selectEstado = ref()
-const selectCidade = ref()
+const localizacao = ref()
 
 const minDate = ref(new Date(-8640000000000000))
 const eighteenYearsAgo = ref(new Date())
@@ -615,42 +653,6 @@ const selectOpts = ref({
 
 const compCotista = computed(() => {
   return bools.value.cotista
-})
-
-const countries = computed(() => {
-  const countries = Country.getAllCountries()
-  const filteredCountries = []
-  for (const country of countries) {
-    filteredCountries.push({
-      label: country.name,
-      value: country.isoCode
-    })
-  }
-
-  return filteredCountries
-})
-
-const states = computed(() => {
-  const states = State.getStatesOfCountry(pais.value)
-  const filteredStates = []
-
-  for (const state of states) {
-    filteredStates.push({
-      label: state.name,
-      value: state.isoCode
-    })
-  }
-  return filteredStates
-})
-
-const cities = computed(() => {
-  const cities = City.getCitiesOfState(pais.value, estado.value)
-  const filteredCities = []
-
-  for (const city of cities) {
-    filteredCities.push(city.name)
-  }
-  return filteredCities
 })
 
 async function handleSubmit (values: any) {
@@ -691,6 +693,10 @@ async function handleSubmit (values: any) {
     cotas = null
   }
 
+  const pais = await apiEnderecos.getPaisById(values.carreira.pais)
+  const estado = await apiEnderecos.getEstadoById(values.carreira.estado)
+  const cidade = await apiEnderecos.getCidadeById(values.carreira.cidade)
+
   const empresa = values.carreira.area !== 'Desempregado'
     ? {
         areaAtuacao: values.carreira.area,
@@ -698,9 +704,9 @@ async function handleSubmit (values: any) {
         setorAtuacao: values.carreira.setor,
         nome: values.carreira.empresa,
         endereco: {
-          pais: values.carreira.pais,
-          estado: values.carreira.estado,
-          cidade: values.carreira.cidade
+          pais,
+          estado,
+          cidade
         }
       }
     : null
@@ -723,7 +729,9 @@ async function handleSubmit (values: any) {
 
   const isAdm = $route.params.id !== undefined
 
-  const response = await $storeCadastro.cadastrarEgresso({
+  // const status = 201
+
+  const status = await $storeCadastro.cadastrarEgresso({
     temFoto: temFoto.value, // false por padrao
     foto: formData
   }, {
@@ -747,13 +755,12 @@ async function handleSubmit (values: any) {
       descricao: values.adicionais.experiencias
     },
     bolsaId: values.academico.bolsista.tipo ? parseInt(values.academico.bolsista.tipo) : null,
-    empresa,
+    emprego: empresa,
     titulacao
   }, isAdm, isAdm ? Number($route.params.id) : null)
 
-  if (response.status !== 201) {
+  if (status !== 201) {
     dialogFalha.value = true
-    errorText.value = response.data?.message ? response.data.message : 'Ocorreu um problema na requisição'
     error.value = true
   } else {
     dialogSucesso.value = true
@@ -766,12 +773,39 @@ async function handleSubmit (values: any) {
 }
 
 function handleFail (e: any) {
+  console.log(e)
   camposFaltosos.value = true
 
   const incorrectElements = Object.keys(e.errors)
   const el = document.querySelector(`#${incorrectElements[0].replaceAll('.', '-')}`)
   VueScrollTo.scrollTo(el, 800, { offset: -300 })
 }
+
+async function handleNewInstituicao (event: any) {
+  const response = await $storeCadastro.cadastrarInstituicao(event.nome)
+
+  if (response?.status === 201) {
+    alert('Instituição cadastrada com sucesso.')
+    dialogInstituicao.value = false
+  }
+}
+
+async function handleNewCurso (event: any) {
+  const response = await $storeCadastro.cadastrarCurso(event.nome)
+
+  if (response?.status === 201) {
+    alert('Curso cadastrado com sucesso.')
+    dialogCurso.value = false
+  }
+}
+
+const instituicaoSchema = object().shape({
+  nome: string().required('Insira o nome da instituição')
+})
+
+const cursoSchema = object().shape({
+  nome: string().required('Insira o nome do curso')
+})
 
 const schema = object().shape({
   geral: object({
@@ -882,15 +916,15 @@ const schema = object().shape({
 })
 
 onMounted(async () => {
-  watch(pais, () => {
-    selectEstado.value.setInitialValues('')
-    form.value.setFieldTouched('carreira.estado', false)
-  })
+  // watch(pais, () => {
+  //   selectEstado.value.setInitialValues('')
+  //   form.value.setFieldTouched('carreira.estado', false)
+  // })
 
-  watch(estado, () => {
-    selectCidade.value.setInitialValues('')
-    form.value.setFieldTouched('carreira.cidade', false)
-  })
+  // watch(estado, () => {
+  //   selectCidade.value.setInitialValues('')
+  //   form.value.setFieldTouched('carreira.cidade', false)
+  // })
 
   watch(compCotista, (_, oldVal) => {
     if (oldVal) {
@@ -908,8 +942,12 @@ onMounted(async () => {
       form.value.setFieldTouched('carreira.faixaSalarial', false)
       form.value.setFieldValue('carreira.empresa', '')
       form.value.setFieldTouched('carreira.empresa', false)
-      selectPais.value.setInitialValues('')
+      localizacao.value.setPais('')
+      localizacao.value.setEstado('')
+      localizacao.value.setCidade('')
       form.value.setFieldTouched('carreira.pais', false)
+      form.value.setFieldTouched('carreira.estado', false)
+      form.value.setFieldTouched('carreira.cidade', false)
     }
   })
 
@@ -932,7 +970,7 @@ const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
 }
 
-onMounted(() => {
+onMounted(async () => {
   window.scrollTo(0, 0)
 })
 

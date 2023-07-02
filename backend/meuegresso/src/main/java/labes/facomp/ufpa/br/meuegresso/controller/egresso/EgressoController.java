@@ -139,8 +139,8 @@ public class EgressoController {
         // Cadastro EMPRESA - EMPREGO
         EmpresaCadastroEgressoDTO empresaDTO;
         EmpresaModel empresa;
-        if (egressoCadastroDTO.getEmpresa() != null) {
-            empresaDTO = egressoCadastroDTO.getEmpresa();
+        if (egressoCadastroDTO.getEmprego() != null) {
+            empresaDTO = egressoCadastroDTO.getEmprego();
             EnderecoModel enderecoEmpresa = enderecoService.findByCidadeAndEstadoAndPais(
                     empresaDTO.getEndereco().getCidade(),
                     empresaDTO.getEndereco().getEstado(),
@@ -152,6 +152,7 @@ public class EgressoController {
             empresa = empresaService.findByNome(empresaDTO.getNome());
             if (empresa == null) {
                 empresa = mapper.map(empresaDTO, EmpresaModel.class);
+                empresa.setEndereco(null);
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)

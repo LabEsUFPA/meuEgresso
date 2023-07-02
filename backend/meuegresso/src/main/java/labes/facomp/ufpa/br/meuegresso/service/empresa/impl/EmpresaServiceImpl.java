@@ -2,6 +2,10 @@ package labes.facomp.ufpa.br.meuegresso.service.empresa.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.LocalPosGraficoDTO;
@@ -34,8 +38,18 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
-    public List<EmpresaModel> findAll() {
-        return empresaRepository.findAll();
+    public Page<EmpresaModel> findAll(Integer page, Integer size, Direction direction) {
+        return empresaRepository.findAll(PageRequest.of(page, size, Sort.by(direction, "nome")));
+    }
+
+    @Override
+    public Page<EmpresaModel> findAllByIsEmpregoTrue(Integer page, Integer size, Direction direction) {
+        return empresaRepository.findAllByIsEmpregoTrue(PageRequest.of(page, size, Sort.by(direction, "nome")));
+    }
+
+    @Override
+    public Page<EmpresaModel> findAllByIsEmpregoFalse(Integer page, Integer size, Direction direction) {
+        return empresaRepository.findAllByIsEmpregoFalse(PageRequest.of(page, size, Sort.by(direction, "nome")));
     }
 
     @Override
@@ -58,13 +72,32 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
-    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
-        return empresaRepository.existsByIdAndCreatedBy(id, createdBy);
+    public EmpresaModel findByNome(String nome) {
+        return empresaRepository.findByNomeIgnoreCase(nome).orElse(null);
     }
 
     @Override
-    public EmpresaModel findByNome(String nome) {
-        return empresaRepository.findByNomeIgnoreCase(nome).orElse(null);
+    public Page<EmpresaModel> findByNomeContainsIgnoreCaseAndIsEmpregoTrueOrderByNomeAsc(Integer page, Integer size,
+            Direction direction,
+            String nome) {
+        return empresaRepository.findByNomeContainsIgnoreCaseAndIsEmpregoTrueOrderByNomeAsc(
+                PageRequest.of(page, size, Sort.by(direction, "nome")), nome);
+    }
+
+    @Override
+    public Page<EmpresaModel> findByNomeContainsIgnoreCaseAndIsEmpregoFalseOrderByNomeAsc(Integer page, Integer size,
+            Direction direction,
+            String nome) {
+        return empresaRepository.findByNomeContainsIgnoreCaseAndIsEmpregoFalseOrderByNomeAsc(
+                PageRequest.of(page, size, Sort.by(direction, "nome")), nome);
+    }
+
+    @Override
+    public Page<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(Integer page, Integer size,
+            Direction direction,
+            String nome) {
+        return empresaRepository.findByNomeContainsIgnoreCaseOrderByNomeAsc(
+                PageRequest.of(page, size, Sort.by(direction, "nome")), nome);
     }
 
     @Override
@@ -73,8 +106,8 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
-    public void deleteAll() {
-        empresaRepository.deleteAll();
+    public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+        return empresaRepository.existsByIdAndCreatedBy(id, createdBy);
     }
 
 }

@@ -173,7 +173,7 @@ class EgressoEmpresaControllerTest {
 		enderecoRepository.save(enderecoModel);
 
 		/* Empresa */
-		empresaBasicDTO = EmpresaBasicDTO.builder().id(EMPRESA_ID).nome(NOME).build();
+		empresaBasicDTO = EmpresaBasicDTO.builder().id(EMPRESA_ID).nome(NOME).isEmprego(true).build();
 		empresaModel = modelMapper.map(empresaBasicDTO, EmpresaModel.class);
 		empresaRepository.save(empresaModel);
 

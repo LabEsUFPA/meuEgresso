@@ -1,9 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.controller.administrador.empresa;
 
-import java.util.List;
-
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,11 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import labes.facomp.ufpa.br.meuegresso.dto.administradores.empresa.EmpresaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.DataNotDeletedException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
@@ -49,9 +49,12 @@ public class EmpresaAdmController {
      */
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
-    public List<EmpresaDTO> buscarEmpresas() {
-        return mapper.map(empresaService.findAll(), new TypeToken<List<EmpresaDTO>>() {
-        }.getType());
+    public Page<EmpresaDTO> buscarEmpresas(
+		@RequestParam(defaultValue = "0", required = false) Integer page,
+		@RequestParam(defaultValue = "20", required = false) Integer size,
+		@RequestParam(defaultValue = "ASC", required = false) Direction direction
+	) {
+        return empresaService.findAll(page, size, direction).map(e -> mapper.map(e, EmpresaDTO.class));
     }
 
 	/**

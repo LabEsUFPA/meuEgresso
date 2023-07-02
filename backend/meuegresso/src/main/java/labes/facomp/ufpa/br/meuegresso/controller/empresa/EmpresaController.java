@@ -1,9 +1,8 @@
 package labes.facomp.ufpa.br.meuegresso.controller.empresa;
 
-import java.util.List;
-
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,8 +25,10 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
+import labes.facomp.ufpa.br.meuegresso.model.EnderecoModel;
 import labes.facomp.ufpa.br.meuegresso.service.auth.JwtService;
 import labes.facomp.ufpa.br.meuegresso.service.empresa.EmpresaService;
+import labes.facomp.ufpa.br.meuegresso.service.endereco.EnderecoService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -43,6 +45,8 @@ public class EmpresaController {
 
 	private final EmpresaService empresaService;
 
+	private final EnderecoService enderecoService;
+
 	private final ModelMapper mapper;
 
 	private final JwtService jwtService;
@@ -51,16 +55,101 @@ public class EmpresaController {
 	 * Endpoint responsável por retornar a lista de empresa cadastrados no banco de
 	 * dados.
 	 *
-	 * @return {@link EmpresaBasicDTO} Lista de empresa cadastrados
-	 * @author Alfredo Gabriel
+	 * @return {@link EmpresaBasicDTO} Lista de empresa cadastrados, ordenadas em
+	 *         ordem crescente
+	 * @author Alfredo Gabriel, Marcus Maciel
 	 * @since 21/04/2023
 	 */
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<EmpresaBasicDTO> consultarEmpresas() {
-		return mapper.map(empresaService.findAll(), new TypeToken<List<EmpresaBasicDTO>>() {
-		}.getType());
+	public Page<EmpresaBasicDTO> consultarEmpresas(
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "15", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
+		return empresaService.findAll(page, size, direction).map(e -> mapper.map(e, EmpresaBasicDTO.class));
+	}
+
+	/**
+	 * Endpoint responsável por retornar a lista de empresa cadastrados no banco de
+	 * dados.
+	 *
+	 * @return {@link EmpresaBasicDTO} Lista de empresa cadastrados, ordenadas em
+	 *         ordem crescente
+	 * @author Alfredo Gabriel, Marcus Maciel
+	 * @since 21/04/2023
+	 */
+	@GetMapping("/empresa")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public Page<EmpresaBasicDTO> consultarEmpresasEmprego(
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "15", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
+		return empresaService.findAllByIsEmpregoTrue(page, size, direction)
+				.map(e -> mapper.map(e, EmpresaBasicDTO.class));
+	}
+
+	/**
+	 * Endpoint responsável por retornar a lista de empresa cadastrados no banco de
+	 * dados.
+	 *
+	 * @return {@link EmpresaBasicDTO} Lista de empresa cadastrados, ordenadas em
+	 *         ordem crescente
+	 * @author Marcus Maciel
+	 * @since 01/07/2023
+	 */
+	@GetMapping("/universidade")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public Page<EmpresaBasicDTO> consultarUniversidades(
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "15", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
+		return empresaService.findAllByIsEmpregoFalse(page, size, direction)
+				.map(e -> mapper.map(e, EmpresaBasicDTO.class));
+	}
+
+	/**
+	 * Endpoint responsável por retornar a lista de empresa cadastrados no banco de
+	 * dados, baseadas se contém pedaço de String.
+	 *
+	 * @return {@link EmpresaBasicDTO} Lista de empresa cadastrados que contém
+	 *         trecho de String, ordenadas em ordem
+	 *         crescente
+	 * @author Marcus Maciel
+	 * @since 21/05/2023
+	 */
+
+	@GetMapping(params = { "nome" })
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public Page<EmpresaBasicDTO> consultarEmpresasContainsNome(
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "15", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction,
+			@RequestParam(defaultValue = "", required = false) String nome) {
+		return empresaService.findByNomeContainsIgnoreCaseOrderByNomeAsc(page, size, direction, nome)
+				.map(e -> mapper.map(e, EmpresaBasicDTO.class));
+	}
+
+	@GetMapping(value = "/empresa", params = { "nome" })
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public Page<EmpresaBasicDTO> consultarEmpresasEmpregoContainsNome(
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "15", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction,
+			@RequestParam(defaultValue = "", required = false) String nome) {
+		return empresaService.findByNomeContainsIgnoreCaseAndIsEmpregoTrueOrderByNomeAsc(page, size, direction, nome)
+				.map(e -> mapper.map(e, EmpresaBasicDTO.class));
+	}
+
+	@GetMapping(value = "/universidade", params = { "nome" })
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public Page<EmpresaBasicDTO> consultarUniversidadesContainsNome(
+			@RequestParam(defaultValue = "0", required = false) Integer page,
+			@RequestParam(defaultValue = "15", required = false) Integer size,
+			@RequestParam(defaultValue = "ASC", required = false) Direction direction,
+			@RequestParam(defaultValue = "", required = false) String nome) {
+		return empresaService.findByNomeContainsIgnoreCaseAndIsEmpregoFalseOrderByNomeAsc(page, size, direction, nome)
+				.map(e -> mapper.map(e, EmpresaBasicDTO.class));
 	}
 
 	/**
@@ -93,6 +182,17 @@ public class EmpresaController {
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String cadastrarEmpresa(@RequestBody @Valid EmpresaBasicDTO empresaDTO) {
 		EmpresaModel empresaModel = mapper.map(empresaDTO, EmpresaModel.class);
+		if (empresaDTO.getEndereco() != null) {
+			EnderecoModel enderecoEmpresa = enderecoService.findByCidadeAndEstadoAndPais(
+					empresaDTO.getEndereco().getCidade(),
+					empresaDTO.getEndereco().getEstado(),
+					empresaDTO.getEndereco().getPais());
+			if (enderecoEmpresa == null) {
+				enderecoEmpresa = mapper.map(empresaModel.getEndereco(), EnderecoModel.class);
+				enderecoEmpresa = enderecoService.save(enderecoEmpresa);
+			}
+			empresaModel.setEndereco(enderecoEmpresa);
+		}
 		empresaService.save(empresaModel);
 		return ResponseType.SUCCESS_SAVE.getMessage();
 	}

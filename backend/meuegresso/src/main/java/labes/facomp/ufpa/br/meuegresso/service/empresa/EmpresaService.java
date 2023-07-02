@@ -2,6 +2,9 @@ package labes.facomp.ufpa.br.meuegresso.service.empresa;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
+
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.LocalPosGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EmpresaModel;
@@ -36,7 +39,22 @@ public interface EmpresaService {
 	 *
 	 * @return Lista de objetos da classe EmpresaModel.
 	 */
-	public List<EmpresaModel> findAll();
+	public Page<EmpresaModel> findAll(Integer page, Integer size, Direction direction);
+
+	/**
+	 * Método responsável por encontrar todos os empresas referentes à empresa
+	 * cadastrados.
+	 *
+	 * @return Lista de objetos da classe EmpresaModel.
+	 */
+	public Page<EmpresaModel> findAllByIsEmpregoTrue(Integer page, Integer size, Direction direction);
+
+	/**
+	 * Método responsável por encontrar todos as universidades cadastrados.
+	 *
+	 * @return Lista de objetos da classe EmpresaModel.
+	 */
+	public Page<EmpresaModel> findAllByIsEmpregoFalse(Integer page, Integer size, Direction direction);
 
 	/**
 	 * Método responsável por atualizar dados de um empresa cadastrado.
@@ -74,8 +92,15 @@ public interface EmpresaService {
 	 */
 	public List<LocalPosGraficoDTO> countEgressoByPos();
 
-	/**
-	 * Método responsável por deletar todos os dados da tabela empresa
-	 */
-	public void deleteAll();
+	public Page<EmpresaModel> findByNomeContainsIgnoreCaseOrderByNomeAsc(Integer page, Integer size,
+			Direction direction,
+			String nome);
+
+	public Page<EmpresaModel> findByNomeContainsIgnoreCaseAndIsEmpregoTrueOrderByNomeAsc(Integer page, Integer size,
+			Direction direction,
+			String nome);
+
+	public Page<EmpresaModel> findByNomeContainsIgnoreCaseAndIsEmpregoFalseOrderByNomeAsc(Integer page, Integer size,
+			Direction direction,
+			String nome);
 }

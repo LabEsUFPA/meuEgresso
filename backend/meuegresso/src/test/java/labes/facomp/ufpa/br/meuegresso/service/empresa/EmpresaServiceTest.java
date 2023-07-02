@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
@@ -46,9 +44,6 @@ class EmpresaServiceTest {
     private static final Integer ID = 1;
     private static final String NOME = "Empresa";
 
-    private static final Integer ID2 = 2;
-    private static final String NOME2 = "Ufpa";
-
     @Autowired
     private EmpresaService empresaService;
 
@@ -66,7 +61,7 @@ class EmpresaServiceTest {
     @Test
     void testSave() {
 
-        BDDMockito.given(repository.save(Mockito.any(EmpresaModel.class)))
+        BDDMockito.given(repository.save(new EmpresaModel()))
                 .willReturn(getMockEmpresa());
 
         EmpresaModel response = empresaService.save(new EmpresaModel());
@@ -74,22 +69,6 @@ class EmpresaServiceTest {
         assertNotNull(response);
         assertEquals(ID, response.getId());
         assertEquals(NOME, response.getNome());
-    }
-
-    /**
-     * Metodo para testar o metodo findAll.
-     *
-     * @author Bruno Eiki
-     * @since 27/04/2023
-     */
-    @Test
-    void testFindAll() {
-
-        BDDMockito.given(empresaService.findAll())
-                .willReturn(getMockEmpresaLista());
-
-        List<EmpresaModel> response = empresaService.findAll();
-        assertEquals(getMockEmpresaLista(), response);
     }
 
     /**
@@ -181,24 +160,6 @@ class EmpresaServiceTest {
                 .nome(NOME)
                 .build();
         return empresaTest;
-    }
-
-    private List<EmpresaModel> getMockEmpresaLista() {
-        List<EmpresaModel> empresaLista = new ArrayList<>();
-        EmpresaModel empresaTest = EmpresaModel.builder()
-                .id(ID)
-                .nome(NOME)
-                .build();
-
-        EmpresaModel empresaTest2 = EmpresaModel.builder()
-                .id(ID2)
-                .nome(NOME2)
-                .build();
-
-        empresaLista.add(empresaTest);
-        empresaLista.add(empresaTest2);
-
-        return empresaLista;
     }
 
     @AfterAll

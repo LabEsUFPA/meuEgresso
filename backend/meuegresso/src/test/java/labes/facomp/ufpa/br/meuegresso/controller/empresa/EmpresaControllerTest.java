@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -34,7 +33,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
-import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaBasicDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.page.PageDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.usuario.UsuarioAuthDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
@@ -66,7 +66,7 @@ class EmpresaControllerTest {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
-	EmpresaDTO empresaDTO;
+	EmpresaBasicDTO empresaBasicDTO;
 
 	@Autowired
 	ModelMapper modelMapper;
@@ -124,16 +124,16 @@ class EmpresaControllerTest {
 	@Order(1)
 	void testCadastrarEmpresa() throws Exception {
 
-		empresaDTO = EmpresaDTO.builder()
+		empresaBasicDTO = EmpresaBasicDTO.builder()
 				.id(1)
 				.nome(NOME)
-				.setorAtuacao(SETORATUACAO)
+				.isEmprego(true)
 				.build();
 
 		MvcResult resposta = mockMvc.perform(MockMvcRequestBuilders.post("/empresa")
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Bearer " + this.token)
-				.content(objectMapper.writeValueAsString(empresaDTO)))
+				.content(objectMapper.writeValueAsString(empresaBasicDTO)))
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isCreated())
 				.andReturn();
@@ -152,10 +152,10 @@ class EmpresaControllerTest {
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isOk()).andReturn();
 
-		empresaDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-				EmpresaDTO.class);
+		empresaBasicDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+				EmpresaBasicDTO.class);
 
-		assertEquals(NOME, empresaDTO.getNome());
+		assertEquals(NOME, empresaBasicDTO.getNome());
 		// assertEquals(SETORATUACAO, empresaDTO.getSetorAtuacao());
 
 	}
@@ -169,8 +169,8 @@ class EmpresaControllerTest {
 				.header("Authorization", "Bearer " + this.token))
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isOk()).andReturn();
-		List<EmpresaDTO> empresasDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
-				new TypeReference<List<EmpresaDTO>>() {
+		PageDTO<EmpresaBasicDTO> empresasDTO = objectMapper.readValue(resposta.getResponse().getContentAsString(),
+				new TypeReference<PageDTO<EmpresaBasicDTO>>() {
 				});
 
 		assertNotNull(empresasDTO);
@@ -184,7 +184,7 @@ class EmpresaControllerTest {
 		MvcResult resposta = mockMvc.perform(
 				MockMvcRequestBuilders.put("/empresa")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(empresaDTO))
+						.content(objectMapper.writeValueAsString(empresaBasicDTO))
 						.header("Authorization", "Bearer " + this.token))
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(status().isCreated())
@@ -198,7 +198,7 @@ class EmpresaControllerTest {
 	void testDeleteById() throws Exception {
 
 		MvcResult resposta = mockMvc.perform(
-				MockMvcRequestBuilders.delete("/empresa/" + empresaDTO.getId())
+				MockMvcRequestBuilders.delete("/empresa/" + empresaBasicDTO.getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.header("Authorization", "Bearer " + this.token))
 				.andDo(MockMvcResultHandlers.print())

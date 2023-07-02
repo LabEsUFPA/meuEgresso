@@ -15,11 +15,13 @@
           v-if="fotoEgresso"
           @error="!fotoEgresso"
           :src="fotoEgresso"
+          alt="foto do egresso"
           class="w-8 h-8 object-cover rounded-full border-2 border-sky-200/80"
         >
         <img
           v-else
           :src="eagle"
+          alt="logo do website"
           class="w-8 h-8 p-2 rounded-full flex items-center justify-center shrink-0 bg-sky-200"
         >
 
