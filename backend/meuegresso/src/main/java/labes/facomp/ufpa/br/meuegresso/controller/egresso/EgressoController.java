@@ -30,7 +30,6 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
 import labes.facomp.ufpa.br.meuegresso.exceptions.MatriculaAlreadyExistsException;
-import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.AreaAtuacaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.ContribuicaoModel;
 import labes.facomp.ufpa.br.meuegresso.model.CursoModel;
