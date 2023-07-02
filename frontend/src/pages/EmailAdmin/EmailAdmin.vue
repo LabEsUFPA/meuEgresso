@@ -89,7 +89,7 @@
                   required
                 >
                   <template #label>
-                    <div class="text-lg font-medium text-neutral-900 inline">
+                    <div class="text-lg font-normal text-neutral-900 inline">
                       Data do próximo envio
                     </div>
                   </template>
@@ -103,7 +103,7 @@
                   required
                 >
                   <template #label>
-                    <div class="text-lg font-medium text-neutral-900 inline">
+                    <div class="text-lg font-normal text-neutral-900 inline">
                       Horário do próximo envio
                     </div>
                   </template>
@@ -116,7 +116,7 @@
                 />
                 <CustomInput
                   v-show="bools.destinatarioUnico"
-                  class="mt-[-1.5em] mb-5"
+                  class="mb-5"
                   name="email"
                   type="text"
                   :icon-path="mdiEmail"
@@ -126,7 +126,7 @@
                   :max-length="64"
                 >
                   <template #label>
-                    <div class="text-lg font-medium text-neutral-900 inline">
+                    <div class="text-lg font-normal text-neutral-900 inline">
                       Email
                     </div>
                   </template>
