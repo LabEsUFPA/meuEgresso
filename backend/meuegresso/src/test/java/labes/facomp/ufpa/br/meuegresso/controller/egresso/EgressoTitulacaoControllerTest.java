@@ -35,7 +35,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationRequest;
 import labes.facomp.ufpa.br.meuegresso.dto.auth.AuthenticationResponse;
-import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoUpdateDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoTitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.faixasalarial.FaixaSalarialDTO;
@@ -112,7 +112,7 @@ class EgressoTitulacaoControllerTest {
     UsuarioModel usuarioModel;
 
     CursoModel cursoModel;
-    CursoDTO cursoDTO;
+    CursoUpdateDTO cursoDTO;
 
     EmpresaDTO empresaDTO;
     EmpresaModel empresaModel;
@@ -166,7 +166,7 @@ class EgressoTitulacaoControllerTest {
         /* Curso */
         cursoModel = CursoModel.builder().nome("Ciência da Computação").build();
         cursoModel = cursoRepository.save(cursoModel);
-        cursoDTO = modelMapper.map(cursoModel, CursoDTO.class);
+        cursoDTO = modelMapper.map(cursoModel, CursoUpdateDTO.class);
 
         /* Empresa */
         empresaModel = EmpresaModel.builder().nome("EmpresaTeste").build();

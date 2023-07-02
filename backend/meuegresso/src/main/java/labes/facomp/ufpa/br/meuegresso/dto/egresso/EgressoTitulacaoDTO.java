@@ -2,7 +2,7 @@ package labes.facomp.ufpa.br.meuegresso.dto.egresso;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.curso.CursoUpdateDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoTitulacaoModelId;
@@ -29,7 +29,7 @@ public class EgressoTitulacaoDTO {
 
     @Valid
     @NotNull(message = "Informe o curso.")
-    private CursoDTO curso;
+    private CursoUpdateDTO curso;
 
     @Valid
     @NotNull(message = "Informe a titulação.")
