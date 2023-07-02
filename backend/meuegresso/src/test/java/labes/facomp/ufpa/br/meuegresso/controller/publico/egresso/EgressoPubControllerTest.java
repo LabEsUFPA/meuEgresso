@@ -69,10 +69,9 @@ class EgressoPubControllerTest {
 		GeneroDTO genero = new GeneroDTO(1, "TRANSSEXUAL");
 		
 		DepoimentoDTO depoimento = DepoimentoDTO.builder()
-			.id(1)
-			.descricao("TextoDepoimento")
-			.ativo(true)
-			.build();
+        .id(1)
+        .descricao("TextoDepoimento")
+        .build();
 
 
 		ContribuicaoDTO contribuicao = new ContribuicaoDTO(1, "TextoContribuicao");
