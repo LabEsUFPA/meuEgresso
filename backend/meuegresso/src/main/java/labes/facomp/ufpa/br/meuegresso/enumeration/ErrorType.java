@@ -39,6 +39,8 @@ public enum ErrorType {
 
     USER_004("E-mail já utilizado.", "US-004"),
 
+    USER_005("Usuário sem e-mail verificado.", "US-005"),
+    
     EGRESSO_NAO_VALIDO("Usuário não cadastrado pela faculdade", "EV-001"),
 
     SOLICITACAO_EXPIRADA("Solicitação Expirada", "SE-001"),
