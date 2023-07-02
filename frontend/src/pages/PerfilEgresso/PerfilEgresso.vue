@@ -266,7 +266,7 @@
                 />
 
                 <CustomInput
-                  class="mb-5"
+                  class=""
                   name="geral.email"
                   label="E-mail"
                   placeholder="Ex: marcelle.mota.@gov.br"
@@ -278,10 +278,10 @@
                 <CustomDatepicker
                   class="mb-5"
                   name="geral.nascimento"
+                  label="Data de Nascimento"
                   :icon-path="mdiCalendarEdit"
                   :max-date="eighteenYearsAgo"
                   :min-date="minDate"
-                  custom-label
                   required
                 />
               </div>
