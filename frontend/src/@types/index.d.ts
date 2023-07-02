@@ -140,6 +140,7 @@ export namespace models {
         pais: string
         estado: string
         cidade: string
+        cidadeId: number
       }
     } | null
     titulacao?: {
@@ -161,6 +162,7 @@ export namespace models {
     endereco: {
       id: number
       cidade: string
+      cidadeId: number
       estado: string
       pais: string
       latitude: number

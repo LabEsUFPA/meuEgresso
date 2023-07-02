@@ -91,11 +91,24 @@ async function getCidadeById (id: number): Promise<string> {
   return pais.nome
 }
 
+interface CidadeFull {
+  id: number,
+  nome: string,
+  latitude: number,
+  longitude: number
+}
+
+async function getCidadeByIdFull (id: number): Promise<CidadeFull> {
+  const cidade: CidadeFull = (await Axios.get(`/cidade/${id}`)).data
+  return cidade
+}
+
 export default {
   getPaises,
   getEstados,
   getCidades,
   getPaisById,
   getEstadoById,
-  getCidadeById
+  getCidadeById,
+  getCidadeByIdFull
 }

@@ -37,4 +37,7 @@ public class EnderecoModel extends Auditable {
     @Column(name = "pais_endereco", unique = false, nullable = false)
     private String pais;
 
+    @Column(name = "cidade_id_endereco", unique = false, nullable = true)
+    private Integer cidadeId;
+
 }

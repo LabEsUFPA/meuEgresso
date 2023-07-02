@@ -706,7 +706,8 @@ async function handleSubmit (values: any) {
         endereco: {
           pais,
           estado,
-          cidade
+          cidade,
+          cidadeId: values.carreira.cidade
         }
       }
     : null
