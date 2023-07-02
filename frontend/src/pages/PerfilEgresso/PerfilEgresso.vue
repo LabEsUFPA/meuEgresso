@@ -672,6 +672,7 @@
                   type="text"
                   class="mb-7"
                   :vmodel="dataEgresso.localizacao.cidade"
+                  name="carreira.estado"
                   label="Cidade"
                   placeholder="Belém"
                   :icon-path="mdiMapMarkerRadius"
@@ -899,6 +900,8 @@ import InvalidInsert from 'src/components/InvalidInsert.vue'
 import FolderCarreira from './components/FolderCarreira.vue'
 import FolderAdicionais from './components/FolderAdicionais.vue'
 import ProfileImage from './components/ProfileImage.vue'
+import apiEnderecos from 'src/services/apiEnderecos'
+
 import {
   mdiAccount,
   mdiEmail,
@@ -1138,6 +1141,7 @@ async function handleSubmitAcademico (values: any) {
 }
 
 async function handleSubmitCarreira (values: any) {
+
   if (jsonResponse.emprego === undefined) {
     jsonResponse.emprego = {
       id: {
@@ -1157,9 +1161,9 @@ async function handleSubmitCarreira (values: any) {
 
       },
       endereco: {
-        cidade: jsonResponse.emprego?.empresa?.cidade,
-        estado: jsonResponse.emprego?.empresa?.estado,
-        pais: jsonResponse.emprego?.empresa?.pais
+        cidade: await apiEnderecos.getCidadeById(values.carreira.cidade),
+        estado: await apiEnderecos.getEstadoById(values.carreira.estado),
+        pais: await apiEnderecos.getPaisById(values.carreira.pais)
       },
       empresa: {
         id: 1,
@@ -1180,9 +1184,9 @@ async function handleSubmitCarreira (values: any) {
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
     const endereco = {
-      pais: values.carreira.pais,
-      estado: values.carreira.estado,
-      cidade: values.carreira.cidade
+      cidade: await apiEnderecos.getCidadeById(values.carreira.cidade),
+      estado: await apiEnderecos.getEstadoById(values.carreira.estado),
+      pais: await apiEnderecos.getPaisById(values.carreira.pais)
     }
     jsonResponse.emprego.endereco = endereco
   } else {
