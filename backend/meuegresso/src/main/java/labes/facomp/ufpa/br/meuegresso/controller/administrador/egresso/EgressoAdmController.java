@@ -396,7 +396,7 @@ public class EgressoAdmController {
     }
 
     private void validaEmpresa(EmpresaModel empresa, EgressoModel egressoModel) {
-        EmpresaModel empresaModel = empresa.getId() != null ? empresaService.findById(empresa.getId()) : empresaService.findByNome(empresa.getNome());
+        EmpresaModel empresaModel = empresa.getNome() != null ? empresaService.findByNome(empresa.getNome()) : empresaService.findById(empresa.getId());
         if (empresaModel == null) {
             empresaModel = EmpresaModel.builder().nome(empresa.getNome()).build();
         }
