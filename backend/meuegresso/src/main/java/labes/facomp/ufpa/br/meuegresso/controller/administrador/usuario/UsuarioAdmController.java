@@ -30,10 +30,11 @@ import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ResponseType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.UsuarioStatus;
+import labes.facomp.ufpa.br.meuegresso.exceptions.EmailAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NameAlreadyExistsException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundException;
-import labes.facomp.ufpa.br.meuegresso.exceptions.UnalthorizedRegisterException;
+import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRegisterException;
 import labes.facomp.ufpa.br.meuegresso.exceptions.UnauthorizedRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.model.StatusUsuarioModel;
@@ -98,7 +99,7 @@ public class UsuarioAdmController {
 	 * @author Lucas Cantão
 	 * @throws NotFoundException
 	 * @throws NameAlreadyExistsException
-	 * @throws UnalthorizedRegisterException
+	 * @throws UnauthorizedRegisterException
 	 * @throws InvalidRequestException
 	 * @see {@link UsuarioDTO}
 	 * @since 20/06/2023
@@ -110,11 +111,16 @@ public class UsuarioAdmController {
 	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioRegistro usuarioDTO,
 			JwtAuthenticationToken token,
 			@RequestHeader("Host") String host)
-			throws NameAlreadyExistsException, UnalthorizedRegisterException, InvalidRequestException {
+			throws NameAlreadyExistsException, UnauthorizedRegisterException, InvalidRequestException,
+			EmailAlreadyExistsException {
 		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
 			throw new NameAlreadyExistsException(
 					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),
 					ErrorType.USER_001.getInternalCode());
+		}
+
+		if (usuarioService.existsByEmail(usuarioDTO.getEmail())) {
+			throw new EmailAlreadyExistsException();
 		}
 
 		UsuarioModel usuarioModelTeste = usuarioService.findById(jwtService.getIdUsuario(token));
@@ -124,7 +130,7 @@ public class UsuarioAdmController {
 			Set<Grupos> grupos = usuarioDTO.getGrupos();
 			for (Grupos grupo : grupos) {
 				if (grupo.getAuthority().equals("ROLE_ADMIN")) {
-					throw new UnalthorizedRegisterException(String.format(ErrorType.UNAUTHORIZED_REGISTER.getMessage()),
+					throw new UnauthorizedRegisterException(String.format(ErrorType.UNAUTHORIZED_REGISTER.getMessage()),
 							ErrorType.UNAUTHORIZED_REGISTER.getInternalCode());
 				}
 			}
@@ -138,7 +144,8 @@ public class UsuarioAdmController {
 		usuarioModel.setPassword(password);
 
 		mailService.sendEmail(usuarioModel.getEmail(), "Cadastro no sistema de Egresso por um Administrador.",
-				"Seu cadastro no Sistema de Egresso foi realizado com sucesso pela administração. Sua senha é " + password);
+				"Seu cadastro no Sistema de Egresso foi realizado com sucesso pela administração. Sua senha é "
+						+ password);
 
 		/* Se o adm cria não precisa passar pela aprovação */
 		usuarioModel.setAtivo(true);
