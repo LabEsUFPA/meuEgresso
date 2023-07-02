@@ -187,7 +187,7 @@ const createMapLayer = async () => {
 
   const setMarkers = async () => {
     for (const [keyMapElement, valueMapElement] of props.egressList) {
-      L.circleMarker(getLatLng(keyMapElement), { radius: sizeMarker(1) }).addTo(map).on('click', selectMarker).bindTooltip(await componentToHtml(valueMapElement))
+      L.circleMarker(getLatLng(keyMapElement), { radius: sizeMarker(valueMapElement.length) }).addTo(map).on('click', selectMarker).bindTooltip(await componentToHtml(valueMapElement))
     }
   }
   await setMarkers()
