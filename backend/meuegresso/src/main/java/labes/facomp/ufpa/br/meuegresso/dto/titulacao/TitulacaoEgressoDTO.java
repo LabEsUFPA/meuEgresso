@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TitulacaoEgressoDTO {
 
-    private String instituicao;
+    private Integer instituicao;
 
-    private String curso;
+    private Integer curso;
 }

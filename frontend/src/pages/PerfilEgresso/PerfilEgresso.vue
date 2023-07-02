@@ -520,29 +520,55 @@
                 />
 
                 <CustomCheckbox
-                  class="mb-[-14px]"
+                  class="mb-5"
                   name="academico.posGrad.value"
                   v-model:value="bools.posGrad"
                   label="Pós-graduação"
                 />
 
-                <CustomInput
-                  class="mb-2"
+                <CustomSelect
+                  class="mb-1"
                   name="academico.posGrad.local"
                   label="Instituição da pós-graduação"
-                  :max-length="100"
+                  placeholder="Selecione"
+                  :options="$storeCadastro.instituicoes"
                   :required="bools.posGrad"
                   :disabled="!bools.posGrad"
+                  :is-fetching="$storeCadastro.isFetchingUniversidades"
+                  @typing="$storeCadastro.fetchUniversidadesAsync($event, true)"
+                  @infinite-scroll="$storeCadastro.fetchMoreUniversidadesAsync"
+                  infinite
+                  id="posGradLocal"
+                  :pre-filled="true"
                 />
+                <button
+                  type="button"
+                  class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
+                  :disabled="!bools.posGrad"
+                  @click="dialogInstituicao = true"
+                >
+                  Não encontrou sua instituição? Clique aqui
+                </button>
 
-                <CustomInput
-                  class="mb-5"
+                <CustomSelect
+                  class="mb-1"
                   name="academico.posGrad.curso"
                   label="Curso de pós-graduação"
+                  placeholder="Selecione"
+                  :options="$storeCadastro.cursos"
                   :required="bools.posGrad"
-                  :max-length="100"
                   :disabled="!bools.posGrad"
+                  :pre-filled="true"
                 />
+
+                <button
+                  type="button"
+                  class="mb-5 ml-1 text-sm disabled:opacity-75 text-cyan-700 enabled:hover:text-cyan-500 disabled:cursor-not-allowed cursor-pointer"
+                  :disabled="!bools.posGrad"
+                  @click="dialogCurso = true"
+                >
+                  Não encontrou seu curso? Clique aqui
+                </button>
 
                 <CustomCheckbox
                   name="academico.posGrad.desejaPos"
@@ -625,7 +651,7 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-7"
-                  :vmodel="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
+                  :vmodel="dataEgresso.localizacao.pais"
                   name="carreira.pais"
                   placeholder="Brasil"
                   label="País"
@@ -635,7 +661,7 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-7"
-                  :vmodel="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
+                  :vmodel="dataEgresso.localizacao.estado"
                   name="carreira.estado"
                   label="Estado"
                   placeholder="Pará"
@@ -646,6 +672,7 @@
                   type="text"
                   class="mb-7"
                   :vmodel="dataEgresso.localizacao.cidade"
+                  name="carreira.cidade"
                   label="Cidade"
                   placeholder="Belém"
                   :icon-path="mdiMapMarkerRadius"
@@ -673,6 +700,8 @@
                   :estado-holder="dataEgresso.localizacao.estado"
                   :cidade-holder="dataEgresso.localizacao.cidade"
                   :pre-filled="true"
+                  :required="dataEgresso.carreira.area !== 'Desempregado'"
+                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
                 />
               </template>
             </FolderCarreira>
@@ -796,6 +825,53 @@
         </div>
       </div>
     </CustomDialog>
+    <CustomDialog v-model="dialogInstituicao">
+      <div class="h-full flex justify-center gap-10 flex-col items-center">
+        <div class="text-2xl font-semibold text-cyan-800">
+          Cadastrar instituição
+        </div>
+
+        <Form
+          :validation-schema="instituicaoSchema"
+          @submit="handleNewInstituicao"
+          class="flex flex-col items-center gap-4"
+        >
+          <CustomInput
+            name="nome"
+            label="Nome da instituição de ensino"
+            placeholder="Universidade Federal do Pará (UFPA)"
+          />
+
+          <CustomButton type="submit">
+            Cadastrar
+          </CustomButton>
+        </Form>
+      </div>
+    </CustomDialog>
+
+    <CustomDialog v-model="dialogCurso">
+      <div class="h-full flex justify-center gap-10 flex-col items-center">
+        <div class="text-2xl font-semibold text-cyan-800">
+          Cadastrar curso
+        </div>
+
+        <Form
+          :validation-schema="cursoSchema"
+          @submit="handleNewCurso"
+          class="flex flex-col items-center gap-4"
+        >
+          <CustomInput
+            name="nome"
+            label="Nome da curso"
+            placeholder="Engenharia de software"
+          />
+
+          <CustomButton type="submit">
+            Cadastrar
+          </CustomButton>
+        </Form>
+      </div>
+    </CustomDialog>
   </div>
 </template>
 
@@ -807,14 +883,16 @@ import CustomInput from 'src/components/CustomInput.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import CustomDatepicker from 'src/components/CustomDatepicker.vue'
 import LocalizacaoSelect from 'src/components/LocalizacaoSelect.vue'
+import CustomButton from 'src/components/CustomButton.vue'
 
 import CustomPerfilData from './components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
-import { Country, State } from 'country-state-city'
 
 import { computed, ref, watch, onMounted } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
+import { useCadastroEgressoStore } from 'src/store/CadastroEgresso'
+
 import { Form } from 'vee-validate'
 import { object, string, boolean } from 'yup'
 import LocalStorage from 'src/services/localStorage'
@@ -823,7 +901,9 @@ import InvalidInsert from 'src/components/InvalidInsert.vue'
 
 import FolderCarreira from './components/FolderCarreira.vue'
 import FolderAdicionais from './components/FolderAdicionais.vue'
+import apiEnderecos from 'src/services/apiEnderecos'
 import ProfileImage from './components/ProfileImage.vue'
+
 import {
   mdiAccount,
   mdiEmail,
@@ -839,13 +919,17 @@ import {
   mdiLoading,
   mdiCalendarEdit
 } from '@mdi/js'
-import apiEnderecos from 'src/services/apiEnderecos'
+
 import { useRoute } from 'vue-router'
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
 const $route = useRoute()
+const $storeCadastro = useCadastroEgressoStore()
 const $store = usePerfilEgressoStore()
 const egressoStore = usePerfilEgressoStore()
+
+const dialogInstituicao = ref(false)
+const dialogCurso = ref(false)
 
 const storage = new LocalStorage()
 const formHeader = ref<typeof Form | null>(null)
@@ -962,6 +1046,7 @@ async function handleSubmitGeral (values: any) {
 }
 
 async function handleSubmitAcademico (values: any) {
+  console.log(values)
   const cotas: Array<{ id: number }> | null = []
   if (values.academico.cotista.value) {
     if (values.academico.cotista.tipos.escola) {
@@ -1005,13 +1090,11 @@ async function handleSubmitAcademico (values: any) {
           titulacaoId: 2
         },
         curso: {
-          id: 1,
-          nome: values.academico.posGrad.curso
+          id: values.academico.posGrad.local
+
         },
         empresa: {
-          id: 1,
-          nome: values.academico.posGrad.local
-
+          id: values.academico.posGrad.local
         },
         titulacao: {
           id: 2
@@ -1019,8 +1102,17 @@ async function handleSubmitAcademico (values: any) {
       }
       jsonResponse.titulacao = titulacao
     } else {
-      jsonResponse.titulacao.empresa.nome = values.academico.posGrad.local
-      jsonResponse.titulacao.curso.nome = values.academico.posGrad.curso
+      const curso = {
+        id: values.academico.posGrad.curso
+
+      }
+      const empresa = {
+        id: values.academico.posGrad.local
+
+      }
+      jsonResponse.titulacao.empresa = empresa
+
+      jsonResponse.titulacao.curso = curso
     }
   }
 
@@ -1071,11 +1163,9 @@ async function handleSubmitCarreira (values: any) {
 
       },
       endereco: {
-        id: 6,
-        cidade: '',
-        estado: '',
-        pais: '',
-        cidadeId: null
+        cidade: await apiEnderecos.getCidadeById(values.carreira.cidade),
+        estado: await apiEnderecos.getEstadoById(values.carreira.estado),
+        pais: await apiEnderecos.getPaisById(values.carreira.pais)
       },
       empresa: {
         id: 1,
@@ -1083,26 +1173,23 @@ async function handleSubmitCarreira (values: any) {
         faixaSalarial: {
           id: 2
         },
+
         isEmprego: true
       }
 
     }
   }
-  if (values.carreira.area !== 'Desempregado') {
-    const pais = await apiEnderecos.getPaisById(values.carreira.pais)
-    const estado = await apiEnderecos.getEstadoById(values.carreira.estado)
-    const cidade = await apiEnderecos.getCidadeById(values.carreira.cidade)
 
+  if (values.carreira.area !== 'Desempregado') {
     jsonResponse.emprego.empresa.nome = values.carreira.empresa
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
 
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
     const endereco = {
-      pais,
-      estado,
-      cidade,
-      cidadeId: values.carreira.cidade
+      pais: await apiEnderecos.getPaisById(values.carreira.pais),
+      estado: await apiEnderecos.getEstadoById(values.carreira.estado),
+      cidade: await apiEnderecos.getCidadeById(values.carreira.cidade)
     }
     jsonResponse.emprego.endereco = endereco
   } else {
@@ -1187,6 +1274,8 @@ const dataEgresso = ref({
   bolsaId: 0,
   areaAtuacaoId: 0,
   faixaSalarialId: 0,
+  localPosId: 0,
+  cursoId: 0,
   grupos: [''],
 
   geral: {
@@ -1313,7 +1402,7 @@ async function fetchUpdateEgresso () {
   const json = JSON.parse(ResponseBack)
 
   jsonResponse = json
-
+  console.log(json)
   // Cotas
   let cotasEgresso = ''
   imageEgressoUrl = await handleEgressoImage(json.id)
@@ -1330,6 +1419,8 @@ async function fetchUpdateEgresso () {
     bolsaId: json.bolsa?.id,
     areaAtuacaoId: json.emprego?.areaAtuacao?.id,
     faixaSalarialId: json.emprego?.faixaSalarial?.id,
+    localPosId: json.titulacao?.empresa?.id,
+    cursoId: json.titulacao?.curso?.id,
     grupos: [''],
 
     geral:
@@ -1451,7 +1542,9 @@ async function fetchUpdateEgresso () {
 
   formAcademico.value?.setValues({
     academico: dataEgresso.value.academico,
-    'academico.bolsista.tipo': dataEgresso.value.bolsaId
+    'academico.bolsista.tipo': dataEgresso.value.bolsaId,
+    'academico.posGrad.curso': dataEgresso.value.cursoId,
+    'academico.posGrad.local': dataEgresso.value.localPosId
   })
   formCarreira.value?.setValues({
     carreira: dataEgresso.value.carreira,
@@ -1500,6 +1593,30 @@ onMounted(() => {
   })
 })
 
+async function handleNewInstituicao (event: any) {
+  const response = await $storeCadastro.cadastrarInstituicao(event.nome)
+
+  if (response?.status === 201) {
+    alert('Instituição cadastrada com sucesso.')
+    dialogInstituicao.value = false
+  }
+}
+
+async function handleNewCurso (event: any) {
+  const response = await $storeCadastro.cadastrarCurso(event.nome)
+
+  if (response?.status === 201) {
+    alert('Curso cadastrado com sucesso.')
+    dialogCurso.value = false
+  }
+}
+const instituicaoSchema = object().shape({
+  nome: string().required('Insira o nome da instituição')
+})
+
+const cursoSchema = object().shape({
+  nome: string().required('Insira o nome do curso')
+})
 const schemaHeader = object().shape({
   geral: object({
     nome: string().required('Campo obrigatório').trim().test('Nome', 'Nome inválido', (value) => {

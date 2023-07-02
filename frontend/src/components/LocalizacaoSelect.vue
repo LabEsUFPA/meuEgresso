@@ -13,9 +13,10 @@
       :is-fetching="pais.isFetching"
       :placeholder="placeHolder.paisHolder"
       :pre-filled="props.preFilled"
-      required
       lazy-emit
       infinite
+      :required="available.required"
+      :disabled="available.disabled"
     />
     <CustomSelect
       name="carreira.estado"
@@ -30,9 +31,10 @@
       :is-fetching="estado.isFetching"
       :placeholder="placeHolder.estadoHolder"
       :pre-filled="props.preFilled"
-      required
       lazy-emit
       infinite
+      :required="available.required"
+      :disabled="available.disabled"
     />
     <CustomSelect
       label="Cidade"
@@ -46,9 +48,10 @@
       :is-fetching="cidade.isFetching"
       :pre-filled="props.preFilled"
       :options="cities"
-      required
       lazy-emit
       infinite
+      :required="available.required"
+      :disabled="available.disabled"
     />
   </div>
 </template>
@@ -119,6 +122,8 @@ interface Props {
   cidadeHolder?: string
   spacing?: string
   preFilled?: boolean
+  disabled: boolean,
+  required: boolean,
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -127,7 +132,9 @@ const props = withDefaults(defineProps<Props>(), {
   estadoHolder: '',
   cidadeHolder: '',
   spacing: 'mb-2',
-  preFilled: false
+  preFilled: false,
+  disabled: false,
+  required: true
 
 })
 
@@ -139,7 +146,10 @@ defineExpose({
   setEstado,
   setCidade
 })
-
+const available = ref({
+  required: props.required,
+  disabled: props.disabled
+})
 const placeHolder = ref({
   paisHolder: props.paisHolder,
   estadoHolder: props.estadoHolder,
@@ -282,5 +292,11 @@ watch(() => props.estadoHolder, (newValue) => {
 })
 watch(() => props.cidadeHolder, (newValue) => {
   placeHolder.value.cidadeHolder = newValue
+})
+watch(() => props.required, (newValue) => {
+  available.value.required = newValue
+})
+watch(() => props.disabled, (newValue) => {
+  available.value.disabled = newValue
 })
 </script>

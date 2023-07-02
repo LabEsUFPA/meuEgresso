@@ -26,6 +26,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoAttDTO
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
@@ -153,17 +154,9 @@ public class EgressoAdmController {
 
             TitulacaoEgressoDTO titulacaoEgressoDTO = egressoCadastroDTO.getTitulacao();
             // Cadastro do curso
-            CursoModel curso = cursoService.findByNome(titulacaoEgressoDTO.getCurso());
-            if (curso == null) {
-                curso = CursoModel.builder().nome(titulacaoEgressoDTO.getCurso()).build();
-                curso = cursoService.save(curso);
-            }
+            CursoModel curso = cursoService.findById(titulacaoEgressoDTO.getCurso());
             // Cadastro do Instituição ex: UFPA
-            EmpresaModel instituicao = empresaService.findByNome(titulacaoEgressoDTO.getInstituicao());
-            if (instituicao == null) {
-                instituicao = EmpresaModel.builder().nome(titulacaoEgressoDTO.getInstituicao()).build();
-                instituicao = empresaService.save(instituicao);
-            }
+            EmpresaModel instituicao = empresaService.findById(titulacaoEgressoDTO.getInstituicao());
             TitulacaoModel titulacao = titulacaoService
                     .findById(egressoCadastroDTO.getPosGraduacao().booleanValue() ? 2 : 1);
             EgressoTitulacaoModel egressoTitulacao = EgressoTitulacaoModel.builder().empresa(instituicao)
@@ -257,28 +250,13 @@ public class EgressoAdmController {
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
-        if (egressoModel.getContribuicao() != null) {
-            egressoModel.getContribuicao().setEgresso(egressoModel);
-        }
-        if (egressoModel.getDepoimento() != null) {
-            egressoModel.getDepoimento().setEgresso(egressoModel);
-        }
+        validaContribuicaoDepoimento(egressoModel);
         if (egressoModel.getEmprego() != null) {
-            EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
-            egressoEmpresaModel.setEgresso(egressoModel);
-            EnderecoModel enderecoModel = egressoEmpresaModel.getEndereco();
-            EnderecoModel enderecoModelNoBanco = enderecoService.findByCidadeAndEstadoAndPais(
-                    enderecoModel.getCidade(), enderecoModel.getEstado(),
-                    enderecoModel.getPais());
-            if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
-                egressoEmpresaModel.setEndereco(enderecoModelNoBanco);
-                egressoEmpresaModel.setEndereco(enderecoModelNoBanco);
-            } else if (enderecoModelNoBanco == null) {
-                egressoEmpresaModel.getId().setEnderecoId(null);
-                egressoEmpresaModel.setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
-                        .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
+                EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
+                egressoEmpresaModel.setEgresso(egressoModel);
+                validaEmpresa(egressoEmpresaModel.getEmpresa(), egressoModel);
+                validaEndereco(egressoEmpresaModel.getEndereco(), egressoModel);
             }
-        }
         if (egressoModel.getPalestras() != null) {
             egressoModel.getPalestras().setEgresso(egressoModel);
         }
@@ -290,8 +268,8 @@ public class EgressoAdmController {
             validaSetorAtuacao(setorAtuacaoModel.getNome(), egressoModel);
         }
         if (egressoModel.getTitulacao() != null) {
-            validaCurso(egressoModel.getTitulacao().getCurso().getNome(), egressoModel);
-            validaInstituicao(egresso.getTitulacao().getEmpresa().getNome(), egressoModel);
+            validaCurso(egressoModel.getTitulacao().getCurso(), egressoModel);
+            validaInstituicao(egresso.getTitulacao().getEmpresa(), egressoModel);
             egressoModel.getTitulacao().setEgresso(egressoModel);
         }
         egressoModel.getUsuario().setUsername(user.getUsername());
@@ -384,6 +362,15 @@ public class EgressoAdmController {
         return ResponseType.FAIL_IMAGE_DELETE.getMessage();
     }
 
+    private void validaContribuicaoDepoimento(EgressoModel egressoModel) {
+        if (egressoModel.getContribuicao() != null) {
+            egressoModel.getContribuicao().setEgresso(egressoModel);
+        }
+        if (egressoModel.getDepoimento() != null) {
+            egressoModel.getDepoimento().setEgresso(egressoModel);
+        }
+    }
+
     private void validaSetorAtuacao(String setorAtuacaoNome, EgressoModel egressoModel) {
         SetorAtuacaoModel setorAtuacaoModelNoBanco = setorAtuacaoService.findByNome(setorAtuacaoNome);
         if (setorAtuacaoModelNoBanco == null) {
@@ -400,18 +387,41 @@ public class EgressoAdmController {
         egressoModel.getEmprego().setAreaAtuacao(areaAtuacaoModelNoBanco);
     }
 
-    private void validaCurso(String cursoNome, EgressoModel egressoModel) {
-        CursoModel cursoModel = cursoService.findByNome(cursoNome);
+    private void validaCurso(CursoModel curso, EgressoModel egressoModel) {
+        CursoModel cursoModel = curso.getId() != null ? cursoService.findById(curso.getId()) : cursoService.findByNome(curso.getNome());
         if (cursoModel == null) {
-            cursoModel = CursoModel.builder().nome(cursoNome).build();
+            cursoModel = CursoModel.builder().nome(curso.getNome()).build();
         }
         egressoModel.getTitulacao().setCurso(cursoModel);
     }
 
-    private void validaInstituicao(String cursoInstituicao, EgressoModel egressoModel) {
-        EmpresaModel empresaModel = empresaService.findByNome(cursoInstituicao);
+    private void validaEmpresa(EmpresaModel empresa, EgressoModel egressoModel) {
+        EmpresaModel empresaModel = empresa.getNome() != null ? empresaService.findByNome(empresa.getNome()) : empresaService.findById(empresa.getId());
         if (empresaModel == null) {
-            empresaModel = EmpresaModel.builder().nome(cursoInstituicao).build();
+            empresaModel = EmpresaModel.builder().nome(empresa.getNome()).build();
+        }
+        egressoModel.getEmprego().setEmpresa(empresaModel);
+    }
+
+    private void validaEndereco(EnderecoModel enderecoModel, EgressoModel egressoModel) {
+        EnderecoModel enderecoModelNoBanco = enderecoService.findByCidadeAndEstadoAndPais(
+                enderecoModel.getCidade(), enderecoModel.getEstado(),
+                enderecoModel.getPais());
+        if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
+            egressoModel.getEmprego().setEndereco(enderecoModelNoBanco);
+            egressoModel.getEmprego().getId().setEnderecoId(enderecoModelNoBanco.getId());
+        } else if (enderecoModelNoBanco == null) {
+            egressoModel.getEmprego().getId().setEnderecoId(null);
+            egressoModel.getEmprego()
+                    .setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
+                            .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
+        }
+    }
+
+    private void validaInstituicao(EmpresaDTO instituicao, EgressoModel egressoModel) {
+        EmpresaModel empresaModel = instituicao.getId() != null ? empresaService.findById(instituicao.getId()): empresaService.findByNome(instituicao.getNome());
+        if (empresaModel == null) {
+            empresaModel = EmpresaModel.builder().nome(instituicao.getNome()).build();
         }
         egressoModel.getTitulacao().setEmpresa(empresaModel);
     }
