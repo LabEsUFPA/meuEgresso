@@ -112,7 +112,7 @@
           size="48"
           :path="mdiEmoticonSadOutline"
         />
-        <h1 class="text-xl sm:text-2xl font-medium">
+        <h1 class="text-md sm:text-lg font-medium">
           Nenhuma vaga encontrada
         </h1>
       </div>

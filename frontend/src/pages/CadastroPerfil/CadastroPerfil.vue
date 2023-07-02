@@ -113,13 +113,13 @@
             Entre
           </RouterLink>
         </p>
-        <p class="mt-2 w-64 text-sm text-center">
+        <p class="mt-2 w-72 text-sm text-center">
           Ao clicar em Cadastrar-se, você concorda com nossa
           <RouterLink
             to="/privacidade"
             class="text-sky-600"
           >
-            Política de Privacidade.
+            Política de Privacidade e Cookies.
           </RouterLink>
         </p>
       </div>

@@ -133,6 +133,11 @@ public class EgressoServiceImpl implements EgressoService {
 	}
 
 	@Override
+    public boolean existsByUsuarioId(Integer id) {
+        return egressoRepository.existsByUsuarioId(id);
+    }
+
+    @Override
 	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
 		return egressoRepository.existsByIdAndCreatedBy(id, createdBy);
 	}

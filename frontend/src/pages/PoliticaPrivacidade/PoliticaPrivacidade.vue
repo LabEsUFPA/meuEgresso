@@ -143,10 +143,112 @@
       </li>
     </ol>
 
-    <p class="mt-10 text-justify">
-      Ao utilizar o Meu Egresso, você reconhece ter lido, compreendido e concordado com todos os
-      termos nesta página.
+    <h1 class="text-lg sm:text-2xl font-semibold text-cyan-800 text-center mb-3 mt-6">
+      Termo de Aceite da Política de Cookies
+    </h1>
+
+    <p class="text-justify">
+      Este Termo de Aceite estabelece as diretrizes e condições para o uso de cookies no Meu Egresso
+      de gerenciamento de egressos da Faculdade de Computação da Universidade Federal do Pará
+      (UFPA), doravante chamada "MEU EGRESSO COMPUTAÇÃO". Ao utilizar esta aplicação, você
+      concorda com os termos aqui apresentados e assume a responsabilidade pelo cumprimento das
+      obrigações legais relacionadas à política de cookies.
     </p>
+
+    <ol class="list-decimal text-justify">
+      <li class="text-lg sm:text-xl font-semibold text-cyan-800 mt-3">
+        Uso de Cookies
+
+        <ol class="list-decimal text-base font-normal text-neutral-900">
+          <li>
+            O Meu Egresso utiliza cookies, que são pequenos arquivos de texto armazenados no seu
+            dispositivo (computador, smartphone, tablet etc.) quando você acessa o sistema
+          </li>
+          <li>
+            Os cookies permitem o reconhecimento do seu dispositivo, personalização da sua
+            experiência de uso, análise de dados e melhorias contínuas na aplicação.
+          </li>
+        </ol>
+      </li>
+
+      <li class="text-lg sm:text-xl font-semibold text-cyan-800 mt-3">
+        Tipos de Cookies Utilizados
+
+        <ol class="list-decimal text-base font-normal text-neutral-900">
+          <li>
+            Cookies Necessários: Esses cookies são essenciais para o funcionamento do Meu Egresso e
+            permitem que você navegue e utilize os recursos disponíveis
+          </li>
+          <li>
+            Cookies de Desempenho: Esses cookies coletam informações sobre como você interage com
+            a aplicação, como páginas visitadas, tempo de permanência, erros encontrados, entre outros. Essas informações são usadas para melhorar o desempenho e a usabilidade da aplicação.
+          </li>
+          <li>
+            Cookies de Funcionalidade: Esses cookies permitem que O Meu Egresso lembre suas
+            preferências e ofereça recursos personalizados, como idioma escolhido, layout preferido, entre
+            outros
+          </li>
+        </ol>
+      </li>
+
+      <li class="text-lg sm:text-xl font-semibold text-cyan-800 mt-3">
+        Consentimento e Gerenciamento de Cookies
+
+        <ol class="list-decimal text-base font-normal text-neutral-900">
+          <li>
+            Ao utilizar O Meu Egresso, você concorda com o uso de cookies, conforme descrito neste
+            Termo de Aceite.
+          </li>
+          <li>
+            Você tem a opção de gerenciar e controlar os cookies. Pode aceitar todos os cookies, recusar
+            todos os cookies ou configurar suas preferências de cookies no seu navegador
+          </li>
+          <li>
+            É importante ressaltar que, ao optar por recusar ou desativar certos cookies, pode haver
+            impacto na funcionalidade e desempenho do Meu Egresso.
+          </li>
+        </ol>
+      </li>
+
+      <li class="text-lg sm:text-xl font-semibold text-cyan-800 mt-3">
+        Armazenamento e Retenção de Dados
+
+        <ol class="list-decimal text-base font-normal text-neutral-900">
+          <li>
+            Os dados coletados por meio dos cookies são tratados em conformidade com as leis
+            aplicáveis de proteção de dados e privacidade.
+          </li>
+          <li>
+            Os dados pessoais coletados por meio dos cookies são armazenados pelo tempo necessário
+            para cumprir as finalidades descritas no item 2.
+          </li>
+        </ol>
+      </li>
+
+      <li class="text-lg sm:text-xl font-semibold text-cyan-800 mt-3">
+        Disposições Finais
+
+        <ol class="list-decimal text-base font-normal text-neutral-900">
+          <li>
+            Este Termo de Aceite da Política de Cookies é regido pelas leis da República Federativa do
+            Brasil.
+          </li>
+          <li>
+            Caso qualquer disposição deste Termo de Aceite seja considerada inválida ou inexequível,
+            as demais disposições permanecerão em pleno vigor e efeito.
+          </li>
+          <li>
+            Em caso de dúvidas ou sugestões sobre este Termo de Aceite, entre em contato com a
+            equipe responsável pelo Meu Egresso.
+          </li>
+        </ol>
+      </li>
+
+      <p class="mt-10 text-justify">
+        Ao utilizar o Meu Egresso, você reconhece ter lido, compreendido e concordado com todos os
+        termos nesta página.
+      </p>
+    </ol>
   </div>
 </template>
 

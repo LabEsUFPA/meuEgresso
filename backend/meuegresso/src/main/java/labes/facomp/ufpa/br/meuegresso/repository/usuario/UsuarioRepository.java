@@ -43,9 +43,10 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 	/**
 	 * Método responsável por retornar dados para o EgressoDashDTO
 	 *
-	 * @author Eude Monteiro
-	 * @return Um objeto map com informações sobre o nome do usuário,
-	 *         seu status de cadastro e data de modificação.
+	 * @author Bruno Eiki
+	 * @return Um objeto com informações sobre o id do usuário e do egresso,
+	 * nome do usuário, seu status de cadastro, nome da empresa, e-mail, data
+	 * de criação e foto.
 	 * @since 12/06/2023
 	 */
 	@Query(nativeQuery = true, value = """
@@ -60,7 +61,6 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			CASE
 			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
 			CASE
-			WHEN e.ativo = FALSE THEN 'inativo'
 			WHEN u.valido_usuario = FALSE THEN 'pendente'
 			WHEN u.valido_usuario = TRUE THEN 'completo'
 			END
@@ -78,7 +78,6 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			CASE
 			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
 			CASE
-			WHEN e.ativo = FALSE THEN 'inativo'
 			WHEN u.valido_usuario = TRUE THEN 'completo'
 			WHEN u.valido_usuario = FALSE THEN 'pendente'
 			END
@@ -94,25 +93,26 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			@Param("status") String[] status,
 			@Param("ordenacao") String ordenacao);
 
+
+	/**
+	 * Método responsável por retornar dados para notificação do status
+	 *
+	 * @author AlfredoGabriel, Eude Monteiro
+	 * @return Um objeto map com informações sobre o nome do usuário,
+	 *         seu status de cadastro e data de modificação.
+	 * @since 12/06/2023
+	 */
 	@Query(value = """
 			WITH usuario_status AS (
 			SELECT
 			upper(u.nome_usuario) AS nome_usuario,
 			u.id_usuario,
-			CASE
-			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
-			case
-			when u.revtype = 2 then 'excluido'
-			WHEN e.ativo = FALSE THEN 'inativo'
-			WHEN u.valido_usuario = TRUE THEN 'completo'
-			WHEN u.valido_usuario = FALSE THEN 'pendente'
-			END
-			ELSE 'incompleto'
-			END AS status,
+			su.status,
 			u.last_modified_date
 			FROM
 			usuario_grupo_aud ug
 			LEFT JOIN egresso_aud e ON ug.id_usuario = e.usuario_id
+			JOIN status_usuario su ON su.usuario_id_status_usuario = ug.id_usuario
 			JOIN usuario_aud u ON ug.id_usuario = u.id_usuario
 			WHERE
 			ug.grupo = 'EGRESSO'
@@ -121,12 +121,7 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			WHEN ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL THEN
 			case
 			when u.revtype = 2 then 'excluido'
-			WHEN e.ativo = FALSE THEN 'inativo'
-			WHEN u.valido_usuario = TRUE THEN 'completo'
-			WHEN u.valido_usuario = FALSE THEN 'pendente'
-			END
-			ELSE 'incompleto'
-			end ilike %:status%
+			LOWER(su.status) ilike %:status%
 			AND (ug.grupo = 'EGRESSO' AND e.usuario_id IS NOT NULL OR u.valido_usuario = FALSE)
 			)
 			SELECT
