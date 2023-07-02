@@ -378,7 +378,7 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-5"
-                  :vmodel="'R$ ' + dataEgresso.academico.bolsista.remuneracao"
+                  :vmodel="dataEgresso.academico.bolsista.remuneracao"
                   name="academico.bolsista.remuneracao"
                   label="Remuneração da bolsa"
                   placeholder="Selecione"
@@ -668,7 +668,12 @@
                 </div>
               </template>
               <template #local>
-                <LocalizacaoSelect />
+                <LocalizacaoSelect
+                  :pais-holder="dataEgresso.localizacao.pais"
+                  :estado-holder="dataEgresso.localizacao.estado"
+                  :cidade-holder="dataEgresso.localizacao.cidade"
+                  :pre-filled="true"
+                />
               </template>
             </FolderCarreira>
           </Form>
@@ -806,7 +811,7 @@ import LocalizacaoSelect from 'src/components/LocalizacaoSelect.vue'
 import CustomPerfilData from './components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
-import { Country, State, City } from 'country-state-city'
+import { Country, State } from 'country-state-city'
 
 import { computed, ref, watch, onMounted } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
@@ -861,41 +866,6 @@ eighteenYearsAgo.value.setFullYear(eighteenYearsAgo.value.getFullYear() - 18)
 const checkRegistrationLength = ($event: Event) => {
   missingDigits.value = 12 - String($event).length
 }
-const countries = computed(() => {
-  const countries = Country.getAllCountries()
-  const filteredCountries = []
-  for (const country of countries) {
-    filteredCountries.push({
-      label: country.name,
-      value: country.isoCode
-    })
-  }
-
-  return filteredCountries
-})
-
-const states = computed(() => {
-  const states = State.getStatesOfCountry(dataEgresso.value.localizacao.pais)
-  const filteredStates = []
-
-  for (const state of states) {
-    filteredStates.push({
-      label: state.name,
-      value: state.isoCode
-    })
-  }
-  return filteredStates
-})
-
-const cities = computed(() => {
-  const cities = City.getCitiesOfState(dataEgresso.value.localizacao.pais, dataEgresso.value.localizacao.estado)
-  const filteredCities = []
-
-  for (const city of cities) {
-    filteredCities.push(city.name)
-  }
-  return filteredCities
-})
 
 //
 const stagedChanges = ref({
@@ -1112,8 +1082,8 @@ async function handleSubmitCarreira (values: any) {
         nome: '',
         faixaSalarial: {
           id: 2
-        }
-
+        },
+        isEmprego: true
       }
 
     }
@@ -1395,7 +1365,7 @@ async function fetchUpdateEgresso () {
       bolsista: {
         value: json.bolsista,
         tipo: json.bolsa?.nome || '',
-        remuneracao: json.remuneracaoBolsa || ''
+        remuneracao: json.remuneracaoBolsa ? 'R$ ' + json.remuneracaoBolsa : ''
       },
       posGrad: {
         value: json.posGraduacao,

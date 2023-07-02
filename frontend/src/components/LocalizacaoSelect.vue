@@ -14,6 +14,7 @@
       required
       ref="selectPais"
       :placeholder="placeHolder.paisHolder"
+      :pre-filled="props.preFilled"
     />
     <CustomSelect
       :class="spacing"
@@ -29,6 +30,7 @@
       required
       ref="selectEstado"
       :placeholder="placeHolder.estadoHolder"
+      :pre-filled="props.preFilled"
     />
     <CustomSelect
       name="carreira.cidade"
@@ -43,6 +45,7 @@
       required
       ref="selectCidade"
       :placeholder="placeHolder.cidadeHolder"
+      :pre-filled="props.preFilled"
     />
   </div>
 </template>
@@ -112,6 +115,7 @@ interface Props {
   estadoHolder?: string
   cidadeHolder?: string
   spacing?: string
+  preFilled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -119,7 +123,9 @@ const props = withDefaults(defineProps<Props>(), {
   paisHolder: '',
   estadoHolder: '',
   cidadeHolder: '',
-  spacing: 'mb-2'
+  spacing: 'mb-2',
+  preFilled: false
+
 })
 
 defineExpose({
