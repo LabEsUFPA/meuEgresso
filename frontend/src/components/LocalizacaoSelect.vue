@@ -1,51 +1,54 @@
 <template>
   <div>
     <CustomSelect
-      :class="spacing"
       name="carreira.pais"
       label="País"
-      :options="countries"
       v-model:value="pais"
+      ref="selectPais"
       @change="handleChangeLocal('pais', $event)"
-      :is-fetching="pais.isFetching"
       @typing="fetchCountries($event, true)"
       @infinite-scroll="fetchMoreCounties"
-      infinite
-      required
-      ref="selectPais"
+      :class="spacing"
+      :options="countries"
+      :is-fetching="pais.isFetching"
       :placeholder="placeHolder.paisHolder"
       :pre-filled="props.preFilled"
+      required
+      lazy-emit
+      infinite
     />
     <CustomSelect
-      :class="spacing"
       name="carreira.estado"
       label="Estado"
-      :options="states"
       v-model:value="estado"
+      ref="selectEstado"
       @change="handleChangeLocal('estado', $event)"
-      :is-fetching="estado.isFetching"
       @typing="fetchStates($event, true)"
       @infinite-scroll="fetchMoreStates"
-      infinite
-      required
-      ref="selectEstado"
+      :class="spacing"
+      :options="states"
+      :is-fetching="estado.isFetching"
       :placeholder="placeHolder.estadoHolder"
       :pre-filled="props.preFilled"
+      required
+      lazy-emit
+      infinite
     />
     <CustomSelect
-      name="carreira.cidade"
       label="Cidade"
-      :options="cities"
+      name="carreira.cidade"
       v-model:value="cidade"
-      @change="handleChangeLocal('cidade', $event)"
-      :is-fetching="cidade.isFetching"
-      @typing="fetchCities($event, true)"
-      @infinite-scroll="fetchMoreCities"
-      infinite
-      required
       ref="selectCidade"
+      @change="handleChangeLocal('cidade', $event)"
+      @infinite-scroll="fetchMoreCities"
+      @typing="fetchCities($event, true)"
       :placeholder="placeHolder.cidadeHolder"
+      :is-fetching="cidade.isFetching"
       :pre-filled="props.preFilled"
+      :options="cities"
+      required
+      lazy-emit
+      infinite
     />
   </div>
 </template>
