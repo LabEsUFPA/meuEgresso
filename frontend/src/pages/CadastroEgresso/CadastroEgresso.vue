@@ -308,7 +308,7 @@
             />
 
             <CustomInput
-              class="mb-1"
+              class="mb-5"
               name="carreira.empresa"
               label="Empresa"
               placeholder="Google"
@@ -327,7 +327,13 @@
               :disabled="area === 'Desempregado'"
             />
 
+            <div class="mb-5 text-sm font-semibold text-cyan-600">
+              Localização:
+            </div>
+
             <LocalizacaoSelect
+              ref="localizacao"
+              spacing="mb-5"
               pais-holder="Selecione"
               estado-holder="Selecione"
               cidade-holder="Selectione"
@@ -599,6 +605,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import VueScrollTo from 'vue-scrollto'
 import { boolean, mixed, object, string } from 'yup'
 import { useRoute } from 'vue-router'
+import apiEnderecos from 'src/services/apiEnderecos'
 
 const baseURL = 'https://egressos.computacao.ufpa.br/'
 const $storeCadastro = useCadastroEgressoStore()
@@ -625,8 +632,7 @@ const error = ref(false)
 
 const selectSetor = ref()
 const selectFaixa = ref()
-// const inputEmpresa = ref()
-const selectPais = ref()
+const localizacao = ref()
 
 const minDate = ref(new Date(-8640000000000000))
 const eighteenYearsAgo = ref(new Date())
@@ -687,6 +693,10 @@ async function handleSubmit (values: any) {
     cotas = null
   }
 
+  const pais = await apiEnderecos.getPaisById(values.carreira.pais)
+  const estado = await apiEnderecos.getEstadoById(values.carreira.estado)
+  const cidade = await apiEnderecos.getCidadeById(values.carreira.cidade)
+
   const empresa = values.carreira.area !== 'Desempregado'
     ? {
         areaAtuacao: values.carreira.area,
@@ -694,9 +704,9 @@ async function handleSubmit (values: any) {
         setorAtuacao: values.carreira.setor,
         nome: values.carreira.empresa,
         endereco: {
-          pais: values.carreira.pais,
-          estado: values.carreira.estado,
-          cidade: values.carreira.cidade
+          pais,
+          estado,
+          cidade
         }
       }
     : null
@@ -932,8 +942,12 @@ onMounted(async () => {
       form.value.setFieldTouched('carreira.faixaSalarial', false)
       form.value.setFieldValue('carreira.empresa', '')
       form.value.setFieldTouched('carreira.empresa', false)
-      selectPais.value.setInitialValues('')
+      localizacao.value.setPais('')
+      localizacao.value.setEstado('')
+      localizacao.value.setCidade('')
       form.value.setFieldTouched('carreira.pais', false)
+      form.value.setFieldTouched('carreira.estado', false)
+      form.value.setFieldTouched('carreira.cidade', false)
     }
   })
 

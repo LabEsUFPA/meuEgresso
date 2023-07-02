@@ -8,6 +8,11 @@ interface ReturnValue {
   status: number
 }
 
+interface ResponseType {
+  id: number
+  nome: string
+}
+
 const baseURL = import.meta.env.VITE_URL_ENDERECOS
 
 const Axios = axios.create({
@@ -71,8 +76,29 @@ async function getCidades (query: string, idEstado: number, page: number): Promi
   })
 }
 
+async function getPaisById (id: number): Promise<string> {
+  const pais: ResponseType = (await Axios.get(`/pais/${id}`)).data
+  console.log(pais)
+  return pais.nome
+}
+
+async function getEstadoById (id: number): Promise<string> {
+  const pais: ResponseType = (await Axios.get(`/estado/${id}`)).data
+  console.log(pais)
+  return pais.nome
+}
+
+async function getCidadeById (id: number): Promise<string> {
+  const pais: ResponseType = (await Axios.get(`/cidade/${id}`)).data
+  console.log(pais)
+  return pais.nome
+}
+
 export default {
   getPaises,
   getEstados,
-  getCidades
+  getCidades,
+  getPaisById,
+  getEstadoById,
+  getCidadeById
 }

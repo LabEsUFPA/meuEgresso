@@ -668,41 +668,7 @@
                 </div>
               </template>
               <template #local>
-                <CustomSelect
-                  class="mb-5"
-                  name="carreira.pais"
-                  label="País"
-                  :options="countries"
-                  v-model:value="dataEgresso.localizacao.pais"
-                  @change="dataEgresso.localizacao.pais = $event"
-
-                  :placeholder="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
-                  :pre-filled="true"
-                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
-                />
-
-                <CustomSelect
-                  class="mb-5"
-                  name="carreira.estado"
-                  label="Estado"
-                  :options="states"
-                  v-model:value="dataEgresso.localizacao.estado"
-                  @change="dataEgresso.localizacao.estado = $event"
-                  :placeholder="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
-                  :pre-filled="true"
-                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
-                />
-
-                <CustomSelect
-                  name="carreira.cidade"
-                  label="Cidade"
-                  :options="cities"
-                  v-model:value="dataEgresso.localizacao.cidade"
-
-                  :pre-filled="true"
-                  :placeholder="dataEgresso.localizacao.cidade"
-                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
-                />
+                <LocalizacaoSelect />
               </template>
             </FolderCarreira>
           </Form>
@@ -835,6 +801,7 @@ import FolderSection from 'src/components/FolderSection.vue'
 import CustomInput from 'src/components/CustomInput.vue'
 import CustomCheckbox from 'src/components/CustomCheckbox.vue'
 import CustomDatepicker from 'src/components/CustomDatepicker.vue'
+import LocalizacaoSelect from 'src/components/LocalizacaoSelect.vue'
 
 import CustomPerfilData from './components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'

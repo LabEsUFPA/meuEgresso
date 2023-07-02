@@ -1,7 +1,7 @@
 <template>
   <div>
     <CustomSelect
-      class="mb-2"
+      :class="spacing"
       name="carreira.pais"
       label="País"
       :options="countries"
@@ -12,10 +12,11 @@
       @infinite-scroll="fetchMoreCounties"
       infinite
       required
+      ref="selectPais"
       :placeholder="placeHolder.paisHolder"
     />
     <CustomSelect
-      class="mb-2"
+      :class="spacing"
       name="carreira.estado"
       label="Estado"
       :options="states"
@@ -62,8 +63,22 @@ const $store = useCadastroEgressoStore()
 const storage = new LocalStorage()
 const paisChange = ref(false)
 const estadoChange = ref(false)
+
+const selectPais = ref()
 const selectEstado = ref()
 const selectCidade = ref()
+
+function setPais (payload: string) {
+  selectPais.value.setInitialValues(payload)
+}
+
+function setEstado (payload: string) {
+  selectEstado.value.setInitialValues(payload)
+}
+
+function setCidade (payload: string) {
+  selectCidade.value.setInitialValues(payload)
+}
 
 // const $emit = defineEmits(['paisChange', 'estadoChange'])
 
@@ -96,18 +111,24 @@ interface Props {
   paisHolder?: string
   estadoHolder?: string
   cidadeHolder?: string
+  spacing?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isInput: true,
   paisHolder: '',
   estadoHolder: '',
-  cidadeHolder: ''
+  cidadeHolder: '',
+  spacing: 'mb-2'
 })
+
 defineExpose({
   fetchMoreCounties,
   fetchMoreStates,
-  fetchMoreCities
+  fetchMoreCities,
+  setPais,
+  setEstado,
+  setCidade
 })
 
 const placeHolder = ref({

@@ -223,9 +223,9 @@ onMounted(() => {
       model.value = ''
       handleChange('')
     }
-    // if (input.value) {
-    //   input.value.focus()
-    // }
+    if (input.value) {
+      input.value.focus()
+    }
   })
 })
 </script>
