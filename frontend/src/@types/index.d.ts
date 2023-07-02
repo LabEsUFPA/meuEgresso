@@ -148,14 +148,14 @@ export namespace models {
     empresa: {
       id: number
       nome: string
-      endereco: {
-        id: number
-        cidade: string
-        estado: string
-        pais: string
-        latitude: number
-        longitude: number
-      }
+    }
+    endereco: {
+      id: number
+      cidade: string
+      estado: string
+      pais: string
+      latitude: number
+      longitude: number
     }
   }
 
@@ -359,9 +359,14 @@ export namespace models {
     dataExpiracao: string
     link: string
     salario: string
-    createdBy: {
-      email: string
+    createdBy: number
+    createdByUser: {
+      id: number
       nome: string
+      egresso: {
+        id: number
+      }
+      foto: string
     }
   }
   export interface AnuncioModelPost {

@@ -65,7 +65,8 @@ class UsuarioServiceImplTest {
 		usuario.setUsername("john123");
 		usuario.setEmail("john@example.com");
 		usuario.setPassword("password123");
-		usuario.setCreatedBy(usuario);
+		usuario.setCreatedBy(usuario.getId());
+		usuario.setEmailVerificado(true);
 
 		usuarioRepository.save(usuario);
 
@@ -75,7 +76,8 @@ class UsuarioServiceImplTest {
 		usuario2.setUsername("jocke123");
 		usuario2.setEmail("jocke@example.com");
 		usuario2.setPassword("password124");
-		usuario2.setCreatedBy(usuario);
+		usuario2.setCreatedBy(usuario2.getId());
+		usuario2.setEmailVerificado(true);
 		usuarioRepository.save(usuario2);
 
 		usuarios.add(usuario);
@@ -99,6 +101,26 @@ class UsuarioServiceImplTest {
 
 		assertThrows(UsernameNotFoundException.class, () -> usuarioService.loadUserByUsername("carla123"));
 		Mockito.verify(usuarioRepository).findByUsernameIgnoreCase(anyString());
+	}
+
+	@Test
+	void test_Given_Valid_Email_Should_Return_True() {
+		Mockito.when(usuarioRepository.existsByEmail(anyString())).thenReturn(true);
+
+		boolean userindb = usuarioService.existsByEmail("john@example.com");
+
+		assertTrue(userindb);
+		Mockito.verify(usuarioRepository).existsByEmail(anyString());
+	}
+
+	@Test
+	void test_Given_Invalid_Email_Should_Return_False() {
+		Mockito.when(usuarioRepository.existsByEmail(anyString())).thenReturn(false);
+
+		boolean userindb = usuarioService.existsByEmail("john2@example.com");
+
+		assertFalse(userindb);
+		Mockito.verify(usuarioRepository).existsByEmail(anyString());
 	}
 
 	@Test
@@ -174,25 +196,27 @@ class UsuarioServiceImplTest {
 		user.setUsername("john123");
 		user.setEmail("john@example.com");
 		user.setPassword("password123");
-		user.setCreatedBy(usuario);
+		user.setCreatedBy(usuario.getId());
 		// updating
 		user.setNome("Michael");
 		user.setEmail("michel@hotmail.com");
 		user.setUsername("michel123");
 		user.setPassword("newpassword");
-		user.setLastModifiedBy(user);
+		user.setLastModifiedBy(user.getId());
+		user.setEmailVerificado(true);
+		user.setValido(true);
+
 
 		UsuarioModel mockUser = new UsuarioModel();
 		mockUser.setId(10);
 
-		Mockito.when(usuarioRepository.save(new UsuarioModel(10, null, null, null, null, null, null, true)))
+		Mockito.when(usuarioRepository.save(Mockito.any(UsuarioModel.class)))
 				.thenReturn(user);
 		UsuarioModel usertest = usuarioService.update(mockUser);
 
 		MatcherAssert.assertThat(usertest.getId(), Matchers.greaterThan(0));
 		assertNotNull(usertest);
 		assertEquals(user, usertest);
-		Mockito.verify(usuarioRepository).save(new UsuarioModel(10, null, null, null, null, null, null, true));
 	}
 
 	@Test
@@ -204,13 +228,13 @@ class UsuarioServiceImplTest {
 		user.setUsername("john123");
 		user.setEmail("john@example.com");
 		user.setPassword("password123");
-		user.setCreatedBy(usuario);
+		user.setCreatedBy(usuario.getId());
 		// updating
 		user.setNome("Michael");
 		user.setEmail("michel@hotmail.com");
 		user.setUsername("michel123");
 		user.setPassword("newpassword");
-		user.setLastModifiedBy(user);
+		user.setLastModifiedBy(user.getId());
 
 		UsuarioModel mockUser = new UsuarioModel();
 
@@ -241,16 +265,16 @@ class UsuarioServiceImplTest {
 
 	@Test
 	void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_True_If_Right() {
-		Mockito.when(usuarioRepository.existsByIdAndCreatedById(anyInt(), anyInt())).thenReturn(true);
-		assertTrue(usuarioService.existsByIdAndCreatedById(1, 2));
-		Mockito.verify(usuarioRepository).existsByIdAndCreatedById(anyInt(), anyInt());
+		Mockito.when(usuarioRepository.existsByIdAndCreatedBy(anyInt(), anyInt())).thenReturn(true);
+		assertTrue(usuarioService.existsByIdAndCreatedBy(1, 2));
+		Mockito.verify(usuarioRepository).existsByIdAndCreatedBy(anyInt(), anyInt());
 	}
 
 	@Test
 	void test_Given_Id_And_IdFromTheOneThatCreatedTheId_Return_False_If_Wrong() {
-		Mockito.when(usuarioRepository.existsByIdAndCreatedById(anyInt(), anyInt())).thenReturn(false);
-		assertFalse(usuarioService.existsByIdAndCreatedById(5, 5));
-		Mockito.verify(usuarioRepository).existsByIdAndCreatedById(anyInt(), anyInt());
+		Mockito.when(usuarioRepository.existsByIdAndCreatedBy(anyInt(), anyInt())).thenReturn(false);
+		assertFalse(usuarioService.existsByIdAndCreatedBy(5, 5));
+		Mockito.verify(usuarioRepository).existsByIdAndCreatedBy(anyInt(), anyInt());
 	}
 
 	@AfterEach

@@ -77,10 +77,11 @@
             :month-names="['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']"
             :first-day-of-week="1"
             :placeholder="new Date().toLocaleDateString()"
-            :min-date="new Date()"
             :nearby-selectable-month-days="true"
             :editable="true"
-            :data-maska="mask"
+            :data-maska="['##/##/####', '##/##/##']"
+            :max-date="maxDate"
+            :min-date="minDate"
             v-model="inputValue"
             @update:model-value="handleInput"
             @focus="focused = true"
@@ -123,12 +124,14 @@ interface Props {
   required?: boolean
   mask?: string | string[]
   imgIcon?: boolean
-  disabled?: boolean,
-  classHelperText?: string,
-  errorMessage?: string,
-  customErrorMessage?: boolean,
+  disabled?: boolean
+  classHelperText?: string
+  errorMessage?: string
+  customErrorMessage?: boolean
   withoutValidation?: boolean
   customLabel?: boolean
+  maxDate: Date
+  minDate: Date
 }
 
 const props = withDefaults(defineProps<Props>(), {

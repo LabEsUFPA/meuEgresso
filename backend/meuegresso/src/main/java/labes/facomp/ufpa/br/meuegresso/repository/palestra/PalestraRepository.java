@@ -11,7 +11,7 @@ public interface PalestraRepository extends CrudRepository<PalestraModel, Intege
 
     List<PalestraModel> findAll();
 
-    boolean existsByIdAndCreatedById(Integer id, Integer usuarioId);
+    boolean existsByIdAndCreatedBy(Integer id, Integer usuarioId);
 
     Optional<PalestraModel> findByEgressoId(Integer idEgresso);
 

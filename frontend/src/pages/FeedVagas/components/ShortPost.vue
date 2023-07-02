@@ -1,12 +1,18 @@
 <template>
   <div class="flex flex-col w-[960px] bg-white rounded-2xl mx-4 sm:mx-6">
     <div class="flex gap-4 px-6 sm:px-8 pt-6 sm:pt-8 pb-4 items-center border-b-[1px] border-b-gray-200">
-      <div class="shrink-0 p-2 bg-cyan-800 rounded-3xl text-white">
-        <SvgIcon
-          type="mdi"
-          size="21"
-          :path="mdiAccount"
-        />
+      <div class="flex w-8 h-8 justify-center object-cover items-center bg-white rounded-full overflow-hidden">
+        <img
+          v-if="fotoUsuario"
+          @error="!fotoUsuario"
+          :src="fotoUsuario"
+          class="w-8 h-8 object-cover rounded-full border-2 border-sky-200/80"
+        >
+        <img
+          v-else
+          :src="eagle"
+          class="w-8 h-8 p-2 rounded-full flex items-center justify-center shrink-0 bg-sky-200"
+        >
       </div>
 
       <div class="flex flex-col text-cyan-800">
@@ -46,7 +52,7 @@
         v-show="salario"
         class="text-neutral-900 font-medium"
       >
-        {{ formataSalario(salario) }}
+        {{ salario }}
       </p>
     </div>
 
@@ -73,31 +79,29 @@
 <script setup lang="ts">
 
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiAccount, mdiBullhorn, mdiChevronRight } from '@mdi/js'
-
+import { mdiBullhorn, mdiChevronRight } from '@mdi/js'
+import { useLoginStore } from 'src/store/LoginStore'
+import { ref, defineProps } from 'vue'
 import CustomButton from 'src/components/CustomButton.vue'
+import eagle from 'src/assets/eagle.svg'
 
-defineProps<
-  {
-  id: Number,
-  nome: String,
-  titulo: String,
-  area: String,
-  descricao: String,
-  salario: String,
+const tipoUsuario = ref('')
+const $loginStore = useLoginStore()
+
+const props = defineProps<{
+  id: number,
+  nome: string,
+  titulo: string,
+  area: string,
+  descricao: string,
+  salario: string,
+  foto?: string
 }>()
 
-const formataSalario = (value:String) => {
-  console.log(value)
-  const valueConvertido = parseFloat(value.toString())
-  const formattedValue = valueConvertido.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  })
-  if (valueConvertido !== 0.00) {
-    return formattedValue
-  }
-  return ''
+const fotoUsuario = ref(props.foto)
+
+if ($loginStore.loggedIn) {
+  tipoUsuario.value = $loginStore.getUserData()?.scope ?? ''
 }
 
 </script>

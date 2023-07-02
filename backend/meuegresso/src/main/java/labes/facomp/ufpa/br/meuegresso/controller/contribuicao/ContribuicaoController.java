@@ -56,8 +56,9 @@ public class ContribuicaoController {
 	 * @since 21/04/2023
 	 */
 	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public List<ContribuicaoDTO> consultarContribuicaos() {
+	public List<ContribuicaoDTO> consultarContribuicoes() {
 		return mapper.map(contribuicaoService.findAll(), new TypeToken<List<ContribuicaoDTO>>() {
 		}.getType());
 	}
@@ -112,12 +113,10 @@ public class ContribuicaoController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String atualizarContribuicao(@RequestBody @Valid ContribuicaoDTO contribuicaoDTO,
-			JwtAuthenticationToken token) throws UnauthorizedRequestException, InvalidRequestException {
-		if (contribuicaoService.existsByIdAndCreatedById(contribuicaoDTO.getId(), jwtService.getIdUsuario(token))) {
-			ContribuicaoModel contribuicaoModel = contribuicaoService
-					.findByEgressoUsuarioId(jwtService.getIdUsuario(token));
-			contribuicaoModel.setDescricao(contribuicaoDTO.getDescricao());
-			contribuicaoService.update(contribuicaoModel);
+			JwtAuthenticationToken token) throws UnauthorizedRequestException {
+		if (contribuicaoService.existsByIdAndCreatedBy(contribuicaoDTO.getId(), jwtService.getIdUsuario(token))) {
+			ContribuicaoModel contribuicaoModel = mapper.map(contribuicaoDTO, ContribuicaoModel.class);
+			contribuicaoService.save(contribuicaoModel);
 			return ResponseType.SUCCESS_UPDATE.getMessage();
 		}
 		throw new UnauthorizedRequestException();
@@ -132,11 +131,17 @@ public class ContribuicaoController {
 	 * @author Bruno Eiki
 	 * @since 17/04/2023
 	 */
-	@DeleteMapping
+	@DeleteMapping(value = "/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public boolean deleteById(Integer id) {
-		return contribuicaoService.deleteById(id);
+	public String deleteById(@PathVariable Integer id) {
+		
+		if(contribuicaoService.deleteById(id)){
+			return ResponseType.SUCCESS_DELETE.getMessage();
+		}
+		
+		return ResponseType.FAIL_DELETE.getMessage();
 	}
 
 }

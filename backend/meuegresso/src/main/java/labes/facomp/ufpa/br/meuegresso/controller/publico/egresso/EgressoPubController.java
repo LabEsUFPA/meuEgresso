@@ -70,7 +70,6 @@ public class EgressoPubController {
 	 */
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
-
 	public EgressoDTO findById(@PathVariable Integer id) {
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
 		var egresso = egressoService.findById(id);

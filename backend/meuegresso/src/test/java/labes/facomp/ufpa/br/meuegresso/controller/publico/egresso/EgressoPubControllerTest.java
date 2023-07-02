@@ -78,7 +78,7 @@ class EgressoPubControllerTest {
 		ContribuicaoDTO contribuicao = new ContribuicaoDTO(1, "TextoContribuicao");
 
 		UsuarioDTO usuario = UsuarioDTO.builder()
-				.nome("nome_test")
+				.nome("nome test")
 				.build();
 
 		egressoModel.setId(1);
@@ -96,7 +96,7 @@ class EgressoPubControllerTest {
 
 	@Test
 	void testConsultarEgressos() throws Exception {
-		Mockito.when(egressoService.findAll()).thenReturn(egressosModel);
+		Mockito.when(egressoService.findAllByUsuarioValidoIsTrue()).thenReturn(egressosModel);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/publico/egresso"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$").value(Matchers.hasSize(2)))
@@ -115,12 +115,12 @@ class EgressoPubControllerTest {
 						.value(egressoModel.getContribuicao().getDescricao()))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 
-		Mockito.verify(egressoService).findAll();
+		Mockito.verify(egressoService).findAllByUsuarioValidoIsTrue();
 	}
 
 	@Test
 	void testFindById() throws Exception {
-		Mockito.when(egressoService.findById(anyInt())).thenReturn(egressoModel);
+		Mockito.when(egressoService.findByIdAndUsuarioValidoIsTrue(anyInt())).thenReturn(egressoModel);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/publico/egresso/1"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.usuario.nome")
@@ -138,6 +138,6 @@ class EgressoPubControllerTest {
 						.value(egressoModel.getContribuicao().getDescricao()))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 
-		Mockito.verify(egressoService).findById(anyInt());
+		Mockito.verify(egressoService).findByIdAndUsuarioValidoIsTrue(anyInt());
 	}
 }

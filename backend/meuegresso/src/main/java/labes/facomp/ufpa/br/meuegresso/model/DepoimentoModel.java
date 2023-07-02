@@ -14,11 +14,13 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import labes.facomp.ufpa.br.meuegresso.model.audit.Auditable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "depoimento")
@@ -34,7 +36,7 @@ public class DepoimentoModel extends Auditable {
     @Column(name = "descricao_depoimento", unique = false, nullable = false)
     private String descricao;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "egresso_id", unique = true, nullable = false)
     private EgressoModel egresso;
 

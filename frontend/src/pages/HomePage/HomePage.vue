@@ -32,11 +32,11 @@ const getEgresso = async () => {
   const filtered = new Map<string, EgressoMapa[]>()
 
   data.forEach(egresso => {
-    const cidade = City.getCitiesOfState(egresso.empresa.endereco.pais, egresso.empresa.endereco.estado).filter(elem => elem.name === egresso.empresa.endereco.cidade)[0]
-    egresso.empresa.endereco.latitude = parseInt(String(cidade.latitude))
-    egresso.empresa.endereco.longitude = parseInt(String(cidade.longitude))
+    const cidade = City.getCitiesOfState(egresso.endereco.pais, egresso.endereco.estado).filter(elem => elem.name === egresso.endereco.cidade)[0]
+    egresso.endereco.latitude = parseInt(String(cidade.latitude))
+    egresso.endereco.longitude = parseInt(String(cidade.longitude))
 
-    const mapKey = `${egresso.empresa.endereco.latitude}:${egresso.empresa.endereco.longitude}`
+    const mapKey = `${egresso.endereco.latitude}:${egresso.endereco.longitude}`
     const mapElement = filtered.get(mapKey)
 
     if (mapElement) {
