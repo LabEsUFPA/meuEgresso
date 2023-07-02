@@ -651,7 +651,7 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-7"
-                  :vmodel="Country.getCountryByCode(dataEgresso.localizacao.pais)?.name"
+                  :vmodel="dataEgresso.localizacao.pais"
                   name="carreira.pais"
                   placeholder="Brasil"
                   label="País"
@@ -661,7 +661,7 @@
                 <CustomPerfilData
                   type="text"
                   class="mb-7"
-                  :vmodel="State.getStateByCodeAndCountry(dataEgresso.localizacao.estado, dataEgresso.localizacao.pais)?.name"
+                  :vmodel="dataEgresso.localizacao.estado"
                   name="carreira.estado"
                   label="Estado"
                   placeholder="Pará"
@@ -885,7 +885,6 @@ import CustomButton from 'src/components/CustomButton.vue'
 import CustomPerfilData from './components/CustomPerfilData.vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import CustomSelect from 'src/components/CustomSelect.vue'
-import { Country, State } from 'country-state-city'
 
 import { computed, ref, watch, onMounted } from 'vue'
 import { usePerfilEgressoStore } from 'src/store/PerfilEgressoStore'
@@ -1158,10 +1157,9 @@ async function handleSubmitCarreira (values: any) {
 
       },
       endereco: {
-        id: 6,
-        cidade: '',
-        estado: '',
-        pais: ''
+        cidade: jsonResponse.emprego.empresa.cidade,
+        estado: jsonResponse.emprego.empresa.estado,
+        pais: jsonResponse.emprego.empresa.pais
       },
       empresa: {
         id: 1,
@@ -1169,6 +1167,7 @@ async function handleSubmitCarreira (values: any) {
         faixaSalarial: {
           id: 2
         },
+
         isEmprego: true
       }
 
