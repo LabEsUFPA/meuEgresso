@@ -704,7 +704,8 @@ async function handleSubmit (values: any) {
         endereco: {
           pais: await apiEnderecos.getPaisById(values.carreira.pais),
           estado: await apiEnderecos.getEstadoById(values.carreira.estado),
-          cidade: await apiEnderecos.getCidadeById(values.carreira.cidade)
+          cidade: await apiEnderecos.getCidadeById(values.carreira.cidade),
+          cidadeId: values.carreira.cidade
         }
       }
     : null
