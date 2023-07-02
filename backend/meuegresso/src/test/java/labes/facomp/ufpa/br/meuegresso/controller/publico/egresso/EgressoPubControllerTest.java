@@ -71,6 +71,7 @@ class EgressoPubControllerTest {
 		DepoimentoDTO depoimento = DepoimentoDTO.builder()
         .id(1)
         .descricao("TextoDepoimento")
+		.ativo(true)
         .build();
 
 
