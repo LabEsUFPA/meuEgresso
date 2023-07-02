@@ -42,6 +42,14 @@ public interface MailService {
     */
     public MensagemModel save(MensagemModel mensagemModel);
 
+    /**
+    * metodo para reenviar o email de validacao para um usuario.
+    *
+    * @param usuario Dados do usuário
+    * @param redirect link de redirecionamento
+    * @author Alfredo Gabriel
+    * @since 25/06/2023
+    */
     public void reenviarValidacaoEmail(UsuarioModel usuario, String redirect);
 
     /**

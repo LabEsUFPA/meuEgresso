@@ -18,7 +18,7 @@ public interface DepoimentoService {
 	 * Método responsável por persistir determinado depoimento no banco de dados.
 	 *
 	 * @param depoimentoModel Dados do depoimento
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link DepoimentoModel} Dados após serem gravados no banco de dados.
 	 */
 	public DepoimentoModel save(DepoimentoModel depoimentoModel);
 
@@ -26,14 +26,14 @@ public interface DepoimentoService {
 	 * Método responsável por encontrar um determinado depoimento por sua ID.
 	 *
 	 * @param id ID de um depoimento
-	 * @return
+	 * @return {@link DepoimentoModel}
 	 */
 	public DepoimentoModel findById(Integer id);
 
 	/**
 	 * Método responsável por encontrar todos os depoimentos cadastrados.
 	 *
-	 * @return Lista de objetos da classe DepoimentoModel.
+	 * @return {@link List<DepoimentoModel>} Lista de objetos da classe DepoimentoModel.
 	 */
 	public List<DepoimentoModel> findAll();
 
@@ -41,7 +41,8 @@ public interface DepoimentoService {
 	 * Método responsável por atualizar dados de um depoimento cadastrado.
 	 *
 	 * @param depoimento objeto depoimento
-	 * @return
+	 * @throws InvalidRequestException
+	 * @return {@link DepoimentoModel}
 	 */
 	public DepoimentoModel update(DepoimentoModel depoimento) throws InvalidRequestException;
 
@@ -49,6 +50,7 @@ public interface DepoimentoService {
 	 * Método responsável por deletar um depoimento cadastrado por sua ID.
 	 *
 	 * @param id ID de um depoimento
+	 * @return {@link boolean}
 	 */
 	public boolean deleteById(Integer id);
 
@@ -57,7 +59,7 @@ public interface DepoimentoService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return {@link boolean}
 	 */
 	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 }

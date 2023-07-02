@@ -19,7 +19,7 @@ public interface CursoService {
 	 * Método responsável por persistir determinado curso no banco de dados.
 	 *
 	 * @param cursoModel Dados do curso
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link CursoModel} Dados após serem gravados no banco de dados.
 	 */
 	public CursoModel save(CursoModel cursoModel);
 
@@ -27,14 +27,14 @@ public interface CursoService {
 	 * Método responsável por encontrar um determinado curso por sua ID.
 	 *
 	 * @param id ID de um curso
-	 * @return
+	 * @return {@link CursoModel}
 	 */
 	public CursoModel findById(Integer id);
 
 	/**
 	 * Método responsável por encontrar todos os cursos cadastrados.
 	 *
-	 * @return Lista de objetos da classe CursoModel.
+	 * @return {@link List<CursoModel>} Lista de objetos da classe CursoModel.
 	 */
 	public List<CursoModel> findAll();
 
@@ -42,7 +42,8 @@ public interface CursoService {
 	 * Método responsável por atualizar dados de um curso cadastrado.
 	 *
 	 * @param curso objeto curso
-	 * @return
+	 * @throws InvalidRequestException
+	 * @return {@link CursoModel}
 	 */
 	public CursoModel update(CursoModel curso) throws InvalidRequestException;
 
@@ -50,6 +51,7 @@ public interface CursoService {
 	 * Método responsável por deletar um curso cadastrado por sua ID.
 	 *
 	 * @param id ID de um curso
+	 * @return {@link boolean}
 	 */
 	public boolean deleteById(Integer id);
 
@@ -58,10 +60,17 @@ public interface CursoService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return {@link boolean}
 	 */
 	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
+	/**
+	 * Método responsável por verificar se existe um determinado elemento.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return {@link CursoModel}
+	 */
 	public CursoModel findByNome(String nome);
 
 	/**

@@ -839,6 +839,7 @@ import {
   mdiLoading,
   mdiCalendarEdit
 } from '@mdi/js'
+import apiEnderecos from 'src/services/apiEnderecos'
 import { useRoute } from 'vue-router'
 const dialogSucesso = ref(false)
 const dialogFalha = ref(false)
@@ -1073,7 +1074,8 @@ async function handleSubmitCarreira (values: any) {
         id: 6,
         cidade: '',
         estado: '',
-        pais: ''
+        pais: '',
+        cidadeId: null
       },
       empresa: {
         id: 1,
@@ -1087,15 +1089,20 @@ async function handleSubmitCarreira (values: any) {
     }
   }
   if (values.carreira.area !== 'Desempregado') {
+    const pais = await apiEnderecos.getPaisById(values.carreira.pais)
+    const estado = await apiEnderecos.getEstadoById(values.carreira.estado)
+    const cidade = await apiEnderecos.getCidadeById(values.carreira.cidade)
+
     jsonResponse.emprego.empresa.nome = values.carreira.empresa
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
 
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
     const endereco = {
-      pais: values.carreira.pais,
-      estado: values.carreira.estado,
-      cidade: values.carreira.cidade
+      pais,
+      estado,
+      cidade,
+      cidadeId: values.carreira.cidade
     }
     jsonResponse.emprego.endereco = endereco
   } else {

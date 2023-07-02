@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.EmpresaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.exceptions.InvalidRequestException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
@@ -68,6 +69,7 @@ public class EgressoEmpresaServiceImpl implements EgressoEmpresaService {
     }
 
     @Override
+    @Transactional
     public List<EgressoEmpresaModel> findAllByEgressoUsuarioValidoIsTrue() {
         return egressoEmpresaRepository.findAllByEgressoUsuarioValidoIsTrue();
     }

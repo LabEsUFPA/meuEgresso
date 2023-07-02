@@ -50,7 +50,7 @@ export const useCadastroPerfilStore = defineStore('CadastroPerfilStore', {
         route: '/auth/solicitarNovaValidacaoEmail',
         body: {
           email,
-          redirect: 'https://egressos.computacao.ufpa.br/validar-email'
+          redirect: `${window.location.origin}/validar-email`
         }
       })
 
@@ -80,7 +80,7 @@ export const useCadastroPerfilStore = defineStore('CadastroPerfilStore', {
         route: '/auth/register',
         body: {
           ...data,
-          redirect: 'https://egressos.computacao.ufpa.br/validar-email'
+          redirect: `${window.location.origin}/validar-email`
         }
       })
 

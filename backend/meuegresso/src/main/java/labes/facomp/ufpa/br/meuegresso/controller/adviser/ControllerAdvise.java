@@ -10,6 +10,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.mail.MailException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -173,6 +174,24 @@ public class ControllerAdvise {
 				ex.getMessage(),
 				ex.getLocalizedMessage(),
 				ex.getInternalCode());
+	}
+
+	/**
+	 * Caso seja realizada uma requisição não autorizada.
+	 *
+	 * @param ex Exceção capturada.
+	 * @return Mensagem
+	 * @author Alfredo Gabriel
+	 * @since 26/03/2023
+	 */
+	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(LockedException.class)
+	public ErrorResponse handleLockedException(LockedException ex) {
+		return ErrorResponse.builder()
+				.message(ErrorType.USER_005.getMessage())
+				.technicalMessage(ex.getLocalizedMessage())
+				.internalCode(ErrorType.USER_005.getInternalCode())
+				.build();
 	}
 
 	/**

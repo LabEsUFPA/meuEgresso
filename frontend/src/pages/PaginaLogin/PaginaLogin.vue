@@ -25,7 +25,6 @@
             :icon-path="mdiAccount"
             :max-length="50"
             without-validation
-            required
           />
           <CustomInput
             name="password"
@@ -34,7 +33,6 @@
             :icon-path="mdiLock"
             :max-length="80"
             without-validation
-            required
           />
           <CustomCheckbox
             label="Visualizar senha"

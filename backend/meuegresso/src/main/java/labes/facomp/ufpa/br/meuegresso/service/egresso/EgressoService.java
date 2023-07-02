@@ -27,28 +27,63 @@ public interface EgressoService {
 	/**
 	 * Metodo responsavel retornar lista de idades dos egressos.
 	 *
-	 * @param nenhum
-	 * @return Lista com idade de todos os egressos
+	 * @return {@link List<Integer>} Lista com idade de todos os egressos
 	 * @author Pedro Inácio
 	 * @since 19/05/2023
 	 */
 	public List<Integer> findAllIdades();
 
+	/**
+	 * Metodo responsavel por encontrar o egresso pela sua id.
+	 *
+	 * @param id
+	 * @return {@link EgressoModel}
+	 * @author Eude Monteiro
+	 * @since 12/05/2023
+	 */
 	public EgressoModel findById(Integer id);
 
+	/**
+	 * Metodo responsavel retornar lista de todos os egressos.
+	 *
+	 * @return {@link List<EgressoModel>}
+	 * @author Pedro Inácio
+	 * @since 24/04/2023
+	 */
 	public List<EgressoModel> findAll();
 
+	/**
+	 * Metodo responsavel retornar lista de todos os egressos por usuario valido.
+	 *
+	 * @return {@link List<EgressoModel>}
+	 * @author Alfredo Gabriel
+	 * @since 28/06/2023
+	 */
 	public List<EgressoModel> findAllByUsuarioValidoIsTrue();
 
+	/**
+	 * Metodo responsavel por encontrar o egresso pela sua id e se for usuario valido.
+	 *
+	 * @param id
+	 * @return {@link EgressoModel}
+	 * @author Alfredo Gabriel
+	 * @since 28/06/2023
+	 */
 	public EgressoModel findByIdAndUsuarioValidoIsTrue(Integer id);
 
+	/**
+	 * Método responsável por persistir determinado EgressoModel no banco de dados.
+	 *
+	 * @param egresso Dados do EgressoModel
+	 * @return {@link EgressoModel}  Dados após serem gravados no banco de dados.
+	 */
 	public EgressoModel save(EgressoModel egresso);
 
 	/**
 	 * Metodo responsavel por atualizar informacoes do egresso no banco de dados.
 	 *
 	 * @param egresso Dados do egresso
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link EgressoModel} Dados após serem gravados no banco de dados.
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
@@ -58,7 +93,7 @@ public interface EgressoService {
 	 * Metodo responsavel por verificar se egresso existe no banco de dados.
 	 *
 	 * @param id Id do egresso
-	 * @return True caso egresso exista, false do contrario.
+	 * @return {@link boolean}
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
@@ -69,12 +104,18 @@ public interface EgressoService {
 	 * partir do id.
 	 *
 	 * @param id Id do egresso
-	 * @return
+	 * @return {@link boolean}
 	 * @author Pedro Inácio
 	 * @since 16/04/2023
 	 */
 	public boolean deleteById(Integer id);
 
+	/**
+	 * Método responsável verificar se egresso existe pela id do usuario.
+	 *
+	 * @param id id do usuario
+	 * @return {@link boolean}
+	 */
 	public boolean existsByUsuarioId(Integer id);
 
 
@@ -83,7 +124,7 @@ public interface EgressoService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return boolean
+	 * @return {@link boolean}
 	 */
 	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
@@ -91,7 +132,7 @@ public interface EgressoService {
 	 * Método responsável pelo retorno do caminho da foto como um URI
 	 *
 	 * @param fotoNomeString
-	 * @return
+	 * @return {@link Resource}
 	 * @throws MalformedURLException
 	 * @throws FileNotFoundException
 	 * @author Camilo Santos
@@ -124,30 +165,87 @@ public interface EgressoService {
 	 * Método responsável por verificar se matrícula já está associada a um egresso
 	 *
 	 * @param matricula
-	 * @return True caso matricula exista, false do contrario.
+	 * @return {@link boolean}
 	 * @author Bruno Eiki
 	 * @since 21/06/2023
 	 */
 	public boolean existsMatricula(String matricula);
 
+	/**
+	 * Metodo responsavel por contar quantidade de egressos que tem determinada idade e as idades dos egressos.
+	 *
+	 * @return {@link Map<Integer, Integer>} idade e quantidade egressos que tem essa idade
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 */
 	public Map<Integer, Integer> countAgeFromEgressos();
 
+	/**
+	 * Metodo responsavel por contar quantidade de egressos que são pós-graduados e não são.
+	 *
+	 * @return {@link Map<String, Integer>}
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 */
 	public Map<String, Integer> countFezPos();
 
+	/**
+	 * Metodo responsavel por contar quantidade de egressos que são graduados e são pós graduados.
+	 *
+	 * @return {@link Map<String, Integer>}
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 */
 	public Map<String, Integer> countTipoAluno();
 
+	/**
+	 * Metodo responsavel por contar quantidade de egressos que são bolsistas e não são.
+	 *
+	 * @return {@link Map<String, Integer>}
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 */
 	public Map<String, Integer> countBolsista();
 
+	/**
+	 * Metodo responsavel por contar quantidade de egressos que tem em determinada média de remuneção das bolsas.
+	 *
+	 * @return {@link Map<Double, Integer>} média das bolsas e quantidade egressos que tem essa remuneção.
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 */
 	public Map<Double, Integer> countRemuneracaoBolsa();
 
+	/**
+	 * Metodo responsavel por contar quantidade de egressos que tem em determinada data.
+	 *
+	 * @return {@link Map<Integer, Long>} egressos por data
+	 */
 	public Map<LocalDate, Long> countEgressoPorData();
 
+	/**
+	 * Metodo responsavel por contar quantidade de egressos que tem em determinado mês.
+	 *
+	 * @return {@link Map<Integer, Long>} egressos por mês
+	 */
 	public Map<LocalDate, Long> countEgressoPorMesEAno();
 
+	/**
+	 * Metodo responsavel por contar quantidade de egressos que tem em determinado ano.
+	 *
+	 * @return {@link Map<Integer, Long>} egressos por ano
+	 */
 	public Map<Integer, Long> countEgressoPorAno();
 
+	/**
+	 * Metodo responsavel por contar quantidade de egressos que são cotistas e não são.
+	 *
+	 * @return {@link Map<String, Integer>}
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 */
 	public Map<String, Integer> countCotista();
 
+	/**
+	 * Metodo responsavel por contar quantidade de egressos que tem e não tem interesse em fazer pós-graduação.
+	 *
+	 * @return {@link Map<String, Integer>}
+	 * @author Pedro Inácio, Alfredo Gabriel
+	 */
 	public Map<String, Integer> countInteressePos();
 
 	/**

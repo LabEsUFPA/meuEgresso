@@ -18,7 +18,7 @@ public interface PalestraService {
 	 * Método responsável por persistir determinado palestra no banco de dados.
 	 *
 	 * @param palestraModel Dados do palestra
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link PalestraModel} Dados após serem gravados no banco de dados.
 	 */
 	public PalestraModel save(PalestraModel palestraModel);
 
@@ -26,14 +26,14 @@ public interface PalestraService {
 	 * Método responsável por encontrar um determinado palestra por sua ID.
 	 *
 	 * @param id ID de um palestra
-	 * @return
+	 * @return {@link PalestraModel}
 	 */
 	public PalestraModel findById(Integer id);
 
 	/**
 	 * Método responsável por encontrar todos os palestras cadastrados.
 	 *
-	 * @return Lista de objetos da classe PalestraModel.
+	 * @return {@link List<PalestraModel>} Lista de objetos da classe PalestraModel.
 	 */
 	public List<PalestraModel> findAll();
 
@@ -41,7 +41,8 @@ public interface PalestraService {
 	 * Método responsável por atualizar dados de um palestra cadastrado.
 	 *
 	 * @param palestra objeto palestra
-	 * @return
+	 * @throws InvalidRequestException
+	 * @return {@link PalestraModel}
 	 */
 	public PalestraModel update(PalestraModel palestra) throws InvalidRequestException;
 
@@ -49,6 +50,7 @@ public interface PalestraService {
 	 * Método responsável por deletar um palestra cadastrado por sua ID.
 	 *
 	 * @param id ID de um palestra
+	 * @return {@link boolean}
 	 */
 	public boolean deleteById(Integer id);
 
@@ -57,7 +59,7 @@ public interface PalestraService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return {@link boolean}
 	 */
 	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
@@ -66,7 +68,7 @@ public interface PalestraService {
 	 * egresso.
 	 *
 	 * @param id ID de um contribuicao
-	 * @return
+	 * @return {@link PalestraModel}
 	 */
 	public PalestraModel findByEgressoId(Integer idEgresso);
 
@@ -75,7 +77,7 @@ public interface PalestraService {
 	 * egresso.
 	 *
 	 * @param id ID de um contribuicao
-	 * @return
+	 * @return {@link PalestraModel}
 	 */
 	public PalestraModel findByEgressoUsuarioId(Integer idUsuario);
 }

@@ -30,4 +30,7 @@ public class EnderecoDTO {
 
     @NotBlank(message = "Insira o nome do pais.")
     private String pais;
+
+    private Integer cidadeId;
+
 }

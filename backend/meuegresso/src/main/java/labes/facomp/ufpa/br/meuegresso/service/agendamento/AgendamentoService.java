@@ -21,7 +21,7 @@ public interface AgendamentoService {
     public MensagemStatusDTO getMensagensStatus();
     
     /**
-    * metodo para enviar a mensagem de email agendada pelo id.
+    * metodo para enviar a mensagem de email agendada.
     *
     * @author Pedro Inácio
     * @since 16/06/2023

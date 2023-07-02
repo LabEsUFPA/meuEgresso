@@ -21,7 +21,7 @@ public interface AnuncioService {
 	 * Método responsável por persistir determinado anuncio no banco de dados.
 	 *
 	 * @param anuncioModel Dados do anuncio
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link AnuncioModel} Dados após serem gravados no banco de dados.
 	 */
 	public AnuncioModel save(AnuncioModel anuncioModel);
 
@@ -29,7 +29,7 @@ public interface AnuncioService {
 	 * Método responsável por encontrar um determinado anuncio por sua ID.
 	 *
 	 * @param id ID de um anuncio
-	 * @return
+	 * @return {@link AnuncioModel}
 	 */
 	public AnuncioModel findById(Integer id);
 
@@ -37,7 +37,7 @@ public interface AnuncioService {
 	 * Método responsável por encontrar todos os anuncios cadastrados validos pelo
 	 * filtro passado.
 	 *
-	 * @return Lista de objetos da classe AnuncioModel.
+	 * @return {@link Page<AnuncioModel>} Lista de objetos da classe AnuncioModel.
 	 */
 
 	public Page<AnuncioModel> findBySearch(String tituloAnuncio, Integer[] areaEmpregoIds, Integer page, Integer size,
@@ -46,7 +46,7 @@ public interface AnuncioService {
 	/**
 	 * Método responsável por encontrar todos os anuncios cadastrados.
 	 *
-	 * @return Lista de objetos da classe AnuncioModel.
+	 * @return {@link Page<AnuncioModel>} Lista de objetos da classe AnuncioModel.
 	 */
 
 	public Page<AnuncioModel> findAll(Integer page, Integer size, Direction direction);
@@ -55,7 +55,7 @@ public interface AnuncioService {
 	 * Método responsável por atualizar dados de um anuncio cadastrado.
 	 *
 	 * @param anuncio objeto anuncio
-	 * @return
+	 * @return {@link AnuncioModel}
 	 */
 	public AnuncioModel update(AnuncioModel anuncio) throws InvalidRequestException;
 
@@ -63,6 +63,7 @@ public interface AnuncioService {
 	 * Método responsável por deletar um anuncio cadastrado por sua ID.
 	 *
 	 * @param id ID de um anuncio
+	 * @return {@link boolean}
 	 */
 	public boolean deleteById(Integer id);
 
@@ -71,7 +72,7 @@ public interface AnuncioService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return {@link boolean}
 	 */
 	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 

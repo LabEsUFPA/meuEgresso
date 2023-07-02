@@ -19,7 +19,7 @@ public interface CotaService {
 	 * Método responsável por persistir determinado cota no banco de dados.
 	 *
 	 * @param cotaModel Dados do cota
-	 * @return Dados após serem gravados no banco de dados.
+	 * @return {@link CotaModel} Dados após serem gravados no banco de dados.
 	 */
 	public CotaModel save(CotaModel cotaModel);
 
@@ -27,14 +27,14 @@ public interface CotaService {
 	 * Método responsável por encontrar um determinado cota por sua ID.
 	 *
 	 * @param id ID de um cota
-	 * @return
+	 * @return {@link CotaModel}
 	 */
 	public CotaModel findById(Integer id);
 
 	/**
 	 * Método responsável por encontrar todos os cotas cadastrados.
 	 *
-	 * @return Lista de objetos da classe CotaModel.
+	 * @return {@link List<CotaModel>} Lista de objetos da classe CotaModel.
 	 */
 	public List<CotaModel> findAll();
 
@@ -42,7 +42,8 @@ public interface CotaService {
 	 * Método responsável por atualizar dados de um cota cadastrado.
 	 *
 	 * @param cota objeto cota
-	 * @return
+	 * @throws InvalidRequestException
+	 * @return {@link CotaModel}
 	 */
 	public CotaModel update(CotaModel cota) throws InvalidRequestException;
 
@@ -50,6 +51,7 @@ public interface CotaService {
 	 * Método responsável por deletar um cota cadastrado por sua ID.
 	 *
 	 * @param id ID de um cota
+	 * @return {@link boolean}
 	 */
 	public boolean deleteById(Integer id);
 
@@ -58,10 +60,17 @@ public interface CotaService {
 	 *
 	 * @param id
 	 * @param createdBy
-	 * @return
+	 * @return {@link boolean}
 	 */
 	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
+	/**
+	 * Método responsável por contar a quantidade de egressos por cota.
+	 *
+	 * @param id
+	 * @param createdBy
+	 * @return {@link Map<String, Integer>} nome das cotas e quantidade de egresos em cada uma.
+	 */
 	public Map<String, Integer> countEgressoByCota();
 
 }
