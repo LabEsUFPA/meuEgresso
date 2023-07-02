@@ -44,9 +44,6 @@ class EmpresaServiceTest {
     private static final Integer ID = 1;
     private static final String NOME = "Empresa";
 
-    private static final Integer ID2 = 2;
-    private static final String NOME2 = "Ufpa";
-
     @Autowired
     private EmpresaService empresaService;
 

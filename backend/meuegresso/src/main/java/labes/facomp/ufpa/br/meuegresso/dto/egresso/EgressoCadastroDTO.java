@@ -83,7 +83,7 @@ public class EgressoCadastroDTO {
     private Double remuneracaoBolsa;
 
     @Valid
-    private EmpresaCadastroEgressoDTO empresa;
+    private EmpresaCadastroEgressoDTO emprego;
 
     @Valid
     private TitulacaoEgressoDTO titulacao;

@@ -131,7 +131,7 @@ export namespace models {
     }
     bolsaId?: id | null
     remuneracaoBolsa?: number
-    empresa: {
+    emprego: {
       areaAtuacao: string
       faixaSalarialId?: id | null
       setorAtuacao?: string

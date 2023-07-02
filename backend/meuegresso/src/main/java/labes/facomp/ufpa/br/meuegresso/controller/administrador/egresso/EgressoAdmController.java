@@ -153,15 +153,15 @@ public class EgressoAdmController {
 
             TitulacaoEgressoDTO titulacaoEgressoDTO = egressoCadastroDTO.getTitulacao();
             // Cadastro do curso
-            CursoModel curso = cursoService.findById(titulacaoEgressoDTO.getCurso()); // TODO FIX
+            CursoModel curso = cursoService.findByNome(titulacaoEgressoDTO.getCurso());
             if (curso == null) {
-                curso = CursoModel.builder().id(titulacaoEgressoDTO.getCurso()).build();
+                curso = CursoModel.builder().nome(titulacaoEgressoDTO.getCurso()).build();
                 curso = cursoService.save(curso);
             }
             // Cadastro do Instituição ex: UFPA
-            EmpresaModel instituicao = empresaService.findById(titulacaoEgressoDTO.getInstituicao()); // TODO FIX
+            EmpresaModel instituicao = empresaService.findByNome(titulacaoEgressoDTO.getInstituicao());
             if (instituicao == null) {
-                instituicao = EmpresaModel.builder().id(titulacaoEgressoDTO.getInstituicao()).build();
+                instituicao = EmpresaModel.builder().nome(titulacaoEgressoDTO.getInstituicao()).build();
                 instituicao = empresaService.save(instituicao);
             }
             TitulacaoModel titulacao = titulacaoService
@@ -175,19 +175,20 @@ public class EgressoAdmController {
         // Cadastro EMPRESA - EMPREGO
         EmpresaCadastroEgressoDTO empresaDTO;
         EmpresaModel empresa;
-        if (egressoCadastroDTO.getEmpresa() != null) {
-            empresaDTO = egressoCadastroDTO.getEmpresa();
+        if (egressoCadastroDTO.getEmprego() != null) {
+            empresaDTO = egressoCadastroDTO.getEmprego();
             EnderecoModel enderecoEmpresa = enderecoService.findByCidadeAndEstadoAndPais(
-                    empresaDTO.getEmpresaAndEndereco().getEndereco().getCidade(),
-                    empresaDTO.getEmpresaAndEndereco().getEndereco().getEstado(),
-                    empresaDTO.getEmpresaAndEndereco().getEndereco().getPais());
+                    empresaDTO.getEndereco().getCidade(),
+                    empresaDTO.getEndereco().getEstado(),
+                    empresaDTO.getEndereco().getPais());
             if (enderecoEmpresa == null) {
-                enderecoEmpresa = mapper.map(empresaDTO.getEmpresaAndEndereco().getEndereco(), EnderecoModel.class);
+                enderecoEmpresa = mapper.map(empresaDTO.getEndereco(), EnderecoModel.class);
                 enderecoEmpresa = enderecoService.save(enderecoEmpresa);
             }
-            empresa = empresaService.findByNome(empresaDTO.getEmpresaAndEndereco().getNome());
+            empresa = empresaService.findByNome(empresaDTO.getNome());
             if (empresa == null) {
                 empresa = mapper.map(empresaDTO, EmpresaModel.class);
+                empresa.setEndereco(null);
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)

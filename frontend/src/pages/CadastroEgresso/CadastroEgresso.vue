@@ -745,7 +745,7 @@ async function handleSubmit (values: any) {
       descricao: values.adicionais.experiencias
     },
     bolsaId: values.academico.bolsista.tipo ? parseInt(values.academico.bolsista.tipo) : null,
-    empresa,
+    emprego: empresa,
     titulacao
   }, isAdm, isAdm ? Number($route.params.id) : null)
 

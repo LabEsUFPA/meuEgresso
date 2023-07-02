@@ -19,5 +19,5 @@ public class AuditableDTO {
 
 	protected LocalDateTime lastModifiedDate;
 
-	protected Boolean ativo;
+	protected Boolean ativo = true;
 }

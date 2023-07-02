@@ -1,7 +1,9 @@
 package labes.facomp.ufpa.br.meuegresso.dto.empresa;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import labes.facomp.ufpa.br.meuegresso.dto.administradores.endereco.EnderecoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +22,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EmpresaCadastroEgressoDTO {
 
-    private EmpresaBasicDTO empresaAndEndereco;
+    @NotBlank(message = "Insira o nome da empresa.")
+    private String nome;
 
     @NotBlank(message = "Insira o setor de atuação da empresa.")
     private String setorAtuacao;
@@ -31,4 +34,6 @@ public class EmpresaCadastroEgressoDTO {
     @NotNull(message = "Informe a faixa salarial.")
     private Integer faixaSalarialId;
 
+    @Valid
+    private EnderecoDTO endereco;
 }
