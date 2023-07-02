@@ -899,8 +899,8 @@ import InvalidInsert from 'src/components/InvalidInsert.vue'
 
 import FolderCarreira from './components/FolderCarreira.vue'
 import FolderAdicionais from './components/FolderAdicionais.vue'
-import ProfileImage from './components/ProfileImage.vue'
 import apiEnderecos from 'src/services/apiEnderecos'
+import ProfileImage from './components/ProfileImage.vue'
 
 import {
   mdiAccount,
@@ -1141,7 +1141,6 @@ async function handleSubmitAcademico (values: any) {
 }
 
 async function handleSubmitCarreira (values: any) {
-
   if (jsonResponse.emprego === undefined) {
     jsonResponse.emprego = {
       id: {
@@ -1177,6 +1176,7 @@ async function handleSubmitCarreira (values: any) {
 
     }
   }
+
   if (values.carreira.area !== 'Desempregado') {
     jsonResponse.emprego.empresa.nome = values.carreira.empresa
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
@@ -1184,9 +1184,9 @@ async function handleSubmitCarreira (values: any) {
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
     const endereco = {
-      cidade: await apiEnderecos.getCidadeById(values.carreira.cidade),
+      pais: await apiEnderecos.getPaisById(values.carreira.pais),
       estado: await apiEnderecos.getEstadoById(values.carreira.estado),
-      pais: await apiEnderecos.getPaisById(values.carreira.pais)
+      cidade: await apiEnderecos.getCidadeById(values.carreira.cidade)
     }
     jsonResponse.emprego.endereco = endereco
   } else {

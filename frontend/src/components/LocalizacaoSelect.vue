@@ -119,6 +119,8 @@ interface Props {
   cidadeHolder?: string
   spacing?: string
   preFilled?: boolean
+  disabled: boolean,
+  required: boolean,
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -127,7 +129,9 @@ const props = withDefaults(defineProps<Props>(), {
   estadoHolder: '',
   cidadeHolder: '',
   spacing: 'mb-2',
-  preFilled: false
+  preFilled: false,
+  disabled: false,
+  required: true
 
 })
 

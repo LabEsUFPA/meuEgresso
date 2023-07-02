@@ -693,10 +693,6 @@ async function handleSubmit (values: any) {
     cotas = null
   }
 
-  const pais = await apiEnderecos.getPaisById(values.carreira.pais)
-  const estado = await apiEnderecos.getEstadoById(values.carreira.estado)
-  const cidade = await apiEnderecos.getCidadeById(values.carreira.cidade)
-
   const empresa = values.carreira.area !== 'Desempregado'
     ? {
         areaAtuacao: values.carreira.area,
@@ -704,9 +700,9 @@ async function handleSubmit (values: any) {
         setorAtuacao: values.carreira.setor,
         nome: values.carreira.empresa,
         endereco: {
-          pais,
-          estado,
-          cidade
+          pais: await apiEnderecos.getPaisById(values.carreira.pais),
+          estado: await apiEnderecos.getEstadoById(values.carreira.estado),
+          cidade: await apiEnderecos.getCidadeById(values.carreira.cidade)
         }
       }
     : null

@@ -26,6 +26,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.administradores.egresso.EgressoAttDTO
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoCadastroDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.egresso.EgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaCadastroEgressoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.empresa.EmpresaDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.titulacao.TitulacaoEgressoDTO;
 import labes.facomp.ufpa.br.meuegresso.enumeration.ErrorType;
 import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
@@ -153,17 +154,9 @@ public class EgressoAdmController {
 
             TitulacaoEgressoDTO titulacaoEgressoDTO = egressoCadastroDTO.getTitulacao();
             // Cadastro do curso
-            CursoModel curso = cursoService.findByNome(titulacaoEgressoDTO.getCurso());
-            if (curso == null) {
-                curso = CursoModel.builder().nome(titulacaoEgressoDTO.getCurso()).build();
-                curso = cursoService.save(curso);
-            }
+            CursoModel curso = cursoService.findById(titulacaoEgressoDTO.getCurso());
             // Cadastro do Instituição ex: UFPA
-            EmpresaModel instituicao = empresaService.findByNome(titulacaoEgressoDTO.getInstituicao());
-            if (instituicao == null) {
-                instituicao = EmpresaModel.builder().nome(titulacaoEgressoDTO.getInstituicao()).build();
-                instituicao = empresaService.save(instituicao);
-            }
+            EmpresaModel instituicao = empresaService.findById(titulacaoEgressoDTO.getInstituicao());
             TitulacaoModel titulacao = titulacaoService
                     .findById(egressoCadastroDTO.getPosGraduacao().booleanValue() ? 2 : 1);
             EgressoTitulacaoModel egressoTitulacao = EgressoTitulacaoModel.builder().empresa(instituicao)
@@ -272,7 +265,7 @@ public class EgressoAdmController {
                     enderecoModel.getPais());
             if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
                 egressoEmpresaModel.setEndereco(enderecoModelNoBanco);
-                egressoEmpresaModel.setEndereco(enderecoModelNoBanco);
+                egressoEmpresaModel.getId().setEnderecoId(enderecoModelNoBanco.getId());
             } else if (enderecoModelNoBanco == null) {
                 egressoEmpresaModel.getId().setEnderecoId(null);
                 egressoEmpresaModel.setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
@@ -290,8 +283,8 @@ public class EgressoAdmController {
             validaSetorAtuacao(setorAtuacaoModel.getNome(), egressoModel);
         }
         if (egressoModel.getTitulacao() != null) {
-            validaCurso(egressoModel.getTitulacao().getCurso().getNome(), egressoModel);
-            validaInstituicao(egresso.getTitulacao().getEmpresa().getNome(), egressoModel);
+            validaCurso(egressoModel.getTitulacao().getCurso(), egressoModel);
+            validaInstituicao(egresso.getTitulacao().getEmpresa(), egressoModel);
             egressoModel.getTitulacao().setEgresso(egressoModel);
         }
         egressoModel.getUsuario().setUsername(user.getUsername());
@@ -400,18 +393,18 @@ public class EgressoAdmController {
         egressoModel.getEmprego().setAreaAtuacao(areaAtuacaoModelNoBanco);
     }
 
-    private void validaCurso(String cursoNome, EgressoModel egressoModel) {
-        CursoModel cursoModel = cursoService.findByNome(cursoNome);
+    private void validaCurso(CursoModel curso, EgressoModel egressoModel) {
+        CursoModel cursoModel = curso.getId() != null ? cursoService.findById(curso.getId()) : cursoService.findByNome(curso.getNome());
         if (cursoModel == null) {
-            cursoModel = CursoModel.builder().nome(cursoNome).build();
+            cursoModel = CursoModel.builder().nome(curso.getNome()).build();
         }
         egressoModel.getTitulacao().setCurso(cursoModel);
     }
 
-    private void validaInstituicao(String cursoInstituicao, EgressoModel egressoModel) {
-        EmpresaModel empresaModel = empresaService.findByNome(cursoInstituicao);
+    private void validaInstituicao(EmpresaDTO instituicao, EgressoModel egressoModel) {
+        EmpresaModel empresaModel = instituicao.getId() != null ? empresaService.findById(instituicao.getId()): empresaService.findByNome(instituicao.getNome());
         if (empresaModel == null) {
-            empresaModel = EmpresaModel.builder().nome(cursoInstituicao).build();
+            empresaModel = EmpresaModel.builder().nome(instituicao.getNome()).build();
         }
         egressoModel.getTitulacao().setEmpresa(empresaModel);
     }
