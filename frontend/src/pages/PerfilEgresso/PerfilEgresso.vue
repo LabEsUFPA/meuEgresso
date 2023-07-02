@@ -672,7 +672,7 @@
                   type="text"
                   class="mb-7"
                   :vmodel="dataEgresso.localizacao.cidade"
-                  name="carreira.estado"
+                  name="carreira.cidade"
                   label="Cidade"
                   placeholder="Belém"
                   :icon-path="mdiMapMarkerRadius"
@@ -700,6 +700,8 @@
                   :estado-holder="dataEgresso.localizacao.estado"
                   :cidade-holder="dataEgresso.localizacao.cidade"
                   :pre-filled="true"
+                  :required="dataEgresso.carreira.area !== 'Desempregado'"
+                  :disabled="dataEgresso.carreira.area === 'Desempregado'"
                 />
               </template>
             </FolderCarreira>
@@ -1178,6 +1180,8 @@ async function handleSubmitCarreira (values: any) {
   }
 
   if (values.carreira.area !== 'Desempregado') {
+    // empresa id to null caso mude
+
     jsonResponse.emprego.empresa.nome = values.carreira.empresa
     jsonResponse.emprego.setorAtuacao.nome = values.carreira.setor
 
@@ -1399,7 +1403,7 @@ async function fetchUpdateEgresso () {
   const json = JSON.parse(ResponseBack)
 
   jsonResponse = json
-
+  console.log(json)
   // Cotas
   let cotasEgresso = ''
   imageEgressoUrl = await handleEgressoImage(json.id)

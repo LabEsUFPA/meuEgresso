@@ -337,6 +337,8 @@
               pais-holder="Selecione"
               estado-holder="Selecione"
               cidade-holder="Selectione"
+              :required="area !== 'Desempregado'"
+              :disabled="area === 'Desempregado'"
             />
           </div>
         </template>
