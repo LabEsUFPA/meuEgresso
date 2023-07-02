@@ -185,8 +185,9 @@ public class AuthenticationController {
 		}
 
 		usuarioModel.setGrupos(Set.of(Grupos.EGRESSO));
+		// usuarioModel.setEmailVerificado(true);
 		mailService.usuarioCadastrado(usuarioModel,
-				usuarioDTO.getRedirect().orElse(String.format(REDIRECT, host)));
+		usuarioDTO.getRedirect().orElse(String.format(REDIRECT, host)));
 		usuarioModel = usuarioService.save(usuarioModel);
 		statusUsuarioService
 				.save(StatusUsuarioModel.builder().usuarioId(usuarioModel.getId())
