@@ -92,9 +92,9 @@ async function getCidadeById (id: number): Promise<string> {
 }
 
 interface CidadeFull {
-  id: number,
-  nome: string,
-  latitude: number,
+  id: number
+  nome: string
+  latitude: number
   longitude: number
 }
 
