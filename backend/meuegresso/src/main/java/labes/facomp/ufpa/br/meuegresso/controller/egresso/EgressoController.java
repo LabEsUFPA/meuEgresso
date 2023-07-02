@@ -228,12 +228,7 @@ public class EgressoController {
 
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
-            if (egressoModel.getContribuicao() != null) {
-                egressoModel.getContribuicao().setEgresso(egressoModel);
-            }
-            if (egressoModel.getDepoimento() != null) {
-                egressoModel.getDepoimento().setEgresso(egressoModel);
-            }
+            validaContribuicaoDepoimento(egressoModel);
             if (egressoModel.getEmprego() != null) {
                 EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
                 egressoEmpresaModel.setEgresso(egressoModel);
@@ -311,6 +306,15 @@ public class EgressoController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseType.FAIL_IMAGE_DELETE.getMessage());
     }
 
+    private void validaContribuicaoDepoimento(EgressoModel egressoModel) {
+        if (egressoModel.getContribuicao() != null) {
+            egressoModel.getContribuicao().setEgresso(egressoModel);
+        }
+        if (egressoModel.getDepoimento() != null) {
+            egressoModel.getDepoimento().setEgresso(egressoModel);
+        }
+    }
+
     private void validaSetorAtuacao(String setorAtuacaoNome, EgressoModel egressoModel) {
         SetorAtuacaoModel setorAtuacaoModelNoBanco = setorAtuacaoService.findByNome(setorAtuacaoNome);
         if (setorAtuacaoModelNoBanco == null) {
@@ -328,7 +332,8 @@ public class EgressoController {
     }
 
     private void validaCurso(CursoModel curso, EgressoModel egressoModel) {
-        CursoModel cursoModel = curso.getId() != null ? cursoService.findById(curso.getId()) : cursoService.findByNome(curso.getNome());
+        CursoModel cursoModel = curso.getId() != null ? cursoService.findById(curso.getId())
+                : cursoService.findByNome(curso.getNome());
         if (cursoModel == null) {
             cursoModel = CursoModel.builder().nome(curso.getNome()).build();
         }
@@ -336,7 +341,8 @@ public class EgressoController {
     }
 
     private void validaEmpresa(EmpresaModel empresa, EgressoModel egressoModel) {
-        EmpresaModel empresaModel = empresa.getId() != null ? empresaService.findById(empresa.getId()) : empresaService.findByNome(empresa.getNome());
+        EmpresaModel empresaModel = empresa.getId() != null ? empresaService.findById(empresa.getId())
+                : empresaService.findByNome(empresa.getNome());
         if (empresaModel == null) {
             empresaModel = EmpresaModel.builder().nome(empresa.getNome()).build();
         }
@@ -359,7 +365,8 @@ public class EgressoController {
     }
 
     private void validaInstituicao(EmpresaDTO instituicao, EgressoModel egressoModel) {
-        EmpresaModel empresaModel = instituicao.getId() != null ? empresaService.findById(instituicao.getId()): empresaService.findByNome(instituicao.getNome());
+        EmpresaModel empresaModel = instituicao.getId() != null ? empresaService.findById(instituicao.getId())
+                : empresaService.findByNome(instituicao.getNome());
         if (empresaModel == null) {
             empresaModel = EmpresaModel.builder().nome(instituicao.getNome()).build();
         }

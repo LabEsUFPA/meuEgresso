@@ -250,28 +250,13 @@ public class EgressoAdmController {
 
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
-        if (egressoModel.getContribuicao() != null) {
-            egressoModel.getContribuicao().setEgresso(egressoModel);
-        }
-        if (egressoModel.getDepoimento() != null) {
-            egressoModel.getDepoimento().setEgresso(egressoModel);
-        }
+        validaContribuicaoDepoimento(egressoModel);
         if (egressoModel.getEmprego() != null) {
-            EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
-            egressoEmpresaModel.setEgresso(egressoModel);
-            EnderecoModel enderecoModel = egressoEmpresaModel.getEndereco();
-            EnderecoModel enderecoModelNoBanco = enderecoService.findByCidadeAndEstadoAndPais(
-                    enderecoModel.getCidade(), enderecoModel.getEstado(),
-                    enderecoModel.getPais());
-            if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
-                egressoEmpresaModel.setEndereco(enderecoModelNoBanco);
-                egressoEmpresaModel.getId().setEnderecoId(enderecoModelNoBanco.getId());
-            } else if (enderecoModelNoBanco == null) {
-                egressoEmpresaModel.getId().setEnderecoId(null);
-                egressoEmpresaModel.setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
-                        .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
+                EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
+                egressoEmpresaModel.setEgresso(egressoModel);
+                validaEmpresa(egressoEmpresaModel.getEmpresa(), egressoModel);
+                validaEndereco(egressoEmpresaModel.getEndereco(), egressoModel);
             }
-        }
         if (egressoModel.getPalestras() != null) {
             egressoModel.getPalestras().setEgresso(egressoModel);
         }
@@ -377,6 +362,15 @@ public class EgressoAdmController {
         return ResponseType.FAIL_IMAGE_DELETE.getMessage();
     }
 
+    private void validaContribuicaoDepoimento(EgressoModel egressoModel) {
+        if (egressoModel.getContribuicao() != null) {
+            egressoModel.getContribuicao().setEgresso(egressoModel);
+        }
+        if (egressoModel.getDepoimento() != null) {
+            egressoModel.getDepoimento().setEgresso(egressoModel);
+        }
+    }
+
     private void validaSetorAtuacao(String setorAtuacaoNome, EgressoModel egressoModel) {
         SetorAtuacaoModel setorAtuacaoModelNoBanco = setorAtuacaoService.findByNome(setorAtuacaoNome);
         if (setorAtuacaoModelNoBanco == null) {
@@ -399,6 +393,29 @@ public class EgressoAdmController {
             cursoModel = CursoModel.builder().nome(curso.getNome()).build();
         }
         egressoModel.getTitulacao().setCurso(cursoModel);
+    }
+
+    private void validaEmpresa(EmpresaModel empresa, EgressoModel egressoModel) {
+        EmpresaModel empresaModel = empresa.getId() != null ? empresaService.findById(empresa.getId()) : empresaService.findByNome(empresa.getNome());
+        if (empresaModel == null) {
+            empresaModel = EmpresaModel.builder().nome(empresa.getNome()).build();
+        }
+        egressoModel.getEmprego().setEmpresa(empresaModel);
+    }
+
+    private void validaEndereco(EnderecoModel enderecoModel, EgressoModel egressoModel) {
+        EnderecoModel enderecoModelNoBanco = enderecoService.findByCidadeAndEstadoAndPais(
+                enderecoModel.getCidade(), enderecoModel.getEstado(),
+                enderecoModel.getPais());
+        if (enderecoModelNoBanco != null && enderecoModel != enderecoModelNoBanco) {
+            egressoModel.getEmprego().setEndereco(enderecoModelNoBanco);
+            egressoModel.getEmprego().getId().setEnderecoId(enderecoModelNoBanco.getId());
+        } else if (enderecoModelNoBanco == null) {
+            egressoModel.getEmprego().getId().setEnderecoId(null);
+            egressoModel.getEmprego()
+                    .setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
+                            .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
+        }
     }
 
     private void validaInstituicao(EmpresaDTO instituicao, EgressoModel egressoModel) {
