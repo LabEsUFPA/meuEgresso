@@ -32,7 +32,7 @@
             ['rounded-lg']: !open,
             ['w-64 py-1 px-3 relative border bg-white']: true,
           })"
-          @click="!disabled ? focusInput = !focusInput : ''"
+          @click="handleFocus"
         >
           <div
             :class="{
@@ -147,6 +147,7 @@ interface Props {
   preFilled?: boolean // tirar duvidas
   isFetching?: boolean,
   infinite?: boolean
+  lazyEmit?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -177,6 +178,11 @@ const filteredDataArray = computed(() => {
     return option.label.toString().toLowerCase().indexOf(model.value.toLowerCase()) >= 0
   })
 })
+
+function handleFocus () {
+  if (!props.disabled) focusInput.value = !focusInput.value
+  if (props.infinite && !props.lazyEmit) $emit('typing', '')
+}
 
 const name = toRef(props, 'name')
 const {
