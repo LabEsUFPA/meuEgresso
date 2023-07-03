@@ -51,6 +51,7 @@ public class EgressoServiceImpl implements EgressoService {
 	private String uploadDirectory;
 
 	@Override
+	@Transactional
 	public EgressoModel save(EgressoModel egressoModel) {
 		return egressoRepository.save(egressoModel);
 	}
@@ -62,17 +63,20 @@ public class EgressoServiceImpl implements EgressoService {
 	}
 
 	@Override
+	@Transactional
 	public EgressoModel findById(Integer idEgresso) {
 		return egressoRepository.findById(idEgresso).orElseThrow();
 	}
 
 
 	@Override
+	@Transactional
     public EgressoModel findByIdAndUsuarioValidoIsTrue(Integer id) {
         return egressoRepository.findByIdAndUsuarioValidoIsTrue(id).orElseThrow();
     }
 
     @Override
+	@Transactional
 	public List<EgressoModel> findAll() {
 		return egressoRepository.findAll();
 	}
@@ -86,6 +90,7 @@ public class EgressoServiceImpl implements EgressoService {
 	 * @since 19/05/2023
 	 */
 	@Override
+	@Transactional
 	public List<Integer> findAllIdades() {
 		List<EgressoModel> lista = egressoRepository.findAll();
 		List<Integer> idades = new ArrayList<>();
@@ -96,6 +101,7 @@ public class EgressoServiceImpl implements EgressoService {
 	}
 
 	@Override
+	@Transactional
 	public List<EgressoModel> findAllByUsuarioValidoIsTrue() {
 		return egressoRepository.findAllByUsuarioValidoIsTrue();
 	}
