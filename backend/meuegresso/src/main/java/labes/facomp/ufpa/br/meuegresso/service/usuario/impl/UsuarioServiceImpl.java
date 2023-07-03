@@ -191,4 +191,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return true;
 	}
 
+	@Override
+	public boolean existsById(Integer id) {
+		return usuarioRepository.existsById(id);
+	}
+
 }

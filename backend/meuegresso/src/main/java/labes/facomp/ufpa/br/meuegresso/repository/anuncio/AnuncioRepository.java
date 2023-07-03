@@ -19,6 +19,8 @@ public interface AnuncioRepository extends CrudRepository<AnuncioModel, Integer>
             select a
             from
                 anuncio a
+            inner join usuario u on
+            u.id = a.createdBy
             where
                 a.dataExpiracao >= now()
                 and a.titulo ilike :tituloAnuncio
