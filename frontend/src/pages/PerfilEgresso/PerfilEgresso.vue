@@ -1165,8 +1165,7 @@ async function handleSubmitCarreira (values: any) {
       endereco: {
         cidade: await apiEnderecos.getCidadeById(values.carreira.cidade),
         estado: await apiEnderecos.getEstadoById(values.carreira.estado),
-        pais: await apiEnderecos.getPaisById(values.carreira.pais),
-        cidadeId: values.carreira.cidade
+        pais: await apiEnderecos.getPaisById(values.carreira.pais)
       },
       empresa: {
         id: 1,
@@ -1190,8 +1189,7 @@ async function handleSubmitCarreira (values: any) {
     const endereco = {
       pais: await apiEnderecos.getPaisById(values.carreira.pais),
       estado: await apiEnderecos.getEstadoById(values.carreira.estado),
-      cidade: await apiEnderecos.getCidadeById(values.carreira.cidade),
-      cidadeId: values.carreira.cidade
+      cidade: await apiEnderecos.getCidadeById(values.carreira.cidade)
     }
     jsonResponse.emprego.endereco = endereco
   } else {
