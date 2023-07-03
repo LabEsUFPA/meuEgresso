@@ -19,7 +19,8 @@ export function getRandomEgresso (): EgressoMapa {
       estado: faker.location.state(),
       pais: faker.location.countryCode(),
       latitude: faker.location.latitude(),
-      longitude: faker.location.longitude()
+      longitude: faker.location.longitude(),
+      cidadeId: 0
     }
   }
 }
