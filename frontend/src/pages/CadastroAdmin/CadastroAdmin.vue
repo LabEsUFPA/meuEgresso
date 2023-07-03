@@ -33,7 +33,7 @@
           <p class="text-blue-400 text-center font-bold mb-5 sm:text-base">
             Preencha os campos abaixo:
           </p>
-          <div class="flex flex-col">
+          <div class="flex flex-col gap-y-4">
             <div class="flex flex-col gap-x-6 gap-y-4 md:gap-x-16 lg:gap-x-20 xl:gap-x-24 2xl:gap-x-32 sm:flex-row">
               <CustomInput
                 name="nome"
@@ -63,7 +63,7 @@
               />
               <CustomInput
                 name="confirmationEmail"
-                label=""
+                label="Confirmar e-mail"
                 type="email"
                 :required="true"
                 :icon-path="mdiEmail"
