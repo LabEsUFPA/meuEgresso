@@ -961,6 +961,7 @@ const stagedChanges = ref({
 
 // if (storage.has('loggedEgresso')) {
 $store.fetchAll()
+$storeCadastro.fetchAll()
 
 const isSuperUser = computed(() => {
   if (storage.has('loggedUser')) {
