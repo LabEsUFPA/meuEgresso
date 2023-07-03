@@ -359,6 +359,7 @@ public class EgressoController {
             egressoModel.getEmprego().getId().setEnderecoId(null);
             egressoModel.getEmprego()
                     .setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
+                    .cidadeId(enderecoModel.getCidadeId())
                             .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
         }
     }
