@@ -247,6 +247,9 @@ public class GraficoPubController {
 				mediaOutros += entry.getKey() * entry.getValue();
 				it.remove();
 			}
+			if(entry.getKey() == 0){
+				it.remove();
+			}
 		}
 
 		if(outros<0){
