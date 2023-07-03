@@ -238,8 +238,7 @@ public class EgressoController {
             if (egressoModel.getPalestras() != null) {
                 egressoModel.getPalestras().setEgresso(egressoModel);
             }
-            egressoModel.getUsuario()
-                    .setPassword(usuarioService.findById(jwtService.getIdUsuario(token)).getPassword());
+            egressoModel.setUsuario(usuarioService.findById(jwtService.getIdUsuario(token)));
             if (egressoModel.getEmprego() != null) {
                 SetorAtuacaoModel setorAtuacaoModel = egressoModel.getEmprego().getSetorAtuacao();
                 AreaAtuacaoModel areaAtuacaoModel = egressoModel.getEmprego().getAreaAtuacao();

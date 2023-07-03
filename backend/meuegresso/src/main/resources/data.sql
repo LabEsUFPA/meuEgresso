@@ -2,15 +2,12 @@
 
 INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario, email_verificado_usuario) VALUES ('admin@admin.com','ADMIN ADMIN','{bcrypt}$2a$10$vh9/MkL4XQyd.fqkQdnWSelTUxPBpDb6qL5W2uWLxLUN0JR9vwRZm','ADMIN', true) ON CONFLICT DO NOTHING;
 INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario, email_verificado_usuario) VALUES ('secretario@secretario.com','SECRETARIO SECRETARIO','{bcrypt}$2a$10$biZwxymZqQDevuqWzB/wCe0jfC6Idr.SJRYO9oXBFPuusp9oA9hAy','SECRETARIO', true) ON CONFLICT DO NOTHING;
-INSERT INTO usuario (email,nome_usuario,senha_usuario,login_usuario, email_verificado_usuario) VALUES ('egresso@egresso.com','EGRESSO EGRESSO','{bcrypt}$2a$10$Tas4Xjqxogotz3bSL08nHOZRUNF9WJZuPthj2qn3maJMjwI2/uHtO','EGRESSO', true) ON CONFLICT DO NOTHING;
 
 -- Usuarios por Grupo
 INSERT INTO public.usuario_grupo
 VALUES (1, 'ADMIN') ON CONFLICT DO NOTHING;
 INSERT INTO public.usuario_grupo
 VALUES (2, 'SECRETARIO') ON CONFLICT DO NOTHING;
-INSERT INTO public.usuario_grupo
-VALUES (3, 'EGRESSO') ON CONFLICT DO NOTHING;
 --- Tipos de Cota
 INSERT INTO public.cota (nome_cota, created_by)
 VALUES ('Escola', 1) ON CONFLICT DO NOTHING;
