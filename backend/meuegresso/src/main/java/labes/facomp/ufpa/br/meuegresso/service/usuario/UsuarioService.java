@@ -85,7 +85,10 @@ public interface UsuarioService extends UserDetailsService {
 	 * @param createdBy
 	 * @return {@link boolean}
 	 */
-	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);	
+	
+	public boolean existsById(Integer id);
+
 	
 	/**
 	 * Método responsável por verificar se existe um usuario pelo username.
