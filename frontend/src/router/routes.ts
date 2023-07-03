@@ -1,4 +1,118 @@
 export default [
-  { path: '/', component: () => import('pages/HomePage.vue') },
-  { path: '/test', component: () => import('pages/RouterTest.vue') }
+  {
+    path: '/',
+    component: async () => await import('src/components/HeaderAndFooter.vue'),
+    children: [
+      { path: '/', component: async () => await import('src/pages/HomePage/HomePage.vue') },
+      { path: '/entrar', component: async () => await import('src/pages/PaginaLogin/PaginaLogin.vue') },
+      {
+        path: '/cadastro',
+        component: async () => await import('src/pages/CadastroEgresso/CadastroEgresso.vue'),
+        meta: {
+          shouldNotForce: true,
+          requiresAuthAdmin: true,
+          allowedScopes: ['EGRESSO']
+        }
+      },
+      {
+        path: '/cadastro/:id',
+        component: async () => await import('src/pages/CadastroEgresso/CadastroEgresso.vue'),
+        meta: {
+          requiresAuthAdmin: true,
+          allowedScopes: ['SECRETARIO', 'ADMIN']
+        }
+      },
+      {
+        path: '/cadastro-perfil',
+        component: async () => await import('src/pages/CadastroPerfil/CadastroPerfil.vue')
+      },
+      {
+        path: '/cadastro-admin',
+        component: async () => await import('src/pages/CadastroAdmin/CadastroAdmin.vue'),
+        meta: {
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
+        }
+      },
+      {
+        path: '/cadastro-anuncio',
+        component: async () => await import('src/pages/CadastroAnuncio/CadastroAnuncio.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/notificacoes-admin',
+        component: async () => await import('src/pages/NotificacoesAdmin/NotificacoesAdmin.vue'),
+        meta: {
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
+        }
+      },
+      {
+        path: '/egresso',
+        component: async () => await import('src/pages/PerfilEgresso/PerfilEgresso.vue')
+      },
+      {
+        path: '/egresso/:id',
+        component: async () => await import('src/pages/PerfilEgresso/PerfilEgresso.vue')
+      },
+      {
+        path: '/conta',
+        component: async () => await import('src/pages/EdicaoConta/EdicaoConta.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/graficos',
+        component: async () => await import('src/pages/PaginaGraficos/PaginaGraficos.vue')
+      },
+      {
+        path: '/vagas',
+        component: async () => await import('src/pages/FeedVagas/FeedVagas.vue')
+      },
+      {
+        path: '/email',
+        component: async () => await import('src/pages/EmailAdmin/EmailAdmin.vue'),
+        meta: {
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
+        }
+      },
+      {
+        path: '/vagas/:id',
+        component: async () => await import('src/pages/AnuncioVaga/AnuncioVaga.vue')
+      },
+      {
+        path: '/painel-admin',
+        component: async () => await import('src/pages/PainelAdmin/PainelAdmin.vue'),
+        meta: {
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
+        }
+      },
+      {
+        path: '/registro-egressos',
+        component: async () => await import('src/pages/RegistroEgressos/RegistroEgressos.vue'),
+        meta: {
+          requiresAuthAdmin: true,
+          allowedScopes: ['ADMIN', 'SECRETARIO']
+        }
+      },
+      {
+        path: 'redefinir-senha',
+        component: async () => await import('src/pages/RedefinirSenha/RedefinirSenha.vue')
+      },
+      {
+        path: 'validar-email',
+        component: async () => await import('src/pages/ValidarEmail/ValidarEmail.vue')
+      },
+      {
+        path: 'privacidade',
+        component: async () => await import('src/pages/PoliticaPrivacidade/PoliticaPrivacidade.vue')
+      }
+    ]
+  },
+  { path: '/:pathMatch(.*)*', component: async () => await import('src/pages/PageNotFound/PageNotFound.vue') }
 ]

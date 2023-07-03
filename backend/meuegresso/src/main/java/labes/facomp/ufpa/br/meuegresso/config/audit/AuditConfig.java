@@ -6,11 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
-import labes.facomp.ufpa.br.meuegresso.model.UsuarioModel;
-import labes.facomp.ufpa.br.meuegresso.repository.usuario.UsuarioRepository;
+import labes.facomp.ufpa.br.meuegresso.enumeration.JwtUtils;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -25,17 +24,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuditConfig {
 
-	private final UsuarioRepository userRepository;
-
 	@Bean
-	public AuditorAware<UsuarioModel> auditorAware() {
+	public AuditorAware<Integer> auditorAware() {
 		return () -> {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			if (auth != null) {
-				return Optional.of(userRepository.findByUsername(auth.getName()).orElse(null));
-			} else {
+			JwtAuthenticationToken authToken = SecurityContextHolder.getContext()
+					.getAuthentication() instanceof JwtAuthenticationToken
+							? (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication()
+							: null;
+
+			if (authToken != null) {
+				Integer userId = Integer
+						.parseInt(authToken.getTokenAttributes().get(JwtUtils.USER_ID.getPropriedade()).toString());
+				return Optional.of(userId);
+			} else
 				return Optional.ofNullable(null);
-			}
 		};
 	}
 }

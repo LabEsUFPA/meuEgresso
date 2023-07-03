@@ -9,31 +9,33 @@ spring:
   # Database
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:./data/meuEgressoDBTest
+    url: jdbc:h2:mem:testdb;BUILTIN_ALIAS_OVERRIDE=1
     username: meuEgressoTest
     password: meuEgressoTestPassword
   h2:
     console.enabled: true
     console.path: /h2
-    
+  sql:
+    init:
+      mode: always
+      data-locations:
+      - classpath:h2alias/age.sql
 
-  data:
-    mongodb:
-      host: localhost
-      database: db-mongo
-      port: 27017
-      username: mongo
-      password: mongo
-      authentication-database: admin # habilitar autenticação
-      auto-index-creation: true # Atualizar indices quando autlaizar o model.
+  # Email configuration
+  mail:
+    username: user
+    password: admin
+    host: 127.0.0.1
+    port: 3025
+    protocol: smtp
 
   jpa:
-    database: postgresql
+    database: h2
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
       naming:
         physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -41,3 +43,10 @@ spring:
       '[hibernate.generate_statistics]' : true
       '[persistence.schema-generation.scripts.create-target]' : create.sql
 
+server:
+  port: 15000
+
+token:
+  domain: teste.com
+  expiresHours: 3
+fotosDir: test/java/labes/facomp/ufpa/br/meuegresso/fotosTeste/

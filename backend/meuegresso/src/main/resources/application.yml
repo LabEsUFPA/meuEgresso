@@ -3,11 +3,16 @@ spring:
     default: homol
   application:
     name: Meu Egresso API
+  servlet:
+    multipart:
+      max-file-size: 5MB
   #configuração do jackson
   jackson:
     default-property-inclusion: NON_NULL
+  jpa:
+    defer-datasource-initialization: true
 
-# Email configuration
+  # Email configuration
   mail:
     host: smtp.gmail.com
     port: 587
@@ -49,7 +54,12 @@ rsa:
 
 # Server configuration
 server:
-  port: 8080
+  port: ${APP_PORT}
+  forward-headers-strategy: framework
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
   compression:
     enabled: true
     min-response-size: 2048
@@ -57,8 +67,10 @@ server:
     - application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
 
 token:
-  expiresHours: 3
+  domain: ${DOMAIN_COOKIE}
+  expiresHours: ${TOKEN_EXPIRES_HOURS}
 
 cors:
-  allowedOriginPatterns:
-  - http://localhost:*
+  allowedOrigins: ${ALLOWED_ORIGINS}
+
+fotosDir: ${PATHFOTOS}

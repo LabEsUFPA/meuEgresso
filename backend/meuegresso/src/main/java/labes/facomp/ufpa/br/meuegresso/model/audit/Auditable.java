@@ -1,8 +1,9 @@
 package labes.facomp.ufpa.br.meuegresso.model.audit;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -17,36 +18,39 @@ import jakarta.persistence.TemporalType;
 import lombok.Data;
 
 /**
- * Encapsulamento dos atributos comuns a todas as classes a fim de rastrar alterações no banco de dados.
+ * Encapsulamento dos atributos comuns a todas as classes a fim de rastrar
+ * alterações no banco de dados.
  *
  * @author Alfredo Gabriel
  * @since 26/03/2023
  * @version 1.0
  */
 @Data
+@Audited
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class Auditable {
 
 	@CreatedBy
 	@Column(name = "created_by", updatable = false)
-	protected String createdBy;
+	protected Integer createdBy;
 
 	@CreatedDate
-	@Column(name = "created_date", updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	protected Date createdDate;
+	@ColumnDefault(value = "now()")
+	@Column(name = "created_date", updatable = false)
+	protected LocalDateTime createdDate;
 
 	@LastModifiedBy
 	@Column(name = "last_modified_by")
-	protected String lastModifiedBy;
+	protected Integer lastModifiedBy;
 
 	@LastModifiedDate
-	@Column(name = "last_modified_date")
 	@Temporal(TemporalType.TIMESTAMP)
-	protected Date lastModifiedDate;
+	@Column(name = "last_modified_date")
+	protected LocalDateTime lastModifiedDate;
 
-	@Column(name = "ativo", nullable = false)
 	@ColumnDefault(value = "TRUE")
+	@Column(name = "ativo", nullable = false)
 	protected Boolean ativo = true;
 }

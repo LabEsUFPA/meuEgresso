@@ -1,0 +1,38 @@
+package labes.facomp.ufpa.br.meuegresso.dto.administradores.usuario;
+
+import java.util.Set;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import labes.facomp.ufpa.br.meuegresso.enumeration.Grupos;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class UsuarioRegistro {
+
+    @NotBlank(message = "Informe um usuário.")
+    private String username;
+
+    //@NotBlank(message = "Informe uma senha.")
+    //private String password;
+
+    @Email(message = "Informe um e-mail valido.")
+    @NotBlank(message = "Informe um email.")
+    private String email;
+
+    @NotBlank(message = "Informe um nome.")
+    private String nome;
+
+    @Pattern(regexp = "[0-9]{12}|$", message = "Informe uma matrícula válida.")
+    private String registration;
+
+    @NotEmpty(message = "Informe um grupo")
+    private Set<Grupos> grupos;
+
+}
