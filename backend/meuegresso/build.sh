@@ -4,4 +4,14 @@
 
 [ ! -d "./.env" ] && echo "Arquivo de configuração '.env' não existe, consulte o manual" && exit 1;
 
-[ -d "./meuEgressoFotos" ] && docker pull alverad/meu-egresso-api:latest && docker stack deploy -c <(docker-compose -f docker-compose.api.yml config) meuegresso-api
+cat << EOF > run.sh
+#!/bin/bash
+mvn clean
+`grep "=" .env | tr '\n' ' '`mvn install
+docker-compose down
+docker image prune
+docker volume prune
+docker-compose up --build
+EOF
+
+bash run.sh

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker pull alverad/meu-egresso-front:develop-latest && docker stack deploy -c docker-compose.yml meuegresso-front
+docker pull alverad/meu-egresso-front:latest && docker stack deploy -c <(docker-compose -f docker-compose.yml config) meuegresso-front

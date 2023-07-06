@@ -28,6 +28,8 @@ services:
     environment:
       - TZ=America/Belem
     image: meu-egresso-api:latest
+    volumes:
+      - ./meuEgressoFotos:${PATHFOTOS}
     ports:
       - ${APP_PORT}:${APP_PORT}
     restart: always
