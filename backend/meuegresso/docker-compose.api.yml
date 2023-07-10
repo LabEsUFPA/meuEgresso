@@ -11,7 +11,7 @@ services:
     networks:
       - traefik-public
     volumes:
-      - ./meuEgressoFotos:${PATHFOTOS}
+      - ${PATHFOTOS}:/fotosEgressos
     environment:
       - TZ=America/Belem
       - APP_PORT=80
