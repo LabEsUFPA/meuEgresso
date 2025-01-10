@@ -10,6 +10,7 @@ Para executar o projeto em modo de desenvolvimento, siga os passos abaixo:
 npm i
 ```
 
+
 2. Copie o arquivo de ambiente
 
 ```bash
