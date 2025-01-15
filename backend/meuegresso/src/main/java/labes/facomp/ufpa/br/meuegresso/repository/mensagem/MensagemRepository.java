@@ -25,10 +25,10 @@ public interface MensagemRepository extends CrudRepository<MensagemModel, Intege
         void deleteById(Integer id);
 
         @Query(value = """
-                        select * from mensagem m where m.frequente_mensagem = false
+            select * from mensagem m where m.frequente_mensagem = false
+                        and (m.email_mensagem <> '')
                         and (m.data_mensagem::::date = CURRENT_DATE
                         and (m.data_enviada_mensagem::::date != CURRENT_DATE or m.data_enviada_mensagem::::date is null)
-                        and (m.email_mensagem <> '')
                         or m.data_mensagem  < CURRENT_DATE and m.data_enviada_mensagem is null)
                                            """, nativeQuery = true)
         List<MensagemModel> findEmailsParaEnviar();
