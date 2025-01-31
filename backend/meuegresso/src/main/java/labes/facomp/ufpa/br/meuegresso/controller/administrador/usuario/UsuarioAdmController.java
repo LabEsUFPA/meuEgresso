@@ -45,6 +45,7 @@ import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
 import labes.facomp.ufpa.br.meuegresso.service.mail.MailService;
 import labes.facomp.ufpa.br.meuegresso.service.statususuario.StatusUsuarioService;
 import labes.facomp.ufpa.br.meuegresso.service.usuario.UsuarioService;
+import labes.facomp.ufpa.br.meuegresso.service.recuperacaosenha.RecuperacaoSenhaService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -72,6 +73,8 @@ public class UsuarioAdmController {
 	private final AuthService authService;
 
 	private final MailService mailService;
+
+	private final RecuperacaoSenhaService recuperacaoSenhaService;
 
 	/**
 	 * Endpoint responsável por retornar a lista de usuários cadastrados no banco de
@@ -217,6 +220,8 @@ public class UsuarioAdmController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 	public String deleteById(@PathVariable(name = "id") Integer id) {
+		recuperacaoSenhaService.deleteByUsuarioId(id);
+
 		if (egressoService.existsByUsuarioId(id)) {
 			EgressoModel egressoModel = egressoService.findByUsuarioId(id);
 			if (egressoService.deleteById(egressoModel.getId())) {

@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -66,4 +68,13 @@ public class RecuperacaoSenhaServiceImpl implements RecuperacaoSenhaService {
         return recuperacaoSenhaRepository.findByToken(token).orElseThrow(UnauthorizedRequestException::new);
     }
 
+    @Override
+    @Transactional
+    public boolean deleteByUsuarioId(Integer idUsuario) {
+        if (recuperacaoSenhaRepository.existsByUsuario_Id(idUsuario)) {
+            recuperacaoSenhaRepository.deleteByUsuario_Id(idUsuario);
+            return true;
+        }
+        return false;
+    }
 }
