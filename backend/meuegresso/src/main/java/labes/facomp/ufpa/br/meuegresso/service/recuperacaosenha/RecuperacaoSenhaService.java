@@ -39,4 +39,12 @@ public interface RecuperacaoSenhaService {
 	 * @return {@link RecuperacaoSenhaModel}
 	 */
     public RecuperacaoSenhaModel save(RecuperacaoSenhaModel recuperacaoSenha);
+
+	/**
+	 * Método responsável por deletar todas as recuperações de senha pelo id do usuário.
+	 *
+	 * @param idUsuario
+	 * @return {@link boolean}
+	 */
+    public boolean deleteByUsuarioId(Integer idUsuario);
 }

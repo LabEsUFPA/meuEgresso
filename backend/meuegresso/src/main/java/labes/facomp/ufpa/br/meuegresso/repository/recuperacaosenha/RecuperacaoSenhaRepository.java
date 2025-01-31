@@ -13,4 +13,7 @@ public interface RecuperacaoSenhaRepository extends CrudRepository<RecuperacaoSe
 
     Optional<RecuperacaoSenhaModel> findTopByUsuarioEmailAndPasswordChangeIsFalse(String email);
 
+    boolean existsByUsuario_Id(Integer idUsuario);
+
+    int deleteByUsuario_Id(Integer idUsuario);
 }
