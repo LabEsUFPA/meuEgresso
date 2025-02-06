@@ -111,7 +111,7 @@ class GraficoPubControllerTest extends Configuracao {
 
         static final String ENDERECO_CIDADE = "Barcarena";
         static final String ENDERECO_ESTADO = "Para";
-        static final String ENDERECO_PAIS = "Brasil";
+        static final String ENDERECO_PAIS = "Brazil";
 
         static final Integer EMPRESA_ID = 1;
         static final String EMPRESA_NOME = "EmpresaTeste";
@@ -122,7 +122,7 @@ class GraficoPubControllerTest extends Configuracao {
         static final String GENERO_NOME = "GeneroTeste";
 
         static final Integer EGRESSO_ID = 1;
-        static final LocalDate EGRESSO_NASCIMENTO = LocalDate.parse("1997-05-05");
+        static final LocalDate EGRESSO_NASCIMENTO = LocalDate.parse("2000-01-01");
         static final String EGRESSO_EMAIL = "emai@teste.com";
 
         static final Integer CURSO_ID = 1;
@@ -616,10 +616,11 @@ class GraficoPubControllerTest extends Configuracao {
 
                 assertNotNull(idadesGraficoDTO);
                 assertEquals(1, idadesGraficoDTO.getIdadesEgressos().size());
-                // O get(26) seleciona a chave com idade 26 e retorna quantos egressos
-                // tem essa idade, que nesse caso é 1
-                assertEquals(1, idadesGraficoDTO.getIdadesEgressos().get(26));
-                assertEquals(26.0, idadesGraficoDTO.getMediaIdades());
+                // O get(25) seleciona a chave com idade 25 e retorna quantos egressos
+                // tem essa idade, que nesse caso é 1. Note que a idade muda conforme
+                // o ano que estamos.
+                assertEquals(1, idadesGraficoDTO.getIdadesEgressos().get(25));
+                assertEquals(25.0, idadesGraficoDTO.getMediaIdades());
         }
 
         @Test
