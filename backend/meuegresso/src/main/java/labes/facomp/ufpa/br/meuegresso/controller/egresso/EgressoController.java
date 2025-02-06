@@ -142,9 +142,11 @@ public class EgressoController {
                 enderecoEmpresa = mapper.map(empresaDTO.getEndereco(), EnderecoModel.class);
                 enderecoEmpresa = enderecoService.save(enderecoEmpresa);
             }
+            // id null porque estava sobrescrevendo linhas do banco
             empresa = empresaService.findByNome(empresaDTO.getNome());
             if (empresa == null) {
                 empresa = mapper.map(empresaDTO, EmpresaModel.class);
+                empresa.setId(null);
                 empresa.setEndereco(null);
                 empresa = empresaService.save(empresa);
             }
