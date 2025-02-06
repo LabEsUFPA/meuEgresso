@@ -182,6 +182,7 @@ public class EgressoAdmController {
             if (empresa == null) {
                 empresa = mapper.map(empresaDTO, EmpresaModel.class);
                 empresa.setEndereco(null);
+                empresa.setId(null);
                 empresa = empresaService.save(empresa);
             }
             egresso.setEmprego(EgressoEmpresaModel.builder().egresso(egresso).empresa(empresa)
