@@ -253,10 +253,8 @@ public class EgressoAdmController {
         EgressoModel egressoModel = mapper.map(egresso, EgressoModel.class);
         validaContribuicaoDepoimento(egressoModel);
         if (egressoModel.getEmprego() != null) {
-                EgressoEmpresaModel egressoEmpresaModel = egressoModel.getEmprego();
-                egressoEmpresaModel.setEgresso(egressoModel);
-                validaEmpresa(egressoEmpresaModel.getEmpresa(), egressoModel);
-                validaEndereco(egressoEmpresaModel.getEndereco(), egressoModel);
+                validaEmpresa(egressoModel);
+                validaEndereco(egressoModel.getEmprego().getEndereco(), egressoModel);
             }
         if (egressoModel.getPalestras() != null) {
             egressoModel.getPalestras().setEgresso(egressoModel);
@@ -396,12 +394,22 @@ public class EgressoAdmController {
         egressoModel.getTitulacao().setCurso(cursoModel);
     }
 
-    private void validaEmpresa(EmpresaModel empresa, EgressoModel egressoModel) {
-        EmpresaModel empresaModel = empresa.getNome() != null ? empresaService.findByNome(empresa.getNome()) : empresaService.findById(empresa.getId());
-        if (empresaModel == null) {
-            empresaModel = EmpresaModel.builder().nome(empresa.getNome()).build();
+    private void validaEmpresa(EgressoModel egressoModel) {
+
+        EmpresaModel empresaNova = egressoModel.getEmprego().getEmpresa();
+        
+        egressoModel.getEmprego().setEgresso(egressoModel);
+        EmpresaModel empresaNoBanco = empresaService.findByNome(empresaNova.getNome());
+
+        if (empresaNoBanco == null) {
+            egressoModel.getEmprego().getId().setEmpresaId(null);
+            egressoModel.getEmprego()
+                    .setEmpresa(EmpresaModel.builder()
+                            .nome(empresaNova.getNome()).endereco(null).build());
+        } else {
+            egressoModel.getEmprego().setEmpresa(empresaNoBanco);
+            egressoModel.getEmprego().getId().setEmpresaId(empresaNoBanco.getId());
         }
-        egressoModel.getEmprego().setEmpresa(empresaModel);
     }
 
     private void validaEndereco(EnderecoModel enderecoModel, EgressoModel egressoModel) {

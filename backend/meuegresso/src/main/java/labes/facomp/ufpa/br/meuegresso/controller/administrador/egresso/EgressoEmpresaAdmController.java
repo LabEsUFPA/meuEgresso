@@ -41,10 +41,10 @@ public class EgressoEmpresaAdmController {
 	private final ModelMapper mapper;
 
 	/**
-     * Endpoint responsavel por buscar todas as cotas no banco.
+     * Endpoint responsavel por buscar todas os egressoEmpresa no banco.
      *
      * @param void
-     * @return {@link EgressoEmpresaDTO} Retorna uma lista com todos as cotas.
+     * @return {@link EgressoEmpresaDTO} Retorna uma lista com todos os egressoEmpresa.
      * @author Bruno Eiki
      * @since 21/04/2023
      */
