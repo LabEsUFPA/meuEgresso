@@ -1160,13 +1160,20 @@ async function handleSubmitCarreira (values: any) {
       },
       faixaSalarial: {
         id: 2
-
       },
       endereco: {
-        cidade: await apiEnderecos.getCidadeById(values.carreira.cidade),
-        estado: await apiEnderecos.getEstadoById(values.carreira.estado),
-        pais: await apiEnderecos.getPaisById(values.carreira.pais),
-        cidadeId: values.carreira.cidade
+        cidade: (typeof values.carreira.cidade) === 'number'
+          ? await apiEnderecos.getCidadeById(values.carreira.cidade)
+          : values.carreira.cidade,
+        estado: (typeof values.carreira.estado) === 'number'
+          ? await apiEnderecos.getEstadoById(values.carreira.estado)
+          : values.carreira.estado,
+        pais: (typeof values.carreira.pais) === 'number'
+          ? await apiEnderecos.getPaisById(values.carreira.pais)
+          : values.carreira.pais,
+        cidadeId: (typeof values.carreira.cidade) === 'number'
+          ? values.carreira.cidadeId
+          : values.carreira.cidade
       },
       empresa: {
         id: 1,
@@ -1188,10 +1195,18 @@ async function handleSubmitCarreira (values: any) {
     jsonResponse.emprego.areaAtuacao.nome = values.carreira.area
     jsonResponse.emprego.faixaSalarial.id = values.carreira.faixaSalarial
     const endereco = {
-      pais: await apiEnderecos.getPaisById(values.carreira.pais),
-      estado: await apiEnderecos.getEstadoById(values.carreira.estado),
-      cidade: await apiEnderecos.getCidadeById(values.carreira.cidade),
-      cidadeId: values.carreira.cidade
+      cidade: (typeof values.carreira.cidade) === 'number'
+        ? await apiEnderecos.getCidadeById(values.carreira.cidade)
+        : values.carreira.cidade,
+      estado: (typeof values.carreira.estado) === 'number'
+        ? await apiEnderecos.getEstadoById(values.carreira.estado)
+        : values.carreira.estado,
+      pais: (typeof values.carreira.pais) === 'number'
+        ? await apiEnderecos.getPaisById(values.carreira.pais)
+        : values.carreira.pais,
+      cidadeId: (typeof values.carreira.cidade) === 'number'
+        ? values.carreira.cidade
+        : values.carreira.cidadeId
     }
     jsonResponse.emprego.endereco = endereco
   } else {
@@ -1292,6 +1307,7 @@ const dataEgresso = ref({
     pais: '',
     estado: '',
     cidade: '',
+    cidadeId: 0,
     isInput: false
   },
   academico: {
@@ -1438,6 +1454,7 @@ async function fetchUpdateEgresso () {
       pais: json.emprego?.empresa?.endereco?.pais || json.emprego?.endereco?.pais || '',
       estado: json.emprego?.empresa?.endereco?.estado || json.emprego?.endereco?.estado || '',
       cidade: json.emprego?.empresa?.endereco?.cidade || json.emprego?.endereco?.cidade || '',
+      cidadeId: json.emprego?.empresa?.endereco?.cidadeId || json.emprego?.endereco?.cidadeId || 0,
       isInput: false
     },
     academico: {
@@ -1553,7 +1570,8 @@ async function fetchUpdateEgresso () {
     'carreira.faixaSalarial': dataEgresso.value.faixaSalarialId,
     'carreira.pais': dataEgresso.value.localizacao.pais,
     'carreira.estado': dataEgresso.value.localizacao.estado,
-    'carreira.cidade': dataEgresso.value.localizacao.cidade
+    'carreira.cidade': dataEgresso.value.localizacao.cidade,
+    'carreira.cidadeId': dataEgresso.value.localizacao.cidadeId
   })
 
   formAdicionais.value?.setValues({
