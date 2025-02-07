@@ -336,7 +336,7 @@
               spacing="mb-5"
               pais-holder="Selecione"
               estado-holder="Selecione"
-              cidade-holder="Selectione"
+              cidade-holder="Selecione"
               :required="area !== 'Desempregado'"
               :disabled="area === 'Desempregado'"
             />

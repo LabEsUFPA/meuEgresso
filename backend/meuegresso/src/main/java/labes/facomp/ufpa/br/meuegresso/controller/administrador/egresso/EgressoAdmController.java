@@ -274,6 +274,7 @@ public class EgressoAdmController {
         egressoModel.getUsuario().setUsername(user.getUsername());
         egressoModel.getUsuario().setPassword(user.getPassword());
         egressoModel.getUsuario().setGrupos(user.getGrupos());
+        egressoModel.getUsuario().setEmailVerificado(user.getEmailVerificado());
 
         egressoModel.setId(id);
 
@@ -423,7 +424,8 @@ public class EgressoAdmController {
             egressoModel.getEmprego().getId().setEnderecoId(null);
             egressoModel.getEmprego()
                     .setEndereco(EnderecoModel.builder().cidade(enderecoModel.getCidade())
-                            .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).build());
+                            .estado(enderecoModel.getEstado()).pais(enderecoModel.getPais()).cidadeId(enderecoModel.getCidadeId()).build());
+            
         }
     }
 
