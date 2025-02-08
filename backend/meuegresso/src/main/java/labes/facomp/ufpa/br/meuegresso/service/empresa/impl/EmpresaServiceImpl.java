@@ -102,7 +102,9 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     @Override
     public List<LocalPosGraficoDTO> countEgressoByPos() {
-        return empresaRepository.countEgressoByPos();
+        List<LocalPosGraficoDTO> localPosGrafico = empresaRepository.countEgressoByPos();
+        localPosGrafico.sort((e1, e2) -> Long.compare(e2.getQuantidade(), e1.getQuantidade()));
+        return localPosGrafico;
     }
 
     @Override

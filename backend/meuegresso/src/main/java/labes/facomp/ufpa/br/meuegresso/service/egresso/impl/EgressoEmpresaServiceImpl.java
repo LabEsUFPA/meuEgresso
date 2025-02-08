@@ -76,7 +76,9 @@ public class EgressoEmpresaServiceImpl implements EgressoEmpresaService {
 
     @Override
     public List<EmpresaGraficoDTO> countEgressoByEmpresas() {
-        return egressoEmpresaRepository.countEgressoByEmpresas();
+        List<EmpresaGraficoDTO> empresaGrafico = egressoEmpresaRepository.countEgressoByEmpresas();
+        empresaGrafico.sort((e1, e2) -> Long.compare(e2.getQuantidade(), e1.getQuantidade()));
+        return empresaGrafico;
     }
 
 }
