@@ -69,7 +69,9 @@ public class CursoServiceImpl implements CursoService {
 
     @Override
     public List<CursosGraficoDTO> countEgressoByCurso() {
-        return cursoRepository.countEgressoByCurso();
+        List<CursosGraficoDTO> cursosGrafico = cursoRepository.countEgressoByCurso();
+        cursosGrafico.sort((e1, e2) -> Long.compare(e2.getQuantidade(), e1.getQuantidade()));
+        return cursosGrafico;
     }
 
 }

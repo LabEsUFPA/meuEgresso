@@ -29,9 +29,11 @@ services:
       - TZ=America/Belem
     image: meu-egresso-api:latest
     volumes:
-      - ./meuEgressoFotos:${PATHFOTOS}
+      - meuEgressoFotos:/fotosEgressos
     ports:
       - ${APP_PORT}:${APP_PORT}
     restart: always
     depends_on:
       - postgres
+volumes:
+  meuEgressoFotos:
