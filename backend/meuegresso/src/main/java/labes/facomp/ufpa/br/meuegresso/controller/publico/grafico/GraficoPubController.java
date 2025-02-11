@@ -292,7 +292,7 @@ public class GraficoPubController {
 		if(locais.size() >= 10){
 			List<LocalPosGraficoDTO> locaisDez = locais.stream().limit(9).collect(Collectors.toList());
 			long outros = 0;
-			for(int i=9; i <= locais.size(); i++){
+			for(int i=9; i < locais.size(); i++){
 				outros += locais.get(i).getQuantidade();
 			}
 			if(outros > 0){
@@ -321,7 +321,7 @@ public class GraficoPubController {
 		if(cursos.size() >= 10){
 			List<CursosGraficoDTO> cursosDez = cursos.stream().limit(9).collect(Collectors.toList());
 			long outros = 0;
-			for(int i=9; i <= cursos.size(); i++){
+			for(int i=9; i < cursos.size(); i++){
 				outros += cursos.get(i).getQuantidade();
 			}
 			if(outros > 0){
@@ -369,7 +369,7 @@ public class GraficoPubController {
 		if(empresas.size() >= 10){
 			List<EmpresaGraficoDTO> empresasDez = empresas.stream().limit(9).collect(Collectors.toList());
 			long outros = 0;
-			for(int i=9; i <= empresas.size(); i++){
+			for(int i=9; i < empresas.size(); i++){
 				outros += empresas.get(i).getQuantidade();
 			}
 			if(outros > 0){
