@@ -352,8 +352,12 @@ export namespace models {
         series: PieChartModel
         error: boolean
       } | null
-      age: {
-        series: BarChartModel
+      // age: {
+      //   series: BarChartModel
+      //   error: boolean
+      // } | null
+      ageGroup: {
+        series: PieChartModel
         error: boolean
       } | null
     }

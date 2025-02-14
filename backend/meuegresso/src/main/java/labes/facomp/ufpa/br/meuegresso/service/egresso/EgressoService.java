@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.FaixaEtariaGraficoDTO;
+
 
 /**
  * Interface responsável por especificar os metodos a serem implementados.
@@ -178,6 +180,14 @@ public interface EgressoService {
 	 * @author Pedro Inácio, Alfredo Gabriel
 	 */
 	public Map<Integer, Integer> countAgeFromEgressos();
+
+	/**
+	 * Metodo responsavel por contar quantidade de egressos que tem determinada faixa etária.
+	 *
+	 * @return {@link List<FaixaEtariaGraficoDTO>} faixa etária e quantidade de egressos nessa faixa
+	 * @author Bruno Eiki
+	 */
+	public List<FaixaEtariaGraficoDTO> countFaixaEtariaFromEgressos();
 
 	/**
 	 * Metodo responsavel por contar quantidade de egressos que são pós-graduados e não são.
