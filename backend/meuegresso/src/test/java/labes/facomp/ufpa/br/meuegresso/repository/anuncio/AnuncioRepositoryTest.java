@@ -174,20 +174,14 @@ class AnuncioRepositoryTest
 
                 List<AnuncioModel> lista = List.of(getMockAnuncioIdOne(), getMockAnuncioIdThree());
 
-                // Page<AnuncioModel> page = new PageImpl<>(lista, PageRequest.of(0, 20), lista.size());
-
-                // BDDMockito.given(anuncioRepository.findBySearch(Mockito.anyString(),
-                //                 Mockito.any(), Mockito.any(Pageable.class)))
-                //                 .willReturn(page);
-
                 Integer[] areas = {1,2};
 
                 Page<AnuncioModel> response = anuncioRepository.findBySearch("%%", areas, PageRequest.of(0, 20));
 
-                // assertEquals(2, response.getContent().size());
-                // assertEquals(lista, response.getContent());
-                // assertEquals(getMockAnuncioIdOne(), response.getContent().get(0));
-                // assertEquals(getMockAnuncioIdThree(), response.getContent().get(1));
+                assertEquals(2, response.getContent().size());
+                assertEquals(lista, response.getContent());
+                assertEquals(getMockAnuncioIdOne(), response.getContent().get(0));
+                assertEquals(getMockAnuncioIdThree(), response.getContent().get(1));
 
         }
 

@@ -11,6 +11,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import labes.facomp.ufpa.br.meuegresso.exceptions.NotFoundFotoEgressoException;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoModel;
 import labes.facomp.ufpa.br.meuegresso.repository.egresso.EgressoRepository;
 import labes.facomp.ufpa.br.meuegresso.service.egresso.EgressoService;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.FaixaEtariaGraficoDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -207,6 +209,44 @@ public class EgressoServiceImpl implements EgressoService {
 				});
 		return countIdades;
 	}
+
+	@Override
+	public List<FaixaEtariaGraficoDTO> countFaixaEtariaFromEgressos () {
+		Map<Integer, Integer> idadesContagem = countAgeFromEgressos();
+		
+		List<FaixaEtariaGraficoDTO> faixas = inicializarFaixasEtarias();
+		
+		idadesContagem.forEach((idade, quantidade) -> {
+			int indice = calcularIndiceFaixa(idade);
+			faixas.get(indice).adicionarQuantidade(quantidade);
+		});
+
+		return faixas;
+	}
+
+	private List<FaixaEtariaGraficoDTO> inicializarFaixasEtarias() {
+		String[] descricoes = {
+			"menor ou igual a 22 anos",
+			"entre 23 e 27 anos",
+			"entre 28 e 32 anos",
+			"entre 33 e 37 anos",
+			"entre 38 e 42 anos",
+			"entre 43 e 47 anos",
+			"entre 48 e 52 anos",
+			"maior ou igual a 53 anos"
+    };
+    
+		return Arrays.stream(descricoes)
+                .map(desc -> new FaixaEtariaGraficoDTO(desc, 0))
+                .collect(Collectors.toList());
+	}
+
+	private int calcularIndiceFaixa(int idade) {
+		if (idade <= 22) return 0;
+		if (idade >= 53) return 7;
+		return ((idade - 23) / 5) + 1;
+	}
+
 
 	@Override
 	public Map<String, Integer> countFezPos() {

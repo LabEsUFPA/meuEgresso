@@ -23,7 +23,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
         wage,
         sector,
         gender,
-        age
+        // age,
+        ageGroup
       ] = await Promise.all([
         this.getCompanyData(),
         this.getPostGraduateCourseData(),
@@ -40,7 +41,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
         this.getWageData(),
         this.getSectorData(),
         this.getGenderData(),
-        this.getAgeData()
+        // this.getAgeData(),
+        this.getAgeGroupData()
       ])
 
       const response: AllChartSeries = {
@@ -59,7 +61,8 @@ export const useGraficoStore = defineStore('GraficoStore', {
         wage,
         sector,
         gender,
-        age
+        // age,
+        ageGroup
       }
 
       return response
@@ -395,24 +398,48 @@ export const useGraficoStore = defineStore('GraficoStore', {
       }
     },
 
-    async getAgeData () {
+    // async getAgeData () {
+    //   const response = await Api.request({
+    //     method: 'get',
+    //     route: '/publico/grafico/idades'
+    //   })
+
+    //   const x: string[] = []
+    //   const y: number[] = []
+
+    //   if ((response?.status) === 200) {
+    //     Object.keys(response.data?.idadesEgressos).forEach((item: string) => {
+    //       x.push(`${item} anos`)
+    //       y.push(response.data?.idadesEgressos[item])
+    //     })
+    //   }
+
+    //   return {
+    //     series: { x, y },
+    //     error: response?.status !== 200
+    //   }
+    // },
+
+    async getAgeGroupData () {
       const response = await Api.request({
         method: 'get',
-        route: '/publico/grafico/idades'
+        route: '/publico/grafico/faixaEtaria'
       })
 
-      const x: string[] = []
-      const y: number[] = []
+      const values: PieChartSeries[] = []
+      const legend: string[] = []
 
-      if ((response?.status) === 200) {
-        Object.keys(response.data?.idadesEgressos).forEach((item: string) => {
-          x.push(`${item} anos`)
-          y.push(response.data?.idadesEgressos[item])
-        })
+      if (response?.status === 200) {
+        response.data?.forEach(
+          (item: { faixa: string, quantidade: number }) => {
+            values.push({ value: item.quantidade, name: item.faixa })
+            legend.push(item.faixa)
+          }
+        )
       }
 
       return {
-        series: { x, y },
+        series: { values, legend },
         error: response?.status !== 200
       }
     }

@@ -30,6 +30,7 @@ import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.SalarioGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.SetorAtuacaoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.TipoAlunoGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.TipoBolsaGraficoDTO;
+import labes.facomp.ufpa.br.meuegresso.dto.publico.grafico.FaixaEtariaGraficoDTO;
 import labes.facomp.ufpa.br.meuegresso.model.EgressoEmpresaModel;
 import labes.facomp.ufpa.br.meuegresso.service.areaatuacao.AreaAtuacaoService;
 import labes.facomp.ufpa.br.meuegresso.service.cota.CotaService;
@@ -127,6 +128,21 @@ public class GraficoPubController {
 		idadesContagens.entrySet().removeIf(entry -> entry.getValue() <= totalTwo*0.05);
 
 		return new IdadesGraficoDTO(media,idadesContagens);
+	}
+
+
+	/**
+	 * Endpoint responsavel por buscar as faixas etárias.
+	 *
+	 * @return {@link IdadesGraficoDTO} Retorna uma lista com a faixa etária das idades
+	 * @author Bruno Eiki
+	 * @since 12/02/2025
+	 */
+	@GetMapping(value = "/faixaEtaria")
+	@ResponseStatus(code = HttpStatus.OK)
+	public List<FaixaEtariaGraficoDTO> getFaixaEtaria() {
+		return egressoService.countFaixaEtariaFromEgressos();
+				
 	}
 
 	/**

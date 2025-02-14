@@ -72,12 +72,19 @@
         :loading="loadedData.sector ? false : true"
         :data="loadedData.sector"
       />
-      <CustomBarGraph
+      <!-- <CustomBarGraph
         v-show="filters.all || filters.general"
         legend="Idade"
         info="Quantidade de egressos por idade"
         :loading="loadedData.age ? false : true"
         :data="loadedData.age"
+      /> -->
+      <CustomPieGraph
+        v-show="filters.all || filters.general"
+        legend="Faixa Etária"
+        info="Quantidade de egressos por faixa etária"
+        :loading="loadedData.ageGroup ? false : true"
+        :data="loadedData.ageGroup"
       />
       <CustomPieGraph
         v-show="filters.all || filters.academic"
@@ -203,7 +210,8 @@ const loadedData = ref<AllChartSeries>({
   wage: null,
   sector: null,
   gender: null,
-  age: null
+  // age: null,
+  ageGroup: null
 })
 
 onMounted(async () => {
