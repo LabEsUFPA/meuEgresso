@@ -178,6 +178,7 @@
           @submit="handleSubmitGeral"
           @invalid-submit="onInvalid"
           :validation-schema="schemaGeral"
+          v-if="!isPublic || isSuperUser"
         >
           <div class="flex justify-center items-center h-full">
             <div
