@@ -1748,8 +1748,8 @@ const schemaAdicionais = object().shape({
     assuntosPalestras: string().when('palestras', ([palestras], schemaAdicionais) => {
       return palestras ? schemaAdicionais.required('Campo obrigatório') : schemaAdicionais.notRequired()
     }),
-    experiencias: string().required('Campo obrigatório'),
-    contribuicoes: string().required('Campo obrigatório')
+    experiencias: string(),
+    contribuicoes: string()
   })
 })
 const profileImageRef = ref<typeof ProfileImage | null>(null)
