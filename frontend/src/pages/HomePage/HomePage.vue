@@ -1,6 +1,17 @@
 <template>
+  <div
+    v-if="loading"
+    class="flex h-[70vh] items-center justify-center text-center"
+  >
+    <SvgIcon
+      type="mdi"
+      size="80"
+      class="animate-spin text-gray-400"
+      :path="mdiLoading"
+    />
+  </div>
   <SociodemographicMap
-    v-if="!loading"
+    v-else
     :egress-list="markers"
   />
 </template>
@@ -11,6 +22,9 @@ import { useHomeStore } from 'src/store/HomeStore'
 import SociodemographicMap from './components/SociodemographicMap.vue'
 import { type models } from 'src/@types'
 import apiEnderecos from 'src/services/apiEnderecos'
+import { mdiLoading } from "@mdi/js"
+import SvgIcon from '@jamescoyle/vue-icon'
+
 
 interface EgressoMapa extends models.EgressoMapa {}
 

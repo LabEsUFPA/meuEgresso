@@ -909,8 +909,8 @@ const schema = object().shape({
     assuntosPalestras: string().when('palestras', ([palestras], schema) => {
       return palestras ? schema.required('Campo obrigatório') : schema.notRequired()
     }),
-    experiencias: string().required('Campo obrigatório'),
-    contribuicoes: string().required('Campo obrigatório')
+    experiencias: string(),
+    contribuicoes: string()
   })
 })
 
