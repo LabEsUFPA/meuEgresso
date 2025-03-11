@@ -136,7 +136,7 @@ public class DashAdmController {
 		document.open();
 
 		List<EgressoDashDTO> egressos = usuarioService.findBySearch("",
-				new String[] { "pendente", "inativo", "completo", "incompleto" }, 0, 8000, "DESC").toList();
+				new String[] { "pendente", "inativo", "completo", "incompleto" }, 0, 20, "DESC").toList();
 
 		document.add(new Paragraph("UNIVERSIDADE FEDERAL DO PARÁ"));
 		document.add(new Paragraph("Listagem de Egressos", bold));
