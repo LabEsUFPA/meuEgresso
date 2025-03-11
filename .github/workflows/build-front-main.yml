@@ -28,7 +28,7 @@ jobs:
 
       - name: Build the Docker image
         working-directory: ./frontend/
-        run: docker build . --file docker/Dockerfile --tag alverad/meu-egresso-front:latest
+        run: docker build . --file docker/Dockerfile --tag alverad/meu-egresso-front:stable
 
       - name: Docker Push
-        run: docker push alverad/meu-egresso-front:latest
+        run: docker push alverad/meu-egresso-front:stable
